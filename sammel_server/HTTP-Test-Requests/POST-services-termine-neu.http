@@ -1,0 +1,23 @@
+POST http://127.0.0.1:18080/service/termine/neu
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+{
+  "beginn": "2020-02-05T09:00:00",
+  "ende": "2020-02-05T12:00:00",
+  "ort": {
+    "bezirk": "Friedrichshain-Kreuzberg",
+    "id": 1,
+    "ort": "F-Hain Nordkiez"
+  },
+  "teilnehmer": [
+    {
+      "id": 3,
+      "name": "Karl Marx"
+    }
+  ]
+}
+
+###
+
