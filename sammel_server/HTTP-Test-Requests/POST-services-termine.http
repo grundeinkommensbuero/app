@@ -1,0 +1,30 @@
+POST http://127.0.0.1:18080/service/termine
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+{
+  "beginn": "2020-02-05T09:00:00",
+  "ende": "2020-02-05T12:00:00",
+  "id": 1,
+  "ort": {
+    "bezirk": "Friedrichshain-Kreuzberg",
+    "id": 1,
+    "ort": "F-Hain Nordkiez"
+  ***REMOVED***,
+  "teilnehmer": [
+    {
+      "id": 1,
+      "name": "Karl Marx",
+      "telefonnummer": "0176336423"
+    ***REMOVED***,
+    {
+      "id": 2,
+      "name": "Bini Adamczak",
+      "passwort": "hash2"
+    ***REMOVED***
+  ]
+***REMOVED***
+
+###
+

@@ -1,0 +1,31 @@
+buildscript {
+    ext.kotlin_version = '1.2.71'
+    repositories {
+        google()
+        jcenter()
+    ***REMOVED***
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.2.1'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    ***REMOVED***
+***REMOVED***
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+    ***REMOVED***
+***REMOVED***
+
+rootProject.buildDir = '../build'
+subprojects {
+    project.buildDir = "${rootProject.buildDir***REMOVED***/${project.name***REMOVED***"
+***REMOVED***
+subprojects {
+    project.evaluationDependsOn(':app')
+***REMOVED***
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+***REMOVED***

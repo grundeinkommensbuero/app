@@ -1,0 +1,13 @@
+POST http://127.0.0.1:18080/service/benutzer/neu
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+{
+  "name": "Karl Marx",
+  "passwort": "hashed_password_3",
+  "telefonnummer": "0173 738 2345"
+***REMOVED***
+
+###
+
