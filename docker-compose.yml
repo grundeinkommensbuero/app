@@ -36,6 +36,6 @@ services:
      - db
     depends_on:
      - db
-#   Names our volume
+
 volumes:
   my-db: {}

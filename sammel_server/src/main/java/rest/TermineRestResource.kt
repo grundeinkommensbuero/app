@@ -53,6 +53,7 @@ open class TermineRestResource {
             var beginn: LocalDateTime? = null,
             var ende: LocalDateTime? = null,
             var ort: Ort? = null,
+            var typ: String? = null,
             var teilnehmer: List<BenutzerDto>? = emptyList()) {
 
         fun convertToTermin(): Termin {
@@ -61,6 +62,7 @@ open class TermineRestResource {
             termin.beginn = beginn
             termin.ende = ende
             termin.ort = ort
+            termin.typ = typ
             termin.teilnehmer =
                     if (teilnehmer == null) {
                         emptyList()
@@ -77,6 +79,7 @@ open class TermineRestResource {
                         termin.beginn,
                         termin.ende,
                         termin.ort,
+                        termin.typ,
                         termin.teilnehmer.map { teilnehmer -> BenutzerDto.convertFromBenutzer(teilnehmer) })
             }
         }

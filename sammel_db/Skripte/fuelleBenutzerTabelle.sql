@@ -1,2 +1,2 @@
-INSERT INTO db.Benutzer (id, name, passwort, telefonnummer) VALUES (1, 'Karl Marx', 'hash1', '0170873243');
-INSERT INTO db.Benutzer (id, name, passwort, telefonnummer) VALUES (2, 'Bini Adamczak', 'hash2', null);
+INSERT INTO db.Benutzer (id, name, passwort, telefonnummer) VALUES (1, 'Karl Marx', 'hash1', '0173594651');
+INSERT INTO db.Benutzer (id, name, passwort, telefonnummer) VALUES (2, 'Rosa Luxemburg', 'hash2', null);
