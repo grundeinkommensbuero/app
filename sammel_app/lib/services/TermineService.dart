@@ -16,9 +16,12 @@ class TermineService {
       headers: _header,
     );
     if (response.statusCode == 200) {
-      return (jsonDecode(response.body) as List)
+      final termine = (jsonDecode(response.body) as List)
           .map((jsonTermin) => Termin.fromJson(jsonTermin))
           .toList();
+      // Sortierung auf Client-Seite um Server und Datenbank skalierbar zu halten
+      termine.sort((termin1, termin2) => termin1.beginn.compareTo(termin2.beginn));
+      return termine;
     ***REMOVED*** else {
       throw RestFehler(
           "Unerwarteter Fehler: ${response.statusCode***REMOVED*** - ${response.body***REMOVED***");

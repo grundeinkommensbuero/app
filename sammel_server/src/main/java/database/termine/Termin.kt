@@ -23,6 +23,9 @@ class Termin {
     @JoinColumn(name = "ort")
     var ort: Ort? = null
 
+    @Column
+    var typ: String? = null
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "Termin_Teilnehmer",
             joinColumns = [JoinColumn(name = "Termin", referencedColumnName = "id")],

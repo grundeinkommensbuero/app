@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/services/Benutzer.dart';
@@ -16,13 +15,15 @@ void main() {
                   1,
                   DateTime(2020, 1, 2, 15, 0, 0),
                   DateTime(2020, 1, 2, 18, 0, 0),
-                  Ort(15, "Friedrichshain-Kreuzberg", "Fhain - Nordkiez"),
+                  Ort(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez'),
+                  'Sammel-Termin',
                   [])),
               '{'
                   '"id":1,'
                   '"beginn":"2020-01-02T15:00:00.000",'
                   '"ende":"2020-01-02T18:00:00.000",'
                   '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez"***REMOVED***,'
+                  '"typ":"Sammel-Termin",'
                   '"teilnehmer":[]***REMOVED***');
         ***REMOVED***);
 
@@ -35,6 +36,7 @@ void main() {
                   DateTime(2020, 1, 2, 15, 0, 0),
                   DateTime(2020, 1, 2, 18, 0, 0),
                   Ort(15, "Friedrichshain-Kreuzberg", "Fhain - Nordkiez"),
+                  'Sammel-Termin',
                   [
                     Benutzer("Karla Kolumna", "01456972524"),
                     Benutzer("D0min4tor_1337")])),
@@ -43,6 +45,7 @@ void main() {
                   '"beginn":"2020-01-02T15:00:00.000",'
                   '"ende":"2020-01-02T18:00:00.000",'
                   '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez"***REMOVED***,'
+                  '"typ":"Sammel-Termin",'
                   '"teilnehmer":['
                   '{"name":"Karla Kolumna","telefonnummer":"01456972524"***REMOVED***,'
                   '{"name":"D0min4tor_1337","telefonnummer":null***REMOVED***]***REMOVED***');
@@ -56,14 +59,16 @@ void main() {
           '"beginn":"2020-01-02T15:00:00.000",'
           '"ende":"2020-01-02T18:00:00.000",'
           '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez"***REMOVED***,'
+          '"typ":"Sammel-Termin",'
           '"teilnehmer":[]***REMOVED***'));
       expect(termin.id, 1);
       expect(termin.beginn, equals(DateTime(2020, 1, 2, 15, 0, 0)));
       expect(termin.ende, equals(DateTime(2020, 1, 2, 18, 0, 0)));
+      expect(termin.typ, 'Sammel-Termin');
       expect(
           termin.ort.toString(),
           Ort(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez').toString());
-      expect(termin.teilnehmer, null);
+      expect(termin.teilnehmer, []);
     ***REMOVED***);
 
     test(
@@ -73,6 +78,7 @@ void main() {
           '"beginn":"2020-01-02T15:00:00.000",'
           '"ende":"2020-01-02T18:00:00.000",'
           '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez"***REMOVED***,'
+          '"typ":"Sammel-Termin",'
           '"teilnehmer":['
           '{"name":"Karla Kolumna","telefonnummer":"01456972524"***REMOVED***,'
           '{"name":"D0min4tor_1337","telefonnummer":null***REMOVED***]***REMOVED***'));
@@ -82,6 +88,7 @@ void main() {
       expect(
           termin.ort.toString(),
           Ort(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez').toString());
+      expect(termin.typ, 'Sammel-Termin');
       expect(termin.teilnehmer.length, 2);
       expect(
           termin.teilnehmer[0].toString(),
@@ -90,12 +97,5 @@ void main() {
           termin.teilnehmer[1].toString(),
           Benutzer("D0min4tor_1337").toString());
     ***REMOVED***);
-  ***REMOVED***);
-  test('Test', () {
-    String jsonList = '[1,2,3]';
-    var list = jsonDecode(jsonList);
-    print(list);
-    List<int> intList = (list as List).map((element) => element as int).toList();
-    print(intList);
   ***REMOVED***);
 ***REMOVED***
