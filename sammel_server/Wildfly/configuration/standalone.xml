@@ -39,6 +39,15 @@
     <management>
         <security-realms>
             <security-realm name="ManagementRealm">
+                <!--                <server-identities>-->
+                <!--                    <ssl>-->
+                <!--                        <keystore path="wildfly.keystore.jks" relative-to="jboss.server.config.dir"-->
+                <!--                                  keystore-password="I thought what I'd do was I'd pretend I was one of those deaf-mutes"-->
+                <!--                                  alias="wildfly_admin"-->
+                <!--                                  key-password="I thought what I'd do was I'd pretend I was one of those deaf-mutes"-->
+                <!--                                  generate-self-signed-certificate-host="localhost"/>-->
+                <!--                    </ssl>-->
+                <!--                </server-identities>-->
                 <authentication>
                     <local default-user="$local" skip-group-loading="true"/>
                     <properties path="mgmt-users.properties" relative-to="jboss.server.config.dir"/>
@@ -81,7 +90,9 @@
         <management-interfaces>
             <http-interface security-realm="ManagementRealm">
                 <http-upgrade enabled="true"/>
+                <!-- Costum Configuration -->
                 <socket-binding http="management-http"/>
+                <!--                <socket-binding https="management-https"/>-->
             </http-interface>
         </management-interfaces>
         <access-control provider="simple">
@@ -385,6 +396,26 @@
                 </mechanism-provider-filtering-sasl-server-factory>
                 <provider-sasl-server-factory name="global"/>
             </sasl>
+            <!-- Costum Configuration -->
+            <tls>
+                <key-stores>
+                    <key-store name="dweKeyStore">
+                        <credential-reference
+                                clear-text="I thought what I'd do was I'd pretend I was one of those deaf-mutes"/>
+                        <implementation type="JKS"/>
+                        <file path="sammel-app.keystore.jks" relative-to="jboss.server.config.dir"/>
+                    </key-store>
+                </key-stores>
+                <key-managers>
+                    <key-manager name="dweKeyManager" key-store="dweKeyStore">
+                        <credential-reference
+                                clear-text="I thought what I'd do was I'd pretend I was one of those deaf-mutes"/>
+                    </key-manager>
+                </key-managers>
+                <server-ssl-contexts>
+                    <server-ssl-context name="dweSSLContext" protocols="TLSv1.2" key-manager="dweKeyManager"/>
+                </server-ssl-contexts>
+            </tls>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:infinispan:8.0">
             <cache-container name="web" default-cache="passivation" module="org.wildfly.clustering.web.infinispan">
@@ -535,7 +566,8 @@
             <buffer-cache name="default"/>
             <server name="default-server">
                 <http-listener name="default" socket-binding="http" redirect-socket="https" enable-http2="true"/>
-                <https-listener name="https" socket-binding="https" security-realm="ApplicationRealm"
+                <!-- Costum Configuration -->
+                <https-listener name="https" socket-binding="https" ssl-context="dweSSLContext"
                                 enable-http2="true"/>
                 <host name="default-host" alias="localhost">
                     <location name="/" handler="welcome-content"/>
