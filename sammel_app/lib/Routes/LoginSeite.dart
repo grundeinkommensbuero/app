@@ -40,8 +40,18 @@ class _LoginSeiteState extends State<LoginSeite> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
-      ),
+          title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(
+            widget.title,
+            style: TextStyle(
+              color: Color.fromARGB(255, 129, 28, 98),
+            ),
+          ),
+          Image.asset('assets/images/logo.png')
+        ],
+      )),
       body: Center(
         child: ListView(
           children: <Widget>[
@@ -90,7 +100,8 @@ class _LoginSeiteState extends State<LoginSeite> {
   }
 
   loginBenutzer() async {
-    var authentifiziert = await _benutzerService.authentifziereBenutzer(_login, context);
+    var authentifiziert =
+        await _benutzerService.authentifziereBenutzer(_login, context);
     if (authentifiziert) {
       print('DEBUG ### Erfolgreich authentifiziert');
       navigiereZuMeldungenSeite();
@@ -117,8 +128,7 @@ class _LoginSeiteState extends State<LoginSeite> {
               title: Text("Fehler"),
               content: Text(e.message),
             );
-          }
-      );
+          });
     } catch (e, s) {
       showDialog(
           context: context,
@@ -127,8 +137,7 @@ class _LoginSeiteState extends State<LoginSeite> {
               title: Text("Ausnahmefehler"),
               content: Text(e.message),
             );
-          }
-      );
+          });
       print('Unerwarteter Fehler: ${e}, ${s}');
     }
     navigiereZuMeldungenSeite();
