@@ -19,10 +19,13 @@ class _TermineSeiteState extends State<TermineSeite> {
   static final _termineService = TermineService();
   List<Termin> termine = [];
 
+  _TermineSeiteState() {
+    ladeTermine();
+  ***REMOVED***
+
   @override
   Widget build(BuildContext context) {
     // TODO: Memory-Leak beheben
-    ladeTermine();
     return Scaffold(
         appBar: AppBar(
             title: Row(

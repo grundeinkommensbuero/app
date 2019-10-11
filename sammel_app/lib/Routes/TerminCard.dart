@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +26,7 @@ class TerminCard extends StatelessWidget {
             ? Colors.amberAccent
             : _HELLGELB,
         child: Column(children: [
-          Text(termin.typ,
+          Text('${termin.typ***REMOVED***',
               style: TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,

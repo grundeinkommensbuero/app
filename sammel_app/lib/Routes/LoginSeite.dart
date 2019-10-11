@@ -11,8 +11,8 @@ class LoginSeite extends StatefulWidget {
 ***REMOVED***
 
 class _LoginSeiteState extends State<LoginSeite> {
-  static String _REGISTRIEREN = 'Registrieren';
-  static String _ANMELDEN = 'Anmelden';
+  static const String _REGISTRIEREN = 'Registrieren';
+  static const String _ANMELDEN = 'Anmelden';
   static double _padding = 8.0;
   bool _modus = false;
   static final _benutzerService = BenutzerService();
@@ -100,11 +100,34 @@ class _LoginSeiteState extends State<LoginSeite> {
   ***REMOVED***
 
   loginBenutzer() async {
-    var authentifiziert =
-        await _benutzerService.authentifziereBenutzer(_login, context);
-    if (authentifiziert) {
-      print('DEBUG ### Erfolgreich authentifiziert');
-      navigiereZuMeldungenSeite();
+    try {
+      var authentifiziert =
+          await _benutzerService.authentifziereBenutzer(_login);
+
+      if (authentifiziert.erfolgreich) {
+        navigiereZuMeldungenSeite();
+      ***REMOVED*** else {
+        if (context != null) {
+          showDialog(
+              context: context,
+              builder: (_) {
+                return AlertDialog(
+                  title: Text("Computer sagt Nein"),
+                  content: Text(authentifiziert.meldung),
+                );
+              ***REMOVED***);
+        ***REMOVED***
+      ***REMOVED***
+    ***REMOVED*** catch (e, s) {
+      print('Fehler: $e\n$s'); //TODO LOG
+      showDialog(
+          context: context,
+          builder: (_) {
+            return AlertDialog(
+              title: Text("Unerwarteter Fehler"),
+              content: Text(e.toString()),
+            );
+          ***REMOVED***);
     ***REMOVED***
   ***REMOVED***
 
@@ -119,13 +142,14 @@ class _LoginSeiteState extends State<LoginSeite> {
   legeBenutzerAn() async {
     try {
       await _benutzerService.legeBenutzerAn(_login);
+      navigiereZuMeldungenSeite();
     ***REMOVED*** on LoginException catch (e) {
       print('Erwarteter Fehler: ${e.message***REMOVED***');
       showDialog(
           context: context,
           builder: (_) {
             return AlertDialog(
-              title: Text("Fehler"),
+              title: Text("Computer sagt Nein"),
               content: Text(e.message),
             );
           ***REMOVED***);
@@ -134,12 +158,11 @@ class _LoginSeiteState extends State<LoginSeite> {
           context: context,
           builder: (_) {
             return AlertDialog(
-              title: Text("Ausnahmefehler"),
+              title: Text("Unerwarteter Fehler"),
               content: Text(e.message),
             );
           ***REMOVED***);
-      print('Unerwarteter Fehler: ${e***REMOVED***, ${s***REMOVED***');
+      print('Unerwarteter Fehler: $e, $s');
     ***REMOVED***
-    navigiereZuMeldungenSeite();
   ***REMOVED***
 ***REMOVED***

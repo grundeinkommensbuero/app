@@ -1,30 +1,23 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:http/http.dart' as http;
+import 'package:http_server/http_server.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/services/RestFehler.dart';
+import 'package:sammel_app/services/Service.dart';
 
-class TermineService {
-  Map<String, String> _header = {
-    HttpHeaders.contentTypeHeader: "application/json",
-    HttpHeaders.acceptHeader: "*/*",
-  ***REMOVED***
-
+class TermineService extends Service {
   Future<List<Termin>> ladeTermine() async {
-    var response = await http.get(
-      Uri.http('10.0.2.2:18080', '/service/termine'),
-      headers: _header,
-    );
-    if (response.statusCode == 200) {
-      final termine = (jsonDecode(response.body) as List)
-          .map((jsonTermin) => Termin.fromJson(jsonTermin))
-          .toList();
+    HttpClientResponseBody response = await get(Uri.parse('/service/termine'));
+    if (response.response.statusCode == 200) {
+      final termine = (response.body as List).map((jsonTermin) {
+        var termin = Termin.fromJson(jsonTermin);
+        return termin;
+      ***REMOVED***).toList();
       // Sortierung auf Client-Seite um Server und Datenbank skalierbar zu halten
-      termine.sort((termin1, termin2) => termin1.beginn.compareTo(termin2.beginn));
+      termine
+          .sort((termin1, termin2) => termin1.beginn.compareTo(termin2.beginn));
       return termine;
     ***REMOVED*** else {
       throw RestFehler(
-          "Unerwarteter Fehler: ${response.statusCode***REMOVED*** - ${response.body***REMOVED***");
+          "Unerwarteter Fehler: ${response.response.statusCode***REMOVED*** - ${response.body***REMOVED***");
     ***REMOVED***
   ***REMOVED***
 ***REMOVED***

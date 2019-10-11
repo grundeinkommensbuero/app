@@ -5,8 +5,8 @@ class Benutzer {
   Benutzer(this.name, [this.telefonnummer]);
 
   Benutzer.fromJson(Map<String, dynamic> json) :
-      name = json['name'],
-      telefonnummer = json['telefonnummer'];
+      name = json['name'] ?? 'Anonym',
+      telefonnummer = json['telefonnummer'] ?? '';
 
   Map<String, dynamic> toJson() =>
       {

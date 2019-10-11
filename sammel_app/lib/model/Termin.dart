@@ -8,6 +8,7 @@ class Termin {
   DateTime ende;
   Ort ort;
   String typ;
+
   List<Benutzer> teilnehmer;
 
   Termin(this.id, this.beginn, this.ende, this.ort, this.typ, this.teilnehmer);
@@ -17,12 +18,13 @@ class Termin {
         beginn = DateTime.parse(json['beginn']),
         ende = DateTime.parse(json['ende']),
         ort = Ort.fromJson(json['ort']),
-        typ = json['typ'],
+        typ = json['typ'] ?? 'Termin',
         teilnehmer = (json['teilnehmer'] as List)
             .map((json) => Benutzer.fromJson(json))
             .toList();
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         'id': id,
         'beginn': beginn.toIso8601String(),
         'ende': ende.toIso8601String(),
@@ -38,6 +40,6 @@ class Termin {
       case 'Info-Veranstaltung':
         return 'assets/images/Info-Veranstaltung.png';
     ***REMOVED***
-    return null;
+    return '';
   ***REMOVED***
 ***REMOVED***
