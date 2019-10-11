@@ -2,6 +2,7 @@ package rest
 
 import database.benutzer.BenutzerDao
 import org.hibernate.validator.internal.util.StringHelper.isNullOrEmptyString
+import org.jboss.logging.Logger
 import javax.ejb.EJB
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType.APPLICATION_JSON
@@ -9,6 +10,7 @@ import javax.ws.rs.core.Response
 
 @Path("benutzer")
 open class BenutzerRestResource {
+    private val LOG = Logger.getLogger(this::class.java)
 
     @EJB
     private lateinit var dao: BenutzerDao
@@ -86,9 +88,10 @@ open class BenutzerRestResource {
                     .build()
         ***REMOVED***
         if (!benutzerAusDb.passwort.equals(login.passwortHash)) {
+            LOG.info("Falscher Login mit Benutzer ${login.benutzer.id***REMOVED***")
             return Response
                     .status(401)
-                    .entity(RestFehlermeldung("Nutzername und Passwort stimmen nicht überein"))
+                    .entity(RestFehlermeldung("{Security***REMOVED*** Nutzername und Passwort stimmen nicht überein"))
                     .build()
         ***REMOVED***
         return Response
