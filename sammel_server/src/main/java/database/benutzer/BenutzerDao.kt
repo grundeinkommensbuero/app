@@ -1,5 +1,6 @@
 package database.benutzer
 
+import org.jboss.logging.Logger
 import javax.ejb.Stateless
 import javax.inject.Inject
 import javax.persistence.EntityManager
@@ -8,6 +9,7 @@ import kotlin.Exception
 
 @Stateless
 open class BenutzerDao {
+    private val LOG = Logger.getLogger(BenutzerDao::class.java)
 
     @Inject
     @PersistenceContext(unitName = "mysql")
@@ -21,7 +23,9 @@ open class BenutzerDao {
                 .setParameter("name", name)
                 .resultList
         if (benutzerListe.size > 1) {
-            throw BenutzerMehrfachVorhandenException("Benutzer ${name} ist mehrfach vorhanden")
+            val message = "Benutzer $name ist mehrfach vorhanden"
+            LOG.warn("Inkonsistente Daten in der Datenbank: $message")
+            throw BenutzerMehrfachVorhandenException(message)
         }
         if (benutzerListe.size == 0) {
             return null
@@ -35,6 +39,7 @@ open class BenutzerDao {
         entityManager.persist(benutzer)
         val benutzerAusDb = getBenutzer(benutzer.name)
         if (benutzerAusDb == null) {
+            LOG.warn("Benutzer ${benutzer.name} (${benutzer.id}) wurde fehlerfrei in Datenbank angelegt aber nicht wieder gefunden")
             throw BenutzerAnlegenGescheitertException("Beim Anlegen des Benutzers ist ein Fehler aufgetreten")
         }
         return benutzerAusDb

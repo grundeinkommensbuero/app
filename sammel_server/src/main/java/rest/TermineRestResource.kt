@@ -3,14 +3,17 @@ package rest
 import database.Stammdaten.Ort
 import database.termine.Termin
 import database.termine.TermineDao
+import org.jboss.logging.Logger
 import java.time.LocalDateTime
 import javax.ejb.EJB
+import javax.ejb.EJBException
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType.APPLICATION_JSON
 import javax.ws.rs.core.Response
 
 @Path("termine")
 open class TermineRestResource {
+    private val LOG = Logger.getLogger(TermineRestResource::class.java)
 
     @EJB
     private lateinit var dao: TermineDao
@@ -42,7 +45,14 @@ open class TermineRestResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun aktualisiereTermin(termin: TerminDto): Response {
-        dao.aktualisiereTermin(termin.convertToTermin())
+        try {
+            dao.aktualisiereTermin(termin.convertToTermin())
+        } catch (e: EJBException) {
+            LOG.error("Fehler beim Mergen eines Termins. " +
+                    "Möglicherweise hat ein Client versucht einen Termin mit unbekannter ID zu aktualisieren\n" +
+                    "Termin: $termin\n", e)
+            return Response.status(422).build()
+        }
         return Response
                 .ok()
                 .build()
