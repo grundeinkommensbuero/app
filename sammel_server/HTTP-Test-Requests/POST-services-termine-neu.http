@@ -11,6 +11,7 @@ Content-Type: application/json
     "id": 1,
     "ort": "F-Hain Nordkiez"
   },
+  "typ": "Sammel-Termin",
   "teilnehmer": [
     {
       "id": 3,
