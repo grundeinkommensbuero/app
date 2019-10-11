@@ -27,6 +27,7 @@ dependencies:
   quiver: '>=2.0.0 <3.0.0'
   flutter_local_notifications: ^0.8.4
   date_format: 1.0.6
+  http_server: 0.9.8+3
 
 dev_dependencies:
   flutter_test:
@@ -49,6 +50,8 @@ flutter:
    - assets/images/logo.png
    - assets/images/Sammel-Termin.png
    - assets/images/Info-Veranstaltung.png
+   - assets/security/sammel-server_localhost.pem
+   - assets/security/sammel-server_10.0.2.2.pem
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -1,99 +1,63 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:http_server/http_server.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 
+import 'Service.dart';
 import 'Benutzer.dart';
 
-class BenutzerService {
-  Map<String, String> _header = {
-    HttpHeaders.contentTypeHeader: "application/json",
-    HttpHeaders.acceptHeader: "*/*",
-  };
-
-  Future<bool> authentifziereBenutzer(Login login,
-      [BuildContext context]) async {
+class BenutzerService extends Service {
+  Future<Authentifizierung> authentifziereBenutzer(Login login) async {
     print('Authentifiziere Benutzer ${login.benutzer.name}');
-    var response = await http.post(
-      Uri.http('10.0.2.2:18080', '/service/benutzer/authentifiziere'),
-      headers: _header,
-      body: jsonEncode(login),
-    );
-
-    if (response.statusCode == 200) {
-      return true;
+    HttpClientResponseBody response;
+    try {
+      response = await post(
+          Uri(path: '/service/benutzer/authentifiziere'), jsonEncode(login));
+    } on WrongResponseFormatException catch (e, t) {
+      // TODO Log
+      print('Exception bei Authentifizierung: ${e.message}\n$t');
+      throw LoginException('Vom Server kommt eine fehlerhafte Antwort');
+    }
+    if (response.response.statusCode == 200) {
+      return Authentifizierung(true);
     }
 
-    if (response.statusCode == 412) {
+    if (response.response.statusCode == 412) {
       var fehler = RestFehler.deserialisiere(response.body);
-      // TODO Usermeldung in GUI
-      print('Eingabefehler für ${login.benutzer.name}: ${fehler.meldung}');
-      if (context != null) {
-        showDialog(
-            context: context,
-            builder: (_) {
-              return AlertDialog(
-                title: Text("Fehler"),
-                content: Text(fehler.meldung),
-              );
-            });
-      }
-      return false;
+      return Authentifizierung(false, fehler.meldung);
     }
 
-    if (response.statusCode == 401) {
+    if (response.response.statusCode == 401) {
       var fehler = RestFehler.deserialisiere(response.body);
-      // TODO Usermeldung in GUI
       print('Authentifizierung von Benutzer ${login.benutzer.name} '
           'fehlgeschlagen: ${fehler.meldung}.');
-      if (context != null) {
-        showDialog(
-            context: context,
-            builder: (_) {
-              return AlertDialog(
-                title: Text("Anmelden fehlgeschlagen"),
-                content: Text(fehler.meldung),
-              );
-            });
-      }
-      return false;
+      return Authentifizierung(false, fehler.meldung);
     } else {
       // Unerwarteter Fehler
-      //LOG
-      if (context != null) {
-        showDialog(
-            context: context,
-            builder: (_) {
-              return AlertDialog(
-                title: Text("Unerwarteter Fehler"),
-                content: Text(response.body),
-              );
-            });
-      }
-      throw Exception('HTTP-Status: ${response.statusCode}\n ${response.body}');
+      throw Exception(
+          'HTTP-Status: ${response.response.statusCode}\n ${body(response.body)}');
     }
   }
 
   legeBenutzerAn(Login login) async {
-    print('DEBUG ### lege neuen Benutzer an : ${jsonEncode(login)}');
-    var response = await http.post(
-      Uri.http('10.0.2.2:18080', '/service/benutzer/neu'),
-      headers: _header,
-      body: jsonEncode(login),
+    var response = await post(
+      Uri.parse('/service/benutzer/neu'),
+      jsonEncode(login),
     );
 
-    if (response.statusCode == 200) {
+    if (response.response.statusCode == 200) {
       return;
     }
 
-    if (response.statusCode == 412) {
+    if (response.response.statusCode == 412) {
+      print('Fehler: $response');
       final RestFehler restFehler = RestFehler.deserialisiere(response.body);
       throw LoginException(restFehler.meldung);
     } else {
       // Unerwarteter Fehler
-      //LOG
-      throw Exception('HTTP-Status: ${response.statusCode}\n ${response.body}');
+      //TODO LOG
+      print('Fehler: $response');
+      throw Exception(
+          'HTTP-Status: ${response.response.statusCode}\n ${response.body}');
     }
   }
 }
@@ -110,6 +74,13 @@ class Login {
 
   Map<String, dynamic> toJson() =>
       {'benutzer': benutzer, 'passwortHash': passwortHash};
+}
+
+class Authentifizierung {
+  bool erfolgreich = false;
+  String meldung = '';
+
+  Authentifizierung(this.erfolgreich, [this.meldung]);
 }
 
 class LoginException {

@@ -9,8 +9,8 @@ class Ort {
 
   Ort.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        bezirk = json['bezirk'],
-        ort = json['ort'];
+        bezirk = json['bezirk'] ?? '',
+        ort = json['ort'] ?? '';
 
   Map<String, dynamic> toJson() => {
         'id': id,
