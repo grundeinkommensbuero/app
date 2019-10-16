@@ -1,0 +1,5 @@
+image: cirrusci/flutter:latest
+
+app-unittests-job:
+  script:
+    - flutter test

@@ -33,13 +33,13 @@ void main() {
     test('deserialisiert Benutzer mit Name ohne Telefonnummer', () {
       var benutzer = Benutzer.fromJson(jsonDecode('{"name":"Egon Olsen","telefonnummer":null}'));
       expect(benutzer.name,'Egon Olsen');
-      expect(benutzer.telefonnummer,null);
+      expect(benutzer.telefonnummer,'');
     });
 
     test('deserialisiert Benutzer ohne Name ohne Telefonnummer', () {
       var benutzer = Benutzer.fromJson(jsonDecode('{"name":null,"telefonnummer":null}'));
-      expect(benutzer.name,null);
-      expect(benutzer.telefonnummer,null);
+      expect(benutzer.name,'Anonym');
+      expect(benutzer.telefonnummer,'');
     });
   });
 }
