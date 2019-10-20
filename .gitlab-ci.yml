@@ -2,7 +2,7 @@
 # Siehe auch: https://medium.com/@chima_37359/setup-gitlab-ci-in-flutter-android-project-89f6628828e8
 stages:
   - build_and_test
-#  - deploy_coverage
+  - deploy_coverage
 
 unit_test:
   image: gableroux/flutter:v1.2.1
@@ -16,15 +16,15 @@ unit_test:
       - coverage/
   coverage: '/^lines\.+: |\d+\.?\d+\%/'
 
-#build_android:
-#  image: gableroux/flutter:v1.2.1
-#  stage: build_and_test
-#  script:
-#    - cd sammel_app
-#    - flutter build apk --release
-#  artifacts:
-#    paths:
-#      - sammel_app/build/app/outputs/apk/release/
+build_android:
+  image: gableroux/flutter:v1.2.1
+  stage: build_and_test
+  script:
+    - cd sammel_app
+    - flutter build apk --release
+  artifacts:
+    paths:
+      - sammel_app/build/app/outputs/apk/release/
 
 pages:
   image: alpine
