@@ -33,7 +33,7 @@ pages:
     - unit_test
   script:
     - mkdir public
-    - mv samel_app/coverage/ public/coverage/
+    - mv sammel_app/coverage/ public/coverage/
   artifacts:
     paths:
       - public
