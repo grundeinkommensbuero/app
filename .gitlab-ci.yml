@@ -5,7 +5,7 @@ stages:
   - deploy_coverage
 
 unit_test:
-  image: gableroux/flutter:v1.2.1
+  image: gableroux/flutter:latest
   stage: build_and_test
   script:
     - cd sammel_app
