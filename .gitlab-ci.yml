@@ -13,7 +13,7 @@ unit_test:
     - genhtml coverage/lcov.info --output=coverage
   artifacts:
     paths:
-      - coverage/
+      - sammel_app/coverage/
   coverage: '/^lines\.+: |\d+\.?\d+\%/'
 
 build_android:
