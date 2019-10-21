@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +6,7 @@ import 'package:sammel_app/services/Benutzer.dart';
 import 'package:sammel_app/shared/DateTimeHelfer.dart';
 
 class TerminCard extends StatelessWidget {
-  Termin termin;
+  final Termin termin;
   static const _PADDING = 5.0;
   static const _HELLGELB = Color.fromARGB(255, 250, 250, 150);
   static final TextStyle style = TextStyle(

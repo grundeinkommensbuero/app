@@ -70,7 +70,7 @@ class Login {
     this.benutzer = Benutzer(name);
   }
 
-  Login(this.benutzer, this.passwortHash) {}
+  Login(this.benutzer, this.passwortHash);
 
   Map<String, dynamic> toJson() =>
       {'benutzer': benutzer, 'passwortHash': passwortHash};
