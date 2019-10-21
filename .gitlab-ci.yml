@@ -30,7 +30,7 @@ pages:
   image: alpine
   stage: deploy_coverage
   dependencies:
-    - unit_test
+    - unit_tests_app
   script:
     - mkdir public
     - mv sammel_app/coverage/ public/coverage/
