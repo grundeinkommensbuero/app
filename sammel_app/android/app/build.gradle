@@ -26,8 +26,9 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+    // Löst einen Fehler im Build auf dem Gitlab-CI, bei dem der daemon vorzeitig runtergefahren wird
     compileSdkVersion 29
-    buildToolsVersion '26.0.2'
+    buildToolsVersion '26.0.3'
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
