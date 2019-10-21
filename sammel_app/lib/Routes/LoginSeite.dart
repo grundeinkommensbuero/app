@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sammel_app/Routes/TermineSeite.dart';
+import 'package:sammel_app/services/ServiceProvider.dart';
 import '../services/BenutzerService.dart';
 
 class LoginSeite extends StatefulWidget {
@@ -15,7 +16,7 @@ class _LoginSeiteState extends State<LoginSeite> {
   static const String _ANMELDEN = 'Anmelden';
   static double _padding = 8.0;
   bool _modus = false;
-  static final _benutzerService = BenutzerService();
+  static final _benutzerService = ServiceProvider.benutzerService();
 
   static Login _login = Login.ausName('', '');
 

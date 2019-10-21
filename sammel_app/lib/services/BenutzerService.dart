@@ -5,7 +5,14 @@ import 'package:sammel_app/services/RestFehler.dart';
 import 'Service.dart';
 import 'Benutzer.dart';
 
-class BenutzerService extends Service {
+abstract class AbstractBenutzerService extends Service {
+  Future<Authentifizierung> authentifziereBenutzer(Login login);
+
+  legeBenutzerAn(Login login);
+}
+
+class BenutzerService extends AbstractBenutzerService {
+  @override
   Future<Authentifizierung> authentifziereBenutzer(Login login) async {
     print('Authentifiziere Benutzer ${login.benutzer.name}');
     HttpClientResponseBody response;
@@ -38,6 +45,7 @@ class BenutzerService extends Service {
     }
   }
 
+  @override
   legeBenutzerAn(Login login) async {
     var response = await post(
       Uri.parse('/service/benutzer/neu'),
@@ -87,4 +95,30 @@ class LoginException {
   final String message;
 
   LoginException(this.message);
+}
+
+class DemoBenutzerService extends AbstractBenutzerService {
+  List<Login> credentials = [
+    Login(Benutzer('Karl Marx', '123456789'), 'Expropriation!'),
+    Login(Benutzer('Rosa Luxemburg'), 'Ich bin, ich war, ich werde sein'),
+  ];
+
+  @override
+  Future<Authentifizierung> authentifziereBenutzer(Login login) async {
+    var matches = credentials
+        .where((cred) =>
+            cred.benutzer.name == login.benutzer.name &&
+            cred.passwortHash == login.passwortHash)
+        .toList();
+    return Authentifizierung(
+        matches.isNotEmpty,
+        matches.isEmpty
+            ? 'Benutzername und Passwort stimmen nicht überein'
+            : null);
+  }
+
+  @override
+  legeBenutzerAn(Login login) {
+    credentials.add(login);
+  }
 }
