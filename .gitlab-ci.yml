@@ -4,7 +4,7 @@ stages:
   - build_and_test
   - deploy_coverage
 
-unit_test:
+unit_tests_app:
   image: gableroux/flutter:latest
   stage: build_and_test
   script:
@@ -16,7 +16,7 @@ unit_test:
       - sammel_app/coverage/
   coverage: '/^lines\.+: |\d+\.?\d+\%/'
 
-build_android:
+build_android_apk:
   image: gableroux/flutter:latest
   stage: build_and_test
   script:
