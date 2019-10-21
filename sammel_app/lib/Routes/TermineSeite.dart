@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sammel_app/Routes/TerminCard.dart';
 import 'package:sammel_app/model/Termin.dart';
+import 'package:sammel_app/services/ServiceProvider.dart';
 import '../services/TermineService.dart';
 
 class TermineSeite extends StatefulWidget {
@@ -16,7 +17,7 @@ class _TermineSeiteState extends State<TermineSeite> {
     color: Color.fromARGB(255, 129, 28, 98),
     fontSize: 15.0,
   );
-  static final _termineService = TermineService();
+  static final _termineService = ServiceProvider.termineService();
   List<Termin> termine = [];
 
   _TermineSeiteState() {
