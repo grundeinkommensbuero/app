@@ -62,4 +62,18 @@ class TermineRestResourceTest {
         assertEquals(terminInDb.teilnehmer.size, 2)
         assertEquals(terminInDb.teilnehmer[0].name, karl().name)
     ***REMOVED***
+
+    @Test
+    fun aktualisiereTerminAktualisiertTerminInDb() {
+        val terminDto = terminDtoMitTeilnehmer()
+
+        resource.aktualisiereTermin(terminDto)
+
+        val argCaptor = argumentCaptor<Termin>()
+        verify(dao, times(1)).aktualisiereTermin(argCaptor.capture())
+        val termin = argCaptor.firstValue
+        assertEquals(termin.id, terminDto.id)
+        assertEquals(termin.teilnehmer.size, 2)
+        assertEquals(termin.teilnehmer[0].name, karl().name)
+    ***REMOVED***
 ***REMOVED***
