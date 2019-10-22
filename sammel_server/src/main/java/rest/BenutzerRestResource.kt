@@ -1,7 +1,6 @@
 package rest
 
 import database.benutzer.BenutzerDao
-import org.hibernate.validator.internal.util.StringHelper.isNullOrEmptyString
 import org.jboss.logging.Logger
 import javax.ejb.EJB
 import javax.ws.rs.*
@@ -18,14 +17,14 @@ open class BenutzerRestResource {
     @GET
     @Produces(APPLICATION_JSON)
     open fun getBenutzer(@QueryParam("name") name: String?): Response {
-        if (isNullOrEmptyString(name)) {
+        if (name.isNullOrEmpty()) {
             return Response
                     .status(412)
                     .entity(RestFehlermeldung("Parameter 'name' fehlt oder ist leer"))
                     .build()
         ***REMOVED***
         try {
-            val ergebnis = dao.getBenutzer(name!!)
+            val ergebnis = dao.getBenutzer(name)
             if (ergebnis == null) {
                 return Response
                         .status(404)
@@ -52,7 +51,7 @@ open class BenutzerRestResource {
     @Produces(APPLICATION_JSON)
     open fun legeNeuenBenutzerAn(login: Login): Response {
         val benutzer = login.benutzer
-        if (isNullOrEmptyString(benutzer.name)) {
+        if (benutzer.name.isNullOrEmpty()) {
             return Response
                     .status(412)
                     .entity(RestFehlermeldung("Benutzername darf nicht leer sein"))
@@ -74,7 +73,7 @@ open class BenutzerRestResource {
     @Produces(APPLICATION_JSON)
     open fun authentifiziereBenutzer(login: Login): Response {
         val benutzer = login.benutzer
-        if (isNullOrEmptyString(benutzer.name)) {
+        if (benutzer.name.isNullOrEmpty()) {
             return Response
                     .status(412)
                     .entity(RestFehlermeldung("Benutzername darf nicht leer sein"))
