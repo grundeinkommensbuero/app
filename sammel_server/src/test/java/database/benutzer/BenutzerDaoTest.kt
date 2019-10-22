@@ -8,6 +8,7 @@ import org.mockito.ArgumentMatchers.*
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
+import org.mockito.junit.MockitoRule
 import javax.persistence.EntityManager
 import javax.persistence.TypedQuery
 import kotlin.test.assertFailsWith
@@ -19,7 +20,7 @@ class BenutzerDaoTest {
 
     @Rule
     @JvmField
-    var mockitoRule = MockitoJUnit.rule()
+    var mockitoRule: MockitoRule = MockitoJUnit.rule()
 
     @Mock
     private lateinit var entityManager: EntityManager
@@ -27,7 +28,7 @@ class BenutzerDaoTest {
     private lateinit var typedQuery: TypedQuery<Benutzer>
 
     @InjectMocks
-    private lateinit var dao: BenutzerDao;
+    private lateinit var dao: BenutzerDao
 
     @Test
     fun getBenutzerLiefertFehlermeldungBeiMultiplenErgebnissen() {
@@ -39,7 +40,7 @@ class BenutzerDaoTest {
                 .thenReturn(typedQuery)
         whenever(typedQuery.setParameter(anyString(), anyString()))
                 .thenReturn(typedQuery)
-        whenever(typedQuery.getResultList())
+        whenever(typedQuery.resultList)
                 .thenReturn(response)
 
         assertFailsWith<BenutzerDao.BenutzerMehrfachVorhandenException> {
@@ -54,7 +55,7 @@ class BenutzerDaoTest {
                 .thenReturn(typedQuery)
         whenever(typedQuery.setParameter(anyString(), anyOrNull()))
                 .thenReturn(typedQuery)
-        whenever(typedQuery.getResultList())
+        whenever(typedQuery.resultList)
                 .thenReturn(response)
 
         assertNull(dao.getBenutzer("Antonio Gramsci"))
@@ -68,7 +69,7 @@ class BenutzerDaoTest {
                 .thenReturn(typedQuery)
         whenever(typedQuery.setParameter(anyString(), anyOrNull()))
                 .thenReturn(typedQuery)
-        whenever(typedQuery.getResultList())
+        whenever(typedQuery.resultList)
                 .thenReturn(response)
 
         val ergebnis = dao.getBenutzer("Karl Marx")
@@ -83,7 +84,7 @@ class BenutzerDaoTest {
                 .thenReturn(typedQuery)
         whenever(typedQuery.setParameter(anyString(), anyOrNull()))
                 .thenReturn(typedQuery)
-        whenever(typedQuery.getResultList())
+        whenever(typedQuery.resultList)
                 .thenReturn(listOf(karl))
 
         val benutzer = Benutzer(0, "Karl Marx", "hash1", null)
@@ -98,7 +99,7 @@ class BenutzerDaoTest {
                 .thenReturn(typedQuery)
         whenever(typedQuery.setParameter(anyString(), anyOrNull()))
                 .thenReturn(typedQuery)
-        whenever(typedQuery.getResultList())
+        whenever(typedQuery.resultList)
                 .thenReturn(emptyList())
 
 
