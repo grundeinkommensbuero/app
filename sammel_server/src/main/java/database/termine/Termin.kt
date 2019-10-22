@@ -34,7 +34,6 @@ class Termin {
 
     constructor()
 
-    @Suppress("ConvertSecondaryConstructorToPrimary")
     constructor(id: Long, beginn: LocalDateTime, ende: LocalDateTime, ort: Ort, typ: String, teilnehmer: List<Benutzer>) {
         this.id = id
         this.beginn = beginn

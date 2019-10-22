@@ -6,14 +6,14 @@ import javax.ws.rs.Produces
 import javax.ws.rs.core.Response
 
 @Path("health")
-open class HealthRestRessource {
+open class HealthRestResource {
 
     @GET
     @Produces("application/json")
     open fun health(): Response {
         return Response
                 .ok()
-                .entity(Health(status = "lebendig", version = "Apha-1.0"))
+                .entity(Health(status = "lebendig", version = "Alpha-1.0"))
                 .build()
 
     }
