@@ -1,8 +1,8 @@
-package database.Stammdaten
+package database.stammdaten
 
 import javax.persistence.*
 
-@Entity()
+@Entity
 @Table(name = "Stamm_Orte")
 class Ort {
     @Id
@@ -15,7 +15,8 @@ class Ort {
     @Column
     var ort: String = ""
 
-    @Suppress("ConvertSecondaryConstructorToPrimary")
+    constructor()
+
     constructor(id: Int, bezirk: String, ort: String) {
         this.id = id
         this.bezirk = bezirk

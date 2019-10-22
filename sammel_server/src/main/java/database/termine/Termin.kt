@@ -1,6 +1,6 @@
 package database.termine
 
-import database.Stammdaten.Ort
+import database.stammdaten.Ort
 import database.benutzer.Benutzer
 import java.time.LocalDateTime
 import javax.persistence.*
@@ -31,4 +31,16 @@ class Termin {
             joinColumns = [JoinColumn(name = "Termin", referencedColumnName = "id")],
             inverseJoinColumns = [JoinColumn(name = "Teilnehmer", referencedColumnName = "id")])
     var teilnehmer: List<Benutzer> = emptyList()
+
+    constructor()
+
+    @Suppress("ConvertSecondaryConstructorToPrimary")
+    constructor(id: Long, beginn: LocalDateTime, ende: LocalDateTime, ort: Ort, typ: String, teilnehmer: List<Benutzer>) {
+        this.id = id
+        this.beginn = beginn
+        this.ende = ende
+        this.ort = ort
+        this.typ = typ
+        this.teilnehmer = teilnehmer
+    ***REMOVED***
 ***REMOVED***

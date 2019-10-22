@@ -1,8 +1,8 @@
 package rest
 
 import com.nhaarman.mockitokotlin2.whenever
-import database.Stammdaten.Ort
-import database.Stammdaten.StammdatenDao
+import database.stammdaten.Ort
+import database.stammdaten.StammdatenDao
 import rest.StammdatenRestResource.OrtDto
 import org.junit.Test
 

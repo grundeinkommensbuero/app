@@ -6,7 +6,6 @@ import javax.persistence.*
 @Table(name = "Benutzer")
 class Benutzer() {
 
-    @Suppress("ConvertSecondaryConstructorToPrimary")
     constructor(id: Long, name: String, passwort: String, telefonnummer: String?) : this() {
         this.id = id
         this.name = name

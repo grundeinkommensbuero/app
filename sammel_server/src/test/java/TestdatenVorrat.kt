@@ -1,0 +1,34 @@
+import database.stammdaten.Ort
+import database.benutzer.Benutzer
+
+class TestdatenVorrat {
+    companion object {
+        fun nordkiez(): Ort {
+            return Ort(1, "Friedrichshain-Kreuzberg", "Friedrichshain Nordkiez")
+        ***REMOVED***
+
+        fun treptowerPark(): Ort {
+            return Ort(2, "Treptow-Köpenick", "Treptower Part")
+        ***REMOVED***
+
+        fun goerli(): Ort {
+            return Ort(3, "Friedrichshain-Kreuzberg", "Görlitzer Park und Umgebung")
+        ***REMOVED***
+
+        fun sammeltermin(): String {
+            return "Sammel-Termin"
+        ***REMOVED***
+
+        fun infoveranstaltung(): String {
+            return "Info-Veranstaltung"
+        ***REMOVED***
+
+        fun karl(): Benutzer {
+            return Benutzer(1, "Karl Marx", "Expropriation!", "123456789")
+        ***REMOVED***
+
+        fun rosa(): Benutzer {
+            return Benutzer(1, "Rosa Luxemburg", "Ich bin, ich war ich, werde sein", null)
+        ***REMOVED***
+    ***REMOVED***
+***REMOVED***

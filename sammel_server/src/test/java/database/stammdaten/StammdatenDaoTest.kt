@@ -1,4 +1,4 @@
-package database.Stammdaten
+package database.stammdaten
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.whenever
