@@ -1,4 +1,4 @@
-package database.Stammdaten
+package database.stammdaten
 
 import org.jboss.logging.Logger
 import javax.ejb.Stateless

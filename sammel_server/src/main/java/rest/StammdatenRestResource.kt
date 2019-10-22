@@ -1,7 +1,7 @@
 package rest
 
-import database.Stammdaten.Ort
-import database.Stammdaten.StammdatenDao
+import database.stammdaten.Ort
+import database.stammdaten.StammdatenDao
 import javax.ejb.EJB
 import javax.ws.rs.*
 import javax.ws.rs.core.Response

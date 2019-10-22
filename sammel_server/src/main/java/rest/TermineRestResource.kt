@@ -1,6 +1,6 @@
 package rest
 
-import database.Stammdaten.Ort
+import database.stammdaten.Ort
 import database.termine.Termin
 import database.termine.TermineDao
 import org.jboss.logging.Logger
