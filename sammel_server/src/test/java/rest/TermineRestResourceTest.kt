@@ -15,7 +15,8 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import rest.TermineRestResource.TerminDto
-import kotlin.test.assertEquals
+import javax.ejb.EJBException
+import kotlin.test.*
 
 class TermineRestResourceTest {
     @Rule
@@ -61,6 +62,17 @@ class TermineRestResourceTest {
         assertEquals(terminInDb.id, termin.id)
         assertEquals(terminInDb.teilnehmer.size, 2)
         assertEquals(terminInDb.teilnehmer[0].name, karl().name)
+    }
+
+    @Test
+    fun aktualisiereTerminReichtFehlerWeiterBeiUnbekannterId() {
+        val terminDto = terminDtoMitTeilnehmer()
+        whenever(dao.aktualisiereTermin(any())).thenThrow(EJBException())
+
+        val response = resource.aktualisiereTermin(terminDto)
+
+        assertEquals(response.status, 422)
+        assertNull(response.entity)
     }
 
     @Test
