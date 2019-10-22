@@ -14,4 +14,11 @@ class Ort {
 
     @Column
     var ort: String = ""
+
+    @Suppress("ConvertSecondaryConstructorToPrimary")
+    constructor(id: Int, bezirk: String, ort: String) {
+        this.id = id
+        this.bezirk = bezirk
+        this.ort = ort
+    }
 }
