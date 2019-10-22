@@ -75,4 +75,36 @@ class BenutzerDaoTest {
 
         assertSame(ergebnis, karl)
     }
+
+    @Test
+    fun legtNeuenBenutzerAnGibtDatenbankBenutzerZurueck() {
+        val karl = Benutzer(1, "Karl Marx", "hash1", null)
+        whenever(entityManager.createQuery(anyString(), any<Class<Benutzer>>()))
+                .thenReturn(typedQuery)
+        whenever(typedQuery.setParameter(anyString(), anyOrNull()))
+                .thenReturn(typedQuery)
+        whenever(typedQuery.getResultList())
+                .thenReturn(listOf(karl))
+
+        val benutzer = Benutzer(0, "Karl Marx", "hash1", null)
+        val ergebnis = dao.legeNeuenBenutzerAn(benutzer)
+
+        assertSame(ergebnis, karl)
+    }
+
+    @Test
+    fun legtNeuenBenutzerAnGibtFehlerAusWennAngelegterBenutzerNichtAuffindbarIst() {
+        whenever(entityManager.createQuery(anyString(), any<Class<Benutzer>>()))
+                .thenReturn(typedQuery)
+        whenever(typedQuery.setParameter(anyString(), anyOrNull()))
+                .thenReturn(typedQuery)
+        whenever(typedQuery.getResultList())
+                .thenReturn(emptyList())
+
+
+        assertFailsWith<BenutzerDao.BenutzerAnlegenGescheitertException> {
+            val benutzer = Benutzer(0, "Karl Marx", "hash1", null)
+            dao.legeNeuenBenutzerAn(benutzer)
+        }
+    }
 }
