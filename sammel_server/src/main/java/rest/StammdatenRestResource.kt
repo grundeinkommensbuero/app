@@ -18,10 +18,10 @@ open class StammdatenRestResource {
     open fun getOrte(): Response {
         val ergebnis: List<Ort>?
         ergebnis = dao.getOrte()
-        ergebnis.map { ort -> OrtDto.convertFromOrt(ort)}
+        val dtoListe = ergebnis.map { ort -> OrtDto.convertFromOrt(ort)}.toList()
         return Response
                 .ok()
-                .entity(ergebnis)
+                .entity(dtoListe)
                 .build()
     }
 
