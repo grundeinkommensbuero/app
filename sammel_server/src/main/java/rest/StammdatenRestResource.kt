@@ -31,7 +31,7 @@ open class StammdatenRestResource {
             var ort: String? = null) {
 
         fun convertToOrt(): Ort {
-            val ortObj = Ort()
+            val ortObj = Ort(1, "Friedrichshain-Kreuzberg", "Friedrichshain Nordkiez")
             ortObj.id = id ?: 0
             ortObj.bezirk = bezirk ?: ""
             ortObj.ort = ort ?: ""
