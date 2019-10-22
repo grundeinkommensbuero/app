@@ -23,14 +23,14 @@ class StammdatenRestResourceTest {
     private lateinit var dao: StammdatenDao
 
     @InjectMocks
-    private lateinit var restResource: StammdatenRestResource
+    private lateinit var resource: StammdatenRestResource
 
     @Test
     fun getOrte() {
         val nordkiez = Ort(1, "Friedrichshain-Kreuzberg", "Friedrichshain Nordkiez")
         whenever(dao.getOrte()).thenReturn(listOf(nordkiez))
 
-        val ergebnis = restResource.getOrte()
+        val ergebnis = resource.getOrte()
 
         assertEquals(ergebnis.status, 200)
         val list = ergebnis.entity as List<*>
