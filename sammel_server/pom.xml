@@ -118,6 +118,10 @@
                             <directory>web/WEB-INF</directory>
                             <targetPath>WEB-INF</targetPath>
                         </resource>
+                        <resource>
+                            <directory>web/META-INF</directory>
+                            <targetPath>WEB-INF/classes/META-INF</targetPath>
+                        </resource>
                     </webResources>
                 </configuration>
             </plugin>
