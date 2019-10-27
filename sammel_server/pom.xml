@@ -6,7 +6,7 @@
 
     <groupId>de.kybernetik</groupId>
     <artifactId>sammel_server</artifactId>
-    <packaging>pom</packaging>
+    <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -38,12 +38,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>5.3.1.Final-redhat-1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>org.jboss.arquillian.container</groupId>
             <artifactId>arquillian-container-test-api</artifactId>
             <version>1.1.13.Final</version>
@@ -72,6 +66,11 @@
             <artifactId>mockito-kotlin</artifactId>
             <version>2.1.0</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging</artifactId>
+            <version>3.4.1.Final</version>
         </dependency>
         <!-- Um Response im Test benutzen zu können -->
         <dependency>
@@ -106,6 +105,20 @@
                 </executions>
                 <configuration>
                     <jvmTarget>1.8</jvmTarget>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <warName>sammel-server</warName>
+                    <webXml>web/WEB-INF/web.xml</webXml>
+                    <webResources>
+                        <resource>
+                            <directory>web/WEB-INF</directory>
+                            <targetPath>WEB-INF</targetPath>
+                        </resource>
+                    </webResources>
                 </configuration>
             </plugin>
         </plugins>
