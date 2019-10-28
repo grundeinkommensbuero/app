@@ -5,7 +5,7 @@ import 'package:sammel_app/services/TermineService.dart';
 import 'package:test/test.dart';
 
 void main() {
-  // TODO in beiden Modi prüfen
+  // FIXME in beiden Modi prüfen
   test('liefert richtigen BenutzerService', () {
     var benutzerService = prefix0.ServiceProvider.benutzerService();
     if (ServiceProvider.DEMOMODUS) {
