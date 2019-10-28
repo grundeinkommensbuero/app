@@ -7,7 +7,7 @@ COPY Wildfly/mySQL /opt/jboss/wildfly/modules/com/mysql/main
 COPY Wildfly/configuration /opt/jboss/wildfly/standalone/configuration/
 
 # Artefakte zum Deployment kopieren
-COPY target/deployments /opt/jboss/wildfly/standalone/deployments/
+COPY target/*.war /opt/jboss/wildfly/standalone/deployments/
 
 # Richte Standard-Admin-Nutzer ein
 RUN /opt/jboss/wildfly/bin/add-user.sh admin password --silent
