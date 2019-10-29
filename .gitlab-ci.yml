@@ -3,6 +3,7 @@
 stages:
   - build_and_test
   - deploy_coverage
+  - deploy_backend
 
 unit_tests_app:
   image: gableroux/flutter:latest
@@ -40,20 +41,28 @@ pages:
   only:
     - master
 
-test_backend:
+test_server:
   image: maven:latest
   stage: build_and_test
   script:
     - cd sammel_server
     - mvn test -fae
 
-build_backend:
+build_server:
   image: maven:latest
   stage: build_and_test
   script:
     - cd sammel_server
     - mvn install -DskipTests
-    - mkdir public
   artifacts:
     paths:
       - sammel_server/target
+
+push_server:
+  image: docker:latest
+  stage: deploy_backend
+  dependencies:
+    - build_and_test
+  script:
+    - docker build sammel_server -t kybernetik/sammel-server:latest
+    - docker push kybernetik/sammel-app:sammel-server
