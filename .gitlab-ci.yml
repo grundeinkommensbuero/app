@@ -62,7 +62,7 @@ push_server:
   image: docker:latest
   stage: deploy_backend
   dependencies:
-    - build_and_test
+    - build_server
   script:
     - docker build sammel_server -t kybernetik/sammel-server:latest
     - docker push kybernetik/sammel-app:sammel-server
