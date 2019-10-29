@@ -54,7 +54,7 @@ build_backend:
     - cd sammel_server
     - mvn install -DskipTests
     - mkdir public
-    - mv sammel_server/target public/target
+    - mv target public/target
   artifacts:
     paths:
       - public/target
