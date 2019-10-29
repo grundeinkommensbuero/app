@@ -39,3 +39,22 @@ pages:
       - public
   only:
     - master
+
+test_backend:
+  image: maven:latest
+  stage: build_and_test
+  script:
+    - cd sammel_server
+    - mvn test -fae
+
+build_backend:
+  image: maven:latest
+  stage: build_and_test
+  script:
+    - cd sammel_server
+    - mvn install -DskipTests
+    - mkdir public
+    - mv sammel_server/target public/target
+  artifacts:
+    paths:
+      - public/target
