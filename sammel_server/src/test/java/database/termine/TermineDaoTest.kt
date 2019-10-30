@@ -44,8 +44,6 @@ class TermineDaoTest {
         val termineInDb = listOf(termin1,termin2)
         whenever(entityManager.createQuery(anyString(), any<Class<Termin>>()))
                 .thenReturn(typedQuery)
-        whenever(typedQuery.setParameter(anyString(), anyOrNull()))
-                .thenReturn(typedQuery)
         whenever(typedQuery.resultList)
                 .thenReturn(termineInDb)
 
