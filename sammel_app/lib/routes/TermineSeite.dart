@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sammel_app/Routes/TerminCard.dart';
+import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/services/ServiceProvider.dart';
-import '../services/TermineService.dart';
 
 class TermineSeite extends StatefulWidget {
   TermineSeite({Key key, this.title}) : super(key: key);

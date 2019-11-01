@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sammel_app/Routes/TermineSeite.dart';
+import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/ServiceProvider.dart';
 import '../services/BenutzerService.dart';
 
