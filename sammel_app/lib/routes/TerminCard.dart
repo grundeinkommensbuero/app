@@ -80,15 +80,6 @@ class TerminCard extends StatelessWidget {
     return ende.isAfter(DateTime.now()) ? DUNKELGELB : HELLGELB;
   }
 
-  Widget erzeugeTeilnehmerZeile(Benutzer benutzer) {
-    return Row(
-      children: <Widget>[
-        Icon(Icons.supervised_user_circle),
-        Text(' ${benutzer.name} '),
-      ],
-    );
-  }
-
   static String erzeugeDatumText(DateTime beginn, DateTime ende) {
     return ''
         '${ermittlePrefix(beginn)}'
