@@ -120,7 +120,7 @@ class _LoginSeiteState extends State<LoginSeite> {
         ***REMOVED***
       ***REMOVED***
     ***REMOVED*** catch (e, s) {
-      print('Fehler: $e\n$s'); //TODO LOG
+      print('Fehler: $e\n$s');
       showDialog(
           context: context,
           builder: (_) {
