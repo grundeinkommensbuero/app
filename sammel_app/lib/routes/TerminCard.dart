@@ -19,44 +19,40 @@ class TerminCard extends StatelessWidget {
   TerminCard(this.termin);
 
   build(context) {
-    return Container(
-        child: Column(children: [
-      RaisedButton(
-        color: faerbeVergangeneTermine(termin.ende),
-        child: Column(children: [
-          Text('${termin.typ***REMOVED***',
-              style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.bold,
-                  color: Color.fromARGB(255, 129, 28, 98))),
-          Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            Image.asset(
-              termin.getAsset(),
-              height: 40.0,
-            ),
-            SizedBox(
-              width: 20.0,
-            ),
-            Flexible(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                  Text(
-                    erzeugeOrtText(termin.ort),
-                    style: style,
-                    overflow: TextOverflow.clip,
-                  ),
-                  Text(erzeugeDatumText(termin.beginn, termin.ende)),
-                  erzeugeTeilnehmerRow(termin.teilnehmer),
-                ])),
-          ]),
+    return RaisedButton(
+      color: faerbeVergangeneTermine(termin.ende),
+      child: Column(children: [
+        Text(
+          '${termin.typ***REMOVED***',
+          style: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+              color: Color.fromARGB(255, 129, 28, 98)),
+        ),
+        Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+          Image.asset(
+            termin.getAsset(),
+            height: 40.0,
+          ),
+          SizedBox(
+            width: 20.0,
+          ),
+          Flexible(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                Text(
+                  erzeugeOrtText(termin.ort),
+                  style: style,
+                  overflow: TextOverflow.clip,
+                ),
+                Text(erzeugeDatumText(termin.beginn, termin.ende)),
+                erzeugeTeilnehmerRow(termin.teilnehmer),
+              ])),
         ]),
-        onPressed: () => {***REMOVED***,
-      ),
-      SizedBox(
-        height: _PADDING,
-      ),
-    ]));
+      ]),
+      onPressed: () => {***REMOVED***,
+    );
   ***REMOVED***
 
   static Row erzeugeTeilnehmerRow(List<Benutzer> teilnehmer) {

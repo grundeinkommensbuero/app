@@ -41,9 +41,11 @@ class _TermineSeiteState extends State<TermineSeite> {
           ],
         )),
         body: Center(
-            child: ListView(
-                children:
-                    termine.map((termin) => TerminCard(termin)).toList())));
+            child: ListView.builder(
+                itemCount: termine.length,
+                itemBuilder: (context, index) => ListTile(
+                    title: TerminCard(termine[index]),
+                    contentPadding: EdgeInsets.only(bottom: 0.1)))));
   ***REMOVED***
 
   void ladeTermine() {
