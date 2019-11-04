@@ -1,6 +1,7 @@
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/services/Benutzer.dart';
+import 'package:sammel_app/shared/DateTimeHelfer.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -42,12 +43,19 @@ void main() {
       expect(datumText.substring(0, datumText.indexOf(',')), 'Morgen');
     });
 
-    test('ermittelt Wochentag richtig', () {
+    test('gibt Wochentag an für übermorgen bis in 7 Tagen', () {
       var spaeter = DateTime(now().year, now().month, now().day, 20)
           .add(Duration(days: 2));
       var datumText = TerminCard.ermittlePrefix(spaeter);
 
-      expect(datumText.substring(0, datumText.indexOf(',')), 'Sonntag');
+      expect(datumText.substring(0, datumText.indexOf(',')),
+          DateTimeHelfer.wochentag(spaeter));
+      spaeter = DateTime(now().year, now().month, now().day, 20)
+          .add(Duration(days: 7));
+      datumText = TerminCard.ermittlePrefix(spaeter);
+
+      expect(datumText.substring(0, datumText.indexOf(',')),
+          DateTimeHelfer.wochentag(spaeter));
     });
   });
   group('faerbeVergangeneTermine', () {
@@ -115,4 +123,5 @@ DateTime now() => DateTime.now();
 Ort nordkiez() => Ort(0, "Friedrichshain-Kreuzberg", "Friedrichshain Nordkiez");
 
 Benutzer rosa() => Benutzer('Rosa Luxemburg');
+
 Benutzer karl() => Benutzer('Karl Marx', '123456789');
