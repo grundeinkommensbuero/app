@@ -22,8 +22,12 @@ class _TermineSeiteState extends State<TermineSeite> {
 
   @override
   Widget build(BuildContext context) {
-    termineService = Provider.of<TermineService>(context);
-    ladeTermine();
+    // Termine nur initial laden, nicht bei jedem redraw,
+    // braucht allerdings context, darum nicht im initState() möglich
+    if (termineService == null) {
+      termineService = Provider.of<TermineService>(context);
+      ladeTermine();
+    ***REMOVED***
     // TODO: Memory-Leak beheben
     return Scaffold(
         appBar: AppBar(
