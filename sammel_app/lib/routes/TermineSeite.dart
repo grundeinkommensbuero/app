@@ -46,12 +46,9 @@ class _TermineSeiteState extends State<TermineSeite> {
         body: Center(
             child: ListView.builder(
                 itemCount: termine.length,
-                itemBuilder: (context, index) {
-                  print('Zeichne TerminCard');
-                  return ListTile(
+                itemBuilder: (context, index) => ListTile(
                     title: TerminCard(termine[index]),
-                    contentPadding: EdgeInsets.only(bottom: 0.1));
-                ***REMOVED***)));
+                    contentPadding: EdgeInsets.only(bottom: 0.1)))));
   ***REMOVED***
 
   void ladeTermine() {
