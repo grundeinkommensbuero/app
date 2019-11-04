@@ -15,7 +15,7 @@ class TerminCard extends StatelessWidget {
     fontSize: 15.0,
   );
 
-  TerminCard(this.termin);
+  TerminCard(this.termin, [Key key]);
 
   build(context) {
     return RaisedButton(
