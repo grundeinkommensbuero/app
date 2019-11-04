@@ -28,12 +28,14 @@ dependencies:
   flutter_local_notifications: ^0.8.4
   date_format: 1.0.6
   http_server: 0.9.8+3
+  provider: 3.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   test: ^1.5.1
   flutter_launcher_icons: 0.7.3
+  mockito: 4.1.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

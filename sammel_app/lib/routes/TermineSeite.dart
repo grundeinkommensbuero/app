@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/services/ServiceProvider.dart';
+import 'package:sammel_app/services/TermineService.dart';
 
 class TermineSeite extends StatefulWidget {
   TermineSeite({Key key, this.title}) : super(key: key);
@@ -12,19 +13,17 @@ class TermineSeite extends StatefulWidget {
 }
 
 class _TermineSeiteState extends State<TermineSeite> {
+  static var termineService;
   static final TextStyle style = TextStyle(
     color: Color.fromARGB(255, 129, 28, 98),
     fontSize: 15.0,
   );
-  static final _termineService = ServiceProvider.termineService();
   List<Termin> termine = [];
-
-  _TermineSeiteState() {
-    ladeTermine();
-  }
 
   @override
   Widget build(BuildContext context) {
+    termineService = Provider.of<TermineService>(context);
+    ladeTermine();
     // TODO: Memory-Leak beheben
     return Scaffold(
         appBar: AppBar(
@@ -49,7 +48,7 @@ class _TermineSeiteState extends State<TermineSeite> {
   }
 
   void ladeTermine() {
-    _termineService.ladeTermine().then((termine) {
+    termineService.ladeTermine().then((termine) {
       setState(() {
         this.termine = termine;
       });

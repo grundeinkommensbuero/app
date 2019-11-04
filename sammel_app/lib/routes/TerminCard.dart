@@ -8,7 +8,6 @@ import 'package:sammel_app/shared/DateTimeHelfer.dart';
 
 class TerminCard extends StatelessWidget {
   final Termin termin;
-  static const _PADDING = 5.0;
   static const DUNKELGELB = Colors.amberAccent;
   static const HELLGELB = Color.fromARGB(255, 250, 250, 150);
   static final TextStyle style = TextStyle(
