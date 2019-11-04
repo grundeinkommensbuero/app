@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
-import 'package:sammel_app/services/ServiceProvider.dart';
 import '../services/BenutzerService.dart';
 
 class LoginSeite extends StatefulWidget {
@@ -16,7 +16,8 @@ class _LoginSeiteState extends State<LoginSeite> {
   static const String _ANMELDEN = 'Anmelden';
   static double _padding = 8.0;
   bool _modus = false;
-  static final _benutzerService = ServiceProvider.benutzerService();
+
+  static var benutzerService;
 
   static Login _login = Login.ausName('', '');
 
@@ -39,6 +40,7 @@ class _LoginSeiteState extends State<LoginSeite> {
 
   @override
   Widget build(BuildContext context) {
+    benutzerService = Provider.of<BenutzerService>(context);
     return Scaffold(
       appBar: AppBar(
           title: Row(
@@ -103,7 +105,7 @@ class _LoginSeiteState extends State<LoginSeite> {
   loginBenutzer() async {
     try {
       var authentifiziert =
-          await _benutzerService.authentifziereBenutzer(_login);
+          await benutzerService.authentifziereBenutzer(_login);
 
       if (authentifiziert.erfolgreich) {
         navigiereZuMeldungenSeite();
@@ -142,7 +144,7 @@ class _LoginSeiteState extends State<LoginSeite> {
 
   legeBenutzerAn() async {
     try {
-      await _benutzerService.legeBenutzerAn(_login);
+      await benutzerService.legeBenutzerAn(_login);
       navigiereZuMeldungenSeite();
     ***REMOVED*** on LoginException catch (e) {
       print('Erwarteter Fehler: ${e.message***REMOVED***');
