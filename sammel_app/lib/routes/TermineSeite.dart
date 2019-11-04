@@ -18,15 +18,15 @@ class _TermineSeiteState extends State<TermineSeite> {
     color: Color.fromARGB(255, 129, 28, 98),
     fontSize: 15.0,
   );
+  bool initialized = false;
   List<Termin> termine = [];
 
   @override
   Widget build(BuildContext context) {
-    // Termine nur initial laden, nicht bei jedem redraw,
-    // braucht allerdings context, darum nicht im initState() möglich
-    if (termineService == null) {
+    if (!initialized) {
       termineService = Provider.of<TermineService>(context);
       ladeTermine();
+      initialized = true;
     }
     // TODO: Memory-Leak beheben
     return Scaffold(
@@ -46,9 +46,12 @@ class _TermineSeiteState extends State<TermineSeite> {
         body: Center(
             child: ListView.builder(
                 itemCount: termine.length,
-                itemBuilder: (context, index) => ListTile(
+                itemBuilder: (context, index) {
+                  print('Zeichne TerminCard');
+                  return ListTile(
                     title: TerminCard(termine[index]),
-                    contentPadding: EdgeInsets.only(bottom: 0.1)))));
+                    contentPadding: EdgeInsets.only(bottom: 0.1));
+                })));
   }
 
   void ladeTermine() {
