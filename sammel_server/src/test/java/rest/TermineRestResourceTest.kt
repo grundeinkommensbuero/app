@@ -3,8 +3,9 @@ package rest
 import TestdatenVorrat.Companion.karl
 import TestdatenVorrat.Companion.rosa
 import TestdatenVorrat.Companion.terminDtoMitTeilnehmer
-import TestdatenVorrat.Companion.terminMitTeilnehmer
-import TestdatenVorrat.Companion.terminOhneTeilnehmer
+import TestdatenVorrat.Companion.terminMitTeilnehmerMitDetails
+import TestdatenVorrat.Companion.terminMitTeilnehmerOhneDetails
+import TestdatenVorrat.Companion.terminOhneTeilnehmerOhneDetails
 import com.nhaarman.mockitokotlin2.*
 import database.termine.Termin
 import database.termine.TermineDao
@@ -31,7 +32,7 @@ class TermineRestResourceTest {
 
     @Test
     fun getTermineLiefertTerminDtosAus() {
-        whenever(dao.getTermine()).thenReturn(listOf(terminOhneTeilnehmer(), terminMitTeilnehmer()))
+        whenever(dao.getTermine()).thenReturn(listOf(terminOhneTeilnehmerOhneDetails(), terminMitTeilnehmerMitDetails()))
         val response = resource.getTermine()
 
         assertEquals(response.status, 200)
@@ -40,9 +41,9 @@ class TermineRestResourceTest {
         assertEquals(termine[0]!!::class.java, TerminDto::class.java)
         val termin1 = termine[0] as TerminDto
         val termin2 = termine[1] as TerminDto
-        assertEquals(termin1.id, terminOhneTeilnehmer().id)
+        assertEquals(termin1.id, terminOhneTeilnehmerOhneDetails().id)
         assertEquals(termin1.teilnehmer?.size, 0)
-        assertEquals(termin2.id, terminMitTeilnehmer().id)
+        assertEquals(termin2.id, terminMitTeilnehmerOhneDetails().id)
         assertEquals(termin2.teilnehmer?.size, 2)
         assertEquals(termin2.teilnehmer?.get(0)?.name, karl().name)
         assertEquals(termin2.teilnehmer?.get(1)?.name, rosa().name)
