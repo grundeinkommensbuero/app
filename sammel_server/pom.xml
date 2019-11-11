@@ -152,13 +152,13 @@
                             <rules>
                                 <rule>
                                     <element>BUNDLE</element>
-                                    <limits>
+                                    <!--limits>
                                         <limit>
                                             <counter>COMPLEXITY</counter>
                                             <value>COVEREDRATIO</value>
                                             <minimum>0.50</minimum>
                                         </limit>
-                                    </limits>
+                                    </limits-->
                                 </rule>
                             </rules>
                         </configuration>
