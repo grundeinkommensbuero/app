@@ -32,14 +32,19 @@ class Termin {
             inverseJoinColumns = [JoinColumn(name = "Teilnehmer", referencedColumnName = "id")])
     var teilnehmer: List<Benutzer> = emptyList()
 
+    @OneToOne(cascade = [CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH], fetch = FetchType.LAZY)
+    @JoinColumn(name = "details", referencedColumnName = "ID")
+    var details: TerminDetails? = null
+
     constructor()
 
-    constructor(id: Long, beginn: LocalDateTime, ende: LocalDateTime, ort: Ort, typ: String, teilnehmer: List<Benutzer>) {
+    constructor(id: Long, beginn: LocalDateTime?, ende: LocalDateTime?, ort: Ort?, typ: String?, teilnehmer: List<Benutzer>, details: TerminDetails?) {
         this.id = id
         this.beginn = beginn
         this.ende = ende
         this.ort = ort
         this.typ = typ
+        this.details = details
         this.teilnehmer = teilnehmer
     }
 }

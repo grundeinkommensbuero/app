@@ -1,6 +1,7 @@
 import database.stammdaten.Ort
 import database.benutzer.Benutzer
 import database.termine.Termin
+import database.termine.TerminDetails
 import rest.TermineRestResource
 import java.time.LocalDateTime
 
@@ -34,30 +35,46 @@ class TestdatenVorrat {
             return Benutzer(1, "Rosa Luxemburg", "Ich bin, ich war ich, werde sein", null)
         }
 
-        fun terminOhneTeilnehmer(): Termin {
+        fun terminOhneTeilnehmerOhneDetails(): Termin {
             return Termin(1,
                     LocalDateTime.of(2019, 10, 22, 16, 30, 0),
                     LocalDateTime.of(2019, 10, 22, 18, 0, 0),
                     nordkiez(),
                     sammeltermin(),
-                    emptyList())
+                    emptyList(),
+                    null)
         }
 
-        fun terminMitTeilnehmer(): Termin {
+        fun terminMitTeilnehmerOhneDetails(): Termin {
             return Termin(2,
                     LocalDateTime.of(2019, 10, 22, 12, 0, 0),
                     LocalDateTime.of(2019, 10, 22, 15, 0, 0),
                     goerli(),
                     sammeltermin(),
-                    listOf(karl(), rosa()))
+                    listOf(karl(), rosa()),
+                    null)
+        }
+
+        fun terminMitTeilnehmerMitDetails(): Termin {
+            return Termin(2,
+                    LocalDateTime.of(2019, 10, 22, 12, 0, 0),
+                    LocalDateTime.of(2019, 10, 22, 15, 0, 0),
+                    goerli(),
+                    sammeltermin(),
+                    listOf(karl(), rosa()),
+                    terminDetails())
         }
 
         fun terminDtoMitTeilnehmer(): TermineRestResource.TerminDto {
-            return TermineRestResource.TerminDto.convertFromTermin(terminMitTeilnehmer())
+            return TermineRestResource.TerminDto.convertFromTerminWithoutDetails(terminMitTeilnehmerOhneDetails())
         }
 
         fun terminDtoOhneTeilnehmer(): TermineRestResource.TerminDto {
-            return TermineRestResource.TerminDto.convertFromTermin(terminOhneTeilnehmer())
+            return TermineRestResource.TerminDto.convertFromTerminWithoutDetails(terminOhneTeilnehmerOhneDetails())
+        }
+
+        internal fun terminDetails(): TerminDetails {
+            return TerminDetails(1, "Weltzeituhr", "Kommt zahlreich", "kalle@revo.de")
         }
     }
 }

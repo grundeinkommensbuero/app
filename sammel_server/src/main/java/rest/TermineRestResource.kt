@@ -2,6 +2,7 @@ package rest
 
 import database.stammdaten.Ort
 import database.termine.Termin
+import database.termine.TerminDetails
 import database.termine.TermineDao
 import org.jboss.logging.Logger
 import java.time.LocalDateTime
@@ -22,7 +23,21 @@ open class TermineRestResource {
     @Produces(APPLICATION_JSON)
     open fun getTermine(): Response {
         val ergebnis: List<TerminDto>?
-        ergebnis = dao.getTermine().map { termin -> TerminDto.convertFromTermin(termin) }
+        ergebnis = dao.getTermine().map { termin -> TerminDto.convertFromTerminWithoutDetails(termin) }
+        return Response
+                .ok()
+                .entity(ergebnis)
+                .build()
+    }
+
+    @GET
+    @Path("termin")
+    @Produces(APPLICATION_JSON)
+    open fun getTermin(@QueryParam("id") id: Long): Response {
+        val ergebnis: TerminDto?
+        val termin = dao.getTermin(id)
+        termin.details
+        ergebnis = TerminDto.convertFromTerminWithDetails(termin)
         return Response
                 .ok()
                 .entity(ergebnis)
@@ -37,7 +52,7 @@ open class TermineRestResource {
         val aktualisierterTermin = dao.erstelleNeuenTermin(termin.convertToTermin())
         return Response
                 .ok()
-                .entity(TerminDto.convertFromTermin(aktualisierterTermin))
+                .entity(TerminDto.convertFromTerminWithoutDetails(aktualisierterTermin))
                 .build()
     }
 
@@ -64,34 +79,66 @@ open class TermineRestResource {
             var ende: LocalDateTime? = null,
             var ort: Ort? = null,
             var typ: String? = null,
-            var teilnehmer: List<BenutzerDto>? = emptyList()) {
+            var teilnehmer: List<BenutzerDto>? = emptyList(),
+            var details: TerminDetailsDto?) {
 
         fun convertToTermin(): Termin {
-            val termin = Termin()
-            termin.id = id ?: 0
-            termin.beginn = beginn
-            termin.ende = ende
-            termin.ort = ort
-            termin.typ = typ
-            termin.teilnehmer =
+            return Termin(
+                    id = id ?: 0,
+                    beginn = beginn,
+                    ende = ende,
+                    ort = ort,
+                    typ = typ,
+                    teilnehmer =
                     if (teilnehmer == null) {
                         emptyList()
                     } else {
                         teilnehmer!!.map { teilnehmer -> teilnehmer.convertToBenutzer() }
-                    }
-            return termin
+                    },
+                    details = details?.convertToTerminDetails())
         }
 
         companion object {
-            fun convertFromTermin(termin: Termin): TerminDto {
-                return TerminDto(
-                        termin.id,
-                        termin.beginn,
-                        termin.ende,
-                        termin.ort,
-                        termin.typ,
-                        termin.teilnehmer.map { teilnehmer -> BenutzerDto.convertFromBenutzer(teilnehmer) })
+            fun convertFromTerminWithDetails(termin: Termin): TerminDto {
+                val terminDto = convertFromTerminWithoutDetails(termin)
+                terminDto.details = TerminDetailsDto.convertFromTerminDetails(termin.details)
+                return terminDto
             }
+
+            fun convertFromTerminWithoutDetails(termin: Termin): TerminDto = TerminDto(
+                    termin.id,
+                    termin.beginn,
+                    termin.ende,
+                    termin.ort,
+                    termin.typ,
+                    termin.teilnehmer.map { teilnehmer -> BenutzerDto.convertFromBenutzer(teilnehmer) },
+                    null)
+        }
+    }
+}
+
+class TerminDetailsDto(
+        val id: Long? = null,
+        val treffpunkt: String? = null,
+        val kommentar: String? = null,
+        val kontakt: String? = null) {
+
+    fun convertToTerminDetails(): TerminDetails {
+        return TerminDetails(
+                id = this.id ?: 0,
+                treffpunkt = this.treffpunkt,
+                kommentar = this.kommentar,
+                kontakt = this.kontakt)
+    }
+
+    companion object {
+        fun convertFromTerminDetails(details: TerminDetails?): TerminDetailsDto? {
+            if (details == null) return null
+            return TerminDetailsDto(
+                    id = details.id,
+                    treffpunkt = details.treffpunkt,
+                    kommentar = details.kommentar,
+                    kontakt = details.kontakt)
         }
     }
 }

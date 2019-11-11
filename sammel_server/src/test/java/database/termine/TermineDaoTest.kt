@@ -5,6 +5,7 @@ import TestdatenVorrat.Companion.karl
 import TestdatenVorrat.Companion.nordkiez
 import TestdatenVorrat.Companion.rosa
 import TestdatenVorrat.Companion.sammeltermin
+import TestdatenVorrat.Companion.terminDetails
 import TestdatenVorrat.Companion.treptowerPark
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Rule
@@ -39,9 +40,9 @@ class TermineDaoTest {
 
     @Test
     fun getTermineLiefertTermineAusDb() {
-        val termin1 = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList())
-        val termin2 = Termin(2, beginn, ende, treptowerPark(), infoveranstaltung(), listOf(rosa(), karl()))
-        val termineInDb = listOf(termin1,termin2)
+        val termin1 = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), terminDetails())
+        val termin2 = Termin(2, beginn, ende, treptowerPark(), infoveranstaltung(), listOf(rosa(), karl()), terminDetails())
+        val termineInDb = listOf(termin1, termin2)
         whenever(entityManager.createQuery(anyString(), any<Class<Termin>>()))
                 .thenReturn(typedQuery)
         whenever(typedQuery.resultList)
@@ -58,19 +59,20 @@ class TermineDaoTest {
     }
 
     @Test
-    fun getTerminLiefertTerminAusDb() {
-        val terminInDb = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList())
+    fun getTerminLiefertTerminMitDetailsAusDb() {
+        val terminInDb = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), terminDetails())
         whenever(entityManager.find(any<Class<Termin>>(), anyLong()))
                 .thenReturn(terminInDb)
 
-        val termine = dao.getTermin(1L)
+        val termin = dao.getTermin(1L)
 
-        assertEquals(termine, terminInDb)
+        assertEquals(termin, terminInDb)
+        assertEquals(termin.details, terminInDb.details)
     }
 
     @Test
     fun aktualisiereTerminSchreibtTerminInDb() {
-        val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList())
+        val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), terminDetails())
 
         dao.aktualisiereTermin(termin)
 
@@ -80,7 +82,7 @@ class TermineDaoTest {
 
     @Test
     fun erstelleNeuenTerminSchreibtTerminInDb() {
-        val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList())
+        val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), terminDetails())
 
         dao.erstelleNeuenTermin(termin)
 
