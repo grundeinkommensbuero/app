@@ -1,6 +1,7 @@
 import 'package:sammel_app/services/Benutzer.dart';
 
 import 'Ort.dart';
+import 'TerminDetails.dart';
 
 class Termin {
   int id;
@@ -8,10 +9,12 @@ class Termin {
   DateTime ende;
   Ort ort;
   String typ;
+  TerminDetails terminDetails;
 
   List<Benutzer> teilnehmer;
 
-  Termin(this.id, this.beginn, this.ende, this.ort, this.typ, this.teilnehmer);
+  Termin(this.id, this.beginn, this.ende, this.ort, this.typ, this.teilnehmer,
+      this.terminDetails);
 
   Termin.fromJson(Map<String, dynamic> json)
       : id = json['id'],
@@ -21,16 +24,19 @@ class Termin {
         typ = json['typ'] ?? 'Termin',
         teilnehmer = (json['teilnehmer'] as List)
             .map((json) => Benutzer.fromJson(json))
-            .toList();
+            .toList(),
+        terminDetails = json['terminDetails'] != null
+            ? TerminDetails.fromJSON(json['terminDetails'])
+            : null;
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         'id': id,
         'beginn': beginn.toIso8601String(),
         'ende': ende.toIso8601String(),
         'ort': ort,
         'typ': typ,
         'teilnehmer': teilnehmer,
+        'terminDetails': terminDetails,
       };
 
   String getAsset() {
