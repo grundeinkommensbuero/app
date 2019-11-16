@@ -1,17 +1,17 @@
 import 'dart:convert';
 
-import 'package:date_format/date_format.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/services/Benutzer.dart';
 import 'package:test/test.dart';
 
 import '../routes/TerminCard_test.dart';
+import 'TerminDetails_test.dart';
 
 void main() {
   group('serialisere', () {
     test(
-        'serialisiert Temin mit id, Beginn, Ende, Ort und leerer Teilnehmerliste',
+        'serialisiert Temin mit id, Beginn, Ende, Ort, leerer Teilnehmerliste und ohne Details',
         () {
       expect(
           jsonEncode(Termin(
@@ -19,17 +19,21 @@ void main() {
               DateTime(2020, 1, 2, 15, 0, 0),
               DateTime(2020, 1, 2, 18, 0, 0),
               Ort(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez'),
-              'Sammel-Termin', [])),
+              'Sammel-Termin',
+              [],
+              null)),
           '{'
           '"id":1,'
           '"beginn":"2020-01-02T15:00:00.000",'
           '"ende":"2020-01-02T18:00:00.000",'
           '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez"***REMOVED***,'
           '"typ":"Sammel-Termin",'
-          '"teilnehmer":[]***REMOVED***');
+          '"teilnehmer":[],'
+          '"terminDetails":null***REMOVED***');
     ***REMOVED***);
 
-    test('serialisiert Temin mit id, Beginn, Ende, Ort und Teilnehmerliste',
+    test(
+        'serialisiert Temin mit id, Beginn, Ende, Ort, mit Teilnehmerliste und ohne Details',
         () {
       expect(
           jsonEncode(Termin(
@@ -37,10 +41,12 @@ void main() {
               DateTime(2020, 1, 2, 15, 0, 0),
               DateTime(2020, 1, 2, 18, 0, 0),
               Ort(15, "Friedrichshain-Kreuzberg", "Fhain - Nordkiez"),
-              'Sammel-Termin', [
-            Benutzer("Karla Kolumna", "01456972524"),
-            Benutzer("D0min4tor_1337")
-          ])),
+              'Sammel-Termin',
+              [
+                Benutzer("Karla Kolumna", "01456972524"),
+                Benutzer("D0min4tor_1337")
+              ],
+              null)),
           '{'
           '"id":1,'
           '"beginn":"2020-01-02T15:00:00.000",'
@@ -49,7 +55,38 @@ void main() {
           '"typ":"Sammel-Termin",'
           '"teilnehmer":['
           '{"name":"Karla Kolumna","telefonnummer":"01456972524"***REMOVED***,'
-          '{"name":"D0min4tor_1337","telefonnummer":null***REMOVED***]***REMOVED***');
+          '{"name":"D0min4tor_1337","telefonnummer":null***REMOVED***],'
+          '"terminDetails":null***REMOVED***');
+    ***REMOVED***);
+
+    test(
+        'serialisiert Temin mit id, Beginn, Ende, Ort, mit Teilnehmerliste und mit Details',
+        () {
+      expect(
+          jsonEncode(Termin(
+              1,
+              DateTime(2020, 1, 2, 15, 0, 0),
+              DateTime(2020, 1, 2, 18, 0, 0),
+              Ort(15, "Friedrichshain-Kreuzberg", "Fhain - Nordkiez"),
+              'Sammel-Termin',
+              [
+                Benutzer("Karla Kolumna", "01456972524"),
+                Benutzer("D0min4tor_1337")
+              ],
+              TerminDetailsTestDaten.terminDetailsTestDaten())),
+          '{'
+          '"id":1,'
+          '"beginn":"2020-01-02T15:00:00.000",'
+          '"ende":"2020-01-02T18:00:00.000",'
+          '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez"***REMOVED***,'
+          '"typ":"Sammel-Termin",'
+          '"teilnehmer":['
+          '{"name":"Karla Kolumna","telefonnummer":"01456972524"***REMOVED***,'
+          '{"name":"D0min4tor_1337","telefonnummer":null***REMOVED***],'
+          '"terminDetails":{"treffpunkt":"Weltzeituhr",'
+          '"kommentar":"Bringe Westen und Klämmbretter mit",'
+          '"kontakt":"Ruft an unter 012345678"***REMOVED***'
+          '***REMOVED***');
     ***REMOVED***);
   ***REMOVED***);
   group('deserialisiere', () {
@@ -96,10 +133,36 @@ void main() {
       expect(termin.teilnehmer[1].toString(),
           Benutzer("D0min4tor_1337").toString());
     ***REMOVED***);
+
+    test('deserialisiert Temin mit Details', () {
+      var termin = Termin.fromJson(jsonDecode('{'
+          '"id":1,'
+          '"beginn":"2020-01-02T15:00:00.000",'
+          '"ende":"2020-01-02T18:00:00.000",'
+          '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez"***REMOVED***,'
+          '"typ":"Sammel-Termin",'
+          '"teilnehmer":['
+          '{"name":"Karla Kolumna","telefonnummer":"01456972524"***REMOVED***,'
+          '{"name":"D0min4tor_1337","telefonnummer":null***REMOVED***],'
+          '"terminDetails":{"treffpunkt":"Weltzeituhr",'
+          '"kommentar":"Ich bringe Westen und Klämbretter mit",'
+          '"kontakt":"Ruft mich an unter 01234567"***REMOVED***'
+          '***REMOVED***'));
+      expect(termin.terminDetails.treffpunkt, "Weltzeituhr");
+      expect(termin.terminDetails.kommentar,
+          "Ich bringe Westen und Klämbretter mit");
+      expect(termin.terminDetails.kontakt, "Ruft mich an unter 01234567");
+    ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***
 
 class TerminTestDaten {
-  static Termin terminOhneTeilnehmer() => Termin(0, DateTime(2019, 11, 4, 17, 9, 0),
-      DateTime(2019, 11, 4, 18, 9, 0), nordkiez(), 'Sammel-Termin', []);
+  static Termin terminOhneTeilnehmer() => Termin(
+      0,
+      DateTime(2019, 11, 4, 17, 9, 0),
+      DateTime(2019, 11, 4, 18, 9, 0),
+      nordkiez(),
+      'Sammel-Termin',
+      [],
+      TerminDetailsTestDaten.terminDetailsTestDaten());
 ***REMOVED***
