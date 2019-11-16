@@ -10,6 +10,7 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
+import rest.StammdatenRestResource
 import javax.persistence.EntityManager
 import javax.persistence.TypedQuery
 
@@ -36,4 +37,10 @@ class StammdatenDaoTest {
 
         assert(orte.containsAll(orteAusDb))
     ***REMOVED***
+
+    companion object {
+        open fun nordkiez(): StammdatenRestResource.OrtDto =
+                StammdatenRestResource.OrtDto(0, "Friedrichshain-Kreuzberg", "Friedrichshain Nordkiez")
+    ***REMOVED***
+
 ***REMOVED***

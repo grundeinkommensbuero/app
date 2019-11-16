@@ -23,7 +23,8 @@ open class TermineRestResource {
     @Produces(APPLICATION_JSON)
     open fun getTermine(): Response {
         val ergebnis: List<TerminDto>?
-        ergebnis = dao.getTermine().map { termin -> TerminDto.convertFromTerminWithoutDetails(termin) ***REMOVED***
+        // FIXME zu POST-Request umbauen und Filter-Parameter durchreichen
+        ergebnis = dao.getTermine(TermineFilter()).map { termin -> TerminDto.convertFromTerminWithoutDetails(termin) ***REMOVED***
         return Response
                 .ok()
                 .entity(ergebnis)
