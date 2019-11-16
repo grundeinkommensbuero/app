@@ -8,18 +8,27 @@ import TestdatenVorrat.Companion.sammeltermin
 import TestdatenVorrat.Companion.terminDetails
 import TestdatenVorrat.Companion.treptowerPark
 import com.nhaarman.mockitokotlin2.*
+import database.stammdaten.Ort
+import database.stammdaten.StammdatenDaoTest
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.*
 import org.mockito.ArgumentMatchers.any
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
+import rest.TermineFilter
+import shared.toDate
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.LocalTime
 import javax.persistence.EntityManager
 import javax.persistence.TypedQuery
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class TermineDaoTest {
     @Rule
@@ -39,7 +48,7 @@ class TermineDaoTest {
     private val ende = LocalDateTime.of(2019, 10, 22, 18, 0, 0)
 
     @Test
-    fun getTermineLiefertTermineAusDb() {
+    fun getTermineLiefertAlleTermineAusDbMitLeeremFilter() {
         val termin1 = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), terminDetails())
         val termin2 = Termin(2, beginn, ende, treptowerPark(), infoveranstaltung(), listOf(rosa(), karl()), terminDetails())
         val termineInDb = listOf(termin1, termin2)
@@ -48,7 +57,7 @@ class TermineDaoTest {
         whenever(typedQuery.resultList)
                 .thenReturn(termineInDb)
 
-        val termine = dao.getTermine()
+        val termine = dao.getTermine(TermineFilter())
 
         assertEquals(termine.size, 2)
         assertEquals(termine[0], termin1)
@@ -56,6 +65,127 @@ class TermineDaoTest {
         assertEquals(termine[1].teilnehmer.size, 2)
         assertEquals(termine[1].teilnehmer[0].name, rosa().name)
         assertEquals(termine[1].teilnehmer[1].name, karl().name)
+    }
+
+    @Test
+    fun erzeugeGetTermineQueryErgaenztTypenKlauselWennNichtNull() {
+        whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)
+
+        dao.erzeugeGetTermineQuery(TermineFilter(listOf("Sammel-Termin", "Info-Veranstaltung"), emptyList(), null, null, emptyList()))
+
+        verify(entityManager, atLeastOnce()).createQuery(matches(".*\\swhere termine\\.typ in \\(:typen\\)"), any<Class<Termin>>())
+        val typenCaptor = ArgumentCaptor.forClass(List::class.java)
+        verify(typedQuery, atLeastOnce()).setParameter(matches("typen"), typenCaptor.capture())
+        assertTrue(typenCaptor.value.contains("Sammel-Termin"))
+        assertTrue(typenCaptor.value.contains("Info-Veranstaltung"))
+    }
+
+    @Test
+    fun erzeugeGetTermineQueryErgaenztTypenKlauselNICHTWennNull() {
+        whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)
+
+        dao.erzeugeGetTermineQuery(TermineFilter())
+
+        val queryCaptor = ArgumentCaptor.forClass(String::class.java)
+        verify(entityManager, atLeastOnce()).createQuery(queryCaptor.capture(), any<Class<Termin>>())
+        assertFalse(queryCaptor.value.contains("where termine.typ in :typen"))
+        verify(typedQuery, never()).setParameter(matches("typen"), any())
+    }
+
+    @Test
+    fun erzeugeGetTermineQueryErgaenztTageKlauselWennNichtNull() {
+        whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)
+
+        val heute = LocalDate.now()
+        dao.erzeugeGetTermineQuery(TermineFilter(emptyList(), listOf(heute, heute.plusDays(1)), null, null, emptyList()))
+
+        verify(entityManager, atLeastOnce()).createQuery(matches(".*\\swhere DATE\\(termine\\.beginn\\) in \\(:tage\\)"), any<Class<Termin>>())
+        val tageCaptor = ArgumentCaptor.forClass(List::class.java)
+        verify(typedQuery, atLeastOnce()).setParameter(matches("tage"), tageCaptor.capture())
+        assertTrue(tageCaptor.value.contains(heute.toDate()))
+        assertTrue(tageCaptor.value.contains(heute.plusDays(1).toDate()))
+    }
+
+    @Test
+    fun erzeugeGetTermineQueryErgaenztTageKlauselNICHTWennNull() {
+        whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)
+
+        dao.erzeugeGetTermineQuery(TermineFilter())
+
+        val queryCaptor = ArgumentCaptor.forClass(String::class.java)
+        verify(entityManager, atLeastOnce()).createQuery(queryCaptor.capture(), any<Class<Termin>>())
+        assertFalse(queryCaptor.value.contains("where DATE(termine.beginn) in (:tage)"))
+        verify(typedQuery, never()).setParameter(matches("tage"), any())
+    }
+
+    @Test
+    fun erzeugeGetTermineQueryErgaenztVonKlauselWennNichtNull() {
+        whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)
+
+        val jetzt = LocalTime.now()
+        dao.erzeugeGetTermineQuery(TermineFilter(emptyList(), emptyList(), jetzt, null, emptyList()))
+
+        verify(entityManager, atLeastOnce()).createQuery(matches(".*\\swhere TIME\\(termine\\.beginn\\) >= TIME\\(:von\\)"), any<Class<Termin>>())
+        verify(typedQuery, atLeastOnce()).setParameter("von", jetzt.atDate(LocalDate.now()))
+    }
+
+    @Test
+    fun erzeugeGetTermineQueryErgaenztVonKlauselNICHTWennNull() {
+        whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)
+
+        dao.erzeugeGetTermineQuery(TermineFilter())
+
+        val queryCaptor = ArgumentCaptor.forClass(String::class.java)
+        verify(entityManager, atLeastOnce()).createQuery(queryCaptor.capture(), any<Class<Termin>>())
+        assertFalse(queryCaptor.value.contains("where TIME(termine.beginn) >= TIME(:von)"))
+        verify(typedQuery, never()).setParameter(matches("von"), any())
+    }
+
+    @Test
+    fun erzeugeGetTermineQueryErgaenztBisKlauselWennNichtNull() {
+        whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)
+
+        val jetzt = LocalTime.now()
+        dao.erzeugeGetTermineQuery(TermineFilter(emptyList(), emptyList(), null, jetzt, emptyList()))
+
+        verify(entityManager, atLeastOnce()).createQuery(matches(".*\\swhere TIME\\(termine\\.beginn\\) <= TIME\\(:bis\\)"), any<Class<Termin>>())
+        verify(typedQuery, atLeastOnce()).setParameter("bis", jetzt.atDate(LocalDate.now()))
+    }
+
+    @Test
+    fun erzeugeGetTermineQueryErgaenztBisKlauselNICHTWennNull() {
+        whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)
+
+        dao.erzeugeGetTermineQuery(TermineFilter())
+
+        val queryCaptor = ArgumentCaptor.forClass(String::class.java)
+        verify(entityManager, atLeastOnce()).createQuery(queryCaptor.capture(), any<Class<Termin>>())
+        assertFalse(queryCaptor.value.contains("where TIME(termine.beginn) <= TIME(:bis)"))
+        verify(typedQuery, never()).setParameter(matches("von"), any())
+    }
+
+    @Test
+    fun erzeugeGetTermineQueryErgaenztOrteKlauselWennNichtNull() {
+        whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)
+
+        dao.erzeugeGetTermineQuery(TermineFilter(emptyList(), emptyList(), null, null, listOf(StammdatenDaoTest.nordkiez())))
+
+        verify(entityManager, atLeastOnce()).createQuery(matches(".*\\swhere termine\\.ort in \\(:orte\\)"), any<Class<Termin>>())
+        val tageCaptor = ArgumentCaptor.forClass(List::class.java)
+        verify(typedQuery, atLeastOnce()).setParameter(matches("orte"), tageCaptor.capture())
+        assertEquals((tageCaptor.value[0] as Ort).id, StammdatenDaoTest.nordkiez().convertToOrt().id)
+    }
+
+    @Test
+    fun erzeugeGetTermineQueryErgaenztOrteKlauselNICHTWennNull() {
+        whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)
+
+        dao.erzeugeGetTermineQuery(TermineFilter())
+
+        val queryCaptor = ArgumentCaptor.forClass(String::class.java)
+        verify(entityManager, atLeastOnce()).createQuery(queryCaptor.capture(), any<Class<Termin>>())
+        assertFalse(queryCaptor.value.contains("where termine.ort in (:orte)"))
+        verify(typedQuery, never()).setParameter(matches("orte"), any())
     }
 
     @Test

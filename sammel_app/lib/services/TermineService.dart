@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:http_server/http_server.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/services/Benutzer.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/Service.dart';

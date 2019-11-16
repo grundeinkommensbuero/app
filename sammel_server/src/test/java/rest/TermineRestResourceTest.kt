@@ -32,7 +32,7 @@ class TermineRestResourceTest {
 
     @Test
     fun getTermineLiefertTerminDtosAus() {
-        whenever(dao.getTermine()).thenReturn(listOf(terminOhneTeilnehmerOhneDetails(), terminMitTeilnehmerMitDetails()))
+        whenever(dao.getTermine(any())).thenReturn(listOf(terminOhneTeilnehmerOhneDetails(), terminMitTeilnehmerMitDetails()))
         val response = resource.getTermine()
 
         assertEquals(response.status, 200)
