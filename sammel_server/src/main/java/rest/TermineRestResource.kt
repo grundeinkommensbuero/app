@@ -5,6 +5,7 @@ import database.termine.Termin
 import database.termine.TerminDetails
 import database.termine.TermineDao
 import org.jboss.logging.Logger
+import rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithoutDetails
 import java.time.LocalDateTime
 import javax.ejb.EJB
 import javax.ejb.EJBException
@@ -19,15 +20,14 @@ open class TermineRestResource {
     @EJB
     private lateinit var dao: TermineDao
 
-    @GET
+    @POST
+    @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
-    open fun getTermine(): Response {
-        val ergebnis: List<TerminDto>?
-        // FIXME zu POST-Request umbauen und Filter-Parameter durchreichen
-        ergebnis = dao.getTermine(TermineFilter()).map { termin -> TerminDto.convertFromTerminWithoutDetails(termin) ***REMOVED***
+    open fun getTermine(filter: TermineFilter?): Response {
+        val termine = dao.getTermine(filter ?: TermineFilter())
         return Response
                 .ok()
-                .entity(ergebnis)
+                .entity(termine.map { termin -> convertFromTerminWithoutDetails(termin) ***REMOVED***)
                 .build()
     ***REMOVED***
 
@@ -35,13 +35,11 @@ open class TermineRestResource {
     @Path("termin")
     @Produces(APPLICATION_JSON)
     open fun getTermin(@QueryParam("id") id: Long): Response {
-        val ergebnis: TerminDto?
         val termin = dao.getTermin(id)
         termin.details
-        ergebnis = TerminDto.convertFromTerminWithDetails(termin)
         return Response
                 .ok()
-                .entity(ergebnis)
+                .entity(TerminDto.convertFromTerminWithDetails(termin))
                 .build()
     ***REMOVED***
 
@@ -53,7 +51,7 @@ open class TermineRestResource {
         val aktualisierterTermin = dao.erstelleNeuenTermin(termin.convertToTermin())
         return Response
                 .ok()
-                .entity(TerminDto.convertFromTerminWithoutDetails(aktualisierterTermin))
+                .entity(convertFromTerminWithoutDetails(aktualisierterTermin))
                 .build()
     ***REMOVED***
 

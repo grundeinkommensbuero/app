@@ -65,9 +65,9 @@ class Service {
           if (body.type != "json" &&
               ((body is List && (body.body as List).isNotEmpty) ||
                   ((body is String && (body as String).isEmpty)))) {
-            throw WrongResponseFormatException(
-                'Get-Request bekommt "${body.type***REMOVED***",'
-                ' statt "json" - Response zurück: ${body.body***REMOVED***');
+            var message = 'Get-Request bekommt "${body.type***REMOVED***",'
+                ' statt "json" - Response zurück: ${body.body***REMOVED***';
+            throw WrongResponseFormatException(message);
           ***REMOVED*** else {
             return body;
           ***REMOVED***
