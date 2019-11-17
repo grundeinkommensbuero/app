@@ -13,7 +13,7 @@ abstract class AbstractTermineService extends Service {
 
 class TermineService extends AbstractTermineService {
   Future<List<Termin>> ladeTermine() async {
-    HttpClientResponseBody response = await get(Uri.parse('/service/termine'));
+    HttpClientResponseBody response = await post(Uri.parse('/service/termine'), '');
     if (response.response.statusCode == 200) {
       final termine = (response.body as List).map((jsonTermin) {
         var termin = Termin.fromJson(jsonTermin);

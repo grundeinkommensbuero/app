@@ -11,6 +11,7 @@ import database.termine.Termin
 import database.termine.TermineDao
 import org.junit.Rule
 import org.junit.Test
+import org.mockito.ArgumentCaptor
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
@@ -31,9 +32,12 @@ class TermineRestResourceTest {
     private lateinit var resource: TermineRestResource
 
     @Test
-    fun getTermineLiefertTerminDtosAus() {
+    fun getTermineLiefertTerminDtosAusMitFilter() {
         whenever(dao.getTermine(any())).thenReturn(listOf(terminOhneTeilnehmerOhneDetails(), terminMitTeilnehmerMitDetails()))
-        val response = resource.getTermine()
+        val filter = TermineFilter()
+        val response = resource.getTermine(filter)
+
+        verify(dao, atLeastOnce()).getTermine(filter)
 
         assertEquals(response.status, 200)
         val termine = response.entity as List<*>
@@ -47,6 +51,20 @@ class TermineRestResourceTest {
         assertEquals(termin2.teilnehmer?.size, 2)
         assertEquals(termin2.teilnehmer?.get(0)?.name, karl().name)
         assertEquals(termin2.teilnehmer?.get(1)?.name, rosa().name)
+    }
+
+    @Test
+    fun getTermineNimmtFuerKeinenFilterLeerenFilter() {
+        whenever(dao.getTermine(any())).thenReturn(listOf(terminOhneTeilnehmerOhneDetails(), terminMitTeilnehmerMitDetails()))
+        resource.getTermine(null)
+
+        val captor = ArgumentCaptor.forClass(TermineFilter::class.java)
+        verify(dao, atLeastOnce()).getTermine(capture<TermineFilter>(captor))
+        assertEquals(captor.value.typen, emptyList())
+        assertEquals(captor.value.tage, emptyList())
+        assertEquals(captor.value.von, null)
+        assertEquals(captor.value.bis, null)
+        assertEquals(captor.value.orte, emptyList())
     }
 
     @Test
