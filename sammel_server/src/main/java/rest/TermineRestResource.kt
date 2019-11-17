@@ -116,30 +116,30 @@ open class TermineRestResource {
                     null)
         ***REMOVED***
     ***REMOVED***
-***REMOVED***
 
-class TerminDetailsDto(
-        val id: Long? = null,
-        val treffpunkt: String? = null,
-        val kommentar: String? = null,
-        val kontakt: String? = null) {
+    class TerminDetailsDto(
+            val id: Long? = null,
+            val treffpunkt: String? = null,
+            val kommentar: String? = null,
+            val kontakt: String? = null) {
 
-    fun convertToTerminDetails(): TerminDetails {
-        return TerminDetails(
-                id = this.id ?: 0,
-                treffpunkt = this.treffpunkt,
-                kommentar = this.kommentar,
-                kontakt = this.kontakt)
-    ***REMOVED***
+        fun convertToTerminDetails(): TerminDetails {
+            return TerminDetails(
+                    id = this.id ?: 0,
+                    treffpunkt = this.treffpunkt,
+                    kommentar = this.kommentar,
+                    kontakt = this.kontakt)
+        ***REMOVED***
 
-    companion object {
-        fun convertFromTerminDetails(details: TerminDetails?): TerminDetailsDto? {
-            if (details == null) return null
-            return TerminDetailsDto(
-                    id = details.id,
-                    treffpunkt = details.treffpunkt,
-                    kommentar = details.kommentar,
-                    kontakt = details.kontakt)
+        companion object {
+            fun convertFromTerminDetails(details: TerminDetails?): TerminDetailsDto? {
+                if (details == null) return null
+                return TerminDetailsDto(
+                        id = details.id,
+                        treffpunkt = details.treffpunkt,
+                        kommentar = details.kommentar,
+                        kontakt = details.kontakt)
+            ***REMOVED***
         ***REMOVED***
     ***REMOVED***
 ***REMOVED***
