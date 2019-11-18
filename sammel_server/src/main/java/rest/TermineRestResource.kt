@@ -24,6 +24,7 @@ open class TermineRestResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun getTermine(filter: TermineFilter?): Response {
+        LOG.info("Request nach Terminen mit Filter ${filter?.typen***REMOVED***, ${filter?.tage***REMOVED***, ${filter?.von***REMOVED***, ${filter?.bis***REMOVED***, ${filter?.orte***REMOVED***")
         val termine = dao.getTermine(filter ?: TermineFilter())
         return Response
                 .ok()
@@ -58,7 +59,10 @@ open class TermineRestResource {
     @POST
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
+    @Path("termin")
     open fun aktualisiereTermin(termin: TerminDto): Response {
+        LOG.info("aktualisiereTermin() mit Termin-Typ ${termin.typ***REMOVED***")
+        LOG.info("aktualisiereTermin() mit Termin-Details ${termin.details?.kommentar***REMOVED***: ${termin.details?.treffpunkt***REMOVED***, ${termin.details?.kommentar***REMOVED***, ${termin.details?.kontakt***REMOVED***")
         try {
             dao.aktualisiereTermin(termin.convertToTermin())
         ***REMOVED*** catch (e: EJBException) {
@@ -79,7 +83,7 @@ open class TermineRestResource {
             var ort: Ort? = null,
             var typ: String? = null,
             var teilnehmer: List<BenutzerDto>? = emptyList(),
-            var details: TerminDetailsDto?) {
+            var details: TerminDetailsDto? = TerminDetailsDto()) {
 
         fun convertToTermin(): Termin {
             return Termin(
@@ -115,11 +119,11 @@ open class TermineRestResource {
         ***REMOVED***
     ***REMOVED***
 
-    class TerminDetailsDto(
-            val id: Long? = null,
-            val treffpunkt: String? = null,
-            val kommentar: String? = null,
-            val kontakt: String? = null) {
+    data class TerminDetailsDto(
+            var id: Long? = null,
+            var treffpunkt: String? = null,
+            var kommentar: String? = null,
+            var kontakt: String? = null) {
 
         fun convertToTerminDetails(): TerminDetails {
             return TerminDetails(

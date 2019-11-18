@@ -32,7 +32,7 @@ class Termin {
             inverseJoinColumns = [JoinColumn(name = "Teilnehmer", referencedColumnName = "id")])
     var teilnehmer: List<Benutzer> = emptyList()
 
-    @OneToOne(cascade = [CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH], fetch = FetchType.LAZY)
+    @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     @JoinColumn(name = "details", referencedColumnName = "ID")
     var details: TerminDetails? = null
 

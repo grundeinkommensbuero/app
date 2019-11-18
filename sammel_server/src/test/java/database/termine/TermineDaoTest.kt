@@ -189,6 +189,31 @@ class TermineDaoTest {
     ***REMOVED***
 
     @Test
+    fun erzeugeGetTermineQueryErgaenztAlleKlauselnWennNichtNull() {
+        whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)
+
+        dao.erzeugeGetTermineQuery(TermineFilter(
+                listOf("Sammel-Termin"),
+                listOf(LocalDate.of(2019, 11, 18)),
+                LocalTime.of(12, 0, 0),
+                LocalTime.of(18, 0, 0),
+                listOf(StammdatenDaoTest.nordkiez())))
+
+        val queryCaptor = ArgumentCaptor.forClass(String::class.java)
+        verify(entityManager, atLeastOnce()).createQuery(queryCaptor.capture(), any<Class<Termin>>())
+        assertTrue(queryCaptor.value.contains("termine.typ in (:typen)"))
+        assertTrue(queryCaptor.value.contains("DATE(termine.beginn) in (:tage)"))
+        assertTrue(queryCaptor.value.contains("TIME(termine.beginn) >= TIME(:von)"))
+        assertTrue(queryCaptor.value.contains("TIME(termine.beginn) <= TIME(:bis)"))
+        assertTrue(queryCaptor.value.contains("termine.ort in (:orte)"))
+        verify(typedQuery, atLeastOnce()).setParameter(matches("typen"), any())
+        verify(typedQuery, atLeastOnce()).setParameter(matches("tage"), any())
+        verify(typedQuery, atLeastOnce()).setParameter(matches("von"), any())
+        verify(typedQuery, atLeastOnce()).setParameter(matches("bis"), any())
+        verify(typedQuery, atLeastOnce()).setParameter(matches("orte"), any())
+    ***REMOVED***
+
+    @Test
     fun getTerminLiefertTerminMitDetailsAusDb() {
         val terminInDb = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), terminDetails())
         whenever(entityManager.find(any<Class<Termin>>(), anyLong()))
