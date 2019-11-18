@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
+import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/TermineService.dart';
@@ -17,7 +18,8 @@ void main() {
       (WidgetTester tester) async {
     var termineSeiteWidget = TermineSeite(title: 'Titel mit Ümläüten');
 
-    when(terminService.ladeTermine()).thenAnswer((_) async => []);
+    when(terminService.ladeTermine(TermineFilter.leererFilter()))
+        .thenAnswer((_) async => []);
 
     await tester.pumpWidget(Provider<TermineService>(
         builder: (context) => terminService,
@@ -30,11 +32,12 @@ void main() {
       (WidgetTester tester) async {
     var termineSeiteWidget = TermineSeite(title: 'Titel mit Ümläüten');
 
-    when(terminService.ladeTermine()).thenAnswer((_) async => [
-          TerminTestDaten.terminOhneTeilnehmer(),
-          TerminTestDaten.terminOhneTeilnehmer(),
-          TerminTestDaten.terminOhneTeilnehmer(),
-        ]);
+    when(terminService.ladeTermine(TermineFilter.leererFilter()))
+        .thenAnswer((_) async => [
+              TerminTestDaten.terminOhneTeilnehmer(),
+              TerminTestDaten.terminOhneTeilnehmer(),
+              TerminTestDaten.terminOhneTeilnehmer(),
+            ]);
 
     await tester.pumpWidget(Provider<TermineService>(
         builder: (context) => terminService,

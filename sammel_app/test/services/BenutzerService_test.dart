@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/Benutzer.dart';
 import 'package:sammel_app/services/BenutzerService.dart';
 import 'package:sammel_app/services/TermineService.dart';
@@ -52,7 +53,7 @@ void main() {
     group('DemoTermineService', () {
       test('liefert Termine aus', () async {
         var demoTermineService = DemoTermineService();
-        var ergebnis = await demoTermineService.ladeTermine();
+        var ergebnis = await demoTermineService.ladeTermine(TermineFilter.leererFilter());
         expect(ergebnis.isNotEmpty, true);
       });
     });

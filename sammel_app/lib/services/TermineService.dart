@@ -1,19 +1,22 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:http_server/http_server.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
+import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/Benutzer.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/Service.dart';
 
 abstract class AbstractTermineService extends Service {
-  Future<List<Termin>> ladeTermine();
+  Future<List<Termin>> ladeTermine(TermineFilter filter);
 }
 
 class TermineService extends AbstractTermineService {
-  Future<List<Termin>> ladeTermine() async {
-    HttpClientResponseBody response = await post(Uri.parse('/service/termine'), '');
+  Future<List<Termin>> ladeTermine(TermineFilter filter) async {
+    HttpClientResponseBody response =
+        await post(Uri.parse('/service/termine'), jsonEncode(filter));
     if (response.response.statusCode == 200) {
       final termine = (response.body as List).map((jsonTermin) {
         var termin = Termin.fromJson(jsonTermin);
@@ -35,12 +38,11 @@ class DemoTermineService extends AbstractTermineService {
   static Benutzer rosa = Benutzer('Rosa Luxemburg');
   static Ort nordkiez =
       Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez');
-  static Ort treptowerPark = Ort(2, 'Treptow-Köpenick', 'Treptower Park');
+  static Ort treptowerPark =
+      Ort(2, 'Treptow-Köpenick', 'Treptower Park');
   static Ort goerli =
       Ort(2, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung');
   static var heute = DateTime.now();
-
-  // ladeTermine reicht Termine ohne Details heraus
   List<Termin> termine = [
     Termin(
         1,
@@ -65,7 +67,7 @@ class DemoTermineService extends AbstractTermineService {
     Termin(
         3,
         DateTime(heute.year, heute.month, heute.day, 23, 0, 0),
-        DateTime(heute.year, heute.month, heute.day + 1, 2, 0, 0),
+        DateTime(heute.year, heute.month, heute.day+1, 2, 0, 0),
         goerli,
         'Sammel-Termin',
         [rosa],
@@ -87,7 +89,7 @@ class DemoTermineService extends AbstractTermineService {
   ];
 
   @override
-  Future<List<Termin>> ladeTermine() async {
+  Future<List<Termin>> ladeTermine(TermineFilter filter) async {
     // Wert muss als Future herausgereicht werden
     return (new Completer()..complete(termine)).future;
   }
