@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/services/TermineService.dart';
@@ -20,11 +21,13 @@ class _TermineSeiteState extends State<TermineSeite> {
   );
   bool initialized = false;
   List<Termin> termine = [];
+  TermineFilter filter;
 
   @override
   Widget build(BuildContext context) {
     if (!initialized) {
       termineService = Provider.of<TermineService>(context);
+      filter = TermineFilter.leererFilter();
       ladeTermine();
       initialized = true;
     ***REMOVED***
@@ -52,7 +55,7 @@ class _TermineSeiteState extends State<TermineSeite> {
   ***REMOVED***
 
   void ladeTermine() {
-    termineService.ladeTermine().then((termine) {
+    termineService.ladeTermine(this.filter).then((termine) {
       setState(() {
         this.termine = termine;
       ***REMOVED***);
