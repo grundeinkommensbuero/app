@@ -4,28 +4,24 @@ Cache-Control: no-cache
 Content-Type: application/json
 
 {
-  "beginn": "2020-02-05T09:00:00",
-  "ende": "2020-02-05T12:00:00",
-  "id": 1,
-  "ort": {
-    "bezirk": "Friedrichshain-Kreuzberg",
-    "id": 1,
-    "ort": "F-Hain Nordkiez"
-  },
-  "typ": "Sammel-Termin",
-  "teilnehmer": [
+  "typen": [
+    "Sammel-Termin"
+  ],
+  "tage": [
+    "2020-02-05"
+  ],
+  "von": "08:00:00",
+  "bis": "18:00:00",
+  "orte": [
     {
       "id": 1,
-      "name": "Karl Marx",
-      "telefonnummer": "0176336423"
-    },
-    {
-      "id": 2,
-      "name": "Bini Adamczak",
-      "passwort": "hash2"
+      "bezirk": "Friedrichshain-Kreuzberg",
+      "ort": "Friedrichshain Nordkiez"
     }
   ]
 }
+
+<> 2019-10-05T053122.200.json
 
 ###
 

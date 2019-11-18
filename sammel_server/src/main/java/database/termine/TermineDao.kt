@@ -4,7 +4,6 @@ import org.jboss.logging.Logger
 import rest.TermineFilter
 import shared.toDate
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import javax.ejb.Stateless
 import javax.inject.Inject
 import javax.persistence.EntityManager
@@ -23,20 +22,30 @@ open class TermineDao {
         return erzeugeGetTermineQuery(filter).resultList
     }
 
+    private val typenKlausel = "termine.typ in (:typen)"
+    private val tageKlausel = "DATE(termine.beginn) in (:tage)"
+    private val vonKlausel = "TIME(termine.beginn) >= TIME(:von)"
+    private val bisKlausel = "TIME(termine.beginn) <= TIME(:bis)"
+    private val orteKlausel = "termine.ort in (:orte)"
+
+    @Suppress("JpaQueryApiInspection") // IDEA kriegt die Query nicht zusammen
     open fun erzeugeGetTermineQuery(filter: TermineFilter): TypedQuery<Termin> {
-        val query = entityManager
-                .createQuery("select termine from Termin termine" +
-                        if (filter.typen.isNotEmpty()) " where termine.typ in (:typen)" else "" +
-                                if (filter.tage.isNotEmpty()) " where DATE(termine.beginn) in (:tage)" else "" +
-                                        if (filter.bis != null) " where TIME(termine.beginn) <= TIME(:bis)" else "" +
-                                                if (filter.von != null) " where TIME(termine.beginn) >= TIME(:von)" else "" +
-                                                        if (filter.orte.isNotEmpty()) " where termine.ort in (:orte)" else "",
-                        Termin::class.java)
-        if(filter.typen.isNotEmpty()) query.setParameter("typen", filter.typen)
-        if(filter.tage.isNotEmpty()) query.setParameter("tage", filter.tage.map { it.toDate() })
-        if(filter.von != null) query.setParameter("von", filter.von.atDate(LocalDate.now()))
-        if(filter.bis != null) query.setParameter("bis", filter.bis.atDate(LocalDate.now()))
-        if(filter.orte.isNotEmpty()) query.setParameter("orte", filter.orte.map { it.convertToOrt() })
+        val filterKlausel = mutableListOf<String>()
+        if (filter.typen.isNotEmpty()) filterKlausel.add(typenKlausel)
+        if (filter.tage.isNotEmpty()) filterKlausel.add(tageKlausel)
+        if (filter.von != null) filterKlausel.add(vonKlausel)
+        if (filter.bis != null) filterKlausel.add(bisKlausel)
+        if (filter.orte.isNotEmpty()) filterKlausel.add(orteKlausel)
+
+        var sql = "select termine from Termin termine"
+        if(filterKlausel.isNotEmpty()) sql += " where " + filterKlausel.joinToString(" and ")
+        val query = entityManager.createQuery(sql, Termin::class.java)
+
+        if (filterKlausel.contains(typenKlausel)) query.setParameter("typen", filter.typen)
+        if (filterKlausel.contains(tageKlausel)) query.setParameter("tage", filter.tage.map { it.toDate() })
+        if (filterKlausel.contains(vonKlausel)) query.setParameter("von", filter.von!!.atDate(LocalDate.now()))
+        if (filterKlausel.contains(bisKlausel)) query.setParameter("bis", filter.bis!!.atDate(LocalDate.now()))
+        if (filterKlausel.contains(orteKlausel)) query.setParameter("orte", filter.orte.map { it.convertToOrt() })
         LOG.debug("debug ### " + query.toString())
         return query
     }

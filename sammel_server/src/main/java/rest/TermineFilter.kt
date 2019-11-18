@@ -3,10 +3,10 @@ package rest
 import java.time.LocalDate
 import java.time.LocalTime
 
-class TermineFilter(
-        val typen: List<String> = emptyList(),
-        val tage: List<LocalDate> = emptyList(),
-        val von: LocalTime? = null,
-        val bis: LocalTime? = null,
-        val orte: List<StammdatenRestResource.OrtDto> = emptyList()
+data class TermineFilter(
+        var typen: List<String> = emptyList(),
+        var tage: List<LocalDate> = emptyList(),
+        var von: LocalTime? = null,
+        var bis: LocalTime? = null,
+        var orte: List<StammdatenRestResource.OrtDto> = emptyList()
 )

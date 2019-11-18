@@ -1,8 +1,0 @@
-GET http://127.0.0.1:18080/service/termine
-Accept: */*
-Cache-Control: no-cache
-
-<> 2019-10-05T053122.200.json
-
-###
-
