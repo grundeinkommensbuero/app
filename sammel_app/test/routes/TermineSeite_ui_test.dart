@@ -32,12 +32,11 @@ void main() {
       (WidgetTester tester) async {
     var termineSeiteWidget = TermineSeite(title: 'Titel mit Ümläüten');
 
-    when(terminService.ladeTermine(TermineFilter.leererFilter()))
-        .thenAnswer((_) async => [
-              TerminTestDaten.terminOhneTeilnehmer(),
-              TerminTestDaten.terminOhneTeilnehmer(),
-              TerminTestDaten.terminOhneTeilnehmer(),
-            ]);
+    when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+          TerminTestDaten.terminOhneTeilnehmer(),
+          TerminTestDaten.terminOhneTeilnehmer(),
+          TerminTestDaten.terminOhneTeilnehmer(),
+        ]);
 
     await tester.pumpWidget(Provider<TermineService>(
         builder: (context) => terminService,
