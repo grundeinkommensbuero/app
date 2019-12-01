@@ -1,4 +1,7 @@
-class DateTimeHelfer {
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+class ChronoHelfer {
   static String wochentag(DateTime datetime) {
     switch (datetime.weekday) {
       case 1:
@@ -17,5 +20,12 @@ class DateTimeHelfer {
         return 'Sonntag';
     ***REMOVED***
     throw Exception('Unbekannter Wochentag');
+  ***REMOVED***
+
+  static DateFormat dateFormat = DateFormat("HH:mm:ss");
+
+  static String timeToString(TimeOfDay time) {
+    if (time == null) return null;
+    return dateFormat.format(DateTime(0, 1, 1, time.hour, time.minute, 0));
   ***REMOVED***
 ***REMOVED***

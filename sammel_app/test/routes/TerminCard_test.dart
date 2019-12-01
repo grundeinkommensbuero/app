@@ -1,7 +1,7 @@
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/services/Benutzer.dart';
-import 'package:sammel_app/shared/DateTimeHelfer.dart';
+import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -49,13 +49,13 @@ void main() {
       var datumText = TerminCard.ermittlePrefix(spaeter);
 
       expect(datumText.substring(0, datumText.indexOf(',')),
-          DateTimeHelfer.wochentag(spaeter));
+          ChronoHelfer.wochentag(spaeter));
       spaeter = DateTime(now().year, now().month, now().day, 20)
           .add(Duration(days: 7));
       datumText = TerminCard.ermittlePrefix(spaeter);
 
       expect(datumText.substring(0, datumText.indexOf(',')),
-          DateTimeHelfer.wochentag(spaeter));
+          ChronoHelfer.wochentag(spaeter));
     ***REMOVED***);
   ***REMOVED***);
   group('faerbeVergangeneTermine', () {

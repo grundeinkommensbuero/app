@@ -9,7 +9,7 @@ class Service {
   static const port = 18443;
 
   static final clientContext = SecurityContext();
-  final client = HttpClient(context: clientContext);
+  HttpClient client = HttpClient(context: clientContext);
 
   final Map<String, String> header = {
     HttpHeaders.contentTypeHeader: "application/json",

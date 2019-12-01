@@ -1,32 +1,92 @@
 import 'dart:convert';
 
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
+
+import '../routes/TerminCard_test.dart';
 
 void main() {
   group('serialisere', () {
-    test('serialisiert vollstaendigen TermineFilter', () {
-      var filter = TermineFilter(
-          ["Sammel-Termin", "Info-Veranstaltung"],
-          [DateTime.now(), DateTime.now().add(Duration(days: 1))],
-          Time(10, 0, 0),
-          Time(22, 0, 0),
-          [Ort(1, "bezirk1", "ort1"), Ort(1, "bezirk2", "ort2")]);
-
-      var json = jsonEncode(filter);
-
-      expect(json, '{'
-          '"typen":["Sammel-Termin","Info-Veranstaltung"],'
-          '"tage":[],"von":null,"bis":null,"orte":[]***REMOVED***');
+    test('serialisiert leeren TermineFilter', () {
+      expect(jsonEncode(TermineFilter.leererFilter()),
+          '{"typen":[],"tage":[],"von":null,"bis":null,"orte":[]***REMOVED***');
     ***REMOVED***);
 
-    test('serialisiert leeren TermineFilter', () {
-      var leererFilter = TermineFilter.leererFilter();
-      var json = jsonEncode(leererFilter);
-
-      expect(json, '{"typen":[],"tage":[],"von":null,"bis":null,"orte":[]***REMOVED***');
+    test('serialisiert gefuellten TermineFilter', () {
+      expect(
+          jsonEncode(TermineFilter(
+              ["Sammel-Termin", "Info-Veranstaltung"],
+              [DateTime(2019, 11, 22, 0, 0, 0), DateTime(2019, 1, 30, 0, 0, 0)],
+              TimeOfDay(hour: 4, minute: 10),
+              TimeOfDay(hour: 23, minute: 0),
+              [nordkiez()])),
+          '{'
+          '"typen":["Sammel-Termin","Info-Veranstaltung"],'
+          '"tage":["2019-11-22","2019-01-30"],'
+          '"von":"04:10:00",'
+          '"bis":"23:00:00",'
+          '"orte":[{"id":0,"bezirk":"Friedrichshain-Kreuzberg","ort":"Friedrichshain Nordkiez"***REMOVED***]'
+          '***REMOVED***');
+    ***REMOVED***);
+  ***REMOVED***);
+  group("deserialisiere", () {
+    test("deserialisert leeren TermineFilter", () {
+      var termineFilter = TermineFilter.fromJSON(jsonDecode('{'
+          '"typen":[],'
+          '"tage":[],'
+          '"von":null,'
+          '"bis":null,'
+          '"orte":[]'
+          '***REMOVED***'));
+      expect(termineFilter.typen.length, 0);
+      expect(termineFilter.tage.length, 0);
+      expect(termineFilter.von, null);
+      expect(termineFilter.bis, null);
+      expect(termineFilter.orte.length, 0);
+    ***REMOVED***);
+    test("deserialisert gefuellten TermineFilter", () {
+      var termineFilter = TermineFilter.fromJSON(jsonDecode('{'
+          '"typen":["Sammel-Termin","Info-Veranstaltung"],'
+          '"tage":["2019-11-22","2019-01-02"],'
+          '"von":"23:59:00",'
+          '"bis":"01:02:00",'
+          '"orte":[{"id":0,"bezirk":"Friedrichshain-Kreuzberg","ort":"Friedrichshain Nordkiez"***REMOVED***]'
+          '***REMOVED***'));
+      expect(termineFilter.typen.length, 2);
+      expect(termineFilter.typen[0], "Sammel-Termin");
+      expect(termineFilter.typen[1], "Info-Veranstaltung");
+      expect(termineFilter.tage.length, 2);
+      expect([
+        termineFilter.tage[0].day,
+        termineFilter.tage[0].month,
+        termineFilter.tage[0].year
+      ], [
+        22,
+        11,
+        2019
+      ]);
+      expect([
+        termineFilter.tage[1].day,
+        termineFilter.tage[1].month,
+        termineFilter.tage[1].year
+      ], [
+        2,
+        1,
+        2019
+      ]);
+      expect([termineFilter.von.hour, termineFilter.von.minute], [23, 59]);
+      expect([termineFilter.bis.hour, termineFilter.bis.minute], [1, 2]);
+      expect(termineFilter.orte.length, 1);
+      expect([
+        termineFilter.orte[0].id,
+        termineFilter.orte[0].bezirk,
+        termineFilter.orte[0].ort
+      ], [
+        0,
+        "Friedrichshain-Kreuzberg",
+        "Friedrichshain Nordkiez"
+      ]);
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***

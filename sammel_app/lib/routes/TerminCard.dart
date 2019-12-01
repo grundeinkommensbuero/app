@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/services/Benutzer.dart';
-import 'package:sammel_app/shared/DateTimeHelfer.dart';
+import 'package:sammel_app/shared/ChronoHelfer.dart';
 
 class TerminCard extends StatelessWidget {
   final Termin termin;
@@ -95,7 +95,7 @@ class TerminCard extends StatelessWidget {
         prefix = 'Morgen, ';
       ***REMOVED*** else {
         if (beginn.isBefore(heuteNacht.add(Duration(days: 7)))) {
-          prefix = '${DateTimeHelfer.wochentag(beginn)***REMOVED***, ';
+          prefix = '${ChronoHelfer.wochentag(beginn)***REMOVED***, ';
         ***REMOVED***
       ***REMOVED***
     ***REMOVED***

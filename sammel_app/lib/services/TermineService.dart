@@ -18,17 +18,16 @@ class TermineService extends AbstractTermineService {
     HttpClientResponseBody response =
         await post(Uri.parse('/service/termine'), jsonEncode(filter));
     if (response.response.statusCode == 200) {
-      final termine = (response.body as List).map((jsonTermin) {
-        var termin = Termin.fromJson(jsonTermin);
-        return termin;
-      ***REMOVED***).toList();
+      final termine = (response.body as List)
+          .map((jsonTermin) => Termin.fromJson(jsonTermin))
+          .toList();
       // Sortierung auf Client-Seite um Server und Datenbank skalierbar zu halten
       termine
           .sort((termin1, termin2) => termin1.beginn.compareTo(termin2.beginn));
       return termine;
     ***REMOVED*** else {
-      throw RestFehler(
-          "Unerwarteter Fehler: ${response.response.statusCode***REMOVED*** - ${response.body***REMOVED***");
+      throw RestFehler("Unerwarteter Fehler: "
+          "${response.response.statusCode***REMOVED*** - ${response.body***REMOVED***");
     ***REMOVED***
   ***REMOVED***
 ***REMOVED***
@@ -38,10 +37,9 @@ class DemoTermineService extends AbstractTermineService {
   static Benutzer rosa = Benutzer('Rosa Luxemburg');
   static Ort nordkiez =
       Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez');
-  static Ort treptowerPark =
-      Ort(2, 'Treptow-Köpenick', 'Treptower Park');
+  static Ort treptowerPark = Ort(2, 'Treptow-Köpenick', 'Treptower Park');
   static Ort goerli =
-      Ort(2, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung');
+      Ort(3, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung');
   static var heute = DateTime.now();
   List<Termin> termine = [
     Termin(
@@ -67,7 +65,7 @@ class DemoTermineService extends AbstractTermineService {
     Termin(
         3,
         DateTime(heute.year, heute.month, heute.day, 23, 0, 0),
-        DateTime(heute.year, heute.month, heute.day+1, 2, 0, 0),
+        DateTime(heute.year, heute.month, heute.day + 1, 2, 0, 0),
         goerli,
         'Sammel-Termin',
         [rosa],
@@ -91,6 +89,7 @@ class DemoTermineService extends AbstractTermineService {
   @override
   Future<List<Termin>> ladeTermine(TermineFilter filter) async {
     // Wert muss als Future herausgereicht werden
-    return (new Completer()..complete(termine)).future;
+    //return (new Completer()..complete(termine)).future;
+    return termine;
   ***REMOVED***
 ***REMOVED***
