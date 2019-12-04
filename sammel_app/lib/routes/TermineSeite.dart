@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:calendarro/calendarro.dart';
+import 'package:calendarro/default_weekday_labels_row.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
@@ -124,8 +126,8 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
                           color: Color.fromARGB(255, 149, 48, 118),
                           textColor: Colors.amberAccent,
                           materialTapTargetSize: _zeroPadding,
-                          onPressed: () => {***REMOVED***,//tageAuswahl(),
-                          child: Text("alle Tage,"),
+                          onPressed: () => tageAuswahl(),
+                          child: tageButtonBeschriftung(),
                         )),
                     SizedBox(
                         width: double.infinity,
@@ -161,6 +163,18 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
     );
   ***REMOVED***
 
+  Text tageButtonBeschriftung() {
+    if (widget.filter.tage == null || widget.filter.tage.isEmpty) {
+      return Text("alle Tage,");
+    ***REMOVED*** else {
+      return Text("am " +
+          widget.filter.tage
+              .map((tag) => DateFormat("dd.MM.").format(tag))
+              .join(", ") +
+          ",");
+    ***REMOVED***
+  ***REMOVED***
+
   String artButtonBeschriftung() {
     return widget.filter.typen != null && widget.filter.typen.isNotEmpty
         ? widget.filter.typen.join(", ")
@@ -170,9 +184,9 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
   static String uhrzeitButtonBeschriftung(TermineFilter filter) {
     String beschriftung = '';
     if (filter.von != null)
-      beschriftung += 'von ' + ChronoHelfer.timeToString(filter.von);
+      beschriftung += 'von ' + ChronoHelfer.timeToStringHHmm(filter.von);
     if (filter.bis != null)
-      beschriftung += ' bis ' + ChronoHelfer.timeToString(filter.bis);
+      beschriftung += ' bis ' + ChronoHelfer.timeToStringHHmm(filter.bis);
     if (beschriftung.isEmpty) beschriftung = 'jederzeit';
     beschriftung += ',';
     return beschriftung;
@@ -231,21 +245,42 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
   ***REMOVED***
 
   tageAuswahl() async {
-    var jetzt = DateTime.now();
-    await showDialog<List<int>>(
+    var selectedDates = await showDialog<List<DateTime>>(
         context: context,
         builder: (context) =>
             StatefulBuilder(builder: (context, setDialogState) {
-              List<int> ausgewOrte =
-                  widget.filter.orte?.map((ort) => ort.id).toList();
-              if (ausgewOrte == null) ausgewOrte = []; // Null-Sicherheit
-
+              List<DateTime> selectedDates = widget.filter.tage;
+              int aktuellerMonat = DateTime.now().month;
+              if (selectedDates == null) selectedDates = [];
               return SimpleDialog(children: <Widget>[
-                Calendarro(
-                  displayMode: DisplayMode.MONTHS,
-                )
+                Row(
+                  children: [Text(aktuellerMonat.toString())],
+                  mainAxisAlignment: MainAxisAlignment.center,
+                ),
+                Container(
+                    height: 260.0,
+                    width: 1.0,
+                    child: Calendarro(
+                      selectedDates: selectedDates,
+                      weekdayLabelsRow: GerCalendarroWeekdayLabelsView(),
+                      selectionMode: SelectionMode.MULTI,
+                      displayMode: DisplayMode.MONTHS,
+                    )),
+                ButtonBar(alignment: MainAxisAlignment.center, children: [
+                  RaisedButton(
+                    child: Text("Keine"),
+                    onPressed: () => Navigator.pop(context, <DateTime>[]),
+                  ),
+                  RaisedButton(
+                    child: Text("Auswählen"),
+                    onPressed: () => Navigator.pop(context, selectedDates),
+                  )
+                ])
               ]);
             ***REMOVED***));
+    setState(() {
+      widget.filter.tage = selectedDates;
+    ***REMOVED***);
   ***REMOVED***
 
   zeitAuswahl() async {
@@ -379,6 +414,23 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
         setDialogState(() => bezirk.ortAuswahl[ort] = wurdeAusgewaehlt);
         print('Nachher: ' + bezirk.ortAuswahl[ort].toString());
       ***REMOVED***,
+    );
+  ***REMOVED***
+***REMOVED***
+
+class GerCalendarroWeekdayLabelsView extends CalendarroWeekdayLabelsView {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Expanded(child: Text("Mo", textAlign: TextAlign.center)),
+        Expanded(child: Text("Di", textAlign: TextAlign.center)),
+        Expanded(child: Text("Mi", textAlign: TextAlign.center)),
+        Expanded(child: Text("Do", textAlign: TextAlign.center)),
+        Expanded(child: Text("Fr", textAlign: TextAlign.center)),
+        Expanded(child: Text("Sa", textAlign: TextAlign.center)),
+        Expanded(child: Text("So", textAlign: TextAlign.center)),
+      ],
     );
   ***REMOVED***
 ***REMOVED***

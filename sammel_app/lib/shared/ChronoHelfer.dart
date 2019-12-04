@@ -22,10 +22,16 @@ class ChronoHelfer {
     throw Exception('Unbekannter Wochentag');
   ***REMOVED***
 
-  static DateFormat dateFormat = DateFormat("HH:mm:ss");
+  static DateFormat dateFormatHHmmss = DateFormat("HH:mm:ss");
+  static DateFormat dateFormatHHmm = DateFormat("HH:mm");
 
-  static String timeToString(TimeOfDay time) {
+  static String timeToStringHHmmss(TimeOfDay time) {
     if (time == null) return null;
-    return dateFormat.format(DateTime(0, 1, 1, time.hour, time.minute, 0));
+    return dateFormatHHmmss.format(DateTime(0, 1, 1, time.hour, time.minute, 0));
+  ***REMOVED***
+
+  static String timeToStringHHmm(TimeOfDay time) {
+    if (time == null) return null;
+    return dateFormatHHmm.format(DateTime(0, 1, 1, time.hour, time.minute, 0));
   ***REMOVED***
 ***REMOVED***
