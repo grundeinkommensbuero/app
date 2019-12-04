@@ -33,8 +33,8 @@ class TermineFilter {
         'typen': typen,
         'tage':
             tage.map((tag) => DateFormat('yyyy-MM-dd').format(tag)).toList(),
-        'von': ChronoHelfer.timeToString(von),
-        'bis': ChronoHelfer.timeToString(bis),
+        'von': ChronoHelfer.timeToStringHHmmss(von),
+        'bis': ChronoHelfer.timeToStringHHmmss(bis),
         'orte': orte,
       };
 }
