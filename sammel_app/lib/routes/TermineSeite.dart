@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
@@ -245,41 +246,70 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
   }
 
   tageAuswahl() async {
-    var selectedDates = await showDialog<List<DateTime>>(
+    DateTime currentMonth = DateTime.now();
+    List<DateTime> selectedDatesFromFilter = []..addAll(widget.filter.tage);
+    if (selectedDatesFromFilter == null) selectedDatesFromFilter = [];
+    var selectedDatesFromDialog = await showDialog<List<DateTime>>(
         context: context,
         builder: (context) =>
             StatefulBuilder(builder: (context, setDialogState) {
-              List<DateTime> selectedDates = widget.filter.tage;
-              int aktuellerMonat = DateTime.now().month;
-              if (selectedDates == null) selectedDates = [];
-              return SimpleDialog(children: <Widget>[
-                Row(
-                  children: [Text(aktuellerMonat.toString())],
-                  mainAxisAlignment: MainAxisAlignment.center,
-                ),
-                Container(
-                    height: 260.0,
-                    width: 1.0,
-                    child: Calendarro(
-                      selectedDates: selectedDates,
-                      weekdayLabelsRow: GerCalendarroWeekdayLabelsView(),
-                      selectionMode: SelectionMode.MULTI,
-                      displayMode: DisplayMode.MONTHS,
-                    )),
-                ButtonBar(alignment: MainAxisAlignment.center, children: [
-                  RaisedButton(
-                    child: Text("Keine"),
-                    onPressed: () => Navigator.pop(context, <DateTime>[]),
+              return SimpleDialog(
+                  titlePadding:
+                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 0.0),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      RaisedButton(
+                        shape: CircleBorder(),
+                        child: Icon(Icons.arrow_left),
+                        onPressed: () => setDialogState(() => currentMonth =
+                            Jiffy(currentMonth).subtract(months: 1)),
+                      ),
+                      Text(
+                        ChronoHelfer.monthName(currentMonth.month) +
+                            '\n' +
+                            currentMonth.year.toString(),
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.center,
+                        textWidthBasis: TextWidthBasis.parent,
+                      ),
+                      RaisedButton(
+                        shape: CircleBorder(),
+                        child: Icon(Icons.arrow_right),
+                        onPressed: () => setDialogState(() =>
+                            currentMonth = Jiffy(currentMonth).add(months: 1)),
+                      ),
+                    ],
                   ),
-                  RaisedButton(
-                    child: Text("Auswählen"),
-                    onPressed: () => Navigator.pop(context, selectedDates),
-                  )
-                ])
-              ]);
+                  children: <Widget>[
+                    Container(
+                        height: 260.0,
+                        width: 1.0,
+                        child: Calendarro(
+                          startDate: Jiffy(currentMonth).startOf("month"),
+                          endDate: Jiffy(currentMonth).endOf("month"),
+                          selectedDates: selectedDatesFromFilter,
+                          weekdayLabelsRow: GerCalendarroWeekdayLabelsView(),
+                          selectionMode: SelectionMode.MULTI,
+                          displayMode: DisplayMode.MONTHS,
+                        )),
+                    ButtonBar(alignment: MainAxisAlignment.center, children: [
+                      RaisedButton(
+                        child: Text("Keine"),
+                        onPressed: () => Navigator.pop(context, <DateTime>[]),
+                      ),
+                      RaisedButton(
+                        child: Text("Auswählen"),
+                        onPressed: () =>
+                            Navigator.pop(context, selectedDatesFromFilter),
+                      )
+                    ])
+                  ]);
             }));
     setState(() {
-      widget.filter.tage = selectedDates;
+      if(selectedDatesFromDialog != null)
+      widget.filter.tage = selectedDatesFromDialog
+        ..sort((dt1, dt2) => dt1.compareTo(dt2));
     });
   }
 
