@@ -15,6 +15,9 @@ import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
+import 'package:sammel_app/shared/showLocationPicker.dart';
+import 'package:sammel_app/shared/showMultipleDatePicker.dart';
+import 'package:sammel_app/shared/showTimeRangePicker.dart';
 
 class TermineSeite extends StatefulWidget {
   TermineSeite({Key key, this.title***REMOVED***) : super(key: key);
@@ -246,243 +249,31 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
   ***REMOVED***
 
   tageAuswahl() async {
-    DateTime currentMonth = DateTime.now();
-    List<DateTime> selectedDatesFromFilter = []..addAll(widget.filter.tage);
-    if (selectedDatesFromFilter == null) selectedDatesFromFilter = [];
-    var selectedDatesFromDialog = await showDialog<List<DateTime>>(
-        context: context,
-        builder: (context) =>
-            StatefulBuilder(builder: (context, setDialogState) {
-              return SimpleDialog(
-                  titlePadding:
-                      EdgeInsets.symmetric(vertical: 10.0, horizontal: 0.0),
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      RaisedButton(
-                        shape: CircleBorder(),
-                        child: Icon(Icons.arrow_left),
-                        onPressed: () => setDialogState(() => currentMonth =
-                            Jiffy(currentMonth).subtract(months: 1)),
-                      ),
-                      Text(
-                        ChronoHelfer.monthName(currentMonth.month) +
-                            '\n' +
-                            currentMonth.year.toString(),
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.center,
-                        textWidthBasis: TextWidthBasis.parent,
-                      ),
-                      RaisedButton(
-                        shape: CircleBorder(),
-                        child: Icon(Icons.arrow_right),
-                        onPressed: () => setDialogState(() =>
-                            currentMonth = Jiffy(currentMonth).add(months: 1)),
-                      ),
-                    ],
-                  ),
-                  children: <Widget>[
-                    Container(
-                        height: 260.0,
-                        width: 1.0,
-                        child: Calendarro(
-                          startDate: Jiffy(currentMonth).startOf("month"),
-                          endDate: Jiffy(currentMonth).endOf("month"),
-                          selectedDates: selectedDatesFromFilter,
-                          weekdayLabelsRow: GerCalendarroWeekdayLabelsView(),
-                          selectionMode: SelectionMode.MULTI,
-                          displayMode: DisplayMode.MONTHS,
-                        )),
-                    ButtonBar(alignment: MainAxisAlignment.center, children: [
-                      RaisedButton(
-                        child: Text("Keine"),
-                        onPressed: () => Navigator.pop(context, <DateTime>[]),
-                      ),
-                      RaisedButton(
-                        child: Text("Auswählen"),
-                        onPressed: () =>
-                            Navigator.pop(context, selectedDatesFromFilter),
-                      )
-                    ])
-                  ]);
-            ***REMOVED***));
+    var selectedDates =
+        await showMultipleDatePicker(widget.filter.tage, context);
     setState(() {
-      if(selectedDatesFromDialog != null)
-      widget.filter.tage = selectedDatesFromDialog
-        ..sort((dt1, dt2) => dt1.compareTo(dt2));
+      if (selectedDates != null)
+        widget.filter.tage = selectedDates
+          ..sort((dt1, dt2) => dt1.compareTo(dt2));
     ***REMOVED***);
   ***REMOVED***
 
   zeitAuswahl() async {
-    var von = await zeigeZeitAuswahl('von', widget.filter.von?.hour ?? 12);
-    var bis = await zeigeZeitAuswahl('bis', widget.filter.bis?.hour ?? 12);
-
+    TimeRange timeRange = await showTimeRangePicker(
+        context, widget.filter.von?.hour, widget.filter.bis?.hour);
     setState(() {
-      widget.filter.von = von;
-      widget.filter.bis = bis;
+      widget.filter.von = timeRange.from;
+      widget.filter.bis = timeRange.to;
     ***REMOVED***);
   ***REMOVED***
-
-  Future<TimeOfDay> zeigeZeitAuswahl(String titel, int startStunde) =>
-      showTimePicker(
-          context: context,
-          initialTime: TimeOfDay(hour: startStunde, minute: 0),
-          builder: (BuildContext context, Widget child) {
-            return MediaQuery(
-              data:
-                  MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-              child: Container(
-                  child: Column(
-                children: <Widget>[Text(titel), child],
-              )),
-            );
-          ***REMOVED***);
 
   ortAuswahl() async {
-    var orte = await Provider.of<StammdatenService>(context).ladeOrte();
-    List<BezirkItem> bezirke = erzeugeBezirkDaten(orte);
-    await showDialog<List<int>>(
-        context: context,
-        builder: (context) =>
-            StatefulBuilder(builder: (context, setDialogState) {
-              List<int> ausgewOrte =
-                  widget.filter.orte?.map((ort) => ort.id).toList();
-              if (ausgewOrte == null) ausgewOrte = []; // Null-Sicherheit
-
-              return SimpleDialog(
-                  title: const Text('Wähle einen oder mehrere Orte'),
-                  children: <Widget>[
-                    ExpansionPanelList(
-                        expansionCallback: (int index, bool ausgeklappt) {
-                          setDialogState(() {
-                            bezirke[index].ausgeklappt = !ausgeklappt;
-                          ***REMOVED***);
-                        ***REMOVED***,
-                        children: expansionPanelListe(
-                            orte, ausgewOrte, bezirke, setDialogState)),
-                    RaisedButton(
-                        child: Text('Fertig'),
-                        onPressed: () => Navigator.pop(context, ausgewOrte))
-                  ]);
-            ***REMOVED***));
+    var allLocations = await Provider.of<StammdatenService>(context).ladeOrte();
+    var selectedLocations = await showMultipleLocationPicker(
+        context, widget.filter.orte, allLocations, multiple: true);
 
     setState(() {
-      widget.filter.orte = bezirke
-          .expand((bezirk) => bezirk.ortAuswahl.entries)
-          .where((entry) => entry.value)
-          .map((entry) => entry.key)
-          .toList();
+      widget.filter.orte = selectedLocations;
     ***REMOVED***);
-  ***REMOVED***
-
-  List<BezirkItem> erzeugeBezirkDaten(List<Ort> orte) {
-    var bezirkNamen = orte.map((ort) => ort.bezirk).toSet();
-    return bezirkNamen
-        .map((name) => BezirkItem(
-            name,
-            Map<Ort, bool>()
-              ..addEntries(orte.where((ort) => ort.bezirk == name).map((ort) =>
-                  MapEntry(
-                      ort,
-                      widget.filter.orte
-                          .any((filterOrt) => filterOrt.id == ort.id)))),
-            false))
-        .toList();
-  ***REMOVED***
-
-  List<ExpansionPanel> expansionPanelListe(List<Ort> orte, List<int> ausgewOrte,
-      List<BezirkItem> bezirke, Function setdialogState) {
-    return bezirke
-        .map((item) => expansionPanel(item, orte, ausgewOrte, setdialogState))
-        .toList();
-  ***REMOVED***
-
-  ExpansionPanel expansionPanel(BezirkItem bezirk, List<Ort> orte,
-      List<int> ausgewOrte, Function setdialogState) {
-    return ExpansionPanel(
-        headerBuilder: (BuildContext context, bool isExpanded) =>
-            bezirkCheckbox(bezirk, orte, ausgewOrte, setdialogState),
-        canTapOnHeader: true,
-        isExpanded: bezirk.ausgeklappt,
-        body: Column(
-            children: bezirk.ortAuswahl.keys
-                .map((ort) => ortCheckbox(ort, bezirk, setdialogState))
-                .toList()));
-  ***REMOVED***
-
-  CheckboxListTile bezirkCheckbox(BezirkItem item, List<Ort> orte,
-      List<int> ausgewOrte, Function setDialogState) {
-    return CheckboxListTile(
-      value: item.ortAuswahl.values.every((ausgewaehlt) => ausgewaehlt == true),
-      title: Text(item.bezirk),
-      onChanged: (bool ausgewaehlt) {
-        setDialogState(() {
-          if (ausgewaehlt) {
-            item.ortAuswahl.keys.forEach((ort) => item.ortAuswahl[ort] = true);
-          ***REMOVED*** else {
-            item.ortAuswahl.keys.forEach((ort) => item.ortAuswahl[ort] = false);
-          ***REMOVED***
-        ***REMOVED***);
-      ***REMOVED***,
-    );
-  ***REMOVED***
-
-  bool alleOrteDesBezirksAusgewaehlt(
-      String bezirk, List<Ort> orte, List<int> ausgewOrte) {
-    return orte.every((ortStammdaten) =>
-        ortStammdaten.bezirk != bezirk ||
-        ausgewOrte.contains(ortStammdaten.id));
-  ***REMOVED***
-
-  CheckboxListTile ortCheckbox(Ort ort, BezirkItem bezirk, setDialogState) {
-    return CheckboxListTile(
-      value: bezirk.ortAuswahl[ort],
-      title: Text('      ' + ort.ort),
-      onChanged: (bool wurdeAusgewaehlt) {
-        print('Wert: ' + wurdeAusgewaehlt.toString());
-        print('Vorher: ' + bezirk.ortAuswahl[ort].toString());
-        setDialogState(() => bezirk.ortAuswahl[ort] = wurdeAusgewaehlt);
-        print('Nachher: ' + bezirk.ortAuswahl[ort].toString());
-      ***REMOVED***,
-    );
-  ***REMOVED***
-***REMOVED***
-
-class GerCalendarroWeekdayLabelsView extends CalendarroWeekdayLabelsView {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Expanded(child: Text("Mo", textAlign: TextAlign.center)),
-        Expanded(child: Text("Di", textAlign: TextAlign.center)),
-        Expanded(child: Text("Mi", textAlign: TextAlign.center)),
-        Expanded(child: Text("Do", textAlign: TextAlign.center)),
-        Expanded(child: Text("Fr", textAlign: TextAlign.center)),
-        Expanded(child: Text("Sa", textAlign: TextAlign.center)),
-        Expanded(child: Text("So", textAlign: TextAlign.center)),
-      ],
-    );
-  ***REMOVED***
-***REMOVED***
-
-class BezirkItem {
-  String bezirk;
-  Map<Ort, bool> ortAuswahl;
-  bool ausgeklappt;
-
-  BezirkItem(this.bezirk, this.ortAuswahl, this.ausgeklappt);
-
-  @override
-  String toString() {
-    return bezirk +
-        ':' +
-        ortAuswahl.entries
-            .map((entry) =>
-                jsonEncode(entry.key) + ' (' + entry.value.toString() + ') ')
-            .toList()
-            .toString() +
-        ' (' +
-        ausgeklappt.toString() +
-        ')';
   ***REMOVED***
 ***REMOVED***
