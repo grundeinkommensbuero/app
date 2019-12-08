@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
-import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/TermineService.dart';
@@ -18,8 +17,7 @@ void main() {
       (WidgetTester tester) async {
     var termineSeiteWidget = TermineSeite(title: 'Titel mit Ümläüten');
 
-    when(terminService.ladeTermine(TermineFilter.leererFilter()))
-        .thenAnswer((_) async => []);
+    when(terminService.ladeTermine(any)).thenAnswer((_) async => []);
 
     await tester.pumpWidget(Provider<TermineService>(
         builder: (context) => terminService,
@@ -48,5 +46,42 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(TerminCard), findsNWidgets(3));
+  ***REMOVED***);
+
+  testWidgets('TermineSeite zeigt Filter an', (WidgetTester tester) async {
+    var termineSeiteWidget = TermineSeite(title: 'Titel');
+
+    when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+          TerminTestDaten.terminOhneTeilnehmer(),
+          TerminTestDaten.terminOhneTeilnehmer(),
+          TerminTestDaten.terminOhneTeilnehmer(),
+        ]);
+
+    await tester.pumpWidget(Provider<TermineService>(
+        builder: (context) => terminService,
+        child: MaterialApp(home: termineSeiteWidget)));
+
+    expect(find.text('Filter'), findsOneWidget);
+  ***REMOVED***);
+
+  testWidgets('TermineSeite oeffnet Filter-Menu an',
+      (WidgetTester tester) async {
+    var termineSeiteWidget = TermineSeite(title: 'Titel');
+
+    when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+          TerminTestDaten.terminOhneTeilnehmer(),
+          TerminTestDaten.terminOhneTeilnehmer(),
+          TerminTestDaten.terminOhneTeilnehmer(),
+        ]);
+
+    await tester.pumpWidget(Provider<TermineService>(
+        builder: (context) => terminService,
+        child: MaterialApp(home: termineSeiteWidget)));
+
+    await tester.tap(find.text('Filter'));
+
+    await tester.pump();
+
+    expect(find.text('Anwenden'), findsOneWidget);
   ***REMOVED***);
 ***REMOVED***

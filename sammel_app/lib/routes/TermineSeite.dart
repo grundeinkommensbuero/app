@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/services/TermineService.dart';
@@ -31,8 +32,8 @@ class _TermineSeiteState extends State<TermineSeite> {
   Widget build(BuildContext context) {
     if (!initialized) {
       termineService = Provider.of<TermineService>(context);
-      filterWidget = FilterWidget(() => ladeTermine());
-      ladeTermine();
+      filterWidget = FilterWidget(ladeTermine);
+      ladeTermine(TermineFilter.leererFilter());
       initialized = true;
     ***REMOVED***
     // TODO: Memory-Leak beheben
@@ -65,8 +66,8 @@ class _TermineSeiteState extends State<TermineSeite> {
     );
   ***REMOVED***
 
-  void ladeTermine() {
-    termineService.ladeTermine(filterWidget.filter).then((termine) {
+  void ladeTermine(TermineFilter filter) {
+    termineService.ladeTermine(filter).then((termine) {
       setState(() {
         this.termine = termine;
       ***REMOVED***);
