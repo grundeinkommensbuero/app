@@ -152,4 +152,28 @@ void main() {
 
     expect(checkboxTiles.every((ct) => ct.value == false), true);
   ***REMOVED***);
+
+  testWidgets('Type Selection saves selected types to filter',
+      (WidgetTester tester) async {
+    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+
+    await tester.pumpWidget(MaterialApp(home: filterWidget));
+
+    await tester.tap(find.byKey(Key('filter button')));
+    await tester.pump();
+
+    await tester.tap(find.byKey(Key('type button')));
+    await tester.pump();
+
+    await tester.tap(find.text('Sammel-Termin'));
+    await tester.pump();
+
+    await tester.tap(find.text('Fertig'));
+    await tester.pump();
+
+    await tester.tap(find.byKey(Key('filter button')));
+    await tester.pump();
+
+    expect(filterWidget.filter.typen, containsAll(['Sammel-Termin']));
+  ***REMOVED***);
 ***REMOVED***
