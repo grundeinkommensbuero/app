@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
@@ -93,8 +95,7 @@ void main() {
     expect(find.byKey(Key('type selection dialog')), findsOneWidget);
   });
 
-  testWidgets('Type Selection shows all types',
-      (WidgetTester tester) async {
+  testWidgets('Type Selection shows all types', (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
 
     await tester.pumpWidget(MaterialApp(home: filterWidget));
@@ -108,5 +109,29 @@ void main() {
     // currently hardcoded
     expect(find.text('Sammel-Termin'), findsOneWidget);
     expect(find.text('Info-Veranstaltung'), findsOneWidget);
+  });
+
+  testWidgets('Type Selection selects initially types from filter',
+      (WidgetTester tester) async {
+    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+
+    await tester.pumpWidget(MaterialApp(home: filterWidget));
+
+    filterWidget.filter.typen = ['Sammel-Termin'];
+
+    await tester.tap(find.byKey(Key('filter button')));
+    await tester.pump();
+
+    await tester.tap(find.byKey(Key('type button')));
+    await tester.pump();
+
+    var checkboxTiles = tester
+        .widgetList<CheckboxListTile>(find.byType(CheckboxListTile));
+    var sammelTermin = checkboxTiles
+        .firstWhere((ct) => (ct.title as Text).data == 'Sammel-Termin');
+    var andere = checkboxTiles.where((ct) => ct != sammelTermin);
+
+    expect(sammelTermin.value, isTrue);
+    expect(andere.every((ct) => ct.value == false), true);
   });
 }
