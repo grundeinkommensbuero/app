@@ -31,10 +31,10 @@ void main() {
 
     await tester.pump();
 
-    expect(find.byKey(Key("type")), findsOneWidget);
-    expect(find.byKey(Key("days")), findsOneWidget);
-    expect(find.byKey(Key("time")), findsOneWidget);
-    expect(find.byKey(Key("locations")), findsOneWidget);
+    expect(find.byKey(Key("type button")), findsOneWidget);
+    expect(find.byKey(Key("days button")), findsOneWidget);
+    expect(find.byKey(Key("time button")), findsOneWidget);
+    expect(find.byKey(Key("locations button")), findsOneWidget);
   });
 
   testWidgets('Filter closes with click', (WidgetTester tester) async {
@@ -50,13 +50,13 @@ void main() {
 
     await tester.pump();
 
-    expect(find.byKey(Key("type")), findsNothing);
-    expect(find.byKey(Key("days")), findsNothing);
-    expect(find.byKey(Key("time")), findsNothing);
-    expect(find.byKey(Key("locations")), findsNothing);
+    expect(find.byKey(Key("type button")), findsNothing);
+    expect(find.byKey(Key("days button")), findsNothing);
+    expect(find.byKey(Key("time button")), findsNothing);
+    expect(find.byKey(Key("locations button")), findsNothing);
   });
 
-  testWidgets('Filter changes caption of filter button',
+  testWidgets('Filter changes caption of filter button with click',
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
 
@@ -76,5 +76,37 @@ void main() {
 
     expect(find.text('Anwenden'), findsNothing);
     expect(find.text('Filter'), findsOneWidget);
+  });
+
+  testWidgets('Filter opens Type selection with click at type button',
+      (WidgetTester tester) async {
+    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+
+    await tester.pumpWidget(MaterialApp(home: filterWidget));
+
+    await tester.tap(find.byKey(Key('filter button')));
+    await tester.pump();
+
+    await tester.tap(find.byKey(Key('type button')));
+    await tester.pump();
+
+    expect(find.byKey(Key('type selection dialog')), findsOneWidget);
+  });
+
+  testWidgets('Type Selection shows all types',
+      (WidgetTester tester) async {
+    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+
+    await tester.pumpWidget(MaterialApp(home: filterWidget));
+
+    await tester.tap(find.byKey(Key('filter button')));
+    await tester.pump();
+
+    await tester.tap(find.byKey(Key('type button')));
+    await tester.pump();
+
+    // currently hardcoded
+    expect(find.text('Sammel-Termin'), findsOneWidget);
+    expect(find.text('Info-Veranstaltung'), findsOneWidget);
   });
 }
