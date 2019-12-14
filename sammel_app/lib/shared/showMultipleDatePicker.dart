@@ -22,6 +22,7 @@ Future<List<DateTime>> showMultipleDatePicker(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     RaisedButton(
+                      key: Key('previous month button'),
                       shape: CircleBorder(),
                       child: Icon(Icons.arrow_left),
                       onPressed: () => setDialogState(() => currentMonth =
@@ -31,11 +32,13 @@ Future<List<DateTime>> showMultipleDatePicker(
                       ChronoHelfer.monthName(currentMonth.month) +
                           '\n' +
                           currentMonth.year.toString(),
+                      key: Key('current month'),
                       style: TextStyle(fontWeight: FontWeight.bold),
                       textAlign: TextAlign.center,
                       textWidthBasis: TextWidthBasis.parent,
                     ),
                     RaisedButton(
+                      key: Key('next month button'),
                       shape: CircleBorder(),
                       child: Icon(Icons.arrow_right),
                       onPressed: () => setDialogState(() =>
@@ -61,6 +64,7 @@ Future<List<DateTime>> showMultipleDatePicker(
                       onPressed: () => Navigator.pop(context, <DateTime>[]),
                     ),
                     RaisedButton(
+                      key: Key('days dialog accept button'),
                       child: Text("Auswählen"),
                       onPressed: () =>
                           Navigator.pop(context, selectedDatesFromFilter),
