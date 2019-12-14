@@ -60,6 +60,7 @@ Future<List<DateTime>> showMultipleDatePicker(
                       )),
                   ButtonBar(alignment: MainAxisAlignment.center, children: [
                     RaisedButton(
+                      key: Key('days dialog none button'),
                       child: Text("Keine"),
                       onPressed: () => Navigator.pop(context, <DateTime>[]),
                     ),
