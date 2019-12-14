@@ -283,4 +283,26 @@ void main() {
         DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
     expect(filterWidget.filter.tage, containsAll([heute]));
   ***REMOVED***);
+
+  testWidgets('Days Selection empties days from filter on Keine',
+      (WidgetTester tester) async {
+    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+    filterWidget.filter.tage = [DateTime.now()];
+
+    await tester.pumpWidget(MaterialApp(home: filterWidget));
+
+    await tester.tap(find.byKey(Key('filter button')));
+    await tester.pump();
+
+    await tester.tap(find.byKey(Key('days button')));
+    await tester.pump();
+
+    await tester.tap(find.text(DateTime.now().day.toString()));
+    await tester.pump();
+
+    await tester.tap(find.byKey(Key('days dialog none button')));
+    await tester.pump();
+
+    expect(filterWidget.filter.tage, isEmpty);
+  ***REMOVED***);
 ***REMOVED***
