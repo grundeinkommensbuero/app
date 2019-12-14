@@ -81,10 +81,10 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
                   ],
                 ),
           SizedBox(
-            key: Key("filter button"),
               width: double.infinity,
               height: 50.0,
               child: RaisedButton(
+                key: Key("filter button"),
                 color: Color.fromARGB(255, 129, 28, 98),
                 textColor: Colors.amberAccent,
                 materialTapTargetSize: _zeroPadding,
@@ -92,7 +92,8 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Icon(Icons.playlist_add_check),
-                    Text(buttonText, textScaleFactor: 1.2),
+                    Text(buttonText,
+                        key: Key('filter button text'), textScaleFactor: 1.2),
                     Icon(expanded ? Icons.done : Icons.arrow_drop_down),
                   ],
                 ),
