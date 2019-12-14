@@ -134,4 +134,22 @@ void main() {
     expect(sammelTermin.value, isTrue);
     expect(andere.every((ct) => ct.value == false), true);
   });
+
+  testWidgets('Type Selection selects initially nothing if filter is empty',
+      (WidgetTester tester) async {
+    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+
+    await tester.pumpWidget(MaterialApp(home: filterWidget));
+
+    await tester.tap(find.byKey(Key('filter button')));
+    await tester.pump();
+
+    await tester.tap(find.byKey(Key('type button')));
+    await tester.pump();
+
+    var checkboxTiles = tester
+        .widgetList<CheckboxListTile>(find.byType(CheckboxListTile));
+
+    expect(checkboxTiles.every((ct) => ct.value == false), true);
+  });
 }
