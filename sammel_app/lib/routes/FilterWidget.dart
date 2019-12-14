@@ -189,8 +189,9 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
   }
 
   daysSelection() async {
-    var selectedDates =
-        await showMultipleDatePicker(widget.filter.tage, context);
+    var selectedDates = await showMultipleDatePicker(
+        widget.filter.tage, context,
+        key: Key('days selection dialog'));
     setState(() {
       if (selectedDates != null)
         widget.filter.tage = selectedDates

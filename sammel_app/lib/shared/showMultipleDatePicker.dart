@@ -6,7 +6,8 @@ import 'package:jiffy/jiffy.dart';
 import 'ChronoHelfer.dart';
 
 Future<List<DateTime>> showMultipleDatePicker(
-    List<DateTime> previousSelectedDates, BuildContext context) async {
+    List<DateTime> previousSelectedDates, BuildContext context,
+    {key: Key}) async {
   DateTime currentMonth = DateTime.now();
   List<DateTime> selectedDatesFromFilter = []..addAll(previousSelectedDates);
   if (selectedDatesFromFilter == null) selectedDatesFromFilter = [];
@@ -14,6 +15,7 @@ Future<List<DateTime>> showMultipleDatePicker(
       context: context,
       builder: (context) => StatefulBuilder(builder: (context, setDialogState) {
             return SimpleDialog(
+                key: key,
                 titlePadding:
                     EdgeInsets.symmetric(vertical: 10.0, horizontal: 0.0),
                 title: Row(
