@@ -39,7 +39,7 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     SizedBox(
-                        key: Key("type"),
+                        key: Key("type button"),
                         width: double.infinity,
                         child: FlatButton(
                           color: Color.fromARGB(255, 149, 48, 118),
@@ -49,7 +49,7 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
                           child: Text(artButtonBeschriftung()),
                         )),
                     SizedBox(
-                        key: Key("days"),
+                        key: Key("days button"),
                         width: double.infinity,
                         child: FlatButton(
                           color: Color.fromARGB(255, 149, 48, 118),
@@ -59,7 +59,7 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
                           child: tageButtonBeschriftung(),
                         )),
                     SizedBox(
-                        key: Key("time"),
+                        key: Key("time button"),
                         width: double.infinity,
                         child: FlatButton(
                           color: Color.fromARGB(255, 149, 48, 118),
@@ -69,7 +69,7 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
                           child: Text(uhrzeitButtonBeschriftung(widget.filter)),
                         )),
                     SizedBox(
-                        key: Key("locations"),
+                        key: Key("locations button"),
                         width: double.infinity,
                         child: FlatButton(
                           color: Color.fromARGB(255, 149, 48, 118),
@@ -159,6 +159,7 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
         builder: (context) =>
             StatefulBuilder(builder: (context, setDialogState) {
               return SimpleDialog(
+                  key: Key('type selection dialog'),
                   contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
                   titlePadding: EdgeInsets.all(15.0),
                   title: const Text('Wähle Termin-Arten'),
