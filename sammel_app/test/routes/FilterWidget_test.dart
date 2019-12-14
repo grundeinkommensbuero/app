@@ -1,14 +1,25 @@
+import 'dart:math';
+
 import 'package:calendarro/calendarro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:provider/provider.dart';
+import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/FilterWidget.dart';
+import 'package:sammel_app/services/StammdatenService.dart';
+import 'package:sammel_app/shared/LocationPicker.dart';
 
 int numberOfTimesCalled = 0;
 
 Function iWasCalled(TermineFilter _) {
   numberOfTimesCalled++;
 }
+
+class StammdatenServiceMock extends Mock implements StammdatenService {}
+
+final stammdatenService = StammdatenServiceMock();
 
 void main() {
   testWidgets('Filter starts successfully', (WidgetTester tester) async {
@@ -304,5 +315,45 @@ void main() {
     await tester.pump();
 
     expect(filterWidget.filter.tage, isEmpty);
+  });
+
+  testWidgets('Filter opens Locations selection with click at locations button',
+      (WidgetTester tester) async {
+    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+
+    when(stammdatenService.ladeOrte()).thenAnswer((_) async => []);
+
+    await tester.pumpWidget(Provider<StammdatenService>(
+        builder: (context) => stammdatenService,
+        child: MaterialApp(home: filterWidget)));
+
+    await tester.tap(find.byKey(Key('filter button')));
+    await tester.pump();
+
+    await tester.tap(find.byKey(Key('locations button')));
+    await tester.pump();
+
+    expect(find.byKey(Key('locations selection dialog')), findsOneWidget);
+  });
+
+  testWidgets('Filter passes locations ot Locations selection',
+      (WidgetTester tester) async {
+    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+
+    when(stammdatenService.ladeOrte()).thenAnswer((_) async =>
+        [Ort(0, 'district1', 'place1'), Ort(0, 'district2', 'place2')]);
+
+    await tester.pumpWidget(Provider<StammdatenService>(
+        builder: (context) => stammdatenService,
+        child: MaterialApp(home: filterWidget)));
+
+    await tester.tap(find.byKey(Key('filter button')));
+    await tester.pump();
+
+    await tester.tap(find.byKey(Key('locations button')));
+    await tester.pump();
+
+    expect(find.text('district1'), findsOneWidget);
+    expect(find.text('district2'), findsOneWidget);
   });
 }
