@@ -211,4 +211,20 @@ void main() {
     var calendarro = tester.widget(find.byType(Calendarro)) as Calendarro;
     expect(calendarro.state.isDateSelected(DateTime.now()), true);
   });
+
+  testWidgets('Days Selection selects no days when filter is empty',
+      (WidgetTester tester) async {
+    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+
+    await tester.pumpWidget(MaterialApp(home: filterWidget));
+
+    await tester.tap(find.byKey(Key('filter button')));
+    await tester.pump();
+
+    await tester.tap(find.byKey(Key('days button')));
+    await tester.pump();
+
+    var calendarro = tester.widget(find.byType(Calendarro)) as Calendarro;
+    expect(calendarro.selectedDates.isEmpty, true);
+  });
 }
