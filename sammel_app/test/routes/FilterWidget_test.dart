@@ -176,4 +176,19 @@ void main() {
 
     expect(filterWidget.filter.typen, containsAll(['Sammel-Termin']));
   ***REMOVED***);
+
+  testWidgets('Filter opens Days selection with click at days button',
+          (WidgetTester tester) async {
+        FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+
+        await tester.pumpWidget(MaterialApp(home: filterWidget));
+
+        await tester.tap(find.byKey(Key('filter button')));
+        await tester.pump();
+
+        await tester.tap(find.byKey(Key('days button')));
+        await tester.pump();
+
+        expect(find.byKey(Key('days selection dialog')), findsOneWidget);
+      ***REMOVED***);
 ***REMOVED***
