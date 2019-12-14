@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:calendarro/calendarro.dart';
+import 'package:calendarro/default_day_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
@@ -125,8 +127,8 @@ void main() {
     await tester.tap(find.byKey(Key('type button')));
     await tester.pump();
 
-    var checkboxTiles = tester
-        .widgetList<CheckboxListTile>(find.byType(CheckboxListTile));
+    var checkboxTiles =
+        tester.widgetList<CheckboxListTile>(find.byType(CheckboxListTile));
     var sammelTermin = checkboxTiles
         .firstWhere((ct) => (ct.title as Text).data == 'Sammel-Termin');
     var andere = checkboxTiles.where((ct) => ct != sammelTermin);
@@ -147,8 +149,8 @@ void main() {
     await tester.tap(find.byKey(Key('type button')));
     await tester.pump();
 
-    var checkboxTiles = tester
-        .widgetList<CheckboxListTile>(find.byType(CheckboxListTile));
+    var checkboxTiles =
+        tester.widgetList<CheckboxListTile>(find.byType(CheckboxListTile));
 
     expect(checkboxTiles.every((ct) => ct.value == false), true);
   ***REMOVED***);
@@ -178,17 +180,35 @@ void main() {
   ***REMOVED***);
 
   testWidgets('Filter opens Days selection with click at days button',
-          (WidgetTester tester) async {
-        FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+      (WidgetTester tester) async {
+    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
 
-        await tester.pumpWidget(MaterialApp(home: filterWidget));
+    await tester.pumpWidget(MaterialApp(home: filterWidget));
 
-        await tester.tap(find.byKey(Key('filter button')));
-        await tester.pump();
+    await tester.tap(find.byKey(Key('filter button')));
+    await tester.pump();
 
-        await tester.tap(find.byKey(Key('days button')));
-        await tester.pump();
+    await tester.tap(find.byKey(Key('days button')));
+    await tester.pump();
 
-        expect(find.byKey(Key('days selection dialog')), findsOneWidget);
-      ***REMOVED***);
+    expect(find.byKey(Key('days selection dialog')), findsOneWidget);
+  ***REMOVED***);
+
+  testWidgets('Days Selection selects initially days from filter',
+      (WidgetTester tester) async {
+    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+
+    await tester.pumpWidget(MaterialApp(home: filterWidget));
+
+    filterWidget.filter.tage = [DateTime.now()];
+
+    await tester.tap(find.byKey(Key('filter button')));
+    await tester.pump();
+
+    await tester.tap(find.byKey(Key('days button')));
+    await tester.pump();
+
+    var calendarro = tester.widget(find.byType(Calendarro)) as Calendarro;
+    expect(calendarro.state.isDateSelected(DateTime.now()), true);
+  ***REMOVED***);
 ***REMOVED***
