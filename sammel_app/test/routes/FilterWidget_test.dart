@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:calendarro/calendarro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -355,5 +353,67 @@ void main() {
 
     expect(find.text('district1'), findsOneWidget);
     expect(find.text('district2'), findsOneWidget);
+  ***REMOVED***);
+
+  MaterialApp WidgetWithlocationPicker(WidgetTester tester,
+      List<Ort> allLocations, List<Ort> previousSelection) {
+    return MaterialApp(
+      home: Material(
+        child: Builder(builder: (BuildContext context) {
+          return Center(
+            child: RaisedButton(
+              child: const Text('X'),
+              onPressed: () {
+                LocationPicker(context, locations: allLocations)
+                    .showLocationPicker(previousSelection);
+              ***REMOVED***,
+            ),
+          );
+        ***REMOVED***),
+      ),
+    );
+  ***REMOVED***
+
+  testWidgets('LocationPicker shows correct list of districts',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(WidgetWithlocationPicker(tester,
+        [Ort(0, 'district1', 'place1'), Ort(0, 'district2', 'place2')], []));
+
+    await tester.tap(find.byType(RaisedButton));
+    await tester.pumpAndSettle();
+
+    expect(find.text('district1'), findsOneWidget);
+    expect(find.text('district2'), findsOneWidget);
+  ***REMOVED***);
+
+  testWidgets('LocationPicker shows correct places with correct districts',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(WidgetWithlocationPicker(tester, [
+      Ort(0, 'district1', 'place1'),
+      Ort(1, 'district1', 'place2'),
+      Ort(2, 'district2', 'place3')
+    ], []));
+
+    await tester.tap(find.byType(RaisedButton));
+    await tester.pumpAndSettle();
+
+    expect(find.text('district1'), findsOneWidget);
+
+    var captions = tester
+        .widgetList(find.descendant(
+            of: find.byType(ExpansionPanelList),
+            matching: find.byType(Text, skipOffstage: false)))
+        .map((t) => (t as Text).data)
+        .toList();
+
+    expect(
+        captions,
+        containsAllInOrder([
+          'district1',
+          '      place1',
+          '      place2',
+          'district2',
+          '      place3'
+        ]));
   ***REMOVED***);
 ***REMOVED***
