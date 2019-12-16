@@ -7,13 +7,13 @@ import 'package:sammel_app/model/Ort.dart';
 
 class LocationPicker {
   List<Ort> locations = [];
-  BuildContext context;
   List<DistrictItem> districts;
   Key key;
 
-  LocationPicker(final this.context, {final this.key, final this.locations***REMOVED***);
+  LocationPicker({final this.key, final this.locations***REMOVED***);
 
-  Future<List<Ort>> showLocationPicker(final List<Ort> previousSelection,
+  Future<List<Ort>> showLocationPicker(
+      final context, final List<Ort> previousSelection,
       {bool multiple = false***REMOVED***) async {
     this.districts =
         _generateDistrictList(List.from(previousSelection), locations);
@@ -23,7 +23,7 @@ class LocationPicker {
         builder: (context) =>
             StatefulBuilder(builder: (context, setDialogState) {
               List<int> selectedLocations =
-              previousSelection?.map((ort) => ort.id).toList();
+                  previousSelection?.map((ort) => ort.id).toList();
               if (selectedLocations == null)
                 selectedLocations = []; // Null-Sicherheit
 
@@ -50,15 +50,15 @@ class LocationPicker {
                             multiple)),
                     multiple
                         ? RaisedButton(
-                        child: Text('Fertig'),
-                        onPressed: () => Navigator.pop(context))
+                            child: Text('Fertig'),
+                            onPressed: () => Navigator.pop(context))
                         : RaisedButton(
-                      child: Text('Keine Auswahl'),
-                      onPressed: () {
-                        _eraseSelections(districts);
-                        Navigator.pop(context);
-                      ***REMOVED***,
-                    )
+                            child: Text('Keine Auswahl'),
+                            onPressed: () {
+                              _eraseSelections(districts);
+                              Navigator.pop(context);
+                            ***REMOVED***,
+                          )
                   ]);
             ***REMOVED***));
     return districts
@@ -68,44 +68,37 @@ class LocationPicker {
         .toList();
   ***REMOVED***
 
-  List<DistrictItem> _generateDistrictList(List<Ort> selectedLocations,
-      List<Ort> allLocations) {
+  List<DistrictItem> _generateDistrictList(
+      List<Ort> selectedLocations, List<Ort> allLocations) {
     var bezirkNamen = allLocations.map((ort) => ort.bezirk).toSet();
     return bezirkNamen
-        .map((name) =>
-        DistrictItem(
+        .map((name) => DistrictItem(
             name,
             Map<Ort, bool>()
               ..addEntries(allLocations.where((ort) => ort.bezirk == name).map(
-                      (ort) =>
-                      MapEntry(
-                          ort,
-                          selectedLocations
-                              .any((filterOrt) => filterOrt.id == ort.id)))),
+                  (ort) => MapEntry(
+                      ort,
+                      selectedLocations
+                          .any((filterOrt) => filterOrt.id == ort.id)))),
             false))
         .toList();
   ***REMOVED***
 
-  List<ExpansionPanel> _expansionPanelList(BuildContext context,
+  List<ExpansionPanel> _expansionPanelList(
+      BuildContext context,
       List<Ort> orte,
       List<int> ausgewOrte,
       List<DistrictItem> districts,
       Function setdialogState,
       bool multiple) {
     return districts
-        .map((item) =>
-        _expansionPanel(
-            context,
-            item,
-            orte,
-            ausgewOrte,
-            setdialogState,
-            districts,
-            multiple))
+        .map((item) => _expansionPanel(context, item, orte, ausgewOrte,
+            setdialogState, districts, multiple))
         .toList();
   ***REMOVED***
 
-  ExpansionPanel _expansionPanel(BuildContext context,
+  ExpansionPanel _expansionPanel(
+      BuildContext context,
       DistrictItem disctrict,
       List<Ort> locations,
       List<int> selLoc,
@@ -113,18 +106,16 @@ class LocationPicker {
       List<DistrictItem> districts,
       bool multiple) {
     return ExpansionPanel(
-        headerBuilder: (BuildContext context, bool isExpanded) =>
-        multiple
+        headerBuilder: (BuildContext context, bool isExpanded) => multiple
             ? _disctrictCheckbox(disctrict, locations, selLoc, setDialogState)
             : _disctrictPanel(disctrict, locations, selLoc, setDialogState),
         canTapOnHeader: true,
         isExpanded: disctrict.expanded,
         body: Column(
             children: disctrict.locationSelection.keys
-                .map((ort) =>
-            multiple
-                ? _locationCheckbox(ort, disctrict, setDialogState)
-                : _locationButton(context, ort, disctrict, districts))
+                .map((ort) => multiple
+                    ? _locationCheckbox(ort, disctrict, setDialogState)
+                    : _locationButton(context, ort, disctrict, districts))
                 .toList()));
   ***REMOVED***
 
@@ -138,25 +129,25 @@ class LocationPicker {
   CheckboxListTile _disctrictCheckbox(DistrictItem item, List<Ort> locations,
       List<int> ausgewOrte, Function setDialogState) {
     return CheckboxListTile(
-      value: item.locationSelection.values.every((ausgewaehlt) =>
-      ausgewaehlt == true),
+      value: item.locationSelection.values
+          .every((ausgewaehlt) => ausgewaehlt == true),
       title: Text(item.districtName),
       onChanged: (bool ausgewaehlt) {
         setDialogState(() {
           if (ausgewaehlt) {
-            item.locationSelection.keys.forEach((ort) =>
-            item.locationSelection[ort] = true);
+            item.locationSelection.keys
+                .forEach((ort) => item.locationSelection[ort] = true);
           ***REMOVED*** else {
-            item.locationSelection.keys.forEach((ort) =>
-            item.locationSelection[ort] = false);
+            item.locationSelection.keys
+                .forEach((ort) => item.locationSelection[ort] = false);
           ***REMOVED***
         ***REMOVED***);
       ***REMOVED***,
     );
   ***REMOVED***
 
-  CheckboxListTile _locationCheckbox(Ort ort, DistrictItem bezirk,
-      setDialogState) {
+  CheckboxListTile _locationCheckbox(
+      Ort ort, DistrictItem bezirk, setDialogState) {
     return CheckboxListTile(
       value: bezirk.locationSelection[ort],
       title: Text('      ' + ort.ort),
@@ -184,10 +175,8 @@ class LocationPicker {
   ***REMOVED***
 
   void _eraseSelections(List<DistrictItem> districts) {
-    districts.forEach((district) =>
-        district.locationSelection.keys
-            .forEach((location) =>
-        district.locationSelection[location] = false));
+    districts.forEach((district) => district.locationSelection.keys
+        .forEach((location) => district.locationSelection[location] = false));
   ***REMOVED***
 ***REMOVED***
 
@@ -204,7 +193,7 @@ class DistrictItem {
         ':' +
         locationSelection.entries
             .map((entry) =>
-        jsonEncode(entry.key) + ' (' + entry.value.toString() + ') ')
+                jsonEncode(entry.key) + ' (' + entry.value.toString() + ') ')
             .toList()
             .toString() +
         ' (' +
