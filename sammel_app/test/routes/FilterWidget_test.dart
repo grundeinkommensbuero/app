@@ -355,7 +355,7 @@ void main() {
     expect(find.text('district2'), findsOneWidget);
   ***REMOVED***);
 
-  MaterialApp WidgetWithlocationPicker(LocationPicker locationPicker,
+  MaterialApp WidgetWithLocationPicker(LocationPicker locationPicker,
       WidgetTester tester, List<Ort> previousSelection) {
     return MaterialApp(
       home: Material(
@@ -375,7 +375,7 @@ void main() {
 
   testWidgets('LocationPicker shows correct list of districts and places',
       (WidgetTester tester) async {
-    await tester.pumpWidget(WidgetWithlocationPicker(
+    await tester.pumpWidget(WidgetWithLocationPicker(
         LocationPicker(locations: [
           Ort(0, 'district1', 'place1'),
           Ort(1, 'district2', 'place2')
@@ -394,7 +394,7 @@ void main() {
 
   testWidgets('LocationPicker shows correct places with correct districts',
       (WidgetTester tester) async {
-    await tester.pumpWidget(WidgetWithlocationPicker(
+    await tester.pumpWidget(WidgetWithLocationPicker(
         LocationPicker(locations: [
           Ort(0, 'district1', 'place1'),
           Ort(1, 'district1', 'place2'),
@@ -434,7 +434,7 @@ void main() {
       Ort(0, 'district2', 'place3')
     ]);
     var widgetWithlocationPicker =
-        WidgetWithlocationPicker(locationPicker, tester, []);
+        WidgetWithLocationPicker(locationPicker, tester, []);
     await tester.pumpWidget(widgetWithlocationPicker);
 
     await tester.tap(find.text('X'));
@@ -482,7 +482,7 @@ void main() {
 
   testWidgets('LocationPicker selects district on tap',
           (WidgetTester tester) async {
-        await tester.pumpWidget(WidgetWithlocationPicker(
+        await tester.pumpWidget(WidgetWithLocationPicker(
             LocationPicker(locations: [
               Ort(0, 'district1', 'place1'),
               Ort(1, 'district1', 'place2'),
