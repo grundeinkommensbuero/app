@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:calendarro/calendarro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Ort.dart';
@@ -12,9 +11,11 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 
 int numberOfTimesCalled = 0;
+TermineFilter iWasCalledResult;
 
-Function iWasCalled(TermineFilter _) {
+Function iWasCalled(TermineFilter result) {
   numberOfTimesCalled++;
+  iWasCalledResult = result;
 }
 
 class StammdatenServiceMock extends Mock implements StammdatenService {}
@@ -393,8 +394,7 @@ void main() {
     expect(find.byKey(Key('to time picker')), findsOneWidget);
   });
 
-  testWidgets(
-      'Filter intially shows time from filter in from time selection',
+  testWidgets('Filter intially shows time from filter in from time selection',
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
     filterWidget.filter.von = TimeOfDay(hour: 19, minute: 15);
@@ -418,8 +418,7 @@ void main() {
     expect(find.text('21'), findsOneWidget);
   });
 
-  testWidgets(
-      'Filter intially shows default time if filter is empty',
+  testWidgets('Filter intially shows default time if filter is empty',
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
 
@@ -441,8 +440,7 @@ void main() {
     expect(find.text('00'), findsOneWidget);
   });
 
-  testWidgets(
-      'Filter saves selected time to filter',
+  testWidgets('Filter saves selected time to filter',
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
 
@@ -466,5 +464,35 @@ void main() {
 
     expect(ChronoHelfer.timeToStringHHmm(filterWidget.filter.von), '12:00');
     expect(ChronoHelfer.timeToStringHHmm(filterWidget.filter.von), '12:00');
+  });
+
+  testWidgets('Filter is applied on Anwendn button',
+      (WidgetTester tester) async {
+    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+    await tester.pumpWidget(MaterialApp(home: filterWidget));
+
+    await tester.tap(find.byKey(Key('filter button')));
+    await tester.pump();
+
+    filterWidget.filter = TermineFilter(
+        ['Sammel-Termin'],
+        [DateTime(2019, 12, 16)],
+        TimeOfDay(hour: 19, minute: 15),
+        TimeOfDay(hour: 20, minute: 21),
+        [Ort(1, 'district', 'place')]);
+
+    numberOfTimesCalled = 0;
+    iWasCalledResult = null;
+
+    await tester.tap(find.byKey(Key('filter button')));
+    await tester.pump();
+
+    expect(numberOfTimesCalled, 1);
+    expect(iWasCalledResult.typen, containsAll(['Sammel-Termin']));
+    expect(ChronoHelfer.timeToStringHHmm(iWasCalledResult.von), '19:15');
+    expect(ChronoHelfer.timeToStringHHmm(iWasCalledResult.bis), '20:21');
+    expect(iWasCalledResult.tage.map((t) => DateFormat.yMd().format(t)),
+        containsAll(['12/16/2019']));
+    expect(iWasCalledResult.orte.map((o) => o.id), containsAll([1]));
   });
 }
