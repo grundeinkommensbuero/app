@@ -364,7 +364,8 @@ void main() {
             child: RaisedButton(
               child: const Text('X'),
               onPressed: () {
-                locationPicker.showLocationPicker(context, previousSelection);
+                locationPicker.showLocationPicker(context, previousSelection,
+                    multiple: true);
               ***REMOVED***,
             ),
           );
@@ -383,7 +384,7 @@ void main() {
         tester,
         []));
 
-    await tester.tap(find.byType(RaisedButton));
+    await tester.tap(find.text('X'));
     await tester.pumpAndSettle();
 
     expect(find.text('district1'), findsOneWidget);
@@ -403,7 +404,7 @@ void main() {
         tester,
         []));
 
-    await tester.tap(find.byType(RaisedButton));
+    await tester.tap(find.text('X'));
     await tester.pumpAndSettle();
 
     expect(find.text('district1'), findsOneWidget);
@@ -441,7 +442,6 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('district1'), findsOneWidget);
-
 
     // check for expansion by variable because checking real expansion is a mess
     // see: https://github.com/flutter/flutter/blob/master/packages/flutter/test/material/expansion_panel_test.dart
@@ -481,24 +481,40 @@ void main() {
   ***REMOVED***);
 
   testWidgets('LocationPicker selects district on tap',
-          (WidgetTester tester) async {
-        await tester.pumpWidget(WidgetWithLocationPicker(
-            LocationPicker(locations: [
-              Ort(0, 'district1', 'place1'),
-              Ort(1, 'district1', 'place2'),
-              Ort(2, 'district2', 'place3')
-            ]),
-            tester,
-            []));
+      (WidgetTester tester) async {
+    await tester.pumpWidget(WidgetWithLocationPicker(
+        LocationPicker(locations: [
+          Ort(0, 'district1', 'place1'),
+          Ort(1, 'district1', 'place2'),
+          Ort(2, 'district2', 'place3')
+        ]),
+        tester,
+        []));
 
-        await tester.tap(find.byType(RaisedButton));
-        await tester.pumpAndSettle();
+    await tester.tap(find.text('X'));
+    await tester.pumpAndSettle();
 
-        expect(find.text('district1'), findsOneWidget);
+    expect(find.text('district1'), findsOneWidget);
 
-        tester.tap(find.text('district1'));
+    expect(find.byType(ExpansionPanelList), findsWidgets);
 
+    expect(
+        tester
+            .widgetList<CheckboxListTile>(find.byType(CheckboxListTile))
+            .where((ct) => (ct.title as Text).data == 'district1')
+            .first
+            .value,
+        isFalse);
 
+    await tester.tap(find.text('district1'));
+    await tester.pump();
 
-      ***REMOVED***);
+    expect(
+        tester
+            .widgetList<CheckboxListTile>(find.byType(CheckboxListTile))
+            .where((ct) => (ct.title as Text).data == 'district1')
+            .first
+            .value,
+        isTrue);
+  ***REMOVED***);
 ***REMOVED***
