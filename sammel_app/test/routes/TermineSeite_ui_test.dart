@@ -8,7 +8,7 @@ import 'package:sammel_app/services/TermineService.dart';
 
 import '../model/Termin_test.dart';
 
-class TermineServiceMock extends Mock implements StammatenService {}
+class TermineServiceMock extends Mock implements TermineService {}
 
 final terminService = TermineServiceMock();
 
@@ -19,7 +19,7 @@ void main() {
 
     when(terminService.ladeTermine(any)).thenAnswer((_) async => []);
 
-    await tester.pumpWidget(Provider<StammatenService>(
+    await tester.pumpWidget(Provider<TermineService>(
         builder: (context) => terminService,
         child: MaterialApp(home: termineSeiteWidget)));
 
@@ -36,7 +36,7 @@ void main() {
           TerminTestDaten.terminOhneTeilnehmer(),
         ]);
 
-    await tester.pumpWidget(Provider<StammatenService>(
+    await tester.pumpWidget(Provider<TermineService>(
         builder: (context) => terminService,
         child: MaterialApp(home: termineSeiteWidget)));
 
@@ -57,7 +57,7 @@ void main() {
           TerminTestDaten.terminOhneTeilnehmer(),
         ]);
 
-    await tester.pumpWidget(Provider<StammatenService>(
+    await tester.pumpWidget(Provider<TermineService>(
         builder: (context) => terminService,
         child: MaterialApp(home: termineSeiteWidget)));
 
@@ -74,7 +74,7 @@ void main() {
           TerminTestDaten.terminOhneTeilnehmer(),
         ]);
 
-    await tester.pumpWidget(Provider<StammatenService>(
+    await tester.pumpWidget(Provider<TermineService>(
         builder: (context) => terminService,
         child: MaterialApp(home: termineSeiteWidget)));
 
