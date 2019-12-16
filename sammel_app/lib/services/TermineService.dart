@@ -13,7 +13,7 @@ abstract class AbstractTermineService extends Service {
   Future<List<Termin>> ladeTermine(TermineFilter filter);
 ***REMOVED***
 
-class StammatenService extends AbstractTermineService {
+class TermineService extends AbstractTermineService {
   Future<List<Termin>> ladeTermine(TermineFilter filter) async {
     HttpClientResponseBody response =
         await post(Uri.parse('/service/termine'), jsonEncode(filter));

@@ -14,8 +14,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          Provider<StammatenService>.value(
-              value: demoModus ? DemoTermineService() : StammatenService()),
+          Provider<TermineService>.value(
+              value: demoModus ? DemoTermineService() : TermineService()),
           Provider<BenutzerService>.value(
               value: demoModus ? DemoBenutzerService() : BenutzerService()),
           Provider<StammdatenService>.value(
