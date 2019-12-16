@@ -364,8 +364,7 @@ void main() {
             child: RaisedButton(
               child: const Text('X'),
               onPressed: () {
-                locationPicker.showLocationPicker(context, previousSelection,
-                    multiple: true);
+                locationPicker.showLocationPicker(context, previousSelection);
               ***REMOVED***,
             ),
           );
@@ -380,7 +379,7 @@ void main() {
         LocationPicker(locations: [
           Ort(0, 'district1', 'place1'),
           Ort(1, 'district2', 'place2')
-        ]),
+        ], multiMode: true),
         tester,
         []));
 
@@ -400,7 +399,7 @@ void main() {
           Ort(0, 'district1', 'place1'),
           Ort(1, 'district1', 'place2'),
           Ort(2, 'district2', 'place3')
-        ]),
+        ], multiMode: true),
         tester,
         []));
 
@@ -433,7 +432,7 @@ void main() {
       Ort(0, 'district1', 'place1'),
       Ort(0, 'district1', 'place2'),
       Ort(0, 'district2', 'place3')
-    ]);
+    ], multiMode: true);
     var widgetWithlocationPicker =
         WidgetWithLocationPicker(locationPicker, tester, []);
     await tester.pumpWidget(widgetWithlocationPicker);
@@ -494,7 +493,7 @@ void main() {
           Ort(0, 'district1', 'place1'),
           Ort(1, 'district1', 'place2'),
           Ort(2, 'district2', 'place3')
-        ]),
+        ], multiMode: true),
         tester,
         []));
 
@@ -518,7 +517,7 @@ void main() {
           Ort(0, 'district1', 'place1'),
           Ort(1, 'district1', 'place2'),
           Ort(2, 'district2', 'place3')
-        ]),
+        ], multiMode: true),
         tester,
         []));
 
@@ -546,7 +545,7 @@ void main() {
           Ort(0, 'district1', 'place1'),
           Ort(1, 'district1', 'place2'),
           Ort(2, 'district2', 'place3')
-        ]),
+        ], multiMode: true),
         tester,
         [Ort(2, 'district2', 'place3')]));
 
@@ -566,7 +565,7 @@ void main() {
           Ort(0, 'district1', 'place1'),
           Ort(1, 'district1', 'place2'),
           Ort(2, 'district2', 'place3')
-        ]),
+        ], multiMode: true),
         tester,
         []));
 
@@ -578,5 +577,44 @@ void main() {
     expect(checkBoxTileWithName(tester, '      place2').value, isFalse);
     expect(checkBoxTileWithName(tester, 'district2').value, isFalse);
     expect(checkBoxTileWithName(tester, '      place3').value, isFalse);
+  ***REMOVED***);
+
+  testWidgets('LocationPicker uses multi/single mode',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(WidgetWithLocationPicker(
+        LocationPicker(locations: [
+          Ort(0, 'district1', 'place1'),
+          Ort(1, 'district1', 'place2'),
+          Ort(2, 'district2', 'place3')
+        ], multiMode: true),
+        tester,
+        []));
+
+    await tester.tap(find.text('X'));
+    await tester.pumpAndSettle();
+
+    expect(
+        find.descendant(
+            of: find.byType(ExpansionPanelList),
+            matching: find.byType(CheckboxListTile)),
+        findsNWidgets(5));
+
+    await tester.pumpWidget(WidgetWithLocationPicker(
+        LocationPicker(locations: [
+          Ort(0, 'district1', 'place1'),
+          Ort(1, 'district1', 'place2'),
+          Ort(2, 'district2', 'place3')
+        ], multiMode: false),
+        tester,
+        []));
+
+    await tester.tap(find.text('X'));
+    await tester.pumpAndSettle();
+
+    expect(
+        find.descendant(
+            of: find.byType(ExpansionPanelList),
+            matching: find.byType(ListTile)),
+        findsNWidgets(5));
   ***REMOVED***);
 ***REMOVED***

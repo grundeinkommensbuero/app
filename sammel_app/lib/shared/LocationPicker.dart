@@ -9,12 +9,12 @@ class LocationPicker {
   List<Ort> locations = [];
   List<DistrictItem> districts;
   Key key;
+  bool multiMode;
 
-  LocationPicker({final this.key, final this.locations***REMOVED***);
+  LocationPicker({final this.key, final this.locations, this.multiMode = false***REMOVED***);
 
   Future<List<Ort>> showLocationPicker(
-      final context, final List<Ort> previousSelection,
-      {bool multiple = false***REMOVED***) async {
+      final context, final List<Ort> previousSelection) async {
     this.districts =
         _generateDistrictList(List.from(previousSelection), locations);
 
@@ -31,7 +31,7 @@ class LocationPicker {
                   key: key,
                   contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
                   titlePadding: EdgeInsets.all(15.0),
-                  title: multiple
+                  title: multiMode
                       ? const Text('Wähle einen oder mehrere Orte')
                       : const Text('Wähle einen Ort'),
                   children: <Widget>[
@@ -46,9 +46,8 @@ class LocationPicker {
                             locations,
                             selectedLocations,
                             districts,
-                            setDialogState,
-                            multiple)),
-                    multiple
+                            setDialogState)),
+                    multiMode
                         ? RaisedButton(
                             child: Text('Fertig'),
                             onPressed: () => Navigator.pop(context))
@@ -89,11 +88,10 @@ class LocationPicker {
       List<Ort> orte,
       List<int> ausgewOrte,
       List<DistrictItem> districts,
-      Function setdialogState,
-      bool multiple) {
+      Function setdialogState) {
     return districts
         .map((item) => _expansionPanel(context, item, orte, ausgewOrte,
-            setdialogState, districts, multiple))
+            setdialogState, districts))
         .toList();
   ***REMOVED***
 
@@ -103,17 +101,16 @@ class LocationPicker {
       List<Ort> locations,
       List<int> selLoc,
       Function setDialogState,
-      List<DistrictItem> districts,
-      bool multiple) {
+      List<DistrictItem> districts) {
     return ExpansionPanel(
-        headerBuilder: (BuildContext context, bool isExpanded) => multiple
+        headerBuilder: (BuildContext context, bool isExpanded) => multiMode
             ? _disctrictCheckbox(disctrict, locations, selLoc, setDialogState)
             : _disctrictPanel(disctrict, locations, selLoc, setDialogState),
         canTapOnHeader: true,
         isExpanded: disctrict.expanded,
         body: Column(
             children: disctrict.locationSelection.keys
-                .map((ort) => multiple
+                .map((ort) => multiMode
                     ? _locationCheckbox(ort, disctrict, setDialogState)
                     : _locationButton(context, ort, disctrict, districts))
                 .toList()));
