@@ -258,6 +258,13 @@ void main() {
             .startsWith(currentMonthName),
         true);
 
+    expect(
+        DateFormat.yMd().format(
+            (tester.widget(find.byType(Calendarro)) as Calendarro).startDate),
+        '${DateTime.now().month***REMOVED***/'
+        '1/'
+        '${DateTime.now().year***REMOVED***');
+
     expect(find.byKey(Key('next month button')), findsOneWidget);
     await tester.tap(find.byKey(Key('next month button')));
     await tester.pump();
@@ -270,6 +277,13 @@ void main() {
             .startsWith(nextMonthName),
         true);
 
+    expect(
+        DateFormat.yMd().format(
+            (tester.widget(find.byType(Calendarro)) as Calendarro).startDate),
+        '${Jiffy(DateTime.now()).add(months: 1).month***REMOVED***/'
+        '1/'
+        '${Jiffy(DateTime.now()).add(months: 1).year***REMOVED***');
+
     await tester.tap(find.byKey(Key('previous month button')));
     await tester.pump();
 
@@ -278,6 +292,13 @@ void main() {
             .data
             .startsWith(currentMonthName),
         true);
+
+    expect(
+        DateFormat.yMd().format(
+            (tester.widget(find.byType(Calendarro)) as Calendarro).startDate),
+        '${DateTime.now().month***REMOVED***/'
+        '1/'
+        '${DateTime.now().year***REMOVED***');
   ***REMOVED***);
 
   testWidgets('Days Selection saves selected days to filter on Auswaehlen',
