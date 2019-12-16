@@ -506,6 +506,14 @@ void main() {
             .value,
         isFalse);
 
+    expect(
+        tester
+            .widgetList<CheckboxListTile>(find.byType(CheckboxListTile))
+            .where((ct) => (ct.title as Text).data == 'district2')
+            .first
+            .value,
+        isFalse);
+
     await tester.tap(find.text('district1'));
     await tester.pump();
 
@@ -516,5 +524,63 @@ void main() {
             .first
             .value,
         isTrue);
+
+    expect(
+        tester
+            .widgetList<CheckboxListTile>(find.byType(CheckboxListTile))
+            .where((ct) => (ct.title as Text).data == 'district2')
+            .first
+            .value,
+        isFalse);
+  });
+
+  testWidgets('LocationPicker selects according places with tap on district',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(WidgetWithLocationPicker(
+        LocationPicker(locations: [
+          Ort(0, 'district1', 'place1'),
+          Ort(1, 'district1', 'place2'),
+          Ort(2, 'district2', 'place3')
+        ]),
+        tester,
+        []));
+
+    await tester.tap(find.text('X'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('district1'), findsOneWidget);
+
+    expect(find.byType(ExpansionPanelList), findsWidgets);
+
+    tester
+        .widgetList<CheckboxListTile>(find.byType(CheckboxListTile))
+        .forEach((ct) => expect(ct.value, isFalse));
+
+    await tester.tap(find.text('district1'));
+    await tester.pump();
+
+    expect(
+        tester
+            .widgetList<CheckboxListTile>(find.byType(CheckboxListTile))
+            .where((ct) => (ct.title as Text).data == '      place1')
+            .first
+            .value,
+        isTrue);
+
+    expect(
+        tester
+            .widgetList<CheckboxListTile>(find.byType(CheckboxListTile))
+            .where((ct) => (ct.title as Text).data == '      place2')
+            .first
+            .value,
+        isTrue);
+
+    expect(
+        tester
+            .widgetList<CheckboxListTile>(find.byType(CheckboxListTile))
+            .where((ct) => (ct.title as Text).data == '      place3')
+            .first
+            .value,
+        isFalse);
   });
 }
