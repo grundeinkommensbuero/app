@@ -209,7 +209,7 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
   ***REMOVED***
 
   locationSelection() async {
-    var allLocations = await Provider.of<StammdatenService>(context).ladeOrte();
+    var allLocations = await Provider.of<AbstractStammdatenService>(context).ladeOrte();
 
     var selectedLocations = await LocationPicker(
             locations: allLocations,

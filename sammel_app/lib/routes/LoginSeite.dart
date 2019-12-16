@@ -40,7 +40,7 @@ class _LoginSeiteState extends State<LoginSeite> {
 
   @override
   Widget build(BuildContext context) {
-    benutzerService = Provider.of<BenutzerService>(context);
+    benutzerService = Provider.of<AbstractBenutzerService>(context);
     return Scaffold(
       appBar: AppBar(
           title: Row(

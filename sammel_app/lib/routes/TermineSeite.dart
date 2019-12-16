@@ -31,7 +31,7 @@ class _TermineSeiteState extends State<TermineSeite> {
   @override
   Widget build(BuildContext context) {
     if (!initialized) {
-      termineService = Provider.of<TermineService>(context);
+      termineService = Provider.of<AbstractTermineService>(context);
       filterWidget = FilterWidget(ladeTermine);
       ladeTermine(TermineFilter.leererFilter());
       initialized = true;
