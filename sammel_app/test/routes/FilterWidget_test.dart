@@ -356,15 +356,16 @@ void main() {
   ***REMOVED***);
 
   MaterialApp WidgetWithLocationPicker(LocationPicker locationPicker,
-      WidgetTester tester, List<Ort> previousSelection) {
+      WidgetTester tester, List<Ort> previousSelection, Function result) {
     return MaterialApp(
       home: Material(
         child: Builder(builder: (BuildContext context) {
           return Center(
             child: RaisedButton(
               child: const Text('X'),
-              onPressed: () {
-                locationPicker.showLocationPicker(context, previousSelection);
+              onPressed: () async {
+                result(await locationPicker.showLocationPicker(
+                    context, previousSelection));
               ***REMOVED***,
             ),
           );
@@ -381,7 +382,8 @@ void main() {
           Ort(1, 'district2', 'place2')
         ], multiMode: true),
         tester,
-        []));
+        [],
+        (_) {***REMOVED***));
 
     await tester.tap(find.text('X'));
     await tester.pumpAndSettle();
@@ -401,7 +403,8 @@ void main() {
           Ort(2, 'district2', 'place3')
         ], multiMode: true),
         tester,
-        []));
+        [],
+            (_) {***REMOVED***));
 
     await tester.tap(find.text('X'));
     await tester.pumpAndSettle();
@@ -434,7 +437,7 @@ void main() {
       Ort(0, 'district2', 'place3')
     ], multiMode: true);
     var widgetWithlocationPicker =
-        WidgetWithLocationPicker(locationPicker, tester, []);
+        WidgetWithLocationPicker(locationPicker, tester, [], (_) {***REMOVED***);
     await tester.pumpWidget(widgetWithlocationPicker);
 
     await tester.tap(find.text('X'));
@@ -479,7 +482,7 @@ void main() {
     expect(locationPicker.districts[1].expanded, true);
   ***REMOVED***);
 
-  CheckboxListTile checkBoxTileWithName(WidgetTester tester, String name) {
+  CheckboxListTile findCheckboxTileWithName(WidgetTester tester, String name) {
     return tester
         .widgetList<CheckboxListTile>(find.byType(CheckboxListTile))
         .where((ct) => (ct.title as Text).data == name)
@@ -495,19 +498,20 @@ void main() {
           Ort(2, 'district2', 'place3')
         ], multiMode: true),
         tester,
-        []));
+        [],
+            (_) {***REMOVED***));
 
     await tester.tap(find.text('X'));
     await tester.pumpAndSettle();
 
-    expect(checkBoxTileWithName(tester, 'district1').value, isFalse);
-    expect(checkBoxTileWithName(tester, 'district2').value, isFalse);
+    expect(findCheckboxTileWithName(tester, 'district1').value, isFalse);
+    expect(findCheckboxTileWithName(tester, 'district2').value, isFalse);
 
     await tester.tap(find.text('district1'));
     await tester.pump();
 
-    expect(checkBoxTileWithName(tester, 'district1').value, isTrue);
-    expect(checkBoxTileWithName(tester, 'district2').value, isFalse);
+    expect(findCheckboxTileWithName(tester, 'district1').value, isTrue);
+    expect(findCheckboxTileWithName(tester, 'district2').value, isFalse);
   ***REMOVED***);
 
   testWidgets('LocationPicker selects according places with tap on district',
@@ -519,23 +523,24 @@ void main() {
           Ort(2, 'district2', 'place3')
         ], multiMode: true),
         tester,
-        []));
+        [],
+            (_) {***REMOVED***));
 
     await tester.tap(find.text('X'));
     await tester.pumpAndSettle();
 
     expect(find.text('district1'), findsOneWidget);
 
-    expect(checkBoxTileWithName(tester, '      place1').value, isFalse);
-    expect(checkBoxTileWithName(tester, '      place2').value, isFalse);
-    expect(checkBoxTileWithName(tester, '      place3').value, isFalse);
+    expect(findCheckboxTileWithName(tester, '      place1').value, isFalse);
+    expect(findCheckboxTileWithName(tester, '      place2').value, isFalse);
+    expect(findCheckboxTileWithName(tester, '      place3').value, isFalse);
 
     await tester.tap(find.text('district1'));
     await tester.pump();
 
-    expect(checkBoxTileWithName(tester, '      place1').value, isTrue);
-    expect(checkBoxTileWithName(tester, '      place2').value, isTrue);
-    expect(checkBoxTileWithName(tester, '      place3').value, isFalse);
+    expect(findCheckboxTileWithName(tester, '      place1').value, isTrue);
+    expect(findCheckboxTileWithName(tester, '      place2').value, isTrue);
+    expect(findCheckboxTileWithName(tester, '      place3').value, isFalse);
   ***REMOVED***);
 
   testWidgets('LocationPicker selects initially selected places on startup',
@@ -547,14 +552,15 @@ void main() {
           Ort(2, 'district2', 'place3')
         ], multiMode: true),
         tester,
-        [Ort(2, 'district2', 'place3')]));
+        [Ort(2, 'district2', 'place3')],
+            (_) {***REMOVED***));
 
     await tester.tap(find.text('X'));
     await tester.pumpAndSettle();
 
-    expect(checkBoxTileWithName(tester, '      place1').value, isFalse);
-    expect(checkBoxTileWithName(tester, '      place2').value, isFalse);
-    expect(checkBoxTileWithName(tester, '      place3').value, isTrue);
+    expect(findCheckboxTileWithName(tester, '      place1').value, isFalse);
+    expect(findCheckboxTileWithName(tester, '      place2').value, isFalse);
+    expect(findCheckboxTileWithName(tester, '      place3').value, isTrue);
   ***REMOVED***);
 
   testWidgets(
@@ -567,16 +573,17 @@ void main() {
           Ort(2, 'district2', 'place3')
         ], multiMode: true),
         tester,
-        []));
+        [],
+            (_) {***REMOVED***));
 
     await tester.tap(find.text('X'));
     await tester.pumpAndSettle();
 
-    expect(checkBoxTileWithName(tester, 'district1').value, isFalse);
-    expect(checkBoxTileWithName(tester, '      place1').value, isFalse);
-    expect(checkBoxTileWithName(tester, '      place2').value, isFalse);
-    expect(checkBoxTileWithName(tester, 'district2').value, isFalse);
-    expect(checkBoxTileWithName(tester, '      place3').value, isFalse);
+    expect(findCheckboxTileWithName(tester, 'district1').value, isFalse);
+    expect(findCheckboxTileWithName(tester, '      place1').value, isFalse);
+    expect(findCheckboxTileWithName(tester, '      place2').value, isFalse);
+    expect(findCheckboxTileWithName(tester, 'district2').value, isFalse);
+    expect(findCheckboxTileWithName(tester, '      place3').value, isFalse);
   ***REMOVED***);
 
   testWidgets('LocationPicker uses multi/single mode',
@@ -588,7 +595,8 @@ void main() {
           Ort(2, 'district2', 'place3')
         ], multiMode: true),
         tester,
-        []));
+        [],
+            (_) {***REMOVED***));
 
     await tester.tap(find.text('X'));
     await tester.pumpAndSettle();
@@ -606,7 +614,8 @@ void main() {
           Ort(2, 'district2', 'place3')
         ], multiMode: false),
         tester,
-        []));
+        [],
+            (_) {***REMOVED***));
 
     await tester.tap(find.text('X'));
     await tester.pumpAndSettle();
@@ -616,5 +625,32 @@ void main() {
             of: find.byType(ExpansionPanelList),
             matching: find.byType(ListTile)),
         findsNWidgets(5));
+  ***REMOVED***);
+
+  testWidgets('LocationPicker returns selected locations',
+      (WidgetTester tester) async {
+    var result = List<Ort>();
+    await tester.pumpWidget(WidgetWithLocationPicker(
+        LocationPicker(locations: [
+          Ort(0, 'district1', 'place1'),
+          Ort(1, 'district1', 'place2'),
+          Ort(2, 'district2', 'place3')
+        ], multiMode: true),
+        tester,
+        [],
+        (selection) => result = selection));
+
+    await tester.tap(find.text('X'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('district1'));
+    await tester.pump();
+    await tester.tap(find.text('Fertig'));
+    await tester.pump();
+
+    expect(
+        result.map((ort) => ort.ort),
+        containsAll(
+            ['place1', 'place2']));
   ***REMOVED***);
 ***REMOVED***
