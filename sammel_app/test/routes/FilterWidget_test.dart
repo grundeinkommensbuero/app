@@ -353,4 +353,19 @@ void main() {
     expect(find.text('district1'), findsOneWidget);
     expect(find.text('district2'), findsOneWidget);
   });
+
+  testWidgets('Filter opens From Time selection with click at Zeit button',
+          (WidgetTester tester) async {
+        FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+
+        await tester.pumpWidget(MaterialApp(home: filterWidget));
+
+        await tester.tap(find.byKey(Key('filter button')));
+        await tester.pump();
+
+        await tester.tap(find.byKey(Key('time button')));
+        await tester.pump();
+
+        expect(find.byKey(Key('from time picker')), findsOneWidget);
+      });
 }

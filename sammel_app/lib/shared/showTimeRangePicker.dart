@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
-Future<TimeRange> showTimeRangePicker(
-    BuildContext context, initialFrom, initialTo) async {
-  var from =
-      await showSingleTimePicker(context, initialFrom ?? 12, 'von');
-  var to = await showSingleTimePicker(context, initialTo ?? 12, 'bis');
+Future<TimeRange> showTimeRangePicker(BuildContext context, initialFrom,
+    initialTo) async {
+  var from = await showSingleTimePicker(
+      context, initialFrom ?? 12, 'von', key: Key('from time picker'));
+  var to = await showSingleTimePicker(
+      context, initialTo ?? 12, 'bis', key: Key('to time picker'));
   return TimeRange(from, to);
-}
+  }
 
-Future<TimeOfDay> showSingleTimePicker(
-    BuildContext context, int initialTime, String title) async {
+Future<TimeOfDay> showSingleTimePicker(BuildContext context, int initialTime,
+    String title, {Key key}) async {
   TransitionBuilder builder = (BuildContext context, Widget timePicker) {
     return MediaQuery(
+      key: key,
       data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
