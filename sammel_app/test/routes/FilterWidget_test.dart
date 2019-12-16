@@ -1,4 +1,5 @@
 import 'package:calendarro/calendarro.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
@@ -238,7 +239,6 @@ void main() {
     expect(calendarro.selectedDates.isEmpty, true);
   ***REMOVED***);
 
-  // FIXME Geht nüch...
   testWidgets('Days Selection changes displayed month with buttons',
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
@@ -299,6 +299,42 @@ void main() {
         '${DateTime.now().month***REMOVED***/'
         '1/'
         '${DateTime.now().year***REMOVED***');
+  ***REMOVED***);
+
+  testWidgets('Days Selection selects dates from multiple months',
+      (WidgetTester tester) async {
+    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+
+    await tester.pumpWidget(MaterialApp(home: filterWidget));
+
+    await tester.tap(find.byKey(Key('filter button')));
+    await tester.pump();
+
+    await tester.tap(find.byKey(Key('days button')));
+    await tester.pump();
+
+    await tester.tap(find.text('1'));
+    await tester.pump();
+
+    await tester.tap(find.byKey(Key('next month button')));
+    await tester.pump();
+
+    await tester.tap(find.text('1'));
+    await tester.pump();
+
+    await tester.tap(find.byKey(Key('days dialog accept button')));
+    await tester.pump();
+
+    expect(
+        filterWidget.filter.tage.map((t) => DateFormat.yMd().format(t)),
+        containsAll([
+          '${DateTime.now().month***REMOVED***/'
+              '1/'
+              '${DateTime.now().year***REMOVED***',
+          '${Jiffy(DateTime.now()).add(months: 1).month***REMOVED***/'
+              '1/'
+              '${Jiffy(DateTime.now()).add(months: 1).year***REMOVED***'
+        ]));
   ***REMOVED***);
 
   testWidgets('Days Selection saves selected days to filter on Auswaehlen',
