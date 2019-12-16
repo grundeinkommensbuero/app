@@ -18,7 +18,7 @@ class TermineSeite extends StatefulWidget {
 ***REMOVED***
 
 class _TermineSeiteState extends State<TermineSeite> {
-  static var termineService;
+  static AbstractTermineService termineService;
   static final TextStyle style = TextStyle(
     color: Color.fromARGB(255, 129, 28, 98),
     fontSize: 15.0,

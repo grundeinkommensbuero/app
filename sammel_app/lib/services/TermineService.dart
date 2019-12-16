@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:http_server/http_server.dart';
 import 'package:sammel_app/model/Ort.dart';
@@ -11,6 +12,7 @@ import 'package:sammel_app/services/Service.dart';
 
 abstract class AbstractTermineService extends Service {
   Future<List<Termin>> ladeTermine(TermineFilter filter);
+  Future<Termin> createTermin(Termin termin);
 ***REMOVED***
 
 class TermineService extends AbstractTermineService {
@@ -27,6 +29,17 @@ class TermineService extends AbstractTermineService {
       return termine;
     ***REMOVED*** else {
       throw RestFehler("Unerwarteter Fehler: "
+          "${response.response.statusCode***REMOVED*** - ${response.body***REMOVED***");
+    ***REMOVED***
+  ***REMOVED***
+
+  Future<Termin> createTermin(Termin termin) async {
+    var response =
+        await post(Uri.parse('service/termine/neu'), jsonEncode(termin));
+    if(response.response.statusCode == 200) {
+      return Termin.fromJson(response.body);
+    ***REMOVED*** else {
+      throw RestFehler("Fehler beim Anlegen eines Termins: "
           "${response.response.statusCode***REMOVED*** - ${response.body***REMOVED***");
     ***REMOVED***
   ***REMOVED***
@@ -91,5 +104,13 @@ class DemoTermineService extends AbstractTermineService {
     // Wert muss als Future herausgereicht werden
     //return (new Completer()..complete(termine)).future;
     return termine;
+  ***REMOVED***
+
+  @override
+  Future<Termin> createTermin(Termin termin) async {
+    int highestId = termine.map((termin) => termin.id).reduce(max);
+    termin.id = highestId + 1;
+    termine.add(termin);
+    return await termin;
   ***REMOVED***
 ***REMOVED***
