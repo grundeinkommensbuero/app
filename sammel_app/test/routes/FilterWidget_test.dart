@@ -339,7 +339,7 @@ void main() {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
 
     when(stammdatenService.ladeOrte()).thenAnswer((_) async =>
-        [Ort(0, 'district1', 'place1'), Ort(0, 'district2', 'place2')]);
+        [Ort(0, 'district1', 'place1'), Ort(1, 'district2', 'place2')]);
 
     await tester.pumpWidget(Provider<StammdatenService>(
         builder: (context) => stammdatenService,
@@ -355,8 +355,8 @@ void main() {
     expect(find.text('district2'), findsOneWidget);
   });
 
-  MaterialApp WidgetWithlocationPicker(WidgetTester tester,
-      List<Ort> allLocations, List<Ort> previousSelection) {
+  MaterialApp WidgetWithlocationPicker(LocationPicker locationPicker,
+      WidgetTester tester, List<Ort> previousSelection) {
     return MaterialApp(
       home: Material(
         child: Builder(builder: (BuildContext context) {
@@ -364,8 +364,7 @@ void main() {
             child: RaisedButton(
               child: const Text('X'),
               onPressed: () {
-                LocationPicker(context, locations: allLocations)
-                    .showLocationPicker(previousSelection);
+                locationPicker.showLocationPicker(context, previousSelection);
               },
             ),
           );
@@ -374,25 +373,35 @@ void main() {
     );
   }
 
-  testWidgets('LocationPicker shows correct list of districts',
+  testWidgets('LocationPicker shows correct list of districts and places',
       (WidgetTester tester) async {
-    await tester.pumpWidget(WidgetWithlocationPicker(tester,
-        [Ort(0, 'district1', 'place1'), Ort(0, 'district2', 'place2')], []));
+    await tester.pumpWidget(WidgetWithlocationPicker(
+        LocationPicker(locations: [
+          Ort(0, 'district1', 'place1'),
+          Ort(1, 'district2', 'place2')
+        ]),
+        tester,
+        []));
 
     await tester.tap(find.byType(RaisedButton));
     await tester.pumpAndSettle();
 
     expect(find.text('district1'), findsOneWidget);
+    expect(find.text('      place1'), findsOneWidget);
     expect(find.text('district2'), findsOneWidget);
+    expect(find.text('      place2'), findsOneWidget);
   });
 
   testWidgets('LocationPicker shows correct places with correct districts',
       (WidgetTester tester) async {
-    await tester.pumpWidget(WidgetWithlocationPicker(tester, [
-      Ort(0, 'district1', 'place1'),
-      Ort(1, 'district1', 'place2'),
-      Ort(2, 'district2', 'place3')
-    ], []));
+    await tester.pumpWidget(WidgetWithlocationPicker(
+        LocationPicker(locations: [
+          Ort(0, 'district1', 'place1'),
+          Ort(1, 'district1', 'place2'),
+          Ort(2, 'district2', 'place3')
+        ]),
+        tester,
+        []));
 
     await tester.tap(find.byType(RaisedButton));
     await tester.pumpAndSettle();
@@ -401,8 +410,7 @@ void main() {
 
     var captions = tester
         .widgetList(find.descendant(
-            of: find.byType(ExpansionPanelList),
-            matching: find.byType(Text, skipOffstage: false)))
+            of: find.byType(ExpansionPanelList), matching: find.byType(Text)))
         .map((t) => (t as Text).data)
         .toList();
 
@@ -415,5 +423,58 @@ void main() {
           'district2',
           '      place3'
         ]));
+  });
+
+  testWidgets(
+      'LocationPicker opens/closes places tiles on click of parent district',
+      (WidgetTester tester) async {
+    var locationPicker = LocationPicker(locations: [
+      Ort(0, 'district1', 'place1'),
+      Ort(0, 'district1', 'place2'),
+      Ort(0, 'district2', 'place3')
+    ]);
+    var widgetWithlocationPicker =
+        WidgetWithlocationPicker(locationPicker, tester, []);
+    await tester.pumpWidget(widgetWithlocationPicker);
+
+    await tester.tap(find.text('X'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('district1'), findsOneWidget);
+
+    expect(locationPicker.districts[0].expanded, false);
+    expect(locationPicker.districts[1].expanded, false);
+
+    //expect(find.text('      place1'), findsNothing);
+
+    var expandButtons = find.byType(IconButton);
+
+    //open first
+    await tester.tap(expandButtons.first);
+    await tester.pump();
+
+    expect(locationPicker.districts[0].expanded, true);
+    expect(locationPicker.districts[1].expanded, false);
+
+    //close first
+    await tester.tap(expandButtons.first);
+    await tester.pump();
+
+    expect(locationPicker.districts[0].expanded, false);
+    expect(locationPicker.districts[1].expanded, false);
+
+    // open second
+    await tester.tap(expandButtons.last);
+    await tester.pump();
+
+    expect(locationPicker.districts[0].expanded, false);
+    expect(locationPicker.districts[1].expanded, true);
+
+    // open both
+    await tester.tap(expandButtons.first);
+    await tester.pump();
+
+    expect(locationPicker.districts[0].expanded, true);
+    expect(locationPicker.districts[1].expanded, true);
   });
 }
