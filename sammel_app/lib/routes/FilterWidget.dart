@@ -201,7 +201,7 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
 
   timeSelection() async {
     TimeRange timeRange = await showTimeRangePicker(
-        context, widget.filter.von?.hour, widget.filter.bis?.hour);
+        context, widget.filter.von, widget.filter.bis);
     setState(() {
       widget.filter.von = timeRange.from;
       widget.filter.bis = timeRange.to;

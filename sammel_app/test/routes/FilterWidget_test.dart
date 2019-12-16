@@ -389,4 +389,22 @@ void main() {
     expect(find.text('bis'), findsOneWidget);
     expect(find.byKey(Key('to time picker')), findsOneWidget);
   });
+
+  testWidgets(
+      'Filter intially shows time from filter in from time selection',
+      (WidgetTester tester) async {
+    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+    filterWidget.filter.von = TimeOfDay(hour: 19, minute: 15);
+
+    await tester.pumpWidget(MaterialApp(home: filterWidget));
+
+    await tester.tap(find.byKey(Key('filter button')));
+    await tester.pump();
+
+    await tester.tap(find.byKey(Key('time button')));
+    await tester.pump();
+
+    expect(find.text('19'), findsOneWidget);
+    expect(find.text('15'), findsOneWidget);
+  });
 }
