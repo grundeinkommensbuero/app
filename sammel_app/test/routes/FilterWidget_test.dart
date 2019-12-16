@@ -2,6 +2,7 @@ import 'package:calendarro/calendarro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Ort.dart';
@@ -238,7 +239,7 @@ void main() {
   ***REMOVED***);
 
   // FIXME Geht nüch...
-  /*testWidgets('Days Selection changes displayed month with buttons',
+  testWidgets('Days Selection changes displayed month with buttons',
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
 
@@ -250,28 +251,34 @@ void main() {
     await tester.tap(find.byKey(Key('days button')));
     await tester.pump();
 
-    var monthLabel = tester.widget(find.byKey(Key('current month'))) as Text;
-
     var currentMonthName = ChronoHelfer.monthName(DateTime.now().month);
-    expect(monthLabel.data.startsWith(currentMonthName), true);
+    expect(
+        (tester.widget(find.byKey(Key('current month'))) as Text)
+            .data
+            .startsWith(currentMonthName),
+        true);
 
-    var calendarro = tester.widget(find.byType(Calendarro)) as Calendarro;
-
-    print('Vorher: ' + calendarro.startDate.toString());
     expect(find.byKey(Key('next month button')), findsOneWidget);
     await tester.tap(find.byKey(Key('next month button')));
     await tester.pump();
-    print('Nachher: ' + calendarro.startDate.toString());
 
     var nextMonthName =
         ChronoHelfer.monthName(Jiffy(DateTime.now()).add(months: 1).month);
-    expect(monthLabel.data.startsWith(nextMonthName), true);
+    expect(
+        (tester.widget(find.byKey(Key('current month'))) as Text)
+            .data
+            .startsWith(nextMonthName),
+        true);
 
     await tester.tap(find.byKey(Key('previous month button')));
     await tester.pump();
 
-    expect(monthLabel.data.startsWith(currentMonthName), true);
-  ***REMOVED***);*/
+    expect(
+        (tester.widget(find.byKey(Key('current month'))) as Text)
+            .data
+            .startsWith(currentMonthName),
+        true);
+  ***REMOVED***);
 
   testWidgets('Days Selection saves selected days to filter on Auswaehlen',
       (WidgetTester tester) async {
