@@ -209,7 +209,7 @@ void main() {
 
     when(stammdatenService.ladeOrte()).thenAnswer((_) async => []);
 
-    await tester.pumpWidget(Provider<StammdatenService>(
+    await tester.pumpWidget(Provider<AbstractStammdatenService>(
         builder: (context) => stammdatenService,
         child: MaterialApp(home: filterWidget)));
 
@@ -229,7 +229,7 @@ void main() {
     when(stammdatenService.ladeOrte()).thenAnswer((_) async =>
         [Ort(0, 'district1', 'place1'), Ort(1, 'district2', 'place2')]);
 
-    await tester.pumpWidget(Provider<StammdatenService>(
+    await tester.pumpWidget(Provider<AbstractStammdatenService>(
         builder: (context) => stammdatenService,
         child: MaterialApp(home: filterWidget)));
 
