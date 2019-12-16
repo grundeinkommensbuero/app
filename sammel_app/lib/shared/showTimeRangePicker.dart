@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 
-Future<TimeRange> showTimeRangePicker(BuildContext context, initialFrom,
-    initialTo) async {
+Future<TimeRange> showTimeRangePicker(
+    BuildContext context, TimeOfDay initialFrom, TimeOfDay initialTo) async {
   var from = await showSingleTimePicker(
-      context, initialFrom ?? 12, 'von', key: Key('from time picker'));
+      context, initialFrom ?? TimeOfDay(hour: 12, minute: 00), 'von',
+      key: Key('from time picker'));
   var to = await showSingleTimePicker(
-      context, initialTo ?? 12, 'bis', key: Key('to time picker'));
+      context, initialTo ?? TimeOfDay(hour: 12, minute: 00), 'bis',
+      key: Key('to time picker'));
   return TimeRange(from, to);
-  ***REMOVED***
+***REMOVED***
 
-Future<TimeOfDay> showSingleTimePicker(BuildContext context, int initialTime,
-    String title, {Key key***REMOVED***) async {
+Future<TimeOfDay> showSingleTimePicker(
+    BuildContext context, TimeOfDay initialTime, String title,
+    {Key key***REMOVED***) async {
   TransitionBuilder builder = (BuildContext context, Widget timePicker) {
     return MediaQuery(
       key: key,
@@ -34,7 +37,7 @@ Future<TimeOfDay> showSingleTimePicker(BuildContext context, int initialTime,
   ***REMOVED***
   return await showTimePicker(
       context: context,
-      initialTime: TimeOfDay(hour: initialTime, minute: 0),
+      initialTime: initialTime,
       builder: builder);
 ***REMOVED***
 
