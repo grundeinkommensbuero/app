@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:calendarro/calendarro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -7,6 +9,7 @@ import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/FilterWidget.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
+import 'package:sammel_app/shared/ChronoHelfer.dart';
 
 int numberOfTimesCalled = 0;
 
@@ -436,5 +439,32 @@ void main() {
 
     expect(find.text('12'), findsOneWidget);
     expect(find.text('00'), findsOneWidget);
+  });
+
+  testWidgets(
+      'Filter saves selected time to filter',
+      (WidgetTester tester) async {
+    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+
+    await tester.pumpWidget(MaterialApp(home: filterWidget));
+
+    await tester.tap(find.byKey(Key('filter button')));
+    await tester.pump();
+
+    await tester.tap(find.byKey(Key('time button')));
+    await tester.pump();
+
+    expect(find.byKey(Key('from time picker')), findsOneWidget);
+
+    await tester.tap(find.text('OK'));
+    await tester.pump();
+
+    expect(find.byKey(Key('to time picker')), findsOneWidget);
+
+    await tester.tap(find.text('OK'));
+    await tester.pump();
+
+    expect(ChronoHelfer.timeToStringHHmm(filterWidget.filter.von), '12:00');
+    expect(ChronoHelfer.timeToStringHHmm(filterWidget.filter.von), '12:00');
   });
 }
