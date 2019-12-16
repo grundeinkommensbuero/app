@@ -501,8 +501,6 @@ void main() {
     await tester.tap(find.text('X'));
     await tester.pumpAndSettle();
 
-    expect(find.byType(ExpansionPanelList), findsWidgets);
-
     expect(checkBoxTileWithName(tester, 'district1').value, isFalse);
     expect(checkBoxTileWithName(tester, 'district2').value, isFalse);
 
@@ -528,8 +526,6 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('district1'), findsOneWidget);
-
-    expect(find.byType(ExpansionPanelList), findsWidgets);
 
     expect(checkBoxTileWithName(tester, '      place1').value, isFalse);
     expect(checkBoxTileWithName(tester, '      place2').value, isFalse);
@@ -557,10 +553,30 @@ void main() {
     await tester.tap(find.text('X'));
     await tester.pumpAndSettle();
 
-    expect(find.byType(ExpansionPanelList), findsWidgets);
-
     expect(checkBoxTileWithName(tester, '      place1').value, isFalse);
     expect(checkBoxTileWithName(tester, '      place2').value, isFalse);
     expect(checkBoxTileWithName(tester, '      place3').value, isTrue);
+  });
+
+  testWidgets(
+      'LocationPicker selects no places on startup with empty previous selection',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(WidgetWithLocationPicker(
+        LocationPicker(locations: [
+          Ort(0, 'district1', 'place1'),
+          Ort(1, 'district1', 'place2'),
+          Ort(2, 'district2', 'place3')
+        ]),
+        tester,
+        []));
+
+    await tester.tap(find.text('X'));
+    await tester.pumpAndSettle();
+
+    expect(checkBoxTileWithName(tester, 'district1').value, isFalse);
+    expect(checkBoxTileWithName(tester, '      place1').value, isFalse);
+    expect(checkBoxTileWithName(tester, '      place2').value, isFalse);
+    expect(checkBoxTileWithName(tester, 'district2').value, isFalse);
+    expect(checkBoxTileWithName(tester, '      place3').value, isFalse);
   });
 }
