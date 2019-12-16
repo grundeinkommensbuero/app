@@ -355,17 +355,38 @@ void main() {
   });
 
   testWidgets('Filter opens From Time selection with click at Zeit button',
-          (WidgetTester tester) async {
-        FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+      (WidgetTester tester) async {
+    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
 
-        await tester.pumpWidget(MaterialApp(home: filterWidget));
+    await tester.pumpWidget(MaterialApp(home: filterWidget));
 
-        await tester.tap(find.byKey(Key('filter button')));
-        await tester.pump();
+    await tester.tap(find.byKey(Key('filter button')));
+    await tester.pump();
 
-        await tester.tap(find.byKey(Key('time button')));
-        await tester.pump();
+    await tester.tap(find.byKey(Key('time button')));
+    await tester.pump();
 
-        expect(find.byKey(Key('from time picker')), findsOneWidget);
-      });
+    expect(find.text('von'), findsOneWidget);
+    expect(find.byKey(Key('from time picker')), findsOneWidget);
+  });
+
+  testWidgets(
+      'Filter opens To Time selection when From Time selection is closed',
+      (WidgetTester tester) async {
+    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+
+    await tester.pumpWidget(MaterialApp(home: filterWidget));
+
+    await tester.tap(find.byKey(Key('filter button')));
+    await tester.pump();
+
+    await tester.tap(find.byKey(Key('time button')));
+    await tester.pump();
+
+    await tester.tap(find.text('OK'));
+    await tester.pump();
+
+    expect(find.text('bis'), findsOneWidget);
+    expect(find.byKey(Key('to time picker')), findsOneWidget);
+  });
 }
