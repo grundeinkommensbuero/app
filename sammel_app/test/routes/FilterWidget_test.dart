@@ -442,6 +442,9 @@ void main() {
 
     expect(find.text('district1'), findsOneWidget);
 
+
+    // check for expansion by variable because checking real expansion is a mess
+    // see: https://github.com/flutter/flutter/blob/master/packages/flutter/test/material/expansion_panel_test.dart
     expect(locationPicker.districts[0].expanded, false);
     expect(locationPicker.districts[1].expanded, false);
 
@@ -452,7 +455,6 @@ void main() {
     //open first
     await tester.tap(expandButtons.first);
     await tester.pump();
-
     expect(locationPicker.districts[0].expanded, true);
     expect(locationPicker.districts[1].expanded, false);
 
@@ -477,4 +479,26 @@ void main() {
     expect(locationPicker.districts[0].expanded, true);
     expect(locationPicker.districts[1].expanded, true);
   ***REMOVED***);
+
+  testWidgets('LocationPicker selects district on tap',
+          (WidgetTester tester) async {
+        await tester.pumpWidget(WidgetWithlocationPicker(
+            LocationPicker(locations: [
+              Ort(0, 'district1', 'place1'),
+              Ort(1, 'district1', 'place2'),
+              Ort(2, 'district2', 'place3')
+            ]),
+            tester,
+            []));
+
+        await tester.tap(find.byType(RaisedButton));
+        await tester.pumpAndSettle();
+
+        expect(find.text('district1'), findsOneWidget);
+
+        tester.tap(find.text('district1'));
+
+
+
+      ***REMOVED***);
 ***REMOVED***
