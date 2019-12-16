@@ -480,6 +480,13 @@ void main() {
     expect(locationPicker.districts[1].expanded, true);
   ***REMOVED***);
 
+  CheckboxListTile checkBoxTileWithName(WidgetTester tester, String name) {
+    return tester
+        .widgetList<CheckboxListTile>(find.byType(CheckboxListTile))
+        .where((ct) => (ct.title as Text).data == name)
+        .first;
+  ***REMOVED***
+
   testWidgets('LocationPicker selects district on tap',
       (WidgetTester tester) async {
     await tester.pumpWidget(WidgetWithLocationPicker(
@@ -494,44 +501,16 @@ void main() {
     await tester.tap(find.text('X'));
     await tester.pumpAndSettle();
 
-    expect(find.text('district1'), findsOneWidget);
-
     expect(find.byType(ExpansionPanelList), findsWidgets);
 
-    expect(
-        tester
-            .widgetList<CheckboxListTile>(find.byType(CheckboxListTile))
-            .where((ct) => (ct.title as Text).data == 'district1')
-            .first
-            .value,
-        isFalse);
-
-    expect(
-        tester
-            .widgetList<CheckboxListTile>(find.byType(CheckboxListTile))
-            .where((ct) => (ct.title as Text).data == 'district2')
-            .first
-            .value,
-        isFalse);
+    expect(checkBoxTileWithName(tester, 'district1').value, isFalse);
+    expect(checkBoxTileWithName(tester, 'district2').value, isFalse);
 
     await tester.tap(find.text('district1'));
     await tester.pump();
 
-    expect(
-        tester
-            .widgetList<CheckboxListTile>(find.byType(CheckboxListTile))
-            .where((ct) => (ct.title as Text).data == 'district1')
-            .first
-            .value,
-        isTrue);
-
-    expect(
-        tester
-            .widgetList<CheckboxListTile>(find.byType(CheckboxListTile))
-            .where((ct) => (ct.title as Text).data == 'district2')
-            .first
-            .value,
-        isFalse);
+    expect(checkBoxTileWithName(tester, 'district1').value, isTrue);
+    expect(checkBoxTileWithName(tester, 'district2').value, isFalse);
   ***REMOVED***);
 
   testWidgets('LocationPicker selects according places with tap on district',
@@ -552,35 +531,36 @@ void main() {
 
     expect(find.byType(ExpansionPanelList), findsWidgets);
 
-    tester
-        .widgetList<CheckboxListTile>(find.byType(CheckboxListTile))
-        .forEach((ct) => expect(ct.value, isFalse));
+    expect(checkBoxTileWithName(tester, '      place1').value, isFalse);
+    expect(checkBoxTileWithName(tester, '      place2').value, isFalse);
+    expect(checkBoxTileWithName(tester, '      place3').value, isFalse);
 
     await tester.tap(find.text('district1'));
     await tester.pump();
 
-    expect(
-        tester
-            .widgetList<CheckboxListTile>(find.byType(CheckboxListTile))
-            .where((ct) => (ct.title as Text).data == '      place1')
-            .first
-            .value,
-        isTrue);
+    expect(checkBoxTileWithName(tester, '      place1').value, isTrue);
+    expect(checkBoxTileWithName(tester, '      place2').value, isTrue);
+    expect(checkBoxTileWithName(tester, '      place3').value, isFalse);
+  ***REMOVED***);
 
-    expect(
-        tester
-            .widgetList<CheckboxListTile>(find.byType(CheckboxListTile))
-            .where((ct) => (ct.title as Text).data == '      place2')
-            .first
-            .value,
-        isTrue);
+  testWidgets('LocationPicker selects initially selected places on startup',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(WidgetWithLocationPicker(
+        LocationPicker(locations: [
+          Ort(0, 'district1', 'place1'),
+          Ort(1, 'district1', 'place2'),
+          Ort(2, 'district2', 'place3')
+        ]),
+        tester,
+        [Ort(2, 'district2', 'place3')]));
 
-    expect(
-        tester
-            .widgetList<CheckboxListTile>(find.byType(CheckboxListTile))
-            .where((ct) => (ct.title as Text).data == '      place3')
-            .first
-            .value,
-        isFalse);
+    await tester.tap(find.text('X'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(ExpansionPanelList), findsWidgets);
+
+    expect(checkBoxTileWithName(tester, '      place1').value, isFalse);
+    expect(checkBoxTileWithName(tester, '      place2').value, isFalse);
+    expect(checkBoxTileWithName(tester, '      place3').value, isTrue);
   ***REMOVED***);
 ***REMOVED***
