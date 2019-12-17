@@ -1,5 +1,3 @@
-import 'package:sammel_app/services/Benutzer.dart';
-
 import 'Ort.dart';
 import 'TerminDetails.dart';
 
@@ -11,10 +9,8 @@ class Termin {
   String typ;
   TerminDetails terminDetails;
 
-  List<Benutzer> teilnehmer;
-
-  Termin(this.id, this.beginn, this.ende, this.ort, this.typ, this.teilnehmer,
-      this.terminDetails);
+  Termin(
+      this.id, this.beginn, this.ende, this.ort, this.typ, this.terminDetails);
 
   Termin.fromJson(Map<String, dynamic> json)
       : id = json['id'],
@@ -22,9 +18,6 @@ class Termin {
         ende = DateTime.parse(json['ende']),
         ort = Ort.fromJson(json['ort']),
         typ = json['typ'] ?? 'Termin',
-        teilnehmer = (json['teilnehmer'] as List)
-            .map((json) => Benutzer.fromJson(json))
-            .toList(),
         terminDetails = json['terminDetails'] != null
             ? TerminDetails.fromJSON(json['terminDetails'])
             : null;
@@ -35,7 +28,6 @@ class Termin {
         'ende': ende.toIso8601String(),
         'ort': ort,
         'typ': typ,
-        'teilnehmer': teilnehmer,
         'terminDetails': terminDetails,
       ***REMOVED***
 

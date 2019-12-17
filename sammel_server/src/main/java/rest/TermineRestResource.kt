@@ -24,7 +24,6 @@ open class TermineRestResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun getTermine(filter: TermineFilter?): Response {
-        LOG.info("Request nach Terminen mit Filter ${filter?.typen***REMOVED***, ${filter?.tage***REMOVED***, ${filter?.von***REMOVED***, ${filter?.bis***REMOVED***, ${filter?.orte***REMOVED***")
         val termine = dao.getTermine(filter ?: TermineFilter())
         return Response
                 .ok()
@@ -82,7 +81,6 @@ open class TermineRestResource {
             var ende: LocalDateTime? = null,
             var ort: Ort? = null,
             var typ: String? = null,
-            var teilnehmer: List<BenutzerDto>? = emptyList(),
             var details: TerminDetailsDto? = TerminDetailsDto()) {
 
         fun convertToTermin(): Termin {
@@ -92,12 +90,7 @@ open class TermineRestResource {
                     ende = ende,
                     ort = ort,
                     typ = typ,
-                    teilnehmer =
-                    if (teilnehmer == null) {
-                        emptyList()
-                    ***REMOVED*** else {
-                        teilnehmer!!.map { teilnehmer -> teilnehmer.convertToBenutzer() ***REMOVED***
-                    ***REMOVED***,
+                    teilnehmer = emptyList(),
                     details = details?.convertToTerminDetails())
         ***REMOVED***
 
@@ -114,7 +107,6 @@ open class TermineRestResource {
                     termin.ende,
                     termin.ort,
                     termin.typ,
-                    termin.teilnehmer.map { teilnehmer -> BenutzerDto.convertFromBenutzer(teilnehmer) ***REMOVED***,
                     null)
         ***REMOVED***
     ***REMOVED***

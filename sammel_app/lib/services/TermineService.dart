@@ -6,7 +6,6 @@ import 'package:http_server/http_server.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
-import 'package:sammel_app/services/Benutzer.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/Service.dart';
 
@@ -46,8 +45,6 @@ class TermineService extends AbstractTermineService {
 ***REMOVED***
 
 class DemoTermineService extends AbstractTermineService {
-  static Benutzer karl = Benutzer('Karl Marx');
-  static Benutzer rosa = Benutzer('Rosa Luxemburg');
   static Ort nordkiez =
       Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez');
   static Ort treptowerPark = Ort(2, 'Treptow-Köpenick', 'Treptower Park');
@@ -61,7 +58,6 @@ class DemoTermineService extends AbstractTermineService {
         DateTime(heute.year - 1, heute.month - 1, heute.day - 1, 12, 0, 0),
         nordkiez,
         'Sammel-Termin',
-        [karl, rosa],
         null /*TerminDetails('Weltzeituhr', 'Bringe Westen und Klämmbretter mit',
             'Ruft mich an unter 01234567')*/
         ),
@@ -71,7 +67,6 @@ class DemoTermineService extends AbstractTermineService {
         DateTime(heute.year, heute.month, heute.day, 13, 0, 0),
         treptowerPark,
         'Sammel-Termin',
-        [karl],
         null /*TerminDetails('Hinter der 3. Parkbank links',
             'wir machen die Parkeingänge', 'Schreibt mir unter e@mail.de')*/
         ),
@@ -81,7 +76,6 @@ class DemoTermineService extends AbstractTermineService {
         DateTime(heute.year, heute.month, heute.day + 1, 2, 0, 0),
         goerli,
         'Sammel-Termin',
-        [rosa],
         null /*TerminDetails('wir telefonieren uns zusammen', 'bitte seid pünktlich',
             'Meine Handynummer ist 01234567')*/
         ),
@@ -91,7 +85,6 @@ class DemoTermineService extends AbstractTermineService {
         DateTime(heute.year, heute.month, heute.day + 1, 20, 30, 0),
         treptowerPark,
         'Info-Veranstaltung',
-        [rosa, karl],
         null /*TerminDetails(
             'DGB-Haus, Raum 1312',
             'Ihr seid alle herzlich eingeladen zur Strategiediskussion',

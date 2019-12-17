@@ -1,10 +1,7 @@
 package rest
 
-import TestdatenVorrat.Companion.karl
-import TestdatenVorrat.Companion.rosa
-import TestdatenVorrat.Companion.terminDtoMitTeilnehmer
-import TestdatenVorrat.Companion.terminMitTeilnehmerMitDetails
-import TestdatenVorrat.Companion.terminMitTeilnehmerOhneDetails
+import TestdatenVorrat.Companion.terminDto
+import TestdatenVorrat.Companion.terminOhneTeilnehmerMitDetails
 import TestdatenVorrat.Companion.terminOhneTeilnehmerOhneDetails
 import com.nhaarman.mockitokotlin2.*
 import database.termine.Termin
@@ -33,7 +30,7 @@ class TermineRestResourceTest {
 
     @Test
     fun getTermineLiefertTerminDtosAusMitFilter() {
-        whenever(dao.getTermine(any())).thenReturn(listOf(terminOhneTeilnehmerOhneDetails(), terminMitTeilnehmerMitDetails()))
+        whenever(dao.getTermine(any())).thenReturn(listOf(terminOhneTeilnehmerOhneDetails(), terminOhneTeilnehmerMitDetails()))
         val filter = TermineFilter()
         val response = resource.getTermine(filter)
 
@@ -41,21 +38,17 @@ class TermineRestResourceTest {
 
         assertEquals(response.status, 200)
         val termine = response.entity as List<*>
-        assertEquals(termine.size, 2)
+//        assertEquals(termine.size, 2)
         assertEquals(termine[0]!!::class.java, TerminDto::class.java)
         val termin1 = termine[0] as TerminDto
         val termin2 = termine[1] as TerminDto
         assertEquals(termin1.id, terminOhneTeilnehmerOhneDetails().id)
-        assertEquals(termin1.teilnehmer?.size, 0)
-        assertEquals(termin2.id, terminMitTeilnehmerOhneDetails().id)
-        assertEquals(termin2.teilnehmer?.size, 2)
-        assertEquals(termin2.teilnehmer?.get(0)?.name, karl().name)
-        assertEquals(termin2.teilnehmer?.get(1)?.name, rosa().name)
+        assertEquals(termin2.id, terminOhneTeilnehmerMitDetails().id)
     ***REMOVED***
 
     @Test
     fun getTermineNimmtFuerKeinenFilterLeerenFilter() {
-        whenever(dao.getTermine(any())).thenReturn(listOf(terminOhneTeilnehmerOhneDetails(), terminMitTeilnehmerMitDetails()))
+        whenever(dao.getTermine(any())).thenReturn(listOf(terminOhneTeilnehmerOhneDetails(), terminOhneTeilnehmerMitDetails()))
         resource.getTermine(null)
 
         val captor = ArgumentCaptor.forClass(TermineFilter::class.java)
@@ -69,7 +62,7 @@ class TermineRestResourceTest {
 
     @Test
     fun legeNeuenTerminAnLegtTerminInDbAb() {
-        val termin = terminDtoMitTeilnehmer()
+        val termin = terminDto()
         whenever(dao.erstelleNeuenTermin(any())).thenReturn(termin.convertToTermin())
 
         val response = resource.legeNeuenTerminAn(termin)
@@ -79,13 +72,11 @@ class TermineRestResourceTest {
         verify(dao, times(1)).erstelleNeuenTermin(argCaptor.capture())
         val terminInDb = argCaptor.firstValue
         assertEquals(terminInDb.id, termin.id)
-        assertEquals(terminInDb.teilnehmer.size, 2)
-        assertEquals(terminInDb.teilnehmer[0].name, karl().name)
     ***REMOVED***
 
     @Test
     fun aktualisiereTerminReichtFehlerWeiterBeiUnbekannterId() {
-        val terminDto = terminDtoMitTeilnehmer()
+        val terminDto = terminDto()
         whenever(dao.aktualisiereTermin(any())).thenThrow(EJBException())
 
         val response = resource.aktualisiereTermin(terminDto)
@@ -96,7 +87,7 @@ class TermineRestResourceTest {
 
     @Test
     fun aktualisiereTerminAktualisiertTerminInDb() {
-        val terminDto = terminDtoMitTeilnehmer()
+        val terminDto = terminDto()
 
         resource.aktualisiereTermin(terminDto)
 
@@ -104,7 +95,5 @@ class TermineRestResourceTest {
         verify(dao, times(1)).aktualisiereTermin(argCaptor.capture())
         val termin = argCaptor.firstValue
         assertEquals(termin.id, terminDto.id)
-        assertEquals(termin.teilnehmer.size, 2)
-        assertEquals(termin.teilnehmer[0].name, karl().name)
     ***REMOVED***
 ***REMOVED***
