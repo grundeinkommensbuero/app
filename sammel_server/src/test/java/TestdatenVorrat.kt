@@ -65,11 +65,17 @@ class TestdatenVorrat {
                     terminDetails())
         }
 
-        fun terminDtoMitTeilnehmer(): TermineRestResource.TerminDto {
-            return TermineRestResource.TerminDto.convertFromTerminWithoutDetails(terminMitTeilnehmerOhneDetails())
+        fun terminOhneTeilnehmerMitDetails(): Termin {
+            return Termin(2,
+                    LocalDateTime.of(2019, 10, 22, 12, 0, 0),
+                    LocalDateTime.of(2019, 10, 22, 15, 0, 0),
+                    goerli(),
+                    sammeltermin(),
+                    emptyList(),
+                    terminDetails())
         }
 
-        fun terminDtoOhneTeilnehmer(): TermineRestResource.TerminDto {
+        fun terminDto(): TermineRestResource.TerminDto {
             return TermineRestResource.TerminDto.convertFromTerminWithoutDetails(terminOhneTeilnehmerOhneDetails())
         }
 

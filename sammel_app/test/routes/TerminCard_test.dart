@@ -1,6 +1,5 @@
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
-import 'package:sammel_app/services/Benutzer.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:test/test.dart';
 
@@ -94,34 +93,8 @@ void main() {
       expect(text, 'Friedrichshain-Kreuzberg, Friedrichshain Nordkiez');
     });
   });
-  group('erzeugeTeilnehmerRow', () {
-    test('erzeugt leere Zeile bei keinen Teilnehmern', () {
-      List<Benutzer> teilnehmer = [];
-      var row = TerminCard.erzeugeTeilnehmerRow(teilnehmer);
-
-      expect(row.children.length, 0);
-    });
-
-    test('erzeugt korrekte Zeile bei einem Teilnehmer', () {
-      List<Benutzer> teilnehmer = [rosa()];
-      var row = TerminCard.erzeugeTeilnehmerRow(teilnehmer);
-
-      expect(row.children.length, 1);
-    });
-
-    test('erzeugt korrekte Zeile bei einem Teilnehmer', () {
-      List<Benutzer> teilnehmer = [karl(), rosa()];
-      var row = TerminCard.erzeugeTeilnehmerRow(teilnehmer);
-
-      expect(row.children.length, 2);
-    });
-  });
 }
 
 DateTime now() => DateTime.now();
 
 Ort nordkiez() => Ort(0, "Friedrichshain-Kreuzberg", "Friedrichshain Nordkiez");
-
-Benutzer rosa() => Benutzer('Rosa Luxemburg');
-
-Benutzer karl() => Benutzer('Karl Marx', '123456789');

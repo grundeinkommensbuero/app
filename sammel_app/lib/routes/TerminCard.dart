@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/services/Benutzer.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 
 class TerminCard extends StatelessWidget {
@@ -46,25 +45,11 @@ class TerminCard extends StatelessWidget {
                   overflow: TextOverflow.clip,
                 ),
                 Text(erzeugeDatumText(termin.beginn, termin.ende)),
-                erzeugeTeilnehmerRow(termin.teilnehmer),
               ])),
         ]),
       ]),
       onPressed: () => {},
     );
-  }
-
-  static Row erzeugeTeilnehmerRow(List<Benutzer> teilnehmer) {
-    return Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: teilnehmer
-            .map((benutzer) => Row(
-                  children: <Widget>[
-                    Icon(Icons.supervised_user_circle),
-                    Text(' ${benutzer.name} '),
-                  ],
-                ))
-            .toList());
   }
 
   static String erzeugeOrtText(Ort ort) {

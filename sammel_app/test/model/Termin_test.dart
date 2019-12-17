@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/services/Benutzer.dart';
 import 'package:test/test.dart';
 
 import '../routes/TerminCard_test.dart';
@@ -20,7 +19,6 @@ void main() {
               DateTime(2020, 1, 2, 18, 0, 0),
               Ort(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez'),
               'Sammel-Termin',
-              [],
               null)),
           '{'
           '"id":1,'
@@ -42,10 +40,6 @@ void main() {
               DateTime(2020, 1, 2, 18, 0, 0),
               Ort(15, "Friedrichshain-Kreuzberg", "Fhain - Nordkiez"),
               'Sammel-Termin',
-              [
-                Benutzer("Karla Kolumna", "01456972524"),
-                Benutzer("D0min4tor_1337")
-              ],
               null)),
           '{'
           '"id":1,'
@@ -69,10 +63,6 @@ void main() {
               DateTime(2020, 1, 2, 18, 0, 0),
               Ort(15, "Friedrichshain-Kreuzberg", "Fhain - Nordkiez"),
               'Sammel-Termin',
-              [
-                Benutzer("Karla Kolumna", "01456972524"),
-                Benutzer("D0min4tor_1337")
-              ],
               TerminDetailsTestDaten.terminDetailsTestDaten())),
           '{'
           '"id":1,'
@@ -106,7 +96,6 @@ void main() {
       expect(termin.typ, 'Sammel-Termin');
       expect(termin.ort.toString(),
           Ort(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez').toString());
-      expect(termin.teilnehmer, []);
     });
 
     test(
@@ -127,11 +116,6 @@ void main() {
       expect(termin.ort.toString(),
           Ort(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez').toString());
       expect(termin.typ, 'Sammel-Termin');
-      expect(termin.teilnehmer.length, 2);
-      expect(termin.teilnehmer[0].toString(),
-          Benutzer("Karla Kolumna", "01456972524").toString());
-      expect(termin.teilnehmer[1].toString(),
-          Benutzer("D0min4tor_1337").toString());
     });
 
     test('deserialisiert Temin mit Details', () {
@@ -163,6 +147,5 @@ class TerminTestDaten {
       DateTime(2019, 11, 4, 18, 9, 0),
       nordkiez(),
       'Sammel-Termin',
-      [],
       TerminDetailsTestDaten.terminDetailsTestDaten());
 }

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sammel_app/services/BenutzerService.dart';
+import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
-import 'routes/LoginSeite.dart';
 
 void main() => runApp(MyApp());
 
@@ -16,8 +15,6 @@ class MyApp extends StatelessWidget {
         providers: [
           Provider<AbstractTermineService>.value(
               value: demoModus ? DemoTermineService() : TermineService()),
-          Provider<AbstractBenutzerService>.value(
-              value: demoModus ? DemoBenutzerService() : BenutzerService()),
           Provider<AbstractStammdatenService>.value(
               value: demoModus ? DemoStammdatenService() : StammdatenService()),
         ],
@@ -26,7 +23,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.amber,
           ),
-          home: LoginSeite(title: 'Deutsche Wohnen Enteignen'),
+          home: TermineSeite(title: 'Deutsche Wohnen Enteignen'),
         ));
   }
 }
