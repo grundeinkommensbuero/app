@@ -8,6 +8,7 @@ import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/services/TermineService.dart';
 
 import 'FilterWidget.dart';
+import 'TerminDetails.dart';
 
 class TermineSeite extends StatefulWidget {
   TermineSeite({Key key, this.title***REMOVED***) : super(key: key);
@@ -60,6 +61,9 @@ class _TermineSeiteState extends State<TermineSeite> {
                   itemCount: termine.length,
                   itemBuilder: (context, index) => ListTile(
                       title: TerminCard(termine[index]),
+                      onTap: () {
+                        openTerminDetailsWidget(context, termine[index]);
+                      ***REMOVED***,
                       contentPadding: EdgeInsets.only(bottom: 0.1)))),
         ],
       ),
@@ -74,5 +78,20 @@ class _TermineSeiteState extends State<TermineSeite> {
     ***REMOVED***);
   ***REMOVED***
 
-  oeffneFilter() {***REMOVED***
+  openTerminDetailsWidget(BuildContext context, Termin termin) {
+    print('Card gedrückt');
+    showDialog(
+        context: context,
+        builder: (BuildContext context) => SimpleDialog(
+              contentPadding: EdgeInsets.only(
+                  left: 10.0, right: 10.0, top: 25.0, bottom: 5.0),
+              children: <Widget>[
+                TerminDetailsWidget(termin),
+                RaisedButton(
+                  child: Text('Schließen'),
+                  onPressed: () => Navigator.pop(context),
+                )
+              ],
+            ));
+  ***REMOVED***
 ***REMOVED***
