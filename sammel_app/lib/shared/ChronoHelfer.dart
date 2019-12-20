@@ -52,16 +52,23 @@ class ChronoHelfer {
     throw Exception('Unbekannter Monat');
   }
 
-  static DateFormat dateFormatHHmmss = DateFormat("HH:mm:ss");
-  static DateFormat dateFormatHHmm = DateFormat("HH:mm");
+  static DateFormat _dateFormatHHmmss = DateFormat("HH:mm:ss");
+  static DateFormat _dateFormatHHmm = DateFormat("HH:mm");
+
+  static String dateTimeToStringHHmmss(DateTime time) =>
+      timeToStringHHmmss(TimeOfDay.fromDateTime(time));
 
   static String timeToStringHHmmss(TimeOfDay time) {
     if (time == null) return null;
-    return dateFormatHHmmss.format(DateTime(0, 1, 1, time.hour, time.minute, 0));
+    return _dateFormatHHmmss
+        .format(DateTime(0, 1, 1, time.hour, time.minute, 0));
   }
+
+  static String dateTimeToStringHHmm(DateTime time) =>
+      timeToStringHHmm(TimeOfDay.fromDateTime(time));
 
   static String timeToStringHHmm(TimeOfDay time) {
     if (time == null) return null;
-    return dateFormatHHmm.format(DateTime(0, 1, 1, time.hour, time.minute, 0));
+    return _dateFormatHHmm.format(DateTime(0, 1, 1, time.hour, time.minute, 0));
   }
 }

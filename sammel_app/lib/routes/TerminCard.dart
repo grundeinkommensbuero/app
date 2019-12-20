@@ -17,8 +17,11 @@ class TerminCard extends StatelessWidget {
   TerminCard(this.termin, [Key key]);
 
   build(context) {
-    return RaisedButton(
-      color: faerbeVergangeneTermine(termin.ende),
+    return Container(
+      padding: EdgeInsets.all(10.0),
+      decoration: BoxDecoration(
+          color: faerbeVergangeneTermine(termin.ende),
+          boxShadow: [BoxShadow(color: Colors.grey , offset: Offset(1.0, 1.0), blurRadius: 3.0, spreadRadius: 1.0)]),
       child: Column(children: [
         Text(
           '${termin.typ}',
@@ -42,13 +45,11 @@ class TerminCard extends StatelessWidget {
                 Text(
                   erzeugeOrtText(termin.ort),
                   style: style,
-                  overflow: TextOverflow.clip,
                 ),
                 Text(erzeugeDatumText(termin.beginn, termin.ende)),
               ])),
         ]),
       ]),
-      onPressed: () => {},
     );
   }
 
