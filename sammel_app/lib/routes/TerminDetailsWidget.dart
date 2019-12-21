@@ -58,6 +58,8 @@ class _TerminDetailsWidget extends State<TerminDetailsWidget> {
             child: Text(
               'Treffpunkt: ' + widget.termin.details.treffpunkt,
               style: TextStyle(fontWeight: FontWeight.normal),
+              overflow: TextOverflow.clip,
+              softWrap: true,
             ),
             maxHeight: 40.0,
             expandableCondition: widget.termin.details.treffpunkt.length > 70,
