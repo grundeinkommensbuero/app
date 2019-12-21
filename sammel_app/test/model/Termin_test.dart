@@ -24,7 +24,7 @@ void main() {
           '"ende":"2020-01-02T18:00:00.000",'
           '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez"***REMOVED***,'
           '"typ":"Sammel-Termin",'
-          '"terminDetails":null***REMOVED***');
+          '"details":null***REMOVED***');
     ***REMOVED***);
 
     test('serialisiert Temin mit id, Beginn, Ende, Ort und mit Details', () {
@@ -42,7 +42,7 @@ void main() {
           '"ende":"2020-01-02T18:00:00.000",'
           '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez"***REMOVED***,'
           '"typ":"Sammel-Termin",'
-          '"terminDetails":{"treffpunkt":"Weltzeituhr",'
+          '"details":{"treffpunkt":"Weltzeituhr",'
           '"kommentar":"Bringe Westen und Klämmbretter mit",'
           '"kontakt":"Ruft an unter 012345678"***REMOVED***'
           '***REMOVED***');
