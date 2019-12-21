@@ -11,13 +11,16 @@ import 'package:sammel_app/services/Service.dart';
 
 abstract class AbstractTermineService extends Service {
   Future<List<Termin>> ladeTermine(TermineFilter filter);
+
   Future<Termin> createTermin(Termin termin);
+
+  Future<Termin> getTerminMitDetails(int id);
 }
 
 class TermineService extends AbstractTermineService {
   Future<List<Termin>> ladeTermine(TermineFilter filter) async {
     HttpClientResponseBody response =
-        await post(Uri.parse('/service/termine'), jsonEncode(filter));
+    await post(Uri.parse('/service/termine'), jsonEncode(filter));
     if (response.response.statusCode == 200) {
       final termine = (response.body as List)
           .map((jsonTermin) => Termin.fromJson(jsonTermin))
@@ -34,22 +37,34 @@ class TermineService extends AbstractTermineService {
 
   Future<Termin> createTermin(Termin termin) async {
     var response =
-        await post(Uri.parse('service/termine/neu'), jsonEncode(termin));
-    if(response.response.statusCode == 200) {
+    await post(Uri.parse('service/termine/neu'), jsonEncode(termin));
+    if (response.response.statusCode == 200) {
       return Termin.fromJson(response.body);
     } else {
       throw RestFehler("Fehler beim Anlegen eines Termins: "
           "${response.response.statusCode} - ${response.body}");
     }
   }
+
+  @override
+  Future<Termin> getTerminMitDetails(int id) {
+    return get(Uri.parse('service/termine/termin?id=' + id.toString()))
+        .then((response) {
+      if (response.response.statusCode == 200)
+        return Termin.fromJson(response.body);
+      else
+        throw RestFehler("Fehler beim Ermitteln eines Termins: "
+            "${response.response.statusCode} - ${response.body}");
+    });
+  }
 }
 
 class DemoTermineService extends AbstractTermineService {
   static Ort nordkiez =
-      Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez');
+  Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez');
   static Ort treptowerPark = Ort(2, 'Treptow-Köpenick', 'Treptower Park');
   static Ort goerli =
-      Ort(3, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung');
+  Ort(3, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung');
   static var heute = DateTime.now();
   List<Termin> termine = [
     Termin(
@@ -60,7 +75,7 @@ class DemoTermineService extends AbstractTermineService {
         'Sammel-Termin',
         null /*TerminDetails('Weltzeituhr', 'Bringe Westen und Klämmbretter mit',
             'Ruft mich an unter 01234567')*/
-        ),
+    ),
     Termin(
         2,
         DateTime(heute.year, heute.month, heute.day, 11, 0, 0),
@@ -69,7 +84,7 @@ class DemoTermineService extends AbstractTermineService {
         'Sammel-Termin',
         null /*TerminDetails('Hinter der 3. Parkbank links',
             'wir machen die Parkeingänge', 'Schreibt mir unter e@mail.de')*/
-        ),
+    ),
     Termin(
         3,
         DateTime(heute.year, heute.month, heute.day, 23, 0, 0),
@@ -78,7 +93,7 @@ class DemoTermineService extends AbstractTermineService {
         'Sammel-Termin',
         null /*TerminDetails('wir telefonieren uns zusammen', 'bitte seid pünktlich',
             'Meine Handynummer ist 01234567')*/
-        ),
+    ),
     Termin(
         4,
         DateTime(heute.year, heute.month, heute.day + 1, 18, 0, 0),
@@ -89,7 +104,7 @@ class DemoTermineService extends AbstractTermineService {
             'DGB-Haus, Raum 1312',
             'Ihr seid alle herzlich eingeladen zur Strategiediskussion',
             'Meldet euch doch bitte an unter info@dwenteignen.de damit wir das Buffet planen können')*/
-        ),
+    ),
   ];
 
   @override
@@ -105,5 +120,11 @@ class DemoTermineService extends AbstractTermineService {
     termin.id = highestId + 1;
     termine.add(termin);
     return await termin;
+  }
+
+  // TODO: implement getTermin
+  @override
+  Future<Termin> getTerminMitDetails(int id) {
+    return null;
   }
 }

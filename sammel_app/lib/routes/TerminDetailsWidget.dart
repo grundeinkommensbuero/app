@@ -1,19 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/model/TerminDetails.dart';
-import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 
 class TerminDetailsWidget extends StatefulWidget {
   Termin termin;
 
-  TerminDetailsWidget(this.termin) {
-    termin.terminDetails = TerminDetails('Ubhf Samariterstraße',
-        'Wir machen die U8', 'Ihr erreicht mich unter 01234567');
-  }
+  TerminDetailsWidget(this.termin);
 
   @override
   State<StatefulWidget> createState() {
@@ -22,6 +16,8 @@ class TerminDetailsWidget extends StatefulWidget {
 }
 
 class _TerminDetailsWidget extends State<TerminDetailsWidget> {
+  bool initialized = false;
+
   _TerminDetailsWidget();
 
   @override
@@ -61,12 +57,11 @@ class _TerminDetailsWidget extends State<TerminDetailsWidget> {
           ]),
           ExpandableConstrainedBox(
             child: Text(
-              'Treffpunkt: ' + widget.termin.terminDetails.treffpunkt,
+              'Treffpunkt: ' + widget.termin.details.treffpunkt,
               style: TextStyle(fontWeight: FontWeight.normal),
             ),
             maxHeight: 40.0,
-            expandableCondition:
-                widget.termin.terminDetails.treffpunkt.length > 70,
+            expandableCondition: widget.termin.details.treffpunkt.length > 70,
           )
         ])
       ]),
@@ -106,12 +101,11 @@ class _TerminDetailsWidget extends State<TerminDetailsWidget> {
           ),
           ExpandableConstrainedBox(
             child: Text(
-              widget.termin.terminDetails.kommentar,
+              widget.termin.details.kommentar,
               style: TextStyle(fontWeight: FontWeight.normal),
             ),
             maxHeight: 105.0,
-            expandableCondition:
-                widget.termin.terminDetails.kommentar.length > 200,
+            expandableCondition: widget.termin.details.kommentar.length > 200,
           )
         ])
       ]),
@@ -132,12 +126,11 @@ class _TerminDetailsWidget extends State<TerminDetailsWidget> {
           ),
           ExpandableConstrainedBox(
             child: Text(
-              widget.termin.terminDetails.kontakt,
+              widget.termin.details.kontakt,
               style: TextStyle(fontWeight: FontWeight.normal),
             ),
             maxHeight: 105.0,
-            expandableCondition:
-                widget.termin.terminDetails.kontakt.length > 200,
+            expandableCondition: widget.termin.details.kontakt.length > 200,
           )
         ])
       ]),
@@ -204,6 +197,10 @@ class _ExpandableConstraintBox extends State<ExpandableConstrainedBox> {
                 ]),
             onPressed: () => setState(() => expanded = !expanded),
           )
-        : widget.child;
+        : ConstrainedBox(
+            constraints: BoxConstraints(
+                maxHeight: expanded ? double.infinity : widget.maxHeight,
+                maxWidth: 250.0),
+            child: widget.child);
   }
 }

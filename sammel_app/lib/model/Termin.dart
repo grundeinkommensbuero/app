@@ -7,10 +7,10 @@ class Termin {
   DateTime ende;
   Ort ort;
   String typ;
-  TerminDetails terminDetails;
+  TerminDetails details;
 
   Termin(
-      this.id, this.beginn, this.ende, this.ort, this.typ, this.terminDetails);
+      this.id, this.beginn, this.ende, this.ort, this.typ, this.details);
 
   Termin.fromJson(Map<String, dynamic> json)
       : id = json['id'],
@@ -18,8 +18,8 @@ class Termin {
         ende = DateTime.parse(json['ende']),
         ort = Ort.fromJson(json['ort']),
         typ = json['typ'] ?? 'Termin',
-        terminDetails = json['terminDetails'] != null
-            ? TerminDetails.fromJSON(json['terminDetails'])
+        details = json['details'] != null
+            ? TerminDetails.fromJSON(json['details'])
             : null;
 
   Map<String, dynamic> toJson() => {
@@ -28,7 +28,7 @@ class Termin {
         'ende': ende.toIso8601String(),
         'ort': ort,
         'typ': typ,
-        'terminDetails': terminDetails,
+        'details': details,
       };
 
   String getAsset() {

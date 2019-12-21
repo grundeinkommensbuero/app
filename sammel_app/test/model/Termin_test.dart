@@ -9,9 +9,7 @@ import 'TerminDetails_test.dart';
 
 void main() {
   group('serialisere', () {
-    test(
-        'serialisiert Temin mit id, Beginn, Ende, Ort und ohne Details',
-        () {
+    test('serialisiert Temin mit id, Beginn, Ende, Ort und ohne Details', () {
       expect(
           jsonEncode(Termin(
               1,
@@ -29,9 +27,7 @@ void main() {
           '"terminDetails":null}');
     });
 
-    test(
-        'serialisiert Temin mit id, Beginn, Ende, Ort und mit Details',
-        () {
+    test('serialisiert Temin mit id, Beginn, Ende, Ort und mit Details', () {
       expect(
           jsonEncode(Termin(
               1,
@@ -53,9 +49,7 @@ void main() {
     });
   });
   group('deserialisiere', () {
-    test(
-        'deserialisiert Temin mit id, Beginn, Ende, Ort und ohne Details',
-        () {
+    test('deserialisiert Temin mit id, Beginn, Ende, Ort und ohne Details', () {
       var termin = Termin.fromJson(jsonDecode('{'
           '"id":1,'
           '"beginn":"2020-01-02T15:00:00.000",'
@@ -68,24 +62,15 @@ void main() {
       expect(termin.typ, 'Sammel-Termin');
       expect(termin.ort.toString(),
           Ort(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez').toString());
-      expect(termin.terminDetails, isNull);
+      expect(termin.details, isNull);
     });
 
     test('deserialisiert Temin mit Details', () {
-      var termin = Termin.fromJson(jsonDecode('{'
-          '"id":1,'
-          '"beginn":"2020-01-02T15:00:00.000",'
-          '"ende":"2020-01-02T18:00:00.000",'
-          '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez"},'
-          '"typ":"Sammel-Termin",'
-          '"terminDetails":{"treffpunkt":"Weltzeituhr",'
-          '"kommentar":"Ich bringe Westen und Klämbretter mit",'
-          '"kontakt":"Ruft mich an unter 01234567"}'
-          '}'));
-      expect(termin.terminDetails.treffpunkt, "Weltzeituhr");
-      expect(termin.terminDetails.kommentar,
-          "Ich bringe Westen und Klämbretter mit");
-      expect(termin.terminDetails.kontakt, "Ruft mich an unter 01234567");
+      var termin = Termin.fromJson(jsonDecode(
+          '{"beginn":"2020-02-05T09:00:00","details":{"id":1,"kommentar":"wir stellen uns an die Ubhf-Eingänge. ihr erkennt mich an der DWE-Weste","kontakt":"kalle@revo.de","treffpunkt":"Weltzeituhr"},"ende":"2020-02-05T12:00:00","id":1,"ort":{"bezirk":"Friedrichshain-Kreuzberg","id":1,"ort":"Friedrichshain Nordkiez"},"typ":"Sammel-Termin"}'));
+      expect(termin.details.treffpunkt, "Weltzeituhr");
+      expect(termin.details.kommentar, "wir stellen uns an die Ubhf-Eingänge. ihr erkennt mich an der DWE-Weste");
+      expect(termin.details.kontakt, "kalle@revo.de");
     });
   });
 }

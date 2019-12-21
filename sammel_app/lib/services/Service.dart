@@ -31,8 +31,10 @@ class Service {
 
   Future<HttpClientResponseBody> get(Uri url) async {
     if (!zertifikatGeladen) ladeZertifikat();
+    var uri = Uri.https('$host:$port', url.path, url.queryParameters);
+    print(uri.toString());
     return await client
-        .getUrl(Uri.https('$host:$port', url.toString()))
+        .getUrl(uri)
         .then((HttpClientRequest request) {
           request.headers.contentType = ContentType.json;
           request.headers.add('Accept', 'application/json');
@@ -41,6 +43,8 @@ class Service {
         .then(HttpBodyHandler.processResponse)
         .then((HttpClientResponseBody body) {
           if (body.type != "json") {
+            print('Get-Request bekommt "${body.type}",'
+                ' statt "json" - Response zurück: ${body.body}');
             throw WrongResponseFormatException(
                 'Get-Request bekommt "${body.type}",'
                 ' statt "json" - Response zurück: ${body.body}');
