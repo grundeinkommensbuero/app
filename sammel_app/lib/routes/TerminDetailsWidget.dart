@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
+import 'package:sammel_app/shared/ExpandableConstrainedBox.dart';
 
 class TerminDetailsWidget extends StatefulWidget {
   Termin termin;
@@ -16,7 +17,6 @@ class TerminDetailsWidget extends StatefulWidget {
 }
 
 class _TerminDetailsWidget extends State<TerminDetailsWidget> {
-
   _TerminDetailsWidget();
 
   @override
@@ -79,8 +79,9 @@ class _TerminDetailsWidget extends State<TerminDetailsWidget> {
             'Wann?',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          Text(formatiereDatum(widget.termin.beginn)),
-          Text(formatiereUhrzeit(widget.termin.beginn, widget.termin.ende))
+          Text(ChronoHelfer.formatDateOfDateTime(widget.termin.beginn)),
+          Text(ChronoHelfer.formatFromToOfDateTimes(
+              widget.termin.beginn, widget.termin.ende))
         ])
       ]),
       SizedBox(
@@ -134,72 +135,5 @@ class _TerminDetailsWidget extends State<TerminDetailsWidget> {
         ])
       ]),
     ]);
-  }
-
-  String formatiereDatum(DateTime date) {
-    return ChronoHelfer.wochentag(date) +
-        ', ' +
-        date.day.toString() +
-        '. ' +
-        ChronoHelfer.monthName(date.month) +
-        ' ' +
-        date.year.toString();
-  }
-
-  String formatiereUhrzeit(DateTime start, DateTime end) =>
-      'von ' +
-      ChronoHelfer.dateTimeToStringHHmm(start) +
-      ' bis ' +
-      ChronoHelfer.dateTimeToStringHHmm(end) +
-      ' Uhr';
-}
-
-class ExpandableConstrainedBox extends StatefulWidget {
-  Widget child = Placeholder();
-  double maxHeight = 40.0;
-  bool expandableCondition = true;
-
-  ExpandableConstrainedBox(
-      {this.child, this.maxHeight, this.expandableCondition});
-
-  @override
-  State<StatefulWidget> createState() {
-    return _ExpandableConstraintBox();
-  }
-}
-
-class _ExpandableConstraintBox extends State<ExpandableConstrainedBox> {
-  bool expanded = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return widget.expandableCondition
-        ? FlatButton(
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            padding: EdgeInsets.zero,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ConstrainedBox(
-                      constraints: BoxConstraints(
-                          maxHeight:
-                              expanded ? double.infinity : widget.maxHeight,
-                          maxWidth: 220.0,
-                          minWidth: 220.0),
-                      child: widget.child),
-                  Icon(
-                    expanded
-                        ? Icons.keyboard_arrow_up
-                        : Icons.keyboard_arrow_down,
-                  ),
-                ]),
-            onPressed: () => setState(() => expanded = !expanded),
-          )
-        : ConstrainedBox(
-            constraints: BoxConstraints(
-                maxHeight: expanded ? double.infinity : widget.maxHeight,
-                maxWidth: 250.0),
-            child: widget.child);
   }
 }
