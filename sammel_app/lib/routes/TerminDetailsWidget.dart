@@ -16,7 +16,6 @@ class TerminDetailsWidget extends StatefulWidget {
 }
 
 class _TerminDetailsWidget extends State<TerminDetailsWidget> {
-  bool initialized = false;
 
   _TerminDetailsWidget();
 
