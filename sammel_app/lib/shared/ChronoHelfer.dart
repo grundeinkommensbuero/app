@@ -71,4 +71,11 @@ class ChronoHelfer {
     if (time == null) return null;
     return _dateFormatHHmm.format(DateTime(0, 1, 1, time.hour, time.minute, 0));
   ***REMOVED***
+
+  static String formatDateOfDateTime(DateTime date) {
+    return '${wochentag(date)***REMOVED***, ${date.day.toString()***REMOVED***. ${monthName(date.month)***REMOVED*** ${date.year.toString()***REMOVED***';
+  ***REMOVED***
+
+  static String formatFromToOfDateTimes(DateTime start, DateTime end) =>
+      'von ${dateTimeToStringHHmm(start)***REMOVED*** bis ${dateTimeToStringHHmm(end)***REMOVED*** Uhr';
 ***REMOVED***
