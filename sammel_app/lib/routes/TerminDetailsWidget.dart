@@ -51,7 +51,7 @@ class _TerminDetailsWidget extends State<TerminDetailsWidget> {
           Row(children: [
             Icon(
               Icons.subdirectory_arrow_right,
-              size: 20.0,
+              size: 18.0,
             ),
             Text(widget.termin.ort.ort),
           ]),
