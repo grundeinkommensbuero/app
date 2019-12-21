@@ -32,7 +32,6 @@ class Service {
   Future<HttpClientResponseBody> get(Uri url) async {
     if (!zertifikatGeladen) ladeZertifikat();
     var uri = Uri.https('$host:$port', url.path, url.queryParameters);
-    print(uri.toString());
     return await client
         .getUrl(uri)
         .then((HttpClientRequest request) {
@@ -43,8 +42,6 @@ class Service {
         .then(HttpBodyHandler.processResponse)
         .then((HttpClientResponseBody body) {
           if (body.type != "json") {
-            print('Get-Request bekommt "${body.type***REMOVED***",'
-                ' statt "json" - Response zurück: ${body.body***REMOVED***');
             throw WrongResponseFormatException(
                 'Get-Request bekommt "${body.type***REMOVED***",'
                 ' statt "json" - Response zurück: ${body.body***REMOVED***');
