@@ -80,7 +80,7 @@ class _TerminDetailsWidget extends State<TerminDetailsWidget> {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(ChronoHelfer.formatDateOfDateTime(widget.termin.beginn)),
-          Text(ChronoHelfer.formatFromToOfDateTimes(
+          Text(ChronoHelfer.formatFromToTimeOfDateTimes(
               widget.termin.beginn, widget.termin.ende))
         ])
       ]),
