@@ -1,20 +1,35 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Termin.dart';
+import 'package:sammel_app/model/TerminDetails.dart';
+import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 
-class TerminDetailsWidget extends StatelessWidget {
+class TerminDetailsWidget extends StatefulWidget {
   Termin termin;
 
-  TerminDetailsWidget(this.termin);
+  TerminDetailsWidget(this.termin) {
+    termin.terminDetails = TerminDetails('Ubhf Samariterstraße',
+        'Wir machen die U8', 'Ihr erreicht mich unter 01234567');
+  }
+
+  @override
+  State<StatefulWidget> createState() {
+    return _TerminDetailsWidget();
+  }
+}
+
+class _TerminDetailsWidget extends State<TerminDetailsWidget> {
+  _TerminDetailsWidget();
 
   @override
   Widget build(BuildContext context) {
     return Column(children: [
       Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        Image.asset(termin.getAsset(), width: 30.0),
-        Text(termin.typ,
+        Image.asset(widget.termin.getAsset(), width: 30.0),
+        Text(widget.termin.typ,
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 22.0,
@@ -36,18 +51,23 @@ class TerminDetailsWidget extends StatelessWidget {
             'Wo? ',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          Text(termin.ort.bezirk),
+          Text(widget.termin.ort.bezirk),
           Row(children: [
             Icon(
               Icons.subdirectory_arrow_right,
               size: 20.0,
             ),
-            Text(termin.ort.ort),
+            Text(widget.termin.ort.ort),
           ]),
-          ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: 40.0, maxWidth: 250.0),
-              child:
-                  SingleChildScrollView(child: Text('Treffpunkt: Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter')))
+          ExpandableConstrainedBox(
+            child: Text(
+              'Treffpunkt: ' + widget.termin.terminDetails.treffpunkt,
+              style: TextStyle(fontWeight: FontWeight.normal),
+            ),
+            maxHeight: 40.0,
+            expandableCondition:
+                widget.termin.terminDetails.treffpunkt.length > 70,
+          )
         ])
       ]),
       SizedBox(
@@ -65,8 +85,8 @@ class TerminDetailsWidget extends StatelessWidget {
             'Wann?',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          Text(formatiereDatum(termin.beginn)),
-          Text(formatiereUhrzeit(termin.beginn, termin.ende))
+          Text(formatiereDatum(widget.termin.beginn)),
+          Text(formatiereUhrzeit(widget.termin.beginn, widget.termin.ende))
         ])
       ]),
       SizedBox(
@@ -79,19 +99,21 @@ class TerminDetailsWidget extends StatelessWidget {
         SizedBox(
           width: 10.0,
         ),
-        ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: 150.0, maxWidth: 250.0),
-            child: SingleChildScrollView(
-                child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                  Text(
-                    'Was?',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  Flexible(child: Column(children: [Text(' Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter   Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter')]))
-                ])))
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            'Was?',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          ExpandableConstrainedBox(
+            child: Text(
+              widget.termin.terminDetails.kommentar,
+              style: TextStyle(fontWeight: FontWeight.normal),
+            ),
+            maxHeight: 105.0,
+            expandableCondition:
+                widget.termin.terminDetails.kommentar.length > 200,
+          )
+        ])
       ]),
       SizedBox(
         height: 10.0,
@@ -108,12 +130,15 @@ class TerminDetailsWidget extends StatelessWidget {
             'Wer?',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: 105.0, maxWidth: 250.0),
-              child: SingleChildScrollView(
-                  child: Text(
-                ' Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter Platzhalter',
-              )))
+          ExpandableConstrainedBox(
+            child: Text(
+              widget.termin.terminDetails.kontakt,
+              style: TextStyle(fontWeight: FontWeight.normal),
+            ),
+            maxHeight: 105.0,
+            expandableCondition:
+                widget.termin.terminDetails.kontakt.length > 200,
+          )
         ])
       ]),
     ]);
@@ -133,5 +158,52 @@ class TerminDetailsWidget extends StatelessWidget {
       'von ' +
       ChronoHelfer.dateTimeToStringHHmm(start) +
       ' bis ' +
-      ChronoHelfer.dateTimeToStringHHmm(end);
+      ChronoHelfer.dateTimeToStringHHmm(end) +
+      ' Uhr';
+}
+
+class ExpandableConstrainedBox extends StatefulWidget {
+  Widget child = Placeholder();
+  double maxHeight = 40.0;
+  bool expandableCondition = true;
+
+  ExpandableConstrainedBox(
+      {this.child, this.maxHeight, this.expandableCondition});
+
+  @override
+  State<StatefulWidget> createState() {
+    return _ExpandableConstraintBox();
+  }
+}
+
+class _ExpandableConstraintBox extends State<ExpandableConstrainedBox> {
+  bool expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.expandableCondition
+        ? FlatButton(
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            padding: EdgeInsets.zero,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ConstrainedBox(
+                      constraints: BoxConstraints(
+                          maxHeight:
+                              expanded ? double.infinity : widget.maxHeight,
+                          maxWidth: 220.0,
+                          minWidth: 220.0),
+                      child: widget.child),
+                  Icon(
+                    expanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
+                  ),
+                ]),
+            onPressed: () => setState(() => expanded = !expanded),
+          )
+        : widget.child;
+  }
 }
