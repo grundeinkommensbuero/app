@@ -21,7 +21,13 @@ class TerminCard extends StatelessWidget {
       padding: EdgeInsets.all(10.0),
       decoration: BoxDecoration(
           color: faerbeVergangeneTermine(termin.ende),
-          boxShadow: [BoxShadow(color: Colors.grey , offset: Offset(1.0, 1.0), blurRadius: 3.0, spreadRadius: 1.0)]),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.grey,
+                offset: Offset(1.0, 1.0),
+                blurRadius: 3.0,
+                spreadRadius: 1.0)
+          ]),
       child: Column(children: [
         Text(
           '${termin.typ}',
