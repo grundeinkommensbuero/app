@@ -76,7 +76,15 @@ void main() {
 ***REMOVED***
 
 class TerminTestDaten {
-  static Termin terminOhneTeilnehmer() => Termin(
+  static Termin einTermin() => Termin(
+      0,
+      DateTime(2019, 11, 4, 17, 9, 0),
+      DateTime(2019, 11, 4, 18, 9, 0),
+      nordkiez(),
+      'Sammel-Termin',
+      null);
+
+  static einTerminMitDetails() => Termin(
       0,
       DateTime(2019, 11, 4, 17, 9, 0),
       DateTime(2019, 11, 4, 18, 9, 0),

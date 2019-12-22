@@ -18,6 +18,7 @@ class TerminCard extends StatelessWidget {
 
   build(context) {
     return Container(
+      key: Key('termin card'),
       padding: EdgeInsets.all(10.0),
       decoration: BoxDecoration(
           color: faerbeVergangeneTermine(termin.ende),

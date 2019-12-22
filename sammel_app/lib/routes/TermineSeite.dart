@@ -82,11 +82,13 @@ class _TermineSeiteState extends State<TermineSeite> {
     showDialog(
         context: context,
         builder: (BuildContext context) => SimpleDialog(
+              key: Key('termin details dialog'),
               contentPadding: EdgeInsets.only(
                   left: 10.0, right: 10.0, top: 25.0, bottom: 5.0),
               children: <Widget>[
                 TerminDetailsWidget(terminMitDetails),
                 RaisedButton(
+                  key: Key('close termin details button'),
                   child: Text('Schließen'),
                   onPressed: () => Navigator.pop(context),
                 )
