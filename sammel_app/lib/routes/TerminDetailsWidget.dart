@@ -21,7 +21,7 @@ class _TerminDetailsWidget extends State<TerminDetailsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
+    return Column(key: Key('termin details widget'), children: [
       Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         Image.asset(widget.termin.getAsset(), width: 30.0),
         Text(widget.termin.typ,
