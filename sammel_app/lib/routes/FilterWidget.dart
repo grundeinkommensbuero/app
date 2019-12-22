@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
+import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/LocationPicker.dart';
 import 'package:sammel_app/shared/showMultipleDatePicker.dart';
 import 'package:sammel_app/shared/showTimeRangePicker.dart';
@@ -165,6 +166,8 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
                   title: const Text('Wähle Termin-Arten'),
                   children: <Widget>[
                     ...moeglicheTypen.map((typ) => CheckboxListTile(
+                          checkColor: Colors.black,
+                          activeColor: DweTheme.yellowLight,
                           value: ausgewTypen.contains(typ),
                           title: Text(typ),
                           onChanged: (neuerWert) {
@@ -209,7 +212,8 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
   ***REMOVED***
 
   locationSelection() async {
-    var allLocations = await Provider.of<AbstractStammdatenService>(context).ladeOrte();
+    var allLocations =
+        await Provider.of<AbstractStammdatenService>(context).ladeOrte();
 
     var selectedLocations = await LocationPicker(
             locations: allLocations,

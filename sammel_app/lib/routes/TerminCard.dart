@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
+import 'package:sammel_app/shared/DweTheme.dart';
 
 class TerminCard extends StatelessWidget {
   final Termin termin;
-  static const DUNKELGELB = Colors.amberAccent;
-  static const HELLGELB = Color.fromARGB(255, 250, 250, 150);
   static final TextStyle style = TextStyle(
     color: Color.fromARGB(255, 129, 28, 98),
     fontSize: 15.0,
@@ -65,7 +64,9 @@ class TerminCard extends StatelessWidget {
   ***REMOVED***
 
   static Color faerbeVergangeneTermine(DateTime ende) {
-    return ende.isAfter(DateTime.now()) ? DUNKELGELB : HELLGELB;
+    return ende.isAfter(DateTime.now())
+        ? DweTheme.yellowLight
+        : DweTheme.yellowBright;
   ***REMOVED***
 
   static String erzeugeDatumText(DateTime beginn, DateTime ende) {

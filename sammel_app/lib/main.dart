@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
+import 'package:sammel_app/shared/DweTheme.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,9 +21,7 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
           title: 'Deutsche Wohnen Enteignen',
-          theme: ThemeData(
-            primarySwatch: Colors.amber,
-          ),
+          theme: DweTheme.themeData,
           home: TermineSeite(title: 'Deutsche Wohnen Enteignen'),
         ));
   ***REMOVED***

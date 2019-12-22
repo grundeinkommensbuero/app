@@ -5,13 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sammel_app/model/Ort.dart';
 
+import 'DweTheme.dart';
+
 class LocationPicker {
   List<Ort> locations = [];
   List<DistrictItem> districts;
   Key key;
   bool multiMode;
 
-  LocationPicker({final this.key, final this.locations, this.multiMode = false***REMOVED***);
+  LocationPicker(
+      {final this.key, final this.locations, this.multiMode = false***REMOVED***);
 
   Future<List<Ort>> showLocationPicker(
       final context, final List<Ort> previousSelection) async {
@@ -41,12 +44,8 @@ class LocationPicker {
                             districts[index].expanded = !expanded;
                           ***REMOVED***);
                         ***REMOVED***,
-                        children: _expansionPanelList(
-                            context,
-                            locations,
-                            selectedLocations,
-                            districts,
-                            setDialogState)),
+                        children: _expansionPanelList(context, locations,
+                            selectedLocations, districts, setDialogState)),
                     multiMode
                         ? RaisedButton(
                             child: Text('Fertig'),
@@ -90,8 +89,8 @@ class LocationPicker {
       List<DistrictItem> districts,
       Function setdialogState) {
     return districts
-        .map((item) => _expansionPanel(context, item, orte, ausgewOrte,
-            setdialogState, districts))
+        .map((item) => _expansionPanel(
+            context, item, orte, ausgewOrte, setdialogState, districts))
         .toList();
   ***REMOVED***
 
@@ -123,35 +122,43 @@ class LocationPicker {
     );
   ***REMOVED***
 
-  CheckboxListTile _disctrictCheckbox(DistrictItem item, List<Ort> locations,
+  Container _disctrictCheckbox(DistrictItem item, List<Ort> locations,
       List<int> ausgewOrte, Function setDialogState) {
-    return CheckboxListTile(
-      value: item.locationSelection.values
-          .every((ausgewaehlt) => ausgewaehlt == true),
-      title: Text(item.districtName),
-      onChanged: (bool ausgewaehlt) {
-        setDialogState(() {
-          if (ausgewaehlt) {
-            item.locationSelection.keys
-                .forEach((ort) => item.locationSelection[ort] = true);
-          ***REMOVED*** else {
-            item.locationSelection.keys
-                .forEach((ort) => item.locationSelection[ort] = false);
-          ***REMOVED***
-        ***REMOVED***);
-      ***REMOVED***,
-    );
+    return Container(
+        decoration: BoxDecoration(color: DweTheme.yellowLight),
+        child: CheckboxListTile(
+          checkColor: Colors.black,
+          activeColor: DweTheme.yellowLight,
+          value: item.locationSelection.values
+              .every((ausgewaehlt) => ausgewaehlt == true),
+          title: Text(item.districtName),
+          onChanged: (bool ausgewaehlt) {
+            setDialogState(() {
+              if (ausgewaehlt) {
+                item.locationSelection.keys
+                    .forEach((ort) => item.locationSelection[ort] = true);
+              ***REMOVED*** else {
+                item.locationSelection.keys
+                    .forEach((ort) => item.locationSelection[ort] = false);
+              ***REMOVED***
+            ***REMOVED***);
+          ***REMOVED***,
+        ));
   ***REMOVED***
 
-  CheckboxListTile _locationCheckbox(
-      Ort ort, DistrictItem bezirk, setDialogState) {
-    return CheckboxListTile(
-      value: bezirk.locationSelection[ort],
-      title: Text('      ' + ort.ort),
-      onChanged: (bool wurdeAusgewaehlt) {
-        setDialogState(() => bezirk.locationSelection[ort] = wurdeAusgewaehlt);
-      ***REMOVED***,
-    );
+  Container _locationCheckbox(Ort ort, DistrictItem bezirk, setDialogState) {
+    return Container(
+        decoration: BoxDecoration(color: DweTheme.yellowLight),
+        child: CheckboxListTile(
+          checkColor: Colors.black,
+          activeColor: DweTheme.yellowLight,
+          value: bezirk.locationSelection[ort],
+          title: Text('      ' + ort.ort),
+          onChanged: (bool wurdeAusgewaehlt) {
+            setDialogState(
+                () => bezirk.locationSelection[ort] = wurdeAusgewaehlt);
+          ***REMOVED***,
+        ));
   ***REMOVED***
 
   ListTile _locationButton(BuildContext context, Ort location,

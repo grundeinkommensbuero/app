@@ -44,12 +44,7 @@ class _TermineSeiteState extends State<TermineSeite> {
           title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(
-            widget.title,
-            style: TextStyle(
-              color: Color.fromARGB(255, 129, 28, 98),
-            ),
-          ),
+          Text(widget.title,),
           Image.asset('assets/images/logo.png')
         ],
       )),
