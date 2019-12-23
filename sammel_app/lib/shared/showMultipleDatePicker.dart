@@ -19,36 +19,39 @@ Future<List<DateTime>> showMultipleDatePicker(
       builder: (context) => StatefulBuilder(builder: (context, setDialogState) {
             return SimpleDialog(
                 key: key,
-                titlePadding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 0.0),
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    RaisedButton(
-                      key: Key('previous month button'),
-                      shape: CircleBorder(),
-                      child: Icon(Icons.arrow_left),
-                      onPressed: () => setDialogState(() => currentMonth =
-                          Jiffy(currentMonth).subtract(months: 1)),
-                    ),
-                    Text(
-                      ChronoHelfer.monthName(currentMonth.month) +
-                          '\n' +
-                          currentMonth.year.toString(),
-                      key: Key('current month'),
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                      textWidthBasis: TextWidthBasis.parent,
-                    ),
-                    RaisedButton(
-                      key: Key('next month button'),
-                      shape: CircleBorder(),
-                      child: Icon(Icons.arrow_right),
-                      onPressed: () => setDialogState(() =>
-                          currentMonth = Jiffy(currentMonth).add(months: 1)),
-                    ),
-                  ],
-                ),
+                titlePadding: EdgeInsets.zero,
+                title: AppBar(
+                    titleSpacing: 5.0,
+                    leading: null,
+                    automaticallyImplyLeading: false,
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        RaisedButton(
+                          key: Key('previous month button'),
+                          shape: CircleBorder(),
+                          child: Icon(Icons.arrow_left),
+                          onPressed: () => setDialogState(() => currentMonth =
+                              Jiffy(currentMonth).subtract(months: 1)),
+                        ),
+                        Text(
+                          ChronoHelfer.monthName(currentMonth.month) +
+                              '\n' +
+                              currentMonth.year.toString(),
+                          key: Key('current month'),
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                          textWidthBasis: TextWidthBasis.parent,
+                        ),
+                        RaisedButton(
+                          key: Key('next month button'),
+                          shape: CircleBorder(),
+                          child: Icon(Icons.arrow_right),
+                          onPressed: () => setDialogState(() => currentMonth =
+                              Jiffy(currentMonth).add(months: 1)),
+                        ),
+                      ],
+                    )),
                 children: <Widget>[
                   Container(
                       height: 260.0,
@@ -95,25 +98,34 @@ class DweCalendarroDayItem extends CalendarroDayItem {
   @override
   Widget build(BuildContext context) {
     bool isWeekend = DateUtils.isWeekend(date);
+    bool dayBeforeSelected =
+        calendarroState.isDateSelected(date.subtract(Duration(days: 1)));
     bool daySelected = calendarroState.isDateSelected(date);
+    bool dayAfterSelected =
+        calendarroState.isDateSelected(date.add(Duration(days: 1)));
     var textColor = isWeekend ? DweTheme.purple : Colors.black;
-    if(daySelected) textColor = DweTheme.yellow;
+    if (daySelected) textColor = DweTheme.yellow;
     var fontWeight = isWeekend ? FontWeight.bold : FontWeight.normal;
     bool isToday = DateUtils.isToday(date);
     calendarroState = Calendarro.of(context);
 
-
     BoxDecoration boxDecoration;
     if (daySelected) {
-      boxDecoration =
-          BoxDecoration(color: DweTheme.purple, shape: BoxShape.circle);
+      var leftborder = dayBeforeSelected ? Radius.zero : Radius.circular(20.0);
+      var rightborder = dayAfterSelected ? Radius.zero : Radius.circular(20.0);
+      boxDecoration = BoxDecoration(
+          color: DweTheme.purple,
+          shape: BoxShape.rectangle,
+          borderRadius:
+              BorderRadius.horizontal(left: leftborder, right: rightborder));
     } else if (isToday) {
       boxDecoration = BoxDecoration(
           border: Border.all(
             color: DweTheme.purple,
             width: 1.0,
           ),
-          shape: BoxShape.circle);
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.all(Radius.circular(10.0)));
     }
 
     return Expanded(

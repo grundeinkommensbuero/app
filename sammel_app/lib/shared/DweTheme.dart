@@ -17,8 +17,9 @@ class DweTheme {
               title: TextStyle(
                   fontWeight: FontWeight.bold, fontSize: 20.0, color: purple),
               headline: TextStyle(color: purple))),
-      dialogBackgroundColor: yellow,
+      dialogBackgroundColor: yellowLight,
       buttonTheme: ButtonThemeData(
+          padding: EdgeInsets.all(5.0),
           colorScheme: ColorScheme.light(
               primary: purple,
               onPrimary: yellow,
