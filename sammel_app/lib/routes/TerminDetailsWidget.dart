@@ -1,3 +1,5 @@
+import 'dart:ui' as prefix0;
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -22,20 +24,6 @@ class _TerminDetailsWidget extends State<TerminDetailsWidget> {
   @override
   Widget build(BuildContext context) {
     return Column(key: Key('termin details widget'), children: [
-      Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        Image.asset(widget.termin.getAsset(), width: 30.0),
-        Text(widget.termin.typ,
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 22.0,
-                color: Color.fromARGB(255, 129, 28, 98))),
-        Container(width: 20.0)
-      ]),
-      SizedBox(
-        height: 20.0,
-      ),
-
-      // Location
       Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Icon(Icons.location_searching, size: 40.0),
         SizedBox(
@@ -135,7 +123,7 @@ class _TerminDetailsWidget extends State<TerminDetailsWidget> {
             expandableCondition: widget.termin.details.kontakt.length > 200,
           )
         ])
-      ]),
+      ])
     ]);
   }
 }
