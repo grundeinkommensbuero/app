@@ -24,7 +24,7 @@ class LocationPicker {
         builder: (context) =>
             StatefulBuilder(builder: (context, setDialogState) {
               List<int> selectedLocations =
-                  previousSelection?.map((ort) => ort.id).toList();
+                  previousSelection?.map((ort) => ort.id)?.toList();
               if (selectedLocations == null)
                 selectedLocations = []; // Null-Sicherheit
 
