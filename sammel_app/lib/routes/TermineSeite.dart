@@ -44,7 +44,9 @@ class _TermineSeiteState extends State<TermineSeite> {
           title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(widget.title,),
+          Text(
+            widget.title,
+          ),
           Image.asset('assets/images/logo.png')
         ],
       )),
@@ -77,9 +79,24 @@ class _TermineSeiteState extends State<TermineSeite> {
     showDialog(
         context: context,
         builder: (BuildContext context) => SimpleDialog(
+              titlePadding: EdgeInsets.zero,
+              title: AppBar(
+                  leading: null,
+                  automaticallyImplyLeading: false,
+                  title: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Image.asset(terminMitDetails.getAsset(), width: 30.0),
+                        Container(width: 10.0),
+                        Text(terminMitDetails.typ,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 22.0,
+                                color: Color.fromARGB(255, 129, 28, 98))),
+                      ])),
               key: Key('termin details dialog'),
-              contentPadding: EdgeInsets.only(
-                  left: 10.0, right: 10.0, top: 25.0, bottom: 5.0),
+              contentPadding: EdgeInsets.all(10.0),
               children: <Widget>[
                 TerminDetailsWidget(terminMitDetails),
                 RaisedButton(
