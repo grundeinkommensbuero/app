@@ -162,8 +162,11 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
               return SimpleDialog(
                   key: Key('type selection dialog'),
                   contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
-                  titlePadding: EdgeInsets.all(15.0),
-                  title: const Text('Wähle Termin-Arten'),
+                  titlePadding: EdgeInsets.zero,
+                  title: AppBar(
+                      leading: null,
+                      automaticallyImplyLeading: false,
+                      title: const Text('Wähle Termin-Arten')),
                   children: <Widget>[
                     ...moeglicheTypen.map((typ) => CheckboxListTile(
                           checkColor: Colors.black,
