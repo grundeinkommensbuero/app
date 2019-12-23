@@ -25,7 +25,7 @@ class _TerminDetailsWidget extends State<TerminDetailsWidget> {
   Widget build(BuildContext context) {
     return Column(key: Key('termin details widget'), children: [
       Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Icon(Icons.location_searching, size: 40.0),
+        Icon(Icons.my_location, size: 40.0),
         SizedBox(
           width: 10.0,
         ),
