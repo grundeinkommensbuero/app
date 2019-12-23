@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sammel_app/model/Ort.dart';
 
-import 'DweTheme.dart';
-
 class LocationPicker {
   List<Ort> locations = [];
   List<DistrictItem> districts;
@@ -38,14 +36,8 @@ class LocationPicker {
                       ? const Text('Wähle einen oder mehrere Orte')
                       : const Text('Wähle einen Ort'),
                   children: <Widget>[
-                    ExpansionPanelList(
-                        expansionCallback: (int index, bool expanded) {
-                          setDialogState(() {
-                            districts[index].expanded = !expanded;
-                          });
-                        },
-                        children: _expansionPanelList(context, locations,
-                            selectedLocations, districts, setDialogState)),
+                    ..._expansionTileList(context, locations, selectedLocations,
+                        districts, setDialogState),
                     multiMode
                         ? RaisedButton(
                             child: Text('Fertig'),
@@ -82,83 +74,78 @@ class LocationPicker {
         .toList();
   }
 
-  List<ExpansionPanel> _expansionPanelList(
+  List<ExpansionTile> _expansionTileList(
       BuildContext context,
       List<Ort> orte,
       List<int> ausgewOrte,
       List<DistrictItem> districts,
       Function setdialogState) {
     return districts
-        .map((item) => _expansionPanel(
+        .map((item) => _expansionTile(
             context, item, orte, ausgewOrte, setdialogState, districts))
         .toList();
   }
 
-  ExpansionPanel _expansionPanel(
+  ExpansionTile _expansionTile(
       BuildContext context,
       DistrictItem disctrict,
       List<Ort> locations,
       List<int> selLoc,
       Function setDialogState,
       List<DistrictItem> districts) {
-    return ExpansionPanel(
-        headerBuilder: (BuildContext context, bool isExpanded) => multiMode
+    return ExpansionTile(
+        title: multiMode
             ? _disctrictCheckbox(disctrict, locations, selLoc, setDialogState)
-            : _disctrictPanel(disctrict, locations, selLoc, setDialogState),
-        canTapOnHeader: true,
-        isExpanded: disctrict.expanded,
-        body: Column(
-            children: disctrict.locationSelection.keys
-                .map((ort) => multiMode
-                    ? _locationCheckbox(ort, disctrict, setDialogState)
-                    : _locationButton(context, ort, disctrict, districts))
-                .toList()));
+            : _disctrictTile(disctrict, locations, selLoc, setDialogState),
+        initiallyExpanded: disctrict.expanded,
+        children: disctrict.locationSelection.keys
+            .map((ort) => multiMode
+                ? _locationCheckbox(ort, disctrict, setDialogState)
+                : _locationButton(context, ort, disctrict, districts))
+            .toList());
   }
 
-  ListTile _disctrictPanel(DistrictItem item, List<Ort> orte,
+  ListTile _disctrictTile(DistrictItem item, List<Ort> orte,
       List<int> selectedLocations, Function setDialogState) {
     return ListTile(
       title: Text(item.districtName),
     );
   }
 
-  Container _disctrictCheckbox(DistrictItem item, List<Ort> locations,
+  CheckboxListTile _disctrictCheckbox(DistrictItem item, List<Ort> locations,
       List<int> ausgewOrte, Function setDialogState) {
-    return Container(
-        decoration: BoxDecoration(color: DweTheme.yellowLight),
-        child: CheckboxListTile(
-          checkColor: Colors.black,
-          activeColor: DweTheme.yellowLight,
-          value: item.locationSelection.values
-              .every((ausgewaehlt) => ausgewaehlt == true),
-          title: Text(item.districtName),
-          onChanged: (bool ausgewaehlt) {
-            setDialogState(() {
-              if (ausgewaehlt) {
-                item.locationSelection.keys
-                    .forEach((ort) => item.locationSelection[ort] = true);
-              } else {
-                item.locationSelection.keys
-                    .forEach((ort) => item.locationSelection[ort] = false);
-              }
-            });
-          },
-        ));
+    return CheckboxListTile(
+      checkColor: Colors.black,
+      value: item.locationSelection.values
+          .every((ausgewaehlt) => ausgewaehlt == true),
+      title: Text(
+        item.districtName,
+        style: TextStyle(color: Colors.black),
+      ),
+      onChanged: (bool ausgewaehlt) {
+        setDialogState(() {
+          if (ausgewaehlt) {
+            item.locationSelection.keys
+                .forEach((ort) => item.locationSelection[ort] = true);
+          } else {
+            item.locationSelection.keys
+                .forEach((ort) => item.locationSelection[ort] = false);
+          }
+        });
+      },
+    );
   }
 
-  Container _locationCheckbox(Ort ort, DistrictItem bezirk, setDialogState) {
-    return Container(
-        decoration: BoxDecoration(color: DweTheme.yellowLight),
-        child: CheckboxListTile(
-          checkColor: Colors.black,
-          activeColor: DweTheme.yellowLight,
-          value: bezirk.locationSelection[ort],
-          title: Text('      ' + ort.ort),
-          onChanged: (bool wurdeAusgewaehlt) {
-            setDialogState(
-                () => bezirk.locationSelection[ort] = wurdeAusgewaehlt);
-          },
-        ));
+  CheckboxListTile _locationCheckbox(
+      Ort ort, DistrictItem bezirk, setDialogState) {
+    return CheckboxListTile(
+      checkColor: Colors.black,
+      value: bezirk.locationSelection[ort],
+      title: Text('      ' + ort.ort),
+      onChanged: (bool wurdeAusgewaehlt) {
+        setDialogState(() => bezirk.locationSelection[ort] = wurdeAusgewaehlt);
+      },
+    );
   }
 
   ListTile _locationButton(BuildContext context, Ort location,

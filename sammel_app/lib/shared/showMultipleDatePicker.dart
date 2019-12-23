@@ -1,7 +1,10 @@
 import 'package:calendarro/calendarro.dart';
+import 'package:calendarro/date_utils.dart';
+import 'package:calendarro/default_day_tile.dart';
 import 'package:calendarro/default_weekday_labels_row.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:sammel_app/shared/DweTheme.dart';
 
 import 'ChronoHelfer.dart';
 
@@ -57,6 +60,7 @@ Future<List<DateTime>> showMultipleDatePicker(
                         weekdayLabelsRow: GerCalendarroWeekdayLabelsView(),
                         selectionMode: SelectionMode.MULTI,
                         displayMode: DisplayMode.MONTHS,
+                        dayTileBuilder: DweDayTileBuilder(),
                       )),
                   ButtonBar(alignment: MainAxisAlignment.center, children: [
                     RaisedButton(
@@ -74,6 +78,59 @@ Future<List<DateTime>> showMultipleDatePicker(
                 ]);
           }));
   return selectedDatesFromDialog;
+}
+
+class DweDayTileBuilder extends DayTileBuilder {
+  @override
+  Widget build(BuildContext context, DateTime date, DateTimeCallback onTap) {
+    return DweCalendarroDayItem(
+        date: date, calendarroState: Calendarro.of(context), onTap: onTap);
+  }
+}
+
+class DweCalendarroDayItem extends CalendarroDayItem {
+  DweCalendarroDayItem({DateTime date, CalendarroState calendarroState, onTap})
+      : super(date: date, calendarroState: calendarroState, onTap: onTap);
+
+  @override
+  Widget build(BuildContext context) {
+    bool isWeekend = DateUtils.isWeekend(date);
+    bool daySelected = calendarroState.isDateSelected(date);
+    var textColor = isWeekend ? DweTheme.purple : Colors.black;
+    if(daySelected) textColor = DweTheme.yellow;
+    var fontWeight = isWeekend ? FontWeight.bold : FontWeight.normal;
+    bool isToday = DateUtils.isToday(date);
+    calendarroState = Calendarro.of(context);
+
+
+    BoxDecoration boxDecoration;
+    if (daySelected) {
+      boxDecoration =
+          BoxDecoration(color: DweTheme.purple, shape: BoxShape.circle);
+    } else if (isToday) {
+      boxDecoration = BoxDecoration(
+          border: Border.all(
+            color: DweTheme.purple,
+            width: 1.0,
+          ),
+          shape: BoxShape.circle);
+    }
+
+    return Expanded(
+        child: GestureDetector(
+      child: Container(
+          height: 40.0,
+          decoration: boxDecoration,
+          child: Center(
+              child: Text(
+            "${date.day}",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: textColor, fontWeight: fontWeight),
+          ))),
+      onTap: handleTap,
+      behavior: HitTestBehavior.translucent,
+    ));
+  }
 }
 
 class GerCalendarroWeekdayLabelsView extends CalendarroWeekdayLabelsView {

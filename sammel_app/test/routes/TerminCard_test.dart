@@ -1,6 +1,7 @@
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
+import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -61,29 +62,29 @@ void main() {
     test('faerbt vergangene Termine hellgelb', () {
       DateTime gestern = DateTime.now().subtract(Duration(days: 1));
       expect(TerminCard.faerbeVergangeneTermine(gestern),
-          equals(TerminCard.HELLGELB));
+          equals(DweTheme.yellowLight));
 
       DateTime vor1Stunde = DateTime.now().subtract(Duration(hours: 1));
       expect(TerminCard.faerbeVergangeneTermine(vor1Stunde),
-          equals(TerminCard.HELLGELB));
+          equals(DweTheme.yellowLight));
 
       DateTime vor1Minute = DateTime.now().subtract(Duration(minutes: 1));
       expect(TerminCard.faerbeVergangeneTermine(vor1Minute),
-          equals(TerminCard.HELLGELB));
+          equals(DweTheme.yellowLight));
     });
 
     test('faerbt zukünftige Termine dunkelgelb', () {
       DateTime morgen = DateTime.now().add(Duration(days: 1));
       expect(TerminCard.faerbeVergangeneTermine(morgen),
-          equals(TerminCard.DUNKELGELB));
+          equals(DweTheme.yellowLight));
 
       DateTime in1Stunde = DateTime.now().add(Duration(hours: 1));
       expect(TerminCard.faerbeVergangeneTermine(in1Stunde),
-          equals(TerminCard.DUNKELGELB));
+          equals(DweTheme.yellowLight));
 
       DateTime in1Minute = DateTime.now().add(Duration(minutes: 1));
       expect(TerminCard.faerbeVergangeneTermine(in1Minute),
-          equals(TerminCard.DUNKELGELB));
+          equals(DweTheme.yellowLight));
     });
   });
   group('erzeugeOrtText', () {
