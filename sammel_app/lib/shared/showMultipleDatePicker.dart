@@ -21,7 +21,7 @@ Future<List<DateTime>> showMultipleDatePicker(
                 key: key,
                 titlePadding: EdgeInsets.zero,
                 title: AppBar(
-                    titleSpacing: 5.0,
+                    titleSpacing: 0.0,
                     leading: null,
                     automaticallyImplyLeading: false,
                     title: Row(
