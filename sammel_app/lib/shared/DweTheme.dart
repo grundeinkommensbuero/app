@@ -8,19 +8,24 @@ class DweTheme {
   static final Color purpleLight = Color.fromARGB(255, 129, 28, 98);
 
   static ThemeData themeData = ThemeData(
-      primarySwatch: yellow,
+      // button text color
+      primaryColor: yellow,
+      accentColor: purple,
       appBarTheme: AppBarTheme(
-          // for AppBar
           color: yellow,
           textTheme: TextTheme(
               title: TextStyle(
                   fontWeight: FontWeight.bold, fontSize: 20.0, color: purple),
               headline: TextStyle(color: purple))),
       dialogBackgroundColor: yellow,
-      // for all dialogs
       buttonTheme: ButtonThemeData(
-          // for buttons
+          colorScheme: ColorScheme.light(
+              primary: purple,
+              onPrimary: yellow,
+              surface: yellow,
+              background: yellow,
+              onError: yellow),
           buttonColor: purple,
-          textTheme: ButtonTextTheme.accent),
-      accentIconTheme: IconThemeData(color: purple));
+          textTheme: ButtonTextTheme.primary),
+      iconTheme: IconThemeData(color: purple));
 ***REMOVED***

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sammel_app/shared/DweTheme.dart';
 
 Future<TimeRange> showTimeRangePicker(
     BuildContext context, TimeOfDay initialFrom, TimeOfDay initialTo) async {
@@ -24,11 +25,12 @@ Future<TimeOfDay> showSingleTimePicker(
           // hack, um über dem Dialog einen Titel darzustellen
           // ignore: missing_required_param
           FloatingActionButton(
+              backgroundColor: DweTheme.yellow,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50.0)),
               child: Text(
                 title,
-                style: TextStyle(fontSize: 25.0),
+                style: TextStyle(fontSize: 25.0, color: Colors.black),
               )),
           timePicker
         ],
@@ -36,9 +38,7 @@ Future<TimeOfDay> showSingleTimePicker(
     );
   ***REMOVED***
   return await showTimePicker(
-      context: context,
-      initialTime: initialTime,
-      builder: builder);
+      context: context, initialTime: initialTime, builder: builder);
 ***REMOVED***
 
 class TimeRange {
