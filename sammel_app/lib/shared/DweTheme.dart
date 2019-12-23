@@ -19,10 +19,11 @@ class DweTheme {
               headline: TextStyle(color: purple))),
       dialogBackgroundColor: yellowLight,
       buttonTheme: ButtonThemeData(
-          padding: EdgeInsets.all(5.0),
           colorScheme: ColorScheme.light(
               primary: purple,
               onPrimary: yellow,
+              secondary: purple,
+              onSecondary: yellowLight,
               surface: yellow,
               background: yellow,
               onError: yellow),

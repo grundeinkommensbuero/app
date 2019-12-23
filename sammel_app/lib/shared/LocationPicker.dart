@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sammel_app/model/Ort.dart';
+import 'package:sammel_app/shared/DweTheme.dart';
 
 class LocationPicker {
   List<Ort> locations = [];
@@ -31,10 +32,13 @@ class LocationPicker {
               return SimpleDialog(
                   key: key,
                   contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
-                  titlePadding: EdgeInsets.all(15.0),
-                  title: multiMode
-                      ? const Text('Wähle einen oder mehrere Orte')
-                      : const Text('Wähle einen Ort'),
+                  titlePadding: EdgeInsets.zero,
+                  title: AppBar(
+                      leading: null,
+                      automaticallyImplyLeading: false,
+                      title: multiMode
+                          ? const Text('Wähle einen oder mehrere Orte')
+                          : const Text('Wähle einen Ort')),
                   children: <Widget>[
                     ..._expansionTileList(context, locations, selectedLocations,
                         districts, setDialogState),
@@ -115,7 +119,7 @@ class LocationPicker {
   CheckboxListTile _disctrictCheckbox(DistrictItem item, List<Ort> locations,
       List<int> ausgewOrte, Function setDialogState) {
     return CheckboxListTile(
-      checkColor: Colors.black,
+      checkColor: DweTheme.yellow,
       value: item.locationSelection.values
           .every((ausgewaehlt) => ausgewaehlt == true),
       title: Text(
@@ -139,7 +143,7 @@ class LocationPicker {
   CheckboxListTile _locationCheckbox(
       Ort ort, DistrictItem bezirk, setDialogState) {
     return CheckboxListTile(
-      checkColor: Colors.black,
+      checkColor: DweTheme.yellow,
       value: bezirk.locationSelection[ort],
       title: Text('      ' + ort.ort),
       onChanged: (bool wurdeAusgewaehlt) {
