@@ -21,7 +21,6 @@ main() {
 
     await tester.pumpWidget(MaterialApp(home: Dialog(child: widget)));
 
-    expect(find.text('Sammel-Termin'), findsOneWidget);
     expect(find.text('Friedrichshain-Kreuzberg'), findsOneWidget);
     expect(find.text('Friedrichshain-Nordkiez'), findsOneWidget);
     expect(find.text('Treffpunkt: Ubhf Samariterstr.'), findsOneWidget);
