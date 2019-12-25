@@ -62,15 +62,15 @@ void main() {
     test('faerbt vergangene Termine hellgelb', () {
       DateTime gestern = DateTime.now().subtract(Duration(days: 1));
       expect(TerminCard.faerbeVergangeneTermine(gestern),
-          equals(DweTheme.yellowLight));
+          equals(DweTheme.yellowBright));
 
       DateTime vor1Stunde = DateTime.now().subtract(Duration(hours: 1));
       expect(TerminCard.faerbeVergangeneTermine(vor1Stunde),
-          equals(DweTheme.yellowLight));
+          equals(DweTheme.yellowBright));
 
       DateTime vor1Minute = DateTime.now().subtract(Duration(minutes: 1));
       expect(TerminCard.faerbeVergangeneTermine(vor1Minute),
-          equals(DweTheme.yellowLight));
+          equals(DweTheme.yellowBright));
     ***REMOVED***);
 
     test('faerbt zukünftige Termine dunkelgelb', () {
