@@ -10,13 +10,13 @@ class TermineFilterTest {
     fun erzeugtGefuelltenFilter() {
         val heute = LocalDate.now()
         val filter = TermineFilter(
-                listOf("Sammel-Termin", "Info-Veranstaltung"),
+                listOf("Sammeln", "Infoveranstaltung"),
                 listOf(heute),
                 LocalTime.of(12, 0 ,0),
                 LocalTime.of(18, 0 ,0),
                 listOf(StammdatenRestResource.OrtDto(0, "Friedrichshain-Kreuzberg", "Friedrichshain Nirdkiez")))
 
-        assertTrue(filter.typen.containsAll(listOf("Sammel-Termin", "Info-Veranstaltung")))
+        assertTrue(filter.typen.containsAll(listOf("Sammeln", "Infoveranstaltung")))
         assertTrue(filter.tage.containsAll(listOf(heute)))
         assertEquals(filter.von?.hour,12)
         assertEquals(filter.bis?.hour, 18)

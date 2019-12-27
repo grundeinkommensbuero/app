@@ -71,13 +71,13 @@ class TermineDaoTest {
     fun erzeugeGetTermineQueryErgaenztTypenKlauselWennNichtNull() {
         whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)
 
-        dao.erzeugeGetTermineQuery(TermineFilter(listOf("Sammel-Termin", "Info-Veranstaltung"), emptyList(), null, null, emptyList()))
+        dao.erzeugeGetTermineQuery(TermineFilter(listOf("Sammeln", "Infoveranstaltung"), emptyList(), null, null, emptyList()))
 
         verify(entityManager, atLeastOnce()).createQuery(matches(".*\\swhere termine\\.typ in \\(:typen\\)"), any<Class<Termin>>())
         val typenCaptor = ArgumentCaptor.forClass(List::class.java)
         verify(typedQuery, atLeastOnce()).setParameter(matches("typen"), typenCaptor.capture())
-        assertTrue(typenCaptor.value.contains("Sammel-Termin"))
-        assertTrue(typenCaptor.value.contains("Info-Veranstaltung"))
+        assertTrue(typenCaptor.value.contains("Sammeln"))
+        assertTrue(typenCaptor.value.contains("Infoveranstaltung"))
     ***REMOVED***
 
     @Test
@@ -193,7 +193,7 @@ class TermineDaoTest {
         whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)
 
         dao.erzeugeGetTermineQuery(TermineFilter(
-                listOf("Sammel-Termin"),
+                listOf("Sammeln"),
                 listOf(LocalDate.of(2019, 11, 18)),
                 LocalTime.of(12, 0, 0),
                 LocalTime.of(18, 0, 0),

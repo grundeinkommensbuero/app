@@ -118,8 +118,8 @@ void main() {
     await tester.pump();
 
     // currently hardcoded
-    expect(find.text('Sammel-Termin'), findsOneWidget);
-    expect(find.text('Info-Veranstaltung'), findsOneWidget);
+    expect(find.text('Sammeln'), findsOneWidget);
+    expect(find.text('Infoveranstaltung'), findsOneWidget);
   ***REMOVED***);
 
   testWidgets('Type Selection selects initially types from filter',
@@ -128,7 +128,7 @@ void main() {
 
     await tester.pumpWidget(MaterialApp(home: filterWidget));
 
-    filterWidget.filter.typen = ['Sammel-Termin'];
+    filterWidget.filter.typen = ['Sammeln'];
 
     await tester.tap(find.byKey(Key('filter button')));
     await tester.pump();
@@ -139,7 +139,7 @@ void main() {
     var checkboxTiles =
         tester.widgetList<CheckboxListTile>(find.byType(CheckboxListTile));
     var sammelTermin = checkboxTiles
-        .firstWhere((ct) => (ct.title as Text).data == 'Sammel-Termin');
+        .firstWhere((ct) => (ct.title as Text).data == 'Sammeln');
     var andere = checkboxTiles.where((ct) => ct != sammelTermin);
 
     expect(sammelTermin.value, isTrue);
@@ -176,7 +176,7 @@ void main() {
     await tester.tap(find.byKey(Key('type button')));
     await tester.pump();
 
-    await tester.tap(find.text('Sammel-Termin'));
+    await tester.tap(find.text('Sammeln'));
     await tester.pump();
 
     await tester.tap(find.text('Fertig'));
@@ -185,7 +185,7 @@ void main() {
     await tester.tap(find.byKey(Key('filter button')));
     await tester.pump();
 
-    expect(filterWidget.filter.typen, containsAll(['Sammel-Termin']));
+    expect(filterWidget.filter.typen, containsAll(['Sammeln']));
   ***REMOVED***);
 
   testWidgets('Filter opens Days selection with click at days button',
@@ -360,7 +360,7 @@ void main() {
     await tester.pump();
 
     filterWidget.filter = TermineFilter(
-        ['Sammel-Termin'],
+        ['Sammeln'],
         [DateTime(2019, 12, 16)],
         TimeOfDay(hour: 19, minute: 15),
         TimeOfDay(hour: 20, minute: 21),
@@ -373,7 +373,7 @@ void main() {
     await tester.pump();
 
     expect(numberOfTimesCalled, 1);
-    expect(iWasCalledResult.typen, containsAll(['Sammel-Termin']));
+    expect(iWasCalledResult.typen, containsAll(['Sammeln']));
     expect(ChronoHelfer.timeToStringHHmm(iWasCalledResult.von), '19:15');
     expect(ChronoHelfer.timeToStringHHmm(iWasCalledResult.bis), '20:21');
     expect(iWasCalledResult.tage.map((t) => DateFormat.yMd().format(t)),

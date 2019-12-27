@@ -159,7 +159,7 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
   ***REMOVED***
 
   typeSelection() async {
-    List<String> moeglicheTypen = ['Sammel-Termin', 'Info-Veranstaltung'];
+    List<String> moeglicheTypen = ['Sammeln', 'Infoveranstaltung'];
     List<String> ausgewTypen = List<String>()..addAll(widget.filter.typen);
     await showDialog<List<String>>(
         context: context,

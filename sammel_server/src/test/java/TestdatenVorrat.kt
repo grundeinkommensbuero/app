@@ -20,11 +20,11 @@ class TestdatenVorrat {
         ***REMOVED***
 
         fun sammeltermin(): String {
-            return "Sammel-Termin"
+            return "Sammeln"
         ***REMOVED***
 
         fun infoveranstaltung(): String {
-            return "Info-Veranstaltung"
+            return "Infoveranstaltung"
         ***REMOVED***
 
         fun karl(): Benutzer {

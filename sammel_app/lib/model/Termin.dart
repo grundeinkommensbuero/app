@@ -33,10 +33,10 @@ class Termin {
 
   String getAsset() {
     switch (typ) {
-      case 'Sammel-Termin':
-        return 'assets/images/Sammel-Termin.png';
-      case 'Info-Veranstaltung':
-        return 'assets/images/Info-Veranstaltung.png';
+      case 'Sammeln':
+        return 'assets/images/Sammeln.png';
+      case 'Infoveranstaltung':
+        return 'assets/images/Infoveranstaltung.png';
     ***REMOVED***
     return '';
   ***REMOVED***

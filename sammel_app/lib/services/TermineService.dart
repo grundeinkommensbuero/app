@@ -74,7 +74,7 @@ class DemoTermineService extends AbstractTermineService {
         DateTime(heute.year, heute.month - 1, heute.day - 1, 9, 0, 0),
         DateTime(heute.year, heute.month - 1, heute.day - 1, 12, 0, 0),
         nordkiez,
-        'Sammel-Termin',
+        'Sammeln',
         TerminDetails('Weltzeituhr', 'Bringe Westen und Klämmbretter mit',
             'Ruft mich an unter 01234567')),
     Termin(
@@ -82,7 +82,7 @@ class DemoTermineService extends AbstractTermineService {
         DateTime(heute.year, heute.month, heute.day - 1, 11, 0, 0),
         DateTime(heute.year, heute.month, heute.day - 1, 13, 0, 0),
         treptowerPark,
-        'Sammel-Termin',
+        'Sammeln',
         TerminDetails('Hinter der 3. Parkbank links',
             'wir machen die Parkeingänge', 'Schreibt mir unter e@mail.de')),
     Termin(
@@ -90,7 +90,7 @@ class DemoTermineService extends AbstractTermineService {
         DateTime(heute.year, heute.month, heute.day, 23, 0, 0),
         DateTime(heute.year, heute.month, heute.day + 1, 2, 0, 0),
         goerli,
-        'Sammel-Termin',
+        'Sammeln',
         TerminDetails('wir telefonieren uns zusammen', 'bitte seid pünktlich',
             'Meine Handynummer ist 01234567')),
     Termin(
@@ -98,7 +98,7 @@ class DemoTermineService extends AbstractTermineService {
         DateTime(heute.year, heute.month, heute.day + 1, 18, 0, 0),
         DateTime(heute.year, heute.month, heute.day + 1, 20, 30, 0),
         treptowerPark,
-        'Info-Veranstaltung',
+        'Infoveranstaltung',
         TerminDetails(
             'DGB-Haus, Raum 1312',
             'Ihr seid alle herzlich eingeladen zur Strategiediskussion',
