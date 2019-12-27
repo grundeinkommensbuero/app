@@ -32,7 +32,7 @@ class _TerminDetailsWidget extends State<TerminDetailsWidget> {
             'Wo? ',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          Text(widget.termin.ort.bezirk),
+          SelectableText(widget.termin.ort.bezirk),
           Row(children: [
             Icon(
               Icons.subdirectory_arrow_right,
@@ -65,8 +65,8 @@ class _TerminDetailsWidget extends State<TerminDetailsWidget> {
             'Wann?',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          Text(ChronoHelfer.formatDateOfDateTime(widget.termin.beginn)),
-          Text(ChronoHelfer.formatFromToTimeOfDateTimes(
+          SelectableText(ChronoHelfer.formatDateOfDateTime(widget.termin.beginn)),
+          SelectableText(ChronoHelfer.formatFromToTimeOfDateTimes(
               widget.termin.beginn, widget.termin.ende))
         ])
       ]),
@@ -86,7 +86,7 @@ class _TerminDetailsWidget extends State<TerminDetailsWidget> {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           ExpandableConstrainedBox(
-            child: Text(
+            child: SelectableText(
               widget.termin.details.kommentar,
               style: TextStyle(fontWeight: FontWeight.normal),
             ),
@@ -111,7 +111,7 @@ class _TerminDetailsWidget extends State<TerminDetailsWidget> {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           ExpandableConstrainedBox(
-            child: Text(
+            child: SelectableText(
               widget.termin.details.kontakt,
               style: TextStyle(fontWeight: FontWeight.normal),
             ),
