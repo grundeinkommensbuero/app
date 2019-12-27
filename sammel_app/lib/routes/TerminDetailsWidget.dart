@@ -88,6 +88,7 @@ class _TerminDetailsWidget extends State<TerminDetailsWidget> {
           ExpandableConstrainedBox(
             child: SelectableText(
               widget.termin.details.kommentar,
+              onTap: () => {***REMOVED***, // TODO: SelectableText stiehlt ExpandableContraintBox den onTap
               style: TextStyle(fontWeight: FontWeight.normal),
             ),
             maxHeight: 105.0,
