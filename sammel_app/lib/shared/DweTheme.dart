@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class DweTheme {
-  static final MaterialColor yellow = Colors.amber;
-  static final MaterialAccentColor yellowLight = Colors.amberAccent;
-  static final Color yellowBright = Color.fromARGB(255, 250, 250, 150);
-  static final Color purple = Color.fromARGB(255, 149, 48, 118);
-  static final Color purpleLight = Color.fromARGB(255, 129, 28, 98);
+  static final Color yellow = Color.fromARGB(255, 255, 216, 0);
+  static final Color yellowLight = Color.fromARGB(255, 255, 230, 40);
+  static final Color yellowBright = Color.fromARGB(255, 255, 255, 130);
+  static final Color purple = Color.fromARGB(255, 129, 28, 98);
+  static final Color purpleLight = Color.fromARGB(255, 109, 8, 78);
 
   static ThemeData themeData = ThemeData(
       // button text color

@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
               value: demoModus ? DemoStammdatenService() : StammdatenService()),
         ],
         child: MaterialApp(
-          title: 'Deutsche Wohnen Enteignen',
+          title: 'DW & Co. Enteignen',
           theme: DweTheme.themeData,
           home: TermineSeite(title: 'Deutsche Wohnen Enteignen'),
         ));
