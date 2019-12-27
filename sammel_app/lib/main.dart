@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           title: 'DW & Co. Enteignen',
           theme: DweTheme.themeData,
-          home: TermineSeite(title: 'Deutsche Wohnen Enteignen'),
+          home: TermineSeite(title: 'Deutsche Wohnen & Co. Enteignen'),
         ));
   }
 }

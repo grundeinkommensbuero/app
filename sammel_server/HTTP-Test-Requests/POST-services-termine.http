@@ -5,7 +5,7 @@ Content-Type: application/json
 
 {
   "typen": [
-    "Sammel-Termin"
+    "Sammeln"
   ],
   "tage": [
     "2020-02-05"

@@ -16,13 +16,13 @@ void main() {
     test('serialisiert gefuellten TermineFilter', () {
       expect(
           jsonEncode(TermineFilter(
-              ["Sammel-Termin", "Info-Veranstaltung"],
+              ["Sammeln", "Infoveranstaltung"],
               [DateTime(2019, 11, 22, 0, 0, 0), DateTime(2019, 1, 30, 0, 0, 0)],
               TimeOfDay(hour: 4, minute: 10),
               TimeOfDay(hour: 23, minute: 0),
               [nordkiez()])),
           '{'
-          '"typen":["Sammel-Termin","Info-Veranstaltung"],'
+          '"typen":["Sammeln","Infoveranstaltung"],'
           '"tage":["2019-11-22","2019-01-30"],'
           '"von":"04:10:00",'
           '"bis":"23:00:00",'
@@ -47,15 +47,15 @@ void main() {
     });
     test("deserialisert gefuellten TermineFilter", () {
       var termineFilter = TermineFilter.fromJSON(jsonDecode('{'
-          '"typen":["Sammel-Termin","Info-Veranstaltung"],'
+          '"typen":["Sammeln","Infoveranstaltung"],'
           '"tage":["2019-11-22","2019-01-02"],'
           '"von":"23:59:00",'
           '"bis":"01:02:00",'
           '"orte":[{"id":0,"bezirk":"Friedrichshain-Kreuzberg","ort":"Friedrichshain Nordkiez"}]'
           '}'));
       expect(termineFilter.typen.length, 2);
-      expect(termineFilter.typen[0], "Sammel-Termin");
-      expect(termineFilter.typen[1], "Info-Veranstaltung");
+      expect(termineFilter.typen[0], "Sammeln");
+      expect(termineFilter.typen[1], "Infoveranstaltung");
       expect(termineFilter.tage.length, 2);
       expect([
         termineFilter.tage[0].day,
