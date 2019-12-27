@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
@@ -45,6 +46,7 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
                         child: FlatButton(
                           color: Color.fromARGB(255, 149, 48, 118),
                           textColor: Colors.amberAccent,
+                          shape: Border(),
                           materialTapTargetSize: _zeroPadding,
                           onPressed: () => typeSelection(),
                           child: Text(artButtonBeschriftung()),
@@ -55,6 +57,7 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
                         child: FlatButton(
                           color: Color.fromARGB(255, 149, 48, 118),
                           textColor: Colors.amberAccent,
+                          shape: Border(),
                           materialTapTargetSize: _zeroPadding,
                           onPressed: () => daysSelection(),
                           child: tageButtonBeschriftung(),
@@ -65,6 +68,7 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
                         child: FlatButton(
                           color: Color.fromARGB(255, 149, 48, 118),
                           textColor: Colors.amberAccent,
+                          shape: Border(),
                           materialTapTargetSize: _zeroPadding,
                           onPressed: () => timeSelection(),
                           child: Text(uhrzeitButtonBeschriftung(widget.filter)),
@@ -75,6 +79,7 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
                         child: FlatButton(
                           color: Color.fromARGB(255, 149, 48, 118),
                           textColor: Colors.amberAccent,
+                          shape: Border(),
                           materialTapTargetSize: _zeroPadding,
                           onPressed: () => locationSelection(),
                           child: Text(ortButtonBeschriftung(widget.filter)),
@@ -87,6 +92,7 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
               child: RaisedButton(
                 key: Key("filter button"),
                 color: Color.fromARGB(255, 129, 28, 98),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.zero, bottom: Radius.elliptical(15.0, 20.0))),
                 textColor: Colors.amberAccent,
                 materialTapTargetSize: _zeroPadding,
                 child: Row(
