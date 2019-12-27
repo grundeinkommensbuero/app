@@ -1,5 +1,3 @@
-import 'dart:ui' as prefix0;
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -40,14 +38,12 @@ class _TerminDetailsWidget extends State<TerminDetailsWidget> {
               Icons.subdirectory_arrow_right,
               size: 18.0,
             ),
-            Text(widget.termin.ort.ort),
+            SelectableText(widget.termin.ort.ort),
           ]),
           ExpandableConstrainedBox(
-            child: Text(
+            child: SelectableText(
               'Treffpunkt: ' + widget.termin.details.treffpunkt,
               style: TextStyle(fontWeight: FontWeight.normal),
-              overflow: TextOverflow.clip,
-              softWrap: true,
             ),
             maxHeight: 40.0,
             expandableCondition: widget.termin.details.treffpunkt.length > 70,
