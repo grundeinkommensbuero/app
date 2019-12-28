@@ -125,10 +125,10 @@ void main() {
   testWidgets('Type Selection selects initially types from filter',
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
-
     await tester.pumpWidget(MaterialApp(home: filterWidget));
+    FilterWidgetState filterState = tester.state(find.byWidget(filterWidget));
 
-    filterWidget.filter.typen = ['Sammeln'];
+    filterState.filter.typen = ['Sammeln'];
 
     await tester.tap(find.byKey(Key('filter button')));
     await tester.pump();
@@ -167,8 +167,8 @@ void main() {
   testWidgets('Type Selection saves selected types to filter',
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
-
     await tester.pumpWidget(MaterialApp(home: filterWidget));
+    FilterWidgetState filterState = tester.state(find.byWidget(filterWidget));
 
     await tester.tap(find.byKey(Key('filter button')));
     await tester.pump();
@@ -185,7 +185,7 @@ void main() {
     await tester.tap(find.byKey(Key('filter button')));
     await tester.pump();
 
-    expect(filterWidget.filter.typen, containsAll(['Sammeln']));
+    expect(filterState.filter.typen, containsAll(['Sammeln']));
   ***REMOVED***);
 
   testWidgets('Filter opens Days selection with click at days button',
@@ -282,10 +282,12 @@ void main() {
   testWidgets('Filter intially shows time from filter in from time selection',
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
-    filterWidget.filter.von = TimeOfDay(hour: 19, minute: 15);
-    filterWidget.filter.bis = TimeOfDay(hour: 20, minute: 21);
 
     await tester.pumpWidget(MaterialApp(home: filterWidget));
+    FilterWidgetState filterState = tester.state(find.byWidget(filterWidget));
+
+    filterState.filter.von = TimeOfDay(hour: 19, minute: 15);
+    filterState.filter.bis = TimeOfDay(hour: 20, minute: 21);
 
     await tester.tap(find.byKey(Key('filter button')));
     await tester.pump();
@@ -328,8 +330,8 @@ void main() {
   testWidgets('Filter saves selected time to filter',
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
-
     await tester.pumpWidget(MaterialApp(home: filterWidget));
+    FilterWidgetState filterState = tester.state(find.byWidget(filterWidget));
 
     await tester.tap(find.byKey(Key('filter button')));
     await tester.pump();
@@ -347,19 +349,20 @@ void main() {
     await tester.tap(find.text('OK'));
     await tester.pump();
 
-    expect(ChronoHelfer.timeToStringHHmm(filterWidget.filter.von), '12:00');
-    expect(ChronoHelfer.timeToStringHHmm(filterWidget.filter.von), '12:00');
+    expect(ChronoHelfer.timeToStringHHmm(filterState.filter.von), '12:00');
+    expect(ChronoHelfer.timeToStringHHmm(filterState.filter.von), '12:00');
   ***REMOVED***);
 
   testWidgets('Filter is applied on Anwendn button',
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
     await tester.pumpWidget(MaterialApp(home: filterWidget));
+    FilterWidgetState filterState = tester.state(find.byWidget(filterWidget));
 
     await tester.tap(find.byKey(Key('filter button')));
     await tester.pump();
 
-    filterWidget.filter = TermineFilter(
+    filterState.filter = TermineFilter(
         ['Sammeln'],
         [DateTime(2019, 12, 16)],
         TimeOfDay(hour: 19, minute: 15),

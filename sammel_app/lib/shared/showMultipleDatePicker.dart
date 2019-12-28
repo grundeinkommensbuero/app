@@ -91,6 +91,8 @@ class DweDayTileBuilder extends DayTileBuilder {
   ***REMOVED***
 ***REMOVED***
 
+// Warning inherited from CalendarroItem
+// ignore: must_be_immutable
 class DweCalendarroDayItem extends CalendarroDayItem {
   DweCalendarroDayItem({DateTime date, CalendarroState calendarroState, onTap***REMOVED***)
       : super(date: date, calendarroState: calendarroState, onTap: onTap);
