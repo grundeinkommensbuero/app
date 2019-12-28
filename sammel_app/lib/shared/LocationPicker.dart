@@ -39,10 +39,9 @@ class LocationPicker {
                       title: multiMode
                           ? const Text('Wähle einen oder mehrere Orte')
                           : const Text('Wähle einen Ort')),
-                  children: <Widget>[
-                    ..._expansionTileList(context, locations, selectedLocations,
-                        districts, setDialogState),
-                    multiMode
+                  children: List.of(_expansionTileList(context, locations,
+                      selectedLocations, districts, setDialogState))
+                    ..add(multiMode
                         ? RaisedButton(
                             child: Text('Fertig'),
                             onPressed: () => Navigator.pop(context))
@@ -52,8 +51,7 @@ class LocationPicker {
                               _eraseSelections(districts);
                               Navigator.pop(context);
                             },
-                          )
-                  ]);
+                          )));
             }));
     return districts
         .expand((bezirk) => bezirk.locationSelection.entries)

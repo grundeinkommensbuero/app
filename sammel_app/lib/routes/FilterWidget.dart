@@ -15,8 +15,7 @@ class FilterWidget extends StatefulWidget {
   void Function(TermineFilter) onApply;
   TermineFilter filter = TermineFilter.leererFilter();
 
-  FilterWidget(void Function(TermineFilter) this.onApply, {Key key})
-      : super(key: key);
+  FilterWidget(this.onApply, {Key key}) : super(key: key);
 
   @override
   _FilterWidget createState() => _FilterWidget();
@@ -92,7 +91,10 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
               child: RaisedButton(
                 key: Key("filter button"),
                 color: Color.fromARGB(255, 129, 28, 98),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.zero, bottom: Radius.elliptical(15.0, 20.0))),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                        top: Radius.zero,
+                        bottom: Radius.elliptical(15.0, 20.0))),
                 textColor: Colors.amberAccent,
                 materialTapTargetSize: _zeroPadding,
                 child: Row(
@@ -173,26 +175,25 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
                       leading: null,
                       automaticallyImplyLeading: false,
                       title: const Text('Wähle Termin-Arten')),
-                  children: <Widget>[
-                    ...moeglicheTypen.map((typ) => CheckboxListTile(
-                          checkColor: Colors.black,
-                          activeColor: DweTheme.yellowLight,
-                          value: ausgewTypen.contains(typ),
-                          title: Text(typ),
-                          onChanged: (neuerWert) {
-                            setDialogState(() {
-                              if (neuerWert) {
-                                ausgewTypen.add(typ);
-                              } else {
-                                ausgewTypen.remove(typ);
-                              }
-                            });
-                          },
-                        )),
-                    RaisedButton(
-                        child: Text('Fertig'),
-                        onPressed: () => Navigator.pop(context))
-                  ]);
+                  children:
+                      List.of(moeglicheTypen.map((typ) => CheckboxListTile(
+                            checkColor: Colors.black,
+                            activeColor: DweTheme.yellowLight,
+                            value: ausgewTypen.contains(typ),
+                            title: Text(typ),
+                            onChanged: (neuerWert) {
+                              setDialogState(() {
+                                if (neuerWert) {
+                                  ausgewTypen.add(typ);
+                                } else {
+                                  ausgewTypen.remove(typ);
+                                }
+                              });
+                            },
+                          )))
+                        ..add(RaisedButton(
+                            child: Text('Fertig'),
+                            onPressed: () => Navigator.pop(context))));
             }));
 
     setState(() {
