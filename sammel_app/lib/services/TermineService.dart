@@ -9,7 +9,6 @@ import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/Service.dart';
-import 'package:sammel_app/shared/ChronoHelfer.dart';
 
 abstract class AbstractTermineService extends Service {
   Future<List<Termin>> ladeTermine(TermineFilter filter);
@@ -136,7 +135,7 @@ class DemoTermineService extends AbstractTermineService {
     int highestId = termine.map((termin) => termin.id).reduce(max);
     termin.id = highestId + 1;
     termine.add(termin);
-    return await termin;
+    return termin;
   ***REMOVED***
 
   @override

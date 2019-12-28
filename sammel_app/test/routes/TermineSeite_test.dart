@@ -7,7 +7,6 @@ import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/TermineService.dart';
 
 import '../model/Termin_test.dart';
-import 'FilterWidget_test.dart';
 
 class TermineServiceMock extends Mock implements TermineService {***REMOVED***
 

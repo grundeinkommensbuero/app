@@ -4,7 +4,7 @@ import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/shared/LocationPicker.dart';
 
 void main() {
-  MaterialApp WidgetWithLocationPicker(LocationPicker LocationPicker,
+  MaterialApp createWidgetWithLocationPicker(LocationPicker locationPicker,
       WidgetTester tester, List<Ort> previousSelection, Function result) {
     return MaterialApp(
       home: Material(
@@ -13,7 +13,7 @@ void main() {
             child: RaisedButton(
               child: const Text('X'),
               onPressed: () async {
-                result(await LocationPicker.showLocationPicker(
+                result(await locationPicker.showLocationPicker(
                     context, previousSelection));
               ***REMOVED***,
             ),
@@ -25,7 +25,7 @@ void main() {
 
   testWidgets('LocationPicker shows correct list of districts and locations',
       (WidgetTester tester) async {
-    await tester.pumpWidget(WidgetWithLocationPicker(
+    await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
           Ort(0, 'district1ExpandButton', 'area1'),
           Ort(1, 'district2ExpandButton', 'area2')
@@ -52,7 +52,7 @@ void main() {
 
   testWidgets('LocationPicker shows correct locations with correct districts',
       (WidgetTester tester) async {
-    await tester.pumpWidget(WidgetWithLocationPicker(
+    await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
           Ort(0, 'district1ExpandButton', 'area1'),
           Ort(1, 'district1ExpandButton', 'area2'),
@@ -100,7 +100,7 @@ void main() {
       Ort(0, 'district2ExpandButton', 'area3')
     ], multiMode: false);
     var widgetWithLocationPicker =
-        WidgetWithLocationPicker(locationPicker, tester, [], (_) {***REMOVED***);
+        createWidgetWithLocationPicker(locationPicker, tester, [], (_) {***REMOVED***);
     await tester.pumpWidget(widgetWithLocationPicker);
 
     await tester.tap(find.text('X'));
@@ -159,7 +159,7 @@ void main() {
 
   testWidgets('LocationPicker selects district on tap',
       (WidgetTester tester) async {
-    await tester.pumpWidget(WidgetWithLocationPicker(
+    await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
           Ort(0, 'district1ExpandButton', 'area1'),
           Ort(1, 'district1ExpandButton', 'area2'),
@@ -188,7 +188,7 @@ void main() {
 
   testWidgets('LocationPicker selects according locations with tap on district',
       (WidgetTester tester) async {
-    await tester.pumpWidget(WidgetWithLocationPicker(
+    await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
           Ort(0, 'district1ExpandButton', 'area1'),
           Ort(1, 'district1ExpandButton', 'area2'),
@@ -225,7 +225,7 @@ void main() {
 
   testWidgets('LocationPicker selects initially selected locations on startup',
       (WidgetTester tester) async {
-    await tester.pumpWidget(WidgetWithLocationPicker(
+    await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
           Ort(0, 'district1ExpandButton', 'area1'),
           Ort(1, 'district1ExpandButton', 'area2'),
@@ -254,7 +254,7 @@ void main() {
   testWidgets(
       'LocationPicker selects no locations on startup with empty previous selection',
       (WidgetTester tester) async {
-    await tester.pumpWidget(WidgetWithLocationPicker(
+    await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
           Ort(0, 'district1', 'area1'),
           Ort(1, 'district1', 'area2'),
@@ -283,7 +283,7 @@ void main() {
   ***REMOVED***);
 
   testWidgets('LocationPicker uses multi mode', (WidgetTester tester) async {
-    await tester.pumpWidget(WidgetWithLocationPicker(
+    await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
           Ort(0, 'district1', 'area1'),
           Ort(1, 'district1', 'area2'),
@@ -306,7 +306,7 @@ void main() {
 
     expect(find.byType(CheckboxListTile), findsNWidgets(5));
 
-    await tester.pumpWidget(WidgetWithLocationPicker(
+    await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
           Ort(0, 'district1', 'area1'),
           Ort(1, 'district1', 'area2'),
@@ -335,7 +335,7 @@ void main() {
   testWidgets('LocationPicker returns selected locations',
       (WidgetTester tester) async {
     var result = List<Ort>();
-    await tester.pumpWidget(WidgetWithLocationPicker(
+    await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
           Ort(0, 'district1', 'area1'),
           Ort(1, 'district1', 'area2'),

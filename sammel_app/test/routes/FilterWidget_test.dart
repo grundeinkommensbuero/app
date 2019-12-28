@@ -13,7 +13,7 @@ import 'package:sammel_app/shared/ChronoHelfer.dart';
 int numberOfTimesCalled = 0;
 TermineFilter iWasCalledResult;
 
-Function iWasCalled(TermineFilter result) {
+iWasCalled(TermineFilter result) {
   numberOfTimesCalled++;
   iWasCalledResult = result;
 ***REMOVED***

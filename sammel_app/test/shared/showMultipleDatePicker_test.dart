@@ -6,7 +6,7 @@ import 'package:jiffy/jiffy.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/showMultipleDatePicker.dart';
 
-MaterialApp WidgetWithMultipleDatePicker(
+MaterialApp createWidgetWithMultipleDatePicker(
     List<DateTime> previousSelection, Function result) {
   return MaterialApp(
     home: Material(
@@ -28,7 +28,7 @@ MaterialApp WidgetWithMultipleDatePicker(
 void main() {
   testWidgets('Days Selection selects initially days from filter',
       (WidgetTester tester) async {
-    var widget = WidgetWithMultipleDatePicker([DateTime.now()], () {***REMOVED***);
+    var widget = createWidgetWithMultipleDatePicker([DateTime.now()], () {***REMOVED***);
 
     await tester.pumpWidget(MaterialApp(home: widget));
 
@@ -41,7 +41,7 @@ void main() {
 
   testWidgets('Days Selection selects no days when filter is empty',
       (WidgetTester tester) async {
-    var widget = WidgetWithMultipleDatePicker([], () {***REMOVED***);
+    var widget = createWidgetWithMultipleDatePicker([], () {***REMOVED***);
 
     await tester.pumpWidget(MaterialApp(home: widget));
 
@@ -54,7 +54,7 @@ void main() {
 
   testWidgets('Days Selection changes displayed month with buttons',
       (WidgetTester tester) async {
-    var widget = WidgetWithMultipleDatePicker([], () {***REMOVED***);
+    var widget = createWidgetWithMultipleDatePicker([], () {***REMOVED***);
 
     await tester.pumpWidget(MaterialApp(home: widget));
 
@@ -114,7 +114,7 @@ void main() {
   testWidgets('Days Selection selects dates from multiple months',
       (WidgetTester tester) async {
     List<DateTime> result;
-    var widget = WidgetWithMultipleDatePicker([], (r) => result = r);
+    var widget = createWidgetWithMultipleDatePicker([], (r) => result = r);
 
     await tester.pumpWidget(MaterialApp(home: widget));
 
@@ -148,7 +148,7 @@ void main() {
   testWidgets('Days Selection saves selected days to filter on Auswaehlen',
       (WidgetTester tester) async {
     var result;
-    var widget = WidgetWithMultipleDatePicker([], (r) => result = r);
+    var widget = createWidgetWithMultipleDatePicker([], (r) => result = r);
 
     await tester.pumpWidget(MaterialApp(home: widget));
 
@@ -170,7 +170,7 @@ void main() {
       (WidgetTester tester) async {
     var result;
     var widget =
-        WidgetWithMultipleDatePicker([DateTime.now()], (r) => result = r);
+        createWidgetWithMultipleDatePicker([DateTime.now()], (r) => result = r);
 
     await tester.pumpWidget(MaterialApp(home: widget));
 
