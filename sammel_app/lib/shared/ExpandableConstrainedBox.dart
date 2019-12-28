@@ -2,15 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ExpandableConstrainedBox extends StatefulWidget {
-  Widget child;
-  double maxHeight = 40.0;
-  bool expandableCondition = true;
+  final Widget child;
+  final double maxHeight;
+  final bool expandableCondition;
 
-  ExpandableConstrainedBox({this.child, maxHeight, expandableCondition}) {
+  ExpandableConstrainedBox(
+      {this.child, this.maxHeight = 40.0, this.expandableCondition = true}) {
     assert(child != null, 'child cannot be null');
-    if (maxHeight != null) this.maxHeight = maxHeight;
-    if (expandableCondition != null)
-      this.expandableCondition = expandableCondition;
   }
 
   @override

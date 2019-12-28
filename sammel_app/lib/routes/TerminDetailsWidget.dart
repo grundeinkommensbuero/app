@@ -6,7 +6,7 @@ import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/ExpandableConstrainedBox.dart';
 
 class TerminDetailsWidget extends StatefulWidget {
-  Termin termin;
+  final Termin termin;
 
   TerminDetailsWidget(this.termin);
 

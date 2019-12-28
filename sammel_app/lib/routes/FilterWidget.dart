@@ -12,16 +12,18 @@ import 'package:sammel_app/shared/showMultipleDatePicker.dart';
 import 'package:sammel_app/shared/showTimeRangePicker.dart';
 
 class FilterWidget extends StatefulWidget {
-  void Function(TermineFilter) onApply;
-  TermineFilter filter = TermineFilter.leererFilter();
+  final void Function(TermineFilter) onApply;
 
   FilterWidget(this.onApply, {Key key}) : super(key: key);
 
   @override
-  _FilterWidget createState() => _FilterWidget();
+  FilterWidgetState createState() => FilterWidgetState();
 }
 
-class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
+class FilterWidgetState extends State<FilterWidget>
+    with TickerProviderStateMixin {
+  TermineFilter filter = TermineFilter.leererFilter();
+
   var _zeroPadding = MaterialTapTargetSize.shrinkWrap;
 
   var buttonText = "Filter";
@@ -70,7 +72,7 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
                           shape: Border(),
                           materialTapTargetSize: _zeroPadding,
                           onPressed: () => timeSelection(),
-                          child: Text(uhrzeitButtonBeschriftung(widget.filter)),
+                          child: Text(uhrzeitButtonBeschriftung(filter)),
                         )),
                     SizedBox(
                         key: Key("locations button"),
@@ -81,7 +83,7 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
                           shape: Border(),
                           materialTapTargetSize: _zeroPadding,
                           onPressed: () => locationSelection(),
-                          child: Text(ortButtonBeschriftung(widget.filter)),
+                          child: Text(ortButtonBeschriftung(filter)),
                         )),
                   ],
                 ),
@@ -114,11 +116,11 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
   }
 
   Text tageButtonBeschriftung() {
-    if (widget.filter.tage == null || widget.filter.tage.isEmpty) {
+    if (filter.tage == null || filter.tage.isEmpty) {
       return Text("alle Tage,");
     } else {
       return Text("am " +
-          widget.filter.tage
+          filter.tage
               .map((tag) => DateFormat("dd.MM.").format(tag))
               .join(", ") +
           ",");
@@ -126,8 +128,8 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
   }
 
   String artButtonBeschriftung() {
-    return widget.filter.typen != null && widget.filter.typen.isNotEmpty
-        ? widget.filter.typen.join(", ")
+    return filter.typen != null && filter.typen.isNotEmpty
+        ? filter.typen.join(", ")
         : "Alle Termin-Arten,";
   }
 
@@ -152,7 +154,7 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
       if (expanded) {
         buttonText = "Filter";
         expanded = false;
-        widget.onApply(widget.filter);
+        widget.onApply(filter);
       } else {
         buttonText = "Anwenden";
         expanded = true;
@@ -162,7 +164,7 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
 
   typeSelection() async {
     List<String> moeglicheTypen = ['Sammeln', 'Infoveranstaltung'];
-    List<String> ausgewTypen = List<String>()..addAll(widget.filter.typen);
+    List<String> ausgewTypen = List<String>()..addAll(filter.typen);
     await showDialog<List<String>>(
         context: context,
         builder: (context) =>
@@ -197,27 +199,25 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
             }));
 
     setState(() {
-      widget.filter.typen = ausgewTypen;
+      filter.typen = ausgewTypen;
     });
   }
 
   daysSelection() async {
-    var selectedDates = await showMultipleDatePicker(
-        widget.filter.tage, context,
+    var selectedDates = await showMultipleDatePicker(filter.tage, context,
         key: Key('days selection dialog'));
     setState(() {
       if (selectedDates != null)
-        widget.filter.tage = selectedDates
-          ..sort((dt1, dt2) => dt1.compareTo(dt2));
+        filter.tage = selectedDates..sort((dt1, dt2) => dt1.compareTo(dt2));
     });
   }
 
   timeSelection() async {
-    TimeRange timeRange = await showTimeRangePicker(
-        context, widget.filter.von, widget.filter.bis);
+    TimeRange timeRange =
+        await showTimeRangePicker(context, filter.von, filter.bis);
     setState(() {
-      widget.filter.von = timeRange.from;
-      widget.filter.bis = timeRange.to;
+      filter.von = timeRange.from;
+      filter.bis = timeRange.to;
     });
   }
 
@@ -229,10 +229,10 @@ class _FilterWidget extends State<FilterWidget> with TickerProviderStateMixin {
             locations: allLocations,
             key: Key('locations selection dialog'),
             multiMode: true)
-        .showLocationPicker(context, widget.filter.orte);
+        .showLocationPicker(context, filter.orte);
 
     setState(() {
-      widget.filter.orte = selectedLocations;
+      filter.orte = selectedLocations;
     });
   }
 }
