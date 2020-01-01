@@ -11,6 +11,7 @@ import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
+import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/LocationPicker.dart';
 import 'package:sammel_app/shared/showMultipleDatePicker.dart';
 import 'package:sammel_app/shared/showTimeRangePicker.dart';
@@ -44,8 +45,7 @@ class CreateTerminWidget extends StatefulWidget {
   _CreateTerminWidget createState() => _CreateTerminWidget();
 ***REMOVED***
 
-class _CreateTerminWidget extends State<CreateTerminWidget>
-    with TickerProviderStateMixin {
+class _CreateTerminWidget extends State<CreateTerminWidget> {
   CreatedTermin termin = CreatedTermin();
   var filter = TermineFilter.leererFilter();
 
@@ -53,135 +53,98 @@ class _CreateTerminWidget extends State<CreateTerminWidget>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        key: Key('create termin dialog'),
-        backgroundColor: Color.fromARGB(255, 129, 28, 98),
-        extendBody: true,
-        appBar: AppBar(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  'Termin erstellen',
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 129, 28, 98),
-                  ),
-                ),
-                Image.asset('assets/images/logo.png')
-              ],
-            )),
-        //  vsync: this,
-        //  duration: Duration(milliseconds: 100),
-        body:  SingleChildScrollView( child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+    return Column(
+      //    crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Icon(Icons.my_location, size: 40.0),
+                SizedBox(
+                  width: 10.0,
+                ),
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(
+                    'Wo? ',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  FlatButton(
+                    //          color: Color.fromARGB(255, 149, 48, 118),
+                    //         textColor: Colors.amberAccent,
+                    materialTapTargetSize: _zeroPadding,
+                    onPressed: () => ortAuswahl(),
+                    child: Text(ortButtonBeschriftung(this.termin)),
+                  ),
+                  FlatButton(
+                    //       color: Color.fromARGB(255, 149, 48, 118),
+                    //     textColor: Colors.amberAccent,
+                      materialTapTargetSize: _zeroPadding,
+                      onPressed: () => treffpunktAuswahl(),
+                      child: Text(treffpunktButtonBeschriftung(this.termin)))])]),
+            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Icon(Icons.access_time, size: 40.0),
             SizedBox(
-                width: double.infinity,
-                child: FlatButton(
-                  color: Color.fromARGB(255, 149, 48, 118),
-                  textColor: Colors.amberAccent,
-                  materialTapTargetSize: _zeroPadding,
-                  onPressed: () => artAuswahl(),
-                  child: Text(artButtonBeschriftung()),
-                )),
-            SizedBox(
-                width: double.infinity,
-                child: FlatButton(
-                  color: Color.fromARGB(255, 149, 48, 118),
-                  textColor: Colors.amberAccent,
+              width: 10.0,
+            ),
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text(
+                    'Wann?',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                FlatButton(
+                  //      color: Color.fromARGB(255, 149, 48, 118),
+                  //      textColor: Colors.amberAccent,
                   materialTapTargetSize: _zeroPadding,
                   onPressed: () => tageAuswahl(),
                   child: tageButtonBeschriftung(),
-                )),
-            SizedBox(
-                width: double.infinity,
-                child: FlatButton(
-                  color: Color.fromARGB(255, 149, 48, 118),
-                  textColor: Colors.amberAccent,
-                  materialTapTargetSize: _zeroPadding,
-                  onPressed: () => zeitAuswahl(),
-                  child: Text(uhrzeitButtonBeschriftung(this.termin)),
-                )),
-            SizedBox(
-                width: double.infinity,
-                child: FlatButton(
-                  color: Color.fromARGB(255, 149, 48, 118),
-                  textColor: Colors.amberAccent,
-                  materialTapTargetSize: _zeroPadding,
-                  onPressed: () => ortAuswahl(),
-                  child: Text(ortButtonBeschriftung(this.termin)),
-                )),
-            SizedBox(
-                width: double.infinity,
-                height: 40.0,
-                child: new FlatButton(
-                    color: Color.fromARGB(255, 149, 48, 118),
-                    textColor: Colors.amberAccent,
+                ),
+                  FlatButton(
+                    //         color: Color.fromARGB(255, 149, 48, 118),
+                    //           textColor: Colors.amberAccent,
                     materialTapTargetSize: _zeroPadding,
-                    onPressed: () => treffpunktAuswahl(),
-                    child: Text(treffpunktButtonBeschriftung(this.termin))
-                  //    validator: (kiez) {
-                  //    return true; //_validate_and_save_kiez(kiez);
-                  //    ***REMOVED***,
-                  //     onSaved: (kiez) {
-                  //      _validate_and_save_kiez(kiez);
-                  //      ***REMOVED***,
-                  //  onFieldSubmitted: (kiez) {
-                  //  _validate_and_save_kiez(kiez);
-                  //   ***REMOVED***)
-                )),
+                    onPressed: () => zeitAuswahl(),
+                    child: Text(uhrzeitButtonBeschriftung(this.termin)),
+                  )
+                ])]),
+            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Icon(Icons.info_outline, size: 40.0),
             SizedBox(
-                width: double.infinity,
-                height: 40.0,
-                child: new FlatButton(
-                    color: Color.fromARGB(255, 149, 48, 118),
-                    textColor: Colors.amberAccent,
-                    materialTapTargetSize: _zeroPadding,
-                    onPressed: () => kontaktAuswahl(),
-                    child: Text(kontaktButtonBeschriftung(this.termin))
-                  //    validator: (kiez) {
-                  //    return true; //_validate_and_save_kiez(kiez);
-                  //    ***REMOVED***,
-                  //     onSaved: (kiez) {
-                  //      _validate_and_save_kiez(kiez);
-                  //      ***REMOVED***,
-                  //  onFieldSubmitted: (kiez) {
-                  //  _validate_and_save_kiez(kiez);
-                  //   ***REMOVED***)
-                )),
-            SizedBox(
-                width: double.infinity,
-                height: 40.0,
-                child: new FlatButton(
-                    color: Color.fromARGB(255, 149, 48, 118),
-                    textColor: Colors.amberAccent,
-                    materialTapTargetSize: _zeroPadding,
-                    onPressed: () => kommentarAuswahl(),
-                    child: Text(kommentarButtonBeschriftung(this.termin))
-                  //    validator: (kiez) {
-                  //    return true; //_validate_and_save_kiez(kiez);
-                  //    ***REMOVED***,
-                  //     onSaved: (kiez) {
-                  //      _validate_and_save_kiez(kiez);
-                  //      ***REMOVED***,
-                  //  onFieldSubmitted: (kiez) {
-                  //  _validate_and_save_kiez(kiez);
-                  //   ***REMOVED***)
-                ))
-
-          ],
-        )),
-        floatingActionButton:    FloatingActionButton.extended(
-            onPressed: () {
-              onApply();
-            ***REMOVED***,
-            icon: Icon(
-              Icons.add,
+              width: 10.0,
             ),
-            label: Text("Fertig"),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(16.0)))),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat);
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(
+                'Was?',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ), FlatButton(
+                //        color: Color.fromARGB(255, 149, 48, 118),
+                //      textColor: Colors.amberAccent,
+                materialTapTargetSize: _zeroPadding,
+                onPressed: () => artAuswahl(),
+                child: Text(artButtonBeschriftung()),
+              ),
+              FlatButton(
+                //       color: Color.fromARGB(255, 149, 48, 118),
+                //       textColor: Colors.amberAccent,
+                  materialTapTargetSize: _zeroPadding,
+                  onPressed: () => kommentarAuswahl(),
+                  child: Text(kommentarButtonBeschriftung(this.termin)))])]),
+            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Icon(Icons.face, size: 40.0),
+            SizedBox(
+              width: 10.0,
+            ),
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(
+                'Wer?',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+             FlatButton(
+            //          color: Color.fromARGB(255, 149, 48, 118),
+            //       textColor: Color.fromARGB(255, 129, 28, 98),
+            materialTapTargetSize: _zeroPadding,
+            onPressed: () => kontaktAuswahl(),
+            child: Text(kontaktButtonBeschriftung(this.termin)))])]),
+            Row(mainAxisAlignment: MainAxisAlignment.center,
+                children: [FlatButton(child: Text('Abbrechen'), onPressed: () => onApply(false)),
+            FlatButton(child: Text('Fertig'), onPressed: () => onApply(true))])]);
   ***REMOVED***
 
   Text tageButtonBeschriftung() {
@@ -360,27 +323,34 @@ class _CreateTerminWidget extends State<CreateTerminWidget>
     return "in " + termin.ort.ort;
   ***REMOVED***
 
-  void onApply() {
-    if(this.termin.von != null && this.termin.bis != null && this.termin.tage != null
-        && !this.termin.tage.isEmpty &&  this.termin.ort != null && this.termin.typ != null && this.termin.typ != '') {
-      List<Termin> termine = new List<Termin>();
-      for (final tag in this.termin.tage) {
-        DateTime begin = new DateTime(
-            tag.year, tag.month, tag.day, this.termin.von.hour,
-            this.termin.von.minute);
-        DateTime end = new DateTime(
-            tag.year, tag.month, tag.day, this.termin.bis.hour,
-            this.termin.bis.minute);
+  void onApply(bool use_data) {
+    if(use_data) {
+      if (this.termin.von != null && this.termin.bis != null &&
+          this.termin.tage != null
+          && !this.termin.tage.isEmpty && this.termin.ort != null &&
+          this.termin.typ != null && this.termin.typ != '') {
+        List<Termin> termine = new List<Termin>();
+        for (final tag in this.termin.tage) {
+          DateTime begin = new DateTime(
+              tag.year, tag.month, tag.day, this.termin.von.hour,
+              this.termin.von.minute);
+          DateTime end = new DateTime(
+              tag.year, tag.month, tag.day, this.termin.bis.hour,
+              this.termin.bis.minute);
 
-        termine.add(Termin(
-            0,
-            begin,
-            end,
-            this.termin.ort,
-            this.termin.typ,
-            this.termin.terminDetails));
+          termine.add(Termin(
+              0,
+              begin,
+              end,
+              this.termin.ort,
+              this.termin.typ,
+              this.termin.terminDetails));
+        ***REMOVED***
+        Navigator.pop(context, termine);
       ***REMOVED***
-      Navigator.pop(context, termine);
+    ***REMOVED***
+    else {
+      Navigator.pop(context, null);
     ***REMOVED***
   ***REMOVED***
 
@@ -419,7 +389,7 @@ class _CreateTerminWidget extends State<CreateTerminWidget>
 
   tageAuswahl() async {
     var selectedDates =
-    await showMultipleDatePicker(this.filter.tage, context);
+    await showMultipleDatePicker(this.filter.tage, context, key: Key('days selection dialog'));
     setState(() {
       if (selectedDates != null)
         this.termin.tage = selectedDates
@@ -457,7 +427,7 @@ class _CreateTerminWidget extends State<CreateTerminWidget>
   ***REMOVED***
 
   String kommentarButtonBeschriftung(CreatedTermin termin) {
-    return (termin.terminDetails.kommentar == null || termin.terminDetails.kommentar == '') ? 'Kommentar' : termin.terminDetails.kommentar;
+    return (termin.terminDetails.kommentar == null || termin.terminDetails.kommentar == '') ? 'Beschreibung' : termin.terminDetails.kommentar;
   ***REMOVED***
 ***REMOVED***
 
@@ -536,9 +506,24 @@ class _TermineSeiteState extends State<TermineSeite> {
       return showDialog(
           context: context,
           builder: (context) {
-            return Dialog(child: Scaffold( body: CreateTerminWidget((){print('done');***REMOVED***) ));
+            return SimpleDialog(
+                titlePadding: EdgeInsets.zero,
+                title: AppBar(
+                    leading: null,
+                    automaticallyImplyLeading: false,
+                    title: Text('Termin erstellen',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 22.0,
+                                  color: Color.fromARGB(255, 129, 28, 98))),
+                        ),
+                contentPadding: EdgeInsets.all(10.0),
+                children: <Widget>[CreateTerminWidget((){print('done');***REMOVED***)] );
           ***REMOVED***);***REMOVED***
-    print(_asyncTerminDialog(context));
+
+          print(_asyncTerminDialog(context));
+
   ***REMOVED***
 
   openTerminDetailsWidget(BuildContext context, Termin termin) async {
