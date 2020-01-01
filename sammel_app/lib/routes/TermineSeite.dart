@@ -47,7 +47,10 @@ class _TermineSeiteState extends State<TermineSeite> {
           Text(
             widget.title,
           ),
-          Image.asset('assets/images/logo.png')
+          Image.asset(
+            'assets/images/logo.png',
+            width: 50.0,
+          )
         ],
       )),
       body: Column(

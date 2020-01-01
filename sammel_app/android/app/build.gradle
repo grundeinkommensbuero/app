@@ -8,8 +8,7 @@ if (localPropertiesFile.exists()) {
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
-    // Verzicht auf GradleException-Dependency
-    throw new Exception("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 ***REMOVED***
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
@@ -33,9 +32,10 @@ if (keystorePropertiesFile.exists()) {
 ***REMOVED***
 
 android {
-    // Löst einen Fehler im Build auf dem Gitlab-CI, bei dem der daemon vorzeitig runtergefahren wird
     compileSdkVersion 29
-    buildToolsVersion '26.0.3'
+    // Löst einen Fehler im Build auf dem Gitlab-CI, bei dem der daemon vorzeitig runtergefahren wird
+    // scheint aber nicht zu helfen
+    // buildToolsVersion '26.0.3'
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -51,17 +51,15 @@ android {
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     ***REMOVED***
 
     signingConfigs {
         release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties.getProperty('keyAlias')
+            keyPassword keystoreProperties.getProperty('keyPassword')
+            storeFile file(keystoreProperties.getProperty('storeFile'))
+            storePassword keystoreProperties.getProperty('storePassword')
         ***REMOVED***
     ***REMOVED***
 
@@ -79,6 +77,6 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 ***REMOVED***
