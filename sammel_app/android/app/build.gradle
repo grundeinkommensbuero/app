@@ -55,7 +55,7 @@ android {
     }
 
     signingConfigs {
-        ci {}
+        profile {}
         release {
             keyAlias keystoreProperties.getProperty('keyAlias')
             keyPassword keystoreProperties.getProperty('keyPassword')
@@ -65,8 +65,8 @@ android {
     }
 
     buildTypes {
-        ci {
-            signingConfig signingConfigs.ci
+        profile {
+            signingConfig signingConfigs.profile
         }
         release {
             signingConfig signingConfigs.release

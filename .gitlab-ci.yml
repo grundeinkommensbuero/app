@@ -22,10 +22,10 @@ build_android_apk:
   stage: build_and_test
   script:
     - cd sammel_app
-    - flutter build apk --ci
+    - flutter build apk --profile
   artifacts:
     paths:
-      - sammel_app/build/app/outputs/apk/ci/
+      - sammel_app/build/app/outputs/apk/profile/
 
 pages:
   image: alpine
