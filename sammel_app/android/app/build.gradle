@@ -55,6 +55,7 @@ android {
     ***REMOVED***
 
     signingConfigs {
+        debug {***REMOVED***
         release {
             keyAlias keystoreProperties.getProperty('keyAlias')
             keyPassword keystoreProperties.getProperty('keyPassword')
@@ -64,6 +65,9 @@ android {
     ***REMOVED***
 
     buildTypes {
+        debug {
+            signingConfig signingConfigs.debug
+        ***REMOVED***
         release {
             signingConfig signingConfigs.release
         ***REMOVED***
