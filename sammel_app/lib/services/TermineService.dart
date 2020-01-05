@@ -135,6 +135,8 @@ class DemoTermineService extends AbstractTermineService {
     int highestId = termine.map((termin) => termin.id).reduce(max);
     termin.id = highestId + 1;
     termine.add(termin);
+    print(termin);
+    print(termine);
     return termin;
   }
 
