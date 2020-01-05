@@ -11,7 +11,6 @@ import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/LocationPicker.dart';
 import 'package:sammel_app/shared/showMultipleDatePicker.dart';
 import 'package:sammel_app/shared/showTimeRangePicker.dart';
@@ -70,15 +69,11 @@ class _CreateTerminWidget extends State<CreateTerminWidget> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               FlatButton(
-                //          color: Color.fromARGB(255, 149, 48, 118),
-                //         textColor: Colors.amberAccent,
                 materialTapTargetSize: _zeroPadding,
                 onPressed: () => ortAuswahl(),
                 child: ortButtonBeschriftung(this.termin),
               ),
               FlatButton(
-                  //       color: Color.fromARGB(255, 149, 48, 118),
-                  //     textColor: Colors.amberAccent,
                   materialTapTargetSize: _zeroPadding,
                   onPressed: () => treffpunktAuswahl(),
                   child: treffpunktButtonBeschriftung(this.termin))
@@ -95,15 +90,11 @@ class _CreateTerminWidget extends State<CreateTerminWidget> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               FlatButton(
-                //      color: Color.fromARGB(255, 149, 48, 118),
-                //      textColor: Colors.amberAccent,
                 materialTapTargetSize: _zeroPadding,
                 onPressed: () => tageAuswahl(),
                 child: tageButtonBeschriftung(),
               ),
               FlatButton(
-                //         color: Color.fromARGB(255, 149, 48, 118),
-                //           textColor: Colors.amberAccent,
                 materialTapTargetSize: _zeroPadding,
                 onPressed: () => zeitAuswahl(),
                 child: uhrzeitButtonBeschriftung(this.termin),
@@ -121,15 +112,11 @@ class _CreateTerminWidget extends State<CreateTerminWidget> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               FlatButton(
-                //        color: Color.fromARGB(255, 149, 48, 118),
-                //      textColor: Colors.amberAccent,
                 materialTapTargetSize: _zeroPadding,
                 onPressed: () => artAuswahl(),
                 child: artButtonBeschriftung(),
               ),
               FlatButton(
-                  //       color: Color.fromARGB(255, 149, 48, 118),
-                  //       textColor: Colors.amberAccent,
                   materialTapTargetSize: _zeroPadding,
                   onPressed: () => kommentarAuswahl(),
                   child: kommentarButtonBeschriftung(this.termin))
@@ -163,7 +150,7 @@ class _CreateTerminWidget extends State<CreateTerminWidget> {
 
   Text tageButtonBeschriftung() {
     if (this.termin.tage == null || this.termin.tage.isEmpty) {
-      return Text("alle Tage,");
+      return Text("Wähle einen Tag");
     ***REMOVED*** else {
       return Text("am " +
           this
@@ -181,51 +168,6 @@ class _CreateTerminWidget extends State<CreateTerminWidget> {
     setState(() {
       this.termin.terminDetails.treffpunkt = ergebnis;
     ***REMOVED***);
-    /*String treffpunkt = this.termin.terminDetails.treffpunkt;
-    Widget cancelButton = FlatButton(
-      child: Text("Cancel"),
-      onPressed: () {
-        Navigator.pop(context);
-      ***REMOVED***,
-    );
-    Widget continueButton = FlatButton(
-      child: Text("Continue"),
-      onPressed: () {
-        setState(() {
-          this.termin.terminDetails.treffpunkt = treffpunkt;
-        ***REMOVED***);
-        Navigator.pop(context);
-      ***REMOVED***,
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Treffpunkt"),
-      content: TextFormField(
-        initialValue: this.termin.terminDetails.treffpunkt,
-        onSaved: (treffpunkt_) {
-          treffpunkt = treffpunkt_;
-        ***REMOVED***,
-        onFieldSubmitted: (treffpunkt_) {
-          treffpunkt = treffpunkt_;
-        ***REMOVED***,
-        onChanged: (treffpunkt_) {
-          treffpunkt = treffpunkt_;
-        ***REMOVED***,
-      ),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      ***REMOVED***,
-    );*/
   ***REMOVED***
 
   void kontaktAuswahl() async {
@@ -234,51 +176,6 @@ class _CreateTerminWidget extends State<CreateTerminWidget> {
     setState(() {
       this.termin.terminDetails.kontakt = ergebnis;
     ***REMOVED***);
-    /*
-    String kontakt = this.termin.terminDetails.kontakt;
-    Widget cancelButton = FlatButton(
-      child: Text("Cancel"),
-      onPressed:  () {
-        Navigator.pop(context);
-      ***REMOVED***,
-    );
-    Widget continueButton = FlatButton(
-      child: Text("Continue"),
-      onPressed:  () {    setState(() {
-        this.termin.terminDetails.kontakt = kontakt;
-      ***REMOVED***); Navigator.pop(context);***REMOVED***,
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Kontakt"),
-      content: TextFormField( initialValue: this.termin.terminDetails.kontakt,
-        onSaved: (kontakt_) {
-          kontakt = kontakt_;
-        ***REMOVED***,
-        onFieldSubmitted: (kontakt_) {
-          kontakt = kontakt_;
-        ***REMOVED***,
-
-        onChanged: (kontakt_) {
-          kontakt = kontakt_;
-        ***REMOVED***,
-
-      ),
-
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      ***REMOVED***,
-    );*/
   ***REMOVED***
 
   Future<String> showTextInputDialog(String current_value, String title, String description) {
@@ -317,13 +214,13 @@ class _CreateTerminWidget extends State<CreateTerminWidget> {
     ***REMOVED***
 
     Widget cancelButton = FlatButton(
-      child: Text("Cancel"),
+      child: Text("Abbrechen"),
       onPressed: () {
         Navigator.pop(context, current_value);
       ***REMOVED***,
     );
     Widget continueButton = FlatButton(
-      child: Text("Continue"),
+      child: Text("Fertig"),
       onPressed: () {
         Navigator.pop(context, current_input);
       ***REMOVED***,
@@ -347,71 +244,18 @@ class _CreateTerminWidget extends State<CreateTerminWidget> {
     );
   ***REMOVED***
 
-
-
   void kommentarAuswahl() async{
     var ergebnis =
         await showTextInputDialog(this.termin.terminDetails.kommentar, 'Kommentar', 'Dummy Text');
     setState(() {
       this.termin.terminDetails.kommentar = ergebnis;
     ***REMOVED***);
-    /*
-    String kommentar = this.termin.terminDetails.kommentar;
-    Widget cancelButton = FlatButton(
-      child: Text("Cancel"),
-      onPressed: () {
-        Navigator.pop(context);
-      ***REMOVED***,
-    );
-    Widget continueButton = FlatButton(
-      child: Text("Continue"),
-      onPressed: () {
-        setState(() {
-          this.termin.terminDetails.kommentar = kommentar;
-        ***REMOVED***);
-        Navigator.pop(context);
-      ***REMOVED***,
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("Kommentar"),
-      content: TextFormField(
-        initialValue: this.termin.terminDetails.kommentar,
-        keyboardType: TextInputType.multiline,
-        maxLines: null,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(),
-        ),
-        onSaved: (kommentar_) {
-          kommentar = kommentar_;
-        ***REMOVED***,
-        onFieldSubmitted: (kommentar_) {
-          kommentar = kommentar_;
-        ***REMOVED***,
-        onChanged: (kommentar_) {
-          kommentar = kommentar_;
-        ***REMOVED***,
-      ),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      ***REMOVED***,
-    );*/
   ***REMOVED***
 
   Text artButtonBeschriftung() {
     return this.termin.typ != null && this.termin.typ != ''
         ? Text(this.termin.typ, style: default_text_style)
-        : Text("Alle Termin-Arten,");
+        : Text("Wähle eine Termin-Art");
   ***REMOVED***
 
   Text uhrzeitButtonBeschriftung(CreatedTermin termin) {
@@ -420,13 +264,13 @@ class _CreateTerminWidget extends State<CreateTerminWidget> {
       beschriftung += 'von ' + ChronoHelfer.timeToStringHHmm(termin.von);
     if (termin.bis != null)
       beschriftung += ' bis ' + ChronoHelfer.timeToStringHHmm(termin.bis);
-    if (beschriftung.isEmpty) return Text('jederzeit');
+    if (beschriftung.isEmpty) return Text('Wähle eine Uhrzeit');
     beschriftung += ',';
     return Text(beschriftung, style: default_text_style);
   ***REMOVED***
 
   Text ortButtonBeschriftung(CreatedTermin termin) {
-    if (termin.ort == null) return Text("überall");
+    if (termin.ort == null) return Text("Wähle einen Ort");
     return Text("in " + termin.ort.ort, style: default_text_style,);
   ***REMOVED***
 
@@ -523,21 +367,21 @@ class _CreateTerminWidget extends State<CreateTerminWidget> {
   Text treffpunktButtonBeschriftung(CreatedTermin termin) {
     return (termin.terminDetails.treffpunkt == null ||
             termin.terminDetails.treffpunkt == '')
-        ? Text('Treffpunkt')
+        ? Text('Treffpunkt eingeben')
         : Text(termin.terminDetails.treffpunkt, style: default_text_style);
   ***REMOVED***
 
   Text kontaktButtonBeschriftung(CreatedTermin termin) {
     return (termin.terminDetails.kontakt == null ||
             termin.terminDetails.kontakt == '')
-        ? Text('Kontakt')
+        ? Text('Kontakt eingeben')
         : Text(termin.terminDetails.kontakt, style: default_text_style);
   ***REMOVED***
 
   Text kommentarButtonBeschriftung(CreatedTermin termin) {
     return (termin.terminDetails.kommentar == null ||
             termin.terminDetails.kommentar == '')
-        ? Text('Beschreibung')
+        ? Text('Beschreibung eingeben')
         : Text(termin.terminDetails.kommentar, style: default_text_style);
   ***REMOVED***
 ***REMOVED***
