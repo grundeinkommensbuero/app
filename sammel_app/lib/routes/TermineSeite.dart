@@ -49,6 +49,7 @@ class _CreateTerminWidget extends State<CreateTerminWidget> {
   var filter = TermineFilter.leererFilter();
 
   var _zeroPadding = MaterialTapTargetSize.shrinkWrap;
+  TextStyle default_text_style = TextStyle(fontWeight: FontWeight.normal, color: Colors.black);
 
   @override
   Widget build(BuildContext context) {
@@ -170,13 +171,13 @@ class _CreateTerminWidget extends State<CreateTerminWidget> {
               .tage
               .map((tag) => DateFormat("dd.MM.").format(tag))
               .join(", ") +
-          ",", style: TextStyle(color: Colors.black));
+          ",", style: default_text_style);
     }
   }
 
   void treffpunktAuswahl() async {
     var ergebnis =
-        await showTextInputDialog(this.termin.terminDetails.treffpunkt, 'Treffpunkt', null);
+        await showTextInputDialog(this.termin.terminDetails.treffpunkt, 'Treffpunkt', 'Dummy Text');
     setState(() {
       this.termin.terminDetails.treffpunkt = ergebnis;
     });
@@ -229,7 +230,7 @@ class _CreateTerminWidget extends State<CreateTerminWidget> {
 
   void kontaktAuswahl() async {
     var ergebnis =
-        await showTextInputDialog(this.termin.terminDetails.kontakt, 'Kontakt', 'blupp');
+        await showTextInputDialog(this.termin.terminDetails.kontakt, 'Kontakt', 'Dummy Text');
     setState(() {
       this.termin.terminDetails.kontakt = ergebnis;
     });
@@ -350,7 +351,7 @@ class _CreateTerminWidget extends State<CreateTerminWidget> {
 
   void kommentarAuswahl() async{
     var ergebnis =
-        await showTextInputDialog(this.termin.terminDetails.kommentar, 'Kommentar', 'kommen');
+        await showTextInputDialog(this.termin.terminDetails.kommentar, 'Kommentar', 'Dummy Text');
     setState(() {
       this.termin.terminDetails.kommentar = ergebnis;
     });
@@ -409,7 +410,7 @@ class _CreateTerminWidget extends State<CreateTerminWidget> {
 
   Text artButtonBeschriftung() {
     return this.termin.typ != null && this.termin.typ != ''
-        ? Text(this.termin.typ, style: TextStyle(color: Colors.black))
+        ? Text(this.termin.typ, style: default_text_style)
         : Text("Alle Termin-Arten,");
   }
 
@@ -421,12 +422,12 @@ class _CreateTerminWidget extends State<CreateTerminWidget> {
       beschriftung += ' bis ' + ChronoHelfer.timeToStringHHmm(termin.bis);
     if (beschriftung.isEmpty) return Text('jederzeit');
     beschriftung += ',';
-    return Text(beschriftung, style: TextStyle(color: Colors.black));
+    return Text(beschriftung, style: default_text_style);
   }
 
   Text ortButtonBeschriftung(CreatedTermin termin) {
     if (termin.ort == null) return Text("überall");
-    return Text("in " + termin.ort.ort, style: TextStyle(color: Colors.black),);
+    return Text("in " + termin.ort.ort, style: default_text_style,);
   }
 
   void onApply(bool use_data) {
@@ -523,21 +524,21 @@ class _CreateTerminWidget extends State<CreateTerminWidget> {
     return (termin.terminDetails.treffpunkt == null ||
             termin.terminDetails.treffpunkt == '')
         ? Text('Treffpunkt')
-        : Text(termin.terminDetails.treffpunkt, style: TextStyle(color: Colors.black));
+        : Text(termin.terminDetails.treffpunkt, style: default_text_style);
   }
 
   Text kontaktButtonBeschriftung(CreatedTermin termin) {
     return (termin.terminDetails.kontakt == null ||
             termin.terminDetails.kontakt == '')
         ? Text('Kontakt')
-        : Text(termin.terminDetails.kontakt, style: TextStyle(color: Colors.black));
+        : Text(termin.terminDetails.kontakt, style: default_text_style);
   }
 
   Text kommentarButtonBeschriftung(CreatedTermin termin) {
     return (termin.terminDetails.kommentar == null ||
             termin.terminDetails.kommentar == '')
         ? Text('Beschreibung')
-        : Text(termin.terminDetails.kommentar, style: TextStyle(color: Colors.black));
+        : Text(termin.terminDetails.kommentar, style: default_text_style);
   }
 }
 
