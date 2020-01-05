@@ -142,10 +142,25 @@ class _CreateTerminWidget extends State<CreateTerminWidget> {
           ]),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             FlatButton(
-                child: Text('Abbrechen'), onPressed: () => onApply(false)),
-            FlatButton(child: Text('Fertig'), onPressed: () => onApply(true))
+                child: Text('Abbrechen'), onPressed: () {onApply(false); Navigator.pop(context, null);***REMOVED***),
+            FlatButton(child: Text('Fertig'), onPressed: () {List<Future<Termin>> list = pushTermineToDB(onApply(true)); Navigator.pop(context, list);***REMOVED*** )
           ])
         ]);
+  ***REMOVED***
+
+  List<Future<Termin>> pushTermineToDB(List<Termin> termine)
+  {
+    print(termine);
+    if(termine != null) {
+      List<Future<Termin>> new_meetings = List<Future<Termin>>();
+      AbstractTermineService termine_service = Provider.of<
+          AbstractTermineService>(context);
+      for (final termin in termine) {
+        new_meetings.add(termine_service.createTermin(termin));
+      ***REMOVED***
+      return new_meetings;
+    ***REMOVED***
+    return null;
   ***REMOVED***
 
   Text tageButtonBeschriftung() {
@@ -274,7 +289,7 @@ class _CreateTerminWidget extends State<CreateTerminWidget> {
     return Text("in " + termin.ort.ort, style: default_text_style,);
   ***REMOVED***
 
-  void onApply(bool use_data) {
+  List<Termin> onApply(bool use_data) {
     if (use_data) {
       if (this.termin.von != null &&
           this.termin.bis != null &&
@@ -293,10 +308,10 @@ class _CreateTerminWidget extends State<CreateTerminWidget> {
           termine.add(Termin(0, begin, end, this.termin.ort, this.termin.typ,
               this.termin.terminDetails));
         ***REMOVED***
-        Navigator.pop(context, termine);
+        return termine;
       ***REMOVED***
     ***REMOVED*** else {
-      Navigator.pop(context, null);
+      return null;
     ***REMOVED***
   ***REMOVED***
 
@@ -360,7 +375,10 @@ class _CreateTerminWidget extends State<CreateTerminWidget> {
             .showLocationPicker(context, List<Ort>());
 
     setState(() {
-      this.termin.ort = selectedLocations[0];
+      if(!selectedLocations.isEmpty)
+        {
+          this.termin.ort = selectedLocations[0];
+        ***REMOVED***
     ***REMOVED***);
   ***REMOVED***
 
@@ -456,8 +474,7 @@ class _TermineSeiteState extends State<TermineSeite> {
   ***REMOVED***
 
   _displayStepper(BuildContext context) async {
-    Future<List<Termin>> _asyncTerminDialog(BuildContext context) async {
-      return showDialog(
+    List<Future<Termin>> new_meetings = await showDialog(
           context: context,
           builder: (context) {
             return SimpleDialog(
@@ -479,9 +496,14 @@ class _TermineSeiteState extends State<TermineSeite> {
                   ***REMOVED***)
                 ]);
           ***REMOVED***);
-    ***REMOVED***
 
-    print(_asyncTerminDialog(context));
+    if(new_meetings != null) {
+      setState(() {
+        for (final termin in new_meetings) {
+          termin.then((Termin termin) => termine.add(termin));
+        ***REMOVED***
+      ***REMOVED***);
+    ***REMOVED***
   ***REMOVED***
 
   openTerminDetailsWidget(BuildContext context, Termin termin) async {
