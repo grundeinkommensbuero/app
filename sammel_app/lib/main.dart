@@ -8,7 +8,7 @@ import 'package:sammel_app/shared/DweTheme.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  final demoModus = false;
+  final demoModus = true;
 
   @override
   Widget build(BuildContext context) {
