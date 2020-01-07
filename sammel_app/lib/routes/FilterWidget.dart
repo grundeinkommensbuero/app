@@ -257,7 +257,10 @@ class FilterElement extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Flexible(child: child),
-                                Icon(Icons.edit)
+                                Icon(
+                                  Icons.create,
+                                  size: 18.0,
+                                )
                               ]))),
                   FlatButton(
                     color: Color.fromARGB(255, 149, 48, 118),
@@ -266,7 +269,10 @@ class FilterElement extends StatelessWidget {
                         left: BorderSide(width: 2.0, color: DweTheme.purple)),
                     materialTapTargetSize: _zeroPadding,
                     onPressed: resetFunction,
-                    child: Icon(Icons.clear),
+                    child: Icon(
+                      Icons.clear,
+                      size: 18.0,
+                    ),
                   )
                 ])));
   ***REMOVED***
