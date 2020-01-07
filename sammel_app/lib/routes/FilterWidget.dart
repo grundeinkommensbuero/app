@@ -41,50 +41,29 @@ class FilterWidgetState extends State<FilterWidget>
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(
-                        key: Key("type button"),
-                        width: double.infinity,
-                        child: FlatButton(
-                          color: Color.fromARGB(255, 149, 48, 118),
-                          textColor: Colors.amberAccent,
-                          shape: Border(),
-                          materialTapTargetSize: _zeroPadding,
-                          onPressed: () => typeSelection(),
-                          child: Text(artButtonBeschriftung()),
-                        )),
-                    SizedBox(
-                        key: Key("days button"),
-                        width: double.infinity,
-                        child: FlatButton(
-                          color: Color.fromARGB(255, 149, 48, 118),
-                          textColor: Colors.amberAccent,
-                          shape: Border(),
-                          materialTapTargetSize: _zeroPadding,
-                          onPressed: () => daysSelection(),
-                          child: tageButtonBeschriftung(),
-                        )),
-                    SizedBox(
+                    FilterElement(
+                      key: Key("type button"),
+                      child: Text(artButtonBeschriftung()),
+                      selectionFunction: typeSelection,
+                      resetFunction: resetType,
+                    ),
+                    FilterElement(
+                      key: Key("days button"),
+                      child: tageButtonBeschriftung(),
+                      selectionFunction: daysSelection,
+                      resetFunction: resetDays,
+                    ),
+                    FilterElement(
                         key: Key("time button"),
-                        width: double.infinity,
-                        child: FlatButton(
-                          color: Color.fromARGB(255, 149, 48, 118),
-                          textColor: Colors.amberAccent,
-                          shape: Border(),
-                          materialTapTargetSize: _zeroPadding,
-                          onPressed: () => timeSelection(),
-                          child: Text(uhrzeitButtonBeschriftung(filter)),
-                        )),
-                    SizedBox(
-                        key: Key("locations button"),
-                        width: double.infinity,
-                        child: FlatButton(
-                          color: Color.fromARGB(255, 149, 48, 118),
-                          textColor: Colors.amberAccent,
-                          shape: Border(),
-                          materialTapTargetSize: _zeroPadding,
-                          onPressed: () => locationSelection(),
-                          child: Text(ortButtonBeschriftung(filter)),
-                        )),
+                        child: Text(uhrzeitButtonBeschriftung(filter)),
+                        selectionFunction: timeSelection,
+                        resetFunction: resetTime),
+                    FilterElement(
+                      key: Key("locations button"),
+                      child: Text(ortButtonBeschriftung(filter)),
+                      selectionFunction: locationSelection,
+                      resetFunction: resetLocations,
+                    ),
                   ],
                 ),
           SizedBox(
@@ -203,6 +182,8 @@ class FilterWidgetState extends State<FilterWidget>
     });
   }
 
+  resetType() => setState(() => filter.typen = []);
+
   daysSelection() async {
     var selectedDates = await showMultipleDatePicker(filter.tage, context,
         key: Key('days selection dialog'));
@@ -212,6 +193,8 @@ class FilterWidgetState extends State<FilterWidget>
     });
   }
 
+  resetDays() => setState(() => filter.tage = []);
+
   timeSelection() async {
     TimeRange timeRange =
         await showTimeRangePicker(context, filter.von, filter.bis);
@@ -220,6 +203,11 @@ class FilterWidgetState extends State<FilterWidget>
       filter.bis = timeRange.to;
     });
   }
+
+  resetTime() => setState(() {
+        filter.von = null;
+        filter.bis = null;
+      });
 
   locationSelection() async {
     var allLocations =
@@ -234,5 +222,52 @@ class FilterWidgetState extends State<FilterWidget>
     setState(() {
       filter.orte = selectedLocations;
     });
+  }
+
+  resetLocations() => setState(() => filter.orte = []);
+}
+
+class FilterElement extends StatelessWidget {
+  final _zeroPadding = MaterialTapTargetSize.shrinkWrap;
+  Widget child;
+  Function selectionFunction;
+  Function resetFunction;
+
+  FilterElement({key, this.child, this.selectionFunction, this.resetFunction})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        width: double.infinity,
+        child: FlatButton(
+            color: Color.fromARGB(255, 149, 48, 118),
+            textColor: Colors.amberAccent,
+            shape: Border(),
+            materialTapTargetSize: _zeroPadding,
+            padding: EdgeInsetsDirectional.zero,
+            onPressed: selectionFunction,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                      child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Flexible(child: child),
+                                Icon(Icons.edit)
+                              ]))),
+                  FlatButton(
+                    color: Color.fromARGB(255, 149, 48, 118),
+                    textColor: Colors.amberAccent,
+                    shape: Border(
+                        left: BorderSide(width: 2.0, color: DweTheme.purple)),
+                    materialTapTargetSize: _zeroPadding,
+                    onPressed: resetFunction,
+                    child: Icon(Icons.clear),
+                  )
+                ])));
   }
 }
