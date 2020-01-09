@@ -6,7 +6,7 @@ stages:
   - deploy_backend
 
 unit_tests_app:
-  image: gableroux/flutter:latest
+  image: cirrusci/flutter:latest
   stage: build_and_test
   script:
     - cd sammel_app
@@ -18,7 +18,7 @@ unit_tests_app:
   coverage: '/^lines\.+: |\d+\.?\d+\%/'
 
 build_android_apk:
-  image: gableroux/flutter:latest
+  image: cirrusci/flutter:latest
   stage: build_and_test
   script:
     - cd sammel_app
