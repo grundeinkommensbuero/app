@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
+import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
@@ -18,6 +19,7 @@ class MyApp extends StatelessWidget {
               value: demoModus ? DemoTermineService() : TermineService()),
           Provider<AbstractStammdatenService>.value(
               value: demoModus ? DemoStammdatenService() : StammdatenService()),
+          Provider<StorageService>.value(value: StorageService()),
         ],
         child: MaterialApp(
           title: 'DW & Co. Enteignen',

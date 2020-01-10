@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
+import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/LocationPicker.dart';
@@ -23,14 +24,19 @@ class FilterWidget extends StatefulWidget {
 class FilterWidgetState extends State<FilterWidget>
     with TickerProviderStateMixin {
   TermineFilter filter = TermineFilter.leererFilter();
+  var _initialized = false;
 
   var _zeroPadding = MaterialTapTargetSize.shrinkWrap;
 
   var buttonText = "Filter";
   var expanded = false;
 
+  StorageService storageService;
+
   @override
   Widget build(BuildContext context) {
+    if (!_initialized) initialize(context);
+
     return AnimatedSize(
       vsync: this,
       duration: Duration(milliseconds: 100),
@@ -94,6 +100,16 @@ class FilterWidgetState extends State<FilterWidget>
     );
   ***REMOVED***
 
+  // Kann nicht im Konstruktor ausgeführt werden, weil der Provider den context braucht, der ins build reingereicht wird
+  void initialize(BuildContext context) {
+    storageService = Provider.of<StorageService>(context);
+    storageService.loadFilterTypes().then((filter) => setState(() {
+          this.filter = filter != null ? filter : TermineFilter.leererFilter();
+          widget.onApply(filter); //lade initial Termine
+        ***REMOVED***));
+    _initialized = true;
+  ***REMOVED***
+
   Text tageButtonBeschriftung() {
     if (filter.tage == null || filter.tage.isEmpty) {
       return Text("alle Tage,");
@@ -134,6 +150,7 @@ class FilterWidgetState extends State<FilterWidget>
         buttonText = "Filter";
         expanded = false;
         widget.onApply(filter);
+        storageService.saveFilter(filter);
       ***REMOVED*** else {
         buttonText = "Anwenden";
         expanded = true;
@@ -143,7 +160,8 @@ class FilterWidgetState extends State<FilterWidget>
 
   typeSelection() async {
     List<String> moeglicheTypen = ['Sammeln', 'Infoveranstaltung'];
-    List<String> ausgewTypen = List<String>()..addAll(filter.typen);
+    List<String> ausgewTypen = List<String>()
+      ..addAll(filter.typen == null ? [] : filter.typen);
     await showDialog<List<String>>(
         context: context,
         builder: (context) =>
@@ -229,9 +247,9 @@ class FilterWidgetState extends State<FilterWidget>
 
 class FilterElement extends StatelessWidget {
   final _zeroPadding = MaterialTapTargetSize.shrinkWrap;
-  Widget child;
-  Function selectionFunction;
-  Function resetFunction;
+  final Widget child;
+  final Function selectionFunction;
+  final Function resetFunction;
 
   FilterElement({key, this.child, this.selectionFunction, this.resetFunction***REMOVED***)
       : super(key: key);
