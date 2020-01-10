@@ -9,9 +9,9 @@ class StorageService {
 
   Future<SharedPreferences> get prefs => _prefs.timeout(Duration(seconds: 5));
 
-  static String _ACTION = 'action';
-  static String _ACTIONLIST = 'actionlist';
-  static String _FILTER = 'filter';
+  static const String _ACTION = 'action';
+  static const String _ACTIONLIST = 'actionlist';
+  static const String _FILTER = 'filter';
 
   StorageService() {
     _prefs = SharedPreferences.getInstance();

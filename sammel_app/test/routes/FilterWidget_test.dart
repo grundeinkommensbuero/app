@@ -8,6 +8,7 @@ import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/FilterWidget.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
+import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 
 int numberOfTimesCalled = 0;
@@ -22,14 +23,24 @@ class StammdatenServiceMock extends Mock implements StammdatenService {}
 
 final stammdatenService = StammdatenServiceMock();
 
+class StorageServiceMock extends Mock implements StorageService {}
+
+final storageService = StorageServiceMock();
+
 void main() {
+  setUp(() {
+    when(storageService.loadFilterTypes()).thenAnswer((_) async => null);
+  });
+
   testWidgets('Filter starts successfully', (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(
       iWasCalled,
       key: Key("filter"),
     );
 
-    await tester.pumpWidget(MaterialApp(home: filterWidget));
+    await tester.pumpWidget(MaterialApp(
+        home: Provider<StorageService>(
+            create: (context) => storageService, child: filterWidget)));
 
     expect(find.byKey(Key("filter")), findsOneWidget);
     expect(find.text('Filter'), findsOneWidget);
@@ -38,7 +49,9 @@ void main() {
   testWidgets('Filter opens with click', (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
 
-    await tester.pumpWidget(MaterialApp(home: filterWidget));
+    await tester.pumpWidget(MaterialApp(
+        home: Provider<StorageService>(
+            create: (context) => storageService, child: filterWidget)));
 
     await tester.tap(find.text("Filter"));
 
@@ -53,7 +66,9 @@ void main() {
   testWidgets('Filter closes with click', (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
 
-    await tester.pumpWidget(MaterialApp(home: filterWidget));
+    await tester.pumpWidget(MaterialApp(
+        home: Provider<StorageService>(
+            create: (context) => storageService, child: filterWidget)));
 
     await tester.tap(find.text("Filter"));
 
@@ -73,7 +88,9 @@ void main() {
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
 
-    await tester.pumpWidget(MaterialApp(home: filterWidget));
+    await tester.pumpWidget(MaterialApp(
+        home: Provider<StorageService>(
+            create: (context) => storageService, child: filterWidget)));
 
     expect(find.text('Anwenden'), findsNothing);
     expect(find.text('Filter'), findsOneWidget);
@@ -95,7 +112,9 @@ void main() {
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
 
-    await tester.pumpWidget(MaterialApp(home: filterWidget));
+    await tester.pumpWidget(MaterialApp(
+        home: Provider<StorageService>(
+            create: (context) => storageService, child: filterWidget)));
 
     await tester.tap(find.byKey(Key('filter button')));
     await tester.pump();
@@ -109,7 +128,9 @@ void main() {
   testWidgets('Type Selection shows all types', (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
 
-    await tester.pumpWidget(MaterialApp(home: filterWidget));
+    await tester.pumpWidget(MaterialApp(
+        home: Provider<StorageService>(
+            create: (context) => storageService, child: filterWidget)));
 
     await tester.tap(find.byKey(Key('filter button')));
     await tester.pump();
@@ -125,7 +146,11 @@ void main() {
   testWidgets('Type Selection selects initially types from filter',
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
-    await tester.pumpWidget(MaterialApp(home: filterWidget));
+
+    await tester.pumpWidget(MaterialApp(
+        home: Provider<StorageService>(
+            create: (context) => storageService, child: filterWidget)));
+
     FilterWidgetState filterState = tester.state(find.byWidget(filterWidget));
 
     filterState.filter.typen = ['Sammeln'];
@@ -138,8 +163,8 @@ void main() {
 
     var checkboxTiles =
         tester.widgetList<CheckboxListTile>(find.byType(CheckboxListTile));
-    var sammelTermin = checkboxTiles
-        .firstWhere((ct) => (ct.title as Text).data == 'Sammeln');
+    var sammelTermin =
+        checkboxTiles.firstWhere((ct) => (ct.title as Text).data == 'Sammeln');
     var andere = checkboxTiles.where((ct) => ct != sammelTermin);
 
     expect(sammelTermin.value, isTrue);
@@ -150,7 +175,9 @@ void main() {
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
 
-    await tester.pumpWidget(MaterialApp(home: filterWidget));
+    await tester.pumpWidget(MaterialApp(
+        home: Provider<StorageService>(
+            create: (context) => storageService, child: filterWidget)));
 
     await tester.tap(find.byKey(Key('filter button')));
     await tester.pump();
@@ -167,7 +194,11 @@ void main() {
   testWidgets('Type Selection saves selected types to filter',
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
-    await tester.pumpWidget(MaterialApp(home: filterWidget));
+
+    await tester.pumpWidget(MaterialApp(
+        home: Provider<StorageService>(
+            create: (context) => storageService, child: filterWidget)));
+
     FilterWidgetState filterState = tester.state(find.byWidget(filterWidget));
 
     await tester.tap(find.byKey(Key('filter button')));
@@ -192,7 +223,9 @@ void main() {
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
 
-    await tester.pumpWidget(MaterialApp(home: filterWidget));
+    await tester.pumpWidget(MaterialApp(
+        home: Provider<StorageService>(
+            create: (context) => storageService, child: filterWidget)));
 
     await tester.tap(find.byKey(Key('filter button')));
     await tester.pump();
@@ -209,9 +242,10 @@ void main() {
 
     when(stammdatenService.ladeOrte()).thenAnswer((_) async => []);
 
-    await tester.pumpWidget(Provider<AbstractStammdatenService>(
-        builder: (context) => stammdatenService,
-        child: MaterialApp(home: filterWidget)));
+    await tester.pumpWidget(MultiProvider(providers: [
+      Provider<AbstractStammdatenService>.value(value: stammdatenService),
+      Provider<StorageService>.value(value: storageService)
+    ], child: MaterialApp(home: filterWidget)));
 
     await tester.tap(find.byKey(Key('filter button')));
     await tester.pump();
@@ -229,9 +263,10 @@ void main() {
     when(stammdatenService.ladeOrte()).thenAnswer((_) async =>
         [Ort(0, 'district1', 'place1'), Ort(1, 'district2', 'place2')]);
 
-    await tester.pumpWidget(Provider<AbstractStammdatenService>(
-        builder: (context) => stammdatenService,
-        child: MaterialApp(home: filterWidget)));
+    await tester.pumpWidget(MultiProvider(providers: [
+      Provider<AbstractStammdatenService>.value(value: stammdatenService),
+      Provider<StorageService>.value(value: storageService)
+    ], child: MaterialApp(home: filterWidget)));
 
     await tester.tap(find.byKey(Key('filter button')));
     await tester.pump();
@@ -247,7 +282,9 @@ void main() {
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
 
-    await tester.pumpWidget(MaterialApp(home: filterWidget));
+    await tester.pumpWidget(MaterialApp(
+        home: Provider<StorageService>(
+            create: (context) => storageService, child: filterWidget)));
 
     await tester.tap(find.byKey(Key('filter button')));
     await tester.pump();
@@ -264,7 +301,9 @@ void main() {
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
 
-    await tester.pumpWidget(MaterialApp(home: filterWidget));
+    await tester.pumpWidget(MaterialApp(
+        home: Provider<StorageService>(
+            create: (context) => storageService, child: filterWidget)));
 
     await tester.tap(find.byKey(Key('filter button')));
     await tester.pump();
@@ -283,7 +322,10 @@ void main() {
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
 
-    await tester.pumpWidget(MaterialApp(home: filterWidget));
+    await tester.pumpWidget(MaterialApp(
+        home: Provider<StorageService>(
+            create: (context) => storageService, child: filterWidget)));
+
     FilterWidgetState filterState = tester.state(find.byWidget(filterWidget));
 
     filterState.filter.von = TimeOfDay(hour: 19, minute: 15);
@@ -309,7 +351,9 @@ void main() {
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
 
-    await tester.pumpWidget(MaterialApp(home: filterWidget));
+    await tester.pumpWidget(MaterialApp(
+        home: Provider<StorageService>(
+            create: (context) => storageService, child: filterWidget)));
 
     await tester.tap(find.byKey(Key('filter button')));
     await tester.pump();
@@ -330,7 +374,11 @@ void main() {
   testWidgets('Filter saves selected time to filter',
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
-    await tester.pumpWidget(MaterialApp(home: filterWidget));
+
+    await tester.pumpWidget(MaterialApp(
+        home: Provider<StorageService>(
+            create: (context) => storageService, child: filterWidget)));
+
     FilterWidgetState filterState = tester.state(find.byWidget(filterWidget));
 
     await tester.tap(find.byKey(Key('filter button')));
@@ -356,7 +404,11 @@ void main() {
   testWidgets('Filter is applied on Anwendn button',
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
-    await tester.pumpWidget(MaterialApp(home: filterWidget));
+
+    await tester.pumpWidget(MaterialApp(
+        home: Provider<StorageService>(
+            create: (context) => storageService, child: filterWidget)));
+
     FilterWidgetState filterState = tester.state(find.byWidget(filterWidget));
 
     await tester.tap(find.byKey(Key('filter button')));
@@ -382,5 +434,11 @@ void main() {
     expect(iWasCalledResult.tage.map((t) => DateFormat.yMd().format(t)),
         containsAll(['12/16/2019']));
     expect(iWasCalledResult.orte.map((o) => o.id), containsAll([1]));
+  });
+
+  group('storage function', () {
+    test('initializes filter with default values if no storage is found', () {
+//      SharedPrefernces.setMockInitialValues (Map<String, dynamic> values);
+    });
   });
 }

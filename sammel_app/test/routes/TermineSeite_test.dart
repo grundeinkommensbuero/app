@@ -4,6 +4,7 @@ import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
+import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 
 import '../model/Termin_test.dart';
@@ -12,16 +13,25 @@ class TermineServiceMock extends Mock implements TermineService {}
 
 final terminService = TermineServiceMock();
 
+class StorageServiceMock extends Mock implements StorageService {}
+
+final storageService = StorageServiceMock();
+
 void main() {
+  setUp(() {
+    when(storageService.loadFilterTypes()).thenAnswer((_) async => null);
+  });
+
   testWidgets('TermineSeite startet fehlerfrei mit leerer Liste',
       (WidgetTester tester) async {
     var termineSeiteWidget = TermineSeite(title: 'Titel mit Ümläüten');
 
     when(terminService.ladeTermine(any)).thenAnswer((_) async => []);
 
-    await tester.pumpWidget(Provider<AbstractTermineService>(
-        builder: (context) => terminService,
-        child: MaterialApp(home: termineSeiteWidget)));
+    await tester.pumpWidget(MultiProvider(providers: [
+      Provider<AbstractTermineService>.value(value: terminService),
+      Provider<StorageService>.value(value: storageService)
+    ], child: MaterialApp(home: termineSeiteWidget)));
 
     expect(find.text('Titel mit Ümläüten'), findsOneWidget);
   });
@@ -36,9 +46,10 @@ void main() {
           TerminTestDaten.einTermin(),
         ]);
 
-    await tester.pumpWidget(Provider<AbstractTermineService>(
-        builder: (context) => terminService,
-        child: MaterialApp(home: termineSeiteWidget)));
+    await tester.pumpWidget(MultiProvider(providers: [
+      Provider<AbstractTermineService>.value(value: terminService),
+      Provider<StorageService>.value(value: storageService)
+    ], child: MaterialApp(home: termineSeiteWidget)));
 
     expect(find.text('Titel mit Ümläüten'), findsOneWidget);
 
@@ -57,9 +68,10 @@ void main() {
           TerminTestDaten.einTermin(),
         ]);
 
-    await tester.pumpWidget(Provider<AbstractTermineService>(
-        builder: (context) => terminService,
-        child: MaterialApp(home: termineSeiteWidget)));
+    await tester.pumpWidget(MultiProvider(providers: [
+      Provider<AbstractTermineService>.value(value: terminService),
+      Provider<StorageService>.value(value: storageService)
+    ], child: MaterialApp(home: termineSeiteWidget)));
 
     expect(find.text('Filter'), findsOneWidget);
   });
@@ -74,9 +86,10 @@ void main() {
           TerminTestDaten.einTermin(),
         ]);
 
-    await tester.pumpWidget(Provider<AbstractTermineService>(
-        builder: (context) => terminService,
-        child: MaterialApp(home: termineSeiteWidget)));
+    await tester.pumpWidget(MultiProvider(providers: [
+      Provider<AbstractTermineService>.value(value: terminService),
+      Provider<StorageService>.value(value: storageService)
+    ], child: MaterialApp(home: termineSeiteWidget)));
 
     await tester.tap(find.text('Filter'));
 
@@ -97,9 +110,10 @@ void main() {
       when(terminService.getTerminMitDetails(any))
           .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
 
-      await tester.pumpWidget(Provider<AbstractTermineService>(
-          builder: (context) => terminService,
-          child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: terminService),
+        Provider<StorageService>.value(value: storageService)
+      ], child: MaterialApp(home: termineSeiteWidget)));
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
@@ -124,9 +138,10 @@ void main() {
       when(terminService.getTerminMitDetails(any))
           .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
 
-      await tester.pumpWidget(Provider<AbstractTermineService>(
-          builder: (context) => terminService,
-          child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: terminService),
+        Provider<StorageService>.value(value: storageService)
+      ], child: MaterialApp(home: termineSeiteWidget)));
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
@@ -149,9 +164,10 @@ void main() {
       when(terminService.getTerminMitDetails(any))
           .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
 
-      await tester.pumpWidget(Provider<AbstractTermineService>(
-          builder: (context) => terminService,
-          child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: terminService),
+        Provider<StorageService>.value(value: storageService)
+      ], child: MaterialApp(home: termineSeiteWidget)));
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
