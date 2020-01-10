@@ -4,7 +4,7 @@ import 'package:sammel_app/services/RestFehler.dart';
 
 import 'Service.dart';
 
-abstract class AbstractStammdatenService extends Service {
+abstract class AbstractStammdatenService extends BackendService {
   Future<List<Ort>> ladeOrte();
 ***REMOVED***
 
