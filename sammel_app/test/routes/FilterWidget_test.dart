@@ -29,7 +29,7 @@ final storageService = StorageServiceMock();
 
 void main() {
   setUp(() {
-    when(storageService.loadFilterTypes()).thenAnswer((_) async => null);
+    when(storageService.loadFilter()).thenAnswer((_) async => null);
   ***REMOVED***);
 
   testWidgets('Filter starts successfully', (WidgetTester tester) async {
@@ -401,7 +401,7 @@ void main() {
     expect(ChronoHelfer.timeToStringHHmm(filterState.filter.von), '12:00');
   ***REMOVED***);
 
-  testWidgets('Filter is applied on Anwendn button',
+  testWidgets('Filter is applied on Anwenden button',
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
 

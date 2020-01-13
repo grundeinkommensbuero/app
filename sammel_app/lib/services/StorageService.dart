@@ -17,8 +17,6 @@ class StorageService {
     _prefs = SharedPreferences.getInstance();
   ***REMOVED***
 
-//      .catchError((Object error) => print/*StorageAccessError()*/);
-
   // Action Properties
 
   Future<bool> saveActionToken(String id, String token) => prefs
@@ -27,58 +25,30 @@ class StorageService {
 
   Future<bool> deleteActionToken(String id) => prefs
       .then((prefs) => prefs.remove('$_ACTION:$id'))
-      .whenComplete(() => markActionIdAsRemoved(id));
+      .whenComplete(() => unmarkActionIdAsStored(id));
 
   Future<String> loadActionToken(String id) =>
       prefs.then((prefs) => prefs.getString('$_ACTION:$id'));
 
-//      .catchError((anyException) => throw (StorageLoadError('Aktion $id')));
+  markActionIdAsStored(String id) => prefs.then((prefs) => _getActionList()
+      .then((list) => prefs.setStringList(_ACTIONLIST, list..add(id))));
 
-  markActionIdAsStored(String id) => prefs.then((prefs) => prefs.setStringList(
-      _ACTIONLIST, prefs.getStringList(_ACTIONLIST)..add(id)));
-
-//      .catchError((anyException) => throw (StorageLoadError('Aktion $id')));
-
-  markActionIdAsRemoved(String id) => prefs.then((prefs) => prefs.setStringList(
-      _ACTIONLIST, prefs.getStringList(_ACTIONLIST)..remove(id)));
-
-//      .catchError((anyException) => throw (StorageDeleteError('Aktion $id')));
+  unmarkActionIdAsStored(String id) => prefs.then((prefs) => _getActionList()
+      .then((list) => prefs.setStringList(_ACTIONLIST, list..remove(id))));
 
   Future<List<String>> loadAllStoredActionIds() =>
       prefs.then((prefs) => prefs.getStringList(_ACTIONLIST));
 
-//      .catchError((anyException) => throw (StorageLoadError('Aktionen-Liste')));
+  Future<List<String>> _getActionList() => _prefs.then((prefs) async {
+        var list = await prefs.getStringList(_ACTIONLIST);
+        return list != null ? list : [];
+      ***REMOVED***);
 
   // Filter Properties
 
   Future<bool> saveFilter(TermineFilter filter) => prefs
       .then((prefs) => prefs.setString(_FILTER, jsonEncode(filter.toJson())));
 
-//      .catchError((anyException) => throw (StorageLoadError('Filter')));
-
-  Future<TermineFilter> loadFilterTypes() => prefs.then(
+  Future<TermineFilter> loadFilter() => prefs.then(
       (prefs) => TermineFilter.fromJSON(jsonDecode(prefs.getString(_FILTER))));
-//      .catchError((anyException) => throw (StorageLoadError('Filter')));
-***REMOVED***
-
-class StorageAccessError extends Error {
-  String message = 'Der Speicher des Geräts ist nicht verfügbar';
-
-  StorageAccessError();
-***REMOVED***
-
-class StorageLoadError extends Error {
-  String message;
-
-  StorageLoadError(String type) {
-    this.message = '$type konnte nicht im Gerätespeicher gefunden werden.';
-  ***REMOVED***
-***REMOVED***
-
-class StorageDeleteError extends Error {
-  String message;
-
-  StorageDeleteError(String type) {
-    this.message = '$type konnte nicht aus dem Gerätespeicher gelöscht werden.';
-  ***REMOVED***
 ***REMOVED***

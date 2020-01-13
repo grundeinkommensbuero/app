@@ -103,7 +103,7 @@ class FilterWidgetState extends State<FilterWidget>
   // Kann nicht im Konstruktor ausgeführt werden, weil der Provider den context braucht, der ins build reingereicht wird
   void initialize(BuildContext context) {
     storageService = Provider.of<StorageService>(context);
-    storageService.loadFilterTypes().then((filter) => setState(() {
+    storageService.loadFilter().then((filter) => setState(() {
           this.filter = filter != null ? filter : TermineFilter.leererFilter();
           widget.onApply(filter); //lade initial Termine
         ***REMOVED***));
