@@ -410,19 +410,15 @@ class _TermineSeiteState extends State<TermineSeite> {
     color: Color.fromARGB(255, 129, 28, 98),
     fontSize: 15.0,
   );
-  bool initialized = false;
+  bool _initialized = false;
   List<Termin> termine = [];
 
   FilterWidget filterWidget;
 
   @override
   Widget build(BuildContext context) {
-    if (!initialized) {
-      termineService = Provider.of<AbstractTermineService>(context);
-      filterWidget = FilterWidget(ladeTermine);
-      ladeTermine(TermineFilter.leererFilter());
-      initialized = true;
-    }
+    if (!_initialized) intialize(context);
+
     // TODO: Memory-Leak beheben
     return Scaffold(
       extendBody: true,
@@ -463,6 +459,12 @@ class _TermineSeiteState extends State<TermineSeite> {
               borderRadius: BorderRadius.all(Radius.circular(16.0)))),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+
+  void intialize(BuildContext context) {
+    termineService = Provider.of<AbstractTermineService>(context);
+    filterWidget = FilterWidget(ladeTermine);
+    _initialized = true;
   }
 
   void ladeTermine(TermineFilter filter) {

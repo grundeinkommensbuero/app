@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:http_server/http_server.dart';
 
-class Service {
+class BackendService {
   static const host = '10.0.2.2';
   static const port = 18443;
 

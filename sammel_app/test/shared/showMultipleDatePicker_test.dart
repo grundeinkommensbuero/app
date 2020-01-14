@@ -166,11 +166,12 @@ void main() {
     expect(result, containsAll([heute]));
   });
 
-  testWidgets('Days Selection empties days from filter on Keine',
+  testWidgets('Days Selection uses previous days from filter on Abbrechen',
       (WidgetTester tester) async {
     var result;
+    var today = DateTime.now();
     var widget =
-        createWidgetWithMultipleDatePicker([DateTime.now()], (r) => result = r);
+        createWidgetWithMultipleDatePicker([today], (r) => result = r);
 
     await tester.pumpWidget(MaterialApp(home: widget));
 
@@ -180,9 +181,9 @@ void main() {
     await tester.tap(find.text(DateTime.now().day.toString()));
     await tester.pump();
 
-    await tester.tap(find.byKey(Key('days dialog none button')));
+    await tester.tap(find.byKey(Key('days dialog cancel button')));
     await tester.pump();
 
-    expect(result, isEmpty);
+    expect(result, containsAll([today]));
   });
 }
