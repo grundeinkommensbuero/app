@@ -33,18 +33,18 @@ class _ActionEditor extends State<ActionEditor> {
   ActionData action = ActionData();
 
   var _zeroPadding = MaterialTapTargetSize.shrinkWrap;
-  TextStyle default_text_style = TextStyle(fontWeight: FontWeight.normal, color: Colors.black);
+  TextStyle default_text_style =
+      TextStyle(fontWeight: FontWeight.normal, color: Colors.black);
 
   get filter => null;
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      //    crossAxisAlignment: CrossAxisAlignment.center,
+        //    crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Text('Die Initiative lebt von deiner Beteiligung'),
           SizedBox(height: 15),
-
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Icon(Icons.my_location, size: 40.0),
             SizedBox(
@@ -57,13 +57,13 @@ class _ActionEditor extends State<ActionEditor> {
               ),
               FlatButton(
                 materialTapTargetSize: _zeroPadding,
-                onPressed: () => ortAuswahl(),
-                child: ortButtonBeschriftung(this.action),
+                onPressed: () => locationSelection(),
+                child: locationButtonCaption(this.action),
               ),
               FlatButton(
                   materialTapTargetSize: _zeroPadding,
-                  onPressed: () => treffpunktAuswahl(),
-                  child: treffpunktButtonBeschriftung(this.action))
+                  onPressed: () => venueSelection(),
+                  child: venueButtonCaption(this.action))
             ])
           ]),
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -78,13 +78,13 @@ class _ActionEditor extends State<ActionEditor> {
               ),
               FlatButton(
                 materialTapTargetSize: _zeroPadding,
-                onPressed: () => tageAuswahl(),
-                child: tageButtonBeschriftung(),
+                onPressed: () => daysSelection(),
+                child: daysButtonCaption(),
               ),
               FlatButton(
                 materialTapTargetSize: _zeroPadding,
-                onPressed: () => zeitAuswahl(),
-                child: uhrzeitButtonBeschriftung(this.action),
+                onPressed: () => timeSelection(),
+                child: timButtonCaption(this.action),
               )
             ])
           ]),
@@ -100,13 +100,13 @@ class _ActionEditor extends State<ActionEditor> {
               ),
               FlatButton(
                 materialTapTargetSize: _zeroPadding,
-                onPressed: () => artAuswahl(),
-                child: artButtonBeschriftung(),
+                onPressed: () => typeSelection(),
+                child: typeButtonCaption(),
               ),
               FlatButton(
                   materialTapTargetSize: _zeroPadding,
-                  onPressed: () => kommentarAuswahl(),
-                  child: kommentarButtonBeschriftung(this.action))
+                  onPressed: () => descriptionSelection(),
+                  child: descriptionButtonCaption(this.action))
             ])
           ]),
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -120,28 +120,36 @@ class _ActionEditor extends State<ActionEditor> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               FlatButton(
-                //          color: Color.fromARGB(255, 149, 48, 118),
-                //       textColor: Color.fromARGB(255, 129, 28, 98),
+                  //          color: Color.fromARGB(255, 149, 48, 118),
+                  //       textColor: Color.fromARGB(255, 129, 28, 98),
                   materialTapTargetSize: _zeroPadding,
-                  onPressed: () => kontaktAuswahl(),
-                  child: kontaktButtonBeschriftung(this.action))
+                  onPressed: () => contactSelection(),
+                  child: contactButtonCaption(this.action))
             ])
           ]),
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            FlatButton(
-                child: Text('Abbrechen'), onPressed: () {onApply(false); Navigator.pop(context, null);}),
-            FlatButton(child: Text('Fertig'), onPressed: () {List<Future<Termin>> list = pushTermineToDB(onApply(true)); Navigator.pop(context, list);} )
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            RaisedButton(
+                child: Text('Abbrechen'),
+                onPressed: () {
+                  onApply(false);
+                  Navigator.pop(context, null);
+                }),
+            RaisedButton(
+                child: Text('Erstellen'),
+                onPressed: () {
+                  List<Future<Termin>> list = pushTermineToDB(onApply(true));
+                  Navigator.pop(context, list);
+                })
           ])
         ]);
   }
 
-  List<Future<Termin>> pushTermineToDB(List<Termin> termine)
-  {
+  List<Future<Termin>> pushTermineToDB(List<Termin> termine) {
     print(termine);
-    if(termine != null) {
+    if (termine != null) {
       List<Future<Termin>> new_meetings = List<Future<Termin>>();
-      AbstractTermineService termineService = Provider.of<
-          AbstractTermineService>(context);
+      AbstractTermineService termineService =
+          Provider.of<AbstractTermineService>(context);
       for (final termin in termine) {
         new_meetings.add(termineService.createTermin(termin));
       }
@@ -150,38 +158,40 @@ class _ActionEditor extends State<ActionEditor> {
     return null;
   }
 
-  Text tageButtonBeschriftung() {
+  Text daysButtonCaption() {
     if (this.action.tage == null || this.action.tage.isEmpty) {
       return Text("Wähle einen Tag");
     } else {
-      return Text("am " +
-          this
-              .action
-              .tage
-              .map((tag) => DateFormat("dd.MM.").format(tag))
-              .join(", ") +
-          ",", style: default_text_style);
+      return Text(
+          "am " +
+              this
+                  .action
+                  .tage
+                  .map((tag) => DateFormat("dd.MM.").format(tag))
+                  .join(", ") +
+              ",",
+          style: default_text_style);
     }
   }
 
-  void treffpunktAuswahl() async {
-    var ergebnis =
-    await showTextInputDialog(this.action.terminDetails.treffpunkt, 'Treffpunkt', 'Dummy Text');
+  void venueSelection() async {
+    var ergebnis = await showTextInputDialog(
+        this.action.terminDetails.treffpunkt, 'Treffpunkt', 'Dummy Text');
     setState(() {
       this.action.terminDetails.treffpunkt = ergebnis;
     });
   }
 
-  void kontaktAuswahl() async {
-    var ergebnis =
-    await showTextInputDialog(this.action.terminDetails.kontakt, 'Kontakt', 'Dummy Text');
+  void contactSelection() async {
+    var ergebnis = await showTextInputDialog(
+        this.action.terminDetails.kontakt, 'Kontakt', 'Dummy Text');
     setState(() {
       this.action.terminDetails.kontakt = ergebnis;
     });
   }
 
-  Future<String> showTextInputDialog(String current_value, String title, String description) {
-
+  Future<String> showTextInputDialog(
+      String current_value, String title, String description) {
     // List list = createTextInputAlertDialogWidget(current_value, description);
     // Widget input_widget = list[1];
     String current_input = current_value;
@@ -208,10 +218,14 @@ class _ActionEditor extends State<ActionEditor> {
 
     Widget input_widget = null;
 
-    if(description != null) {
-      input_widget = SingleChildScrollView(child: ListBody( children: [Text(description),     SizedBox(height: 10),  input_field]));
-    }
-    else {
+    if (description != null) {
+      input_widget = SingleChildScrollView(
+          child: ListBody(children: [
+        Text(description),
+        SizedBox(height: 10),
+        input_field
+      ]));
+    } else {
       input_widget = input_field;
     }
 
@@ -246,21 +260,108 @@ class _ActionEditor extends State<ActionEditor> {
     );
   }
 
-  void kommentarAuswahl() async{
-    var ergebnis =
-    await showTextInputDialog(this.action.terminDetails.kommentar, 'Kommentar', 'Dummy Text');
+  typeSelection() async {
+    List<String> moeglicheTypen = ['Sammel-Termin', 'Info-Veranstaltung'];
+    var ausgewTyp = '';
+    await showDialog<String>(
+        context: context,
+        builder: (context) =>
+            StatefulBuilder(builder: (context, setDialogState) {
+              return SimpleDialog(
+                  contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
+                  titlePadding: EdgeInsets.all(15.0),
+                  title: const Text('Wähle Termin-Arten'),
+                  children: <Widget>[
+                    ...moeglicheTypen.map((typ) => RadioListTile(
+                          groupValue: ausgewTyp,
+                          value: typ,
+                          title: Text(typ),
+                          onChanged: (neuerWert) {
+                            setDialogState(() {
+                              ausgewTyp = neuerWert;
+                            });
+                          },
+                        )),
+                    RaisedButton(
+                        child: Text('Fertig'),
+                        onPressed: () => Navigator.pop(context))
+                  ]);
+            }));
+
+    setState(() {
+      this.action.typ = ausgewTyp;
+    });
+  }
+
+  daysSelection() async {
+    var selectedDates = await showMultipleDatePicker(this.filter.tage, context,
+        key: Key('days selection dialog'));
+    setState(() {
+      if (selectedDates != null)
+        this.action.tage = selectedDates
+          ..sort((dt1, dt2) => dt1.compareTo(dt2));
+    });
+  }
+
+  timeSelection() async {
+    TimeRange timeRange = await showTimeRangePicker(
+        context, this.filter.von?.hour, this.filter.bis?.hour);
+    setState(() {
+      this.action.von = timeRange.from;
+      this.action.bis = timeRange.to;
+    });
+  }
+
+  locationSelection() async {
+    var allLocations =
+        await Provider.of<AbstractStammdatenService>(context).ladeOrte();
+    var selectedLocations =
+        await LocationPicker(locations: allLocations, multiMode: false)
+            .showLocationPicker(context, List<Ort>());
+
+    setState(() {
+      if (!selectedLocations.isEmpty) {
+        this.action.ort = selectedLocations[0];
+      }
+    });
+  }
+
+  void descriptionSelection() async {
+    var ergebnis = await showTextInputDialog(
+        this.action.terminDetails.kommentar, 'Kommentar', 'Dummy Text');
     setState(() {
       this.action.terminDetails.kommentar = ergebnis;
     });
   }
 
-  Text artButtonBeschriftung() {
+  Text venueButtonCaption(ActionData termin) {
+    return (termin.terminDetails.treffpunkt == null ||
+            termin.terminDetails.treffpunkt == '')
+        ? Text('Treffpunkt eingeben')
+        : Text(termin.terminDetails.treffpunkt, style: default_text_style);
+  }
+
+  Text contactButtonCaption(ActionData termin) {
+    return (termin.terminDetails.kontakt == null ||
+            termin.terminDetails.kontakt == '')
+        ? Text('Kontakt eingeben')
+        : Text(termin.terminDetails.kontakt, style: default_text_style);
+  }
+
+  Text descriptionButtonCaption(ActionData termin) {
+    return (termin.terminDetails.kommentar == null ||
+            termin.terminDetails.kommentar == '')
+        ? Text('Beschreibung eingeben')
+        : Text(termin.terminDetails.kommentar, style: default_text_style);
+  }
+
+  Text typeButtonCaption() {
     return this.action.typ != null && this.action.typ != ''
         ? Text(this.action.typ, style: default_text_style)
         : Text("Wähle eine Termin-Art");
   }
 
-  Text uhrzeitButtonBeschriftung(ActionData termin) {
+  Text timButtonCaption(ActionData termin) {
     String beschriftung = '';
     if (termin.von != null)
       beschriftung += 'von ' + ChronoHelfer.timeToStringHHmm(termin.von);
@@ -271,9 +372,12 @@ class _ActionEditor extends State<ActionEditor> {
     return Text(beschriftung, style: default_text_style);
   }
 
-  Text ortButtonBeschriftung(ActionData termin) {
+  Text locationButtonCaption(ActionData termin) {
     if (termin.ort == null) return Text("Wähle einen Ort");
-    return Text("in " + termin.ort.ort, style: default_text_style,);
+    return Text(
+      "in " + termin.ort.ort,
+      style: default_text_style,
+    );
   }
 
   List<Termin> onApply(bool use_data) {
@@ -300,93 +404,5 @@ class _ActionEditor extends State<ActionEditor> {
     } else {
       return null;
     }
-  }
-
-  artAuswahl() async {
-    List<String> moeglicheTypen = ['Sammel-Termin', 'Info-Veranstaltung'];
-    var ausgewTyp = '';
-    await showDialog<String>(
-        context: context,
-        builder: (context) =>
-            StatefulBuilder(builder: (context, setDialogState) {
-              return SimpleDialog(
-                  contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
-                  titlePadding: EdgeInsets.all(15.0),
-                  title: const Text('Wähle Termin-Arten'),
-                  children: <Widget>[
-                    ...moeglicheTypen.map((typ) => RadioListTile(
-                      groupValue: ausgewTyp,
-                      value: typ,
-                      title: Text(typ),
-                      onChanged: (neuerWert) {
-                        setDialogState(() {
-                          ausgewTyp = neuerWert;
-                        });
-                      },
-                    )),
-                    RaisedButton(
-                        child: Text('Fertig'),
-                        onPressed: () => Navigator.pop(context))
-                  ]);
-            }));
-
-    setState(() {
-      this.action.typ = ausgewTyp;
-    });
-  }
-
-  tageAuswahl() async {
-    var selectedDates = await showMultipleDatePicker(this.filter.tage, context,
-        key: Key('days selection dialog'));
-    setState(() {
-      if (selectedDates != null)
-        this.action.tage = selectedDates
-          ..sort((dt1, dt2) => dt1.compareTo(dt2));
-    });
-  }
-
-  zeitAuswahl() async {
-    TimeRange timeRange = await showTimeRangePicker(
-        context, this.filter.von?.hour, this.filter.bis?.hour);
-    setState(() {
-      this.action.von = timeRange.from;
-      this.action.bis = timeRange.to;
-    });
-  }
-
-  ortAuswahl() async {
-    var allLocations =
-    await Provider.of<AbstractStammdatenService>(context).ladeOrte();
-    var selectedLocations =
-    await LocationPicker(locations: allLocations, multiMode: false)
-        .showLocationPicker(context, List<Ort>());
-
-    setState(() {
-      if(!selectedLocations.isEmpty)
-      {
-        this.action.ort = selectedLocations[0];
-      }
-    });
-  }
-
-  Text treffpunktButtonBeschriftung(ActionData termin) {
-    return (termin.terminDetails.treffpunkt == null ||
-        termin.terminDetails.treffpunkt == '')
-        ? Text('Treffpunkt eingeben')
-        : Text(termin.terminDetails.treffpunkt, style: default_text_style);
-  }
-
-  Text kontaktButtonBeschriftung(ActionData termin) {
-    return (termin.terminDetails.kontakt == null ||
-        termin.terminDetails.kontakt == '')
-        ? Text('Kontakt eingeben')
-        : Text(termin.terminDetails.kontakt, style: default_text_style);
-  }
-
-  Text kommentarButtonBeschriftung(ActionData termin) {
-    return (termin.terminDetails.kommentar == null ||
-        termin.terminDetails.kommentar == '')
-        ? Text('Beschreibung eingeben')
-        : Text(termin.terminDetails.kommentar, style: default_text_style);
   }
 }
