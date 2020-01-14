@@ -11,7 +11,7 @@ import 'package:sammel_app/shared/LocationPicker.dart';
 import 'package:sammel_app/shared/showMultipleDatePicker.dart';
 import 'package:sammel_app/shared/showTimeRangePicker.dart';
 
-class CreatedTermin {
+class ActionData {
   TimeOfDay von;
   TimeOfDay bis;
   Ort ort;
@@ -30,7 +30,7 @@ class ActionEditor extends StatefulWidget {
 ***REMOVED***
 
 class _ActionEditor extends State<ActionEditor> {
-  CreatedTermin termin = CreatedTermin();
+  ActionData action = ActionData();
 
   var _zeroPadding = MaterialTapTargetSize.shrinkWrap;
   TextStyle default_text_style = TextStyle(fontWeight: FontWeight.normal, color: Colors.black);
@@ -58,12 +58,12 @@ class _ActionEditor extends State<ActionEditor> {
               FlatButton(
                 materialTapTargetSize: _zeroPadding,
                 onPressed: () => ortAuswahl(),
-                child: ortButtonBeschriftung(this.termin),
+                child: ortButtonBeschriftung(this.action),
               ),
               FlatButton(
                   materialTapTargetSize: _zeroPadding,
                   onPressed: () => treffpunktAuswahl(),
-                  child: treffpunktButtonBeschriftung(this.termin))
+                  child: treffpunktButtonBeschriftung(this.action))
             ])
           ]),
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -84,7 +84,7 @@ class _ActionEditor extends State<ActionEditor> {
               FlatButton(
                 materialTapTargetSize: _zeroPadding,
                 onPressed: () => zeitAuswahl(),
-                child: uhrzeitButtonBeschriftung(this.termin),
+                child: uhrzeitButtonBeschriftung(this.action),
               )
             ])
           ]),
@@ -106,7 +106,7 @@ class _ActionEditor extends State<ActionEditor> {
               FlatButton(
                   materialTapTargetSize: _zeroPadding,
                   onPressed: () => kommentarAuswahl(),
-                  child: kommentarButtonBeschriftung(this.termin))
+                  child: kommentarButtonBeschriftung(this.action))
             ])
           ]),
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -124,7 +124,7 @@ class _ActionEditor extends State<ActionEditor> {
                 //       textColor: Color.fromARGB(255, 129, 28, 98),
                   materialTapTargetSize: _zeroPadding,
                   onPressed: () => kontaktAuswahl(),
-                  child: kontaktButtonBeschriftung(this.termin))
+                  child: kontaktButtonBeschriftung(this.action))
             ])
           ]),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -151,12 +151,12 @@ class _ActionEditor extends State<ActionEditor> {
   ***REMOVED***
 
   Text tageButtonBeschriftung() {
-    if (this.termin.tage == null || this.termin.tage.isEmpty) {
+    if (this.action.tage == null || this.action.tage.isEmpty) {
       return Text("Wähle einen Tag");
     ***REMOVED*** else {
       return Text("am " +
           this
-              .termin
+              .action
               .tage
               .map((tag) => DateFormat("dd.MM.").format(tag))
               .join(", ") +
@@ -166,17 +166,17 @@ class _ActionEditor extends State<ActionEditor> {
 
   void treffpunktAuswahl() async {
     var ergebnis =
-    await showTextInputDialog(this.termin.terminDetails.treffpunkt, 'Treffpunkt', 'Dummy Text');
+    await showTextInputDialog(this.action.terminDetails.treffpunkt, 'Treffpunkt', 'Dummy Text');
     setState(() {
-      this.termin.terminDetails.treffpunkt = ergebnis;
+      this.action.terminDetails.treffpunkt = ergebnis;
     ***REMOVED***);
   ***REMOVED***
 
   void kontaktAuswahl() async {
     var ergebnis =
-    await showTextInputDialog(this.termin.terminDetails.kontakt, 'Kontakt', 'Dummy Text');
+    await showTextInputDialog(this.action.terminDetails.kontakt, 'Kontakt', 'Dummy Text');
     setState(() {
-      this.termin.terminDetails.kontakt = ergebnis;
+      this.action.terminDetails.kontakt = ergebnis;
     ***REMOVED***);
   ***REMOVED***
 
@@ -248,19 +248,19 @@ class _ActionEditor extends State<ActionEditor> {
 
   void kommentarAuswahl() async{
     var ergebnis =
-    await showTextInputDialog(this.termin.terminDetails.kommentar, 'Kommentar', 'Dummy Text');
+    await showTextInputDialog(this.action.terminDetails.kommentar, 'Kommentar', 'Dummy Text');
     setState(() {
-      this.termin.terminDetails.kommentar = ergebnis;
+      this.action.terminDetails.kommentar = ergebnis;
     ***REMOVED***);
   ***REMOVED***
 
   Text artButtonBeschriftung() {
-    return this.termin.typ != null && this.termin.typ != ''
-        ? Text(this.termin.typ, style: default_text_style)
+    return this.action.typ != null && this.action.typ != ''
+        ? Text(this.action.typ, style: default_text_style)
         : Text("Wähle eine Termin-Art");
   ***REMOVED***
 
-  Text uhrzeitButtonBeschriftung(CreatedTermin termin) {
+  Text uhrzeitButtonBeschriftung(ActionData termin) {
     String beschriftung = '';
     if (termin.von != null)
       beschriftung += 'von ' + ChronoHelfer.timeToStringHHmm(termin.von);
@@ -271,29 +271,29 @@ class _ActionEditor extends State<ActionEditor> {
     return Text(beschriftung, style: default_text_style);
   ***REMOVED***
 
-  Text ortButtonBeschriftung(CreatedTermin termin) {
+  Text ortButtonBeschriftung(ActionData termin) {
     if (termin.ort == null) return Text("Wähle einen Ort");
     return Text("in " + termin.ort.ort, style: default_text_style,);
   ***REMOVED***
 
   List<Termin> onApply(bool use_data) {
     if (use_data) {
-      if (this.termin.von != null &&
-          this.termin.bis != null &&
-          this.termin.tage != null &&
-          !this.termin.tage.isEmpty &&
-          this.termin.ort != null &&
-          this.termin.typ != null &&
-          this.termin.typ != '') {
+      if (this.action.von != null &&
+          this.action.bis != null &&
+          this.action.tage != null &&
+          !this.action.tage.isEmpty &&
+          this.action.ort != null &&
+          this.action.typ != null &&
+          this.action.typ != '') {
         List<Termin> termine = new List<Termin>();
-        for (final tag in this.termin.tage) {
+        for (final tag in this.action.tage) {
           DateTime begin = new DateTime(tag.year, tag.month, tag.day,
-              this.termin.von.hour, this.termin.von.minute);
+              this.action.von.hour, this.action.von.minute);
           DateTime end = new DateTime(tag.year, tag.month, tag.day,
-              this.termin.bis.hour, this.termin.bis.minute);
+              this.action.bis.hour, this.action.bis.minute);
 
-          termine.add(Termin(0, begin, end, this.termin.ort, this.termin.typ,
-              this.termin.terminDetails));
+          termine.add(Termin(0, begin, end, this.action.ort, this.action.typ,
+              this.action.terminDetails));
         ***REMOVED***
         return termine;
       ***REMOVED***
@@ -331,7 +331,7 @@ class _ActionEditor extends State<ActionEditor> {
             ***REMOVED***));
 
     setState(() {
-      this.termin.typ = ausgewTyp;
+      this.action.typ = ausgewTyp;
     ***REMOVED***);
   ***REMOVED***
 
@@ -340,7 +340,7 @@ class _ActionEditor extends State<ActionEditor> {
         key: Key('days selection dialog'));
     setState(() {
       if (selectedDates != null)
-        this.termin.tage = selectedDates
+        this.action.tage = selectedDates
           ..sort((dt1, dt2) => dt1.compareTo(dt2));
     ***REMOVED***);
   ***REMOVED***
@@ -349,8 +349,8 @@ class _ActionEditor extends State<ActionEditor> {
     TimeRange timeRange = await showTimeRangePicker(
         context, this.filter.von?.hour, this.filter.bis?.hour);
     setState(() {
-      this.termin.von = timeRange.from;
-      this.termin.bis = timeRange.to;
+      this.action.von = timeRange.from;
+      this.action.bis = timeRange.to;
     ***REMOVED***);
   ***REMOVED***
 
@@ -364,26 +364,26 @@ class _ActionEditor extends State<ActionEditor> {
     setState(() {
       if(!selectedLocations.isEmpty)
       {
-        this.termin.ort = selectedLocations[0];
+        this.action.ort = selectedLocations[0];
       ***REMOVED***
     ***REMOVED***);
   ***REMOVED***
 
-  Text treffpunktButtonBeschriftung(CreatedTermin termin) {
+  Text treffpunktButtonBeschriftung(ActionData termin) {
     return (termin.terminDetails.treffpunkt == null ||
         termin.terminDetails.treffpunkt == '')
         ? Text('Treffpunkt eingeben')
         : Text(termin.terminDetails.treffpunkt, style: default_text_style);
   ***REMOVED***
 
-  Text kontaktButtonBeschriftung(CreatedTermin termin) {
+  Text kontaktButtonBeschriftung(ActionData termin) {
     return (termin.terminDetails.kontakt == null ||
         termin.terminDetails.kontakt == '')
         ? Text('Kontakt eingeben')
         : Text(termin.terminDetails.kontakt, style: default_text_style);
   ***REMOVED***
 
-  Text kommentarButtonBeschriftung(CreatedTermin termin) {
+  Text kommentarButtonBeschriftung(ActionData termin) {
     return (termin.terminDetails.kommentar == null ||
         termin.terminDetails.kommentar == '')
         ? Text('Beschreibung eingeben')
