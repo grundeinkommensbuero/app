@@ -401,15 +401,15 @@
                 <key-stores>
                     <key-store name="dweKeyStore">
                         <credential-reference
-                                clear-text="I thought what I'd do was I'd pretend I was one of those deaf-mutes"/>
-                        <implementation type="JKS"/>
-                        <file path="sammel-app.keystore.jks" relative-to="jboss.server.config.dir"/>
+                                clear-text="password"/>
+                        <implementation type="PKCS12"/>
+                        <file path="sammel-app.keystore.p12" relative-to="jboss.server.config.dir"/>
                     </key-store>
                 </key-stores>
                 <key-managers>
                     <key-manager name="dweKeyManager" key-store="dweKeyStore">
                         <credential-reference
-                                clear-text="I thought what I'd do was I'd pretend I was one of those deaf-mutes"/>
+                                clear-text="password"/>
                     </key-manager>
                 </key-managers>
                 <server-ssl-contexts>

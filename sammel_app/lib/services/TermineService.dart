@@ -10,7 +10,7 @@ import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/Service.dart';
 
-abstract class AbstractTermineService extends Service {
+abstract class AbstractTermineService extends BackendService {
   Future<List<Termin>> ladeTermine(TermineFilter filter);
 
   Future<Termin> createTermin(Termin termin);
