@@ -28,10 +28,6 @@ class StorageServiceMock extends Mock implements StorageService {***REMOVED***
 final storageService = StorageServiceMock();
 
 void main() {
-  setUp(() {
-    when(storageService.loadFilter()).thenAnswer((_) async => null);
-  ***REMOVED***);
-
   testWidgets('Filter starts successfully', (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(
       iWasCalled,
@@ -437,8 +433,67 @@ void main() {
   ***REMOVED***);
 
   group('storage function', () {
-    test('initializes filter with default values if no storage is found', () {
-//      SharedPrefernces.setMockInitialValues (Map<String, dynamic> values);
+    setUp(() {
+      when(storageService.loadFilter()).thenAnswer((_) async => null);
+    ***REMOVED***);
+
+    testWidgets('initializes filter with default values if no storage is found',
+        (WidgetTester tester) async {
+      FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+
+      await tester.pumpWidget(MaterialApp(
+          home: Provider<StorageService>(
+              create: (context) => storageService, child: filterWidget)));
+      FilterWidgetState filterState = tester.state(find.byWidget(filterWidget));
+
+      expect(filterState.filter.typen, []);
+      expect(filterState.filter.tage, []);
+      expect(filterState.filter.von, null);
+      expect(filterState.filter.bis, null);
+      expect(filterState.filter.orte, []);
+    ***REMOVED***);
+
+    testWidgets('loads initially filter from storage if found',
+        (WidgetTester tester) async {
+      when(storageService.loadFilter()).thenAnswer((_) async => TermineFilter(
+          ['Sammeln', 'Infoveranstaltung'],
+          [DateTime(2020, 1, 14), DateTime(2020, 1, 16)],
+          TimeOfDay(hour: 12, minute: 30),
+          TimeOfDay(hour: 15, minute: 0),
+          [
+            Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez'),
+            Ort(2, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung')
+          ]));
+
+      FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+
+      await tester.pumpWidget(MaterialApp(
+          home: Provider<StorageService>(
+              create: (context) => storageService, child: filterWidget)));
+
+      FilterWidgetState filterState = tester.state(find.byWidget(filterWidget));
+      var filter = filterState.filter;
+
+      expect(filter.typen, containsAll(['Sammeln', 'Infoveranstaltung']));
+      expect(filter.tage.length, 2);
+      expect(filter.tage,
+          containsAll([DateTime(2020, 1, 14), DateTime(2020, 1, 16)]));
+      expect(filter.von, TimeOfDay(hour: 12, minute: 30));
+      expect(filter.bis, TimeOfDay(hour: 15, minute: 0));
+      expect(
+          filter.orte.map((ort) => ort.toJson()),
+          containsAll([
+            {
+              'id': 1,
+              'bezirk': 'Friedrichshain-Kreuzberg',
+              'ort': 'Friedrichshain Nordkiez'
+            ***REMOVED***,
+            {
+              'id': 2,
+              'bezirk': 'Friedrichshain-Kreuzberg',
+              'ort': 'Görlitzer Park und Umgebung'
+            ***REMOVED***
+          ]));
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***
