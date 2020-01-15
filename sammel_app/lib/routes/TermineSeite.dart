@@ -57,6 +57,8 @@ class _TermineSeiteState extends State<TermineSeite> {
                   itemCount: termine.length,
                   itemBuilder: (context, index) => ListTile(
                       title: TerminCard(termine[index]),
+                      onTap: () =>
+                          openTerminDetailsWidget(context, termine[index]),
                       contentPadding: EdgeInsets.only(bottom: 0.1)))),
         ],
       ),
