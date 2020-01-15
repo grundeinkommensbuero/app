@@ -36,14 +36,20 @@ class _ActionEditor extends State<ActionEditor> {
   TextStyle default_text_style =
       TextStyle(fontWeight: FontWeight.normal, color: Colors.black);
 
-  get filter => null;
-
   @override
   Widget build(BuildContext context) {
     return Column(
         //    crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text('Die Initiative lebt von deiner Beteiligung'),
+          Text(
+            'Das Volksbegehren lebt von deiner Beteiligung! \n',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          Text(
+            'Wenn du keine passende Sammel-Aktion findest, dann lade andere zum gemeinsamen Sammeln ein! '
+            'Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.',
+            textScaleFactor: 1.0,
+          ),
           SizedBox(height: 15),
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Icon(Icons.my_location, size: 40.0),
@@ -55,15 +61,12 @@ class _ActionEditor extends State<ActionEditor> {
                 'Wo? ',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              FlatButton(
-                materialTapTargetSize: _zeroPadding,
-                onPressed: () => locationSelection(),
-                child: locationButtonCaption(this.action),
-              ),
-              FlatButton(
-                  materialTapTargetSize: _zeroPadding,
-                  onPressed: () => venueSelection(),
-                  child: venueButtonCaption(this.action))
+              InputButton(
+                  onTap: locationSelection,
+                  caption: locationButtonCaption(this.action)),
+              InputButton(
+                  onTap: venueSelection,
+                  caption: venueButtonCaption(this.action)),
             ])
           ]),
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -76,11 +79,7 @@ class _ActionEditor extends State<ActionEditor> {
                 'Wann?',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              FlatButton(
-                materialTapTargetSize: _zeroPadding,
-                onPressed: () => daysSelection(),
-                child: daysButtonCaption(),
-              ),
+              InputButton(onTap: daysSelection, caption: daysButtonCaption()),
               FlatButton(
                 materialTapTargetSize: _zeroPadding,
                 onPressed: () => timeSelection(),
@@ -98,15 +97,10 @@ class _ActionEditor extends State<ActionEditor> {
                 'Was?',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              FlatButton(
-                materialTapTargetSize: _zeroPadding,
-                onPressed: () => typeSelection(),
-                child: typeButtonCaption(),
-              ),
-              FlatButton(
-                  materialTapTargetSize: _zeroPadding,
-                  onPressed: () => descriptionSelection(),
-                  child: descriptionButtonCaption(this.action))
+              InputButton(onTap: typeSelection, caption: typeButtonCaption()),
+              InputButton(
+                  onTap: descriptionSelection,
+                  caption: descriptionButtonCaption(this.action)),
             ])
           ]),
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -119,12 +113,9 @@ class _ActionEditor extends State<ActionEditor> {
                 'Wer?',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              FlatButton(
-                  //          color: Color.fromARGB(255, 149, 48, 118),
-                  //       textColor: Color.fromARGB(255, 129, 28, 98),
-                  materialTapTargetSize: _zeroPadding,
-                  onPressed: () => contactSelection(),
-                  child: contactButtonCaption(this.action))
+              InputButton(
+                  onTap: contactSelection,
+                  caption: contactButtonCaption(this.action)),
             ])
           ]),
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
@@ -176,7 +167,11 @@ class _ActionEditor extends State<ActionEditor> {
 
   void venueSelection() async {
     var ergebnis = await showTextInputDialog(
-        this.action.terminDetails.treffpunkt, 'Treffpunkt', 'Dummy Text');
+        this.action.terminDetails.treffpunkt,
+        'Treffpunkt',
+        'Gib einen leicht zu findenden Treffpunkt an, z.B. '
+            '"Unter der Weltzeituhr", "Schillerstraße 12" oder '
+            '"Eingang Kienitzstraße am Tempelhofer Feld" ');
     setState(() {
       this.action.terminDetails.treffpunkt = ergebnis;
     });
@@ -184,7 +179,9 @@ class _ActionEditor extends State<ActionEditor> {
 
   void contactSelection() async {
     var ergebnis = await showTextInputDialog(
-        this.action.terminDetails.kontakt, 'Kontakt', 'Dummy Text');
+        this.action.terminDetails.kontakt, 'Kontakt', 'Hier kannst du ein paar Worte über dich verlieren, '
+        'vor allem, wie man dich kontaktieren kann, damit andere sich mit dir zum Sammeln verabreden können. '
+        'Beachte dass alle Sammler*innen deine Angaben lesen können.');
     setState(() {
       this.action.terminDetails.kontakt = ergebnis;
     });
@@ -196,6 +193,7 @@ class _ActionEditor extends State<ActionEditor> {
     // Widget input_widget = list[1];
     String current_input = current_value;
     TextFormField input_field = TextFormField(
+      minLines: 3,
       initialValue: current_value,
       keyboardType: TextInputType.multiline,
       maxLines: null,
@@ -294,7 +292,7 @@ class _ActionEditor extends State<ActionEditor> {
   }
 
   daysSelection() async {
-    var selectedDates = await showMultipleDatePicker(this.filter.tage, context,
+    var selectedDates = await showMultipleDatePicker(this.action.tage, context,
         key: Key('days selection dialog'));
     setState(() {
       if (selectedDates != null)
@@ -304,8 +302,8 @@ class _ActionEditor extends State<ActionEditor> {
   }
 
   timeSelection() async {
-    TimeRange timeRange = await showTimeRangePicker(
-        context, this.filter.von?.hour, this.filter.bis?.hour);
+    TimeRange timeRange =
+        await showTimeRangePicker(context, this.action.von, this.action.bis);
     setState(() {
       this.action.von = timeRange.from;
       this.action.bis = timeRange.to;
@@ -328,7 +326,9 @@ class _ActionEditor extends State<ActionEditor> {
 
   void descriptionSelection() async {
     var ergebnis = await showTextInputDialog(
-        this.action.terminDetails.kommentar, 'Kommentar', 'Dummy Text');
+        this.action.terminDetails.kommentar,
+        'Beschreibung',
+        'Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammlerinnen und Sammler mitbringen? Kann man auch später dazustoßen, usw');
     setState(() {
       this.action.terminDetails.kommentar = ergebnis;
     });
@@ -337,28 +337,30 @@ class _ActionEditor extends State<ActionEditor> {
   Text venueButtonCaption(ActionData termin) {
     return (termin.terminDetails.treffpunkt == null ||
             termin.terminDetails.treffpunkt == '')
-        ? Text('Treffpunkt eingeben')
-        : Text(termin.terminDetails.treffpunkt, style: default_text_style);
+        ? Text('Gib einen Treffpunkt an')
+        : Text('Treffpunkt: ${termin.terminDetails.treffpunkt}',
+            style: default_text_style);
   }
 
   Text contactButtonCaption(ActionData termin) {
     return (termin.terminDetails.kontakt == null ||
             termin.terminDetails.kontakt == '')
-        ? Text('Kontakt eingeben')
+        ? Text('Ein paar Worte über dich')
         : Text(termin.terminDetails.kontakt, style: default_text_style);
   }
 
   Text descriptionButtonCaption(ActionData termin) {
     return (termin.terminDetails.kommentar == null ||
             termin.terminDetails.kommentar == '')
-        ? Text('Beschreibung eingeben')
-        : Text(termin.terminDetails.kommentar, style: default_text_style);
+        ? Text('Beschreibe die Aktion kurz')
+        : Text('Beschreibung: ${termin.terminDetails.kommentar}',
+            style: default_text_style);
   }
 
   Text typeButtonCaption() {
     return this.action.typ != null && this.action.typ != ''
         ? Text(this.action.typ, style: default_text_style)
-        : Text("Wähle eine Termin-Art");
+        : Text("Wähle die Art der Aktion");
   }
 
   Text timButtonCaption(ActionData termin) {
@@ -404,5 +406,30 @@ class _ActionEditor extends State<ActionEditor> {
     } else {
       return null;
     }
+  }
+}
+
+class InputButton extends StatelessWidget {
+  Function onTap;
+  Widget caption;
+
+  InputButton({this.onTap, this.caption});
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      onPressed: onTap,
+      child: Row(children: [
+        caption,
+        SizedBox(
+          width: 5,
+        ),
+        Icon(
+          Icons.edit,
+          size: 15,
+        )
+      ]),
+    );
   }
 }
