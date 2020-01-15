@@ -240,7 +240,7 @@ class _ActionEditor extends State<ActionEditor> {
   ***REMOVED***
 
   typeSelection() async {
-    List<String> moeglicheTypen = ['Sammel-Termin', 'Info-Veranstaltung'];
+    List<String> moeglicheTypen = ['Sammeln', 'Infoveranstaltung'];
     var ausgewTyp = '';
     await showDialog<String>(
         context: context,
@@ -249,7 +249,7 @@ class _ActionEditor extends State<ActionEditor> {
               return SimpleDialog(
                   contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
                   titlePadding: EdgeInsets.all(15.0),
-                  title: const Text('Wähle Termin-Arten'),
+                  title: const Text('Wähle Aktions-Arten'),
                   children: <Widget>[
                     ...moeglicheTypen.map((typ) => RadioListTile(
                           groupValue: ausgewTyp,
