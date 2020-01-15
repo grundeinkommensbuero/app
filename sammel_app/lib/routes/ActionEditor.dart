@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -7,6 +8,7 @@ import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
+import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/LocationPicker.dart';
 import 'package:sammel_app/shared/showMultipleDatePicker.dart';
 import 'package:sammel_app/shared/showTimeRangePicker.dart';
@@ -32,10 +34,6 @@ class ActionEditor extends StatefulWidget {
 class _ActionEditor extends State<ActionEditor> {
   ActionData action = ActionData();
 
-  var _zeroPadding = MaterialTapTargetSize.shrinkWrap;
-  TextStyle default_text_style =
-      TextStyle(fontWeight: FontWeight.normal, color: Colors.black);
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -46,7 +44,7 @@ class _ActionEditor extends State<ActionEditor> {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           Text(
-            'Wenn du keine passende Sammel-Aktion findest, dann lade andere zum gemeinsamen Sammeln ein! '
+            'Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. '
             'Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.',
             textScaleFactor: 1.0,
           ),
@@ -63,10 +61,10 @@ class _ActionEditor extends State<ActionEditor> {
               ),
               InputButton(
                   onTap: locationSelection,
-                  caption: locationButtonCaption(this.action)),
+                  child: locationButtonCaption(this.action)),
               InputButton(
                   onTap: venueSelection,
-                  caption: venueButtonCaption(this.action)),
+                  child: venueButtonCaption(this.action)),
             ])
           ]),
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -79,12 +77,9 @@ class _ActionEditor extends State<ActionEditor> {
                 'Wann?',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              InputButton(onTap: daysSelection, caption: daysButtonCaption()),
-              FlatButton(
-                materialTapTargetSize: _zeroPadding,
-                onPressed: () => timeSelection(),
-                child: timButtonCaption(this.action),
-              )
+              InputButton(onTap: daysSelection, child: daysButtonCaption()),
+              InputButton(
+                  onTap: timeSelection, child: timButtonCaption(this.action)),
             ])
           ]),
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -97,10 +92,10 @@ class _ActionEditor extends State<ActionEditor> {
                 'Was?',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              InputButton(onTap: typeSelection, caption: typeButtonCaption()),
+              InputButton(onTap: typeSelection, child: typeButtonCaption()),
               InputButton(
                   onTap: descriptionSelection,
-                  caption: descriptionButtonCaption(this.action)),
+                  child: descriptionButtonCaption(this.action)),
             ])
           ]),
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -115,10 +110,10 @@ class _ActionEditor extends State<ActionEditor> {
               ),
               InputButton(
                   onTap: contactSelection,
-                  caption: contactButtonCaption(this.action)),
+                  child: contactButtonCaption(this.action)),
             ])
           ]),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          ButtonBar(alignment: MainAxisAlignment.spaceAround, children: [
             RaisedButton(
                 child: Text('Abbrechen'),
                 onPressed: () {
@@ -126,7 +121,7 @@ class _ActionEditor extends State<ActionEditor> {
                   Navigator.pop(context, null);
                 ***REMOVED***),
             RaisedButton(
-                child: Text('Erstellen'),
+                child: Text('Fertig'),
                 onPressed: () {
                   List<Future<Termin>> list = pushTermineToDB(onApply(true));
                   Navigator.pop(context, list);
@@ -149,22 +144,6 @@ class _ActionEditor extends State<ActionEditor> {
     return null;
   ***REMOVED***
 
-  Text daysButtonCaption() {
-    if (this.action.tage == null || this.action.tage.isEmpty) {
-      return Text("Wähle einen Tag");
-    ***REMOVED*** else {
-      return Text(
-          "am " +
-              this
-                  .action
-                  .tage
-                  .map((tag) => DateFormat("dd.MM.").format(tag))
-                  .join(", ") +
-              ",",
-          style: default_text_style);
-    ***REMOVED***
-  ***REMOVED***
-
   void venueSelection() async {
     var ergebnis = await showTextInputDialog(
         this.action.terminDetails.treffpunkt,
@@ -179,9 +158,11 @@ class _ActionEditor extends State<ActionEditor> {
 
   void contactSelection() async {
     var ergebnis = await showTextInputDialog(
-        this.action.terminDetails.kontakt, 'Kontakt', 'Hier kannst du ein paar Worte über dich verlieren, '
-        'vor allem, wie man dich kontaktieren kann, damit andere sich mit dir zum Sammeln verabreden können. '
-        'Beachte dass alle Sammler*innen deine Angaben lesen können.');
+        this.action.terminDetails.kontakt,
+        'Kontakt',
+        'Hier kannst du ein paar Worte über dich verlieren, '
+            'vor allem, wie man dich kontaktieren kann, damit andere sich mit dir zum Sammeln verabreden können. '
+            'Beachte dass alle Sammler*innen deine Angaben lesen können.');
     setState(() {
       this.action.terminDetails.kontakt = ergebnis;
     ***REMOVED***);
@@ -334,33 +315,51 @@ class _ActionEditor extends State<ActionEditor> {
     ***REMOVED***);
   ***REMOVED***
 
-  Text venueButtonCaption(ActionData termin) {
+  Text daysButtonCaption() {
+    if (this.action.tage == null || this.action.tage.isEmpty) {
+      return Text("Wähle einen Tag", style: TextStyle(color: DweTheme.purple));
+    ***REMOVED*** else {
+      return Text("am " +
+          this
+              .action
+              .tage
+              .map((tag) => DateFormat("dd.MM.").format(tag))
+              .join(", ") +
+          ",");
+    ***REMOVED***
+  ***REMOVED***
+
+  Widget venueButtonCaption(ActionData termin) {
     return (termin.terminDetails.treffpunkt == null ||
             termin.terminDetails.treffpunkt == '')
-        ? Text('Gib einen Treffpunkt an')
-        : Text('Treffpunkt: ${termin.terminDetails.treffpunkt***REMOVED***',
-            style: default_text_style);
+        ? Text(
+            'Gib einen Treffpunkt an',
+            style: TextStyle(color: DweTheme.purple),
+          )
+        : Text('Treffpunkt: ${termin.terminDetails.treffpunkt***REMOVED***');
   ***REMOVED***
 
   Text contactButtonCaption(ActionData termin) {
     return (termin.terminDetails.kontakt == null ||
             termin.terminDetails.kontakt == '')
-        ? Text('Ein paar Worte über dich')
-        : Text(termin.terminDetails.kontakt, style: default_text_style);
+        ? Text('Ein paar Worte über dich',
+            style: TextStyle(color: DweTheme.purple))
+        : Text(termin.terminDetails.kontakt);
   ***REMOVED***
 
   Text descriptionButtonCaption(ActionData termin) {
     return (termin.terminDetails.kommentar == null ||
             termin.terminDetails.kommentar == '')
-        ? Text('Beschreibe die Aktion kurz')
-        : Text('Beschreibung: ${termin.terminDetails.kommentar***REMOVED***',
-            style: default_text_style);
+        ? Text('Beschreibe die Aktion kurz',
+            style: TextStyle(color: DweTheme.purple))
+        : Text('Beschreibung: ${termin.terminDetails.kommentar***REMOVED***');
   ***REMOVED***
 
   Text typeButtonCaption() {
     return this.action.typ != null && this.action.typ != ''
-        ? Text(this.action.typ, style: default_text_style)
-        : Text("Wähle die Art der Aktion");
+        ? Text(this.action.typ)
+        : Text("Wähle die Art der Aktion",
+            style: TextStyle(color: DweTheme.purple));
   ***REMOVED***
 
   Text timButtonCaption(ActionData termin) {
@@ -369,16 +368,18 @@ class _ActionEditor extends State<ActionEditor> {
       beschriftung += 'von ' + ChronoHelfer.timeToStringHHmm(termin.von);
     if (termin.bis != null)
       beschriftung += ' bis ' + ChronoHelfer.timeToStringHHmm(termin.bis);
-    if (beschriftung.isEmpty) return Text('Wähle eine Uhrzeit');
+    if (beschriftung.isEmpty)
+      return Text('Wähle eine Uhrzeit',
+          style: TextStyle(color: DweTheme.purple));
     beschriftung += ',';
-    return Text(beschriftung, style: default_text_style);
+    return Text(beschriftung);
   ***REMOVED***
 
   Text locationButtonCaption(ActionData termin) {
-    if (termin.ort == null) return Text("Wähle einen Ort");
+    if (termin.ort == null)
+      return Text("Wähle einen Ort", style: TextStyle(color: DweTheme.purple));
     return Text(
       "in " + termin.ort.ort,
-      style: default_text_style,
     );
   ***REMOVED***
 
@@ -411,25 +412,26 @@ class _ActionEditor extends State<ActionEditor> {
 
 class InputButton extends StatelessWidget {
   Function onTap;
-  Widget caption;
+  Widget child;
 
-  InputButton({this.onTap, this.caption***REMOVED***);
+  InputButton({this.onTap, this.child***REMOVED***);
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      onPressed: onTap,
-      child: Row(children: [
-        caption,
-        SizedBox(
-          width: 5,
-        ),
-        Icon(
-          Icons.edit,
-          size: 15,
-        )
-      ]),
-    );
+    return InkWell(
+        child: Container(
+            padding: EdgeInsets.only(bottom: 8.0, top: 4.0),
+            child: Row(crossAxisAlignment: CrossAxisAlignment.start,children: [
+              Icon(
+                Icons.keyboard_arrow_right,
+                size: 15,
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              SizedBox(width: 200.0 ,child: child),
+
+            ])),
+        onTap: onTap);
   ***REMOVED***
 ***REMOVED***
