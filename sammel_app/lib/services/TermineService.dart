@@ -42,7 +42,7 @@ class TermineService extends AbstractTermineService {
     if (response.response.statusCode == 200) {
       return Termin.fromJson(response.body);
     ***REMOVED*** else {
-      throw RestFehler("Fehler beim Anlegen eines Termins: "
+      throw RestFehler("Fehler beim Anlegen einer Aktion: "
           "${response.response.statusCode***REMOVED*** - ${response.body***REMOVED***");
     ***REMOVED***
   ***REMOVED***
@@ -54,7 +54,7 @@ class TermineService extends AbstractTermineService {
       if (response.response.statusCode == 200)
         return Termin.fromJson(response.body);
       else
-        throw RestFehler("Fehler beim Ermitteln eines Termins: "
+        throw RestFehler("Fehler beim Ermitteln einer Aktion: "
             "${response.response.statusCode***REMOVED*** - ${response.body***REMOVED***");
     ***REMOVED***);
   ***REMOVED***

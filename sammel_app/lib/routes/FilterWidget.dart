@@ -125,7 +125,7 @@ class FilterWidgetState extends State<FilterWidget>
   String artButtonBeschriftung() {
     return filter.typen != null && filter.typen.isNotEmpty
         ? filter.typen.join(", ")
-        : "Alle Termin-Arten,";
+        : "Alle Aktions-Arten,";
   ***REMOVED***
 
   static String uhrzeitButtonBeschriftung(TermineFilter filter) {
@@ -173,7 +173,7 @@ class FilterWidgetState extends State<FilterWidget>
                   title: AppBar(
                       leading: null,
                       automaticallyImplyLeading: false,
-                      title: const Text('Wähle Termin-Arten')),
+                      title: const Text('Wähle Aktions-Arten')),
                   children:
                       List.of(moeglicheTypen.map((typ) => CheckboxListTile(
                             checkColor: Colors.black,
