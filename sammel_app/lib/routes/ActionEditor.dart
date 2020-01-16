@@ -25,14 +25,52 @@ class ActionData {
 class ActionEditor extends StatefulWidget {
   void Function() onApply;
 
-  ActionEditor(void Function() this.onApply, {Key key}) : super(key: key);
+  Termin init_termin = null;
+
+  ActionEditor(void Function() this.onApply, Termin init_termin, {Key key}) : super(key: key)
+  {
+    print('create');
+    print(init_termin);
+    this.init_termin = init_termin;
+  }
 
   @override
-  _ActionEditor createState() => _ActionEditor();
+  _ActionEditor createState() => _ActionEditor(this.init_termin);
 }
 
 class _ActionEditor extends State<ActionEditor> {
+
   ActionData action = ActionData();
+
+  _ActionEditor(Termin init_termin) : super()
+  {
+    if(init_termin != null)
+      {
+        if(init_termin.ort != null)
+          {
+            action.ort = init_termin.ort;
+          }
+        if(init_termin.typ != null)
+          {
+            action.typ = init_termin.typ;
+          }
+        if(init_termin.details != null)
+          {
+            action.terminDetails = init_termin.details;
+          }
+        if(init_termin.beginn != null)
+          {
+            action.von = TimeOfDay.fromDateTime(init_termin.beginn);
+            action.tage.add(init_termin.beginn);
+          }
+        if(init_termin.ende != null)
+        {
+          action.bis = TimeOfDay.fromDateTime(init_termin.ende);
+        }
+      }
+    print('action editor called');
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +161,8 @@ class _ActionEditor extends State<ActionEditor> {
             RaisedButton(
                 child: Text('Fertig'),
                 onPressed: () {
-                  List<Future<Termin>> list = pushTermineToDB(onApply(true));
+                  List<Termin> list = onApply(true);
+                //  List<Future<Termin>> list = pushTermineToDB(onApply(true));
                   Navigator.pop(context, list);
                 })
           ])

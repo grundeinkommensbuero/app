@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sammel_app/model/Ort.dart';
+import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
@@ -92,7 +94,8 @@ class _TermineSeiteState extends State<TermineSeite> {
   }
 
   _displayStepper(BuildContext context) async {
-    List<Future<Termin>> new_meetings = await showDialog(
+    Termin init_termin = Termin(1, null, DateTime.now(), null, '5', TerminDetails('t','tt','ttt')  );
+    List<Termin> new_meetings = await showDialog(
           context: context,
           builder: (context) {
             return SimpleDialog(
@@ -111,14 +114,15 @@ class _TermineSeiteState extends State<TermineSeite> {
                 children: <Widget>[
                   ActionEditor(() {
                     print('done');
-                  })
+                  }, init_termin)
                 ]);
           });
 
     if(new_meetings != null) {
       setState(() {
         for (final termin in new_meetings) {
-          termin.then((Termin termin) => termine.add(termin));
+          termine.add(termin);
+        //  termin.then((Termin termin) => termine.add(termin));
         }
       });
     }
