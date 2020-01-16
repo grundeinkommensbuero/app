@@ -25,14 +25,52 @@ class ActionData {
 class ActionEditor extends StatefulWidget {
   void Function() onApply;
 
-  ActionEditor(void Function() this.onApply, {Key key***REMOVED***) : super(key: key);
+  Termin init_termin = null;
+
+  ActionEditor(void Function() this.onApply, Termin init_termin, {Key key***REMOVED***) : super(key: key)
+  {
+    print('create');
+    print(init_termin);
+    this.init_termin = init_termin;
+  ***REMOVED***
 
   @override
-  _ActionEditor createState() => _ActionEditor();
+  _ActionEditor createState() => _ActionEditor(this.init_termin);
 ***REMOVED***
 
 class _ActionEditor extends State<ActionEditor> {
+
   ActionData action = ActionData();
+
+  _ActionEditor(Termin init_termin) : super()
+  {
+    if(init_termin != null)
+      {
+        if(init_termin.ort != null)
+          {
+            action.ort = init_termin.ort;
+          ***REMOVED***
+        if(init_termin.typ != null)
+          {
+            action.typ = init_termin.typ;
+          ***REMOVED***
+        if(init_termin.details != null)
+          {
+            action.terminDetails = init_termin.details;
+          ***REMOVED***
+        if(init_termin.beginn != null)
+          {
+            action.von = TimeOfDay.fromDateTime(init_termin.beginn);
+            action.tage.add(init_termin.beginn);
+          ***REMOVED***
+        if(init_termin.ende != null)
+        {
+          action.bis = TimeOfDay.fromDateTime(init_termin.ende);
+        ***REMOVED***
+      ***REMOVED***
+    print('action editor called');
+  ***REMOVED***
+
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +161,8 @@ class _ActionEditor extends State<ActionEditor> {
             RaisedButton(
                 child: Text('Fertig'),
                 onPressed: () {
-                  List<Future<Termin>> list = pushTermineToDB(onApply(true));
+                  List<Termin> list = onApply(true);
+                //  List<Future<Termin>> list = pushTermineToDB(onApply(true));
                   Navigator.pop(context, list);
                 ***REMOVED***)
           ])
