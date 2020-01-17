@@ -34,15 +34,16 @@ class TermineService extends AbstractTermineService {
       termine.sort(Termin.sortByStart());
       return termine;
     } else {
-      throw RestFehler("Unerwarteter Fehler: "
-          "${response.response.statusCode} - ${response.body}");
+      var meldung = "Unerwarteter Fehler: "
+          "${response.response.statusCode} - ${response.body}";
+      print(meldung);
+      throw RestFehler(meldung);
     }
   }
 
   Future<Termin> createTermin(Termin termin) async {
     var response =
         await post(Uri.parse('service/termine/neu'), jsonEncode(termin));
-    print('### Zurückgegebener Termin: ${jsonEncode(response.body)}');
     if (response.response.statusCode == 200) {
       return Termin.fromJson(response.body);
     } else {
@@ -77,11 +78,9 @@ class TermineService extends AbstractTermineService {
 
   // TODO Tests
   Future<void> deleteAction(Termin action) async {
-    var response = await delete(
-        Uri.parse('service/termine/termin'), jsonEncode(action));
-    if (response.response.statusCode == 200) {
-      return;
-    } else {
+    var response =
+        await delete(Uri.parse('service/termine/termin'), jsonEncode(action));
+    if (response.response.statusCode != 200) {
       throw RestFehler("Fehler beim Löschen einer Aktion: "
           "${response.response.statusCode} - ${response.body}");
     }
