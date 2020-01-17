@@ -6,7 +6,6 @@ import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
-import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/LocationPicker.dart';
@@ -47,6 +46,9 @@ class _ActionEditor extends State<ActionEditor> {
       ***REMOVED***
       if (initAction.ende != null)
         action.bis = TimeOfDay.fromDateTime(initAction.ende);
+      if (initAction.details != null) {
+        action.terminDetails = initAction.details;
+      ***REMOVED***
     ***REMOVED***
   ***REMOVED***
 
@@ -132,25 +134,12 @@ class _ActionEditor extends State<ActionEditor> {
           ButtonBar(alignment: MainAxisAlignment.spaceAround, children: [
             RaisedButton(
                 child: Text('Abbrechen'),
-                onPressed: () => Navigator.pop(context, [])),
+                onPressed: () => Navigator.pop(context, null)),
             RaisedButton(
                 child: Text('Fertig'),
                 onPressed: () => Navigator.pop(context, generateActions()))
           ])
         ]);
-  ***REMOVED***
-
-  List<Future<Termin>> pushTermineToDB(List<Termin> termine) {
-    if (termine != null) {
-      List<Future<Termin>> new_meetings = List<Future<Termin>>();
-      AbstractTermineService termineService =
-          Provider.of<AbstractTermineService>(context);
-      for (final termin in termine) {
-        new_meetings.add(termineService.createTermin(termin));
-      ***REMOVED***
-      return new_meetings;
-    ***REMOVED***
-    return null;
   ***REMOVED***
 
   void venueSelection() async {
@@ -279,7 +268,8 @@ class _ActionEditor extends State<ActionEditor> {
 
   daysSelection() async {
     var selectedDates = await showMultipleDatePicker(this.action.tage, context,
-        key: Key('days selection dialog'));
+        key: Key('days selection dialog'),
+        multiMode: widget.initAction == null ? true : false);
     setState(() {
       if (selectedDates != null)
         this.action.tage = selectedDates
@@ -389,6 +379,7 @@ class _ActionEditor extends State<ActionEditor> {
   ***REMOVED***
 
   List<Termin> generateActions() {
+    // TODO Popup bei Invalidem Inhalt
     if (this.action.von != null &&
         this.action.bis != null &&
         this.action.tage != null &&
@@ -403,8 +394,8 @@ class _ActionEditor extends State<ActionEditor> {
         DateTime end = new DateTime(tag.year, tag.month, tag.day,
             this.action.bis.hour, this.action.bis.minute);
 
-        termine.add(Termin(0, begin, end, this.action.ort, this.action.typ,
-            this.action.terminDetails));
+        termine.add(Termin(widget.initAction?.id, begin, end, this.action.ort,
+            this.action.typ, this.action.terminDetails));
       ***REMOVED***
       return termine;
     ***REMOVED***

@@ -6,6 +6,7 @@ class DweTheme {
   static final Color yellowBright = Color.fromARGB(255, 255, 255, 130);
   static final Color purple = Color.fromARGB(255, 129, 28, 98);
   static final Color purpleLight = Color.fromARGB(255, 109, 8, 78);
+  static final Color red = Color.fromARGB(255, 204, 36, 36);
 
   static ThemeData themeData = ThemeData(
       // button text color
@@ -30,4 +31,5 @@ class DweTheme {
           buttonColor: purple,
           textTheme: ButtonTextTheme.primary),
       iconTheme: IconThemeData(color: purple));
+
 ***REMOVED***

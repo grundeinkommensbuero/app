@@ -5,6 +5,8 @@ import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/ExpandableConstrainedBox.dart';
 
+enum TerminDetailsCommand { EDIT, DELETE, CLOSE ***REMOVED***
+
 class TerminDetailsWidget extends StatefulWidget {
   final Termin termin;
 
@@ -65,7 +67,8 @@ class _TerminDetailsWidget extends State<TerminDetailsWidget> {
             'Wann?',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          SelectableText(ChronoHelfer.formatDateOfDateTime(widget.termin.beginn)),
+          SelectableText(
+              ChronoHelfer.formatDateOfDateTime(widget.termin.beginn)),
           SelectableText(ChronoHelfer.formatFromToTimeOfDateTimes(
               widget.termin.beginn, widget.termin.ende))
         ])
@@ -88,7 +91,8 @@ class _TerminDetailsWidget extends State<TerminDetailsWidget> {
           ExpandableConstrainedBox(
             child: SelectableText(
               widget.termin.details.kommentar,
-              onTap: () => {***REMOVED***, // TODO: SelectableText stiehlt ExpandableContraintBox den onTap
+              onTap: () => {***REMOVED***,
+              // TODO: SelectableText stiehlt ExpandableContraintBox den onTap
               style: TextStyle(fontWeight: FontWeight.normal),
             ),
             maxHeight: 105.0,

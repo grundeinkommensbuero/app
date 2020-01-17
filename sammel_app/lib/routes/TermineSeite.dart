@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/services/TermineService.dart';
+import 'package:sammel_app/shared/DweTheme.dart';
 import 'FilterWidget.dart';
 import 'TerminDetailsWidget.dart';
 
@@ -64,9 +67,7 @@ class _TermineSeiteState extends State<TermineSeite> {
       ),
       floatingActionButton: FloatingActionButton.extended(
           key: Key('create termin button'),
-          onPressed: () {
-            openCreateDialog(context);
-          ***REMOVED***,
+          onPressed: () => openCreateDialog(context),
           icon: Icon(
             Icons.add,
           ),
@@ -111,6 +112,8 @@ class _TermineSeiteState extends State<TermineSeite> {
               children: <Widget>[ActionEditor(Termin.emptyAction())]);
         ***REMOVED***);
 
+    if (newActions == null) return;
+
     for (final action in newActions) {
       termineService
           .createTermin(action)
@@ -122,7 +125,7 @@ class _TermineSeiteState extends State<TermineSeite> {
 
   openTerminDetailsWidget(BuildContext context, Termin termin) async {
     var terminMitDetails = await termineService.getTerminMitDetails(termin.id);
-    showDialog(
+    TerminDetailsCommand command = await showDialog(
         context: context,
         builder: (BuildContext context) => SimpleDialog(
               titlePadding: EdgeInsets.zero,
@@ -145,12 +148,89 @@ class _TermineSeiteState extends State<TermineSeite> {
               contentPadding: EdgeInsets.all(10.0),
               children: <Widget>[
                 TerminDetailsWidget(terminMitDetails),
-                RaisedButton(
-                  key: Key('close termin details button'),
-                  child: Text('Schließen'),
-                  onPressed: () => Navigator.pop(context),
-                )
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      RaisedButton(
+                          color: DweTheme.red,
+                          child: Icon(Icons.delete),
+                          onPressed: () {
+                            showDialog<bool>(
+                                    context: context,
+                                    builder: (context) =>
+                                        confirmDeleteDialog(context))
+                                .then((confirmed) {
+                              if (confirmed)
+                                Navigator.pop(
+                                    context, TerminDetailsCommand.DELETE);
+                            ***REMOVED***);
+                          ***REMOVED***),
+                      RaisedButton(
+                        child: Icon(Icons.edit),
+                        onPressed: () =>
+                            Navigator.pop(context, TerminDetailsCommand.EDIT),
+                      ),
+                      RaisedButton(
+                        key: Key('close termin details button'),
+                        child: Text('Schließen'),
+                        onPressed: () =>
+                            Navigator.pop(context, TerminDetailsCommand.CLOSE),
+                      ),
+                    ]),
               ],
             ));
+
+    if (command == TerminDetailsCommand.DELETE) {
+      return;
+    ***REMOVED***
+
+    if (command == TerminDetailsCommand.EDIT) {
+      Termin newAction = await openEditDialog(context, terminMitDetails);
+      print('### ${jsonEncode(newAction.toJson())***REMOVED***');
+      openTerminDetailsWidget(context, newAction); // recursive and I know it
+      setState(() {
+        termine[termine.indexWhere((a) => a.id == newAction.id)] = newAction;
+      ***REMOVED***);
+    ***REMOVED***
+  ***REMOVED***
+
+  openEditDialog(BuildContext context, Termin termin) async {
+    List<Termin> editedAction = await showDialog(
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+              titlePadding: EdgeInsets.zero,
+              title: AppBar(
+                leading: null,
+                automaticallyImplyLeading: false,
+                title: Text('Aktion bearbeiten',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22.0,
+                        color: Color.fromARGB(255, 129, 28, 98))),
+              ),
+              contentPadding: EdgeInsets.all(10.0),
+              children: <Widget>[ActionEditor(termin)]);
+        ***REMOVED***);
+
+    if (editedAction == null) return termin;
+
+    await termineService.saveAction(editedAction[0]);
+    return editedAction[0];
   ***REMOVED***
 ***REMOVED***
+
+AlertDialog confirmDeleteDialog(BuildContext context) => AlertDialog(
+        title: Text('Termin Löschen'),
+        content: Text('Möchtest du diesen Termin wirklich löschen?'),
+        actions: [
+          RaisedButton(
+              color: DweTheme.red,
+              child: Text('Ja'),
+              onPressed: () => Navigator.pop(context, true)),
+          RaisedButton(
+            child: Text('Nein'),
+            onPressed: () => Navigator.pop(context, false),
+          ),
+        ]);
