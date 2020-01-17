@@ -9,8 +9,15 @@ class Termin {
   String typ;
   TerminDetails details;
 
-  Termin(
-      this.id, this.beginn, this.ende, this.ort, this.typ, this.details);
+  Termin(this.id, this.beginn, this.ende, this.ort, this.typ, this.details);
+
+  Termin.emptyAction()
+      : id = null,
+        beginn = null,
+        ende = null,
+        ort = null,
+        typ = null,
+        details = TerminDetails(null, null, null);
 
   Termin.fromJson(Map<String, dynamic> json)
       : id = json['id'],
@@ -40,4 +47,7 @@ class Termin {
     ***REMOVED***
     return '';
   ***REMOVED***
+
+  static int Function(Termin a, Termin b) sortByStart() =>
+      (termin1, termin2) => termin1.beginn.compareTo(termin2.beginn);
 ***REMOVED***
