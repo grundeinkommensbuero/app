@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -182,7 +180,9 @@ class _TermineSeiteState extends State<TermineSeite> {
             ));
 
     if (command == TerminDetailsCommand.DELETE) {
-      termineService.deleteAction(terminMitDetails).catchError(
+      termineService.deleteAction(terminMitDetails)
+          .then((_) => setState(() => termine.remove(termin)))
+          .catchError(
           (error) => print((error as RestFehler).meldung),
           test: (error) => error is RestFehler);
     ***REMOVED***
