@@ -38,7 +38,6 @@ class _TermineSeiteState extends State<TermineSeite> {
   @override
   Widget build(BuildContext context) {
     if (!_initialized) intialize(context);
-    print('### Gespeicherte IDs: $myActions');
     // TODO: Memory-Leak beheben
     return Scaffold(
       extendBody: true,
@@ -226,17 +225,18 @@ class _TermineSeiteState extends State<TermineSeite> {
 
   //TODO Tests
   Future<void> deleteAction(Termin action) async {
-    await termineService.deleteAction(action).catchError(
-        (error) => print((error as RestFehler).meldung),
-        test: (error) => error is RestFehler);
-    print('### lösche Token für Aktion ${action.id***REMOVED***');
+    try {
+      await termineService.deleteAction(action);
 
-    Provider.of<StorageService>(context).deleteActionToken(action.id);
+      Provider.of<StorageService>(context).deleteActionToken(action.id);
 
-    setState(() {
-      termine.remove(action);
-      myActions.remove(action.id);
-    ***REMOVED***);
+      setState(() {
+        termine.remove(action);
+        myActions.remove(action.id);
+      ***REMOVED***);
+    ***REMOVED*** on RestFehler catch (error) {
+      print((error as RestFehler).meldung);
+    ***REMOVED***
   ***REMOVED***
 
   openEditDialog(BuildContext context, Termin termin) async {

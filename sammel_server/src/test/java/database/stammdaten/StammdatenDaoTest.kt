@@ -39,7 +39,7 @@ class StammdatenDaoTest {
     ***REMOVED***
 
     companion object {
-        open fun nordkiez(): StammdatenRestResource.OrtDto =
+        fun nordkiez(): StammdatenRestResource.OrtDto =
                 StammdatenRestResource.OrtDto(0, "Friedrichshain-Kreuzberg", "Friedrichshain Nordkiez")
     ***REMOVED***
 
