@@ -59,13 +59,7 @@ class _TermineSeiteState extends State<TermineSeite> {
           filterWidget,
           Expanded(
               child: ListView.builder(
-                  itemCount: termine.length,
-                  itemBuilder: (context, index) => ListTile(
-                      title: TerminCard(
-                          termine[index], isMyAction(termine[index].id)),
-                      onTap: () =>
-                          openTerminDetailsWidget(context, termine[index]),
-                      contentPadding: EdgeInsets.only(bottom: 0.1)))),
+                  itemCount: termine.length, itemBuilder: cardListBuilder)),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -79,6 +73,25 @@ class _TermineSeiteState extends State<TermineSeite> {
               borderRadius: BorderRadius.all(Radius.circular(16.0)))),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  ***REMOVED***
+
+  Widget cardListBuilder(context, index) {
+    // insert "Jetzt" line
+    var tile = ListTile(
+        title: TerminCard(termine[index], isMyAction(termine[index].id)),
+        onTap: () => openTerminDetailsWidget(context, termine[index]),
+        contentPadding: EdgeInsets.only(bottom: 0.1));
+    if ((index == 0 || termine[index - 1].beginn.isBefore(DateTime.now())) &&
+        termine[index].beginn.isAfter(DateTime.now()))
+      return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        Text(
+          'Jetzt',
+          style: TextStyle(color: DweTheme.purple, fontSize: 16.0),
+        ),
+        tile,
+      ]);
+    else
+      return tile;
   ***REMOVED***
 
   bool isMyAction(int id) {
