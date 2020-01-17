@@ -27,8 +27,7 @@ class TermineService extends AbstractTermineService {
           .map((jsonTermin) => Termin.fromJson(jsonTermin))
           .toList();
       // Sortierung auf Client-Seite um Server und Datenbank skalierbar zu halten
-      termine
-          .sort((termin1, termin2) => termin1.beginn.compareTo(termin2.beginn));
+      termine.sort(Termin.sortByStart());
       return termine;
     } else {
       throw RestFehler("Unerwarteter Fehler: "

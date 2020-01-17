@@ -23,54 +23,32 @@ class ActionData {
 }
 
 class ActionEditor extends StatefulWidget {
-  void Function() onApply;
+  Termin initAction = null;
 
-  Termin init_termin = null;
-
-  ActionEditor(void Function() this.onApply, Termin init_termin, {Key key}) : super(key: key)
-  {
-    print('create');
-    print(init_termin);
-    this.init_termin = init_termin;
+  ActionEditor(Termin initAction, {Key key}) : super(key: key) {
+    this.initAction = initAction;
   }
 
   @override
-  _ActionEditor createState() => _ActionEditor(this.init_termin);
+  _ActionEditor createState() => _ActionEditor(this.initAction);
 }
 
 class _ActionEditor extends State<ActionEditor> {
-
   ActionData action = ActionData();
 
-  _ActionEditor(Termin init_termin) : super()
-  {
-    if(init_termin != null)
-      {
-        if(init_termin.ort != null)
-          {
-            action.ort = init_termin.ort;
-          }
-        if(init_termin.typ != null)
-          {
-            action.typ = init_termin.typ;
-          }
-        if(init_termin.details != null)
-          {
-            action.terminDetails = init_termin.details;
-          }
-        if(init_termin.beginn != null)
-          {
-            action.von = TimeOfDay.fromDateTime(init_termin.beginn);
-            action.tage.add(init_termin.beginn);
-          }
-        if(init_termin.ende != null)
-        {
-          action.bis = TimeOfDay.fromDateTime(init_termin.ende);
-        }
+  _ActionEditor(Termin initAction) : super() {
+    if (initAction != null) {
+      action.ort = initAction.ort;
+      action.typ = initAction.typ;
+      if (initAction.details != null) action.terminDetails = initAction.details;
+      if (initAction.beginn != null) {
+        action.von = TimeOfDay.fromDateTime(initAction.beginn);
+        action.tage.add(initAction.beginn);
       }
-    print('action editor called');
+      if (initAction.ende != null)
+        action.bis = TimeOfDay.fromDateTime(initAction.ende);
+    }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -154,23 +132,15 @@ class _ActionEditor extends State<ActionEditor> {
           ButtonBar(alignment: MainAxisAlignment.spaceAround, children: [
             RaisedButton(
                 child: Text('Abbrechen'),
-                onPressed: () {
-                  onApply(false);
-                  Navigator.pop(context, null);
-                }),
+                onPressed: () => Navigator.pop(context, [])),
             RaisedButton(
                 child: Text('Fertig'),
-                onPressed: () {
-                  List<Termin> list = onApply(true);
-                //  List<Future<Termin>> list = pushTermineToDB(onApply(true));
-                  Navigator.pop(context, list);
-                })
+                onPressed: () => Navigator.pop(context, generateActions()))
           ])
         ]);
   }
 
   List<Future<Termin>> pushTermineToDB(List<Termin> termine) {
-    print(termine);
     if (termine != null) {
       List<Future<Termin>> new_meetings = List<Future<Termin>>();
       AbstractTermineService termineService =
@@ -209,8 +179,6 @@ class _ActionEditor extends State<ActionEditor> {
 
   Future<String> showTextInputDialog(
       String current_value, String title, String description) {
-    // List list = createTextInputAlertDialogWidget(current_value, description);
-    // Widget input_widget = list[1];
     String current_input = current_value;
     TextFormField input_field = TextFormField(
       minLines: 3,
@@ -222,15 +190,13 @@ class _ActionEditor extends State<ActionEditor> {
       ),
       onSaved: (current_input_) {
         current_input = current_input_;
-        print(current_input);
       },
       onFieldSubmitted: (current_input_) {
         current_input = current_input_;
-        print(current_input);
       },
+      // FIXME
       onChanged: (current_input_) {
         current_input = current_input_;
-        print(current_input);
       },
     );
 
@@ -422,29 +388,25 @@ class _ActionEditor extends State<ActionEditor> {
     );
   }
 
-  List<Termin> onApply(bool use_data) {
-    if (use_data) {
-      if (this.action.von != null &&
-          this.action.bis != null &&
-          this.action.tage != null &&
-          !this.action.tage.isEmpty &&
-          this.action.ort != null &&
-          this.action.typ != null &&
-          this.action.typ != '') {
-        List<Termin> termine = new List<Termin>();
-        for (final tag in this.action.tage) {
-          DateTime begin = new DateTime(tag.year, tag.month, tag.day,
-              this.action.von.hour, this.action.von.minute);
-          DateTime end = new DateTime(tag.year, tag.month, tag.day,
-              this.action.bis.hour, this.action.bis.minute);
+  List<Termin> generateActions() {
+    if (this.action.von != null &&
+        this.action.bis != null &&
+        this.action.tage != null &&
+        !this.action.tage.isEmpty &&
+        this.action.ort != null &&
+        this.action.typ != null &&
+        this.action.typ != '') {
+      List<Termin> termine = new List<Termin>();
+      for (final tag in this.action.tage) {
+        DateTime begin = new DateTime(tag.year, tag.month, tag.day,
+            this.action.von.hour, this.action.von.minute);
+        DateTime end = new DateTime(tag.year, tag.month, tag.day,
+            this.action.bis.hour, this.action.bis.minute);
 
-          termine.add(Termin(0, begin, end, this.action.ort, this.action.typ,
-              this.action.terminDetails));
-        }
-        return termine;
+        termine.add(Termin(0, begin, end, this.action.ort, this.action.typ,
+            this.action.terminDetails));
       }
-    } else {
-      return null;
+      return termine;
     }
   }
 }
@@ -460,7 +422,7 @@ class InputButton extends StatelessWidget {
     return InkWell(
         child: Container(
             padding: EdgeInsets.only(bottom: 8.0, top: 4.0),
-            child: Row(crossAxisAlignment: CrossAxisAlignment.start,children: [
+            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Icon(
                 Icons.keyboard_arrow_right,
                 size: 15,
@@ -468,8 +430,7 @@ class InputButton extends StatelessWidget {
               SizedBox(
                 width: 5,
               ),
-              SizedBox(width: 200.0 ,child: child),
-
+              SizedBox(width: 200.0, child: child),
             ])),
         onTap: onTap);
   }

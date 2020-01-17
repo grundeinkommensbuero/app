@@ -2,8 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sammel_app/model/Ort.dart';
-import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
@@ -67,7 +65,7 @@ class _TermineSeiteState extends State<TermineSeite> {
       floatingActionButton: FloatingActionButton.extended(
           key: Key('create termin button'),
           onPressed: () {
-            _displayStepper(context);
+            openCreateDialog(context);
           },
           icon: Icon(
             Icons.add,
@@ -93,38 +91,32 @@ class _TermineSeiteState extends State<TermineSeite> {
     });
   }
 
-  _displayStepper(BuildContext context) async {
-    Termin init_termin = Termin(1, null, DateTime.now(), null, '5', TerminDetails('t','tt','ttt')  );
-    List<Termin> new_meetings = await showDialog(
-          context: context,
-          builder: (context) {
-            return SimpleDialog(
-                titlePadding: EdgeInsets.zero,
-                title: AppBar(
-                  leading: null,
-                  automaticallyImplyLeading: false,
-                  title: Text('Aktion erstellen',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22.0,
-                          color: Color.fromARGB(255, 129, 28, 98))),
-                ),
-                contentPadding: EdgeInsets.all(10.0),
-                children: <Widget>[
-                  ActionEditor(() {
-                    print('done');
-                  }, init_termin)
-                ]);
-          });
+  openCreateDialog(BuildContext context) async {
+    List<Termin> newActions = await showDialog(
+        context: context,
+        builder: (context) {
+          return SimpleDialog(
+              titlePadding: EdgeInsets.zero,
+              title: AppBar(
+                leading: null,
+                automaticallyImplyLeading: false,
+                title: Text('Aktion erstellen',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22.0,
+                        color: Color.fromARGB(255, 129, 28, 98))),
+              ),
+              contentPadding: EdgeInsets.all(10.0),
+              children: <Widget>[ActionEditor(Termin.emptyAction())]);
+        });
 
-    if(new_meetings != null) {
-      setState(() {
-        for (final termin in new_meetings) {
-          termine.add(termin);
-        //  termin.then((Termin termin) => termine.add(termin));
-        }
-      });
+    for (final action in newActions) {
+      termineService
+          .createTermin(action)
+          .then((terminMitId) => setState(() => termine
+            ..add(terminMitId)
+            ..sort(Termin.sortByStart())));
     }
   }
 
