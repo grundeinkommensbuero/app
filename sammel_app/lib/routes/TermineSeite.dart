@@ -7,8 +7,10 @@ import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/services/RestFehler.dart';
+import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:uuid/uuid.dart';
 import 'FilterWidget.dart';
 import 'TerminDetailsWidget.dart';
 
@@ -114,11 +116,14 @@ class _TermineSeiteState extends State<TermineSeite> {
     if (newActions == null) return;
 
     for (final action in newActions) {
+      var uuid = Uuid().v1();
       termineService
           .createTermin(action)
           .then((terminMitId) => setState(() => termine
             ..add(terminMitId)
             ..sort(Termin.sortByStart())));
+      Provider.of<StorageService>(context)
+          .saveActionToken(action.id.toString(), uuid);
     }
   }
 
@@ -180,11 +185,11 @@ class _TermineSeiteState extends State<TermineSeite> {
             ));
 
     if (command == TerminDetailsCommand.DELETE) {
-      termineService.deleteAction(terminMitDetails)
+      termineService
+          .deleteAction(terminMitDetails)
           .then((_) => setState(() => termine.remove(termin)))
-          .catchError(
-          (error) => print((error as RestFehler).meldung),
-          test: (error) => error is RestFehler);
+          .catchError((error) => print((error as RestFehler).meldung),
+              test: (error) => error is RestFehler);
     }
 
     if (command == TerminDetailsCommand.EDIT) {
