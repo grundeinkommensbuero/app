@@ -62,7 +62,8 @@ class _TermineSeiteState extends State<TermineSeite> {
               child: ListView.builder(
                   itemCount: termine.length,
                   itemBuilder: (context, index) => ListTile(
-                      title: TerminCard(termine[index], isMyAction(index)),
+                      title: TerminCard(
+                          termine[index], isMyAction(termine[index].id)),
                       onTap: () =>
                           openTerminDetailsWidget(context, termine[index]),
                       contentPadding: EdgeInsets.only(bottom: 0.1)))),
@@ -81,11 +82,8 @@ class _TermineSeiteState extends State<TermineSeite> {
     );
   ***REMOVED***
 
-  bool isMyAction(int index) {
-    bool contains = myActions?.contains(termine[index].id);
-    print(
-        '### ${myActions.toString()***REMOVED*** contains ${contains ? '' : 'not'***REMOVED*** Action ${termine[index].id***REMOVED***');
-    return contains;
+  bool isMyAction(int id) {
+    return myActions?.contains(id);
   ***REMOVED***
 
   void intialize(BuildContext context) {
@@ -173,34 +171,15 @@ class _TermineSeiteState extends State<TermineSeite> {
               children: <Widget>[
                 TerminDetailsWidget(terminMitDetails),
                 Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      RaisedButton(
-                          color: DweTheme.red,
-                          child: Icon(Icons.delete),
-                          onPressed: () {
-                            showDialog<bool>(
-                                    context: context,
-                                    builder: (context) =>
-                                        confirmDeleteDialog(context))
-                                .then((confirmed) {
-                              if (confirmed)
-                                Navigator.pop(
-                                    context, TerminDetailsCommand.DELETE);
-                            ***REMOVED***);
-                          ***REMOVED***),
-                      RaisedButton(
-                        child: Icon(Icons.edit),
-                        onPressed: () =>
-                            Navigator.pop(context, TerminDetailsCommand.EDIT),
-                      ),
-                      RaisedButton(
-                        key: Key('close termin details button'),
-                        child: Text('Schließen'),
-                        onPressed: () =>
-                            Navigator.pop(context, TerminDetailsCommand.CLOSE),
-                      ),
-                    ]),
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: addEditDeleteButtonsIfMyAction(termin, context)
+                    ..add(RaisedButton(
+                      key: Key('close termin details button'),
+                      child: Text('Schließen'),
+                      onPressed: () =>
+                          Navigator.pop(context, TerminDetailsCommand.CLOSE),
+                    )),
+                ),
               ],
             ));
 
@@ -208,6 +187,31 @@ class _TermineSeiteState extends State<TermineSeite> {
 
     if (command == TerminDetailsCommand.EDIT)
       editAction(context, terminMitDetails);
+  ***REMOVED***
+
+  List<Widget> addEditDeleteButtonsIfMyAction(
+      Termin termin, BuildContext context) {
+    if (isMyAction(termin.id))
+      return [
+        RaisedButton(
+            color: DweTheme.red,
+            child: Icon(Icons.delete),
+            onPressed: () {
+              showDialog<bool>(
+                      context: context,
+                      builder: (context) => confirmDeleteDialog(context))
+                  .then((confirmed) {
+                if (confirmed)
+                  Navigator.pop(context, TerminDetailsCommand.DELETE);
+              ***REMOVED***);
+            ***REMOVED***),
+        RaisedButton(
+          child: Icon(Icons.edit),
+          onPressed: () => Navigator.pop(context, TerminDetailsCommand.EDIT),
+        )
+      ];
+    else
+      return [];
   ***REMOVED***
 
   Future editAction(BuildContext context, Termin terminMitDetails) async {
