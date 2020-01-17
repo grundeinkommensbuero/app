@@ -66,7 +66,31 @@ class BackendService {
           if (body.type != "json" &&
               ((body is List && (body.body as List).isNotEmpty) ||
                   ((body is String && (body as String).isEmpty)))) {
-            var message = 'Get-Request bekommt "${body.type***REMOVED***",'
+            var message = 'Post-Request bekommt "${body.type***REMOVED***",'
+                ' statt "json" - Response zurück: ${body.body***REMOVED***';
+            throw WrongResponseFormatException(message);
+          ***REMOVED*** else {
+            return body;
+          ***REMOVED***
+        ***REMOVED***);
+  ***REMOVED***
+
+  Future<HttpClientResponseBody> delete(Uri url, String data) async {
+    if (!zertifikatGeladen) ladeZertifikat();
+    return await client
+        .deleteUrl(Uri.https('$host:$port', url.toString()))
+        .then((HttpClientRequest request) {
+          request.headers.contentType = ContentType.json;
+          request.headers.add('Accept', '*/*');
+          request.write(data);
+          return request.close();
+        ***REMOVED***)
+        .then(HttpBodyHandler.processResponse)
+        .then((HttpClientResponseBody body) {
+          if (body.type != "json" &&
+              ((body is List && (body.body as List).isNotEmpty) ||
+                  ((body is String && (body as String).isEmpty)))) {
+            var message = 'Delete-Request bekommt "${body.type***REMOVED***",'
                 ' statt "json" - Response zurück: ${body.body***REMOVED***';
             throw WrongResponseFormatException(message);
           ***REMOVED*** else {

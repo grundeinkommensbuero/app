@@ -18,6 +18,8 @@ abstract class AbstractTermineService extends BackendService {
   Future<Termin> getTerminMitDetails(int id);
 
   Future<void> saveAction(Termin action);
+
+  Future<void> deleteAction(Termin action);
 ***REMOVED***
 
 class TermineService extends AbstractTermineService {
@@ -68,6 +70,18 @@ class TermineService extends AbstractTermineService {
       return;
     ***REMOVED*** else {
       throw RestFehler("Fehler beim Bearbeiten einer Aktion: "
+          "${response.response.statusCode***REMOVED*** - ${response.body***REMOVED***");
+    ***REMOVED***
+  ***REMOVED***
+
+  // TODO Tests
+  Future<void> deleteAction(Termin action) async {
+    var response = await delete(
+        Uri.parse('service/termine/termin'), jsonEncode(action));
+    if (response.response.statusCode == 200) {
+      return;
+    ***REMOVED*** else {
+      throw RestFehler("Fehler beim Löschen einer Aktion: "
           "${response.response.statusCode***REMOVED*** - ${response.body***REMOVED***");
     ***REMOVED***
   ***REMOVED***
@@ -161,5 +175,11 @@ class DemoTermineService extends AbstractTermineService {
   Future<void> saveAction(Termin newAction) async {
     termine[termine.indexWhere((oldAction) => oldAction.id == newAction.id)] =
         newAction;
+  ***REMOVED***
+
+  //TODO Tests
+  @override
+  Future<void> deleteAction(Termin action) {
+    termine.removeAt(termine.indexWhere((a) => a.id == action.id));
   ***REMOVED***
 ***REMOVED***

@@ -8,6 +8,7 @@ import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/model/Termin.dart';
+import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'FilterWidget.dart';
@@ -181,12 +182,13 @@ class _TermineSeiteState extends State<TermineSeite> {
             ));
 
     if (command == TerminDetailsCommand.DELETE) {
-      return;
+      termineService.deleteAction(terminMitDetails).catchError(
+          (error) => print((error as RestFehler).meldung),
+          test: (error) => error is RestFehler);
     ***REMOVED***
 
     if (command == TerminDetailsCommand.EDIT) {
       Termin newAction = await openEditDialog(context, terminMitDetails);
-      print('### ${jsonEncode(newAction.toJson())***REMOVED***');
       openTerminDetailsWidget(context, newAction); // recursive and I know it
       setState(() {
         termine[termine.indexWhere((a) => a.id == newAction.id)] = newAction;

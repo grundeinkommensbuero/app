@@ -38,7 +38,7 @@ open class TermineDao {
         if (filter.orte.isNotEmpty()) filterKlausel.add(orteKlausel)
 
         var sql = "select termine from Termin termine"
-        if(filterKlausel.isNotEmpty()) sql += " where " + filterKlausel.joinToString(" and ")
+        if (filterKlausel.isNotEmpty()) sql += " where " + filterKlausel.joinToString(" and ")
         val query = entityManager.createQuery(sql, Termin::class.java)
 
         if (filterKlausel.contains(typenKlausel)) query.setParameter("typen", filter.typen)
@@ -65,5 +65,13 @@ open class TermineDao {
         entityManager.flush()
         return termin
 
+    ***REMOVED***
+
+    //TODO Tests
+    open fun deleteAction(action: Termin) {
+        val actionFromDb = entityManager.find(Termin::class.java, action.id)
+        entityManager.remove(actionFromDb)
+        entityManager.flush()
+        return
     ***REMOVED***
 ***REMOVED***

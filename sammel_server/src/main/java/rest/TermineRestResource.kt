@@ -75,6 +75,17 @@ open class TermineRestResource {
                 .build()
     ***REMOVED***
 
+    // TODO Tests
+    @DELETE
+    @Consumes(APPLICATION_JSON)
+    @Path("termin")
+    open fun deleteAction(termin: TerminDto): Response {
+        dao.deleteAction(termin.convertToTermin())
+        return Response
+                .ok()
+                .build()
+    ***REMOVED***
+
     data class TerminDto(
             var id: Long? = null,
             var beginn: LocalDateTime? = null,
