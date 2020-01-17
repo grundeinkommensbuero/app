@@ -1,4 +1,4 @@
-package rest9
+package rest
 
 import database.stammdaten.Ort
 import database.termine.Termin
