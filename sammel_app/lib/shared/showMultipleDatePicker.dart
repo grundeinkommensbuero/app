@@ -10,7 +10,7 @@ import 'ChronoHelfer.dart';
 
 Future<List<DateTime>> showMultipleDatePicker(
     List<DateTime> previousSelectedDates, BuildContext context,
-    {key: Key}) async {
+    {key: Key, multiMode = true}) async {
   DateTime currentMonth = DateTime.now();
   List<DateTime> selectedDatesFromFilter = []..addAll(previousSelectedDates);
   if (selectedDatesFromFilter == null) selectedDatesFromFilter = [];
@@ -61,7 +61,9 @@ Future<List<DateTime>> showMultipleDatePicker(
                         endDate: Jiffy(currentMonth).endOf("month"),
                         selectedDates: selectedDatesFromFilter,
                         weekdayLabelsRow: GerCalendarroWeekdayLabelsView(),
-                        selectionMode: SelectionMode.MULTI,
+                        selectionMode: multiMode
+                            ? SelectionMode.MULTI
+                            : SelectionMode.SINGLE,
                         displayMode: DisplayMode.MONTHS,
                         dayTileBuilder: DweDayTileBuilder(),
                       )),
