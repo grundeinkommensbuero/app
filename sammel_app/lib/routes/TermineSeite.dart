@@ -33,10 +33,12 @@ class _TermineSeiteState extends State<TermineSeite> {
 
   FilterWidget filterWidget;
 
+  List<int> myActions;
+
   @override
   Widget build(BuildContext context) {
     if (!_initialized) intialize(context);
-
+    print('### Gespeicherte IDs: $myActions');
     // TODO: Memory-Leak beheben
     return Scaffold(
       extendBody: true,
@@ -60,7 +62,7 @@ class _TermineSeiteState extends State<TermineSeite> {
               child: ListView.builder(
                   itemCount: termine.length,
                   itemBuilder: (context, index) => ListTile(
-                      title: TerminCard(termine[index]),
+                      title: TerminCard(termine[index], isMyAction(index)),
                       onTap: () =>
                           openTerminDetailsWidget(context, termine[index]),
                       contentPadding: EdgeInsets.only(bottom: 0.1)))),
@@ -79,9 +81,21 @@ class _TermineSeiteState extends State<TermineSeite> {
     );
   }
 
+  bool isMyAction(int index) {
+    bool contains = myActions?.contains(termine[index].id);
+    print(
+        '### ${myActions.toString()} contains ${contains ? '' : 'not'} Action ${termine[index].id}');
+    return contains;
+  }
+
   void intialize(BuildContext context) {
+//    Provider.of<StorageService>(context).clearAllPreferences();
+
     termineService = Provider.of<AbstractTermineService>(context);
     filterWidget = FilterWidget(ladeTermine);
+    Provider.of<StorageService>(context)
+        .loadAllStoredActionIds()
+        .then((ids) => setState(() => myActions = ids));
     _initialized = true;
   }
 
@@ -115,16 +129,22 @@ class _TermineSeiteState extends State<TermineSeite> {
 
     if (newActions == null) return;
 
-    for (final action in newActions) {
-      var uuid = Uuid().v1();
-      termineService
-          .createTermin(action)
-          .then((terminMitId) => setState(() => termine
-            ..add(terminMitId)
-            ..sort(Termin.sortByStart())));
-      Provider.of<StorageService>(context)
-          .saveActionToken(action.id.toString(), uuid);
-    }
+    for (final action in newActions) addNewAction(action);
+  }
+
+  addNewAction(Termin action) async {
+    var uuid = Uuid().v1();
+
+    Termin terminMitId = await termineService.createTermin(action);
+
+    Provider.of<StorageService>(context).saveActionToken(terminMitId.id, uuid);
+
+    setState(() {
+      myActions.add(terminMitId.id);
+      termine
+        ..add(terminMitId)
+        ..sort(Termin.sortByStart());
+    });
   }
 
   openTerminDetailsWidget(BuildContext context, Termin termin) async {
@@ -184,21 +204,35 @@ class _TermineSeiteState extends State<TermineSeite> {
               ],
             ));
 
-    if (command == TerminDetailsCommand.DELETE) {
-      termineService
-          .deleteAction(terminMitDetails)
-          .then((_) => setState(() => termine.remove(termin)))
-          .catchError((error) => print((error as RestFehler).meldung),
-              test: (error) => error is RestFehler);
-    }
+    if (command == TerminDetailsCommand.DELETE) deleteAction(terminMitDetails);
 
-    if (command == TerminDetailsCommand.EDIT) {
-      Termin newAction = await openEditDialog(context, terminMitDetails);
-      openTerminDetailsWidget(context, newAction); // recursive and I know it
-      setState(() {
-        termine[termine.indexWhere((a) => a.id == newAction.id)] = newAction;
-      });
-    }
+    if (command == TerminDetailsCommand.EDIT)
+      editAction(context, terminMitDetails);
+  }
+
+  Future editAction(BuildContext context, Termin terminMitDetails) async {
+    Termin newAction = await openEditDialog(context, terminMitDetails);
+
+    setState(() {
+      termine[termine.indexWhere((a) => a.id == newAction.id)] = newAction;
+    });
+
+    openTerminDetailsWidget(context, newAction); // recursive and I know it
+  }
+
+  //TODO Tests
+  Future<void> deleteAction(Termin action) async {
+    await termineService.deleteAction(action).catchError(
+        (error) => print((error as RestFehler).meldung),
+        test: (error) => error is RestFehler);
+    print('### lösche Token für Aktion ${action.id}');
+
+    Provider.of<StorageService>(context).deleteActionToken(action.id);
+
+    setState(() {
+      termine.remove(action);
+      myActions.remove(action.id);
+    });
   }
 
   openEditDialog(BuildContext context, Termin termin) async {

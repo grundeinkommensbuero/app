@@ -42,6 +42,7 @@ class TermineService extends AbstractTermineService {
   Future<Termin> createTermin(Termin termin) async {
     var response =
         await post(Uri.parse('service/termine/neu'), jsonEncode(termin));
+    print('### Zurückgegebener Termin: ${jsonEncode(response.body)}');
     if (response.response.statusCode == 200) {
       return Termin.fromJson(response.body);
     } else {

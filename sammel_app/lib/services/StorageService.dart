@@ -19,29 +19,37 @@ class StorageService {
 
   // Action Properties
 
-  Future<bool> saveActionToken(String id, String token) => prefs
+  Future<bool> saveActionToken(int id, String token) => prefs
       .then((prefs) => prefs.setString('$_ACTION:$id', token))
       .whenComplete(() => markActionIdAsStored(id));
 
-  Future<bool> deleteActionToken(String id) => prefs
+  Future<bool> deleteActionToken(int id) => prefs
       .then((prefs) => prefs.remove('$_ACTION:$id'))
       .whenComplete(() => unmarkActionIdAsStored(id));
 
   Future<String> loadActionToken(String id) =>
       prefs.then((prefs) => prefs.getString('$_ACTION:$id'));
 
-  markActionIdAsStored(String id) => prefs.then((prefs) => _getActionList()
-      .then((list) => prefs.setStringList(_ACTIONLIST, list..add(id))));
+  markActionIdAsStored(int id) => prefs.then((prefs) => _getActionList().then(
+      (list) => prefs.setStringList(_ACTIONLIST, list..add(id.toString()))));
 
-  unmarkActionIdAsStored(String id) => prefs.then((prefs) => _getActionList()
-      .then((list) => prefs.setStringList(_ACTIONLIST, list..remove(id))));
+  unmarkActionIdAsStored(int id) => prefs.then((prefs) => _getActionList().then(
+      (list) => prefs.setStringList(_ACTIONLIST, list..remove(id.toString()))));
 
-  Future<List<String>> loadAllStoredActionIds() =>
-      prefs.then((prefs) => prefs.getStringList(_ACTIONLIST));
+  Future<List<int>> loadAllStoredActionIds() => prefs.then((prefs) async {
+        List<String> stringList = await prefs.getStringList(_ACTIONLIST);
+        if (stringList == null) return [];
+        List<int> intList = stringList.map((id) => int.parse(id)).toList();
+        return intList;
+      });
 
   Future<List<String>> _getActionList() => _prefs.then((prefs) async {
         var list = await prefs.getStringList(_ACTIONLIST);
         return list != null ? list : [];
+      });
+
+  Future<List<String>> clearAllPreferences() => _prefs.then((prefs) async {
+        prefs.clear();
       });
 
   // Filter Properties
@@ -49,6 +57,9 @@ class StorageService {
   Future<bool> saveFilter(TermineFilter filter) => prefs
       .then((prefs) => prefs.setString(_FILTER, jsonEncode(filter.toJson())));
 
-  Future<TermineFilter> loadFilter() => prefs.then(
-      (prefs) => TermineFilter.fromJSON(jsonDecode(prefs.getString(_FILTER))));
+  Future<TermineFilter> loadFilter() => prefs.then((prefs) {
+        var filter = prefs.getString(_FILTER);
+        if (filter == null) return TermineFilter.leererFilter();
+        return TermineFilter.fromJSON(jsonDecode(filter));
+      });
 }
