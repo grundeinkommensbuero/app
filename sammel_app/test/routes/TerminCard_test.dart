@@ -61,29 +61,29 @@ void main() {
   group('faerbeVergangeneTermine', () {
     test('faerbt vergangene Termine hellgelb', () {
       DateTime gestern = DateTime.now().subtract(Duration(days: 1));
-      expect(TerminCard.faerbeVergangeneTermine(gestern),
+      expect(TerminCard.actionColor(gestern, false),
           equals(DweTheme.yellowBright));
 
       DateTime vor1Stunde = DateTime.now().subtract(Duration(hours: 1));
-      expect(TerminCard.faerbeVergangeneTermine(vor1Stunde),
+      expect(TerminCard.actionColor(vor1Stunde, false),
           equals(DweTheme.yellowBright));
 
       DateTime vor1Minute = DateTime.now().subtract(Duration(minutes: 1));
-      expect(TerminCard.faerbeVergangeneTermine(vor1Minute),
+      expect(TerminCard.actionColor(vor1Minute, false),
           equals(DweTheme.yellowBright));
     ***REMOVED***);
 
     test('faerbt zukünftige Termine dunkelgelb', () {
       DateTime morgen = DateTime.now().add(Duration(days: 1));
-      expect(TerminCard.faerbeVergangeneTermine(morgen),
+      expect(TerminCard.actionColor(morgen, false),
           equals(DweTheme.yellowLight));
 
       DateTime in1Stunde = DateTime.now().add(Duration(hours: 1));
-      expect(TerminCard.faerbeVergangeneTermine(in1Stunde),
+      expect(TerminCard.actionColor(in1Stunde, false),
           equals(DweTheme.yellowLight));
 
       DateTime in1Minute = DateTime.now().add(Duration(minutes: 1));
-      expect(TerminCard.faerbeVergangeneTermine(in1Minute),
+      expect(TerminCard.actionColor(in1Minute, false),
           equals(DweTheme.yellowLight));
     ***REMOVED***);
   ***REMOVED***);

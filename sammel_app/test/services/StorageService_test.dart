@@ -18,7 +18,7 @@ void main() async {
 
   group('action tokens', () {
     test('are stored correctly', () async {
-      var result = await service.saveActionToken('1', "123789456");
+      var result = await service.saveActionToken(1, "123789456");
 
       expect(result, true);
       expect(_prefs.containsKey('action:1'), true);
@@ -36,14 +36,14 @@ void main() async {
     test('are deleted correctly', () async {
       await _prefs.setString('action:1', '123789456');
 
-      var result = await service.deleteActionToken('1');
+      var result = await service.deleteActionToken(1);
 
       expect(result, true);
       expect(_prefs.getString("action:1"), null);
     ***REMOVED***);
 
     test('are marked as stored with saving', () async {
-      var result = await service.saveActionToken('1', '123789456');
+      var result = await service.saveActionToken(1, '123789456');
 
       expect(result, true);
       expect(_prefs.containsKey('actionlist'), true);
@@ -53,7 +53,7 @@ void main() async {
     test('are demarked as stored with deletion', () async {
       await _prefs.setString('action:1', '123789456');
 
-      var result = await service.deleteActionToken('1');
+      var result = await service.deleteActionToken(1);
 
       expect(result, true);
       expect(_prefs.getStringList("actionlist"), isEmpty);
