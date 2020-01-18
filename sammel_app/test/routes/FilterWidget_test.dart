@@ -28,6 +28,10 @@ class StorageServiceMock extends Mock implements StorageService {}
 final storageService = StorageServiceMock();
 
 void main() {
+  setUp(() {
+    when(storageService.loadFilter()).thenAnswer((_) async => null);
+  });
+
   testWidgets('Filter starts successfully', (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(
       iWasCalled,
@@ -433,10 +437,6 @@ void main() {
   });
 
   group('storage function', () {
-    setUp(() {
-      when(storageService.loadFilter()).thenAnswer((_) async => null);
-    });
-
     testWidgets('initializes filter with default values if no storage is found',
         (WidgetTester tester) async {
       FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));

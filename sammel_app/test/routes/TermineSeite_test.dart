@@ -20,6 +20,7 @@ final storageService = StorageServiceMock();
 void main() {
   setUp(() {
     when(storageService.loadFilter()).thenAnswer((_) async => null);
+    when(storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
   });
 
   testWidgets('TermineSeite startet fehlerfrei mit leerer Liste',

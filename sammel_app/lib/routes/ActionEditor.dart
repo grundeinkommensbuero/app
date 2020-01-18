@@ -55,7 +55,7 @@ class _ActionEditor extends State<ActionEditor> {
   @override
   Widget build(BuildContext context) {
     return Column(
-        //    crossAxisAlignment: CrossAxisAlignment.center,
+        key: Key('action editor'),
         children: <Widget>[
           Text(
             'Das Volksbegehren lebt von deiner Beteiligung! \n',
