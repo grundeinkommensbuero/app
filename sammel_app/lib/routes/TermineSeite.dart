@@ -244,7 +244,7 @@ class _TermineSeiteState extends State<TermineSeite> {
       Provider.of<StorageService>(context).deleteActionToken(action.id);
 
       setState(() {
-        termine.remove(action);
+        termine.remove(termine.where((a) => a.id == action.id).first);
         myActions.remove(action.id);
       ***REMOVED***);
     ***REMOVED*** on RestFehler catch (error) {
