@@ -43,7 +43,7 @@ void main() {
 
   testWidgets('TermineSeite zeigt alle Termine an',
       (WidgetTester tester) async {
-    var termineSeiteWidget = TermineSeite(title: 'Titel mit Ümläüten');
+    var termineSeiteWidget = TermineSeite(title: 'Titel');
 
     when(terminService.ladeTermine(any)).thenAnswer((_) async => [
           TerminTestDaten.einTermin(),
@@ -55,8 +55,6 @@ void main() {
       Provider<AbstractTermineService>.value(value: terminService),
       Provider<StorageService>.value(value: storageService)
     ], child: MaterialApp(home: termineSeiteWidget)));
-
-    expect(find.text('Titel mit Ümläüten'), findsOneWidget);
 
     // Warten bis asynchron Termine geladen wurden
     await tester.pumpAndSettle();
@@ -64,31 +62,18 @@ void main() {
     expect(find.byType(TerminCard), findsNWidgets(3));
   ***REMOVED***);
 
-  testWidgets('TermineSeite zeigt Filter an', (WidgetTester tester) async {
-    var termineSeiteWidget = TermineSeite(title: 'Titel');
-
-    when(terminService.ladeTermine(any)).thenAnswer((_) async => [
-          TerminTestDaten.einTermin(),
-          TerminTestDaten.einTermin(),
-          TerminTestDaten.einTermin(),
-        ]);
-
-    await tester.pumpWidget(MultiProvider(providers: [
-      Provider<AbstractTermineService>.value(value: terminService),
-      Provider<StorageService>.value(value: storageService)
-    ], child: MaterialApp(home: termineSeiteWidget)));
-
-    expect(find.text('Filter'), findsOneWidget);
-  ***REMOVED***);
-
-  testWidgets('TermineSeite oeffnet Filter-Menu an',
+  testWidgets('TermineSeite sortiert Termine nach Datum',
       (WidgetTester tester) async {
     var termineSeiteWidget = TermineSeite(title: 'Titel');
 
+    var today = DateTime.now();
+    var tomorrow = today.add(Duration(days: 1));
+    var yesterday = today.subtract(Duration(days: 1));
+
     when(terminService.ladeTermine(any)).thenAnswer((_) async => [
-          TerminTestDaten.einTermin(),
-          TerminTestDaten.einTermin(),
-          TerminTestDaten.einTermin(),
+          TerminTestDaten.anActionFrom(today)..ort = goerli(),
+          TerminTestDaten.anActionFrom(tomorrow)..ort = nordkiez(),
+          TerminTestDaten.anActionFrom(yesterday)..ort = treptowerPark(),
         ]);
 
     await tester.pumpWidget(MultiProvider(providers: [
@@ -96,11 +81,66 @@ void main() {
       Provider<StorageService>.value(value: storageService)
     ], child: MaterialApp(home: termineSeiteWidget)));
 
-    await tester.tap(find.text('Filter'));
+    // Warten bis asynchron Termine geladen wurden
+    await tester.pumpAndSettle();
 
-    await tester.pump();
+    expect(
+        find.descendant(
+            of: find.byType(TerminCard).first,
+            matching: find.text(TerminCard.erzeugeOrtText(treptowerPark()))),
+        findsOneWidget);
 
-    expect(find.text('Anwenden'), findsOneWidget);
+    expect(
+        find.descendant(
+            of: find.byType(TerminCard).at(1),
+            matching: find.text(TerminCard.erzeugeOrtText(goerli()))),
+        findsOneWidget);
+
+    expect(
+        find.descendant(
+            of: find.byType(TerminCard).last,
+            matching: find.text(TerminCard.erzeugeOrtText(nordkiez()))),
+        findsOneWidget);
+  ***REMOVED***);
+
+  group('Filter', () {
+    testWidgets('is displayed', (WidgetTester tester) async {
+      var termineSeiteWidget = TermineSeite(title: 'Titel');
+
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.einTermin(),
+            TerminTestDaten.einTermin(),
+            TerminTestDaten.einTermin(),
+          ]);
+
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: terminService),
+        Provider<StorageService>.value(value: storageService)
+      ], child: MaterialApp(home: termineSeiteWidget)));
+
+      expect(find.text('Filter'), findsOneWidget);
+    ***REMOVED***);
+
+    testWidgets('opens on tap', (WidgetTester tester) async {
+      var termineSeiteWidget = TermineSeite(title: 'Titel');
+
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.einTermin(),
+            TerminTestDaten.einTermin(),
+            TerminTestDaten.einTermin(),
+          ]);
+
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: terminService),
+        Provider<StorageService>.value(value: storageService)
+      ], child: MaterialApp(home: termineSeiteWidget)));
+
+      await tester.tap(find.text('Filter'));
+
+      await tester.pump();
+
+      expect(find.text('Anwenden'), findsOneWidget);
+    ***REMOVED***);
   ***REMOVED***);
 
   group('TerminDetailsDialog', () {

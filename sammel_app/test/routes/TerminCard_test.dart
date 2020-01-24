@@ -1,8 +1,9 @@
-import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:test/test.dart';
+
+import '../model/Ort_test.dart';
 
 void main() {
   group('erzeugeDatumZeile berechnet Dauer', () {
@@ -97,5 +98,3 @@ void main() {
 ***REMOVED***
 
 DateTime now() => DateTime.now();
-
-Ort nordkiez() => Ort(0, "Friedrichshain-Kreuzberg", "Friedrichshain Nordkiez");

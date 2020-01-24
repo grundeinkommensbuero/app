@@ -112,7 +112,7 @@ class _TermineSeiteState extends State<TermineSeite> {
   void ladeTermine(TermineFilter filter) {
     termineService.ladeTermine(filter).then((termine) {
       setState(() {
-        this.termine = termine;
+        this.termine = termine..sort(Termin.sortByStart());
       ***REMOVED***);
     ***REMOVED***);
   ***REMOVED***
