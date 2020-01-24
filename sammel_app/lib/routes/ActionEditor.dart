@@ -17,8 +17,15 @@ class ActionData {
   TimeOfDay bis;
   Ort ort;
   String typ;
-  List<DateTime> tage = List<DateTime>();
-  TerminDetails terminDetails = TerminDetails('', '', '');
+  List<DateTime> tage;
+  TerminDetails terminDetails;
+
+  ActionData(
+      [this.von, this.bis, this.ort, this.typ, this.tage, this.terminDetails]) {
+    if (this.tage == null) this.tage = [];
+    if (this.terminDetails == null)
+      this.terminDetails = TerminDetails('', '', '');
+  }
 }
 
 class ActionEditor extends StatefulWidget {
@@ -29,13 +36,13 @@ class ActionEditor extends StatefulWidget {
   }
 
   @override
-  _ActionEditor createState() => _ActionEditor(this.initAction);
+  ActionEditorState createState() => ActionEditorState(this.initAction);
 }
 
-class _ActionEditor extends State<ActionEditor> {
+class ActionEditorState extends State<ActionEditor> {
   ActionData action = ActionData();
 
-  _ActionEditor(Termin initAction) : super() {
+  ActionEditorState(Termin initAction) : super() {
     if (initAction != null) {
       action.ort = initAction.ort;
       action.typ = initAction.typ;
@@ -54,92 +61,94 @@ class _ActionEditor extends State<ActionEditor> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-        key: Key('action editor'),
-        children: <Widget>[
+    return Column(children: <Widget>[
+      Text(
+        'Das Volksbegehren lebt von deiner Beteiligung! \n',
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
+      Text(
+        'Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. '
+        'Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.',
+        textScaleFactor: 1.0,
+      ),
+      SizedBox(height: 15),
+      Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Icon(Icons.my_location, size: 40.0),
+        SizedBox(
+          width: 10.0,
+        ),
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
-            'Das Volksbegehren lebt von deiner Beteiligung! \n',
+            'Wo? ',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
+          InputButton(
+              onTap: locationSelection,
+              child: locationButtonCaption(this.action)),
+          InputButton(
+              onTap: venueSelection, child: venueButtonCaption(this.action)),
+        ])
+      ]),
+      Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Icon(Icons.access_time, size: 40.0),
+        SizedBox(
+          width: 10.0,
+        ),
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
-            'Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. '
-            'Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.',
-            textScaleFactor: 1.0,
+            'Wann?',
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 15),
-          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Icon(Icons.my_location, size: 40.0),
-            SizedBox(
-              width: 10.0,
-            ),
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(
-                'Wo? ',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              InputButton(
-                  onTap: locationSelection,
-                  child: locationButtonCaption(this.action)),
-              InputButton(
-                  onTap: venueSelection,
-                  child: venueButtonCaption(this.action)),
-            ])
-          ]),
-          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Icon(Icons.access_time, size: 40.0),
-            SizedBox(
-              width: 10.0,
-            ),
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(
-                'Wann?',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              InputButton(onTap: daysSelection, child: daysButtonCaption()),
-              InputButton(
-                  onTap: timeSelection, child: timButtonCaption(this.action)),
-            ])
-          ]),
-          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Icon(Icons.info_outline, size: 40.0),
-            SizedBox(
-              width: 10.0,
-            ),
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(
-                'Was?',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              InputButton(onTap: typeSelection, child: typeButtonCaption()),
-              InputButton(
-                  onTap: descriptionSelection,
-                  child: descriptionButtonCaption(this.action)),
-            ])
-          ]),
-          Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Icon(Icons.face, size: 40.0),
-            SizedBox(
-              width: 10.0,
-            ),
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text(
-                'Wer?',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              InputButton(
-                  onTap: contactSelection,
-                  child: contactButtonCaption(this.action)),
-            ])
-          ]),
-          ButtonBar(alignment: MainAxisAlignment.spaceAround, children: [
-            RaisedButton(
-                child: Text('Abbrechen'),
-                onPressed: () => Navigator.pop(context, null)),
-            RaisedButton(
-                child: Text('Fertig'),
-                onPressed: () => Navigator.pop(context, generateActions()))
-          ])
-        ]);
+          InputButton(onTap: daysSelection, child: daysButtonCaption()),
+          InputButton(
+              onTap: timeSelection, child: timeButtonCaption(this.action)),
+        ])
+      ]),
+      Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Icon(Icons.info_outline, size: 40.0),
+        SizedBox(
+          width: 10.0,
+        ),
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            'Was?',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          InputButton(onTap: typeSelection, child: typeButtonCaption()),
+          InputButton(
+              onTap: descriptionSelection,
+              child: descriptionButtonCaption(this.action)),
+        ])
+      ]),
+      Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Icon(Icons.face, size: 40.0),
+        SizedBox(
+          width: 10.0,
+        ),
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            'Wer?',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          InputButton(
+              onTap: contactSelection,
+              child: contactButtonCaption(this.action)),
+        ])
+      ]),
+      ButtonBar(alignment: MainAxisAlignment.spaceAround, children: [
+        RaisedButton(
+            key: Key('action editor cancel button'),
+            child: Text('Abbrechen'),
+            onPressed: () => Navigator.pop(context, null)),
+        RaisedButton(
+            key: Key('action editor finish button'),
+            child: Text('Fertig'),
+            onPressed: () {
+              print('### finish button gedrückt');
+              Navigator.pop(context, generateActions());
+            })
+      ])
+    ]);
   }
 
   void venueSelection() async {
@@ -269,7 +278,7 @@ class _ActionEditor extends State<ActionEditor> {
   daysSelection() async {
     var selectedDates = await showMultipleDatePicker(this.action.tage, context,
         key: Key('days selection dialog'),
-        multiMode: /*widget.initAction == null ? true : false*/true);
+        multiMode: /*widget.initAction == null ? true : false*/ true);
     setState(() {
       if (selectedDates != null)
         this.action.tage = selectedDates
@@ -357,7 +366,7 @@ class _ActionEditor extends State<ActionEditor> {
             style: TextStyle(color: DweTheme.purple));
   }
 
-  Text timButtonCaption(ActionData termin) {
+  Text timeButtonCaption(ActionData termin) {
     String beschriftung = '';
     if (termin.von != null)
       beschriftung += 'von ' + ChronoHelfer.timeToStringHHmm(termin.von);
@@ -380,6 +389,8 @@ class _ActionEditor extends State<ActionEditor> {
 
   List<Termin> generateActions() {
     // TODO Popup bei Invalidem Inhalt
+    print(
+        '### Aktion ist ${this.action.von != null && this.action.bis != null && this.action.tage != null && !this.action.tage.isEmpty && this.action.ort != null && this.action.typ != null && this.action.typ != '' ? 'valide' : 'invalide'}');
     if (this.action.von != null &&
         this.action.bis != null &&
         this.action.tage != null &&

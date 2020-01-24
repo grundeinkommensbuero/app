@@ -134,7 +134,12 @@ class _TermineSeiteState extends State<TermineSeite> {
                         color: Color.fromARGB(255, 129, 28, 98))),
               ),
               contentPadding: EdgeInsets.all(10.0),
-              children: <Widget>[ActionEditor(Termin.emptyAction())]);
+              children: <Widget>[
+                ActionEditor(
+                  Termin.emptyAction(),
+                  key: Key('action creator'),
+                )
+              ]);
         });
 
     if (newActions == null) return;
@@ -206,6 +211,7 @@ class _TermineSeiteState extends State<TermineSeite> {
     if (isMyAction(termin.id))
       return [
         RaisedButton(
+            key: Key('action details delete button'),
             color: DweTheme.red,
             child: Icon(Icons.delete),
             onPressed: () {
@@ -218,6 +224,7 @@ class _TermineSeiteState extends State<TermineSeite> {
               });
             }),
         RaisedButton(
+          key: Key('action details edit button'),
           child: Icon(Icons.edit),
           onPressed: () => Navigator.pop(context, TerminDetailsCommand.EDIT),
         )
@@ -227,10 +234,13 @@ class _TermineSeiteState extends State<TermineSeite> {
   }
 
   Future editAction(BuildContext context, Termin terminMitDetails) async {
+    print('### öffne Edit Dialog');
     Termin newAction = await openEditDialog(context, terminMitDetails);
+    print('### schließe Edit Dialog');
 
     setState(() {
       termine[termine.indexWhere((a) => a.id == newAction.id)] = newAction;
+      termine.sort(Termin.sortByStart());
     });
 
     openTerminDetailsWidget(context, newAction); // recursive and I know it
@@ -269,12 +279,20 @@ class _TermineSeiteState extends State<TermineSeite> {
                         color: Color.fromARGB(255, 129, 28, 98))),
               ),
               contentPadding: EdgeInsets.all(10.0),
-              children: <Widget>[ActionEditor(termin)]);
+              children: <Widget>[
+                ActionEditor(
+                  termin,
+                  key: Key('action editor'),
+                )
+              ]);
         });
 
+    print('### Bearbeiten-Dialog geschlossen');
     if (editedAction == null) return termin;
 
+    print('### Speichere Aktion');
     await termineService.saveAction(editedAction[0]);
+    print('### Aktion gespeichert');
     return editedAction[0];
   }
 }

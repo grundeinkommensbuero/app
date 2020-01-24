@@ -34,7 +34,7 @@ void main() {
     await tester.pumpWidget(MaterialApp(home: termineSeiteWidget));
 
     // sicherstellen, dass am Anfang noch kein Erstellen-Dialog auffindbar ist
-    expect(find.byKey(Key('action editor')), findsNothing);
+    expect(find.byKey(Key('action creator')), findsNothing);
 
     // Termine-Erstellen-Button finden und klicken
     await tester.tap(find.byKey(Key('create termin button')));
@@ -42,6 +42,6 @@ void main() {
     await tester.pump();
 
     // Prüfen ob der Termine-Erstellen-Dialog aufgegangen ist
-    expect(find.byKey(Key('action editor')), findsOneWidget);
+    expect(find.byKey(Key('action creator')), findsOneWidget);
   });
 }

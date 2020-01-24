@@ -84,6 +84,14 @@ class TerminTestDaten {
       'Sammeln',
       null);
 
+  static Termin anActionFrom(DateTime date) => Termin(
+      0,
+      date,
+      date.add(Duration(hours: 1)),
+      nordkiez(),
+      'Sammeln',
+      null);
+
   static einTerminMitDetails() => Termin(
       0,
       DateTime(2019, 11, 4, 17, 9, 0),
