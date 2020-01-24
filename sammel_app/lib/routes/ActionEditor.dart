@@ -144,7 +144,6 @@ class ActionEditorState extends State<ActionEditor> {
             key: Key('action editor finish button'),
             child: Text('Fertig'),
             onPressed: () {
-              print('### finish button gedrückt');
               Navigator.pop(context, generateActions());
             ***REMOVED***)
       ])
@@ -389,8 +388,6 @@ class ActionEditorState extends State<ActionEditor> {
 
   List<Termin> generateActions() {
     // TODO Popup bei Invalidem Inhalt
-    print(
-        '### Aktion ist ${this.action.von != null && this.action.bis != null && this.action.tage != null && !this.action.tage.isEmpty && this.action.ort != null && this.action.typ != null && this.action.typ != '' ? 'valide' : 'invalide'***REMOVED***');
     if (this.action.von != null &&
         this.action.bis != null &&
         this.action.tage != null &&

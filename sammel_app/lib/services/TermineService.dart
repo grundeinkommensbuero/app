@@ -36,7 +36,6 @@ class TermineService extends AbstractTermineService {
     ***REMOVED*** else {
       var meldung = "Unerwarteter Fehler: "
           "${response.response.statusCode***REMOVED*** - ${response.body***REMOVED***";
-      print(meldung);
       throw RestFehler(meldung);
     ***REMOVED***
   ***REMOVED***
