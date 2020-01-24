@@ -4,7 +4,7 @@ import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:test/test.dart';
 
-import '../routes/TerminCard_test.dart';
+import 'Ort_test.dart';
 import 'TerminDetails_test.dart';
 
 void main() {

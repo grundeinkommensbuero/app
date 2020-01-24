@@ -10,7 +10,10 @@ void main() {
           '{"id":1,"bezirk":"bezirk1","ort":"ort1"}');
     });
   });
-
 }
 
-goerli() => Ort(0, "Friedrichshain-Kreuzberg", "Görlitzer Park und Umgebung");
+Ort goerli() => Ort(0, "Friedrichshain-Kreuzberg", "Görlitzer Park und Umgebung");
+
+Ort nordkiez() => Ort(0, "Friedrichshain-Kreuzberg", "Friedrichshain Nordkiez");
+
+Ort treptowerPark() => Ort(0, "Friedrichshain-Kreuzberg", "Treptower Park");
