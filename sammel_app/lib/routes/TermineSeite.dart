@@ -234,9 +234,7 @@ class _TermineSeiteState extends State<TermineSeite> {
   }
 
   Future editAction(BuildContext context, Termin terminMitDetails) async {
-    print('### öffne Edit Dialog');
     Termin newAction = await openEditDialog(context, terminMitDetails);
-    print('### schließe Edit Dialog');
 
     setState(() {
       termine[termine.indexWhere((a) => a.id == newAction.id)] = newAction;
@@ -287,12 +285,9 @@ class _TermineSeiteState extends State<TermineSeite> {
               ]);
         });
 
-    print('### Bearbeiten-Dialog geschlossen');
     if (editedAction == null) return termin;
 
-    print('### Speichere Aktion');
     await termineService.saveAction(editedAction[0]);
-    print('### Aktion gespeichert');
     return editedAction[0];
   }
 }

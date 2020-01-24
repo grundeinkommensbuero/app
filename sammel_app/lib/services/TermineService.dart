@@ -36,7 +36,6 @@ class TermineService extends AbstractTermineService {
     } else {
       var meldung = "Unerwarteter Fehler: "
           "${response.response.statusCode} - ${response.body}";
-      print(meldung);
       throw RestFehler(meldung);
     }
   }
