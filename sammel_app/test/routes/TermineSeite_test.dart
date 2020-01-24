@@ -367,7 +367,7 @@ void main() {
       var today = DateTime.now();
       var twoDaysAgo = today.subtract(Duration(days: 2));
       var yesterday = today.subtract(Duration(days: 1));
-      var tomorrow = today.subtract(Duration(days: 1));
+      var tomorrow = today.add(Duration(days: 1));
 
       when(terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.anActionFrom(yesterday),
