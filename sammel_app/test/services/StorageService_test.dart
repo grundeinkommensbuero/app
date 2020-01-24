@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:intl/intl.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/StorageService.dart';
@@ -142,6 +141,28 @@ void main() async {
               'ort': 'Görlitzer Park und Umgebung'
             }
           ]));
+    });
+
+    test('loads empty filter if none is stored', () async {
+      TermineFilter filter = TermineFilter(
+          ['Sammeln', 'Infoveranstaltung'],
+          [DateTime(2020, 1, 14), DateTime(2020, 1, 16)],
+          TimeOfDay(hour: 12, minute: 30),
+          TimeOfDay(hour: 15, minute: 0),
+          [
+            Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez'),
+            Ort(2, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung')
+          ]);
+      _prefs.clear();
+
+      TermineFilter readFilter = await service.loadFilter();
+
+      expect(readFilter, isNotNull);
+      expect(readFilter.typen, []);
+      expect(readFilter.tage.length, 0);
+      expect(readFilter.von, null);
+      expect(readFilter.bis, null);
+      expect(readFilter.orte.length, 0);
     });
   });
 }
