@@ -163,7 +163,7 @@ void main() {
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byKey(Key('termin card')).first);
+      await tester.tap(find.byKey(Key('action card')).first);
       await tester.pump();
 
       expect(find.byKey(Key('termin details dialog')), findsOneWidget);
@@ -191,7 +191,7 @@ void main() {
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byKey(Key('termin card')).first);
+      await tester.tap(find.byKey(Key('action card')).first);
       await tester.pump();
 
       verify(terminService.getTerminMitDetails(0));
@@ -217,7 +217,7 @@ void main() {
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byKey(Key('termin card')).first);
+      await tester.tap(find.byKey(Key('action card')).first);
       await tester.pump();
 
       await tester.tap(find.byKey(Key('close termin details button')));
@@ -269,7 +269,7 @@ void main() {
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
 
-      expect(find.byKey(Key('termin card')), findsNWidgets(3));
+      expect(find.byKey(Key('action card')), findsNWidgets(3));
 
       await tester.tap(find.byKey(Key('create termin button')));
       await tester.pump();
@@ -296,11 +296,11 @@ void main() {
       await tester.tap(find.byKey(Key('action editor finish button')));
       await tester.pump();
 
-      expect(find.byKey(Key('termin card')), findsNWidgets(4));
+      expect(find.byKey(Key('action card')), findsNWidgets(4));
 
       expect(
           find.descendant(
-              of: find.byKey(Key('termin card')).at(2),
+              of: find.byKey(Key('action card')).at(2),
               matching: find.text('Infoveranstaltung')),
           findsWidgets);
     });
@@ -329,7 +329,7 @@ void main() {
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
 
-      expect(find.byKey(Key('termin card')), findsNWidgets(3));
+      expect(find.byKey(Key('action card')), findsNWidgets(3));
 
       await tester.tap(find.byKey(Key('create termin button')));
       await tester.pump();
@@ -396,11 +396,11 @@ void main() {
 
       expect(
           find.descendant(
-              of: find.byKey(Key('termin card')).last,
+              of: find.byKey(Key('action card')).last,
               matching: find.text('Infoveranstaltung')),
           findsWidgets);
 
-      await tester.tap(find.byKey(Key('termin card')).last);
+      await tester.tap(find.byKey(Key('action card')).last);
       await tester.pump();
 
       await tester.tap(find.byKey(Key('action details edit button')).first);
@@ -418,9 +418,201 @@ void main() {
       // Der Tap auf den Finish-Button löst den Button einfach nicht aus... :/
       /*expect(
           find.descendant(
-              of: find.byKey(Key('termin card')).first,
+              of: find.byKey(Key('action card')).first,
               matching: find.text('Infoveranstaltung')),
           findsWidgets);*/
+    });
+  });
+
+  group('Jetzt-Zeile', () {
+    testWidgets('liegt zwischen vergangenen und vor zukünftigen Aktionen',
+        (WidgetTester tester) async {
+      var termineSeiteWidget = TermineSeite(title: 'Titel');
+
+      DateTime today = DateTime.now();
+      DateTime twoDaysAgo = today.subtract(Duration(days: 2));
+      DateTime yesterday = today.subtract(Duration(days: 1));
+      DateTime tomorrow = today.add(Duration(days: 1));
+
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.anActionFrom(yesterday),
+            TerminTestDaten.anActionFrom(tomorrow),
+            TerminTestDaten.anActionFrom(twoDaysAgo),
+          ]);
+
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: terminService),
+        Provider<StorageService>.value(value: storageService)
+      ], child: MaterialApp(home: termineSeiteWidget)));
+
+      // Warten bis asynchron Termine geladen wurden
+      await tester.pumpAndSettle();
+
+      var listView = find.byType(ListView);
+
+      List<String> keys = tester
+          .widgetList(
+              find.descendant(of: listView, matching: find.byType(Text)))
+          .map((widget) => (widget as Text).data)
+          .where((key) => key == 'Sammeln' || key == 'Jetzt')
+          .toList();
+
+      expect(
+          keys,
+          containsAll([
+            'Sammeln',
+            'Sammeln',
+            'Jetzt',
+            'Sammeln',
+          ]));
+    });
+
+    testWidgets('wird ausgeblendet wenn keine verganen Aktionen existieren ',
+        (WidgetTester tester) async {
+      var termineSeiteWidget = TermineSeite(title: 'Titel');
+
+      DateTime today = DateTime.now();
+      DateTime nextHour = today.add(Duration(hours: 1));
+      DateTime nextDay = today.add(Duration(days: 1));
+      DateTime nextWeek = today.add(Duration(days: 7));
+
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.anActionFrom(nextDay),
+            TerminTestDaten.anActionFrom(nextHour),
+            TerminTestDaten.anActionFrom(nextWeek),
+          ]);
+
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: terminService),
+        Provider<StorageService>.value(value: storageService)
+      ], child: MaterialApp(home: termineSeiteWidget)));
+
+      // Warten bis asynchron Termine geladen wurden
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(Key('action card')), findsNWidgets(3));
+
+      expect(find.byKey(Key('action list now line')), findsNothing);
+    });
+
+    testWidgets(
+        'ist an letzter Stelle, wenn keine zukuenftigen Aktionen existieren ',
+        (WidgetTester tester) async {
+      var termineSeiteWidget = TermineSeite(title: 'Titel');
+
+      DateTime today = DateTime.now();
+      DateTime threeHoursAgo = today.subtract(Duration(hours: 3));
+      DateTime lastDay = today.subtract(Duration(days: 1));
+      DateTime lastWeek = today.subtract(Duration(days: 7));
+
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.anActionFrom(lastDay),
+            TerminTestDaten.anActionFrom(threeHoursAgo),
+            TerminTestDaten.anActionFrom(lastWeek),
+          ]);
+
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: terminService),
+        Provider<StorageService>.value(value: storageService)
+      ], child: MaterialApp(home: termineSeiteWidget)));
+
+      // Warten bis asynchron Termine geladen wurden
+      await tester.pumpAndSettle();
+
+      var listView = find.byType(ListView);
+
+      List<String> keys = tester
+          .widgetList(
+              find.descendant(of: listView, matching: find.byType(Text)))
+          .map((widget) => (widget as Text).data)
+          .where((key) => key == 'Sammeln' || key == 'Jetzt')
+          .toList();
+
+      expect(
+          keys,
+          containsAll([
+            'Sammeln',
+            'Sammeln',
+            'Sammeln',
+            'Jetzt',
+          ]));
+    });
+
+    testWidgets('wird ausgeblendet wenn gar keine Aktionen existieren ',
+        (WidgetTester tester) async {
+      var termineSeiteWidget = TermineSeite(title: 'Titel');
+
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => []);
+
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: terminService),
+        Provider<StorageService>.value(value: storageService)
+      ], child: MaterialApp(home: termineSeiteWidget)));
+
+      // Warten bis asynchron Termine geladen wurden
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(Key('action list now line')), findsNothing);
+    });
+
+    testWidgets('wird ausgeblendet wenn gar keine Aktionen existieren ',
+        (WidgetTester tester) async {
+      var termineSeiteWidget = TermineSeite(title: 'Titel');
+
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => []);
+
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: terminService),
+        Provider<StorageService>.value(value: storageService)
+      ], child: MaterialApp(home: termineSeiteWidget)));
+
+      // Warten bis asynchron Termine geladen wurden
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(Key('action list now line')), findsNothing);
+    });
+
+    testWidgets(
+        'liegt hinter Aktionen die bereits begonnen haben aber noch nicht beendet sind',
+        (WidgetTester tester) async {
+      var termineSeiteWidget = TermineSeite(title: 'Titel');
+
+      DateTime today = DateTime.now();
+      DateTime oneMinuteAgo = today.subtract(Duration(minutes: 1));
+      DateTime twentyMinutesAgo = today.subtract(Duration(minutes: 20));
+      DateTime inTwentyMinutes = today.add(Duration(minutes: 20));
+
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.anActionFrom(inTwentyMinutes),
+            TerminTestDaten.anActionFrom(twentyMinutesAgo),
+            TerminTestDaten.anActionFrom(oneMinuteAgo),
+          ]);
+
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: terminService),
+        Provider<StorageService>.value(value: storageService)
+      ], child: MaterialApp(home: termineSeiteWidget)));
+
+      // Warten bis asynchron Termine geladen wurden
+      await tester.pumpAndSettle();
+
+      var listView = find.byType(ListView);
+
+      List<String> keys = tester
+          .widgetList(
+              find.descendant(of: listView, matching: find.byType(Text)))
+          .map((widget) => (widget as Text).data)
+          .where((key) => key == 'Sammeln' || key == 'Jetzt')
+          .toList();
+
+      expect(
+          keys,
+          containsAll([
+            'Sammeln',
+            'Sammeln',
+            'Jetzt',
+            'Sammeln',
+          ]));
     });
   });
 }
