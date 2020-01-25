@@ -15,11 +15,11 @@ class TerminCard extends StatelessWidget {
 
   bool myAction;
 
-  TerminCard(this.termin, [bool this.myAction = false, Key key]);
+  TerminCard(this.termin, [bool this.myAction = false, Key key])
+      : super(key: key);
 
   build(context) {
     return Container(
-      key: Key('termin card'),
       padding: EdgeInsets.all(10.0),
       decoration:
           BoxDecoration(color: actionColor(termin.ende, myAction), boxShadow: [
