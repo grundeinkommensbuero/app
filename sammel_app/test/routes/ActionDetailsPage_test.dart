@@ -3,10 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
-import 'package:sammel_app/routes/TerminDetailsWidget.dart';
+import 'package:sammel_app/routes/ActionDetailsPage.dart';
 
 main() {
-  testWidgets('shows Termin values', (WidgetTester tester) async {
+  testWidgets('shows action values', (WidgetTester tester) async {
     Termin termin = Termin(
         1,
         DateTime(2019, 12, 22, 12, 36, 0),
@@ -17,7 +17,7 @@ main() {
             'Ubhf Samariterstr.',
             'Wir machen die Frankfurter Allee runter',
             'Ihr erkennt mich an der lila Weste'));
-    var widget = TerminDetailsWidget(termin);
+    var widget = ActionDetailsPage(termin);
 
     await tester.pumpWidget(MaterialApp(home: Dialog(child: widget)));
 

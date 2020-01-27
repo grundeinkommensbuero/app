@@ -7,23 +7,23 @@ import 'package:sammel_app/shared/ExpandableConstrainedBox.dart';
 
 enum TerminDetailsCommand { EDIT, DELETE, CLOSE }
 
-class TerminDetailsWidget extends StatefulWidget {
+class ActionDetailsPage extends StatefulWidget {
   final Termin termin;
 
-  TerminDetailsWidget(this.termin);
+  ActionDetailsPage(this.termin);
 
   @override
   State<StatefulWidget> createState() {
-    return _TerminDetailsWidget();
+    return _ActionDetailsPage();
   }
 }
 
-class _TerminDetailsWidget extends State<TerminDetailsWidget> {
-  _TerminDetailsWidget();
+class _ActionDetailsPage extends State<ActionDetailsPage> {
+  _ActionDetailsPage();
 
   @override
   Widget build(BuildContext context) {
-    return Column(key: Key('termin details widget'), children: [
+    return Column(key: Key('action details page'), children: [
       Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Icon(Icons.my_location, size: 40.0),
         SizedBox(
