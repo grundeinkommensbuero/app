@@ -196,7 +196,7 @@ class _TermineSeiteState extends State<TermineSeite> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: addEditDeleteButtonsIfMyAction(termin, context)
                     ..add(RaisedButton(
-                      key: Key('close termin details button'),
+                      key: Key('action details close button'),
                       child: Text('Schließen'),
                       onPressed: () =>
                           Navigator.pop(context, TerminDetailsCommand.CLOSE),
