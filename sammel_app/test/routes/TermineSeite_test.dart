@@ -41,66 +41,151 @@ void main() {
     expect(find.text('Titel mit Ümläüten'), findsOneWidget);
   });
 
-  testWidgets('TermineSeite zeigt alle Termine an',
-      (WidgetTester tester) async {
-    var termineSeiteWidget = TermineSeite(title: 'Titel');
+  group('presentation', () {
+    testWidgets('TermineSeite shows all actions', (WidgetTester tester) async {
+      var termineSeiteWidget = TermineSeite(title: 'Titel');
 
-    when(terminService.ladeTermine(any)).thenAnswer((_) async => [
-          TerminTestDaten.einTermin(),
-          TerminTestDaten.einTermin(),
-          TerminTestDaten.einTermin(),
-        ]);
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.einTermin(),
+            TerminTestDaten.einTermin(),
+            TerminTestDaten.einTermin(),
+          ]);
 
-    await tester.pumpWidget(MultiProvider(providers: [
-      Provider<AbstractTermineService>.value(value: terminService),
-      Provider<StorageService>.value(value: storageService)
-    ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: terminService),
+        Provider<StorageService>.value(value: storageService)
+      ], child: MaterialApp(home: termineSeiteWidget)));
 
-    // Warten bis asynchron Termine geladen wurden
-    await tester.pumpAndSettle();
+      // Warten bis asynchron Termine geladen wurden
+      await tester.pumpAndSettle();
 
-    expect(find.byType(TerminCard), findsNWidgets(3));
-  });
+      expect(find.byType(TerminCard), findsNWidgets(3));
+    });
 
-  testWidgets('TermineSeite sortiert Termine nach Datum',
-      (WidgetTester tester) async {
-    var termineSeiteWidget = TermineSeite(title: 'Titel');
+    testWidgets('TermineSeite sorts actions by From Date',
+        (WidgetTester tester) async {
+      var termineSeiteWidget = TermineSeite(title: 'Titel');
 
-    var today = DateTime.now();
-    var tomorrow = today.add(Duration(days: 1));
-    var yesterday = today.subtract(Duration(days: 1));
+      var today = DateTime.now();
+      var tomorrow = today.add(Duration(days: 1));
+      var yesterday = today.subtract(Duration(days: 1));
 
-    when(terminService.ladeTermine(any)).thenAnswer((_) async => [
-          TerminTestDaten.anActionFrom(today)..ort = goerli(),
-          TerminTestDaten.anActionFrom(tomorrow)..ort = nordkiez(),
-          TerminTestDaten.anActionFrom(yesterday)..ort = treptowerPark(),
-        ]);
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.anActionFrom(today)..ort = goerli(),
+            TerminTestDaten.anActionFrom(tomorrow)..ort = nordkiez(),
+            TerminTestDaten.anActionFrom(yesterday)..ort = treptowerPark(),
+          ]);
 
-    await tester.pumpWidget(MultiProvider(providers: [
-      Provider<AbstractTermineService>.value(value: terminService),
-      Provider<StorageService>.value(value: storageService)
-    ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: terminService),
+        Provider<StorageService>.value(value: storageService)
+      ], child: MaterialApp(home: termineSeiteWidget)));
 
-    // Warten bis asynchron Termine geladen wurden
-    await tester.pumpAndSettle();
+      // Warten bis asynchron Termine geladen wurden
+      await tester.pumpAndSettle();
 
-    expect(
-        find.descendant(
-            of: find.byType(TerminCard).first,
-            matching: find.text(TerminCard.erzeugeOrtText(treptowerPark()))),
-        findsOneWidget);
+      expect(
+          find.descendant(
+              of: find.byType(TerminCard).first,
+              matching: find.text(TerminCard.erzeugeOrtText(treptowerPark()))),
+          findsOneWidget);
 
-    expect(
-        find.descendant(
-            of: find.byType(TerminCard).at(1),
-            matching: find.text(TerminCard.erzeugeOrtText(goerli()))),
-        findsOneWidget);
+      expect(
+          find.descendant(
+              of: find.byType(TerminCard).at(1),
+              matching: find.text(TerminCard.erzeugeOrtText(goerli()))),
+          findsOneWidget);
 
-    expect(
-        find.descendant(
-            of: find.byType(TerminCard).last,
-            matching: find.text(TerminCard.erzeugeOrtText(nordkiez()))),
-        findsOneWidget);
+      expect(
+          find.descendant(
+              of: find.byType(TerminCard).last,
+              matching: find.text(TerminCard.erzeugeOrtText(nordkiez()))),
+          findsOneWidget);
+    });
+
+    testWidgets('marks own actions for highlighting',
+        (WidgetTester tester) async {
+      var termineSeiteWidget = TermineSeite(title: 'Titel');
+
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.einTermin()..id = 1,
+            TerminTestDaten.einTermin()..id = 2,
+            TerminTestDaten.einTermin()..id = 3,
+          ]);
+
+      when(storageService.loadAllStoredActionIds())
+          .thenAnswer((_) async => [2]);
+
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: terminService),
+        Provider<StorageService>.value(value: storageService)
+      ], child: MaterialApp(home: termineSeiteWidget)));
+
+      // Warten bis asynchron Termine geladen wurden
+      await tester.pumpAndSettle();
+
+      List<TerminCard> actionCards = tester
+          .widgetList(find.byKey(Key('action card')))
+          .map((widget) => widget as TerminCard)
+          .toList();
+
+      expect(actionCards.length, 3);
+
+      expect(actionCards[0].myAction, false);
+      expect(actionCards[1].myAction, true);
+      expect(actionCards[2].myAction, false);
+    });
+
+    testWidgets('shows edit and delete button only at own actions',
+        (WidgetTester tester) async {
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.einTermin()..id=1,
+            TerminTestDaten.einTermin()..id=2,
+            TerminTestDaten.einTermin()..id=3,
+          ]);
+      when(terminService.getTerminMitDetails(any))
+          .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
+
+      when(storageService.loadAllStoredActionIds())
+          .thenAnswer((_) async => [2]);
+
+      var termineSeiteWidget = TermineSeite(title: 'Titel');
+
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: terminService),
+        Provider<StorageService>.value(value: storageService)
+      ], child: MaterialApp(home: termineSeiteWidget)));
+
+      // Warten bis asynchron Termine geladen wurden
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(Key('action card')).at(0));
+      await tester.pump();
+
+      // no buttons at first action
+      expect(find.byKey(Key('action delete button')), findsNothing);
+      expect(find.byKey(Key('action edit button')), findsNothing);
+
+      await tester.tap(find.byKey(Key('action details close button')));
+      await tester.pump();
+
+      // buttons at second action
+      await tester.tap(find.byKey(Key('action card')).at(1));
+      await tester.pump();
+
+      expect(find.byKey(Key('action delete button')), findsOneWidget);
+      expect(find.byKey(Key('action edit button')), findsOneWidget);
+
+      await tester.tap(find.byKey(Key('action details close button')));
+      await tester.pump();
+
+      // no buttons at third action
+      await tester.tap(find.byKey(Key('action card')).at(2));
+      await tester.pump();
+
+      expect(find.byKey(Key('action delete button')), findsNothing);
+      expect(find.byKey(Key('action edit button')), findsNothing);
+    });
   });
 
   group('Filter', () {
@@ -168,7 +253,7 @@ void main() {
 
       expect(find.byKey(Key('termin details dialog')), findsOneWidget);
       expect(find.byKey(Key('action details page')), findsOneWidget);
-      expect(find.byKey(Key('close termin details button')), findsOneWidget);
+      expect(find.byKey(Key('action details close button')), findsOneWidget);
     });
 
     testWidgets('closes TerminDetails dialog with tap on Schliessen button',
@@ -220,7 +305,7 @@ void main() {
       await tester.tap(find.byKey(Key('action card')).first);
       await tester.pump();
 
-      await tester.tap(find.byKey(Key('close termin details button')));
+      await tester.tap(find.byKey(Key('action details close button')));
       await tester.pump();
 
       expect(find.byKey(Key('termin details dialog')), findsNothing);
@@ -634,7 +719,6 @@ void main() {
           ]);
       when(terminService.getTerminMitDetails(any))
           .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
-
       when(storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [0]);
 
@@ -701,7 +785,7 @@ void main() {
       expect(find.byKey(Key('action card')), findsOneWidget);
     });
 
-    group('on cofirmed', () {
+    group('on confirmed', () {
       var termineSeiteWidget;
       var myAction;
 
