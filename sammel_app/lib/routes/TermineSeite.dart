@@ -249,7 +249,6 @@ class _TermineSeiteState extends State<TermineSeite> {
     openTerminDetails(context, newAction); // recursive and I know it
   }
 
-  //TODO Tests
   Future<void> deleteAction(Termin action) async {
     try {
       await termineService.deleteAction(action);

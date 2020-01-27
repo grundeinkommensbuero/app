@@ -74,7 +74,6 @@ class TermineService extends AbstractTermineService {
     }
   }
 
-  // TODO Tests
   Future<void> deleteAction(Termin action) async {
     var response =
         await delete(Uri.parse('service/termine/termin'), jsonEncode(action));
@@ -175,7 +174,6 @@ class DemoTermineService extends AbstractTermineService {
         newAction;
   }
 
-  //TODO Tests
   @override
   Future<void> deleteAction(Termin action) {
     termine.removeAt(termine.indexWhere((a) => a.id == action.id));
