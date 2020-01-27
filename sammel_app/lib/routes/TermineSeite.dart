@@ -12,7 +12,7 @@ import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:uuid/uuid.dart';
 import 'FilterWidget.dart';
-import 'TerminDetailsWidget.dart';
+import 'ActionDetailsPage.dart';
 
 class TermineSeite extends StatefulWidget {
   TermineSeite({Key key, this.title***REMOVED***) : super(key: key);
@@ -82,11 +82,11 @@ class _TermineSeiteState extends State<TermineSeite> {
     var tile = ListTile(
         title: TerminCard(
             termine[index], isMyAction(termine[index].id), Key('action card')),
-        onTap: () => openTerminDetailsWidget(context, termine[index]),
+        onTap: () => openTerminDetails(context, termine[index]),
         contentPadding: EdgeInsets.only(bottom: 0.1));
     var now = DateTime.now();
     if ((termine[index].beginn.isBefore(now)) &&
-        (index == termine.length-1 || termine[index + 1].beginn.isAfter(now)))
+        (index == termine.length - 1 || termine[index + 1].beginn.isAfter(now)))
       return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         tile,
         Text(
@@ -167,7 +167,7 @@ class _TermineSeiteState extends State<TermineSeite> {
     ***REMOVED***);
   ***REMOVED***
 
-  openTerminDetailsWidget(BuildContext context, Termin termin) async {
+  openTerminDetails(BuildContext context, Termin termin) async {
     var terminMitDetails = await termineService.getTerminMitDetails(termin.id);
     TerminDetailsCommand command = await showDialog(
         context: context,
@@ -191,7 +191,7 @@ class _TermineSeiteState extends State<TermineSeite> {
               key: Key('termin details dialog'),
               contentPadding: EdgeInsets.all(10.0),
               children: <Widget>[
-                TerminDetailsWidget(terminMitDetails),
+                ActionDetailsPage(terminMitDetails),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: addEditDeleteButtonsIfMyAction(termin, context)
@@ -216,7 +216,7 @@ class _TermineSeiteState extends State<TermineSeite> {
     if (isMyAction(termin.id))
       return [
         RaisedButton(
-            key: Key('action details delete button'),
+            key: Key('action delete button'),
             color: DweTheme.red,
             child: Icon(Icons.delete),
             onPressed: () {
@@ -229,7 +229,7 @@ class _TermineSeiteState extends State<TermineSeite> {
               ***REMOVED***);
             ***REMOVED***),
         RaisedButton(
-          key: Key('action details edit button'),
+          key: Key('action edit button'),
           child: Icon(Icons.edit),
           onPressed: () => Navigator.pop(context, TerminDetailsCommand.EDIT),
         )
@@ -246,7 +246,7 @@ class _TermineSeiteState extends State<TermineSeite> {
       termine.sort(Termin.sortByStart());
     ***REMOVED***);
 
-    openTerminDetailsWidget(context, newAction); // recursive and I know it
+    openTerminDetails(context, newAction); // recursive and I know it
   ***REMOVED***
 
   //TODO Tests
@@ -298,14 +298,17 @@ class _TermineSeiteState extends State<TermineSeite> {
 ***REMOVED***
 
 AlertDialog confirmDeleteDialog(BuildContext context) => AlertDialog(
+        key: Key('deletion confirmation dialog'),
         title: Text('Termin Löschen'),
         content: Text('Möchtest du diesen Termin wirklich löschen?'),
         actions: [
           RaisedButton(
+              key: Key('delete confirmation yes button'),
               color: DweTheme.red,
               child: Text('Ja'),
               onPressed: () => Navigator.pop(context, true)),
           RaisedButton(
+            key: Key('delete confirmation no button'),
             child: Text('Nein'),
             onPressed: () => Navigator.pop(context, false),
           ),

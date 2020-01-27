@@ -143,7 +143,7 @@ void main() {
     ***REMOVED***);
   ***REMOVED***);
 
-  group('TerminDetailsDialog', () {
+  group('ActionDetailsDialog', () {
     testWidgets('opens with tap on TermineCard', (WidgetTester tester) async {
       var termineSeiteWidget = TermineSeite(title: 'Titel');
 
@@ -167,7 +167,7 @@ void main() {
       await tester.pump();
 
       expect(find.byKey(Key('termin details dialog')), findsOneWidget);
-      expect(find.byKey(Key('termin details widget')), findsOneWidget);
+      expect(find.byKey(Key('action details page')), findsOneWidget);
       expect(find.byKey(Key('close termin details button')), findsOneWidget);
     ***REMOVED***);
 
@@ -424,8 +424,8 @@ void main() {
     ***REMOVED***);
   ***REMOVED***);
 
-  group('Jetzt-Zeile', () {
-    testWidgets('liegt zwischen vergangenen und vor zukünftigen Aktionen',
+  group('now-line', () {
+    testWidgets('lies between past and future actions',
         (WidgetTester tester) async {
       var termineSeiteWidget = TermineSeite(title: 'Titel');
 
@@ -467,7 +467,7 @@ void main() {
           ]));
     ***REMOVED***);
 
-    testWidgets('wird ausgeblendet wenn keine verganen Aktionen existieren ',
+    testWidgets('hides if no past actions present',
         (WidgetTester tester) async {
       var termineSeiteWidget = TermineSeite(title: 'Titel');
 
@@ -495,8 +495,7 @@ void main() {
       expect(find.byKey(Key('action list now line')), findsNothing);
     ***REMOVED***);
 
-    testWidgets(
-        'ist an letzter Stelle, wenn keine zukuenftigen Aktionen existieren ',
+    testWidgets('is at end if no future actions present',
         (WidgetTester tester) async {
       var termineSeiteWidget = TermineSeite(title: 'Titel');
 
@@ -538,25 +537,7 @@ void main() {
           ]));
     ***REMOVED***);
 
-    testWidgets('wird ausgeblendet wenn gar keine Aktionen existieren ',
-        (WidgetTester tester) async {
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
-      when(terminService.ladeTermine(any)).thenAnswer((_) async => []);
-
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
-
-      // Warten bis asynchron Termine geladen wurden
-      await tester.pumpAndSettle();
-
-      expect(find.byKey(Key('action list now line')), findsNothing);
-    ***REMOVED***);
-
-    testWidgets('wird ausgeblendet wenn gar keine Aktionen existieren ',
-        (WidgetTester tester) async {
+    testWidgets('hides if no actions are present', (WidgetTester tester) async {
       var termineSeiteWidget = TermineSeite(title: 'Titel');
 
       when(terminService.ladeTermine(any)).thenAnswer((_) async => []);
@@ -573,7 +554,7 @@ void main() {
     ***REMOVED***);
 
     testWidgets(
-        'liegt hinter Aktionen die bereits begonnen haben aber noch nicht beendet sind',
+        'lies behind actions that started in the past but end in the future',
         (WidgetTester tester) async {
       var termineSeiteWidget = TermineSeite(title: 'Titel');
 
@@ -613,6 +594,245 @@ void main() {
             'Jetzt',
             'Sammeln',
           ]));
+    ***REMOVED***);
+  ***REMOVED***);
+
+  group('delete button', () {
+    testWidgets('opens confirmation dialog', (WidgetTester tester) async {
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.einTermin(),
+          ]);
+      when(terminService.getTerminMitDetails(any))
+          .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
+
+      when(storageService.loadAllStoredActionIds())
+          .thenAnswer((_) async => [0]);
+
+      var termineSeiteWidget = TermineSeite(title: 'Titel');
+
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: terminService),
+        Provider<StorageService>.value(value: storageService)
+      ], child: MaterialApp(home: termineSeiteWidget)));
+
+      // Warten bis asynchron Termine geladen wurden
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(Key('action card')).first);
+      await tester.pump();
+
+      await tester.tap(find.byKey(Key('action delete button')));
+      await tester.pump();
+
+      expect(find.byKey(Key('deletion confirmation dialog')), findsOneWidget);
+    ***REMOVED***);
+
+    testWidgets('closes confirmation dialog on tap at No button',
+        (WidgetTester tester) async {
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.einTermin(),
+          ]);
+      when(terminService.getTerminMitDetails(any))
+          .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
+
+      when(storageService.loadAllStoredActionIds())
+          .thenAnswer((_) async => [0]);
+
+      var termineSeiteWidget = TermineSeite(title: 'Titel');
+
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: terminService),
+        Provider<StorageService>.value(value: storageService)
+      ], child: MaterialApp(home: termineSeiteWidget)));
+
+      // Warten bis asynchron Termine geladen wurden
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(Key('action card')).first);
+      await tester.pump();
+
+      await tester.tap(find.byKey(Key('action delete button')));
+      await tester.pump();
+
+      await tester.tap(find.byKey(Key('delete confirmation no button')));
+      await tester.pump();
+
+      expect(find.byKey(Key('deletion confirmation dialog')), findsNothing);
+    ***REMOVED***);
+
+    testWidgets('does not trigger deletion on tap at No button',
+        (WidgetTester tester) async {
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.einTermin(),
+          ]);
+      when(terminService.getTerminMitDetails(any))
+          .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
+
+      when(storageService.loadAllStoredActionIds())
+          .thenAnswer((_) async => [0]);
+
+      var termineSeiteWidget = TermineSeite(title: 'Titel');
+
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: terminService),
+        Provider<StorageService>.value(value: storageService)
+      ], child: MaterialApp(home: termineSeiteWidget)));
+
+      // Warten bis asynchron Termine geladen wurden
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(Key('action card')), findsOneWidget);
+
+      await tester.tap(find.byKey(Key('action card')).first);
+      await tester.pump();
+
+      expect(find.byKey(Key('action details page')), findsOneWidget);
+
+      await tester.tap(find.byKey(Key('action delete button')));
+      await tester.pump();
+
+      expect(find.byKey(Key('deletion confirmation dialog')), findsOneWidget);
+
+      await tester.tap(find.byKey(Key('delete confirmation no button')));
+      await tester.pump();
+
+      expect(find.byKey(Key('action details page')), findsOneWidget);
+      verifyNever(terminService.deleteAction(any));
+      expect(find.byKey(Key('action card')), findsOneWidget);
+    ***REMOVED***);
+
+    group('on cofirmed', () {
+      var termineSeiteWidget;
+      var myAction;
+
+      setUp(() {
+        DateTime today = DateTime.now();
+        DateTime yesterday = today.subtract(Duration(days: 1));
+        DateTime tomorrow = today.add(Duration(days: 1));
+
+        when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+              TerminTestDaten.einTermin()
+                ..id = 1
+                ..beginn = yesterday,
+              TerminTestDaten.einTermin()
+                ..id = 2
+                ..beginn = today
+                ..typ = 'Infoveranstaltung',
+              TerminTestDaten.einTermin()
+                ..id = 3
+                ..beginn = tomorrow,
+            ]);
+
+        // mittlere Aktion um sicherzustellen, dass nicht einfach immer die erste oder letzte Aktion gelöscht wird
+        myAction = TerminTestDaten.einTerminMitDetails()..id = 2;
+        when(terminService.getTerminMitDetails(any))
+            .thenAnswer((_) async => myAction);
+
+        clearInteractions(storageService);
+        when(storageService.loadAllStoredActionIds())
+            .thenAnswer((_) async => [2]);
+
+        termineSeiteWidget = TermineSeite(title: 'Titel');
+      ***REMOVED***);
+
+      testWidgets('deletes action in backend confirm deletion',
+          (WidgetTester tester) async {
+        await tester.pumpWidget(MultiProvider(providers: [
+          Provider<AbstractTermineService>.value(value: terminService),
+          Provider<StorageService>.value(value: storageService)
+        ], child: MaterialApp(home: termineSeiteWidget)));
+
+        // Warten bis asynchron Termine geladen wurden
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.text('Infoveranstaltung'));
+        await tester.pump();
+
+        await tester.tap(find.byKey(Key('action delete button')));
+        await tester.pump();
+
+        expect(find.byKey(Key('deletion confirmation dialog')), findsOneWidget);
+
+        await tester.tap(find.byKey(Key('delete confirmation yes button')));
+        await tester.pump();
+
+        verify(terminService.deleteAction(myAction)).called(1);
+      ***REMOVED***);
+
+      testWidgets('deletes action in action list', (WidgetTester tester) async {
+        await tester.pumpWidget(MultiProvider(providers: [
+          Provider<AbstractTermineService>.value(value: terminService),
+          Provider<StorageService>.value(value: storageService)
+        ], child: MaterialApp(home: termineSeiteWidget)));
+
+        // Warten bis asynchron Termine geladen wurden
+        await tester.pumpAndSettle();
+
+        // mittleren Dialog um sicherzustellen, dass nicht einfach immer die erste Aktion gelöscht wird
+        await tester.tap(find.byKey(Key('action card')).at(1));
+        await tester.pump();
+
+        await tester.tap(find.byKey(Key('action delete button')));
+        await tester.pump();
+
+        expect(find.byKey(Key('deletion confirmation dialog')), findsOneWidget);
+
+        await tester.tap(find.byKey(Key('delete confirmation yes button')));
+        await tester.pump();
+
+        expect(find.byKey(Key('action card')), findsNWidgets(2));
+        expect(find.text('Infoveranstaltung'), findsNothing);
+      ***REMOVED***);
+
+      testWidgets('deletes action id storage', (WidgetTester tester) async {
+        await tester.pumpWidget(MultiProvider(providers: [
+          Provider<AbstractTermineService>.value(value: terminService),
+          Provider<StorageService>.value(value: storageService)
+        ], child: MaterialApp(home: termineSeiteWidget)));
+
+        // Warten bis asynchron Termine geladen wurden
+        await tester.pumpAndSettle();
+
+        // mittleren Dialog um sicherzustellen, dass nicht einfach immer die erste Aktion gelöscht wird
+        await tester.tap(find.byKey(Key('action card')).at(1));
+        await tester.pump();
+
+        await tester.tap(find.byKey(Key('action delete button')));
+        await tester.pump();
+
+        expect(find.byKey(Key('deletion confirmation dialog')), findsOneWidget);
+
+        await tester.tap(find.byKey(Key('delete confirmation yes button')));
+        await tester.pump();
+
+        verify(storageService.deleteActionToken(2)).called(1);
+      ***REMOVED***);
+
+      testWidgets('closes confirmation dialog and action details',
+          (WidgetTester tester) async {
+        await tester.pumpWidget(MultiProvider(providers: [
+          Provider<AbstractTermineService>.value(value: terminService),
+          Provider<StorageService>.value(value: storageService)
+        ], child: MaterialApp(home: termineSeiteWidget)));
+
+        // Warten bis asynchron Termine geladen wurden
+        await tester.pumpAndSettle();
+
+        // mittleren Dialog um sicherzustellen, dass nicht einfach immer die erste Aktion gelöscht wird
+        await tester.tap(find.byKey(Key('action card')).at(1));
+        await tester.pump();
+
+        await tester.tap(find.byKey(Key('action delete button')));
+        await tester.pump();
+
+        expect(find.byKey(Key('deletion confirmation dialog')), findsOneWidget);
+
+        await tester.tap(find.byKey(Key('delete confirmation yes button')));
+        await tester.pump();
+
+        expect(find.byKey(Key('deletion confirmation dialog')), findsNothing);
+        expect(find.byKey(Key('action details page')), findsNothing);
+      ***REMOVED***);
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***
