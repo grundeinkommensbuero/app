@@ -185,13 +185,6 @@ class ActionEditorState extends State<ActionEditor> {
       decoration: InputDecoration(
         border: OutlineInputBorder(),
       ),
-      onSaved: (current_input_) {
-        current_input = current_input_;
-      ***REMOVED***,
-      onFieldSubmitted: (current_input_) {
-        current_input = current_input_;
-      ***REMOVED***,
-      // FIXME
       onChanged: (current_input_) {
         current_input = current_input_;
       ***REMOVED***,
