@@ -117,7 +117,7 @@ class _TermineSeiteState extends State<TermineSeite> {
   void ladeTermine(TermineFilter filter) {
     termineService.ladeTermine(filter).then((termine) {
       setState(() {
-        this.termine = termine..sort(Termin.sortByStart());
+        this.termine = termine..sort(Termin.compareByStart);
       });
     });
   }
@@ -163,7 +163,7 @@ class _TermineSeiteState extends State<TermineSeite> {
       myActions.add(terminMitId.id);
       termine
         ..add(terminMitId)
-        ..sort(Termin.sortByStart());
+        ..sort(Termin.compareByStart);
     });
   }
 
@@ -243,7 +243,7 @@ class _TermineSeiteState extends State<TermineSeite> {
 
     setState(() {
       termine[termine.indexWhere((a) => a.id == newAction.id)] = newAction;
-      termine.sort(Termin.sortByStart());
+      termine.sort(Termin.compareByStart);
     });
 
     openTerminDetails(context, newAction); // recursive and I know it
