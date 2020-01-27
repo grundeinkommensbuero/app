@@ -48,6 +48,6 @@ class Termin {
     return '';
   ***REMOVED***
 
-  static int Function(Termin a, Termin b) sortByStart() =>
+  static final int Function(Termin a, Termin b) compareByStart =
       (termin1, termin2) => termin1.beginn.compareTo(termin2.beginn);
 ***REMOVED***

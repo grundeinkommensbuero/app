@@ -69,28 +69,56 @@ void main() {
       var termin = Termin.fromJson(jsonDecode(
           '{"beginn":"2020-02-05T09:00:00","details":{"id":1,"kommentar":"wir stellen uns an die Ubhf-Eingänge. ihr erkennt mich an der DWE-Weste","kontakt":"kalle@revo.de","treffpunkt":"Weltzeituhr"***REMOVED***,"ende":"2020-02-05T12:00:00","id":1,"ort":{"bezirk":"Friedrichshain-Kreuzberg","id":1,"ort":"Friedrichshain Nordkiez"***REMOVED***,"typ":"Sammeln"***REMOVED***'));
       expect(termin.details.treffpunkt, "Weltzeituhr");
-      expect(termin.details.kommentar, "wir stellen uns an die Ubhf-Eingänge. ihr erkennt mich an der DWE-Weste");
+      expect(termin.details.kommentar,
+          "wir stellen uns an die Ubhf-Eingänge. ihr erkennt mich an der DWE-Weste");
       expect(termin.details.kontakt, "kalle@revo.de");
     ***REMOVED***);
+  ***REMOVED***);
+
+  test('compareByStart orders actions by Start value', () {
+    var now = DateTime.now();
+    var action1 =
+        Termin(1, now, now.add(Duration(hours: 1)), goerli(), 'Sammeln', null);
+    var action2 = Termin(
+        2,
+        now.add(Duration(days: 1)),
+        now.add(Duration(days: 1)).add(Duration(hours: 1)),
+        nordkiez(),
+        'Sammeln',
+        null);
+    var action3 = Termin(
+        3,
+        now.add(Duration(days: 365)),
+        now.add(Duration(days: 365, hours: 1)),
+        treptowerPark(),
+        'Sammeln',
+        null);
+    var action4 = Termin(4, now.subtract(Duration(hours: 1)),
+        now.add(Duration(hours: 1)), treptowerPark(), 'Sammeln', null);
+
+    // same
+    expect(Termin.compareByStart(action1, action1), 0);
+
+    // first lesser then second
+    expect(Termin.compareByStart(action1, action2), -1);
+
+    // first greater then second
+    expect(Termin.compareByStart(action2, action1), 1);
+
+    // first lesser then second by a year
+    expect(Termin.compareByStart(action1, action3), -1);
+
+    // first lesser then second by start, but not by end
+    expect(Termin.compareByStart(action4, action1), -1);
   ***REMOVED***);
 ***REMOVED***
 
 class TerminTestDaten {
-  static Termin einTermin() => Termin(
-      0,
-      DateTime(2019, 11, 4, 17, 9, 0),
-      DateTime(2019, 11, 4, 18, 9, 0),
-      nordkiez(),
-      'Sammeln',
-      null);
+  static Termin einTermin() => Termin(0, DateTime(2019, 11, 4, 17, 9, 0),
+      DateTime(2019, 11, 4, 18, 9, 0), nordkiez(), 'Sammeln', null);
 
   static Termin anActionFrom(DateTime date) => Termin(
-      0,
-      date,
-      date.add(Duration(hours: 1)),
-      nordkiez(),
-      'Sammeln',
-      null);
+      0, date, date.add(Duration(hours: 1)), nordkiez(), 'Sammeln', null);
 
   static einTerminMitDetails() => Termin(
       0,
