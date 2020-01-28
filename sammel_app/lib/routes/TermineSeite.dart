@@ -1,3 +1,4 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -151,9 +152,7 @@ class TermineSeiteState extends State<TermineSeite> {
 
     if (newActions == null) return;
 
-    setState(() {
-      for (final action in newActions) createNewAction(action);
-    });
+    for (final action in newActions) createNewAction(action);
   }
 
   createNewAction(Termin action) async {
@@ -163,10 +162,12 @@ class TermineSeiteState extends State<TermineSeite> {
 
     storageService.saveActionToken(terminMitId.id, uuid);
 
-    myActions.add(terminMitId.id);
-    termine
-      ..add(terminMitId)
-      ..sort(Termin.compareByStart);
+    setState(() {
+      myActions.add(terminMitId.id);
+      termine
+        ..add(terminMitId)
+        ..sort(Termin.compareByStart);
+    });
   }
 
   openTerminDetails(BuildContext context, Termin termin) async {
@@ -275,7 +276,7 @@ class TermineSeiteState extends State<TermineSeite> {
         termine.indexWhere((Termin action) => action.id == updatedAction.id);
 
     if (remove) {
-      termine.remove(index);
+      termine.removeAt(index);
       myActions.remove(updatedAction.id);
     } else {
       termine[index] = updatedAction;
