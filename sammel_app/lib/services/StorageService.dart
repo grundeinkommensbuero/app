@@ -27,8 +27,8 @@ class StorageService {
       .then((prefs) => prefs.remove('$_ACTION:$id'))
       .whenComplete(() => unmarkActionIdAsStored(id));
 
-  Future<String> loadActionToken(String id) =>
-      prefs.then((prefs) => prefs.getString('$_ACTION:$id'));
+  Future<String> loadActionToken(int id) =>
+      prefs.then((prefs) => prefs.getString('$_ACTION:${id.toString()***REMOVED***'));
 
   markActionIdAsStored(int id) => prefs.then((prefs) => _getActionList().then(
       (list) => prefs.setStringList(_ACTIONLIST, list..add(id.toString()))));

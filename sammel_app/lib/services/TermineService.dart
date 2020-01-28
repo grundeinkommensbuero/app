@@ -13,13 +13,13 @@ import 'package:sammel_app/services/Service.dart';
 abstract class AbstractTermineService extends BackendService {
   Future<List<Termin>> ladeTermine(TermineFilter filter);
 
-  Future<Termin> createTermin(Termin termin);
+  Future<Termin> createTermin(Termin termin, String token);
 
   Future<Termin> getTerminMitDetails(int id);
 
-  Future<void> saveAction(Termin action);
+  Future<void> saveAction(Termin action, String token);
 
-  Future<void> deleteAction(Termin action);
+  Future<void> deleteAction(Termin action, String token);
 ***REMOVED***
 
 class TermineService extends AbstractTermineService {
@@ -39,7 +39,7 @@ class TermineService extends AbstractTermineService {
     ***REMOVED***
   ***REMOVED***
 
-  Future<Termin> createTermin(Termin termin) async {
+  Future<Termin> createTermin(Termin termin, String token) async {
     var response =
         await post(Uri.parse('service/termine/neu'), jsonEncode(termin));
     if (response.response.statusCode == 200) {
@@ -63,7 +63,7 @@ class TermineService extends AbstractTermineService {
   ***REMOVED***
 
   // TODO Tests
-  Future<void> saveAction(Termin action) async {
+  Future<void> saveAction(Termin action, String token) async {
     var response =
         await post(Uri.parse('service/termine/termin'), jsonEncode(action));
     if (response.response.statusCode == 200) {
@@ -74,7 +74,7 @@ class TermineService extends AbstractTermineService {
     ***REMOVED***
   ***REMOVED***
 
-  Future<void> deleteAction(Termin action) async {
+  Future<void> deleteAction(Termin action, String token) async {
     var response =
         await delete(Uri.parse('service/termine/termin'), jsonEncode(action));
     if (response.response.statusCode != 200) {
@@ -155,7 +155,7 @@ class DemoTermineService extends AbstractTermineService {
   ***REMOVED***
 
   @override
-  Future<Termin> createTermin(Termin termin) async {
+  Future<Termin> createTermin(Termin termin, String token) async {
     int highestId = termine.map((termin) => termin.id).reduce(max);
     termin.id = highestId + 1;
     termine.add(termin);
@@ -169,13 +169,13 @@ class DemoTermineService extends AbstractTermineService {
 
   // TODO Tests
   @override
-  Future<void> saveAction(Termin newAction) async {
+  Future<void> saveAction(Termin newAction, String token) async {
     termine[termine.indexWhere((oldAction) => oldAction.id == newAction.id)] =
         newAction;
   ***REMOVED***
 
   @override
-  Future<void> deleteAction(Termin action) {
+  Future<void> deleteAction(Termin action, String token) {
     termine.removeAt(termine.indexWhere((a) => a.id == action.id));
   ***REMOVED***
 ***REMOVED***
