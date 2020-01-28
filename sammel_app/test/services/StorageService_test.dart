@@ -27,7 +27,7 @@ void main() async {
     test('are read correctly', () async {
       await _prefs.setString('action:1', '123789456');
 
-      var token = await service.loadActionToken('1');
+      var token = await service.loadActionToken(1);
 
       expect(token, '123789456');
     });
@@ -144,7 +144,7 @@ void main() async {
     });
 
     test('loads empty filter if none is stored', () async {
-      TermineFilter filter = TermineFilter(
+      TermineFilter(
           ['Sammeln', 'Infoveranstaltung'],
           [DateTime(2020, 1, 14), DateTime(2020, 1, 16)],
           TimeOfDay(hour: 12, minute: 30),

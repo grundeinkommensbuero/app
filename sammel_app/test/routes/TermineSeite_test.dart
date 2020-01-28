@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
@@ -139,9 +140,9 @@ void main() {
     testWidgets('shows edit and delete button only at own actions',
         (WidgetTester tester) async {
       when(terminService.ladeTermine(any)).thenAnswer((_) async => [
-            TerminTestDaten.einTermin()..id=1,
-            TerminTestDaten.einTermin()..id=2,
-            TerminTestDaten.einTermin()..id=3,
+            TerminTestDaten.einTermin()..id = 1,
+            TerminTestDaten.einTermin()..id = 2,
+            TerminTestDaten.einTermin()..id = 3,
           ]);
       when(terminService.getTerminMitDetails(any))
           .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
@@ -370,7 +371,7 @@ void main() {
           [today],
           TerminDetails('', '', ''));
 
-      when(terminService.createTermin(any)).thenAnswer((_) async => Termin(
+      when(terminService.createTermin(any, any)).thenAnswer((_) async => Termin(
           1337,
           today,
           today.add(Duration(hours: 2)),
@@ -399,6 +400,9 @@ void main() {
       var yesterday = today.subtract(Duration(days: 1));
       var tomorrow = today.subtract(Duration(days: 1));
       var dayAfterTomorrow = today.add(Duration(days: 2));
+
+      when(terminService.createTermin(any, any))
+          .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
 
       when(terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.anActionFrom(yesterday),
@@ -430,7 +434,7 @@ void main() {
           [today],
           TerminDetails('', '', ''));
 
-      when(terminService.createTermin(any)).thenAnswer((_) async => Termin(
+      when(terminService.createTermin(any, any)).thenAnswer((_) async => Termin(
           1337,
           today,
           today.add(Duration(hours: 2)),
@@ -441,7 +445,7 @@ void main() {
       await tester.tap(find.byKey(Key('action editor finish button')));
       await tester.pump();
 
-      verify(terminService.createTermin(any)).called(1);
+      verify(terminService.createTermin(any, any)).called(1);
     });
 
     // FIXME
@@ -453,6 +457,9 @@ void main() {
       var twoDaysAgo = today.subtract(Duration(days: 2));
       var yesterday = today.subtract(Duration(days: 1));
       var tomorrow = today.add(Duration(days: 1));
+
+      when(terminService.createTermin(any, any))
+          .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
 
       when(terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.anActionFrom(yesterday),
@@ -488,7 +495,7 @@ void main() {
       await tester.tap(find.byKey(Key('action card')).last);
       await tester.pump();
 
-      await tester.tap(find.byKey(Key('action details edit button')).first);
+      await tester.tap(find.byKey(Key('action edit button')).first);
       await tester.pump();
 
       expect(find.byKey(Key('action editor finish button')), findsOneWidget);
@@ -781,7 +788,7 @@ void main() {
       await tester.pump();
 
       expect(find.byKey(Key('action details page')), findsOneWidget);
-      verifyNever(terminService.deleteAction(any));
+      verifyNever(terminService.deleteAction(any, any));
       expect(find.byKey(Key('action card')), findsOneWidget);
     });
 
@@ -819,7 +826,7 @@ void main() {
         termineSeiteWidget = TermineSeite(title: 'Titel');
       });
 
-      testWidgets('deletes action in backend confirm deletion',
+      testWidgets('deletes action in backend',
           (WidgetTester tester) async {
         await tester.pumpWidget(MultiProvider(providers: [
           Provider<AbstractTermineService>.value(value: terminService),
@@ -840,7 +847,7 @@ void main() {
         await tester.tap(find.byKey(Key('delete confirmation yes button')));
         await tester.pump();
 
-        verify(terminService.deleteAction(myAction)).called(1);
+        verify(terminService.deleteAction(myAction, any)).called(1);
       });
 
       testWidgets('deletes action in action list', (WidgetTester tester) async {
@@ -917,6 +924,64 @@ void main() {
         expect(find.byKey(Key('deletion confirmation dialog')), findsNothing);
         expect(find.byKey(Key('action details page')), findsNothing);
       });
+    });
+  });
+
+  group('action token', () {
+    TermineSeiteState actionPage;
+    setUp(() {
+      actionPage = TermineSeiteState();
+      TermineSeiteState.storageService = storageService;
+      TermineSeiteState.termineService = terminService;
+    });
+
+    test('is uniquely generated at action creation and sent to server', () {
+      when(terminService.createTermin(any, any))
+          .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
+
+      actionPage.createNewAction(TerminTestDaten.einTermin());
+      actionPage.createNewAction(TerminTestDaten.einTermin());
+
+      List<dynamic> uuids =
+          verify(terminService.createTermin(any, captureAny)).captured;
+
+      expect(uuids[0], isNotEmpty);
+      expect(uuids[1], isNotEmpty);
+      expect(uuids[0], isNot(uuids[1]));
+    });
+
+    test('is passed to server when action is edited', () async {
+      Termin action1 = TerminTestDaten.einTermin()..id = 1;
+      Termin action2 = TerminTestDaten.einTermin()..id = 2;
+      actionPage.termine = [action1, action2];
+
+      when(storageService.loadActionToken(1))
+          .thenAnswer((_) async => 'storedToken1');
+      when(storageService.loadActionToken(2))
+          .thenAnswer((_) async => 'storedToken2');
+
+      await actionPage.saveAction(action1);
+      await actionPage.saveAction(action2);
+
+      verify(terminService.saveAction(action1, 'storedToken1')).called(1);
+      verify(terminService.saveAction(action2, 'storedToken2')).called(1);
+    });
+
+    test('is passed to server when action is deleted', () async {
+      Termin action1 = TerminTestDaten.einTermin()..id = 1;
+      Termin action2 = TerminTestDaten.einTermin()..id = 2;
+      actionPage.termine = [action1, action2];
+
+      when(storageService.loadActionToken(1))
+          .thenAnswer((_) async => 'storedToken1');
+      when(storageService.loadActionToken(2))
+          .thenAnswer((_) async => 'storedToken2');
+
+      await actionPage.deleteAction(action1);
+      await actionPage.deleteAction(action2);
+
+      verify(terminService.deleteAction(action1, 'storedToken1')).called(1);
+      verify(terminService.deleteAction(action2, 'storedToken2')).called(1);
     });
   });
 }

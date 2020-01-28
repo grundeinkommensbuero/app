@@ -50,4 +50,12 @@ class Termin {
 
   static final int Function(Termin a, Termin b) compareByStart =
       (termin1, termin2) => termin1.beginn.compareTo(termin2.beginn);
+
+}
+
+class ActionWithToken {
+  final Termin action;
+  final String token;
+
+  ActionWithToken(this.action, this.token);
 }

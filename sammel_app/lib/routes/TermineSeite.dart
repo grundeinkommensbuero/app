@@ -19,11 +19,12 @@ class TermineSeite extends StatefulWidget {
   final String title;
 
   @override
-  _TermineSeiteState createState() => _TermineSeiteState();
+  TermineSeiteState createState() => TermineSeiteState();
 }
 
-class _TermineSeiteState extends State<TermineSeite> {
+class TermineSeiteState extends State<TermineSeite> {
   static AbstractTermineService termineService;
+  static StorageService storageService;
   static final TextStyle style = TextStyle(
     color: Color.fromARGB(255, 129, 28, 98),
     fontSize: 15.0,
@@ -33,7 +34,7 @@ class _TermineSeiteState extends State<TermineSeite> {
 
   FilterWidget filterWidget;
 
-  List<int> myActions;
+  List<int> myActions = [];
 
   @override
   Widget build(BuildContext context) {
@@ -107,8 +108,9 @@ class _TermineSeiteState extends State<TermineSeite> {
 //    Provider.of<StorageService>(context).clearAllPreferences();
 
     termineService = Provider.of<AbstractTermineService>(context);
+    storageService = Provider.of<StorageService>(context);
     filterWidget = FilterWidget(ladeTermine);
-    Provider.of<StorageService>(context)
+    storageService
         .loadAllStoredActionIds()
         .then((ids) => setState(() => myActions = ids));
     _initialized = true;
@@ -149,22 +151,22 @@ class _TermineSeiteState extends State<TermineSeite> {
 
     if (newActions == null) return;
 
-    for (final action in newActions) addNewAction(action);
+    setState(() {
+      for (final action in newActions) createNewAction(action);
+    });
   }
 
-  addNewAction(Termin action) async {
-    var uuid = Uuid().v1();
+  createNewAction(Termin action) async {
+    String uuid = Uuid().v1();
 
-    Termin terminMitId = await termineService.createTermin(action);
+    Termin terminMitId = await termineService.createTermin(action, uuid);
 
-    Provider.of<StorageService>(context).saveActionToken(terminMitId.id, uuid);
+    storageService.saveActionToken(terminMitId.id, uuid);
 
-    setState(() {
-      myActions.add(terminMitId.id);
-      termine
-        ..add(terminMitId)
-        ..sort(Termin.compareByStart);
-    });
+    myActions.add(terminMitId.id);
+    termine
+      ..add(terminMitId)
+      ..sort(Termin.compareByStart);
   }
 
   openTerminDetails(BuildContext context, Termin termin) async {
@@ -205,7 +207,10 @@ class _TermineSeiteState extends State<TermineSeite> {
               ],
             ));
 
-    if (command == TerminDetailsCommand.DELETE) deleteAction(terminMitDetails);
+    if (command == TerminDetailsCommand.DELETE) {
+      await deleteAction(terminMitDetails);
+      setState(() => updateActions(terminMitDetails, true));
+    }
 
     if (command == TerminDetailsCommand.EDIT)
       editAction(context, terminMitDetails);
@@ -239,28 +244,42 @@ class _TermineSeiteState extends State<TermineSeite> {
   }
 
   Future editAction(BuildContext context, Termin terminMitDetails) async {
-    Termin newAction = await openEditDialog(context, terminMitDetails);
+    Termin editedAction = await openEditDialog(context, terminMitDetails);
 
-    setState(() {
-      termine[termine.indexWhere((a) => a.id == newAction.id)] = newAction;
-      termine.sort(Termin.compareByStart);
-    });
+    if (editedAction == null) return;
 
-    openTerminDetails(context, newAction); // recursive and I know it
+    saveAction(editedAction);
+    setState(() => updateActions(editedAction, false));
+
+    openTerminDetails(context, editedAction); // recursive and I know it
+  }
+
+  Future<void> saveAction(Termin editedAction) async {
+    String token = await storageService.loadActionToken(editedAction.id);
+    await termineService.saveAction(editedAction, token);
   }
 
   Future<void> deleteAction(Termin action) async {
+    String token = await storageService.loadActionToken(action.id);
     try {
-      await termineService.deleteAction(action);
-
-      Provider.of<StorageService>(context).deleteActionToken(action.id);
-
-      setState(() {
-        termine.remove(termine.where((a) => a.id == action.id).first);
-        myActions.remove(action.id);
-      });
+      await termineService.deleteAction(action, token);
+      storageService.deleteActionToken(action.id);
     } on RestFehler catch (error) {
       print((error as RestFehler).meldung);
+    }
+  }
+
+  // TODO Tests
+  updateActions(Termin updatedAction, bool remove) {
+    var index =
+        termine.indexWhere((Termin action) => action.id == updatedAction.id);
+
+    if (remove) {
+      termine.remove(index);
+      myActions.remove(updatedAction.id);
+    } else {
+      termine[index] = updatedAction;
+      termine.sort(Termin.compareByStart);
     }
   }
 
@@ -288,10 +307,6 @@ class _TermineSeiteState extends State<TermineSeite> {
                 )
               ]);
         });
-
-    if (editedAction == null) return termin;
-
-    await termineService.saveAction(editedAction[0]);
     return editedAction[0];
   }
 }
