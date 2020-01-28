@@ -331,13 +331,13 @@ void main() {
       expect(find.byKey(Key('action creator')), findsOneWidget);
     });
 
-    testWidgets('new actions are added and sorted into action list',
+    testWidgets('new actions from server are added and sorted into action list',
         (WidgetTester tester) async {
       var termineSeiteWidget = TermineSeite(title: 'Titel');
 
       var today = DateTime.now();
       var yesterday = today.subtract(Duration(days: 1));
-      var tomorrow = today.subtract(Duration(days: 1));
+      var tomorrow = today.add(Duration(days: 1));
       var dayAfterTomorrow = today.add(Duration(days: 2));
 
       when(terminService.ladeTermine(any)).thenAnswer((_) async => [
@@ -366,7 +366,7 @@ void main() {
           TimeOfDay.fromDateTime(today),
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
           goerli(),
-          'Sammeln',
+          'Infoveranstaltung',
           [today],
           TerminDetails('', '', ''));
 
@@ -383,11 +383,70 @@ void main() {
 
       expect(find.byKey(Key('action card')), findsNWidgets(4));
 
+      expect(find.text('Infoveranstaltung'), findsOneWidget);
+
       expect(
           find.descendant(
-              of: find.byKey(Key('action card')).at(2),
+              of: find.byKey(Key('action card')).at(1),
               matching: find.text('Infoveranstaltung')),
           findsWidgets);
+    });
+
+    testWidgets('uses created action from server with id',
+        (WidgetTester tester) async {
+      var termineSeiteWidget = TermineSeite(title: 'Titel');
+
+      var today = DateTime.now();
+      var yesterday = today.subtract(Duration(days: 1));
+      var tomorrow = today.add(Duration(days: 1));
+      var dayAfterTomorrow = today.add(Duration(days: 2));
+
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.anActionFrom(yesterday),
+            TerminTestDaten.anActionFrom(tomorrow),
+            TerminTestDaten.anActionFrom(dayAfterTomorrow),
+          ]);
+
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: terminService),
+        Provider<StorageService>.value(value: storageService)
+      ], child: MaterialApp(home: termineSeiteWidget)));
+
+      // Warten bis asynchron Termine geladen wurden
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(Key('action card')), findsNWidgets(3));
+
+      await tester.tap(find.byKey(Key('create termin button')));
+      await tester.pump();
+
+      ActionEditorState editorState =
+          tester.state(find.byKey(Key('action creator')));
+
+      editorState.action = ActionData(
+          TimeOfDay.fromDateTime(today),
+          TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
+          goerli(),
+          'not this one',
+          [today],
+          TerminDetails('', '', ''));
+
+      when(terminService.createTermin(any, any)).thenAnswer((_) async => Termin(
+          1337,
+          today,
+          today.add(Duration(hours: 2)),
+          goerli(),
+          'Infoveranstaltung',
+          editorState.action.terminDetails));
+
+      await tester.tap(find.byKey(Key('action editor finish button')));
+      await tester.pump();
+
+      TerminCard newCard = tester.widget(find.ancestor(
+          of: find.text('Infoveranstaltung'),
+          matching: find.byKey(Key('action card'))));
+
+      expect(newCard.termin.id, 1337);
     });
 
     testWidgets('new actions are saved to server', (WidgetTester tester) async {
@@ -429,7 +488,7 @@ void main() {
           TimeOfDay.fromDateTime(today),
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
           goerli(),
-          'Neue Aktion',
+          'Infoveranstaltung',
           [today],
           TerminDetails('', '', ''));
 
@@ -825,8 +884,7 @@ void main() {
         termineSeiteWidget = TermineSeite(title: 'Titel');
       });
 
-      testWidgets('deletes action in backend',
-          (WidgetTester tester) async {
+      testWidgets('deletes action in backend', (WidgetTester tester) async {
         await tester.pumpWidget(MultiProvider(providers: [
           Provider<AbstractTermineService>.value(value: terminService),
           Provider<StorageService>.value(value: storageService)

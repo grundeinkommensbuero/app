@@ -45,12 +45,23 @@ class Termin {
       case 'Infoveranstaltung':
         return 'assets/images/Infoveranstaltung.png';
     }
-    return '';
+    throw UnkownActionTypeException('Cannot find asset for unknwon action type "$typ"');
   }
 
   static final int Function(Termin a, Termin b) compareByStart =
       (termin1, termin2) => termin1.beginn.compareTo(termin2.beginn);
 
+}
+
+class UnkownActionTypeException extends Error {
+  var message;
+
+  UnkownActionTypeException(this.message) : super();
+
+  @override
+  String toString() {
+    return '${super.toString()}: $message';
+  }
 }
 
 class ActionWithToken {

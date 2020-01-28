@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -150,24 +149,20 @@ class TermineSeiteState extends State<TermineSeite> {
               ]);
         });
 
-    if (newActions == null) return;
-
-    for (final action in newActions) createNewAction(action);
+    if (newActions != null) {
+      newActions.map((action) => createNewAction(action)).forEach(((action) =>
+          action.then((action) => setState(() => addAction(action)))));
+    }
   }
 
-  createNewAction(Termin action) async {
+  Future<Termin> createNewAction(Termin action) async {
     String uuid = Uuid().v1();
 
     Termin terminMitId = await termineService.createTermin(action, uuid);
 
     storageService.saveActionToken(terminMitId.id, uuid);
 
-    setState(() {
-      myActions.add(terminMitId.id);
-      termine
-        ..add(terminMitId)
-        ..sort(Termin.compareByStart);
-    });
+    return terminMitId;
   }
 
   openTerminDetails(BuildContext context, Termin termin) async {
@@ -282,6 +277,14 @@ class TermineSeiteState extends State<TermineSeite> {
       termine[index] = updatedAction;
       termine.sort(Termin.compareByStart);
     }
+  }
+
+  // TODO Tests
+  addAction(Termin newAction) {
+    myActions.add(newAction.id);
+    termine
+      ..add(newAction)
+      ..sort(Termin.compareByStart);
   }
 
   openEditDialog(BuildContext context, Termin termin) async {
