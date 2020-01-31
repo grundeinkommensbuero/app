@@ -33,7 +33,7 @@ void main() {
     var actionsBefore = await service.ladeTermine(TermineFilter.leererFilter());
     expect(actionsBefore.map((action) => action.id), containsAll([1, 2, 3, 4]));
 
-    await service.deleteAction(actionsBefore[1]);
+    await service.deleteAction(actionsBefore[1], '');
 
     var actionsAfter = await service.ladeTermine(TermineFilter.leererFilter());
     expect(actionsBefore.map((action) => action.id), containsAll([1, 3, 4]));
