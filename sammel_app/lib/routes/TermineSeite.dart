@@ -6,6 +6,7 @@ import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/model/Termin.dart';
+import 'package:sammel_app/services/AuthFehler.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
@@ -251,8 +252,28 @@ class TermineSeiteState extends State<TermineSeite> {
   }
 
   Future<void> saveAction(Termin editedAction) async {
-    String token = await storageService.loadActionToken(editedAction.id);
-    await termineService.saveAction(editedAction, token);
+    try {
+      String token = await storageService.loadActionToken(editedAction.id);
+      await termineService.saveAction(editedAction, token);
+    } on AuthFehler catch (error) {
+      showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+                key: Key('edit authentication failed dialog'),
+                title: Text('Aktion konnte nicht bearbeitet werden'),
+                content: Text(
+                    'Beim Bearbeiten der Aktion ist ein Fehler aufgetreten:\n'
+                    '${error.reason}\n\n'
+                    'Wenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com '),
+                actions: <Widget>[
+                  RaisedButton(
+                    key: Key('authentication error dialog close button'),
+                    child: Text('Okay...'),
+                    onPressed: () => Navigator.pop(context),
+                  )
+                ],
+              ));
+    }
   }
 
   Future<void> deleteAction(Termin action) async {
@@ -262,6 +283,24 @@ class TermineSeiteState extends State<TermineSeite> {
       storageService.deleteActionToken(action.id);
     } on RestFehler catch (error) {
       print((error as RestFehler).meldung);
+    } on AuthFehler catch (error) {
+      showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+                key: Key('delete authentication failed dialog'),
+                title: Text('Aktion konnte nicht gelöscht werden'),
+                content: Text(
+                    'Beim Löschen der Aktion ist ein Fehler aufgetreten:\n'
+                    '${error.reason}\n\n'
+                    'Wenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com '),
+                actions: <Widget>[
+                  RaisedButton(
+                    key: Key('authentication error dialog close button'),
+                    child: Text('Okay...'),
+                    onPressed: () => Navigator.pop(context),
+                  )
+                ],
+              ));
     }
   }
 
