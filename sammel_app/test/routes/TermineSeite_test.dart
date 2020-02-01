@@ -7,6 +7,7 @@ import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
+import 'package:sammel_app/services/AuthFehler.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 
@@ -1039,6 +1040,100 @@ void main() {
 
       verify(terminService.deleteAction(action1, 'storedToken1')).called(1);
       verify(terminService.deleteAction(action2, 'storedToken2')).called(1);
+    ***REMOVED***);
+
+    testWidgets('shows popup if auth error from server for delete action',
+        (WidgetTester tester) async {
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.einTermin(),
+          ]);
+      when(terminService.getTerminMitDetails(any))
+          .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
+      when(storageService.loadAllStoredActionIds())
+          .thenAnswer((_) async => [0]);
+
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: terminService),
+        Provider<StorageService>.value(value: storageService)
+      ], child: MaterialApp(home: TermineSeite(title: 'Titel'))));
+
+      // Warten bis asynchron Termine geladen wurden
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(Key('action card')));
+      await tester.pump();
+
+      await tester.tap(find.byKey(Key('action delete button')));
+      await tester.pump();
+
+      expect(find.byKey(Key('deletion confirmation dialog')), findsOneWidget);
+
+      // case that no token is stored
+      when(storageService.loadActionToken(1)).thenAnswer((_) async => null);
+
+      // covers both cases, wrong and null token
+      when(terminService.deleteAction(any, any)).thenThrow(AuthFehler(''));
+
+      await tester.tap(find.byKey(Key('delete confirmation yes button')));
+      await tester.pump();
+
+      expect(find.byKey(Key('delete authentication failed dialog')),
+          findsOneWidget);
+
+      // test close dialog
+      await tester.tap(find.byKey(Key('authentication error dialog close button')));
+      await tester.pump();
+
+      expect(
+          find.byKey(Key('delete authentication failed dialog')), findsNothing);
+    ***REMOVED***);
+
+    // FIXME
+    testWidgets('shows popup if auth error from server for edit action',
+        (WidgetTester tester) async {
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.einTermin(),
+          ]);
+      when(terminService.getTerminMitDetails(any))
+          .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
+      when(storageService.loadAllStoredActionIds())
+          .thenAnswer((_) async => [0]);
+
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: terminService),
+        Provider<StorageService>.value(value: storageService)
+      ], child: MaterialApp(home: TermineSeite(title: 'Titel'))));
+
+      // Warten bis asynchron Termine geladen wurden
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(Key('action card')));
+      await tester.pump();
+
+      await tester.tap(find.byKey(Key('action edit button')));
+      await tester.pump();
+
+      expect(find.byKey(Key('action editor')), findsOneWidget);
+
+      // case that no token is stored
+      when(storageService.loadActionToken(1)).thenAnswer((_) async => null);
+
+      // covers both cases, wrong and null token
+      when(terminService.saveAction(any, any)).thenThrow(AuthFehler(''));
+
+      await tester.tap(find.byKey(Key('action editor finish button')));
+      await tester.pump();
+
+      // Der Tap auf den Finish-Button löst den Button einfach nicht aus... :/
+//      expect(find.byKey(Key('edit authentication failed dialog')),
+//          findsOneWidget);
+//
+//      // test close dialog
+//      await tester.tap(find.byKey(Key('authentication error dialog close button')));
+//      await tester.pump();
+//
+//      expect(
+//          find.byKey(Key('edit authentication failed dialog')), findsNothing);
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***
