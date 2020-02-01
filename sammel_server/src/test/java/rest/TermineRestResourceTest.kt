@@ -4,6 +4,7 @@ import TestdatenVorrat.Companion.terminDto
 import TestdatenVorrat.Companion.terminOhneTeilnehmerMitDetails
 import TestdatenVorrat.Companion.terminOhneTeilnehmerOhneDetails
 import com.nhaarman.mockitokotlin2.*
+import database.DatabaseException
 import database.termine.Termin
 import database.termine.TermineDao
 import org.junit.Rule
@@ -15,6 +16,7 @@ import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import rest.TermineRestResource.TerminDto
 import javax.ejb.EJBException
+import javax.ws.rs.core.Response
 import kotlin.test.*
 
 class TermineRestResourceTest {
@@ -89,11 +91,37 @@ class TermineRestResourceTest {
     fun aktualisiereTerminAktualisiertTerminInDb() {
         val terminDto = terminDto()
 
-        resource.aktualisiereTermin(terminDto)
+        val response: Response = resource.aktualisiereTermin(terminDto)
 
         val argCaptor = argumentCaptor<Termin>()
         verify(dao, times(1)).aktualisiereTermin(argCaptor.capture())
         val termin = argCaptor.firstValue
         assertEquals(termin.id, terminDto.id)
+
+        assertEquals(response.status, 200)
+    }
+
+    @Test
+    fun deleteActionDeletesActionInDb() {
+        val terminDto = terminDto()
+
+        val response: Response = resource.deleteAction(terminDto)
+
+        val argCaptor = argumentCaptor<Termin>()
+        verify(dao, times(1)).deleteAction(argCaptor.capture())
+        val termin = argCaptor.firstValue
+        assertEquals(termin.id, terminDto.id)
+
+        assertEquals(response.status, 200)
+    }
+
+    @Test
+    fun deleteActionReturns404IfActionNotFound() {
+        val terminDto = terminDto()
+
+        whenever(dao.deleteAction(any())).thenThrow(DatabaseException(""))
+        val response: Response = resource.deleteAction(terminDto)
+
+        assertEquals(response.status, 404)
     }
 }

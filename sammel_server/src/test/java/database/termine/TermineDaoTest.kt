@@ -8,6 +8,7 @@ import TestdatenVorrat.Companion.sammeltermin
 import TestdatenVorrat.Companion.terminDetails
 import TestdatenVorrat.Companion.treptowerPark
 import com.nhaarman.mockitokotlin2.*
+import database.DatabaseException
 import database.stammdaten.Ort
 import database.stammdaten.StammdatenDaoTest
 import org.junit.Rule
@@ -243,5 +244,38 @@ class TermineDaoTest {
 
         verify(entityManager, atLeastOnce()).persist(termin)
         verify(entityManager, atLeastOnce()).flush()
+    }
+
+    @Test
+    fun deleteActionRemovesActionInDb() {
+        val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), terminDetails())
+        val terminFromDb = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), terminDetails())
+
+        whenever(entityManager.find(Termin::class.java, 1L)).thenReturn(terminFromDb)
+
+        dao.deleteAction(termin)
+
+        verify(entityManager, atLeastOnce()).find(Termin::class.java, 1L)
+        verify(entityManager, atLeastOnce()).remove(terminFromDb)
+        verify(entityManager, atLeastOnce()).flush()
+    }
+
+    @Test(expected=DatabaseException::class)
+    fun deleteActionThrowsNotFoundExceptionIfActionDoesNotExist() {
+        val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), terminDetails())
+
+        whenever(entityManager.find(Termin::class.java, 1L)).thenThrow(IllegalArgumentException())
+
+        dao.deleteAction(termin)
+    }
+
+    @Test(expected=DatabaseException::class)
+    fun deleteActionThrowsNotFoundExceptionIfDeletionFails() {
+        val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), terminDetails())
+        val actionFromDb = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), terminDetails())
+        whenever(entityManager.find(Termin::class.java, 1L)).thenReturn(actionFromDb)
+        whenever(entityManager.remove(actionFromDb)).thenThrow(IllegalArgumentException())
+
+        dao.deleteAction(termin)
     }
 }

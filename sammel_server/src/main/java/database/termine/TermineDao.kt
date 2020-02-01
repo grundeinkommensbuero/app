@@ -1,5 +1,6 @@
 package database.termine
 
+import database.DatabaseException
 import org.jboss.logging.Logger
 import rest.TermineFilter
 import shared.toDate
@@ -67,11 +68,19 @@ open class TermineDao {
 
     }
 
-    //TODO Tests
+    @Throws(DatabaseException::class)
     open fun deleteAction(action: Termin) {
-        val actionFromDb = entityManager.find(Termin::class.java, action.id)
-        entityManager.remove(actionFromDb)
-        entityManager.flush()
-        return
+        val actionFromDb: Termin
+        try {
+            actionFromDb = entityManager.find(Termin::class.java, action.id)
+        } catch (ignore: IllegalArgumentException) {
+            throw DatabaseException("Die Aktion wurde nicht gefunden und kann daher nicht gelöscht werden")
+        }
+        try {
+            entityManager.remove(actionFromDb)
+            entityManager.flush()
+        } catch (ignore: Exception) {
+            throw DatabaseException("Die Aktion wurde gefunden, kann aber aus technischen Gründen nicht gelöscht werden")
+        }
     }
 }

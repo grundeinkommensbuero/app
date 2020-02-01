@@ -1,5 +1,6 @@
 package rest
 
+import database.DatabaseException
 import database.stammdaten.Ort
 import database.termine.Termin
 import database.termine.TerminDetails
@@ -60,8 +61,6 @@ open class TermineRestResource {
     @Produces(APPLICATION_JSON)
     @Path("termin")
     open fun aktualisiereTermin(termin: TerminDto): Response {
-        LOG.info("aktualisiereTermin() mit Termin-Typ ${termin.typ}")
-        LOG.info("aktualisiereTermin() mit Termin-Details ${termin.details?.kommentar}: ${termin.details?.treffpunkt}, ${termin.details?.kommentar}, ${termin.details?.kontakt}")
         try {
             dao.aktualisiereTermin(termin.convertToTermin())
         } catch (e: EJBException) {
@@ -75,15 +74,16 @@ open class TermineRestResource {
                 .build()
     }
 
-    // TODO Tests
     @DELETE
     @Consumes(APPLICATION_JSON)
     @Path("termin")
     open fun deleteAction(termin: TerminDto): Response {
-        dao.deleteAction(termin.convertToTermin())
-        return Response
-                .ok()
-                .build()
+        try {
+            dao.deleteAction(termin.convertToTermin())
+        } catch (e: DatabaseException) {
+            return Response.status(404).entity(e.message).build()
+        }
+        return Response.ok().build()
     }
 
     data class TerminDto(
