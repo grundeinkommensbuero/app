@@ -18,6 +18,14 @@ import javax.ws.rs.core.Response
 open class TermineRestResource {
     private val LOG = Logger.getLogger(TermineRestResource::class.java)
 
+    private val noValidActionResponse = Response.status(422)
+            .entity(RestFehlermeldung("Keine gültige Aktion an den Server gesendet"))
+            .build()
+
+    private val noValidTokenResponse = Response.status(403)
+            .entity(RestFehlermeldung("Token passt nicht zu Aktion"))
+            .build()
+
     @EJB
     private lateinit var dao: TermineDao
 
@@ -64,13 +72,15 @@ open class TermineRestResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     @Path("termin")
-    open fun aktualisiereTermin(termin: TerminDto): Response {
+    open fun aktualisiereTermin(actionAndToken: ActionWithTokenDto): Response {
+        if (actionAndToken.action == null || actionAndToken.action!!.id == null) return noValidActionResponse
+        if(!compareToken(actionAndToken.action!!.id!!, actionAndToken.token)) return noValidTokenResponse
         try {
-            dao.aktualisiereTermin(termin.convertToTermin())
+            dao.aktualisiereTermin(actionAndToken.action!!.convertToTermin())
         } catch (e: EJBException) {
             LOG.error("Fehler beim Mergen eines Termins. " +
                     "Möglicherweise hat ein Client versucht einen Termin mit unbekannter ID zu aktualisieren\n" +
-                    "Termin: $termin\n", e)
+                    "Termin: ${actionAndToken.action}\n", e)
             return Response.status(422).build()
         }
         return Response
@@ -82,14 +92,8 @@ open class TermineRestResource {
     @Consumes(APPLICATION_JSON)
     @Path("termin")
     open fun deleteAction(actionAndToken: ActionWithTokenDto): Response {
-        if (actionAndToken.action == null || actionAndToken.action!!.id == null)
-            return Response.status(422)
-                    .entity(RestFehlermeldung("Beim Löschen wurde keine gültige Aktion an den Server gesendet"))
-                    .build()
-        if(!compareToken(actionAndToken.action!!.id!!, actionAndToken.token))
-            return Response.status(403)
-                    .entity(RestFehlermeldung("Token passt nicht zu Aktion"))
-                    .build()
+        if (actionAndToken.action == null || actionAndToken.action!!.id == null) return noValidActionResponse
+        if(!compareToken(actionAndToken.action!!.id!!, actionAndToken.token)) return noValidTokenResponse
         try {
             dao.deleteAction(actionAndToken.action!!.convertToTermin())
         } catch (e: DatabaseException) {
