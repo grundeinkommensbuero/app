@@ -113,8 +113,9 @@ class TermineRestResourceTest {
     fun aktualisiereTerminReichtFehlerWeiterBeiUnbekannterId() {
         val terminDto = terminDto()
         whenever(dao.aktualisiereTermin(any())).thenThrow(EJBException())
+        whenever(dao.loadToken(any())).thenReturn(Token(1L, "token"))
 
-        val response = resource.aktualisiereTermin(terminDto)
+        val response = resource.aktualisiereTermin(ActionWithTokenDto(terminDto, "token"))
 
         assertEquals(response.status, 422)
         assertNull(response.entity)
@@ -123,8 +124,9 @@ class TermineRestResourceTest {
     @Test
     fun aktualisiereTerminAktualisiertTerminInDb() {
         val terminDto = terminDto()
+        whenever(dao.loadToken(any())).thenReturn(Token(1L, "token"))
 
-        val response: Response = resource.aktualisiereTermin(terminDto)
+        val response = resource.aktualisiereTermin(ActionWithTokenDto(terminDto, "token"))
 
         val argCaptor = argumentCaptor<Termin>()
         verify(dao, times(1)).aktualisiereTermin(argCaptor.capture())
@@ -178,6 +180,30 @@ class TermineRestResourceTest {
 
         whenever(dao.loadToken(1L)).thenReturn(Token(1L,"rightToken"))
         val response: Response = resource.deleteAction(ActionWithTokenDto(terminDto, "wrongToken"))
+
+        verify(dao, times(1)).loadToken(1L)
+
+        assertEquals(response.status, 403)
+    ***REMOVED***
+
+    @Test
+    fun editActionChecksToken() {
+        val terminDto = terminDto()
+
+        whenever(dao.loadToken(1L)).thenReturn(Token(1L,"token"))
+        val response: Response = resource.aktualisiereTermin(ActionWithTokenDto(terminDto, "token"))
+
+        verify(dao, times(1)).loadToken(1L)
+
+        assertEquals(response.status, 200)
+    ***REMOVED***
+
+    @Test
+    fun editActionDeniesWhenWithWrongToken() {
+        val terminDto = terminDto()
+
+        whenever(dao.loadToken(1L)).thenReturn(Token(1L,"rightToken"))
+        val response: Response = resource.aktualisiereTermin(ActionWithTokenDto(terminDto, "wrongToken"))
 
         verify(dao, times(1)).loadToken(1L)
 
