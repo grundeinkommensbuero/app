@@ -87,4 +87,8 @@ open class TermineDao {
     open fun storeToken(actionId: Long, token: String) {
         entityManager.persist(Token(actionId, token))
     }
+
+    open fun loadToken(actionId: Long): Token? {
+        return entityManager.find(Token::class.java, actionId)
+    }
 }

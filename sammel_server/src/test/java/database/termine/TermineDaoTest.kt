@@ -260,7 +260,7 @@ class TermineDaoTest {
         verify(entityManager, atLeastOnce()).flush()
     }
 
-    @Test(expected=DatabaseException::class)
+    @Test(expected = DatabaseException::class)
     fun deleteActionThrowsNotFoundExceptionIfActionDoesNotExist() {
         val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), terminDetails())
 
@@ -269,7 +269,7 @@ class TermineDaoTest {
         dao.deleteAction(termin)
     }
 
-    @Test(expected=DatabaseException::class)
+    @Test(expected = DatabaseException::class)
     fun deleteActionThrowsNotFoundExceptionIfDeletionFails() {
         val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), terminDetails())
         val actionFromDb = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), terminDetails())
@@ -277,5 +277,15 @@ class TermineDaoTest {
         whenever(entityManager.remove(actionFromDb)).thenThrow(IllegalArgumentException())
 
         dao.deleteAction(termin)
+    }
+
+    @Test
+    fun loadTokenLoadsTokenForActionIdFromDb() {
+        whenever(entityManager.find(Token::class.java, 12L)).thenReturn(Token(12L, "token"))
+
+        val token = dao.loadToken(12L)
+
+        assertEquals(token!!.actionId, 12L)
+        assertEquals(token.token, "token")
     }
 }

@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.*
 import database.DatabaseException
 import database.termine.Termin
 import database.termine.TermineDao
+import database.termine.Token
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentCaptor
@@ -87,7 +88,7 @@ class TermineRestResourceTest {
         val response = resource.legeNeuenTerminAn(terminMitToken)
 
         assertEquals(response.status, 200)
-        verify(dao, times(1)).storeToken(1L,"secretToken")
+        verify(dao, times(1)).storeToken(1L, "secretToken")
     }
 
     @Test
@@ -137,14 +138,15 @@ class TermineRestResourceTest {
     fun deleteActionDeletesActionInDb() {
         val terminDto = terminDto()
 
-        val response: Response = resource.deleteAction(terminDto)
+        whenever(dao.loadToken(any())).thenReturn(Token(any(),"token"))
+        val response: Response = resource.deleteAction(ActionWithTokenDto(terminDto, "token"))
+
+        assertEquals(response.status, 200)
 
         val argCaptor = argumentCaptor<Termin>()
         verify(dao, times(1)).deleteAction(argCaptor.capture())
         val termin = argCaptor.firstValue
         assertEquals(termin.id, terminDto.id)
-
-        assertEquals(response.status, 200)
     }
 
     @Test
@@ -152,8 +154,33 @@ class TermineRestResourceTest {
         val terminDto = terminDto()
 
         whenever(dao.deleteAction(any())).thenThrow(DatabaseException(""))
-        val response: Response = resource.deleteAction(terminDto)
+        whenever(dao.loadToken(any())).thenReturn(Token(1L,"token"))
+        val response: Response = resource.deleteAction(ActionWithTokenDto(terminDto, "token"))
 
         assertEquals(response.status, 404)
+    }
+
+    @Test
+    fun deleteActionChecksToken() {
+        val terminDto = terminDto()
+
+        whenever(dao.loadToken(1L)).thenReturn(Token(1L,"token"))
+        val response: Response = resource.deleteAction(ActionWithTokenDto(terminDto, "token"))
+
+        verify(dao, times(1)).loadToken(1L)
+
+        assertEquals(response.status, 200)
+    }
+
+    @Test
+    fun deleteActionDeniesWhenWithWrongToken() {
+        val terminDto = terminDto()
+
+        whenever(dao.loadToken(1L)).thenReturn(Token(1L,"rightToken"))
+        val response: Response = resource.deleteAction(ActionWithTokenDto(terminDto, "wrongToken"))
+
+        verify(dao, times(1)).loadToken(1L)
+
+        assertEquals(response.status, 403)
     }
 }

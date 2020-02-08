@@ -81,13 +81,26 @@ open class TermineRestResource {
     @DELETE
     @Consumes(APPLICATION_JSON)
     @Path("termin")
-    open fun deleteAction(termin: TerminDto): Response {
+    open fun deleteAction(actionAndToken: ActionWithTokenDto): Response {
+        if (actionAndToken.action == null || actionAndToken.action!!.id == null)
+            return Response.status(422)
+                    .entity(RestFehlermeldung("Beim Löschen wurde keine gültige Aktion an den Server gesendet"))
+                    .build()
+        if(!compareToken(actionAndToken.action!!.id!!, actionAndToken.token))
+            return Response.status(403)
+                    .entity(RestFehlermeldung("Token passt nicht zu Aktion"))
+                    .build()
         try {
-            dao.deleteAction(termin.convertToTermin())
+            dao.deleteAction(actionAndToken.action!!.convertToTermin())
         } catch (e: DatabaseException) {
             return Response.status(404).entity(e.message).build()
         }
         return Response.ok().build()
+    }
+
+    private fun compareToken(actionId: Long, tokenFromRequest: String?): Boolean {
+        val tokenFromDb = dao.loadToken(actionId)?.token
+        return tokenFromDb == null || tokenFromDb.equals(tokenFromRequest)
     }
 
     data class TerminDto(
