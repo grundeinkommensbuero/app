@@ -40,8 +40,9 @@ class TermineService extends AbstractTermineService {
   ***REMOVED***
 
   Future<Termin> createTermin(Termin termin, String token) async {
-    var response =
-        await post(Uri.parse('service/termine/neu'), jsonEncode(termin));
+    ActionWithToken actionWithToken = ActionWithToken(termin, token);
+    var response = await post(
+        Uri.parse('service/termine/neu'), jsonEncode(actionWithToken));
     if (response.response.statusCode == 200) {
       return Termin.fromJson(response.body);
     ***REMOVED*** else {
@@ -64,8 +65,9 @@ class TermineService extends AbstractTermineService {
 
   // TODO Tests
   Future<void> saveAction(Termin action, String token) async {
-    var response =
-        await post(Uri.parse('service/termine/termin'), jsonEncode(action));
+    var actionWithToken = ActionWithToken(action, token);
+    var response = await post(
+        Uri.parse('service/termine/termin'), jsonEncode(actionWithToken));
     if (response.response.statusCode == 200) {
       return;
     ***REMOVED*** else {

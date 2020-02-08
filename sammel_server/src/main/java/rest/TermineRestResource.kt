@@ -48,12 +48,16 @@ open class TermineRestResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     @Path("neu")
-    open fun legeNeuenTerminAn(termin: TerminDto): Response {
-        val aktualisierterTermin = dao.erstelleNeuenTermin(termin.convertToTermin())
-        return Response
-                .ok()
-                .entity(convertFromTerminWithoutDetails(aktualisierterTermin))
-                .build()
+    open fun legeNeuenTerminAn(actionAndToken: ActionWithTokenDto): Response {
+        if (actionAndToken.action != null) {
+            val updatedAction = dao.erstelleNeuenTermin(actionAndToken.action!!.convertToTermin())
+            val token = actionAndToken.token
+            if (!token.isNullOrEmpty()) dao.storeToken(updatedAction.id, token)
+            return Response
+                    .ok()
+                    .entity(convertFromTerminWithoutDetails(updatedAction))
+                    .build()
+        ***REMOVED*** else return Response.status(422).build()
     ***REMOVED***
 
     @POST
@@ -121,6 +125,10 @@ open class TermineRestResource {
                     null)
         ***REMOVED***
     ***REMOVED***
+
+    data class ActionWithTokenDto(
+            var action: TerminDto? = null,
+            var token: String? = null)
 
     data class TerminDetailsDto(
             var id: Long? = null,

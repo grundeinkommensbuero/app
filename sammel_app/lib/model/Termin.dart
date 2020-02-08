@@ -1,3 +1,4 @@
+
 import 'Ort.dart';
 import 'TerminDetails.dart';
 
@@ -45,12 +46,12 @@ class Termin {
       case 'Infoveranstaltung':
         return 'assets/images/Infoveranstaltung.png';
     ***REMOVED***
-    throw UnkownActionTypeException('Cannot find asset for unknwon action type "$typ"');
+    throw UnkownActionTypeException(
+        'Cannot find asset for unknwon action type "$typ"');
   ***REMOVED***
 
   static final int Function(Termin a, Termin b) compareByStart =
       (termin1, termin2) => termin1.beginn.compareTo(termin2.beginn);
-
 ***REMOVED***
 
 class UnkownActionTypeException extends Error {
@@ -69,4 +70,13 @@ class ActionWithToken {
   final String token;
 
   ActionWithToken(this.action, this.token);
+
+  Map<String, dynamic> toJson() => {
+        'action': action,
+        'token': token,
+      ***REMOVED***
+
+  ActionWithToken.fromJson(Map<String, dynamic> json)
+      : action = json['action'],
+        token = json['token'];
 ***REMOVED***

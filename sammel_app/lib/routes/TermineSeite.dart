@@ -144,26 +144,47 @@ class TermineSeiteState extends State<TermineSeite> {
               contentPadding: EdgeInsets.all(10.0),
               children: <Widget>[
                 ActionEditor(
-                  Termin.emptyAction(),
+                  null,
                   key: Key('action creator'),
                 )
               ]);
         ***REMOVED***);
 
     if (newActions != null) {
-      newActions.map((action) => createNewAction(action)).forEach(((action) =>
-          action.then((action) => setState(() => addAction(action)))));
+      newActions.forEach((action) => createNewAction(action).then((action) {
+            if (action != null) setState(() => addAction(action));
+          ***REMOVED***));
     ***REMOVED***
   ***REMOVED***
 
   Future<Termin> createNewAction(Termin action) async {
     String uuid = Uuid().v1();
+    try {
+      Termin terminMitId = await termineService.createTermin(action, uuid);
+      storageService.saveActionToken(terminMitId.id, uuid);
+      return terminMitId;
+    ***REMOVED*** on RestFehler catch (e) {
+      showRestError(e);
+      return null;
+    ***REMOVED***
+  ***REMOVED***
 
-    Termin terminMitId = await termineService.createTermin(action, uuid);
-
-    storageService.saveActionToken(terminMitId.id, uuid);
-
-    return terminMitId;
+  void showRestError(RestFehler e) {
+    showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text('Aktion konnte nicht angelegt werden'),
+          content: SelectableText(
+              'Ein Fehler ist aufgetreten beim Erstellen der Aktion:'
+              '\n\n${e.meldung***REMOVED***\n\n'
+              'Sollte das öfter auftreten schreib uns doch bitte eine Mail an e@mail.de'),
+          actions: <Widget>[
+            RaisedButton(
+              child: Text('Okay...'),
+              onPressed: () => Navigator.pop(context),
+            )
+          ],
+        ));
   ***REMOVED***
 
   openTerminDetails(BuildContext context, Termin termin) async {
