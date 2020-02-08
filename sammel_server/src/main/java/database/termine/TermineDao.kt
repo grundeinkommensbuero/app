@@ -83,4 +83,8 @@ open class TermineDao {
             throw DatabaseException("Die Aktion wurde gefunden, kann aber aus technischen Gründen nicht gelöscht werden")
         }
     }
+
+    open fun storeToken(actionId: Long, token: String) {
+        entityManager.persist(Token(actionId, token))
+    }
 }

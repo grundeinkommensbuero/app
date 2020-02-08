@@ -1,10 +1,10 @@
 create table Token
 (
-    id         int auto_increment,
-    token text     null,
-    constraint Token_Termine_fk
-        foreign key (id) references Termine (id)
-            on update cascade on delete cascade
+    action_id   int,
+    token       text     null
+-- FIXME sollte eigentlich auf Termin verweisen und kaskadiert gelöscht werden
+--    constraint Token_Termine_fk
+--        foreign key (action_id) references Termine (id)
 )
     comment 'Authentifzierung-Token zu Terminen';
 

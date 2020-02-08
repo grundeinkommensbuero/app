@@ -14,6 +14,7 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
+import rest.TermineRestResource.ActionWithTokenDto
 import rest.TermineRestResource.TerminDto
 import javax.ejb.EJBException
 import javax.ws.rs.core.Response
@@ -63,17 +64,48 @@ class TermineRestResourceTest {
     }
 
     @Test
-    fun legeNeuenTerminAnLegtTerminInDbAb() {
+    fun erstelleNeuenTerminTerminAnLegtTerminInDbAb() {
         val termin = terminDto()
         whenever(dao.erstelleNeuenTermin(any())).thenReturn(termin.convertToTermin())
 
-        val response = resource.legeNeuenTerminAn(termin)
+        val terminMitToken = ActionWithTokenDto(termin, "")
+        val response = resource.legeNeuenTerminAn(terminMitToken)
 
         assertEquals(response.status, 200)
         val argCaptor = argumentCaptor<Termin>()
         verify(dao, times(1)).erstelleNeuenTermin(argCaptor.capture())
         val terminInDb = argCaptor.firstValue
         assertEquals(terminInDb.id, termin.id)
+    }
+
+    @Test
+    fun erstelleNeuenTerminStoresTokenInDb() {
+        val termin = terminDto()
+        whenever(dao.erstelleNeuenTermin(any())).thenReturn(termin.convertToTermin())
+
+        val terminMitToken = ActionWithTokenDto(termin, "secretToken")
+        val response = resource.legeNeuenTerminAn(terminMitToken)
+
+        assertEquals(response.status, 200)
+        verify(dao, times(1)).storeToken(1L,"secretToken")
+    }
+
+    @Test
+    fun erstelleNeuenTerminDoesNotStoreEmptyToken() {
+        val termin = terminDto()
+        whenever(dao.erstelleNeuenTermin(any())).thenReturn(termin.convertToTermin())
+
+        var terminMitToken = ActionWithTokenDto(termin, "")
+        var response = resource.legeNeuenTerminAn(terminMitToken)
+
+        assertEquals(response.status, 200)
+
+        terminMitToken = ActionWithTokenDto(termin, null)
+        response = resource.legeNeuenTerminAn(terminMitToken)
+
+        assertEquals(response.status, 200)
+
+        verify(dao, never()).storeToken(any(), any())
     }
 
     @Test
