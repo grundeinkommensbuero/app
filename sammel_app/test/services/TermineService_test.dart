@@ -6,6 +6,9 @@ import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/TermineService.dart';
 
+import '../model/Ort_test.dart';
+import '../model/Termin_test.dart';
+
 void main() {
   var service = DemoTermineService();
 
@@ -21,7 +24,7 @@ void main() {
             'Sammeln',
             TerminDetails(
                 'U-Bahnhof Samariterstraße',
-                'wir gehen die Frankfurter Alle hoch',
+                'wir gehen die Frankfurter Allee hoch',
                 'Ihr erreicht uns unter 0234567')),
         '');
 
@@ -37,5 +40,23 @@ void main() {
 
     var actionsAfter = await service.ladeTermine(TermineFilter.leererFilter());
     expect(actionsBefore.map((action) => action.id), containsAll([1, 3, 4]));
+  ***REMOVED***);
+
+  test('DemoTerminService stores new action', () async {
+    expect(service.termine[0].typ, 'Sammeln');
+    expect(service.termine[0].ort.id, 1);
+    expect(service.termine[0].details.kontakt, 'Ruft mich an unter 01234567');
+
+    await service.saveAction(
+        TerminTestDaten.einTermin()
+          ..id = 1
+          ..typ = 'Infoveranstaltung'
+          ..ort = treptowerPark()
+          ..details = TerminDetails('bla', 'blub', 'Test123'),
+        '');
+
+    expect(service.termine[0].typ, 'Infoveranstaltung');
+    expect(service.termine[0].ort.id, 2);
+    expect(service.termine[0].details.kontakt, 'Test123');
   ***REMOVED***);
 ***REMOVED***

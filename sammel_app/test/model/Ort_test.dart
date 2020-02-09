@@ -14,6 +14,6 @@ void main() {
 
 Ort goerli() => Ort(0, "Friedrichshain-Kreuzberg", "Görlitzer Park und Umgebung");
 
-Ort nordkiez() => Ort(0, "Friedrichshain-Kreuzberg", "Friedrichshain Nordkiez");
+Ort nordkiez() => Ort(1, "Friedrichshain-Kreuzberg", "Friedrichshain Nordkiez");
 
-Ort treptowerPark() => Ort(0, "Friedrichshain-Kreuzberg", "Treptower Park");
+Ort treptowerPark() => Ort(2, "Friedrichshain-Kreuzberg", "Treptower Park");

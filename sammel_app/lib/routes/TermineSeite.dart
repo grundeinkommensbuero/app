@@ -261,7 +261,6 @@ class TermineSeiteState extends State<TermineSeite> {
     if (editedAction == null) return;
 
     saveAction(editedAction);
-    setState(() => updateAction(editedAction, false));
 
     openTerminDetails(context, editedAction); // recursive and I know it
   ***REMOVED***
@@ -270,6 +269,7 @@ class TermineSeiteState extends State<TermineSeite> {
     try {
       String token = await storageService.loadActionToken(editedAction.id);
       await termineService.saveAction(editedAction, token);
+      setState(() => updateAction(editedAction, false));
     ***REMOVED*** on RestFehler catch (error) {
       showErrorDialog('Aktion konnte nicht gespeichert werden', error,
           key: Key('edit request failed dialog'));
