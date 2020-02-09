@@ -42,7 +42,9 @@ void main() {
           '"ende":"2020-01-02T18:00:00.000",'
           '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez"},'
           '"typ":"Sammeln",'
-          '"details":{"treffpunkt":"Weltzeituhr",'
+          '"details":{'
+          '"id":null,'
+          '"treffpunkt":"Weltzeituhr",'
           '"kommentar":"Bringe Westen und Klämmbretter mit",'
           '"kontakt":"Ruft an unter 012345678"}'
           '}');
