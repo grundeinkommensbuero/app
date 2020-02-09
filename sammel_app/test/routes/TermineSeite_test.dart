@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -567,168 +569,121 @@ void main() {
   });
 
   group('ActionEditor', () {
-    // FIXME
-    testWidgets('re-sorts edited actions into action list (IGNORED)',
+    testWidgets('re-sorts edited actions into action list',
         (WidgetTester tester) async {
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
+      var myAction = TerminTestDaten.einTermin()
+        ..id = 3
+        ..beginn = DateTime.now().add(Duration(days: 1));
 
-      var today = DateTime.now();
-      var twoDaysAgo = today.subtract(Duration(days: 2));
-      var yesterday = today.subtract(Duration(days: 1));
-      var tomorrow = today.add(Duration(days: 1));
-
-      when(terminService.createTermin(any, any))
+      when(terminService.ladeTermine(any)).thenAnswer((_) async {
+        return [
+          TerminTestDaten.einTermin()
+            ..id = 1
+            ..beginn = DateTime.now().subtract(Duration(days: 2)),
+          TerminTestDaten.einTermin()
+            ..id = 2
+            ..beginn = DateTime.now(),
+          myAction
+        ];
+      });
+      when(terminService.getTerminMitDetails(any))
           .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
-
-      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
-            TerminTestDaten.anActionFrom(yesterday),
-            TerminTestDaten.anActionFrom(today),
-            TerminTestDaten.anActionFrom(tomorrow)
-              ..id = 1337
-              ..typ = 'Infoveranstaltung',
-          ]);
-
-      when(terminService.getTerminMitDetails(any)).thenAnswer(
-        (_) async => TerminTestDaten.einTerminMitDetails()
-          ..id = 1337
-          ..typ = 'Infoveranstaltung',
-      );
-
       when(storageService.loadAllStoredActionIds())
-          .thenAnswer((_) async => [1337]);
+          .thenAnswer((_) async => [0]);
 
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(MultiProvider(
+          providers: [
+            Provider<AbstractTermineService>.value(value: terminService),
+            Provider<StorageService>.value(value: storageService)
+          ],
+          child: MaterialApp(
+              home: TermineSeite(title: 'Titel', key: Key('action page')))));
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
 
-      expect(
-          find.descendant(
-              of: find.byKey(Key('action card')).last,
-              matching: find.text('Infoveranstaltung')),
-          findsWidgets);
+      TermineSeiteState termineSeite =
+          await tester.state(find.byKey(Key('action page')));
 
-      await tester.tap(find.byKey(Key('action card')).last);
+      expect(termineSeite.termine.map((action) => action.id),
+          containsAllInOrder([1, 2, 3]));
+
+      termineSeite.saveAction(TerminTestDaten.einTermin()
+        ..id = 3
+        ..beginn = DateTime.now().subtract(Duration(days: 1)));
       await tester.pump();
 
-      await tester.tap(find.byKey(Key('action edit button')).first);
-      await tester.pump();
-
-      expect(find.byKey(Key('action editor finish button')), findsOneWidget);
-
-      ActionEditorState editorState =
-          tester.state(find.byKey(Key('action editor')));
-      editorState.action.tage = [twoDaysAgo];
-
-      await tester.tap(find.byKey(Key('action editor finish button')));
-      await tester.pump();
-
-      // Der Tap auf den Finish-Button löst den Button einfach nicht aus... :/
-      /*expect(
-          find.descendant(
-              of: find.byKey(Key('action card')).first,
-              matching: find.text('Infoveranstaltung')),
-          findsWidgets);*/
+      expect(termineSeite.termine.map((action) => action.id),
+          containsAllInOrder([1, 3, 2]));
     });
 
-    // FIXME
-    testWidgets('shows popup if auth error from server for edit action (IGNORED)',
-            (WidgetTester tester) async {
-          when(terminService.ladeTermine(any)).thenAnswer((_) async => [
-            TerminTestDaten.einTermin(),
+    testWidgets('shows alert popup on AuthFehler from save request',
+        (WidgetTester tester) async {
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.einTermin()
+              ..id = 3
+              ..beginn = DateTime.now().subtract(Duration(days: 1)),
           ]);
-          when(terminService.getTerminMitDetails(any))
-              .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
-          when(storageService.loadAllStoredActionIds())
-              .thenAnswer((_) async => [0]);
+      when(terminService.getTerminMitDetails(any))
+          .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
+      when(storageService.loadAllStoredActionIds())
+          .thenAnswer((_) async => [0]);
 
-          await tester.pumpWidget(MultiProvider(providers: [
+      await tester.pumpWidget(MultiProvider(
+          providers: [
             Provider<AbstractTermineService>.value(value: terminService),
             Provider<StorageService>.value(value: storageService)
-          ], child: MaterialApp(home: TermineSeite(title: 'Titel'))));
+          ],
+          child: MaterialApp(
+              home: TermineSeite(title: 'Titel', key: Key('action page')))));
 
-          // Warten bis asynchron Termine geladen wurden
-          await tester.pumpAndSettle();
+      // Warten bis asynchron Termine geladen wurden
+      await tester.pumpAndSettle();
 
-          await tester.tap(find.byKey(Key('action card')));
-          await tester.pump();
+      TermineSeiteState termineSeite =
+          await tester.state(find.byKey(Key('action page')));
 
-          await tester.tap(find.byKey(Key('action edit button')));
-          await tester.pump();
+      when(terminService.saveAction(any, any)).thenThrow(AuthFehler('message'));
 
-          expect(find.byKey(Key('action editor')), findsOneWidget);
+      termineSeite
+          .saveAction(TerminTestDaten.einTermin()..typ = 'Infoveranstaltung');
 
-          // case that no token is stored
-          when(storageService.loadActionToken(1)).thenAnswer((_) async => null);
+      expect(
+          find.byKey(Key('edit authentication failed dialog')), findsNothing);
+      expect(termineSeite.termine[0].typ, 'Sammeln');
+    });
 
-          // covers both cases, wrong and null token
-          when(terminService.saveAction(any, any)).thenThrow(AuthFehler(''));
-
-          await tester.tap(find.byKey(Key('action editor finish button')));
-          await tester.pump();
-
-          // Der Tap auf den Finish-Button löst den Button einfach nicht aus... :/
-//      expect(find.byKey(Key('edit authentication failed dialog')),
-//          findsOneWidget);
-//
-//      // test close dialog
-//      await tester.tap(find.byKey(Key('authentication error dialog close button')));
-//      await tester.pump();
-//
-//      expect(
-//          find.byKey(Key('edit authentication failed dialog')), findsNothing);
-        });
-
-    // FIXME
-    testWidgets('shows alert popup on RestFehler from save request (IGNORED)',
+    testWidgets('shows alert popup on RestFehler from save request',
         (WidgetTester tester) async {
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
-      var today = DateTime.now();
-
-      when(terminService.createTermin(any, any))
-          .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
-
       when(terminService.ladeTermine(any)).thenAnswer((_) async => [
-            TerminTestDaten.anActionFrom(today)
-              ..id = 1337
-              ..typ = 'Infoveranstaltung',
+            TerminTestDaten.einTermin()..id = 1,
           ]);
-
-      when(terminService.getTerminMitDetails(any)).thenAnswer(
-        (_) async => TerminTestDaten.einTerminMitDetails()
-          ..id = 1337
-          ..typ = 'Infoveranstaltung',
-      );
-
+      when(terminService.getTerminMitDetails(any))
+          .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
       when(storageService.loadAllStoredActionIds())
-          .thenAnswer((_) async => [1337]);
+          .thenAnswer((_) async => [0]);
 
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(MultiProvider(
+          providers: [
+            Provider<AbstractTermineService>.value(value: terminService),
+            Provider<StorageService>.value(value: storageService)
+          ],
+          child: MaterialApp(
+              home: TermineSeite(title: 'Titel', key: Key('action page')))));
 
+      // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byKey(Key('action card')));
-      await tester.pump();
+      TermineSeiteState termineSeite =
+          await tester.state(find.byKey(Key('action page')));
 
-      await tester.tap(find.byKey(Key('action edit button')));
-      await tester.pump();
+      when(terminService.saveAction(any, any)).thenThrow(RestFehler('message'));
 
-      when(terminService.createTermin(any, any))
-          .thenThrow(RestFehler('message'));
+      termineSeite
+          .saveAction(TerminTestDaten.einTermin()..typ = 'Infoveranstaltung');
 
-      await tester.tap(find.byKey(Key('action editor finish button')));
-      await tester.pump();
-
-      await tester.pumpAndSettle();
-
-//      expect(find.byKey(Key('delete request failed dialog')), findsOneWidget);
+      expect(find.byKey(Key('edit request failed dialog')), findsNothing);
+      expect(termineSeite.termine[0].typ, 'Sammeln');
     });
   });
 
@@ -1217,15 +1172,27 @@ void main() {
       expect(uuids[0], isNot(uuids[1]));
     });
 
-    test('is passed to server when action is edited', () async {
+    testWidgets('is passed to server when action is edited',
+        (WidgetTester tester) async {
       Termin action1 = TerminTestDaten.einTermin()..id = 1;
       Termin action2 = TerminTestDaten.einTermin()..id = 2;
-      actionPage.termine = [action1, action2];
+      when(terminService.ladeTermine(any))
+          .thenAnswer((_) async => [action1, action2]);
+
+      await tester.pumpWidget(MultiProvider(
+          providers: [
+            Provider<AbstractTermineService>.value(value: terminService),
+            Provider<StorageService>.value(value: storageService)
+          ],
+          child: MaterialApp(
+              home: TermineSeite(key: Key('action page'), title: 'Titel'))));
+      actionPage = tester.state(find.byKey(Key('action page')));
 
       when(storageService.loadActionToken(1))
           .thenAnswer((_) async => 'storedToken1');
       when(storageService.loadActionToken(2))
           .thenAnswer((_) async => 'storedToken2');
+      when(terminService.saveAction(any, any)).thenAnswer((_) => null);
 
       await actionPage.saveAction(action1);
       await actionPage.saveAction(action2);
