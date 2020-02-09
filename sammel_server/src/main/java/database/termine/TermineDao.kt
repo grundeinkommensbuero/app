@@ -91,4 +91,8 @@ open class TermineDao {
     open fun loadToken(actionId: Long): Token? {
         return entityManager.find(Token::class.java, actionId)
     }
+
+    open fun deleteToken(token: Token) {
+        entityManager.remove(token) //To change body of created functions use File | Settings | File Templates.
+    }
 }

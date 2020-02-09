@@ -5,6 +5,7 @@ import database.stammdaten.Ort
 import database.termine.Termin
 import database.termine.TerminDetails
 import database.termine.TermineDao
+import database.termine.Token
 import org.jboss.logging.Logger
 import rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithoutDetails
 import java.time.LocalDateTime
@@ -74,7 +75,10 @@ open class TermineRestResource {
     @Path("termin")
     open fun aktualisiereTermin(actionAndToken: ActionWithTokenDto): Response {
         if (actionAndToken.action == null || actionAndToken.action!!.id == null) return noValidActionResponse
-        if(!compareToken(actionAndToken.action!!.id!!, actionAndToken.token)) return noValidTokenResponse
+
+        val tokenFromDb = dao.loadToken(actionAndToken.action!!.id!!)?.token
+        if (tokenFromDb != null && !tokenFromDb.equals(actionAndToken.token)) return noValidTokenResponse
+
         try {
             dao.aktualisiereTermin(actionAndToken.action!!.convertToTermin())
         } catch (e: EJBException) {
@@ -93,18 +97,17 @@ open class TermineRestResource {
     @Path("termin")
     open fun deleteAction(actionAndToken: ActionWithTokenDto): Response {
         if (actionAndToken.action == null || actionAndToken.action!!.id == null) return noValidActionResponse
-        if(!compareToken(actionAndToken.action!!.id!!, actionAndToken.token)) return noValidTokenResponse
+
+        val tokenFromDb = dao.loadToken(actionAndToken.action!!.id!!)?.token
+        if (tokenFromDb != null && !tokenFromDb.equals(actionAndToken.token)) return noValidTokenResponse
+
         try {
             dao.deleteAction(actionAndToken.action!!.convertToTermin())
+            if (tokenFromDb != null) dao.deleteToken(Token(actionAndToken.action!!.id!!, actionAndToken.token!!))
         } catch (e: DatabaseException) {
             return Response.status(404).entity(e.message).build()
         }
         return Response.ok().build()
-    }
-
-    private fun compareToken(actionId: Long, tokenFromRequest: String?): Boolean {
-        val tokenFromDb = dao.loadToken(actionId)?.token
-        return tokenFromDb == null || tokenFromDb.equals(tokenFromRequest)
     }
 
     data class TerminDto(

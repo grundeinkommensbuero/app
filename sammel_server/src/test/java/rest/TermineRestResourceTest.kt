@@ -137,10 +137,10 @@ class TermineRestResourceTest {
     }
 
     @Test
-    fun deleteActionDeletesActionInDb() {
+    fun deleteActionDeletesActionAndTokenInDb() {
         val terminDto = terminDto()
 
-        whenever(dao.loadToken(any())).thenReturn(Token(any(),"token"))
+        whenever(dao.loadToken(any())).thenReturn(Token(1L,"token"))
         val response: Response = resource.deleteAction(ActionWithTokenDto(terminDto, "token"))
 
         assertEquals(response.status, 200)
@@ -149,6 +149,11 @@ class TermineRestResourceTest {
         verify(dao, times(1)).deleteAction(argCaptor.capture())
         val termin = argCaptor.firstValue
         assertEquals(termin.id, terminDto.id)
+
+        val tokenCaptor = argumentCaptor<Token>()
+        verify(dao, times(1)).deleteToken(tokenCaptor.capture())
+        assertEquals(tokenCaptor.firstValue.actionId, 1L)
+        assertEquals(tokenCaptor.firstValue.token, "token")
     }
 
     @Test
@@ -182,8 +187,23 @@ class TermineRestResourceTest {
         val response: Response = resource.deleteAction(ActionWithTokenDto(terminDto, "wrongToken"))
 
         verify(dao, times(1)).loadToken(1L)
+        verify(dao, never()).deleteAction(any())
+        verify(dao, never()).deleteToken(any())
 
         assertEquals(response.status, 403)
+    }
+
+    @Test
+    fun deleteActionDeletesActionButNoTokenIfActionHasNoTokenInDb() {
+        val terminDto = terminDto()
+
+        whenever(dao.loadToken(1L)).thenReturn(null)
+        val response: Response = resource.deleteAction(ActionWithTokenDto(terminDto, "token"))
+
+        verify(dao, times(1)).deleteAction(any())
+        verify(dao, never()).deleteToken(any())
+
+        assertEquals(response.status, 200)
     }
 
     @Test
