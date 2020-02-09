@@ -7,6 +7,7 @@ import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
+import 'package:sammel_app/services/AuthFehler.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/Service.dart';
 
@@ -32,11 +33,12 @@ class TermineService extends AbstractTermineService {
           .toList();
       // Sortierung auf Client-Seite um Server und Datenbank skalierbar zu halten
       return termine;
-    ***REMOVED*** else {
-      var meldung = "Unerwarteter Fehler: "
-          "${response.response.statusCode***REMOVED*** - ${response.body***REMOVED***";
-      throw RestFehler(meldung);
     ***REMOVED***
+    if (response.response.statusCode == 403) {
+      throw AuthFehler.fromJson(response.body);
+    ***REMOVED***
+    // else
+    throw RestFehler.fromJson(response.body);
   ***REMOVED***
 
   Future<Termin> createTermin(Termin termin, String token) async {
@@ -46,8 +48,7 @@ class TermineService extends AbstractTermineService {
     if (response.response.statusCode == 200) {
       return Termin.fromJson(response.body);
     ***REMOVED*** else {
-      throw RestFehler("Fehler beim Anlegen einer Aktion: "
-          "${response.response.statusCode***REMOVED*** - ${response.body***REMOVED***");
+      throw RestFehler.fromJson(response.body);
     ***REMOVED***
   ***REMOVED***
 
@@ -58,30 +59,33 @@ class TermineService extends AbstractTermineService {
       if (response.response.statusCode == 200)
         return Termin.fromJson(response.body);
       else
-        throw RestFehler("Fehler beim Ermitteln einer Aktion: "
-            "${response.response.statusCode***REMOVED*** - ${response.body***REMOVED***");
+        throw RestFehler('${response.response.statusCode***REMOVED*** - '
+            '${RestFehler.fromJson(response.body)***REMOVED***');
     ***REMOVED***);
   ***REMOVED***
 
-  // TODO Tests
+  // TODO Tests (Fehlerbehandlung bei falschem Token oder fehlender Aktion)
   Future<void> saveAction(Termin action, String token) async {
-    var actionWithToken = ActionWithToken(action, token);
-    var response = await post(
-        Uri.parse('service/termine/termin'), jsonEncode(actionWithToken));
+    var response = await post(Uri.parse('service/termine/termin'),
+        jsonEncode(ActionWithToken(action, token)));
     if (response.response.statusCode == 200) {
       return;
-    ***REMOVED*** else {
-      throw RestFehler("Fehler beim Bearbeiten einer Aktion: "
-          "${response.response.statusCode***REMOVED*** - ${response.body***REMOVED***");
     ***REMOVED***
+    if (response.response.statusCode == 403) {
+      throw AuthFehler.fromJson(response.body);
+    ***REMOVED***
+    throw RestFehler.fromJson(response.body);
   ***REMOVED***
 
+  // TODO Tests (Fehlerbehandlung bei falschem Token oder fehlender Aktion)
   Future<void> deleteAction(Termin action, String token) async {
-    var response =
-        await delete(Uri.parse('service/termine/termin'), jsonEncode(action));
+    var response = await delete(Uri.parse('service/termine/termin'),
+        jsonEncode(ActionWithToken(action, token)));
+    if (response.response.statusCode == 403) {
+      throw AuthFehler.fromJson(response.body);
+    ***REMOVED***
     if (response.response.statusCode != 200) {
-      throw RestFehler("Fehler beim Löschen einer Aktion: "
-          "${response.response.statusCode***REMOVED*** - ${response.body***REMOVED***");
+      throw RestFehler.fromJson(response.body);
     ***REMOVED***
   ***REMOVED***
 ***REMOVED***
