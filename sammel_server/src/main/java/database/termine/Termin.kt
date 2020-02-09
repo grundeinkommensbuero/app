@@ -4,6 +4,9 @@ import database.stammdaten.Ort
 import database.benutzer.Benutzer
 import java.time.LocalDateTime
 import javax.persistence.*
+import javax.persistence.CascadeType.*
+import javax.persistence.FetchType.EAGER
+import javax.persistence.FetchType.LAZY
 
 @Entity()
 @Table(name = "Termine")
@@ -26,14 +29,14 @@ class Termin {
     @Column
     var typ: String? = null
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = EAGER)
     @JoinTable(name = "Termin_Teilnehmer",
             joinColumns = [JoinColumn(name = "Termin", referencedColumnName = "id")],
             inverseJoinColumns = [JoinColumn(name = "Teilnehmer", referencedColumnName = "id")])
     var teilnehmer: List<Benutzer> = emptyList()
 
-    @OneToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    @JoinColumn(name = "details", referencedColumnName = "ID")
+    @OneToOne(cascade = [ALL], fetch = LAZY)
+    @JoinColumn(name = "details", referencedColumnName = "id")
     var details: TerminDetails? = null
 
     constructor()
