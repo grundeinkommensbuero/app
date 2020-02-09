@@ -8,6 +8,7 @@ import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/AuthFehler.dart';
+import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 
@@ -313,7 +314,7 @@ void main() {
     });
   });
 
-  group('ActionEditor', () {
+  group('ActionCreator', () {
     testWidgets('opens with tap on Create-Button', (WidgetTester tester) async {
       var termineSeiteWidget = TermineSeite(title: 'Titel');
 
@@ -507,8 +508,67 @@ void main() {
       verify(terminService.createTermin(any, any)).called(1);
     });
 
+    testWidgets('shows alert popup on RestFehler from create request',
+        (WidgetTester tester) async {
+      var termineSeiteWidget = TermineSeite(title: 'Titel');
+
+      var today = DateTime.now();
+      var twoDaysAgo = today.subtract(Duration(days: 2));
+      var yesterday = today.subtract(Duration(days: 1));
+      var tomorrow = today.add(Duration(days: 1));
+
+      when(terminService.createTermin(any, any))
+          .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
+
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.anActionFrom(yesterday),
+            TerminTestDaten.anActionFrom(today),
+            TerminTestDaten.anActionFrom(tomorrow)
+              ..id = 1337
+              ..typ = 'Infoveranstaltung',
+          ]);
+
+      when(terminService.getTerminMitDetails(any)).thenAnswer(
+        (_) async => TerminTestDaten.einTerminMitDetails()
+          ..id = 1337
+          ..typ = 'Infoveranstaltung',
+      );
+
+      when(storageService.loadAllStoredActionIds())
+          .thenAnswer((_) async => [1337]);
+
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: terminService),
+        Provider<StorageService>.value(value: storageService)
+      ], child: MaterialApp(home: termineSeiteWidget)));
+
+      await tester.tap(find.byKey(Key('create termin button')));
+      await tester.pump();
+
+      ActionEditorState editorState =
+          tester.state(find.byKey(Key('action creator')));
+
+      editorState.action = ActionData(
+          TimeOfDay.fromDateTime(today),
+          TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
+          goerli(),
+          'Infoveranstaltung',
+          [today],
+          TerminDetails('', '', ''));
+
+      when(terminService.createTermin(any, any))
+          .thenThrow(RestFehler('message'));
+
+      await tester.tap(find.byKey(Key('action editor finish button')));
+      await tester.pump();
+
+      expect(find.byKey(Key('delete request failed dialog')), findsOneWidget);
+    });
+  });
+
+  group('ActionEditor', () {
     // FIXME
-    testWidgets('re-sorts edited actions into action list',
+    testWidgets('re-sorts edited actions into action list (IGNORED)',
         (WidgetTester tester) async {
       var termineSeiteWidget = TermineSeite(title: 'Titel');
 
@@ -572,6 +632,103 @@ void main() {
               of: find.byKey(Key('action card')).first,
               matching: find.text('Infoveranstaltung')),
           findsWidgets);*/
+    });
+
+    // FIXME
+    testWidgets('shows popup if auth error from server for edit action (IGNORED)',
+            (WidgetTester tester) async {
+          when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.einTermin(),
+          ]);
+          when(terminService.getTerminMitDetails(any))
+              .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
+          when(storageService.loadAllStoredActionIds())
+              .thenAnswer((_) async => [0]);
+
+          await tester.pumpWidget(MultiProvider(providers: [
+            Provider<AbstractTermineService>.value(value: terminService),
+            Provider<StorageService>.value(value: storageService)
+          ], child: MaterialApp(home: TermineSeite(title: 'Titel'))));
+
+          // Warten bis asynchron Termine geladen wurden
+          await tester.pumpAndSettle();
+
+          await tester.tap(find.byKey(Key('action card')));
+          await tester.pump();
+
+          await tester.tap(find.byKey(Key('action edit button')));
+          await tester.pump();
+
+          expect(find.byKey(Key('action editor')), findsOneWidget);
+
+          // case that no token is stored
+          when(storageService.loadActionToken(1)).thenAnswer((_) async => null);
+
+          // covers both cases, wrong and null token
+          when(terminService.saveAction(any, any)).thenThrow(AuthFehler(''));
+
+          await tester.tap(find.byKey(Key('action editor finish button')));
+          await tester.pump();
+
+          // Der Tap auf den Finish-Button löst den Button einfach nicht aus... :/
+//      expect(find.byKey(Key('edit authentication failed dialog')),
+//          findsOneWidget);
+//
+//      // test close dialog
+//      await tester.tap(find.byKey(Key('authentication error dialog close button')));
+//      await tester.pump();
+//
+//      expect(
+//          find.byKey(Key('edit authentication failed dialog')), findsNothing);
+        });
+
+    // FIXME
+    testWidgets('shows alert popup on RestFehler from save request (IGNORED)',
+        (WidgetTester tester) async {
+      var termineSeiteWidget = TermineSeite(title: 'Titel');
+
+      var today = DateTime.now();
+
+      when(terminService.createTermin(any, any))
+          .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
+
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.anActionFrom(today)
+              ..id = 1337
+              ..typ = 'Infoveranstaltung',
+          ]);
+
+      when(terminService.getTerminMitDetails(any)).thenAnswer(
+        (_) async => TerminTestDaten.einTerminMitDetails()
+          ..id = 1337
+          ..typ = 'Infoveranstaltung',
+      );
+
+      when(storageService.loadAllStoredActionIds())
+          .thenAnswer((_) async => [1337]);
+
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: terminService),
+        Provider<StorageService>.value(value: storageService)
+      ], child: MaterialApp(home: termineSeiteWidget)));
+
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(Key('action card')));
+      await tester.pump();
+
+      await tester.tap(find.byKey(Key('action edit button')));
+      await tester.pump();
+
+      when(terminService.createTermin(any, any))
+          .thenThrow(RestFehler('message'));
+
+      await tester.tap(find.byKey(Key('action editor finish button')));
+      await tester.pump();
+
+      await tester.pumpAndSettle();
+
+//      expect(find.byKey(Key('delete request failed dialog')), findsOneWidget);
     });
   });
 
@@ -982,6 +1139,58 @@ void main() {
         expect(find.byKey(Key('deletion confirmation dialog')), findsNothing);
         expect(find.byKey(Key('action details page')), findsNothing);
       });
+
+      testWidgets('shows alert popup on RestFehler',
+          (WidgetTester tester) async {
+        await tester.pumpWidget(MultiProvider(providers: [
+          Provider<AbstractTermineService>.value(value: terminService),
+          Provider<StorageService>.value(value: storageService)
+        ], child: MaterialApp(home: termineSeiteWidget)));
+
+        // Warten bis asynchron Termine geladen wurden
+        await tester.pumpAndSettle();
+
+        // mittleren Dialog um sicherzustellen, dass nicht einfach immer die erste Aktion gelöscht wird
+        await tester.tap(find.byKey(Key('action card')).at(1));
+        await tester.pump();
+
+        await tester.tap(find.byKey(Key('action delete button')));
+        await tester.pump();
+
+        when(terminService.deleteAction(any, any))
+            .thenThrow(RestFehler('message'));
+
+        await tester.tap(find.byKey(Key('delete confirmation yes button')));
+        await tester.pump();
+
+        expect(find.byKey(Key('delete request failed dialog')), findsOneWidget);
+      });
+
+      testWidgets('shows alert popup on AuthFehler',
+          (WidgetTester tester) async {
+        await tester.pumpWidget(MultiProvider(providers: [
+          Provider<AbstractTermineService>.value(value: terminService),
+          Provider<StorageService>.value(value: storageService)
+        ], child: MaterialApp(home: termineSeiteWidget)));
+
+        // Warten bis asynchron Termine geladen wurden
+        await tester.pumpAndSettle();
+
+        // mittleren Dialog um sicherzustellen, dass nicht einfach immer die erste Aktion gelöscht wird
+        await tester.tap(find.byKey(Key('action card')).at(1));
+        await tester.pump();
+
+        await tester.tap(find.byKey(Key('action delete button')));
+        await tester.pump();
+
+        when(terminService.deleteAction(any, any))
+            .thenThrow(AuthFehler('message'));
+
+        await tester.tap(find.byKey(Key('delete confirmation yes button')));
+        await tester.pump();
+
+        expect(find.byKey(Key('delete request failed dialog')), findsOneWidget);
+      });
     });
   });
 
@@ -1025,10 +1234,21 @@ void main() {
       verify(terminService.saveAction(action2, 'storedToken2')).called(1);
     });
 
-    test('is passed to server when action is deleted', () async {
+    testWidgets('is passed to server when action is deleted',
+        (WidgetTester tester) async {
       Termin action1 = TerminTestDaten.einTermin()..id = 1;
       Termin action2 = TerminTestDaten.einTermin()..id = 2;
-      actionPage.termine = [action1, action2];
+      when(terminService.ladeTermine(any))
+          .thenAnswer((_) async => [action1, action2]);
+
+      await tester.pumpWidget(MultiProvider(
+          providers: [
+            Provider<AbstractTermineService>.value(value: terminService),
+            Provider<StorageService>.value(value: storageService)
+          ],
+          child: MaterialApp(
+              home: TermineSeite(key: Key('action page'), title: 'Titel'))));
+      actionPage = tester.state(find.byKey(Key('action page')));
 
       when(storageService.loadActionToken(1))
           .thenAnswer((_) async => 'storedToken1');
@@ -1041,99 +1261,85 @@ void main() {
       verify(terminService.deleteAction(action1, 'storedToken1')).called(1);
       verify(terminService.deleteAction(action2, 'storedToken2')).called(1);
     });
+  });
 
-    testWidgets('shows popup if auth error from server for delete action',
-        (WidgetTester tester) async {
-      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
-            TerminTestDaten.einTermin(),
-          ]);
-      when(terminService.getTerminMitDetails(any))
-          .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
-      when(storageService.loadAllStoredActionIds())
-          .thenAnswer((_) async => [0]);
-
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: TermineSeite(title: 'Titel'))));
-
-      // Warten bis asynchron Termine geladen wurden
-      await tester.pumpAndSettle();
-
-      await tester.tap(find.byKey(Key('action card')));
-      await tester.pump();
-
-      await tester.tap(find.byKey(Key('action delete button')));
-      await tester.pump();
-
-      expect(find.byKey(Key('deletion confirmation dialog')), findsOneWidget);
-
-      // case that no token is stored
-      when(storageService.loadActionToken(1)).thenAnswer((_) async => null);
-
-      // covers both cases, wrong and null token
-      when(terminService.deleteAction(any, any)).thenThrow(AuthFehler(''));
-
-      await tester.tap(find.byKey(Key('delete confirmation yes button')));
-      await tester.pump();
-
-      expect(find.byKey(Key('delete authentication failed dialog')),
-          findsOneWidget);
-
-      // test close dialog
-      await tester.tap(find.byKey(Key('authentication error dialog close button')));
-      await tester.pump();
-
-      expect(
-          find.byKey(Key('delete authentication failed dialog')), findsNothing);
+  group('updateAction', () {
+    var termineSeite = TermineSeiteState();
+    setUp(() {
+      termineSeite.termine = [
+        TerminTestDaten.einTermin()..id = 1,
+        TerminTestDaten.einTermin()..id = 2,
+        TerminTestDaten.einTermin()..id = 3,
+      ];
+      termineSeite.myActions = [2, 3];
     });
 
-    // FIXME
-    testWidgets('shows popup if auth error from server for edit action',
-        (WidgetTester tester) async {
-      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
-            TerminTestDaten.einTermin(),
-          ]);
-      when(terminService.getTerminMitDetails(any))
-          .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
-      when(storageService.loadAllStoredActionIds())
-          .thenAnswer((_) async => [0]);
+    test('removes action w/ remove flag', () {
+      termineSeite.updateAction(TerminTestDaten.einTermin()..id = 2, true);
+      expect(
+          termineSeite.termine.map((action) => action.id), containsAll([1, 3]));
+    });
 
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: TermineSeite(title: 'Titel'))));
+    test('removes action from myAction list w/ remove flag', () {
+      termineSeite.updateAction(TerminTestDaten.einTermin()..id = 2, true);
+      expect(termineSeite.myActions, containsAll([3]));
+    });
 
-      // Warten bis asynchron Termine geladen wurden
-      await tester.pumpAndSettle();
+    test('only updates action w/o remove flag', () {
+      var newAction = TerminTestDaten.einTermin()
+        ..id = 2
+        ..ort = goerli();
+      termineSeite.updateAction(newAction, false);
+      expect(termineSeite.termine.map((action) => action.id),
+          containsAll([1, 2, 3]));
+      expect(
+          termineSeite.termine
+              .where((action) => action.id == 3)
+              .toList()[0]
+              .ort
+              .id,
+          goerli().id);
+    });
 
-      await tester.tap(find.byKey(Key('action card')));
-      await tester.pump();
+    test('sorts new list by date', () {
+      var newAction = TerminTestDaten.einTermin()
+        ..id = 2
+        ..beginn = DateTime.now().subtract(Duration(days: 1));
+      termineSeite.updateAction(newAction, false);
+      expect(termineSeite.termine.map((action) => action.id),
+          containsAll([3, 1, 2]));
+    });
 
-      await tester.tap(find.byKey(Key('action edit button')));
-      await tester.pump();
+    test('does nothing with unknown actions', () {
+      termineSeite.updateAction(TerminTestDaten.einTermin()..id = 4, true);
+      expect(termineSeite.termine.map((action) => action.id),
+          containsAll([1, 2, 3]));
+      expect(termineSeite.myActions, containsAll([2, 3]));
+    });
+  });
 
-      expect(find.byKey(Key('action editor')), findsOneWidget);
+  group('addAction', () {
+    var termineSeite = TermineSeiteState();
+    setUp(() {
+      termineSeite.termine = [
+        TerminTestDaten.einTermin()..id = 1,
+        TerminTestDaten.einTermin()..id = 2,
+        TerminTestDaten.einTermin()..id = 3,
+      ];
+    });
 
-      // case that no token is stored
-      when(storageService.loadActionToken(1)).thenAnswer((_) async => null);
+    test('adds new action to list', () {
+      termineSeite.addAction(TerminTestDaten.einTermin()..id = 4);
+      expect(termineSeite.termine.map((action) => action.id),
+          containsAll([1, 2, 3, 4]));
+    });
 
-      // covers both cases, wrong and null token
-      when(terminService.saveAction(any, any)).thenThrow(AuthFehler(''));
-
-      await tester.tap(find.byKey(Key('action editor finish button')));
-      await tester.pump();
-
-      // Der Tap auf den Finish-Button löst den Button einfach nicht aus... :/
-//      expect(find.byKey(Key('edit authentication failed dialog')),
-//          findsOneWidget);
-//
-//      // test close dialog
-//      await tester.tap(find.byKey(Key('authentication error dialog close button')));
-//      await tester.pump();
-//
-//      expect(
-//          find.byKey(Key('edit authentication failed dialog')), findsNothing);
+    test('sorts list', () {
+      termineSeite.addAction(TerminTestDaten.einTermin()
+        ..id = 4
+        ..beginn = DateTime.now().subtract(Duration(days: 1)));
+      expect(termineSeite.termine.map((action) => action.id),
+          containsAll([4, 1, 2, 3]));
     });
   });
 }

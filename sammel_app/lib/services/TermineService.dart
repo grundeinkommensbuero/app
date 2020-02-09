@@ -64,7 +64,6 @@ class TermineService extends AbstractTermineService {
     });
   }
 
-  // TODO Tests (Fehlerbehandlung bei falschem Token oder fehlender Aktion)
   Future<void> saveAction(Termin action, String token) async {
     var response = await post(Uri.parse('service/termine/termin'),
         jsonEncode(ActionWithToken(action, token)));
@@ -77,7 +76,6 @@ class TermineService extends AbstractTermineService {
     throw RestFehler.fromJson(response.body);
   }
 
-  // TODO Tests (Fehlerbehandlung bei falschem Token oder fehlender Aktion)
   Future<void> deleteAction(Termin action, String token) async {
     var response = await delete(Uri.parse('service/termine/termin'),
         jsonEncode(ActionWithToken(action, token)));
