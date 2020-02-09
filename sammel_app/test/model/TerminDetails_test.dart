@@ -9,6 +9,7 @@ void main() {
     expect(
         json,
         '{'
+        '"id":null,'
         '"treffpunkt":"Weltzeituhr",'
         '"kommentar":"Bringe Westen und Klämmbretter mit",'
         '"kontakt":"Ruft an unter 012345678"'

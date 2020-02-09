@@ -1256,12 +1256,14 @@ void main() {
       var newAction = TerminTestDaten.einTermin()
         ..id = 2
         ..ort = goerli();
+
       termineSeite.updateAction(newAction, false);
+
       expect(termineSeite.termine.map((action) => action.id),
           containsAll([1, 2, 3]));
       expect(
           termineSeite.termine
-              .where((action) => action.id == 3)
+              .where((action) => action.id == 2)
               .toList()[0]
               .ort
               .id,
