@@ -1,12 +1,9 @@
-class AuthFehler {
+import 'package:sammel_app/services/RestFehler.dart';
+
+class AuthFehler extends RestFehler {
   String reason;
 
-  AuthFehler(String reason) {
-    this.reason = reason;
-  ***REMOVED***
+  AuthFehler(String reason) : super(reason);
 
-  String message() => '$reason\n\n'
-      'Wenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com';
-
-  AuthFehler.fromJson(Map<String, dynamic> json) : reason = json['meldung'];
+  AuthFehler.fromJson(Map<String, dynamic> json) : super.fromJson(json);
 ***REMOVED***

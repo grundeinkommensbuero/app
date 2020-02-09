@@ -163,9 +163,9 @@ class TermineSeiteState extends State<TermineSeite> {
       Termin terminMitId = await termineService.createTermin(action, uuid);
       storageService.saveActionToken(terminMitId.id, uuid);
       return terminMitId;
-    ***REMOVED*** on RestFehler catch (e) {
-      showRestError(e);
-      return null;
+    ***REMOVED*** on RestFehler catch (error) {
+      showErrorDialog('Aktion konnte nicht erstellt werden', error,
+          key: Key('delete request failed dialog'));
     ***REMOVED***
   ***REMOVED***
 
@@ -222,8 +222,7 @@ class TermineSeiteState extends State<TermineSeite> {
               ],
             ));
 
-    if (command == TerminDetailsCommand.DELETE)
-      deleteAction(terminMitDetails);
+    if (command == TerminDetailsCommand.DELETE) deleteAction(terminMitDetails);
 
     if (command == TerminDetailsCommand.EDIT)
       editAction(context, terminMitDetails);
@@ -262,7 +261,7 @@ class TermineSeiteState extends State<TermineSeite> {
     if (editedAction == null) return;
 
     saveAction(editedAction);
-    setState(() => updateActions(editedAction, false));
+    setState(() => updateAction(editedAction, false));
 
     openTerminDetails(context, editedAction); // recursive and I know it
   ***REMOVED***
@@ -271,21 +270,9 @@ class TermineSeiteState extends State<TermineSeite> {
     try {
       String token = await storageService.loadActionToken(editedAction.id);
       await termineService.saveAction(editedAction, token);
-    ***REMOVED*** on AuthFehler catch (error) {
-      showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-                key: Key('edit authentication failed dialog'),
-                title: Text('Aktion konnte nicht bearbeitet werden'),
-                content: Text(error.message()),
-                actions: <Widget>[
-                  RaisedButton(
-                    key: Key('authentication error dialog close button'),
-                    child: Text('Okay...'),
-                    onPressed: () => Navigator.pop(context),
-                  )
-                ],
-              ));
+    ***REMOVED*** on RestFehler catch (error) {
+      showErrorDialog('Aktion konnte nicht gespeichert werden', error,
+          key: Key('edit request failed dialog'));
     ***REMOVED***
   ***REMOVED***
 
@@ -294,45 +281,18 @@ class TermineSeiteState extends State<TermineSeite> {
     try {
       await termineService.deleteAction(action, token);
       storageService.deleteActionToken(action.id);
-      setState(() => updateActions(action, true));
+      setState(() => updateAction(action, true));
     ***REMOVED*** on RestFehler catch (error) {
-      showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-                key: Key('delete authentication failed dialog'),
-                title: Text('Aktion konnte nicht gelöscht werden'),
-                content: Text(error.message()),
-                actions: <Widget>[
-                  RaisedButton(
-                    key: Key('authentication error dialog close button'),
-                    child: Text('Okay...'),
-                    onPressed: () => Navigator.pop(context),
-                  )
-                ],
-              ));
-    ***REMOVED*** on AuthFehler catch (error) {
-      print('AuthFehler aufgetreten');
-      showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-                key: Key('delete authentication failed dialog'),
-                title: Text('Aktion konnte nicht gelöscht werden'),
-                content: Text(error.message()),
-                actions: <Widget>[
-                  RaisedButton(
-                    key: Key('authentication error dialog close button'),
-                    child: Text('Okay...'),
-                    onPressed: () => Navigator.pop(context),
-                  )
-                ],
-              ));
+      showErrorDialog('Aktion konnte nicht gelöscht werden', error,
+          key: Key('delete request failed dialog'));
     ***REMOVED***
   ***REMOVED***
 
-  // TODO Tests
-  updateActions(Termin updatedAction, bool remove) {
+  updateAction(Termin updatedAction, bool remove) {
     var index =
         termine.indexWhere((Termin action) => action.id == updatedAction.id);
+
+    if (index == -1) return;
 
     if (remove) {
       termine.removeAt(index);
@@ -343,7 +303,6 @@ class TermineSeiteState extends State<TermineSeite> {
     ***REMOVED***
   ***REMOVED***
 
-  // TODO Tests
   addAction(Termin newAction) {
     myActions.add(newAction.id);
     termine
@@ -376,6 +335,22 @@ class TermineSeiteState extends State<TermineSeite> {
               ]);
         ***REMOVED***);
     return editedAction[0];
+  ***REMOVED***
+
+  Future showErrorDialog(String title, RestFehler error, {key: Key***REMOVED***) {
+    return showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+              key: key,
+              title: Text(title),
+              content: Text(error.message()),
+              actions: <Widget>[
+                RaisedButton(
+                  child: Text('Okay...'),
+                  onPressed: () => Navigator.pop(context),
+                )
+              ],
+            ));
   ***REMOVED***
 ***REMOVED***
 
