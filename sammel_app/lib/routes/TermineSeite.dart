@@ -174,10 +174,7 @@ class TermineSeiteState extends State<TermineSeite> {
         context: context,
         child: AlertDialog(
           title: Text('Aktion konnte nicht angelegt werden'),
-          content: SelectableText(
-              'Ein Fehler ist aufgetreten beim Erstellen der Aktion:'
-              '\n\n${e.meldung}\n\n'
-              'Sollte das öfter auftreten schreib uns doch bitte eine Mail an e@mail.de'),
+          content: SelectableText(e.message()),
           actions: <Widget>[
             RaisedButton(
               child: Text('Okay...'),
@@ -225,10 +222,8 @@ class TermineSeiteState extends State<TermineSeite> {
               ],
             ));
 
-    if (command == TerminDetailsCommand.DELETE) {
-      await deleteAction(terminMitDetails);
-      setState(() => updateActions(terminMitDetails, true));
-    }
+    if (command == TerminDetailsCommand.DELETE)
+      deleteAction(terminMitDetails);
 
     if (command == TerminDetailsCommand.EDIT)
       editAction(context, terminMitDetails);
@@ -282,10 +277,7 @@ class TermineSeiteState extends State<TermineSeite> {
           builder: (_) => AlertDialog(
                 key: Key('edit authentication failed dialog'),
                 title: Text('Aktion konnte nicht bearbeitet werden'),
-                content: Text(
-                    'Beim Bearbeiten der Aktion ist ein Fehler aufgetreten:\n'
-                    '${error.reason}\n\n'
-                    'Wenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com '),
+                content: Text(error.message()),
                 actions: <Widget>[
                   RaisedButton(
                     key: Key('authentication error dialog close button'),
@@ -302,18 +294,30 @@ class TermineSeiteState extends State<TermineSeite> {
     try {
       await termineService.deleteAction(action, token);
       storageService.deleteActionToken(action.id);
+      setState(() => updateActions(action, true));
     } on RestFehler catch (error) {
-      print((error as RestFehler).meldung);
-    } on AuthFehler catch (error) {
       showDialog(
           context: context,
           builder: (_) => AlertDialog(
                 key: Key('delete authentication failed dialog'),
                 title: Text('Aktion konnte nicht gelöscht werden'),
-                content: Text(
-                    'Beim Löschen der Aktion ist ein Fehler aufgetreten:\n'
-                    '${error.reason}\n\n'
-                    'Wenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com '),
+                content: Text(error.message()),
+                actions: <Widget>[
+                  RaisedButton(
+                    key: Key('authentication error dialog close button'),
+                    child: Text('Okay...'),
+                    onPressed: () => Navigator.pop(context),
+                  )
+                ],
+              ));
+    } on AuthFehler catch (error) {
+      print('AuthFehler aufgetreten');
+      showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+                key: Key('delete authentication failed dialog'),
+                title: Text('Aktion konnte nicht gelöscht werden'),
+                content: Text(error.message()),
                 actions: <Widget>[
                   RaisedButton(
                     key: Key('authentication error dialog close button'),

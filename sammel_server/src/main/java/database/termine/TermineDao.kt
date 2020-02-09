@@ -93,6 +93,9 @@ open class TermineDao {
     }
 
     open fun deleteToken(token: Token) {
-        entityManager.remove(token) //To change body of created functions use File | Settings | File Templates.
+        // aus irgendeinem Grund funktioniert ein einfaches Remove hier nicht, sondern es muss geprüft werden
+        // ob das Token vom EntityManager verwaltet wird und um ergänzt werden, bevor es gelöscht werden kann
+        // Muss das bei anderen Lösch-Funktionen auch passieren?
+        entityManager.remove(if(entityManager.contains(token)) token else entityManager.merge(token))
     }
 }

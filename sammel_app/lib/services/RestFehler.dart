@@ -1,9 +1,13 @@
 class RestFehler {
-  String meldung;
+  String reason;
 
-  RestFehler(this.meldung);
+  RestFehler(String reason) {
+    this.reason = reason;
+  }
 
-  // TODO auf neue Deserialisierung umstellen
-  RestFehler.deserialisiere(Map<String, dynamic> json)
-      : meldung = json['meldung'];
+  String message() => '$reason\n\n'
+      'Wenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com';
+
+  RestFehler.fromJson(Map<String, dynamic> json)
+      : reason = json['meldung'];
 }

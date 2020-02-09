@@ -23,10 +23,6 @@ open class TermineRestResource {
             .entity(RestFehlermeldung("Keine gültige Aktion an den Server gesendet"))
             .build()
 
-    private val noValidTokenResponse = Response.status(403)
-            .entity(RestFehlermeldung("Token passt nicht zu Aktion"))
-            .build()
-
     @EJB
     private lateinit var dao: TermineDao
 
@@ -77,7 +73,9 @@ open class TermineRestResource {
         if (actionAndToken.action == null || actionAndToken.action!!.id == null) return noValidActionResponse
 
         val tokenFromDb = dao.loadToken(actionAndToken.action!!.id!!)?.token
-        if (tokenFromDb != null && !tokenFromDb.equals(actionAndToken.token)) return noValidTokenResponse
+        if (tokenFromDb != null && !tokenFromDb.equals(actionAndToken.token)) return Response.status(403)
+                .entity(RestFehlermeldung("Bearbeiten dieser Aktion ist unautorisiert"))
+                .build()
 
         try {
             dao.aktualisiereTermin(actionAndToken.action!!.convertToTermin())
@@ -94,12 +92,15 @@ open class TermineRestResource {
 
     @DELETE
     @Consumes(APPLICATION_JSON)
+    @Produces(APPLICATION_JSON)
     @Path("termin")
     open fun deleteAction(actionAndToken: ActionWithTokenDto): Response {
         if (actionAndToken.action == null || actionAndToken.action!!.id == null) return noValidActionResponse
 
         val tokenFromDb = dao.loadToken(actionAndToken.action!!.id!!)?.token
-        if (tokenFromDb != null && !tokenFromDb.equals(actionAndToken.token)) return noValidTokenResponse
+        if (tokenFromDb != null && !tokenFromDb.equals(actionAndToken.token)) return Response.status(403)
+                .entity(RestFehlermeldung("Löschen dieser Aktion ist unautorisiert"))
+                .build()
 
         try {
             dao.deleteAction(actionAndToken.action!!.convertToTermin())

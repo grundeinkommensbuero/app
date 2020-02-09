@@ -1,9 +1,12 @@
 class AuthFehler {
   String reason;
 
-  AuthFehler(this.reason);
+  AuthFehler(String reason) {
+    this.reason = reason;
+  }
 
-  // TODO auf neue Deserialisierung umstellen
-  AuthFehler.deserialisiere(Map<String, dynamic> json)
-      : reason = json['meldung'];
+  String message() => '$reason\n\n'
+      'Wenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com';
+
+  AuthFehler.fromJson(Map<String, dynamic> json) : reason = json['meldung'];
 }
