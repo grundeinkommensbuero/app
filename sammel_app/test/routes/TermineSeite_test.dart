@@ -1311,4 +1311,73 @@ void main() {
           containsAll([4, 1, 2, 3]));
     });
   });
+  group('navgation button', () {
+    testWidgets('for list view is active on start',
+        (WidgetTester tester) async {
+      when(terminService.ladeTermine(any))
+          .thenAnswer((_) async => [(TerminTestDaten.einTermin())]);
+
+      await tester.pumpWidget(MultiProvider(
+          providers: [
+            Provider<AbstractTermineService>.value(value: terminService),
+            Provider<StorageService>.value(value: storageService)
+          ],
+          child: MaterialApp(
+              home: TermineSeite(key: Key('action page'), title: 'Titel'))));
+
+      TermineSeiteState state = tester.state(find.byKey(Key('action page')));
+      expect(state.navigation, 0);
+      expect(find.byKey(Key('action list')), findsOneWidget);
+      expect(find.byKey(Key('action map')), findsNothing);
+    });
+
+    testWidgets('for map view switches to map view',
+        (WidgetTester tester) async {
+      when(terminService.ladeTermine(any))
+          .thenAnswer((_) async => [(TerminTestDaten.einTermin())]);
+
+      await tester.pumpWidget(MultiProvider(
+          providers: [
+            Provider<AbstractTermineService>.value(value: terminService),
+            Provider<StorageService>.value(value: storageService)
+          ],
+          child: MaterialApp(
+              home: TermineSeite(key: Key('action page'), title: 'Titel'))));
+
+      await tester.tap(find.byKey(Key('map view navigation button')));
+      await tester.pump();
+
+      TermineSeiteState state = tester.state(find.byKey(Key('action page')));
+      expect(state.navigation, 1);
+      expect(find.byKey(Key('action map')), findsOneWidget);
+      expect(find.byKey(Key('action list')), findsNothing);
+    });
+
+    testWidgets('for list view switches to list view',
+        (WidgetTester tester) async {
+      when(terminService.ladeTermine(any))
+          .thenAnswer((_) async => [(TerminTestDaten.einTermin())]);
+
+      await tester.pumpWidget(MultiProvider(
+          providers: [
+            Provider<AbstractTermineService>.value(value: terminService),
+            Provider<StorageService>.value(value: storageService)
+          ],
+          child: MaterialApp(
+              home: TermineSeite(key: Key('action page'), title: 'Titel'))));
+
+      await tester.tap(find.byKey(Key('map view navigation button')));
+      await tester.pump();
+
+      TermineSeiteState state = tester.state(find.byKey(Key('action page')));
+      expect(state.navigation, 1);
+
+      await tester.tap(find.byKey(Key('list view navigation button')));
+      await tester.pump();
+
+      expect(state.navigation, 0);
+      expect(find.byKey(Key('action list')), findsOneWidget);
+      expect(find.byKey(Key('action map')), findsNothing);
+        });
+  });
 }

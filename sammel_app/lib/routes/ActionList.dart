@@ -22,7 +22,6 @@ class ActionListState extends State<ActionList> {
 
   @override
   Widget build(BuildContext context) {
-    print('Baue Liste mit ${widget.termine.length} Aktionen');
     return Expanded(
         child: ListView.builder(
             itemCount: widget.termine.length, itemBuilder: cardListBuilder));
@@ -51,3 +50,4 @@ class ActionListState extends State<ActionList> {
       return tile;
   }
 }
+

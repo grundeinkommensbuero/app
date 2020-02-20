@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/model/Termin.dart';
+import 'package:sammel_app/routes/ActionMap.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
@@ -30,16 +31,28 @@ class TermineSeiteState extends State<TermineSeite> {
     fontSize: 15.0,
   );
   bool _initialized = false;
+
   List<Termin> termine = [];
 
   FilterWidget filterWidget;
 
   List<int> myActions = [];
 
+  var view;
+  int navigation = 0;
+
   @override
   Widget build(BuildContext context) {
     if (!_initialized) intialize(context);
     // TODO: Memory-Leak beheben
+
+    view = [
+      ActionList(termine, isMyAction, openTerminDetails,
+          key: Key('action list')),
+      ActionMap(termine, isMyAction, openTerminDetails,
+          key: Key('action map')),
+    ];
+
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
@@ -56,11 +69,7 @@ class TermineSeiteState extends State<TermineSeite> {
         ],
       )),
       body: Column(
-        children: <Widget>[
-          filterWidget,
-          ActionList(termine, isMyAction, openTerminDetails,
-              key: Key('action list')),
-        ],
+        children: <Widget>[filterWidget, view[navigation]],
       ),
       floatingActionButton: FloatingActionButton.extended(
           key: Key('create termin button'),
@@ -72,6 +81,20 @@ class TermineSeiteState extends State<TermineSeite> {
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(16.0)))),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: navigation,
+        onTap: (index) => setState(() => navigation = index),
+        backgroundColor: DweTheme.purple,
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.view_list,
+                  key: Key('list view navigation button')),
+              title: Text('Liste')),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.map, key: Key('map view navigation button')),
+              title: Text('Karte'))
+        ],
+      ),
     );
   }
 
@@ -92,7 +115,6 @@ class TermineSeiteState extends State<TermineSeite> {
       setState(() {
         this.termine = termine..sort(Termin.compareByStart);
       });
-      print('${termine.length} Aktionen geladen');
     });
   }
 
