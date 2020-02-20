@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
-import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/services/AuthFehler.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:uuid/uuid.dart';
+import 'ActionList.dart';
 import 'FilterWidget.dart';
 import 'ActionDetailsPage.dart';
 
@@ -59,11 +58,8 @@ class TermineSeiteState extends State<TermineSeite> {
       body: Column(
         children: <Widget>[
           filterWidget,
-          Expanded(
-              child: ListView.builder(
-                  key: Key('action list'),
-                  itemCount: termine.length,
-                  itemBuilder: cardListBuilder)),
+          ActionList(termine, isMyAction, openTerminDetails,
+              key: Key('action list')),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -77,32 +73,6 @@ class TermineSeiteState extends State<TermineSeite> {
               borderRadius: BorderRadius.all(Radius.circular(16.0)))),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
-  ***REMOVED***
-
-  Widget cardListBuilder(context, index) {
-    // insert "Jetzt" line
-    var tile = ListTile(
-        title: TerminCard(
-            termine[index], isMyAction(termine[index].id), Key('action card')),
-        onTap: () => openTerminDetails(context, termine[index]),
-        contentPadding: EdgeInsets.only(bottom: 0.1));
-    var now = DateTime.now();
-    if ((termine[index].beginn.isBefore(now)) &&
-        (index == termine.length - 1 || termine[index + 1].beginn.isAfter(now)))
-      return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        tile,
-        Text(
-          'Jetzt',
-          key: Key('action list now line'),
-          style: TextStyle(color: DweTheme.purple, fontSize: 16.0),
-        ),
-      ]);
-    else
-      return tile;
-  ***REMOVED***
-
-  bool isMyAction(int id) {
-    return myActions?.contains(id);
   ***REMOVED***
 
   void intialize(BuildContext context) {
@@ -122,6 +92,7 @@ class TermineSeiteState extends State<TermineSeite> {
       setState(() {
         this.termine = termine..sort(Termin.compareByStart);
       ***REMOVED***);
+      print('${termine.length***REMOVED*** Aktionen geladen');
     ***REMOVED***);
   ***REMOVED***
 
@@ -253,6 +224,10 @@ class TermineSeiteState extends State<TermineSeite> {
       ];
     else
       return [];
+  ***REMOVED***
+
+  bool isMyAction(int id) {
+    return myActions?.contains(id);
   ***REMOVED***
 
   Future editAction(BuildContext context, Termin terminMitDetails) async {
