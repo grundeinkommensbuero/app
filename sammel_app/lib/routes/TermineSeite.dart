@@ -49,8 +49,7 @@ class TermineSeiteState extends State<TermineSeite> {
     view = [
       ActionList(termine, isMyAction, openTerminDetails,
           key: Key('action list')),
-      ActionMap(termine, isMyAction, openTerminDetails,
-          key: Key('action map')),
+      ActionMap(termine, isMyAction, openTerminDetails, key: Key('action map')),
     ];
 
     return Scaffold(
@@ -69,7 +68,7 @@ class TermineSeiteState extends State<TermineSeite> {
         ],
       )),
       body: Column(
-        children: <Widget>[filterWidget, view[navigation]],
+        children: <Widget>[filterWidget, Expanded(child: view[navigation])],
       ),
       floatingActionButton: FloatingActionButton.extended(
           key: Key('create termin button'),

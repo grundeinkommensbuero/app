@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -45,26 +44,6 @@ void main() {
   ***REMOVED***);
 
   group('presentation', () {
-    testWidgets('TermineSeite shows all actions', (WidgetTester tester) async {
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
-      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
-            TerminTestDaten.einTermin(),
-            TerminTestDaten.einTermin(),
-            TerminTestDaten.einTermin(),
-          ]);
-
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
-
-      // Warten bis asynchron Termine geladen wurden
-      await tester.pumpAndSettle();
-
-      expect(find.byType(TerminCard), findsNWidgets(3));
-    ***REMOVED***);
-
     testWidgets('TermineSeite sorts actions by From Date',
         (WidgetTester tester) async {
       var termineSeiteWidget = TermineSeite(title: 'Titel');
@@ -106,40 +85,7 @@ void main() {
           findsOneWidget);
     ***REMOVED***);
 
-    testWidgets('marks own actions for highlighting',
-        (WidgetTester tester) async {
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
-      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
-            TerminTestDaten.einTermin()..id = 1,
-            TerminTestDaten.einTermin()..id = 2,
-            TerminTestDaten.einTermin()..id = 3,
-          ]);
-
-      when(storageService.loadAllStoredActionIds())
-          .thenAnswer((_) async => [2]);
-
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
-
-      // Warten bis asynchron Termine geladen wurden
-      await tester.pumpAndSettle();
-
-      List<TerminCard> actionCards = tester
-          .widgetList(find.byKey(Key('action card')))
-          .map((widget) => widget as TerminCard)
-          .toList();
-
-      expect(actionCards.length, 3);
-
-      expect(actionCards[0].myAction, false);
-      expect(actionCards[1].myAction, true);
-      expect(actionCards[2].myAction, false);
-    ***REMOVED***);
-
-    testWidgets('shows edit and delete button only at own actions',
+    testWidgets('shows edit and delete button in Detail Dialog only at own actions',
         (WidgetTester tester) async {
       when(terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin()..id = 1,
@@ -1382,6 +1328,6 @@ void main() {
       expect(state.navigation, 0);
       expect(find.byKey(Key('action list')), findsOneWidget);
       expect(find.byKey(Key('action map')), findsNothing);
-        ***REMOVED***);
+    ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***
