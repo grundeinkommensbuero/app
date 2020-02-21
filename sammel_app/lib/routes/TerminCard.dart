@@ -21,14 +21,15 @@ class TerminCard extends StatelessWidget {
   build(context) {
     return Container(
       padding: EdgeInsets.all(10.0),
-      decoration:
-          BoxDecoration(color: actionColor(termin.ende, myAction), boxShadow: [
-        BoxShadow(
-            color: Colors.grey,
-            offset: Offset(1.0, 1.0),
-            blurRadius: 3.0,
-            spreadRadius: 1.0)
-      ]),
+      decoration: BoxDecoration(
+          color: DweTheme.actionColor(termin.ende, myAction),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.grey,
+                offset: Offset(1.0, 1.0),
+                blurRadius: 3.0,
+                spreadRadius: 1.0)
+          ]),
       child: Column(children: [
         Text(
           '${termin.typ}',
@@ -62,16 +63,6 @@ class TerminCard extends StatelessWidget {
 
   static String erzeugeOrtText(Ort ort) {
     return '${ort.bezirk}, ${ort.ort}';
-  }
-
-  static Color actionColor(DateTime ende, bool isMyAction) {
-    if (isMyAction)
-      return ende.isAfter(DateTime.now())
-          ? DweTheme.green
-          : DweTheme.greenLight;
-    return ende.isAfter(DateTime.now())
-        ? DweTheme.yellowLight
-        : DweTheme.yellowBright;
   }
 
   static String erzeugeDatumText(DateTime beginn, DateTime ende) {

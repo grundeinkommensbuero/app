@@ -47,10 +47,12 @@ class Termin {
         'details': details,
       };
 
-  String getAsset() {
+  String getAsset({bool centered = false}) {
     switch (typ) {
       case 'Sammeln':
-        return 'assets/images/Sammeln.png';
+        return centered
+            ? 'assets/images/Sammeln_centered.png'
+            : 'assets/images/Sammeln.png';
       case 'Infoveranstaltung':
         return 'assets/images/Infoveranstaltung.png';
     }

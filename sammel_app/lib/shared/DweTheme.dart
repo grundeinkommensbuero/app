@@ -34,4 +34,13 @@ class DweTheme {
           textTheme: ButtonTextTheme.primary),
       iconTheme: IconThemeData(color: purple));
 
+  static Color actionColor(DateTime ende, bool isMyAction) {
+    if (isMyAction)
+      return ende.isAfter(DateTime.now())
+          ? DweTheme.green
+          : DweTheme.greenLight;
+    return ende.isAfter(DateTime.now())
+        ? DweTheme.yellowLight
+        : DweTheme.yellowBright;
+  }
 }
