@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -380,6 +379,8 @@ void main() {
           today.add(Duration(hours: 2)),
           goerli(),
           'Infoveranstaltung',
+          52.52116,
+          13.41331,
           editorState.action.terminDetails));
 
       await tester.tap(find.byKey(Key('action editor finish button')));
@@ -441,6 +442,8 @@ void main() {
           today.add(Duration(hours: 2)),
           goerli(),
           'Infoveranstaltung',
+          52.52116,
+          13.41331,
           editorState.action.terminDetails));
 
       await tester.tap(find.byKey(Key('action editor finish button')));
@@ -502,6 +505,8 @@ void main() {
           today.add(Duration(hours: 2)),
           goerli(),
           'Infoveranstaltung',
+          52.52116,
+          13.41331,
           editorState.action.terminDetails));
 
       await tester.tap(find.byKey(Key('action editor finish button')));
@@ -515,7 +520,6 @@ void main() {
       var termineSeiteWidget = TermineSeite(title: 'Titel');
 
       var today = DateTime.now();
-      var twoDaysAgo = today.subtract(Duration(days: 2));
       var yesterday = today.subtract(Duration(days: 1));
       var tomorrow = today.add(Duration(days: 1));
 

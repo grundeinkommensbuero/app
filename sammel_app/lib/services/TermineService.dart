@@ -102,6 +102,8 @@ class DemoTermineService extends AbstractTermineService {
         DateTime(heute.year, heute.month - 1, heute.day - 1, 12, 0, 0),
         nordkiez,
         'Sammeln',
+        52.52116,
+        13.41331,
         TerminDetails('Weltzeituhr', 'Bringe Westen und Klämmbretter mit',
             'Ruft mich an unter 01234567')),
     Termin(
@@ -110,6 +112,8 @@ class DemoTermineService extends AbstractTermineService {
         DateTime(heute.year, heute.month, heute.day - 1, 13, 0, 0),
         treptowerPark,
         'Sammeln',
+        52.48756,
+        13.46336,
         TerminDetails('Hinter der 3. Parkbank links',
             'wir machen die Parkeingänge', 'Schreibt mir unter e@mail.de')),
     Termin(
@@ -118,6 +122,8 @@ class DemoTermineService extends AbstractTermineService {
         DateTime(heute.year, heute.month, heute.day + 1, 2, 0, 0),
         goerli,
         'Sammeln',
+        52.49655,
+        13.43759,
         TerminDetails('wir telefonieren uns zusammen', 'bitte seid pünktlich',
             'Meine Handynummer ist 01234567')),
     Termin(
@@ -126,6 +132,8 @@ class DemoTermineService extends AbstractTermineService {
         DateTime(heute.year, heute.month, heute.day + 1, 20, 30, 0),
         treptowerPark,
         'Infoveranstaltung',
+        52.48612,
+        13.47192,
         TerminDetails(
             'DGB-Haus, Raum 1312',
             'Ihr seid alle herzlich eingeladen zur Strategiediskussion',

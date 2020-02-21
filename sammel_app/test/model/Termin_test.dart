@@ -17,6 +17,8 @@ void main() {
               DateTime(2020, 1, 2, 18, 0, 0),
               Ort(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez'),
               'Sammeln',
+              52.52116,
+              13.41331,
               null)),
           '{'
           '"id":1,'
@@ -24,6 +26,8 @@ void main() {
           '"ende":"2020-01-02T18:00:00.000",'
           '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez"***REMOVED***,'
           '"typ":"Sammeln",'
+          '"lattitude":52.52116,'
+          '"longitude":13.41331,'
           '"details":null***REMOVED***');
     ***REMOVED***);
 
@@ -35,6 +39,8 @@ void main() {
               DateTime(2020, 1, 2, 18, 0, 0),
               Ort(15, "Friedrichshain-Kreuzberg", "Fhain - Nordkiez"),
               'Sammeln',
+              52.52116,
+              13.41331,
               TerminDetailsTestDaten.terminDetailsTestDaten())),
           '{'
           '"id":1,'
@@ -42,6 +48,8 @@ void main() {
           '"ende":"2020-01-02T18:00:00.000",'
           '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez"***REMOVED***,'
           '"typ":"Sammeln",'
+          '"lattitude":52.52116,'
+          '"longitude":13.41331,'
           '"details":{'
           '"id":null,'
           '"treffpunkt":"Weltzeituhr",'
@@ -57,11 +65,15 @@ void main() {
           '"beginn":"2020-01-02T15:00:00.000",'
           '"ende":"2020-01-02T18:00:00.000",'
           '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez"***REMOVED***,'
-          '"typ":"Sammeln"***REMOVED***'));
+          '"typ":"Sammeln",'
+          '"lattitude":52.52116,'
+          '"longitude":13.41331***REMOVED***'));
       expect(termin.id, 1);
       expect(termin.beginn, equals(DateTime(2020, 1, 2, 15, 0, 0)));
       expect(termin.ende, equals(DateTime(2020, 1, 2, 18, 0, 0)));
       expect(termin.typ, 'Sammeln');
+      expect(termin.lattitude, 52.52116);
+      expect(termin.longitude, 13.41331);
       expect(termin.ort.toString(),
           Ort(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez').toString());
       expect(termin.details, isNull);
@@ -69,7 +81,17 @@ void main() {
 
     test('deserialisiert Temin mit Details', () {
       var termin = Termin.fromJson(jsonDecode(
-          '{"beginn":"2020-02-05T09:00:00","details":{"id":1,"kommentar":"wir stellen uns an die Ubhf-Eingänge. ihr erkennt mich an der DWE-Weste","kontakt":"kalle@revo.de","treffpunkt":"Weltzeituhr"***REMOVED***,"ende":"2020-02-05T12:00:00","id":1,"ort":{"bezirk":"Friedrichshain-Kreuzberg","id":1,"ort":"Friedrichshain Nordkiez"***REMOVED***,"typ":"Sammeln"***REMOVED***'));
+          '{'
+              '"beginn":"2020-02-05T09:00:00",'
+              '"details":{'
+              '"id":1,'
+              '"kommentar":"wir stellen uns an die Ubhf-Eingänge. ihr erkennt mich an der DWE-Weste",'
+              '"kontakt":"kalle@revo.de",'
+              '"treffpunkt":"Weltzeituhr"***REMOVED***,'
+              '"ende":"2020-02-05T12:00:00",'
+              '"id":1,'
+              '"ort":{"bezirk":"Friedrichshain-Kreuzberg","id":1,"ort":"Friedrichshain Nordkiez"***REMOVED***,'
+              '"typ":"Sammeln"***REMOVED***'));
       expect(termin.details.treffpunkt, "Weltzeituhr");
       expect(termin.details.kommentar,
           "wir stellen uns an die Ubhf-Eingänge. ihr erkennt mich an der DWE-Weste");
@@ -79,14 +101,23 @@ void main() {
 
   test('compareByStart orders actions by Start value', () {
     var now = DateTime.now();
-    var action1 =
-        Termin(1, now, now.add(Duration(hours: 1)), goerli(), 'Sammeln', null);
+    var action1 = Termin(
+        1,
+        now,
+        now.add(Duration(hours: 1)),
+        goerli(),
+        'Sammeln',
+        52.52116,
+        13.41331,
+        null);
     var action2 = Termin(
         2,
         now.add(Duration(days: 1)),
         now.add(Duration(days: 1)).add(Duration(hours: 1)),
         nordkiez(),
         'Sammeln',
+        52.52116,
+        13.41331,
         null);
     var action3 = Termin(
         3,
@@ -94,9 +125,18 @@ void main() {
         now.add(Duration(days: 365, hours: 1)),
         treptowerPark(),
         'Sammeln',
+        52.52116,
+        13.41331,
         null);
-    var action4 = Termin(4, now.subtract(Duration(hours: 1)),
-        now.add(Duration(hours: 1)), treptowerPark(), 'Sammeln', null);
+    var action4 = Termin(
+        4,
+        now.subtract(Duration(hours: 1)),
+        now.add(Duration(hours: 1)),
+        treptowerPark(),
+        'Sammeln',
+        52.52116,
+        13.41331,
+        null);
 
     // same
     expect(Termin.compareByStart(action1, action1), 0);
@@ -116,11 +156,25 @@ void main() {
 ***REMOVED***
 
 class TerminTestDaten {
-  static Termin einTermin() => Termin(0, DateTime(2019, 11, 4, 17, 9, 0),
-      DateTime(2019, 11, 4, 18, 9, 0), nordkiez(), 'Sammeln', null);
+  static Termin einTermin() => Termin(
+      0,
+      DateTime(2019, 11, 4, 17, 9, 0),
+      DateTime(2019, 11, 4, 18, 9, 0),
+      nordkiez(),
+      'Sammeln',
+      52.52116,
+      13.41331,
+      null);
 
   static Termin anActionFrom(DateTime date) => Termin(
-      0, date, date.add(Duration(hours: 1)), nordkiez(), 'Sammeln', null);
+      0,
+      date,
+      date.add(Duration(hours: 1)),
+      nordkiez(),
+      'Sammeln',
+      52.52116,
+      13.41331,
+      null);
 
   static einTerminMitDetails() => Termin(
       0,
@@ -128,5 +182,7 @@ class TerminTestDaten {
       DateTime(2019, 11, 4, 18, 9, 0),
       nordkiez(),
       'Sammeln',
+      52.52116,
+      13.41331,
       TerminDetailsTestDaten.terminDetailsTestDaten());
 ***REMOVED***

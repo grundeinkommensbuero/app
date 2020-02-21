@@ -117,6 +117,8 @@ open class TermineRestResource {
             var ende: LocalDateTime? = null,
             var ort: Ort? = null,
             var typ: String? = null,
+            var lattitude: Double?,
+            var longitude: Double?,
             var details: TerminDetailsDto? = TerminDetailsDto()) {
 
         fun convertToTermin(): Termin {
@@ -126,6 +128,8 @@ open class TermineRestResource {
                     ende = ende,
                     ort = ort,
                     typ = typ,
+                    lattitude = lattitude,
+                    longitude = longitude,
                     teilnehmer = emptyList(),
                     details = details?.convertToTerminDetails())
         ***REMOVED***
@@ -143,6 +147,8 @@ open class TermineRestResource {
                     termin.ende,
                     termin.ort,
                     termin.typ,
+                    termin.lattitude,
+                    termin.longitude,
                     null)
         ***REMOVED***
     ***REMOVED***

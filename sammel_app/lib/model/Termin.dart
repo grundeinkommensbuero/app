@@ -1,4 +1,3 @@
-
 import 'Ort.dart';
 import 'TerminDetails.dart';
 
@@ -8,9 +7,12 @@ class Termin {
   DateTime ende;
   Ort ort;
   String typ;
+  double lattitude;
+  double longitude;
   TerminDetails details;
 
-  Termin(this.id, this.beginn, this.ende, this.ort, this.typ, this.details);
+  Termin(this.id, this.beginn, this.ende, this.ort, this.typ, this.lattitude,
+      this.longitude, this.details);
 
   Termin.emptyAction()
       : id = null,
@@ -18,6 +20,8 @@ class Termin {
         ende = null,
         ort = null,
         typ = null,
+        lattitude = null,
+        longitude = null,
         details = TerminDetails(null, null, null);
 
   Termin.fromJson(Map<String, dynamic> json)
@@ -26,6 +30,8 @@ class Termin {
         ende = DateTime.parse(json['ende']),
         ort = Ort.fromJson(json['ort']),
         typ = json['typ'] ?? 'Termin',
+        lattitude = json['lattitude'] ?? null,
+        longitude = json['longitude'] ?? null,
         details = json['details'] != null
             ? TerminDetails.fromJSON(json['details'])
             : null;
@@ -36,6 +42,8 @@ class Termin {
         'ende': ende.toIso8601String(),
         'ort': ort,
         'typ': typ,
+        'lattitude': lattitude,
+        'longitude': longitude,
         'details': details,
       ***REMOVED***
 

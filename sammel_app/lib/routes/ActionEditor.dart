@@ -396,7 +396,7 @@ class ActionEditorState extends State<ActionEditor> {
             this.action.bis.hour, this.action.bis.minute);
 
         termine.add(Termin(widget.initAction?.id, begin, end, this.action.ort,
-            this.action.typ, this.action.terminDetails));
+            this.action.typ, null, null, this.action.terminDetails));
       ***REMOVED***
       return termine;
     ***REMOVED***

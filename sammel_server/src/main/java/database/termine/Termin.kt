@@ -29,6 +29,12 @@ class Termin {
     @Column
     var typ: String? = null
 
+    @Column
+    var lattitude: Double? = null
+
+    @Column
+    var longitude: Double? = null
+
     @ManyToMany(fetch = EAGER)
     @JoinTable(name = "Termin_Teilnehmer",
             joinColumns = [JoinColumn(name = "Termin", referencedColumnName = "id")],
@@ -41,12 +47,21 @@ class Termin {
 
     constructor()
 
-    constructor(id: Long, beginn: LocalDateTime?, ende: LocalDateTime?, ort: Ort?, typ: String?, teilnehmer: List<Benutzer>, details: TerminDetails?) {
+    constructor(id: Long,
+                beginn: LocalDateTime?,
+                ende: LocalDateTime?,
+                ort: Ort?,
+                typ: String?, teilnehmer: List<Benutzer>,
+                lattitude: Double?,
+                longitude: Double?,
+                details: TerminDetails?) {
         this.id = id
         this.beginn = beginn
         this.ende = ende
         this.ort = ort
         this.typ = typ
+        this.lattitude = lattitude
+        this.longitude = longitude
         this.details = details
         this.teilnehmer = teilnehmer
     ***REMOVED***

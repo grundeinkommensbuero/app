@@ -50,8 +50,8 @@ class TermineDaoTest {
 
     @Test
     fun getTermineLiefertAlleTermineAusDbMitLeeremFilter() {
-        val termin1 = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), terminDetails())
-        val termin2 = Termin(2, beginn, ende, treptowerPark(), infoveranstaltung(), listOf(rosa(), karl()), terminDetails())
+        val termin1 = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
+        val termin2 = Termin(2, beginn, ende, treptowerPark(), infoveranstaltung(), listOf(rosa(), karl()), 52.48612, 13.47192, terminDetails())
         val termineInDb = listOf(termin1, termin2)
         whenever(entityManager.createQuery(anyString(), any<Class<Termin>>()))
                 .thenReturn(typedQuery)
@@ -66,6 +66,9 @@ class TermineDaoTest {
         assertEquals(termine[1].teilnehmer.size, 2)
         assertEquals(termine[1].teilnehmer[0].name, rosa().name)
         assertEquals(termine[1].teilnehmer[1].name, karl().name)
+        assertEquals(termine[1].teilnehmer[1].name, karl().name)
+        assertEquals(termine[1].lattitude, 52.48612)
+        assertEquals(termine[1].longitude, 13.47192)
     ***REMOVED***
 
     @Test
@@ -216,7 +219,7 @@ class TermineDaoTest {
 
     @Test
     fun getTerminLiefertTerminMitDetailsAusDb() {
-        val terminInDb = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), terminDetails())
+        val terminInDb = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
         whenever(entityManager.find(any<Class<Termin>>(), anyLong()))
                 .thenReturn(terminInDb)
 
@@ -228,7 +231,7 @@ class TermineDaoTest {
 
     @Test
     fun aktualisiereTerminSchreibtTerminInDb() {
-        val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), terminDetails())
+        val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
 
         dao.aktualisiereTermin(termin)
 
@@ -238,7 +241,7 @@ class TermineDaoTest {
 
     @Test
     fun erstelleNeuenTerminSchreibtTerminInDb() {
-        val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), terminDetails())
+        val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
 
         dao.erstelleNeuenTermin(termin)
 
@@ -248,8 +251,8 @@ class TermineDaoTest {
 
     @Test
     fun deleteActionRemovesActionInDb() {
-        val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), terminDetails())
-        val terminFromDb = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), terminDetails())
+        val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
+        val terminFromDb = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
 
         whenever(entityManager.find(Termin::class.java, 1L)).thenReturn(terminFromDb)
 
@@ -262,7 +265,7 @@ class TermineDaoTest {
 
     @Test(expected = DatabaseException::class)
     fun deleteActionThrowsNotFoundExceptionIfActionDoesNotExist() {
-        val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), terminDetails())
+        val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
 
         whenever(entityManager.find(Termin::class.java, 1L)).thenThrow(IllegalArgumentException())
 
@@ -271,8 +274,8 @@ class TermineDaoTest {
 
     @Test(expected = DatabaseException::class)
     fun deleteActionThrowsNotFoundExceptionIfDeletionFails() {
-        val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), terminDetails())
-        val actionFromDb = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), terminDetails())
+        val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
+        val actionFromDb = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
         whenever(entityManager.find(Termin::class.java, 1L)).thenReturn(actionFromDb)
         whenever(entityManager.remove(actionFromDb)).thenThrow(IllegalArgumentException())
 

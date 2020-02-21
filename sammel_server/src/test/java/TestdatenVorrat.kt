@@ -42,6 +42,8 @@ class TestdatenVorrat {
                     nordkiez(),
                     sammeltermin(),
                     emptyList(),
+                    52.48612,
+                    13.47192,
                     null)
         ***REMOVED***
 
@@ -52,6 +54,8 @@ class TestdatenVorrat {
                     goerli(),
                     sammeltermin(),
                     listOf(karl(), rosa()),
+                    52.48612,
+                    13.47192,
                     null)
         ***REMOVED***
 
@@ -62,6 +66,8 @@ class TestdatenVorrat {
                     goerli(),
                     sammeltermin(),
                     listOf(karl(), rosa()),
+                    52.48612,
+                    13.47192,
                     terminDetails())
         ***REMOVED***
 
@@ -72,6 +78,8 @@ class TestdatenVorrat {
                     goerli(),
                     sammeltermin(),
                     emptyList(),
+                    52.48612,
+                    13.47192,
                     terminDetails())
         ***REMOVED***
 
