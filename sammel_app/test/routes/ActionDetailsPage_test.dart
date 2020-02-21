@@ -13,6 +13,8 @@ main() {
         DateTime(2019, 12, 22, 15, 37, 0),
         Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain-Nordkiez'),
         'Sammeln',
+        null,
+        null,
         TerminDetails(
             'Ubhf Samariterstr.',
             'Wir machen die Frankfurter Allee runter',

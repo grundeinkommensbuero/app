@@ -22,6 +22,8 @@ void main() {
             Jiffy(DateTime.now()).add(days: 1),
             Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez'),
             'Sammeln',
+            52.52116,
+            13.41331,
             TerminDetails(
                 'U-Bahnhof Samariterstraße',
                 'wir gehen die Frankfurter Allee hoch',
