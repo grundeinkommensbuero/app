@@ -55,6 +55,17 @@ class ChronoHelfer {
   static DateFormat _dateFormatHHmmss = DateFormat("HH:mm:ss");
   static DateFormat _dateFormatHHmm = DateFormat("HH:mm");
 
+  static bool isTimeOfDayBefore(TimeOfDay timeofday1, TimeOfDay timeofday2)
+  {
+    if(timeofday1.hour<timeofday2.hour){
+      return true;
+    ***REMOVED***
+    if(timeofday1.hour == timeofday2.hour) {
+      return timeofday1.minute < timeofday2.minute;
+    ***REMOVED***
+    return false;
+  ***REMOVED***
+
   static String dateTimeToStringHHmmss(DateTime time) =>
       timeToStringHHmmss(TimeOfDay.fromDateTime(time));
 

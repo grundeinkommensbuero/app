@@ -317,7 +317,7 @@ void main() {
           goerli(),
           'Infoveranstaltung',
           [today],
-          TerminDetails('', '', ''));
+          TerminDetails('test1', 'test2', 'test3'));
 
       when(terminService.createTermin(any, any)).thenAnswer((_) async => Termin(
           1337,
@@ -380,7 +380,7 @@ void main() {
           goerli(),
           'not this one',
           [today],
-          TerminDetails('', '', ''));
+          TerminDetails('test1', 'test2', 'test3'));
 
       when(terminService.createTermin(any, any)).thenAnswer((_) async => Termin(
           1337,
@@ -443,7 +443,7 @@ void main() {
           goerli(),
           'Infoveranstaltung',
           [today],
-          TerminDetails('', '', ''));
+          TerminDetails('test1', 'test2', 'test3'));
 
       when(terminService.createTermin(any, any)).thenAnswer((_) async => Termin(
           1337,
@@ -506,7 +506,7 @@ void main() {
           goerli(),
           'Infoveranstaltung',
           [today],
-          TerminDetails('', '', ''));
+          TerminDetails('test1', 'test2', 'test3'));
 
       when(terminService.createTermin(any, any))
           .thenThrow(RestFehler('message'));
