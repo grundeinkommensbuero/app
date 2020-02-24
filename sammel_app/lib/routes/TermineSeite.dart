@@ -120,6 +120,7 @@ class TermineSeiteState extends State<TermineSeite> {
   openCreateDialog(BuildContext context) async {
     List<Termin> newActions = await showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) {
           return SimpleDialog(
               titlePadding: EdgeInsets.zero,
@@ -141,6 +142,8 @@ class TermineSeiteState extends State<TermineSeite> {
                 )
               ]);
         });
+    print('action editor pop');
+    print(newActions);
 
     if (newActions != null) {
       newActions.forEach((action) => createNewAction(action).then((action) {
@@ -309,6 +312,7 @@ class TermineSeiteState extends State<TermineSeite> {
   openEditDialog(BuildContext context, Termin termin) async {
     List<Termin> editedAction = await showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) {
           return SimpleDialog(
               titlePadding: EdgeInsets.zero,
