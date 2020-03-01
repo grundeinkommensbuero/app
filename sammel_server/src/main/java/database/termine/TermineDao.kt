@@ -16,7 +16,7 @@ open class TermineDao {
     private val LOG = Logger.getLogger(TermineDao::class.java)
 
     @Inject
-    @PersistenceContext(unitName = "mysql")
+    @PersistenceContext(unitName = "mariaDB")
     private lateinit var entityManager: EntityManager
 
     open fun getTermine(filter: TermineFilter): List<Termin> {

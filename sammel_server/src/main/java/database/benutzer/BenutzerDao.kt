@@ -12,7 +12,7 @@ open class BenutzerDao {
     private val LOG = Logger.getLogger(BenutzerDao::class.java)
 
     @Inject
-    @PersistenceContext(unitName = "mysql")
+    @PersistenceContext(unitName = "mariaDB")
     private lateinit var entityManager: EntityManager
 
     @Throws(BenutzerMehrfachVorhandenException::class)
