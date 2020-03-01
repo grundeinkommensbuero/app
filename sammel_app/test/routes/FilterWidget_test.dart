@@ -260,8 +260,10 @@ void main() {
       (WidgetTester tester) async {
     FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
 
-    when(stammdatenService.ladeOrte()).thenAnswer((_) async =>
-        [Ort(0, 'district1', 'place1'), Ort(1, 'district2', 'place2')]);
+    when(stammdatenService.ladeOrte()).thenAnswer((_) async => [
+          Ort(0, 'district1', 'place1', 52.49653, 13.43762),
+          Ort(1, 'district2', 'place2', 52.49653, 13.43762)
+        ]);
 
     await tester.pumpWidget(MultiProvider(providers: [
       Provider<AbstractStammdatenService>.value(value: stammdatenService),
@@ -419,7 +421,7 @@ void main() {
         [DateTime(2019, 12, 16)],
         TimeOfDay(hour: 19, minute: 15),
         TimeOfDay(hour: 20, minute: 21),
-        [Ort(1, 'district', 'place')]);
+        [Ort(1, 'district', 'place', 52.49653, 13.43762)]);
 
     numberOfTimesCalled = 0;
     iWasCalledResult = null;
@@ -461,8 +463,10 @@ void main() {
           TimeOfDay(hour: 12, minute: 30),
           TimeOfDay(hour: 15, minute: 0),
           [
-            Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez'),
-            Ort(2, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung')
+            Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
+                52.49653, 13.43762),
+            Ort(2, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung',
+                52.49653, 13.43762)
           ]));
 
       FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
