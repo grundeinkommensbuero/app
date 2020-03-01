@@ -1,5 +1,6 @@
 package rest
 
+import TestdatenVorrat.Companion.nordkiez
 import com.nhaarman.mockitokotlin2.whenever
 import database.stammdaten.Ort
 import database.stammdaten.StammdatenDao
@@ -27,7 +28,7 @@ class StammdatenRestResourceTest {
 
     @Test
     fun getOrte() {
-        val nordkiez = Ort(1, "Friedrichshain-Kreuzberg", "Friedrichshain Nordkiez")
+        val nordkiez = nordkiez()
         whenever(dao.getOrte()).thenReturn(listOf(nordkiez))
 
         val ergebnis = resource.getOrte()

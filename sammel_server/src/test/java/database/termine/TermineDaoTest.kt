@@ -172,12 +172,12 @@ class TermineDaoTest {
     fun erzeugeGetTermineQueryErgaenztOrteKlauselWennNichtNull() {
         whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)
 
-        dao.erzeugeGetTermineQuery(TermineFilter(emptyList(), emptyList(), null, null, listOf(StammdatenDaoTest.nordkiez())))
+        dao.erzeugeGetTermineQuery(TermineFilter(emptyList(), emptyList(), null, null, listOf(StammdatenDaoTest.nordkiezDto())))
 
         verify(entityManager, atLeastOnce()).createQuery(matches(".*\\swhere termine\\.ort in \\(:orte\\)"), any<Class<Termin>>())
         val tageCaptor = ArgumentCaptor.forClass(List::class.java)
         verify(typedQuery, atLeastOnce()).setParameter(matches("orte"), tageCaptor.capture())
-        assertEquals((tageCaptor.value[0] as Ort).id, StammdatenDaoTest.nordkiez().convertToOrt().id)
+        assertEquals((tageCaptor.value[0] as Ort).id, StammdatenDaoTest.nordkiezDto().convertToOrt().id)
     }
 
     @Test
@@ -201,7 +201,7 @@ class TermineDaoTest {
                 listOf(LocalDate.of(2019, 11, 18)),
                 LocalTime.of(12, 0, 0),
                 LocalTime.of(18, 0, 0),
-                listOf(StammdatenDaoTest.nordkiez())))
+                listOf(StammdatenDaoTest.nordkiezDto())))
 
         val queryCaptor = ArgumentCaptor.forClass(String::class.java)
         verify(entityManager, atLeastOnce()).createQuery(queryCaptor.capture(), any<Class<Termin>>())
