@@ -18,8 +18,8 @@ class Ort {
       : id = json['id'],
         bezirk = json['bezirk'] ?? '',
         ort = json['ort'] ?? '',
-        lattitude = json['lattitude'] ?? '',
-        longitude = json['longitude'] ?? '';
+        lattitude = json['lattitude'] ?? null,
+        longitude = json['longitude'] ?? null;
 
   Map<String, dynamic> toJson() => {
         'id': id,

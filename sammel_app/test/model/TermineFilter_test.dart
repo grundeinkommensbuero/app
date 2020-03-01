@@ -26,7 +26,7 @@ void main() {
           '"tage":["2019-11-22","2019-01-30"],'
           '"von":"04:10:00",'
           '"bis":"23:00:00",'
-          '"orte":[{"id":1,"bezirk":"Friedrichshain-Kreuzberg","ort":"Friedrichshain Nordkiez"}]'
+          '"orte":[{"id":1,"bezirk":"Friedrichshain-Kreuzberg","ort":"Friedrichshain Nordkiez","lattitude":52.51579,"longitude":13.45399}]'
           '}');
     });
   });
