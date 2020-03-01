@@ -11,7 +11,7 @@ open class StammdatenDao() {
     private val LOG = Logger.getLogger(StammdatenDao::class.java)
 
     @Inject
-    @PersistenceContext(unitName = "mysql")
+    @PersistenceContext(unitName = "mariaDB")
     private lateinit var entityManager: EntityManager
 
     open fun getOrte(): List<Ort> {
