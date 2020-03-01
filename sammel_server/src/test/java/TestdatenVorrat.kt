@@ -8,15 +8,15 @@ import java.time.LocalDateTime
 class TestdatenVorrat {
     companion object {
         fun nordkiez(): Ort {
-            return Ort(1, "Friedrichshain-Kreuzberg", "Friedrichshain Nordkiez")
+            return Ort(1, "Friedrichshain-Kreuzberg", "Friedrichshain Nordkiez", 52.51579, 13.45399)
         ***REMOVED***
 
         fun treptowerPark(): Ort {
-            return Ort(2, "Treptow-Köpenick", "Treptower Part")
+            return Ort(2, "Treptow-Köpenick", "Treptower Part", 52.48993, 13.46839)
         ***REMOVED***
 
         fun goerli(): Ort {
-            return Ort(3, "Friedrichshain-Kreuzberg", "Görlitzer Park und Umgebung")
+            return Ort(3, "Friedrichshain-Kreuzberg", "Görlitzer Park und Umgebung", 52.49653, 13.43762)
         ***REMOVED***
 
         fun sammeltermin(): String {
