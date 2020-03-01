@@ -16,12 +16,17 @@ import 'package:sammel_app/shared/showTimeRangePicker.dart';
 enum ValidationState { not_validated, error, ok }
 
 class ActionData {
-  TimeOfDay von;
-  TimeOfDay bis;
-  Ort ort;
-  String typ;
-  List<DateTime> tage;
-  TerminDetails terminDetails;
+  TimeOfDay von = TimeOfDay.fromDateTime(DateTime.now());
+  TimeOfDay bis =
+      TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 1)));
+  Ort ort =
+      Ort(0, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez', null, null);
+  String typ = 'Sammeln';
+  List<DateTime> tage = [DateTime.now()];
+  TerminDetails terminDetails =
+      TerminDetails('Weltzeituhr', 'Es gibt Kuchen', 'Ich bin ich');
+
+  ActionData.testDaten();
 
   ActionData(
       [this.von, this.bis, this.ort, this.typ, this.tage, this.terminDetails]) {
@@ -57,7 +62,7 @@ class ActionEditor extends StatefulWidget {
 }
 
 class ActionEditorState extends State<ActionEditor> {
-  ActionData action = ActionData();
+  ActionData action = ActionData.testDaten();
 
   ActionEditorState(Termin initAction) : super() {
     assign_initial_termin(initAction);
@@ -124,7 +129,9 @@ class ActionEditorState extends State<ActionEditor> {
           ),
           InputButton(onTap: daysSelection, child: daysButtonCaption()),
           InputButton(
-              onTap: timeSelection, child: timeButtonCaption(this.action), key: Key('open time span dialog')),
+              onTap: timeSelection,
+              child: timeButtonCaption(this.action),
+              key: Key('open time span dialog')),
         ])
       ]),
       Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -137,7 +144,11 @@ class ActionEditorState extends State<ActionEditor> {
             'Was?',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          InputButton(onTap: typeSelection, child: typeButtonCaption(), key: Key('open type selection dialog'),),
+          InputButton(
+            onTap: typeSelection,
+            child: typeButtonCaption(),
+            key: Key('open type selection dialog'),
+          ),
           InputButton(
               onTap: descriptionSelection,
               child: descriptionButtonCaption(this.action)),
@@ -166,19 +177,85 @@ class ActionEditorState extends State<ActionEditor> {
         RaisedButton(
             key: Key('action editor finish button'),
             child: Text('Fertig'),
-            onPressed:  () => fertigPressed())
+            onPressed: () => fertigPressed())
       ])
     ]);
   }
 
   void venueSelection() async {
-    var ergebnis = await showTextInputDialog(
-        this.action.terminDetails.treffpunkt,
-        'Treffpunkt',
-        'Gib einen leicht zu findenden Treffpunkt an, z.B. '
-            '"Unter der Weltzeituhr", "Schillerstraße 12" oder '
-            '"Eingang Kienitzstraße am Tempelhofer Feld" ',
-      Key('treffpunkt input dialog'));
+    Marker marker;
+    String current_input = this.action.terminDetails.treffpunkt;
+
+    var ergebnis = await showDialog(
+      context: context,
+      builder: (BuildContext context) => StatefulBuilder(
+          builder: (context, setDialogState) => AlertDialog(
+                key: Key('treffpunkt input dialog'),
+                title: Text('Treffpunkt'),
+                content: SingleChildScrollView(
+                    child: ListBody(children: [
+                  SizedBox(
+                      height: 300.0,
+                      width: 300.0,
+                      child: FlutterMap(
+                          options: MapOptions(
+                              center: LatLng(52.5170365, 13.3888599),
+                              zoom: 10.0,
+                              maxZoom: 19.0,
+                              onTap: (LatLng point) => setDialogState(() =>
+                                  marker = Marker(
+                                      point: point,
+                                      builder: (context) => Icon(
+                                          Icons.supervised_user_circle,
+                                          size: 30.0)))),
+                          layers: [
+                            TileLayerOptions(
+                                urlTemplate:
+                                    "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
+                                subdomains: ['a', 'b', 'c']),
+                            MarkerLayerOptions(
+                                markers: marker == null ? [] : [marker])
+                          ])),
+                  SizedBox(
+                    height: 20.0,
+                  ),
+                  Text(
+                    'Du kannst auch eine eigene Beschreibung angeben, '
+                    'z.B. "Unter der Weltzeituhr" oder "Tempelhofer Feld, '
+                    'Eingang Kienitzstraße":',
+                    textScaleFactor: 0.9,
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  TextFormField(
+                    initialValue: this.action.terminDetails.treffpunkt,
+                    keyboardType: TextInputType.multiline,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                    ),
+                    onChanged: (current_input_) {
+                      current_input = current_input_;
+                    },
+                  ),
+                ])),
+                actions: [
+                  FlatButton(
+                    child: Text("Abbrechen"),
+                    onPressed: () {
+                      Navigator.pop(
+                          context, this.action.terminDetails.treffpunkt);
+                    },
+                  ),
+                  FlatButton(
+                    child: Text("Fertig"),
+                    onPressed: () {
+                      Navigator.pop(context, current_input);
+                    },
+                  ),
+                ],
+              )),
+    );
     setState(() {
       this.action.terminDetails.treffpunkt = ergebnis;
       validateInput();
@@ -241,7 +318,8 @@ class ActionEditorState extends State<ActionEditor> {
       },
     );
     // set up the AlertDialog
-    AlertDialog alert = AlertDialog( key: key,
+    AlertDialog alert = AlertDialog(
+      key: key,
       title: Text(title),
       content: input_widget,
       actions: [
@@ -266,7 +344,8 @@ class ActionEditorState extends State<ActionEditor> {
         context: context,
         builder: (context) =>
             StatefulBuilder(builder: (context, setDialogState) {
-              return SimpleDialog( key: Key('type selection dialog'),
+              return SimpleDialog(
+                  key: Key('type selection dialog'),
                   contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
                   titlePadding: EdgeInsets.all(15.0),
                   title: const Text('Wähle Aktions-Arten'),
@@ -318,9 +397,11 @@ class ActionEditorState extends State<ActionEditor> {
   locationSelection() async {
     var allLocations =
         await Provider.of<AbstractStammdatenService>(context).ladeOrte();
-    var selectedLocations =
-        await LocationPicker(key: Key('Location Picker'), locations: allLocations, multiMode: false)
-            .showLocationPicker(context, List<Ort>());
+    var selectedLocations = await LocationPicker(
+            key: Key('Location Picker'),
+            locations: allLocations,
+            multiMode: false)
+        .showLocationPicker(context, List<Ort>());
 
     setState(() {
       if (!selectedLocations.isEmpty) {
@@ -335,7 +416,7 @@ class ActionEditorState extends State<ActionEditor> {
         this.action.terminDetails.kommentar,
         'Beschreibung',
         'Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammlerinnen und Sammler mitbringen? Kann man auch später dazustoßen, usw',
-    Key('description input dialog'));
+        Key('description input dialog'));
     setState(() {
       this.action.terminDetails.kommentar = ergebnis;
       validateInput();
@@ -348,14 +429,13 @@ class ActionEditorState extends State<ActionEditor> {
         this.action._validated['tage'] == ValidationState.not_validated) {
       text = Text("Wähle einen Tag", style: TextStyle(color: DweTheme.purple));
     } else {
-
       text = Text("am " +
-            this
-                .action
-                .tage
-                .map((tag) => DateFormat("dd.MM.").format(tag))
-                .join(", ") +
-            ",");
+          this
+              .action
+              .tage
+              .map((tag) => DateFormat("dd.MM.").format(tag))
+              .join(", ") +
+          ",");
     }
     return build_text_row(text, this.action._validated['tage']);
   }
@@ -412,7 +492,7 @@ class ActionEditorState extends State<ActionEditor> {
       text = Text(this.action.typ);
     } else {
       text = Text("Wähle die Art der Aktion",
-                style: TextStyle(color: DweTheme.purple));
+          style: TextStyle(color: DweTheme.purple));
     }
     return build_text_row(text, this.action._validated['typ']);
   }
@@ -429,15 +509,13 @@ class ActionEditorState extends State<ActionEditor> {
       val = ValidationState.error;
       text =
           Text('Wähle eine Uhrzeit', style: TextStyle(color: DweTheme.purple));
-    }
-    else{
+    } else {
       val = ValidationState.ok;
       text = Text(beschriftung);
     }
     //beschriftung += ',';
 
     return build_text_row(text, val);
-
   }
 
   Widget locationButtonCaption(ActionData termin) {
@@ -445,7 +523,7 @@ class ActionEditorState extends State<ActionEditor> {
     if (termin._validated['ort'] == ValidationState.not_validated ||
         termin._validated['ort'] == ValidationState.error)
       text = Text("Wähle einen Ort", style: TextStyle(color: DweTheme.purple));
-    else{
+    else {
       text = Text("in " + termin.ort.ort);
     }
     return build_text_row(text, termin._validated['ort']);
@@ -469,7 +547,6 @@ class ActionEditorState extends State<ActionEditor> {
       this.action._validated['typ'] =
           this.action.typ == '' ? ValidationState.error : ValidationState.ok;
     }
-
 
     if (this.action.tage?.isEmpty ?? true) {
       this.action._validated['tage'] = ValidationState.error;
@@ -497,10 +574,9 @@ class ActionEditorState extends State<ActionEditor> {
             this.action.von.hour, this.action.von.minute);
         DateTime end = new DateTime(tag.year, tag.month, tag.day,
             this.action.bis.hour, this.action.bis.minute);
-        if (ChronoHelfer.isTimeOfDayBefore(this.action.bis, this.action.von))
-          {
-            end = end.add(Duration(days: 1));
-          }
+        if (ChronoHelfer.isTimeOfDayBefore(this.action.bis, this.action.von)) {
+          end = end.add(Duration(days: 1));
+        }
         termine.add(Termin(widget.initAction?.id, begin, end, this.action.ort,
             this.action.typ, null, null, this.action.terminDetails));
       }
@@ -527,13 +603,12 @@ class ActionEditorState extends State<ActionEditor> {
       action._validated['fertig_pressed'] = true;
       validateInput();
     });
-    if(action._validated['all'] == ValidationState.ok)
-      {
-        List<Termin> termine = generateActions();
-        if (termine != null) {
-          Navigator.pop(context, generateActions());
-        }
+    if (action._validated['all'] == ValidationState.ok) {
+      List<Termin> termine = generateActions();
+      if (termine != null) {
+        Navigator.pop(context, generateActions());
       }
+    }
   }
 
   void validateTerminDetails() {

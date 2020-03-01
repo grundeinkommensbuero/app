@@ -6,14 +6,37 @@ import 'package:test/test.dart';
 void main() {
   group('serialisere', () {
     test('serialisiert Ort mit id, Bezirk und Ort', () {
-      expect(jsonEncode(Ort(1, 'bezirk1', 'ort1')),
+      expect(jsonEncode(Ort(1, 'bezirk1', 'ort1',null,null)),
           '{"id":1,"bezirk":"bezirk1","ort":"ort1"}');
     });
   });
 }
 
-Ort goerli() => Ort(0, "Friedrichshain-Kreuzberg", "Görlitzer Park und Umgebung");
+Ort goerli() => Ort(0, "Friedrichshain-Kreuzberg", "Görlitzer Park und Umgebung",null,null);
 
-Ort nordkiez() => Ort(1, "Friedrichshain-Kreuzberg", "Friedrichshain Nordkiez");
+Ort nordkiez() => Ort(1, "Friedrichshain-Kreuzberg", "Friedrichshain Nordkiez",null,null);
 
-Ort treptowerPark() => Ort(2, "Friedrichshain-Kreuzberg", "Treptower Park");
+Ort treptowerPark() => Ort(2, "Friedrichshain-Kreuzberg", "Treptower Park",null,null);
+
+/*import 'dart:convert';
+
+import 'package:sammel_app/model/Ort.dart';
+import 'package:test/test.dart';
+
+void main() {
+  group('serialisere', () {
+    test('serialisiert Ort mit id, Bezirk und Ort', () {
+      expect(jsonEncode(Ort(1, 'bezirk1', 'ort1', 52.49653, 13.43762)),
+          '{"id":1,"bezirk":"bezirk1","ort":"ort1","lattitude":52.49653,"longitude":13.43762}');
+    });
+  });
+}
+
+Ort goerli() => Ort(0, 'Friedrichshain-Kreuzberg',
+    'Görlitzer Park und Umgebung', 52.51579, 13.45399);
+
+Ort nordkiez() => Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
+    52.48993, 13.46839);
+
+Ort treptowerPark() =>
+    Ort(2, 'Friedrichshain-Kreuzberg', 'Treptower Park', 52.49653, 13.43762);*/

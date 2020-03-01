@@ -28,15 +28,17 @@ open class StammdatenRestResource {
     data class OrtDto(
             var id: Int? = null,
             var bezirk: String? = null,
-            var ort: String? = null) {
+            var ort: String? = null,
+            var lattitude: Double? = null,
+            var longitude: Double? = null) {
 
         fun convertToOrt(): Ort {
-            return Ort(id ?: 0, bezirk ?: "", ort ?: "", 52.518611, 13.408333)
+            return Ort(id ?: 0, bezirk ?: "", ort ?: "", lattitude, longitude)
         }
 
         companion object {
             fun convertFromOrt(ort: Ort): OrtDto {
-                return OrtDto(ort.id, ort.bezirk, ort.ort)
+                return OrtDto(ort.id, ort.bezirk, ort.ort, ort.lattitude, ort.longitude)
             }
         }
     }

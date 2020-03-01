@@ -89,11 +89,12 @@ class TermineService extends AbstractTermineService {
 }
 
 class DemoTermineService extends AbstractTermineService {
-  static Ort nordkiez =
-      Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez');
-  static Ort treptowerPark = Ort(2, 'Treptow-Köpenick', 'Treptower Park');
-  static Ort goerli =
-      Ort(3, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung');
+  static Ort nordkiez = Ort(1, 'Friedrichshain-Kreuzberg',
+      'Friedrichshain Nordkiez', 52.51579, 13.45399);
+  static Ort treptowerPark =
+      Ort(2, 'Treptow-Köpenick', 'Treptower Park', 52.48993, 13.46839);
+  static Ort goerli = Ort(3, 'Friedrichshain-Kreuzberg',
+      'Görlitzer Park und Umgebung', 52.49653, 13.43762);
   static var heute = DateTime.now();
   List<Termin> termine = [
     Termin(

@@ -15,7 +15,7 @@ void main() {
               1,
               DateTime(2020, 1, 2, 15, 0, 0),
               DateTime(2020, 1, 2, 18, 0, 0),
-              Ort(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez'),
+              Ort(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez', 52.49653, 13.43762),
               'Sammeln',
               52.52116,
               13.41331,
@@ -24,7 +24,7 @@ void main() {
           '"id":1,'
           '"beginn":"2020-01-02T15:00:00.000",'
           '"ende":"2020-01-02T18:00:00.000",'
-          '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez"},'
+          '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez","lattitude":52.49653,"longitude":13.43762},'
           '"typ":"Sammeln",'
           '"lattitude":52.52116,'
           '"longitude":13.41331,'
@@ -37,7 +37,7 @@ void main() {
               1,
               DateTime(2020, 1, 2, 15, 0, 0),
               DateTime(2020, 1, 2, 18, 0, 0),
-              Ort(15, "Friedrichshain-Kreuzberg", "Fhain - Nordkiez"),
+              Ort(15, "Friedrichshain-Kreuzberg", "Fhain - Nordkiez", 52.49653, 13.43762),
               'Sammeln',
               52.52116,
               13.41331,
@@ -46,7 +46,7 @@ void main() {
           '"id":1,'
           '"beginn":"2020-01-02T15:00:00.000",'
           '"ende":"2020-01-02T18:00:00.000",'
-          '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez"},'
+          '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez","lattitude":52.49653,"longitude":13.43762},'
           '"typ":"Sammeln",'
           '"lattitude":52.52116,'
           '"longitude":13.41331,'
@@ -64,7 +64,7 @@ void main() {
           '"id":1,'
           '"beginn":"2020-01-02T15:00:00.000",'
           '"ende":"2020-01-02T18:00:00.000",'
-          '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez"},'
+          '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez","lattitude":52.49653,"longitude":13.43762},'
           '"typ":"Sammeln",'
           '"lattitude":52.52116,'
           '"longitude":13.41331}'));
@@ -75,7 +75,7 @@ void main() {
       expect(termin.lattitude, 52.52116);
       expect(termin.longitude, 13.41331);
       expect(termin.ort.toString(),
-          Ort(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez').toString());
+          Ort(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez', 52.49653, 13.43762).toString());
       expect(termin.details, isNull);
     });
 
