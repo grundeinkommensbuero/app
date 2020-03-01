@@ -1,6 +1,6 @@
-<module xmlns="urn:jboss:module:1.0" name="com.mysql">
+<module xmlns="urn:jboss:module:1.0" name="org.mariadb">
     <resources>
-        <resource-root path="mysql-connector-java-5.1.48.jar" />
+        <resource-root path="mariadb-java-client-2.5.4.jar"/>
     </resources>
     <dependencies>
         <module name="javax.api"/>

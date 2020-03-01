@@ -172,28 +172,33 @@
                         <password>sa</password>
                     </security>
                 </datasource>
-                <datasource jndi-name="java:jboss/datasources/mysqlDS" pool-name="mySqlDS"
+                <datasource jndi-name="java:jboss/datasources/mariaDBDS" pool-name="mariaDBDS"
                             statistics-enabled="${wildfly.datasources.statistics-enabled:${wildfly.statistics-enabled:false}}">
-                    <connection-url>jdbc:mysql://db:3306/db</connection-url>
-                    <driver>mysql</driver>
+                    <connection-url>jdbc:mariadb://db:3306/db</connection-url>
+                    <driver>mariaDB</driver>
+                    <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
+                    <pool>
+                        <min-pool-size>100</min-pool-size>
+                        <max-pool-size>200</max-pool-size>
+                    </pool>
                     <security>
                         <user-name>user</user-name>
                         <password>password</password>
                     </security>
                     <validation>
-                        <valid-connection-checker
-                                class-name="org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLValidConnectionChecker"></valid-connection-checker>
-                        <exception-sorter
-                                class-name="org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLExceptionSorter"></exception-sorter>
+                        <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLValidConnectionChecker"/>
+                        <validate-on-match>true</validate-on-match>
+                        <background-validation>false</background-validation>
+                        <exception-sorter class-name="org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLExceptionSorter"/>
                     </validation>
                 </datasource>
                 <drivers>
                     <driver name="h2" module="com.h2database.h2">
                         <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
                     </driver>
-                    <driver name="mysql" module="com.mysql">
-                        <driver-class>com.mysql.jdbc.Driver</driver-class>
-                        <xa-datasource-class>com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</xa-datasource-class>
+                    <driver name="mariaDB" module="org.mariadb">
+                        <driver-class>org.mariadb.jdbc.Driver</driver-class>
+                        <xa-datasource-class>org.mariadb.jdbc.MariaDbDataSource</xa-datasource-class>
                     </driver>
                 </drivers>
             </datasources>

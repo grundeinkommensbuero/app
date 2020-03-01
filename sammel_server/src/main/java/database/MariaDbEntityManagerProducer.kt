@@ -6,8 +6,8 @@ import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
 
 @ApplicationScoped
-class MySqlEntityManagerProducer {
-    @PersistenceContext(unitName = "mysql")
+class MariaDbEntityManagerProducer {
+    @PersistenceContext(unitName = "mariaDB")
     private lateinit var entityManager: EntityManager
 
     @Produces
