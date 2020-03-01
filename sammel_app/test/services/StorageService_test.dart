@@ -98,12 +98,16 @@ void main() async {
             {
               'id': 1,
               'bezirk': 'Friedrichshain-Kreuzberg',
-              'ort': 'Friedrichshain Nordkiez'
+              'ort': 'Friedrichshain Nordkiez',
+              'lattitude': 52.51579,
+              'longitude': 13.45399
             ***REMOVED***,
             {
               'id': 2,
               'bezirk': 'Friedrichshain-Kreuzberg',
-              'ort': 'Görlitzer Park und Umgebung'
+              'ort': 'Görlitzer Park und Umgebung',
+              'lattitude': 52.49653,
+              'longitude': 13.43762
             ***REMOVED***
           ]));
     ***REMOVED***);
@@ -137,12 +141,16 @@ void main() async {
             {
               'id': 1,
               'bezirk': 'Friedrichshain-Kreuzberg',
-              'ort': 'Friedrichshain Nordkiez'
+              'ort': 'Friedrichshain Nordkiez',
+              'lattitude': 52.51579,
+              'longitude': 13.45399
             ***REMOVED***,
             {
               'id': 2,
               'bezirk': 'Friedrichshain-Kreuzberg',
-              'ort': 'Görlitzer Park und Umgebung'
+              'ort': 'Görlitzer Park und Umgebung',
+              'lattitude': 52.49653,
+              'longitude': 13.43762
             ***REMOVED***
           ]));
     ***REMOVED***);
