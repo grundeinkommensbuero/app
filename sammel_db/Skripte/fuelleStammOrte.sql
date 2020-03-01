@@ -1,3 +1,3 @@
-INSERT INTO db.Stamm_Orte (bezirk, ort) VALUES ('Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez');
-INSERT INTO db.Stamm_Orte (bezirk, ort) VALUES ('Treptow-Köpenick', 'Treptower Park');
-INSERT INTO db.Stamm_Orte (bezirk, ort) VALUES ('Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung');
+INSERT INTO db.Stamm_Orte (bezirk, ort, lattitude, longitude) VALUES ('Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez', 52.51579, 13.45399);
+INSERT INTO db.Stamm_Orte (bezirk, ort, lattitude, longitude) VALUES ('Treptow-Köpenick', 'Treptower Park', 52.48993, 13.46839);
+INSERT INTO db.Stamm_Orte (bezirk, ort, lattitude, longitude) VALUES ('Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung', 52.49653, 13.43762);
