@@ -19,15 +19,12 @@ import 'VenueDialog.dart';
 enum ValidationState { not_validated, error, ok }
 
 class ActionData {
-  TimeOfDay von = TimeOfDay.fromDateTime(DateTime.now());
-  TimeOfDay bis =
-      TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 1)));
-  Ort ort =
-      Ort(0, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez', null, null);
-  String typ = 'Sammeln';
-  List<DateTime> tage = [DateTime.now()];
-  TerminDetails terminDetails =
-      TerminDetails('Weltzeituhr', 'Es gibt Kuchen', 'Ich bin ich');
+  TimeOfDay von;
+  TimeOfDay bis;
+  Ort ort;
+  String typ;
+  List<DateTime> tage;
+  TerminDetails terminDetails;
   LatLng coordinates;
 
   ActionData.testDaten();
