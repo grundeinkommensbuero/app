@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
@@ -12,6 +13,8 @@ import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/LocationPicker.dart';
 import 'package:sammel_app/shared/showMultipleDatePicker.dart';
 import 'package:sammel_app/shared/showTimeRangePicker.dart';
+
+import 'VenueDialog.dart';
 
 enum ValidationState { not_validated, error, ok }
 
@@ -25,11 +28,18 @@ class ActionData {
   List<DateTime> tage = [DateTime.now()];
   TerminDetails terminDetails =
       TerminDetails('Weltzeituhr', 'Es gibt Kuchen', 'Ich bin ich');
+  LatLng coordinates;
 
   ActionData.testDaten();
 
   ActionData(
-      [this.von, this.bis, this.ort, this.typ, this.tage, this.terminDetails]) {
+      [this.von,
+      this.bis,
+      this.ort,
+      this.typ,
+      this.tage,
+      this.terminDetails,
+      this.coordinates]) {
     if (this.tage == null) this.tage = [];
     if (this.terminDetails == null)
       this.terminDetails = TerminDetails('', '', '');
@@ -41,9 +51,8 @@ class ActionData {
     'ort': ValidationState.not_validated,
     'typ': ValidationState.not_validated,
     'tage': ValidationState.not_validated,
-    'terminDetails': ValidationState.not_validated,
     'all': ValidationState.not_validated,
-    'treffpunkt': ValidationState.not_validated,
+    'venue': ValidationState.not_validated,
     'kontakt': ValidationState.not_validated,
     'kommentar': ValidationState.not_validated,
     'fertig_pressed': false
@@ -66,7 +75,7 @@ class ActionEditorState extends State<ActionEditor> {
 
   ActionEditorState(Termin initAction) : super() {
     assign_initial_termin(initAction);
-    validateInput();
+    validateAllInput();
   }
 
   void assign_initial_termin(Termin initAction) {
@@ -83,6 +92,7 @@ class ActionEditorState extends State<ActionEditor> {
       if (initAction.details != null) {
         action.terminDetails = initAction.details;
       }
+      action.coordinates = LatLng(initAction.lattitude, initAction.longitude);
     }
   }
 
@@ -183,82 +193,21 @@ class ActionEditorState extends State<ActionEditor> {
   }
 
   void venueSelection() async {
-    Marker marker;
-    String current_input = this.action.terminDetails.treffpunkt;
+    LatLng center;
+    if (action.ort?.lattitude != null && action.ort?.lattitude != null)
+      center = LatLng(action.ort.lattitude, action.ort.longitude);
+    if (action.coordinates?.latitude != null &&
+        action.coordinates?.longitude != null)
+      center =
+          LatLng(action.coordinates.latitude, action.coordinates.longitude);
 
-    var ergebnis = await showDialog(
-      context: context,
-      builder: (BuildContext context) => StatefulBuilder(
-          builder: (context, setDialogState) => AlertDialog(
-                key: Key('treffpunkt input dialog'),
-                title: Text('Treffpunkt'),
-                content: SingleChildScrollView(
-                    child: ListBody(children: [
-                  SizedBox(
-                      height: 300.0,
-                      width: 300.0,
-                      child: FlutterMap(
-                          options: MapOptions(
-                              center: LatLng(52.5170365, 13.3888599),
-                              zoom: 10.0,
-                              maxZoom: 19.0,
-                              onTap: (LatLng point) => setDialogState(() =>
-                                  marker = Marker(
-                                      point: point,
-                                      builder: (context) => Icon(
-                                          Icons.supervised_user_circle,
-                                          size: 30.0)))),
-                          layers: [
-                            TileLayerOptions(
-                                urlTemplate:
-                                    "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
-                                subdomains: ['a', 'b', 'c']),
-                            MarkerLayerOptions(
-                                markers: marker == null ? [] : [marker])
-                          ])),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  Text(
-                    'Du kannst auch eine eigene Beschreibung angeben, '
-                    'z.B. "Unter der Weltzeituhr" oder "Tempelhofer Feld, '
-                    'Eingang Kienitzstraße":',
-                    textScaleFactor: 0.9,
-                  ),
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  TextFormField(
-                    initialValue: this.action.terminDetails.treffpunkt,
-                    keyboardType: TextInputType.multiline,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                    ),
-                    onChanged: (current_input_) {
-                      current_input = current_input_;
-                    },
-                  ),
-                ])),
-                actions: [
-                  FlatButton(
-                    child: Text("Abbrechen"),
-                    onPressed: () {
-                      Navigator.pop(
-                          context, this.action.terminDetails.treffpunkt);
-                    },
-                  ),
-                  FlatButton(
-                    child: Text("Fertig"),
-                    onPressed: () {
-                      Navigator.pop(context, current_input);
-                    },
-                  ),
-                ],
-              )),
-    );
+    Venue ergebnis = await showVenueDialog(
+        context, action.terminDetails.treffpunkt, action.coordinates, center);
+
     setState(() {
-      this.action.terminDetails.treffpunkt = ergebnis;
-      validateInput();
+      action.terminDetails.treffpunkt = ergebnis.description;
+      action.coordinates = ergebnis.coordinates;
+      validateAllInput();
     });
   }
 
@@ -272,7 +221,7 @@ class ActionEditorState extends State<ActionEditor> {
         Key('contact input dialog'));
     setState(() {
       this.action.terminDetails.kontakt = ergebnis;
-      validateInput();
+      validateAllInput();
     });
   }
 
@@ -368,7 +317,7 @@ class ActionEditorState extends State<ActionEditor> {
 
     setState(() {
       this.action.typ = ausgewTyp;
-      validateInput();
+      validateAllInput();
     });
   }
 
@@ -380,7 +329,7 @@ class ActionEditorState extends State<ActionEditor> {
       if (selectedDates != null)
         this.action.tage = selectedDates
           ..sort((dt1, dt2) => dt1.compareTo(dt2));
-      validateInput();
+      validateAllInput();
     });
   }
 
@@ -390,7 +339,7 @@ class ActionEditorState extends State<ActionEditor> {
     setState(() {
       this.action.von = timeRange.from;
       this.action.bis = timeRange.to;
-      validateInput();
+      validateAllInput();
     });
   }
 
@@ -406,7 +355,7 @@ class ActionEditorState extends State<ActionEditor> {
     setState(() {
       if (!selectedLocations.isEmpty) {
         this.action.ort = selectedLocations[0];
-        validateInput();
+        validateAllInput();
       }
     });
   }
@@ -419,7 +368,7 @@ class ActionEditorState extends State<ActionEditor> {
         Key('description input dialog'));
     setState(() {
       this.action.terminDetails.kommentar = ergebnis;
-      validateInput();
+      validateAllInput();
     });
   }
 
@@ -451,14 +400,13 @@ class ActionEditorState extends State<ActionEditor> {
     } else {
       text = Text('Treffpunkt: ${termin.terminDetails.treffpunkt}');
     }
-    return build_text_row(text, this.action._validated['treffpunkt']);
+    return build_text_row(text, this.action._validated['venue']);
   }
 
   Widget contactButtonCaption(ActionData termin) {
     Text text = null;
     ValidationState val = null;
-    if (this.action._validated['kontakt'] == ValidationState.ok &&
-        this.action._validated['terminDetails'] == ValidationState.ok) {
+    if (this.action._validated['kontakt'] == ValidationState.ok) {
       text = Text(termin.terminDetails.kontakt);
       val = ValidationState.ok;
     } else {
@@ -537,36 +485,76 @@ class ActionEditorState extends State<ActionEditor> {
     }
   }
 
-  void validateInput() {
+  void validateAllInput() {
     validateAgainstNull(this.action.von, 'von');
     validateAgainstNull(this.action.bis, 'bis');
+    validateAgainstNull(this.action.ort, 'ort');
+    validateDays();
+    validateTyp();
+    validateVenue();
+    validateDescription();
+    validateContact();
+
+    action._validated['all'] = ValidationState.ok;
+    for (var value in this.action._validated.values) {
+      if (value == ValidationState.error ||
+          value == ValidationState.not_validated) {
+        action._validated['all'] = ValidationState.error;
+        break;
+      }
+    }
+  }
+
+  void validateContact() {
+    if (this.action.terminDetails.kontakt == null) {
+      this.action._validated['kontakt'] = ValidationState.error;
+    } else {
+      this.action._validated['kontakt'] =
+          this.action.terminDetails.kontakt == ''
+              ? ValidationState.error
+              : ValidationState.ok;
+    }
+  }
+
+  void validateDescription() {
+    if (this.action.terminDetails.kommentar == null) {
+      this.action._validated['kommentar'] = ValidationState.error;
+    } else {
+      this.action._validated['kommentar'] =
+          this.action.terminDetails.kommentar == ''
+              ? ValidationState.error
+              : ValidationState.ok;
+    }
+  }
+
+  void validateVenue() {
+    if ((action.terminDetails.treffpunkt?.isEmpty ?? true) ||
+        action.coordinates?.latitude == null ||
+        action.coordinates?.longitude == null) {
+      this.action._validated['venue'] = ValidationState.error;
+    } else
+      this.action._validated['venue'] = ValidationState.ok;
+  }
+
+  void validateDays() {
     validateAgainstNull(this.action.tage, 'tage');
+
+    if (this.action.tage?.isEmpty ?? true) {
+      this.action._validated['tage'] = ValidationState.error;
+    }
+  }
+
+  void validateTyp() {
     validateAgainstNull(this.action.typ, 'typ');
 
     if (this.action._validated['typ'] == ValidationState.ok) {
       this.action._validated['typ'] =
           this.action.typ == '' ? ValidationState.error : ValidationState.ok;
     }
-
-    if (this.action.tage?.isEmpty ?? true) {
-      this.action._validated['tage'] = ValidationState.error;
-    }
-    validateAgainstNull(this.action.ort, 'ort');
-    validateTerminDetails();
-    ValidationState all = ValidationState.ok;
-    action._validated['all'] = ValidationState.ok;
-    for (var value in this.action._validated.values) {
-      if (value == ValidationState.error ||
-          value == ValidationState.not_validated) {
-        all = ValidationState.error;
-        break;
-      }
-    }
-    action._validated['all'] = all;
   }
 
   List<Termin> generateActions() {
-    validateInput();
+    validateAllInput();
     if (action._validated['all'] == ValidationState.ok) {
       List<Termin> termine = new List<Termin>();
       for (final tag in this.action.tage) {
@@ -577,23 +565,18 @@ class ActionEditorState extends State<ActionEditor> {
         if (ChronoHelfer.isTimeOfDayBefore(this.action.bis, this.action.von)) {
           end = end.add(Duration(days: 1));
         }
-        termine.add(Termin(widget.initAction?.id, begin, end, this.action.ort,
-            this.action.typ, null, null, this.action.terminDetails));
+        termine.add(Termin(
+            widget.initAction?.id,
+            begin,
+            end,
+            this.action.ort,
+            this.action.typ,
+            action.coordinates.latitude,
+            action.coordinates.longitude,
+            this.action.terminDetails));
       }
       return termine;
-    }
-    /*
-    // TODO Popup bei Invalidem Inhalt
-    if (this.action.von != null &&
-        this.action.bis != null &&
-        this.action.tage != null &&
-        !this.action.tage.isEmpty &&
-        this.action.ort != null &&
-        this.action.typ != null &&
-        this.action.typ != '') {
-
-    }*/
-    else {
+    } else {
       return null;
     }
   }
@@ -601,7 +584,7 @@ class ActionEditorState extends State<ActionEditor> {
   fertigPressed() {
     setState(() {
       action._validated['fertig_pressed'] = true;
-      validateInput();
+      validateAllInput();
     });
     if (action._validated['all'] == ValidationState.ok) {
       List<Termin> termine = generateActions();
@@ -611,46 +594,12 @@ class ActionEditorState extends State<ActionEditor> {
     }
   }
 
-  void validateTerminDetails() {
-    if (this.action.terminDetails == null) {
-      this.action._validated['terminDetails'] = ValidationState.error;
-    } else {
-      this.action._validated['terminDetails'] = ValidationState.ok;
-
-      if (this.action.terminDetails.treffpunkt == null) {
-        this.action._validated['treffpunkt'] = ValidationState.error;
-      } else {
-        this.action._validated['treffpunkt'] =
-            this.action.terminDetails.treffpunkt == ''
-                ? ValidationState.error
-                : ValidationState.ok;
-      }
-      if (this.action.terminDetails.kommentar == null) {
-        this.action._validated['kommentar'] = ValidationState.error;
-      } else {
-        this.action._validated['kommentar'] =
-            this.action.terminDetails.kommentar == ''
-                ? ValidationState.error
-                : ValidationState.ok;
-      }
-      if (this.action.terminDetails.kontakt == null) {
-        this.action._validated['kontakt'] = ValidationState.error;
-      } else {
-        this.action._validated['kontakt'] =
-            this.action.terminDetails.kontakt == ''
-                ? ValidationState.error
-                : ValidationState.ok;
-      }
-    }
-  }
-
-  Row build_text_row(Text text, ValidationState val) {
-    List<Widget> w = [Flexible( child: text)];
+  Row build_text_row(Text text, ValidationState valState) {
+    List<Widget> w = [Flexible(child: text)];
     if (action._validated['fertig_pressed']) {
-      if (val == ValidationState.ok) {
+      if (valState == ValidationState.ok) {
         w.add(Icon(Icons.done, color: Colors.black));
-      }
-      else {
+      } else {
         w.add(Icon(Icons.error_outline));
       }
     }
@@ -662,6 +611,7 @@ class InputButton extends StatelessWidget {
   Function onTap;
   Widget child;
   Key key;
+
   InputButton({this.onTap, this.child, this.key}) : super(key: key);
 
   @override

@@ -142,8 +142,6 @@ class TermineSeiteState extends State<TermineSeite> {
                 )
               ]);
         });
-    print('action editor pop');
-    print(newActions);
 
     if (newActions != null) {
       newActions.forEach((action) => createNewAction(action).then((action) {
@@ -334,6 +332,7 @@ class TermineSeiteState extends State<TermineSeite> {
                 )
               ]);
         });
+    if (editedAction == null) return null;
     return editedAction[0];
   }
 

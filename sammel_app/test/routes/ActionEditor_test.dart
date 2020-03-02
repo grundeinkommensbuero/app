@@ -86,7 +86,7 @@ void main() {
           tester.state(find.byKey(Key('action editor')));
       action_data.setState(() {
         action_data.action.typ = TerminTestDaten.einTermin().typ;
-        action_data.validateInput();
+        action_data.validateAllInput();
       });
       await tester.pump();
       expect(
@@ -102,7 +102,7 @@ void main() {
           tester.state(find.byKey(Key('action editor')));
       action_data.setState(() {
         action_data.action.typ = '';
-        action_data.validateInput();
+        action_data.validateAllInput();
       });
       await tester.pump();
       expect(
@@ -130,7 +130,7 @@ void main() {
       action_data.setState(() {
         action_data.action.von = von;
         action_data.action.bis = bis;
-        action_data.validateInput();
+        action_data.validateAllInput();
       });
       await tester.pump();
       expect(find.text('von 12:05 bis 13:09'), findsOneWidget);
@@ -143,7 +143,7 @@ void main() {
       action_data.setState(() {
         action_data.action.von = null;
         action_data.action.bis = null;
-        action_data.validateInput();
+        action_data.validateAllInput();
       });
       await tester.pump();
       expect(find.text('Wähle eine Uhrzeit'), findsOneWidget);
@@ -228,7 +228,7 @@ void main() {
 
       action_data.setState(() {
         action_data.action.tage = List<DateTime>();
-        action_data.validateInput();
+        action_data.validateAllInput();
       });
       await tester.pump();
       expect(find.text("Wähle einen Tag"), findsOneWidget);
@@ -265,7 +265,7 @@ void main() {
         action_data.action.tage = [DateTime(2019, 12, 1)];
         action_data.action.von = TimeOfDay(hour: 10, minute: 32);
         action_data.action.bis = TimeOfDay(hour: 10, minute: 31);
-        action_data.validateInput();
+        action_data.validateAllInput();
       });
       List<Termin> new_termine = action_data.generateActions();
       expect(new_termine[0].ende.day, 2);
