@@ -31,13 +31,23 @@ class ActionMapState extends State<ActionMap> {
       ),
       layers: [
         TileLayerOptions(
-            urlTemplate: "https://{s***REMOVED***.tile.openstreetmap.org/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
+            urlTemplate: "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
             subdomains: ['a', 'b', 'c']),
+//        PolygonLayerOptions(polygons: [
+//          Polygon(
+//              color: Color.fromARGB(40, DweTheme.purple.red, DweTheme.purple.green, DweTheme.purple.blue),
+//              borderStrokeWidth: 2.0,
+//              borderColor: Color.fromARGB(150, DweTheme.purple.red, DweTheme.purple.green, DweTheme.purple.blue),
+//              points: widget.termine
+//                  .map((action) => LatLng(action.lattitude, action.longitude))
+//                  .toList())
+//        ]),
         MarkerLayerOptions(
             markers: widget.termine
                 .where((action) =>
-                    action.lattitude != null && action.longitude != null)
-                .map((action) => ActionMarker(action,
+            action.lattitude != null && action.longitude != null)
+                .map((action) =>
+                ActionMarker(action,
                     myAction: widget.isMyAction(action.id),
                     onTap: widget.openActionDetails))
                 .toList()),
@@ -52,16 +62,17 @@ class ActionMarker extends Marker {
 
   ActionMarker(Termin action, {this.myAction, this.onTap***REMOVED***)
       : super(
-          width: 30.0,
-          height: 30.0,
-          point: LatLng(action.lattitude, action.longitude),
-          builder: (context) => FlatButton(
-              key: Key('action marker'),
-              onPressed: () => onTap(context, action),
-              color: DweTheme.actionColor(action.ende, myAction),
-              shape: CircleBorder(
-                  side: BorderSide(color: DweTheme.purple, width: 1.0)),
-              padding: EdgeInsets.all(0),
-              child: Image.asset(action.getAsset(centered: true))),
-        );
+    width: 30.0,
+    height: 30.0,
+    point: LatLng(action.lattitude, action.longitude),
+    builder: (context) =>
+        FlatButton(
+            key: Key('action marker'),
+            onPressed: () => onTap(context, action),
+            color: DweTheme.actionColor(action.ende, myAction),
+            shape: CircleBorder(
+                side: BorderSide(color: DweTheme.purple, width: 1.0)),
+            padding: EdgeInsets.all(0),
+            child: Image.asset(action.getAsset(centered: true))),
+  );
 ***REMOVED***
