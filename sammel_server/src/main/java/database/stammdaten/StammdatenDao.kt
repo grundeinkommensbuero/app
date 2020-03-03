@@ -19,7 +19,6 @@ open class StammdatenDao() {
         if(orte.isEmpty()) {
             LOG.error("Stammdaten leer: Keine Orte in Datenbank gefunden")
         }
-        println(orte.map {ort -> ort.lattitude })
         return orte
     }
 }
