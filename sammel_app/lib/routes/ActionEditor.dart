@@ -24,10 +24,19 @@ class ActionData {
   Ort ort;
   String typ;
   List<DateTime> tage;
-  TerminDetails terminDetails;
+  TerminDetails terminDetails = TerminDetails('', '', '');
   LatLng coordinates;
 
-  ActionData.testDaten();
+  ActionData.testDaten() {
+    this.von = TimeOfDay.fromDateTime(DateTime.now());
+    this.bis = TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 1)));
+    this.ort = Ort(
+        0, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez', null, null);
+    this.typ = 'Sammeln';
+    this.tage = [DateTime.now()];
+    this.terminDetails =
+        TerminDetails('Weltzeituhr', 'Es gibt Kuchen', 'Ich bin ich');
+  }
 
   ActionData(
       [this.von,
@@ -35,11 +44,10 @@ class ActionData {
       this.ort,
       this.typ,
       this.tage,
-      this.terminDetails,
+      terminDetails,
       this.coordinates]) {
     if (this.tage == null) this.tage = [];
-    if (this.terminDetails == null)
-      this.terminDetails = TerminDetails('', '', '');
+    if (terminDetails != null) this.terminDetails = terminDetails;
   }
 
   var _validated = {
@@ -57,7 +65,7 @@ class ActionData {
 }
 
 class ActionEditor extends StatefulWidget {
-  Termin initAction = null;
+  Termin initAction;
 
   ActionEditor(Termin initAction, {Key key}) : super(key: key) {
     this.initAction = initAction;
@@ -68,29 +76,27 @@ class ActionEditor extends StatefulWidget {
 }
 
 class ActionEditorState extends State<ActionEditor> {
-  ActionData action = ActionData.testDaten();
+  ActionData action = ActionData();
 
   ActionEditorState(Termin initAction) : super() {
-    assign_initial_termin(initAction);
+    if (initAction != null) assign_initial_termin(initAction);
     validateAllInput();
   }
 
   void assign_initial_termin(Termin initAction) {
-    if (initAction != null) {
-      action.ort = initAction.ort;
-      action.typ = initAction.typ;
-      if (initAction.details != null) action.terminDetails = initAction.details;
-      if (initAction.beginn != null) {
-        action.von = TimeOfDay.fromDateTime(initAction.beginn);
-        action.tage.add(initAction.beginn);
-      }
-      if (initAction.ende != null)
-        action.bis = TimeOfDay.fromDateTime(initAction.ende);
-      if (initAction.details != null) {
-        action.terminDetails = initAction.details;
-      }
-      action.coordinates = LatLng(initAction.lattitude, initAction.longitude);
+    action.ort = initAction.ort;
+    action.typ = initAction.typ;
+    if (initAction.details != null) action.terminDetails = initAction.details;
+    if (initAction.beginn != null) {
+      action.von = TimeOfDay.fromDateTime(initAction.beginn);
+      action.tage.add(initAction.beginn);
     }
+    if (initAction.ende != null)
+      action.bis = TimeOfDay.fromDateTime(initAction.ende);
+    if (initAction.details != null) {
+      action.terminDetails = initAction.details;
+    }
+    action.coordinates = LatLng(initAction.lattitude, initAction.longitude);
   }
 
   @override
@@ -388,8 +394,8 @@ class ActionEditorState extends State<ActionEditor> {
 
   Widget venueButtonCaption(ActionData termin) {
     Text text = null;
-    if (this.action._validated['treffpunkt'] == ValidationState.error ||
-        this.action._validated['treffpunkt'] == ValidationState.not_validated) {
+    if (this.action._validated['venue'] == ValidationState.error ||
+        this.action._validated['venue'] == ValidationState.not_validated) {
       text = Text(
         'Gib einen Treffpunkt an',
         style: TextStyle(color: DweTheme.purple),
