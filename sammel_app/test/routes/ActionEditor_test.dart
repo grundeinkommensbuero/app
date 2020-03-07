@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latlong/latlong.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Termin.dart';
+import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
@@ -269,6 +271,135 @@ void main() {
       });
       List<Termin> new_termine = action_data.generateActions();
       expect(new_termine[0].ende.day, 2);
+    });
+  });
+  group('validates', () {
+    var actionEditor = ActionEditorState(TerminTestDaten.einTermin());
+    setUp(() {
+      actionEditor.action = ActionData(
+          TimeOfDay.now(),
+          TimeOfDay.now(),
+          nordkiez(),
+          'Sammeln',
+          [DateTime.now()],
+          TerminDetails('treffpunkt', 'kommentar', 'kontakt'),
+          LatLng(52.48993, 13.46839));
+    });
+
+    test('all inputs valid with correct values', () {
+      actionEditor.validateAllInput();
+
+      expect(actionEditor.action.validated['all'], ValidationState.ok);
+    });
+
+    test('von', () {
+      actionEditor.action.von = null;
+      actionEditor.validateAllInput();
+
+      expect(actionEditor.action.validated['von'], ValidationState.error);
+      expect(actionEditor.action.validated['all'], ValidationState.error);
+    });
+
+    test('bis', () {
+      actionEditor.action.bis = null;
+      actionEditor.validateAllInput();
+
+      expect(actionEditor.action.validated['bis'], ValidationState.error);
+      expect(actionEditor.action.validated['all'], ValidationState.error);
+    });
+
+    test('ort', () {
+      actionEditor.action.ort = null;
+      actionEditor.validateAllInput();
+
+      expect(actionEditor.action.validated['ort'], ValidationState.error);
+      expect(actionEditor.action.validated['all'], ValidationState.error);
+    });
+
+    test('typ', () {
+      actionEditor.action.typ = null;
+      actionEditor.validateAllInput();
+
+      expect(actionEditor.action.validated['typ'], ValidationState.error);
+      expect(actionEditor.action.validated['all'], ValidationState.error);
+
+      actionEditor.action.typ = '';
+      actionEditor.validateAllInput();
+
+      expect(actionEditor.action.validated['typ'], ValidationState.error);
+      expect(actionEditor.action.validated['all'], ValidationState.error);
+    });
+
+    test('venue', () {
+      actionEditor.action.terminDetails.treffpunkt = null;
+      actionEditor.validateAllInput();
+
+      expect(actionEditor.action.validated['venue'], ValidationState.error);
+      expect(actionEditor.action.validated['all'], ValidationState.error);
+
+      actionEditor.action.terminDetails.treffpunkt = '';
+      actionEditor.validateAllInput();
+
+      expect(actionEditor.action.validated['venue'], ValidationState.error);
+      expect(actionEditor.action.validated['all'], ValidationState.error);
+
+      actionEditor.action.terminDetails.treffpunkt = 'treffpunkt';
+      actionEditor.action.coordinates = null;
+      actionEditor.validateAllInput();
+
+      expect(actionEditor.action.validated['venue'], ValidationState.error);
+      expect(actionEditor.action.validated['all'], ValidationState.error);
+    });
+
+    test('description', () {
+      actionEditor.action.terminDetails.kommentar = null;
+      actionEditor.validateAllInput();
+
+      expect(actionEditor.action.validated['kommentar'], ValidationState.error);
+      expect(actionEditor.action.validated['all'], ValidationState.error);
+
+      actionEditor.action.terminDetails.kommentar = '';
+      actionEditor.validateAllInput();
+
+      expect(actionEditor.action.validated['kommentar'], ValidationState.error);
+      expect(actionEditor.action.validated['all'], ValidationState.error);
+    });
+
+    test('contact', () {
+      actionEditor.action.terminDetails.kontakt = null;
+      actionEditor.validateAllInput();
+
+      expect(actionEditor.action.validated['kontakt'], ValidationState.error);
+      expect(actionEditor.action.validated['all'], ValidationState.error);
+
+      actionEditor.action.terminDetails.kontakt = '';
+      actionEditor.validateAllInput();
+
+      expect(actionEditor.action.validated['kontakt'], ValidationState.error);
+      expect(actionEditor.action.validated['all'], ValidationState.error);
+    });
+
+    testWidgets('triggers validation on Fertig button',
+        (WidgetTester tester) async {
+      var actionEditor = ActionEditor(null);
+      await tester.pumpWidget(MaterialApp(home: Scaffold(body: actionEditor)));
+
+      ActionEditorState state = tester.state(find.byWidget(actionEditor));
+
+      expect(state.action.validated['all'], ValidationState.error);
+
+      state.action = ActionData(
+          TimeOfDay.now(),
+          TimeOfDay.now(),
+          nordkiez(),
+          'Sammeln',
+          [DateTime.now()],
+          TerminDetails('treffpunkt', 'kommentar', 'kontakt'),
+          LatLng(52.48993, 13.46839));
+
+      await tester.tap(find.byKey(Key('action editor finish button')));
+
+      expect(state.action.validated['all'], ValidationState.ok);
     });
   });
 }

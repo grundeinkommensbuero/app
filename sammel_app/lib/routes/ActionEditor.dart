@@ -50,7 +50,7 @@ class ActionData {
     if (terminDetails != null) this.terminDetails = terminDetails;
   }
 
-  var _validated = {
+  var validated = {
     'von': ValidationState.not_validated,
     'bis': ValidationState.not_validated,
     'ort': ValidationState.not_validated,
@@ -377,8 +377,8 @@ class ActionEditorState extends State<ActionEditor> {
 
   Widget daysButtonCaption() {
     Text text = null;
-    if (this.action._validated['tage'] == ValidationState.error ||
-        this.action._validated['tage'] == ValidationState.not_validated) {
+    if (this.action.validated['tage'] == ValidationState.error ||
+        this.action.validated['tage'] == ValidationState.not_validated) {
       text = Text("Wähle einen Tag", style: TextStyle(color: DweTheme.purple));
     } else {
       text = Text("am " +
@@ -389,13 +389,13 @@ class ActionEditorState extends State<ActionEditor> {
               .join(", ") +
           ",");
     }
-    return build_text_row(text, this.action._validated['tage']);
+    return build_text_row(text, this.action.validated['tage']);
   }
 
   Widget venueButtonCaption(ActionData termin) {
     Text text = null;
-    if (this.action._validated['venue'] == ValidationState.error ||
-        this.action._validated['venue'] == ValidationState.not_validated) {
+    if (this.action.validated['venue'] == ValidationState.error ||
+        this.action.validated['venue'] == ValidationState.not_validated) {
       text = Text(
         'Gib einen Treffpunkt an',
         style: TextStyle(color: DweTheme.purple),
@@ -403,13 +403,13 @@ class ActionEditorState extends State<ActionEditor> {
     } else {
       text = Text('Treffpunkt: ${termin.terminDetails.treffpunkt}');
     }
-    return build_text_row(text, this.action._validated['venue']);
+    return build_text_row(text, this.action.validated['venue']);
   }
 
   Widget contactButtonCaption(ActionData termin) {
     Text text = null;
     ValidationState val = null;
-    if (this.action._validated['kontakt'] == ValidationState.ok) {
+    if (this.action.validated['kontakt'] == ValidationState.ok) {
       text = Text(termin.terminDetails.kontakt);
       val = ValidationState.ok;
     } else {
@@ -428,24 +428,24 @@ class ActionEditorState extends State<ActionEditor> {
 
   Widget descriptionButtonCaption(ActionData termin) {
     Text text = null;
-    if (this.action._validated['kommentar'] == ValidationState.ok) {
+    if (this.action.validated['kommentar'] == ValidationState.ok) {
       text = Text('Beschreibung: ${termin.terminDetails.kommentar}');
     } else {
       text = Text('Beschreibe die Aktion kurz',
           style: TextStyle(color: DweTheme.purple));
     }
-    return build_text_row(text, this.action._validated['kommentar']);
+    return build_text_row(text, this.action.validated['kommentar']);
   }
 
   Widget typeButtonCaption() {
     Text text = null;
-    if (this.action._validated['typ'] == ValidationState.ok) {
+    if (this.action.validated['typ'] == ValidationState.ok) {
       text = Text(this.action.typ);
     } else {
       text = Text("Wähle die Art der Aktion",
           style: TextStyle(color: DweTheme.purple));
     }
-    return build_text_row(text, this.action._validated['typ']);
+    return build_text_row(text, this.action.validated['typ']);
   }
 
   Row timeButtonCaption(ActionData termin) {
@@ -471,21 +471,13 @@ class ActionEditorState extends State<ActionEditor> {
 
   Widget locationButtonCaption(ActionData termin) {
     Text text = null;
-    if (termin._validated['ort'] == ValidationState.not_validated ||
-        termin._validated['ort'] == ValidationState.error)
+    if (termin.validated['ort'] == ValidationState.not_validated ||
+        termin.validated['ort'] == ValidationState.error)
       text = Text("Wähle einen Ort", style: TextStyle(color: DweTheme.purple));
     else {
       text = Text("in " + termin.ort.ort);
     }
-    return build_text_row(text, termin._validated['ort']);
-  }
-
-  void validateAgainstNull(field, name) {
-    if (field != null) {
-      this.action._validated[name] = ValidationState.ok;
-    } else {
-      this.action._validated[name] = ValidationState.error;
-    }
+    return build_text_row(text, termin.validated['ort']);
   }
 
   void validateAllInput() {
@@ -498,21 +490,29 @@ class ActionEditorState extends State<ActionEditor> {
     validateDescription();
     validateContact();
 
-    action._validated['all'] = ValidationState.ok;
-    for (var value in this.action._validated.values) {
+    action.validated['all'] = ValidationState.ok;
+    for (var value in this.action.validated.values) {
       if (value == ValidationState.error ||
           value == ValidationState.not_validated) {
-        action._validated['all'] = ValidationState.error;
+        action.validated['all'] = ValidationState.error;
         break;
       }
     }
   }
 
+  void validateAgainstNull(field, name) {
+    if (field != null) {
+      this.action.validated[name] = ValidationState.ok;
+    } else {
+      this.action.validated[name] = ValidationState.error;
+    }
+  }
+
   void validateContact() {
     if (this.action.terminDetails.kontakt == null) {
-      this.action._validated['kontakt'] = ValidationState.error;
+      this.action.validated['kontakt'] = ValidationState.error;
     } else {
-      this.action._validated['kontakt'] =
+      this.action.validated['kontakt'] =
           this.action.terminDetails.kontakt == ''
               ? ValidationState.error
               : ValidationState.ok;
@@ -521,9 +521,9 @@ class ActionEditorState extends State<ActionEditor> {
 
   void validateDescription() {
     if (this.action.terminDetails.kommentar == null) {
-      this.action._validated['kommentar'] = ValidationState.error;
+      this.action.validated['kommentar'] = ValidationState.error;
     } else {
-      this.action._validated['kommentar'] =
+      this.action.validated['kommentar'] =
           this.action.terminDetails.kommentar == ''
               ? ValidationState.error
               : ValidationState.ok;
@@ -534,31 +534,31 @@ class ActionEditorState extends State<ActionEditor> {
     if ((action.terminDetails.treffpunkt?.isEmpty ?? true) ||
         action.coordinates?.latitude == null ||
         action.coordinates?.longitude == null) {
-      this.action._validated['venue'] = ValidationState.error;
+      this.action.validated['venue'] = ValidationState.error;
     } else
-      this.action._validated['venue'] = ValidationState.ok;
+      this.action.validated['venue'] = ValidationState.ok;
   }
 
   void validateDays() {
     validateAgainstNull(this.action.tage, 'tage');
 
     if (this.action.tage?.isEmpty ?? true) {
-      this.action._validated['tage'] = ValidationState.error;
+      this.action.validated['tage'] = ValidationState.error;
     }
   }
 
   void validateTyp() {
     validateAgainstNull(this.action.typ, 'typ');
 
-    if (this.action._validated['typ'] == ValidationState.ok) {
-      this.action._validated['typ'] =
+    if (this.action.validated['typ'] == ValidationState.ok) {
+      this.action.validated['typ'] =
           this.action.typ == '' ? ValidationState.error : ValidationState.ok;
     }
   }
 
   List<Termin> generateActions() {
     validateAllInput();
-    if (action._validated['all'] == ValidationState.ok) {
+    if (action.validated['all'] == ValidationState.ok) {
       List<Termin> termine = new List<Termin>();
       for (final tag in this.action.tage) {
         DateTime begin = new DateTime(tag.year, tag.month, tag.day,
@@ -586,10 +586,10 @@ class ActionEditorState extends State<ActionEditor> {
 
   fertigPressed() {
     setState(() {
-      action._validated['fertig_pressed'] = true;
+      action.validated['fertig_pressed'] = true;
       validateAllInput();
     });
-    if (action._validated['all'] == ValidationState.ok) {
+    if (action.validated['all'] == ValidationState.ok) {
       List<Termin> termine = generateActions();
       if (termine != null) {
         Navigator.pop(context, generateActions());
@@ -599,7 +599,7 @@ class ActionEditorState extends State<ActionEditor> {
 
   Row build_text_row(Text text, ValidationState valState) {
     List<Widget> w = [Flexible(child: text)];
-    if (action._validated['fertig_pressed']) {
+    if (action.validated['fertig_pressed']) {
       if (valState == ValidationState.ok) {
         w.add(Icon(Icons.done, color: Colors.black));
       } else {
