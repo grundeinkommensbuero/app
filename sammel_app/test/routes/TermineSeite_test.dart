@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latlong/latlong.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Termin.dart';
@@ -85,7 +86,8 @@ void main() {
           findsOneWidget);
     });
 
-    testWidgets('shows edit and delete button in Detail Dialog only at own actions',
+    testWidgets(
+        'shows edit and delete button in Detail Dialog only at own actions',
         (WidgetTester tester) async {
       when(terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin()..id = 1,
@@ -317,7 +319,8 @@ void main() {
           goerli(),
           'Infoveranstaltung',
           [today],
-          TerminDetails('test1', 'test2', 'test3'));
+          TerminDetails('test1', 'test2', 'test3'),
+          LatLng(52.49653, 13.43762));
 
       when(terminService.createTermin(any, any)).thenAnswer((_) async => Termin(
           1337,
@@ -380,17 +383,20 @@ void main() {
           goerli(),
           'not this one',
           [today],
-          TerminDetails('test1', 'test2', 'test3'));
+          TerminDetails('test1', 'test2', 'test3'),
+          LatLng(52.49653, 13.43762));
 
-      when(terminService.createTermin(any, any)).thenAnswer((_) async => Termin(
-          1337,
-          today,
-          today.add(Duration(hours: 2)),
-          goerli(),
-          'Infoveranstaltung',
-          52.52116,
-          13.41331,
-          editorState.action.terminDetails));
+      when(terminService.createTermin(any, any)).thenAnswer(
+        (_) async => Termin(
+            1337,
+            today,
+            today.add(Duration(hours: 2)),
+            goerli(),
+            'Infoveranstaltung',
+            52.52116,
+            13.41331,
+            editorState.action.terminDetails),
+      );
 
       await tester.tap(find.byKey(Key('action editor finish button')));
       await tester.pump();
@@ -443,7 +449,8 @@ void main() {
           goerli(),
           'Infoveranstaltung',
           [today],
-          TerminDetails('test1', 'test2', 'test3'));
+          TerminDetails('test1', 'test2', 'test3'),
+          LatLng(52.49653, 13.43762));
 
       when(terminService.createTermin(any, any)).thenAnswer((_) async => Termin(
           1337,
@@ -506,7 +513,8 @@ void main() {
           goerli(),
           'Infoveranstaltung',
           [today],
-          TerminDetails('test1', 'test2', 'test3'));
+          TerminDetails('test1', 'test2', 'test3'),
+          LatLng(52.49653, 13.43762));
 
       when(terminService.createTermin(any, any))
           .thenThrow(RestFehler('message'));
