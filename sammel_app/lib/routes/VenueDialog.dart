@@ -3,86 +3,116 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
-Future showVenueDialog(BuildContext context, String initDescription,
-    LatLng initCoordinates, LatLng center) {
-  Marker marker = initCoordinates != null ? VenueMarker(initCoordinates) : null;
-  Venue venue = Venue(initDescription ?? '', initCoordinates);
+Future showVenueDialog(
+        {BuildContext context,
+        String initDescription,
+        LatLng initCoordinates,
+        LatLng center***REMOVED***) =>
+    showDialog(
+      context: context,
+      child: VenueDialog(initDescription, initCoordinates, center),
+    );
 
-  return showDialog(
-    context: context,
-    builder: (BuildContext context) => StatefulBuilder(
-        builder: (context, setDialogState) => AlertDialog(
-              key: Key('treffpunkt input dialog'),
-              title: Text('Treffpunkt'),
-              content: SingleChildScrollView(
-                  child: ListBody(children: [
-                    Text(
-                      'Wähle auf der Karte einen Treffpunkt aus.',
-                      textScaleFactor: 0.9,
-                    ),
-                    Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            color: DweTheme.yellowBright, width: 2.0)),
-                    child: SizedBox(
-                        height: 300.0,
-                        width: 300.0,
-                        child: FlutterMap(
-                            options: MapOptions(
-                                center:
-                                    center ?? LatLng(52.5170365, 13.3888599),
-                                zoom: center != null ? 14.0 : 10.0,
-                                maxZoom: 19.0,
-                                onTap: (LatLng point) => setDialogState(() {
-                                      venue.coordinates = point;
-                                      marker = VenueMarker(point);
-                                    ***REMOVED***)),
-                            layers: [
-                              TileLayerOptions(
-                                  urlTemplate:
-                                      "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
-                                  subdomains: ['a', 'b', 'c']),
-                              MarkerLayerOptions(
-                                  markers: marker == null ? [] : [marker])
-                            ]))),
-                SizedBox(
-                  height: 10.0,
-                ),
-                Text(
-                  'Du kannst auch eine eigene Beschreibung angeben, '
-                  'z.B. "Unter der Weltzeituhr" oder "Tempelhofer Feld, '
-                  'Eingang Kienitzstraße":',
-                  textScaleFactor: 0.9,
-                ),
-                SizedBox(
-                  height: 10.0,
-                ),
-                TextFormField(
-                  initialValue: initDescription ?? '',
-                  keyboardType: TextInputType.multiline,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                  ),
-                  onChanged: (input) => venue.description = input,
-                ),
-              ])),
-              actions: [
-                FlatButton(
-                  child: Text("Abbrechen"),
-                  onPressed: () {
-                    Navigator.pop(
-                        context, Venue(initDescription, initCoordinates));
-                  ***REMOVED***,
-                ),
-                FlatButton(
-                  child: Text("Fertig"),
-                  onPressed: () {
-                    Navigator.pop(context, venue);
-                  ***REMOVED***,
-                ),
-              ],
-            )),
-  );
+class VenueDialog extends StatefulWidget {
+  LatLng center;
+  LatLng initDescription;
+  VenueMarker initMarker;
+  Venue initVenue;
+
+  VenueDialog(String initDescription, LatLng initCoordinates, this.center) {
+    initMarker = initCoordinates != null ? VenueMarker(initCoordinates) : null;
+    initVenue = Venue(initDescription ?? '', initCoordinates);
+  ***REMOVED***
+
+  @override
+  State<StatefulWidget> createState() {
+    return VenueDialogState(initVenue, initMarker, center);
+  ***REMOVED***
+***REMOVED***
+
+class VenueDialogState extends State<VenueDialog> {
+  VenueMarker marker;
+  Venue venue;
+
+  VenueDialogState(Venue initVenue, VenueMarker initMarker, LatLng center) {
+    marker = initMarker;
+    venue = initVenue;
+  ***REMOVED***
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      key: Key('treffpunkt input dialog'),
+      title: Text('Treffpunkt'),
+      content: SingleChildScrollView(
+          child: ListBody(children: [
+        Text(
+          'Wähle auf der Karte einen Treffpunkt aus.',
+          textScaleFactor: 0.9,
+        ),
+        Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: DweTheme.yellowBright, width: 2.0)),
+            child: SizedBox(
+                height: 300.0,
+                width: 300.0,
+                child: FlutterMap(
+                    key: Key('venue map'),
+                    options: MapOptions(
+                        center: widget.center ?? LatLng(52.5170365, 13.3888599),
+                        zoom: widget.center != null ? 14.0 : 10.0,
+                        maxZoom: 19.0,
+                        onTap: (LatLng point) => setState(() {
+                              venue.coordinates = point;
+                              marker = VenueMarker(point);
+                            ***REMOVED***)),
+                    layers: [
+                      TileLayerOptions(
+                          urlTemplate:
+                              "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
+                          subdomains: ['a', 'b', 'c']),
+                      MarkerLayerOptions(
+                          markers: marker == null ? [] : [marker])
+                    ]))),
+        SizedBox(
+          height: 10.0,
+        ),
+        Text(
+          'Du kannst eine eigene Beschreibung angeben, '
+          'z.B. "Unter der Weltzeituhr" oder "Tempelhofer Feld, '
+          'Eingang Kienitzstraße":',
+          textScaleFactor: 0.9,
+        ),
+        SizedBox(
+          height: 10.0,
+        ),
+        TextFormField(
+          key: Key('venue description input'),
+          initialValue: venue.description,
+          keyboardType: TextInputType.multiline,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+          ),
+          onChanged: (input) => venue.description = input,
+        ),
+      ])),
+      actions: [
+        FlatButton(
+          child: Text("Abbrechen"),
+          onPressed: () {
+            Navigator.pop(context, widget.initVenue);
+          ***REMOVED***,
+        ),
+        FlatButton(
+          key: Key('venue dialog finish button'),
+          child: Text("Fertig"),
+          onPressed: () {
+            Navigator.pop(context, venue);
+          ***REMOVED***,
+        ),
+      ],
+    );
+  ***REMOVED***
 ***REMOVED***
 
 class VenueMarker extends Marker {
@@ -90,6 +120,7 @@ class VenueMarker extends Marker {
       : super(
             point: point,
             builder: (context) => DecoratedBox(
+                key: Key('venue marker'),
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: DweTheme.yellow,

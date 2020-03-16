@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong/latlong.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
+import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
@@ -400,6 +401,229 @@ void main() {
       await tester.tap(find.byKey(Key('action editor finish button')));
 
       expect(state.action.validated['all'], ValidationState.ok);
+    ***REMOVED***);
+  ***REMOVED***);
+  group('determineMapCenter', () {
+    test('returns coordinates, if given', () {
+      var actionData = ActionData(
+          null,
+          null,
+          Ort(0, 'Bezirk', 'Ort', 52.1, 43.1),
+          null,
+          null,
+          null,
+          LatLng(52.2, 43.2));
+
+      expect(
+          ActionEditorState.determineMapCenter(actionData), LatLng(52.2, 43.2));
+    ***REMOVED***);
+
+    test('returns location, if given and no coordinates', () {
+      var actionData = ActionData(null, null,
+          Ort(0, 'Bezirk', 'Ort', 52.1, 43.1), null, null, null, null);
+
+      expect(
+          ActionEditorState.determineMapCenter(actionData), LatLng(52.1, 43.1));
+    ***REMOVED***);
+
+    test('returns null, if neither coordinates nor location given', () {
+      var actionData = ActionData(null, null, null, null, null, null, null);
+
+      expect(ActionEditorState.determineMapCenter(actionData), null);
+
+      actionData = ActionData(null, null, Ort(0, 'Bezirk', 'Ort', null, null),
+          null, null, null, null);
+
+      expect(ActionEditorState.determineMapCenter(actionData), null);
+    ***REMOVED***);
+  ***REMOVED***);
+  group('generateActions generates actions', () {
+    var termineSeiteWidget;
+    setUp(() async {
+      termineSeiteWidget = TermineSeite(title: 'Titel');
+
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.einTermin(),
+          ]);
+      when(terminService.getTerminMitDetails(any))
+          .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
+
+      when(storageService.loadAllStoredActionIds())
+          .thenAnswer((_) async => [0]);
+    ***REMOVED***);
+
+    testWidgets('with old start, w/o changes', (WidgetTester tester) async {
+      await show_action_editor(tester, termineSeiteWidget);
+
+      ActionEditorState state = tester.state(find.byType(ActionEditor));
+      Termin action = state.generateActions()[0];
+
+      expect(action.beginn, TerminTestDaten.einTermin().beginn);
+    ***REMOVED***);
+
+    testWidgets('with old end, w/o changes', (WidgetTester tester) async {
+      await show_action_editor(tester, termineSeiteWidget);
+
+      ActionEditorState state = tester.state(find.byType(ActionEditor));
+      Termin action = state.generateActions()[0];
+
+      expect(action.ende, TerminTestDaten.einTermin().ende);
+    ***REMOVED***);
+
+    testWidgets('with old location, w/o changes', (WidgetTester tester) async {
+      await show_action_editor(tester, termineSeiteWidget);
+
+      ActionEditorState state = tester.state(find.byType(ActionEditor));
+      Termin action = state.generateActions()[0];
+
+      expect(action.ort.equals(TerminTestDaten.einTermin().ort), true);
+    ***REMOVED***);
+
+    testWidgets('with old type, w/o changes', (WidgetTester tester) async {
+      await show_action_editor(tester, termineSeiteWidget);
+
+      ActionEditorState state = tester.state(find.byType(ActionEditor));
+      Termin action = state.generateActions()[0];
+
+      expect(action.typ, TerminTestDaten.einTermin().typ);
+    ***REMOVED***);
+
+    testWidgets('with old id', (WidgetTester tester) async {
+      await show_action_editor(tester, termineSeiteWidget);
+
+      ActionEditorState state = tester.state(find.byType(ActionEditor));
+      Termin action = state.generateActions()[0];
+
+      expect(action.id, TerminTestDaten.einTermin().id);
+    ***REMOVED***);
+
+    testWidgets('with old contact, w/o changes', (WidgetTester tester) async {
+      await show_action_editor(tester, termineSeiteWidget);
+
+      ActionEditorState state = tester.state(find.byType(ActionEditor));
+      Termin action = state.generateActions()[0];
+
+      expect(action.details.kontakt,
+          TerminTestDaten.einTerminMitDetails().details.kontakt);
+    ***REMOVED***);
+
+    testWidgets('with old description, w/o changes',
+        (WidgetTester tester) async {
+      await show_action_editor(tester, termineSeiteWidget);
+
+      ActionEditorState state = tester.state(find.byType(ActionEditor));
+      Termin action = state.generateActions()[0];
+
+      expect(action.details.kommentar,
+          TerminTestDaten.einTerminMitDetails().details.kommentar);
+    ***REMOVED***);
+
+    testWidgets('with old venue description, w/o changes',
+        (WidgetTester tester) async {
+      await show_action_editor(tester, termineSeiteWidget);
+
+      ActionEditorState state = tester.state(find.byType(ActionEditor));
+      Termin action = state.generateActions()[0];
+
+      expect(action.details.treffpunkt,
+          TerminTestDaten.einTerminMitDetails().details.treffpunkt);
+    ***REMOVED***);
+
+    testWidgets('with old coordinates, w/o changes',
+        (WidgetTester tester) async {
+      await show_action_editor(tester, termineSeiteWidget);
+
+      ActionEditorState state = tester.state(find.byType(ActionEditor));
+      Termin action = state.generateActions()[0];
+
+      expect(action.lattitude, TerminTestDaten.einTerminMitDetails().lattitude);
+      expect(action.longitude, TerminTestDaten.einTerminMitDetails().longitude);
+    ***REMOVED***);
+
+    testWidgets('with new start, w/ changes', (WidgetTester tester) async {
+      await show_action_editor(tester, termineSeiteWidget);
+
+      ActionEditorState state = tester.state(find.byType(ActionEditor));
+      var now = TimeOfDay.now();
+      state.action.von = now;
+      Termin action = state.generateActions()[0];
+
+      expect(action.beginn, DateTime(2019, 11, 04, now.hour, now.minute));
+    ***REMOVED***);
+
+    testWidgets('with new end, w/ changes', (WidgetTester tester) async {
+      await show_action_editor(tester, termineSeiteWidget);
+
+      ActionEditorState state = tester.state(find.byType(ActionEditor));
+      var now = TimeOfDay.now();
+      state.action.bis = now;
+      Termin action = state.generateActions()[0];
+
+      expect(action.ende, DateTime(2019, 11, 04, now.hour, now.minute));
+    ***REMOVED***);
+
+    testWidgets('with new location, w/ changes', (WidgetTester tester) async {
+      await show_action_editor(tester, termineSeiteWidget);
+
+      ActionEditorState state = tester.state(find.byType(ActionEditor));
+      state.action.ort = nordkiez();
+      Termin action = state.generateActions()[0];
+
+      expect(action.ort.equals(nordkiez()), true);
+    ***REMOVED***);
+
+    testWidgets('with new type, w/ changes', (WidgetTester tester) async {
+      await show_action_editor(tester, termineSeiteWidget);
+
+      ActionEditorState state = tester.state(find.byType(ActionEditor));
+      state.action.typ = 'Neuer Typ';
+      Termin action = state.generateActions()[0];
+
+      expect(action.typ, 'Neuer Typ');
+    ***REMOVED***);
+
+    testWidgets('with new contact, w/ changes', (WidgetTester tester) async {
+      await show_action_editor(tester, termineSeiteWidget);
+
+      ActionEditorState state = tester.state(find.byType(ActionEditor));
+      state.action.terminDetails.kontakt = 'Neuer Kontakt';
+      Termin action = state.generateActions()[0];
+
+      expect(action.details.kontakt, 'Neuer Kontakt');
+    ***REMOVED***);
+
+    testWidgets('with new description, w/ changes',
+        (WidgetTester tester) async {
+      await show_action_editor(tester, termineSeiteWidget);
+
+      ActionEditorState state = tester.state(find.byType(ActionEditor));
+      state.action.terminDetails.kommentar = 'Neuer Kommentar';
+      Termin action = state.generateActions()[0];
+
+      expect(action.details.kommentar, 'Neuer Kommentar');
+    ***REMOVED***);
+
+    testWidgets('with new venue description, w/ changes',
+        (WidgetTester tester) async {
+      await show_action_editor(tester, termineSeiteWidget);
+
+      ActionEditorState state = tester.state(find.byType(ActionEditor));
+      state.action.terminDetails.treffpunkt = 'Neuer Treffpunkt';
+      Termin action = state.generateActions()[0];
+
+      expect(action.details.treffpunkt, 'Neuer Treffpunkt');
+    ***REMOVED***);
+
+    testWidgets('with new coordinates, w/ changes',
+        (WidgetTester tester) async {
+      await show_action_editor(tester, termineSeiteWidget);
+
+      ActionEditorState state = tester.state(find.byType(ActionEditor));
+      state.action.coordinates = LatLng(52.5170365, 13.3888599);
+      Termin action = state.generateActions()[0];
+
+      expect(action.lattitude, 52.5170365);
+      expect(action.longitude, 13.3888599);
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***

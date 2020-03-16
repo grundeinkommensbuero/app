@@ -196,22 +196,29 @@ class ActionEditorState extends State<ActionEditor> {
   ***REMOVED***
 
   void venueSelection() async {
-    LatLng center;
-    if (action.ort?.lattitude != null && action.ort?.lattitude != null)
-      center = LatLng(action.ort.lattitude, action.ort.longitude);
-    if (action.coordinates?.latitude != null &&
-        action.coordinates?.longitude != null)
-      center =
-          LatLng(action.coordinates.latitude, action.coordinates.longitude);
-
     Venue ergebnis = await showVenueDialog(
-        context, action.terminDetails.treffpunkt, action.coordinates, center);
+        context: context,
+        initDescription: action.terminDetails.treffpunkt,
+        initCoordinates: action.coordinates,
+        center: determineMapCenter(action));
 
     setState(() {
       action.terminDetails.treffpunkt = ergebnis.description;
       action.coordinates = ergebnis.coordinates;
       validateAllInput();
     ***REMOVED***);
+  ***REMOVED***
+
+  static LatLng determineMapCenter(ActionData action) {
+    // at old coordinates
+    if (action.coordinates?.latitude != null &&
+        action.coordinates?.longitude != null)
+      return LatLng(action.coordinates.latitude, action.coordinates.longitude);
+    // at location
+    if (action.ort?.lattitude != null && action.ort?.lattitude != null)
+      return LatLng(action.ort.lattitude, action.ort.longitude);
+
+    return null;
   ***REMOVED***
 
   void contactSelection() async {
@@ -512,10 +519,9 @@ class ActionEditorState extends State<ActionEditor> {
     if (this.action.terminDetails.kontakt == null) {
       this.action.validated['kontakt'] = ValidationState.error;
     ***REMOVED*** else {
-      this.action.validated['kontakt'] =
-          this.action.terminDetails.kontakt == ''
-              ? ValidationState.error
-              : ValidationState.ok;
+      this.action.validated['kontakt'] = this.action.terminDetails.kontakt == ''
+          ? ValidationState.error
+          : ValidationState.ok;
     ***REMOVED***
   ***REMOVED***
 
