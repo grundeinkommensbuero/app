@@ -11,7 +11,6 @@ class Ort {
     this.bezirk = bezirk;
     this.lattitude = lattitude;
     this.longitude = longitude;
-
   }
 
   Ort.fromJson(Map<String, dynamic> json)
@@ -28,4 +27,11 @@ class Ort {
         'lattitude': lattitude,
         'longitude': longitude,
       };
+
+  bool equals(Ort that) =>
+      this.id == that.id &&
+      this.bezirk == that.bezirk &&
+      this.ort == that.ort &&
+      this.lattitude == that.lattitude &&
+      this.longitude == that.longitude;
 }

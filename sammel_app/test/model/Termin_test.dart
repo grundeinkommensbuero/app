@@ -176,7 +176,7 @@ class TerminTestDaten {
       13.41331,
       null);
 
-  static einTerminMitDetails() => Termin(
+  static Termin einTerminMitDetails() => Termin(
       0,
       DateTime(2019, 11, 4, 17, 9, 0),
       DateTime(2019, 11, 4, 18, 9, 0),
