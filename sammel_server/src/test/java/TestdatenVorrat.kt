@@ -1,5 +1,6 @@
 import database.stammdaten.Ort
 import database.benutzer.Benutzer
+import database.listlocations.ListLocation
 import database.termine.Termin
 import database.termine.TerminDetails
 import rest.TermineRestResource
@@ -90,5 +91,14 @@ class TestdatenVorrat {
         internal fun terminDetails(): TerminDetails {
             return TerminDetails(1, "Weltzeituhr", "Kommt zahlreich", "kalle@revo.de")
         }
+
+        fun curry36(): ListLocation = ListLocation(1, "Curry 36", "Mehringdamm", "36", 52.4935584, 13.3877282)
+
+        fun cafeKotti(): ListLocation = ListLocation(1, "Café Kotti", "Adalbertstraße", "96", 52.5001477, 13.4181523)
+
+        fun zukunft(): ListLocation = ListLocation(1, "Zukunft", "Laskerstraße", "5", 52.5016524, 13.4655402)
+
+        fun sampleListLocations() = listOf(curry36(), cafeKotti(), zukunft())
+
     }
 }
