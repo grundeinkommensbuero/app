@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:sammel_app/routes/ActionList.dart';
 import 'package:sammel_app/routes/ActionMap.dart';
-import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
+import '../TestdataStorage.dart';
 import '../model/Termin_test.dart';
-import 'ActionList_test.dart';
 
 class TermineServiceMock extends Mock implements TermineService {}
 
@@ -21,31 +18,42 @@ class StorageServiceMock extends Mock implements StorageService {}
 final storageService = StorageServiceMock();
 
 void main() {
+  testWidgets('TermineSeite uses default values', (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(home: Scaffold(body: ActionMap())));
+
+    ActionMap actionMap = await tester.widget(find.byType(ActionMap));
+    expect(actionMap.termine, []);
+    expect(actionMap.listLocations, []);
+    expect(actionMap.isMyAction(), isFalse);
+  });
+
   testWidgets('TermineSeite shows all actions', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
-            body: ActionMap([
-      TerminTestDaten.einTermin(),
-      TerminTestDaten.einTermin(),
-      TerminTestDaten.einTermin(),
-    ], (_) => false, () {}))));
+            body: ActionMap(
+                termine: [
+          TerminTestDaten.einTermin(),
+          TerminTestDaten.einTermin(),
+          TerminTestDaten.einTermin(),
+        ],
+                listLocations: [],
+                isMyAction: (_) => false,
+                openActionDetails: () {}))));
 
     expect(find.byKey(Key('action marker')), findsNWidgets(3));
   });
 
-  testWidgets('marks own actions',
-      (WidgetTester tester) async {
-
+  testWidgets('marks own actions', (WidgetTester tester) async {
     var isMyAction = (id) => id == 2;
 
     var morgen = DateTime.now()..add(Duration(days: 1));
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
-            body: ActionMap([
+            body: ActionMap(termine: [
       TerminTestDaten.anActionFrom(morgen)..id = 1,
       TerminTestDaten.anActionFrom(morgen)..id = 2,
       TerminTestDaten.anActionFrom(morgen)..id = 3,
-    ], isMyAction, () {}))));
+    ], listLocations: [], isMyAction: isMyAction, openActionDetails: () {}))));
 
     List<FlatButton> actionMarker = tester
         .widgetList(find.byKey(Key('action marker')))
@@ -59,19 +67,16 @@ void main() {
     expect(actionMarker[2].color, DweTheme.yellowLight);
   });
 
-  testWidgets('marks past actions',
-      (WidgetTester tester) async {
+  testWidgets('marks past actions', (WidgetTester tester) async {
     var isMyAction = (id) => id == 2;
-
-    var gestern = DateTime.now()..subtract(Duration(days: 1));
 
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
-            body: ActionMap([
+            body: ActionMap(termine: [
       TerminTestDaten.einTermin()..id = 1,
       TerminTestDaten.einTermin()..id = 2,
       TerminTestDaten.einTermin()..id = 3,
-    ], isMyAction, () {}))));
+    ], listLocations: [], isMyAction: isMyAction, openActionDetails: () {}))));
 
     List<FlatButton> actionMarker = tester
         .widgetList(find.byKey(Key('action marker')))
@@ -83,5 +88,18 @@ void main() {
     expect(actionMarker[0].color, DweTheme.yellowBright);
     expect(actionMarker[1].color, DweTheme.greenLight);
     expect(actionMarker[2].color, DweTheme.yellowBright);
+  });
+
+  testWidgets('TermineSeite shows all list locations',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+            body: ActionMap(
+                termine: [],
+                listLocations: [curry36(), cafeKotti(), zukunft()],
+                isMyAction: (_) => false,
+                openActionDetails: () {}))));
+
+    expect(find.byKey(Key('list location marker')), findsNWidgets(3));
   });
 }

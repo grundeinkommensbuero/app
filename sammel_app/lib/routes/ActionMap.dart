@@ -3,15 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
 class ActionMap extends StatefulWidget {
   final List<Termin> termine;
-  final Function openActionDetails;
+  final List<ListLocation> listLocations;
   final Function isMyAction;
+  final Function openActionDetails;
 
-  ActionMap(this.termine, this.isMyAction, this.openActionDetails, {Key key})
+  // no better way yet: https://github.com/dart-lang/sdk/issues/4596
+  static falseFunction() => false;
+
+  ActionMap(
+      {this.termine = const [],
+      this.listLocations = const [],
+      this.isMyAction = falseFunction,
+      this.openActionDetails,
+      Key key})
       : super(key: key);
 
   @override
@@ -24,15 +34,15 @@ class ActionMapState extends State<ActionMap> {
   @override
   Widget build(BuildContext context) {
     return FlutterMap(
-      options: MapOptions(
-        center: LatLng(52.5170365, 13.3888599),
-        zoom: 10.0,
-        maxZoom: 19.0,
-      ),
-      layers: [
-        TileLayerOptions(
-            urlTemplate: "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
-            subdomains: ['a', 'b', 'c']),
+        options: MapOptions(
+          center: LatLng(52.5170365, 13.3888599),
+          zoom: 10.0,
+          maxZoom: 19.0,
+        ),
+        layers: [
+          TileLayerOptions(
+              urlTemplate: "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
+              subdomains: ['a', 'b', 'c']),
 //        PolygonLayerOptions(polygons: [
 //          Polygon(
 //              color: Color.fromARGB(40, DweTheme.purple.red, DweTheme.purple.green, DweTheme.purple.blue),
@@ -42,16 +52,26 @@ class ActionMapState extends State<ActionMap> {
 //                  .map((action) => LatLng(action.lattitude, action.longitude))
 //                  .toList())
 //        ]),
-        MarkerLayerOptions(
-            markers: widget.termine
-                .where((action) =>
-                    action.lattitude != null && action.longitude != null)
-                .map((action) => ActionMarker(action,
-                    myAction: widget.isMyAction(action.id),
-                    onTap: widget.openActionDetails))
-                .toList()),
-      ],
-    );
+          MarkerLayerOptions(
+              markers: <Marker>[]
+                ..addAll(generateListLocationMarkers())
+                ..addAll(generateActionMarkers())),
+        ]);
+  }
+
+  List<ActionMarker> generateActionMarkers() {
+    return widget.termine
+        .where((action) => action.lattitude != null && action.longitude != null)
+        .map((action) => ActionMarker(action,
+            myAction: widget.isMyAction(action.id),
+            onTap: widget.openActionDetails))
+        .toList();
+  }
+
+  Iterable<Marker> generateListLocationMarkers() {
+    return widget.listLocations
+        .map((listlocation) => ListLocationMarker(listlocation))
+        .toList();
   }
 }
 
@@ -76,5 +96,23 @@ class ActionMarker extends Marker {
                       side: BorderSide(color: DweTheme.purple, width: 1.0)),
                   padding: EdgeInsets.all(0),
                   child: Image.asset(action.getAsset(centered: true)))),
+        );
+}
+
+class ListLocationMarker extends Marker {
+  ListLocationMarker(ListLocation listLocation)
+      : super(
+          anchorPos: AnchorPos.align(AnchorAlign.top),
+          point: LatLng(listLocation.latitude, listLocation.longitude),
+          builder: (context) => FlatButton(
+              key: Key('list location marker'),
+              color: Colors.transparent,
+              onPressed: () {},
+              padding: EdgeInsets.all(0),
+              child: Icon(
+                Icons.edit_location,
+                color: DweTheme.purple,
+                size: 30.0,
+              )),
         );
 }
