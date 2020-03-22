@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/model/Termin.dart';
@@ -49,7 +50,12 @@ class TermineSeiteState extends State<TermineSeite> {
     view = [
       ActionList(termine, isMyAction, openTerminDetails,
           key: Key('action list')),
-      ActionMap(termine, isMyAction, openTerminDetails, key: Key('action map')),
+      ActionMap(
+          termine: termine,
+          listLocations: [ListLocation(1, "Curry 36", "Mehringdamm", "36", 52.4935584, 13.3877282)],
+          isMyAction: isMyAction,
+          openActionDetails: openTerminDetails,
+          key: Key('action map')),
     ];
 
     return Scaffold(
