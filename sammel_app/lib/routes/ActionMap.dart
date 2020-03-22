@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -6,6 +7,7 @@ import 'package:latlong/latlong.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ActionMap extends StatefulWidget {
   final List<Termin> termine;
@@ -107,7 +109,7 @@ class ListLocationMarker extends Marker {
           builder: (context) => FlatButton(
               key: Key('list location marker'),
               color: Colors.transparent,
-              onPressed: () {***REMOVED***,
+              onPressed: () => showListLocationDialog(context, listLocation),
               padding: EdgeInsets.all(0),
               child: Icon(
                 Icons.edit_location,
@@ -115,4 +117,42 @@ class ListLocationMarker extends Marker {
                 size: 30.0,
               )),
         );
+
+  static showListLocationDialog(
+          BuildContext context, ListLocation listLocation) =>
+      showDialog(
+          context: context,
+          builder: (context) => SimpleDialog(
+                  title: Text(listLocation.name,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: DweTheme.purple)),
+                  key: Key('list location info dialog'),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0)),
+                  contentPadding: EdgeInsets.all(10.0),
+                  children: <Widget>[
+                    Text(
+                      'Hier liegen öffentliche Unterschriften-Listen aus. '
+                      'Du kannst selbst Unterschriften-Listen an öffentlichen Orten auslegen, z.B. in Cafés, Bars oder Läden. '
+                      'Wichtig ist, dass du die ausgefüllten Listen regelmäßig abholst.\n'
+                      'Frage doch mal die Betreiber*innen deines Lieblings-Spätis!\n',
+                    ),
+                    RichText(
+                        text: TextSpan(children: [
+                      TextSpan(
+                          text: 'Du kannst den Ort auf ',
+                          style: TextStyle(color: Colors.black)),
+                      TextSpan(
+                          text: 'www.dwenteignen.de',
+                          style: TextStyle(
+                              color: Colors.indigo,
+                              decoration: TextDecoration.underline),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap =
+                                () => launch('https://www.dwenteignen.de')),
+                      TextSpan(
+                          text: ' eintragen.',
+                          style: TextStyle(color: Colors.black))
+                    ]))
+                  ]));
 ***REMOVED***

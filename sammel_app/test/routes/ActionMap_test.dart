@@ -18,7 +18,7 @@ class StorageServiceMock extends Mock implements StorageService {***REMOVED***
 final storageService = StorageServiceMock();
 
 void main() {
-  testWidgets('TermineSeite uses default values', (WidgetTester tester) async {
+  testWidgets('uses default values', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(home: Scaffold(body: ActionMap())));
 
     ActionMap actionMap = await tester.widget(find.byType(ActionMap));
@@ -27,7 +27,7 @@ void main() {
     expect(actionMap.isMyAction(), isFalse);
   ***REMOVED***);
 
-  testWidgets('TermineSeite shows all actions', (WidgetTester tester) async {
+  testWidgets('shows all actions', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
             body: ActionMap(
@@ -90,7 +90,7 @@ void main() {
     expect(actionMarker[2].color, DweTheme.yellowBright);
   ***REMOVED***);
 
-  testWidgets('TermineSeite shows all list locations',
+  testWidgets('shows all list locations',
       (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
@@ -101,5 +101,23 @@ void main() {
                 openActionDetails: () {***REMOVED***))));
 
     expect(find.byKey(Key('list location marker')), findsNWidgets(3));
+  ***REMOVED***);
+
+  testWidgets('opens list location info on tap',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+            body: ActionMap(
+                termine: [],
+                listLocations: [curry36()],
+                isMyAction: (_) => false,
+                openActionDetails: () {***REMOVED***))));
+
+    expect(find.byKey(Key('list location marker')), findsOneWidget);
+    await tester.tap(find.byKey(Key('list location marker')));
+    await tester.pump();
+
+    expect(find.byKey(Key('list location info dialog')), findsOneWidget);
+    expect(find.text(curry36().name), findsOneWidget);
   ***REMOVED***);
 ***REMOVED***
