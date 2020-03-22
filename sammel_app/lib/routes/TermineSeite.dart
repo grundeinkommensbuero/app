@@ -7,6 +7,7 @@ import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/routes/ActionMap.dart';
+import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
@@ -34,6 +35,7 @@ class TermineSeiteState extends State<TermineSeite> {
   bool _initialized = false;
 
   List<Termin> termine = [];
+  List<ListLocation> listLocations = [];
 
   FilterWidget filterWidget;
 
@@ -52,7 +54,7 @@ class TermineSeiteState extends State<TermineSeite> {
           key: Key('action list')),
       ActionMap(
           termine: termine,
-          listLocations: [ListLocation(1, "Curry 36", "Mehringdamm", "36", 52.4935584, 13.3877282)],
+          listLocations: listLocations,
           isMyAction: isMyAction,
           openActionDetails: openTerminDetails,
           key: Key('action map')),
@@ -109,9 +111,18 @@ class TermineSeiteState extends State<TermineSeite> {
     termineService = Provider.of<AbstractTermineService>(context);
     storageService = Provider.of<StorageService>(context);
     filterWidget = FilterWidget(ladeTermine);
+
     storageService
         .loadAllStoredActionIds()
         .then((ids) => setState(() => myActions = ids));
+
+    var listLocationService = Provider.of<AbstractListLocationService>(context);
+    listLocationService.getActiveListLocations().then((listLocations) {
+      setState(() {
+        this.listLocations = listLocations;
+      ***REMOVED***);
+    ***REMOVED***);
+
     _initialized = true;
   ***REMOVED***
 
