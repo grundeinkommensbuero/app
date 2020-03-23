@@ -4,4 +4,4 @@ drop table Termine;
 drop table Stamm_Orte;
 drop table TerminDetails;
 drop table Token;
-
+drop table points;

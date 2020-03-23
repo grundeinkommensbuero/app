@@ -16,7 +16,7 @@ open class ListLocationDao {
 
     open fun getActiveListLocations(): List<ListLocation>? {
         LOG.debug("Ermittle Listenorte")
-        val query = "select ppoint from points point where point.active = true"
+        val query = "from ListLocation where active = true"
         val listlocations = entityManager
                 .createQuery(query, ListLocation::class.java)
                 .resultList

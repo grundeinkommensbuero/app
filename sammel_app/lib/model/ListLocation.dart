@@ -1,5 +1,5 @@
 class ListLocation {
-  int id;
+  String id;
   String name;
   String street;
   String number;

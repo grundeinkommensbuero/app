@@ -6,18 +6,18 @@ import javax.persistence.*
 @Table(name = "points")
 class ListLocation() {
 
-    constructor(id: Long, name: String, strasse: String, nummer: String?, latitude: Double?, longitude: Double?) : this() {
+    constructor(id: String?, name: String, strasse: String, nr: String, laengengrad: Double?, breitengrad: Double?) : this() {
         this.id = id
         this.name = name
         this.strasse = strasse
-        this.nummer = nummer
-        this.latitude = latitude
-        this.longitude = longitude
+        this.nr = nr
+        this.laengengrad = laengengrad
+        this.breitengrad = breitengrad
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0
+    var id: String? = null
 
     @Column
     var name: String = ""
@@ -26,12 +26,12 @@ class ListLocation() {
     var strasse: String = ""
 
     @Column
-    var nummer: String? = null
+    var nr: String = ""
 
     @Column
-    var latitude: Double? = null
+    var laengengrad: Double? = null
 
     @Column
-    var longitude: Double? = null
+    var breitengrad: Double? = null
 }
 
