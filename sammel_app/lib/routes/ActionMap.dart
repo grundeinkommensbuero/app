@@ -123,7 +123,9 @@ class ListLocationMarker extends Marker {
       showDialog(
           context: context,
           builder: (context) => SimpleDialog(
-                  title: Text(listLocation.name,
+                  title: Text(
+                      listLocation.name ??
+                          '${listLocation.street***REMOVED*** ${listLocation.number***REMOVED***',
                       textAlign: TextAlign.center,
                       style: TextStyle(color: DweTheme.purple)),
                   key: Key('list location info dialog'),
