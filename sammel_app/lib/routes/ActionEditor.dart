@@ -65,11 +65,9 @@ class ActionData {
 }
 
 class ActionEditor extends StatefulWidget {
-  Termin initAction;
+  final Termin initAction;
 
-  ActionEditor(Termin initAction, {Key key}) : super(key: key) {
-    this.initAction = initAction;
-  }
+  ActionEditor(this.initAction, {Key key}) : super(key: key);
 
   @override
   ActionEditorState createState() => ActionEditorState(this.initAction);
@@ -251,7 +249,7 @@ class ActionEditorState extends State<ActionEditor> {
       },
     );
 
-    Widget input_widget = null;
+    Widget input_widget;
 
     if (description != null) {
       input_widget = SingleChildScrollView(
@@ -363,7 +361,7 @@ class ActionEditorState extends State<ActionEditor> {
         .showLocationPicker(context, List<Ort>());
 
     setState(() {
-      if (!selectedLocations.isEmpty) {
+      if (selectedLocations.isNotEmpty) {
         this.action.ort = selectedLocations[0];
         validateAllInput();
       }
@@ -383,7 +381,7 @@ class ActionEditorState extends State<ActionEditor> {
   }
 
   Widget daysButtonCaption() {
-    Text text = null;
+    Text text;
     if (this.action.validated['tage'] == ValidationState.error ||
         this.action.validated['tage'] == ValidationState.not_validated) {
       text = Text("Wähle einen Tag", style: TextStyle(color: DweTheme.purple));
@@ -400,7 +398,7 @@ class ActionEditorState extends State<ActionEditor> {
   }
 
   Widget venueButtonCaption(ActionData termin) {
-    Text text = null;
+    Text text;
     if (this.action.validated['venue'] == ValidationState.error ||
         this.action.validated['venue'] == ValidationState.not_validated) {
       text = Text(
@@ -414,8 +412,8 @@ class ActionEditorState extends State<ActionEditor> {
   }
 
   Widget contactButtonCaption(ActionData termin) {
-    Text text = null;
-    ValidationState val = null;
+    Text text;
+    ValidationState val;
     if (this.action.validated['kontakt'] == ValidationState.ok) {
       text = Text(termin.terminDetails.kontakt);
       val = ValidationState.ok;
@@ -434,7 +432,7 @@ class ActionEditorState extends State<ActionEditor> {
   }
 
   Widget descriptionButtonCaption(ActionData termin) {
-    Text text = null;
+    Text text;
     if (this.action.validated['kommentar'] == ValidationState.ok) {
       text = Text('Beschreibung: ${termin.terminDetails.kommentar}');
     } else {
@@ -445,7 +443,7 @@ class ActionEditorState extends State<ActionEditor> {
   }
 
   Widget typeButtonCaption() {
-    Text text = null;
+    Text text;
     if (this.action.validated['typ'] == ValidationState.ok) {
       text = Text(this.action.typ);
     } else {
@@ -457,12 +455,12 @@ class ActionEditorState extends State<ActionEditor> {
 
   Row timeButtonCaption(ActionData termin) {
     String beschriftung = '';
-    ValidationState val = null;
+    ValidationState val;
     if (termin.von != null)
       beschriftung += 'von ' + ChronoHelfer.timeToStringHHmm(termin.von);
     if (termin.bis != null)
       beschriftung += ' bis ' + ChronoHelfer.timeToStringHHmm(termin.bis);
-    Text text = null;
+    Text text;
     if (beschriftung.isEmpty) {
       val = ValidationState.error;
       text =
@@ -477,7 +475,7 @@ class ActionEditorState extends State<ActionEditor> {
   }
 
   Widget locationButtonCaption(ActionData termin) {
-    Text text = null;
+    Text text;
     if (termin.validated['ort'] == ValidationState.not_validated ||
         termin.validated['ort'] == ValidationState.error)
       text = Text("Wähle einen Ort", style: TextStyle(color: DweTheme.purple));
@@ -617,9 +615,9 @@ class ActionEditorState extends State<ActionEditor> {
 }
 
 class InputButton extends StatelessWidget {
-  Function onTap;
-  Widget child;
-  Key key;
+  final Function onTap;
+  final Widget child;
+  final Key key;
 
   InputButton({this.onTap, this.child, this.key}) : super(key: key);
 

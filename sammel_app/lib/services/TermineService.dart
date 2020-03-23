@@ -20,7 +20,7 @@ abstract class AbstractTermineService extends BackendService {
 
   Future<void> saveAction(Termin action, String token);
 
-  Future<void> deleteAction(Termin action, String token);
+  deleteAction(Termin action, String token);
 }
 
 class TermineService extends AbstractTermineService {
@@ -76,7 +76,7 @@ class TermineService extends AbstractTermineService {
     throw RestFehler.fromJson(response.body);
   }
 
-  Future<void> deleteAction(Termin action, String token) async {
+  deleteAction(Termin action, String token) async {
     var response = await delete(Uri.parse('service/termine/termin'),
         jsonEncode(ActionWithToken(action, token)));
     if (response.response.statusCode == 403) {
@@ -187,7 +187,7 @@ class DemoTermineService extends AbstractTermineService {
   }
 
   @override
-  Future<void> deleteAction(Termin action, String token) {
+  deleteAction(Termin action, String token) {
     termine.removeAt(termine.indexWhere((a) => a.id == action.id));
   }
 }

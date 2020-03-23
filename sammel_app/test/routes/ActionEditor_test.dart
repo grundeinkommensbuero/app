@@ -8,6 +8,7 @@ import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
+import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
@@ -24,6 +25,11 @@ class TermineServiceMock extends Mock implements AbstractTermineService {}
 
 final terminService = TermineServiceMock();
 
+class ListLocationServiceMock extends Mock
+    implements AbstractListLocationService {}
+
+final listLocationService = ListLocationServiceMock();
+
 class StorageServiceMock extends Mock implements StorageService {}
 
 final storageService = StorageServiceMock();
@@ -32,6 +38,8 @@ void main() {
   setUp(() {
     when(storageService.loadFilter()).thenAnswer((_) async => null);
     when(storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
+    when(listLocationService.getActiveListLocations())
+        .thenAnswer((_) async => []);
   });
 
   testWidgets('TermineSeite opens CreateTerminDialog on click at create button',
@@ -39,6 +47,8 @@ void main() {
     // Provider liefert den Mock für den TermineService rein
     var termineSeiteWidget = MultiProvider(providers: [
       Provider<AbstractTermineService>(create: (context) => terminService),
+      Provider<AbstractListLocationService>(
+          create: (context) => listLocationService),
       Provider<StorageService>(create: (context) => storageService)
     ], child: TermineSeite(title: 'Titel'));
 
@@ -87,10 +97,8 @@ void main() {
       await show_action_editor(tester, termineSeiteWidget);
       ActionEditorState action_data =
           tester.state(find.byKey(Key('action editor')));
-      action_data.setState(() {
-        action_data.action.typ = TerminTestDaten.einTermin().typ;
-        action_data.validateAllInput();
-      });
+      action_data.action.typ = TerminTestDaten.einTermin().typ;
+      action_data.validateAllInput();
       await tester.pump();
       expect(
           find.descendant(
@@ -103,10 +111,8 @@ void main() {
       await show_action_editor(tester, termineSeiteWidget);
       ActionEditorState action_data =
           tester.state(find.byKey(Key('action editor')));
-      action_data.setState(() {
         action_data.action.typ = '';
         action_data.validateAllInput();
-      });
       await tester.pump();
       expect(
           find.descendant(
@@ -130,11 +136,9 @@ void main() {
       expect(find.text('von 12:05 bis 13:09'), findsNothing);
       TimeOfDay von = TimeOfDay(hour: 12, minute: 5);
       TimeOfDay bis = TimeOfDay(hour: 13, minute: 9);
-      action_data.setState(() {
         action_data.action.von = von;
         action_data.action.bis = bis;
         action_data.validateAllInput();
-      });
       await tester.pump();
       expect(find.text('von 12:05 bis 13:09'), findsOneWidget);
     });
@@ -143,11 +147,9 @@ void main() {
       await show_action_editor(tester, termineSeiteWidget);
       ActionEditorState action_data =
           tester.state(find.byKey(Key('action editor')));
-      action_data.setState(() {
         action_data.action.von = null;
         action_data.action.bis = null;
         action_data.validateAllInput();
-      });
       await tester.pump();
       expect(find.text('Wähle eine Uhrzeit'), findsOneWidget);
     });
@@ -168,9 +170,7 @@ void main() {
           tester.state(find.byKey(Key('action editor')));
       expect(find.text("in Görlitzer Park und Umgebung"), findsNothing);
       when(stammdatenService.ladeOrte()).thenAnswer((_) async => [goerli()]);
-      action_data.setState(() {
         action_data.action.ort = goerli();
-      });
       await tester.pump();
       expect(find.text("in Görlitzer Park und Umgebung"), findsOneWidget);
     });
@@ -180,9 +180,7 @@ void main() {
       await show_action_editor(tester, termineSeiteWidget);
       ActionEditorState action_data =
           tester.state(find.byKey(Key('action editor')));
-      action_data.setState(() {
         action_data.action.terminDetails.kontakt = 'test1';
-      });
       await tester.pump();
       expect(find.text('test1'), findsOneWidget);
     });
@@ -192,9 +190,7 @@ void main() {
       await show_action_editor(tester, termineSeiteWidget);
       ActionEditorState action_data =
           tester.state(find.byKey(Key('action editor')));
-      action_data.setState(() {
         action_data.action.terminDetails.treffpunkt = 'test1';
-      });
       await tester.pump();
       expect(find.text('Treffpunkt: test1'), findsOneWidget);
     });
@@ -204,9 +200,7 @@ void main() {
       await show_action_editor(tester, termineSeiteWidget);
       ActionEditorState action_data =
           tester.state(find.byKey(Key('action editor')));
-      action_data.setState(() {
         action_data.action.terminDetails.kommentar = 'test1';
-      });
       await tester.pump();
       expect(find.text('Beschreibung: test1'), findsOneWidget);
     });
@@ -216,9 +210,7 @@ void main() {
       await show_action_editor(tester, termineSeiteWidget);
       ActionEditorState action_data =
           tester.state(find.byKey(Key('action editor')));
-      action_data.setState(() {
         action_data.action.tage = [DateTime(2019, 12, 1)];
-      });
       await tester.pump();
       expect(find.text('am 01.12.,'), findsOneWidget);
     });
@@ -229,10 +221,8 @@ void main() {
       ActionEditorState action_data =
           tester.state(find.byKey(Key('action editor')));
 
-      action_data.setState(() {
         action_data.action.tage = List<DateTime>();
         action_data.validateAllInput();
-      });
       await tester.pump();
       expect(find.text("Wähle einen Tag"), findsOneWidget);
     });
@@ -264,12 +254,10 @@ void main() {
       await show_action_editor(tester, termineSeiteWidget);
       ActionEditorState action_data =
           tester.state(find.byKey(Key('action editor')));
-      action_data.setState(() {
         action_data.action.tage = [DateTime(2019, 12, 1)];
         action_data.action.von = TimeOfDay(hour: 10, minute: 32);
         action_data.action.bis = TimeOfDay(hour: 10, minute: 31);
         action_data.validateAllInput();
-      });
       List<Termin> new_termine = action_data.generateActions();
       expect(new_termine[0].ende.day, 2);
     });
@@ -632,6 +620,8 @@ Future show_action_editor(WidgetTester tester, termineSeiteWidget) async {
   await tester.pumpWidget(MultiProvider(providers: [
     Provider<AbstractTermineService>.value(value: terminService),
     Provider<StorageService>.value(value: storageService),
+    Provider<AbstractListLocationService>(
+        create: (context) => listLocationService),
     Provider<AbstractStammdatenService>.value(value: stammdatenService)
   ], child: MaterialApp(home: termineSeiteWidget)));
 

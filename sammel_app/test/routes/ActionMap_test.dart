@@ -21,7 +21,7 @@ void main() {
   testWidgets('uses default values', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(home: Scaffold(body: ActionMap())));
 
-    ActionMap actionMap = await tester.widget(find.byType(ActionMap));
+    ActionMap actionMap = tester.widget(find.byType(ActionMap));
     expect(actionMap.termine, []);
     expect(actionMap.listLocations, []);
     expect(actionMap.isMyAction(), isFalse);

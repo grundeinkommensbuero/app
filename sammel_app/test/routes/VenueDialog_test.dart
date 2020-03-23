@@ -19,8 +19,8 @@ void main() {
 
   group('presentation', () {
     testWidgets('shows map', (WidgetTester tester) async {
-      var initCoordinates = null;
-      var center = null;
+      var initCoordinates;
+      var center;
       await tester.pumpWidget(MaterialApp(
           home: VenueDialogTester('description', initCoordinates, center)));
 
@@ -31,8 +31,8 @@ void main() {
     });
 
     testWidgets('shows description input field', (WidgetTester tester) async {
-      var initCoordinates = null;
-      var center = null;
+      var initCoordinates;
+      var center;
       await tester.pumpWidget(MaterialApp(
           home: VenueDialogTester('description', initCoordinates, center)));
 
@@ -46,8 +46,8 @@ void main() {
   group('initially shows', () {
     testWidgets('no marker, if no initial coordinates given',
         (WidgetTester tester) async {
-      var initCoordinates = null;
-      var center = null;
+      var initCoordinates;
+      var center;
       await tester.pumpWidget(MaterialApp(
           home: VenueDialogTester('description', initCoordinates, center)));
 
@@ -60,7 +60,7 @@ void main() {
     testWidgets('marker, if initial coordinates given',
         (WidgetTester tester) async {
       var initCoordinates = LatLng(52.51579, 13.45399);
-      var center = null;
+      var center;
       await tester.pumpWidget(MaterialApp(
           home: VenueDialogTester('description', initCoordinates, center)));
 
@@ -74,7 +74,7 @@ void main() {
 
     testWidgets('description', (WidgetTester tester) async {
       var initCoordinates = LatLng(52.51579, 13.45399);
-      var center = null;
+      var center;
       await tester.pumpWidget(MaterialApp(
           home: VenueDialogTester('description', initCoordinates, center)));
 
@@ -243,9 +243,9 @@ void main() {
 }
 
 class VenueDialogTester extends StatelessWidget {
-  String initDescription;
-  LatLng initCoordinates;
-  LatLng center;
+  final String initDescription;
+  final LatLng initCoordinates;
+  final LatLng center;
 
   Venue result;
 

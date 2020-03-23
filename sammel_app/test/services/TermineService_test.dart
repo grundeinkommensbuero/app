@@ -42,7 +42,7 @@ void main() {
     await service.deleteAction(actionsBefore[1], '');
 
     var actionsAfter = await service.ladeTermine(TermineFilter.leererFilter());
-    expect(actionsBefore.map((action) => action.id), containsAll([1, 3, 4]));
+    expect(actionsAfter.map((action) => action.id), containsAll([1, 3, 4]));
   });
 
   test('DemoTerminService stores new action', () async {

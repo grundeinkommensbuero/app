@@ -13,9 +13,9 @@ class TerminCard extends StatelessWidget {
     fontSize: 15.0,
   );
 
-  bool myAction;
+  final bool myAction;
 
-  TerminCard(this.termin, [bool this.myAction = false, Key key])
+  TerminCard(this.termin, [this.myAction = false, Key key])
       : super(key: key);
 
   build(context) {

@@ -9,6 +9,7 @@ import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/AuthFehler.dart';
+import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
@@ -20,35 +21,46 @@ class TermineServiceMock extends Mock implements TermineService {}
 
 final terminService = TermineServiceMock();
 
+class ListLocationServiceMock extends Mock
+    implements AbstractListLocationService {}
+
+final listLocationService = ListLocationServiceMock();
+
 class StorageServiceMock extends Mock implements StorageService {}
 
 final storageService = StorageServiceMock();
 
 void main() {
+  Widget termineSeiteWidget;
+
   setUp(() {
     when(storageService.loadFilter()).thenAnswer((_) async => null);
     when(storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
+    when(listLocationService.getActiveListLocations())
+        .thenAnswer((_) async => []);
+    when(terminService.ladeTermine(any)).thenAnswer((_) async => []);
+
+    termineSeiteWidget = MultiProvider(
+        providers: [
+          Provider<AbstractTermineService>.value(value: terminService),
+          Provider<AbstractListLocationService>.value(
+              value: listLocationService),
+          Provider<StorageService>.value(value: storageService)
+        ],
+        child: MaterialApp(
+            home: TermineSeite(
+                title: 'Titel mit Ümläüten', key: Key('action page'))));
   });
 
   testWidgets('TermineSeite startet fehlerfrei mit leerer Liste',
       (WidgetTester tester) async {
-    var termineSeiteWidget = TermineSeite(title: 'Titel mit Ümläüten');
-
-    when(terminService.ladeTermine(any)).thenAnswer((_) async => []);
-
-    await tester.pumpWidget(MultiProvider(providers: [
-      Provider<AbstractTermineService>.value(value: terminService),
-      Provider<StorageService>.value(value: storageService)
-    ], child: MaterialApp(home: termineSeiteWidget)));
-
+    await tester.pumpWidget(termineSeiteWidget);
     expect(find.text('Titel mit Ümläüten'), findsOneWidget);
   });
 
   group('presentation', () {
     testWidgets('TermineSeite sorts actions by From Date',
         (WidgetTester tester) async {
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
       var today = DateTime.now();
       var tomorrow = today.add(Duration(days: 1));
       var yesterday = today.subtract(Duration(days: 1));
@@ -59,10 +71,7 @@ void main() {
             TerminTestDaten.anActionFrom(yesterday)..ort = treptowerPark(),
           ]);
 
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(termineSeiteWidget);
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
@@ -100,12 +109,7 @@ void main() {
       when(storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [2]);
 
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(termineSeiteWidget);
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
@@ -141,35 +145,25 @@ void main() {
 
   group('Filter', () {
     testWidgets('is displayed', (WidgetTester tester) async {
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
       when(terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
           ]);
 
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(termineSeiteWidget);
 
       expect(find.text('Filter'), findsOneWidget);
     });
 
     testWidgets('opens on tap', (WidgetTester tester) async {
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
       when(terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
           ]);
 
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(termineSeiteWidget);
 
       await tester.tap(find.text('Filter'));
 
@@ -181,8 +175,6 @@ void main() {
 
   group('ActionDetailsDialog', () {
     testWidgets('opens with tap on TermineCard', (WidgetTester tester) async {
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
       when(terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
@@ -191,10 +183,7 @@ void main() {
       when(terminService.getTerminMitDetails(any))
           .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
 
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(termineSeiteWidget);
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
@@ -209,8 +198,6 @@ void main() {
 
     testWidgets('closes TerminDetails dialog with tap on Schliessen button',
         (WidgetTester tester) async {
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
       when(terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
@@ -219,10 +206,7 @@ void main() {
       when(terminService.getTerminMitDetails(any))
           .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
 
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(termineSeiteWidget);
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
@@ -235,8 +219,6 @@ void main() {
 
     testWidgets('loads Termin with details with tap on TermineCard',
         (WidgetTester tester) async {
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
       when(terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
@@ -245,10 +227,7 @@ void main() {
       when(terminService.getTerminMitDetails(any))
           .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
 
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(termineSeiteWidget);
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
@@ -265,14 +244,9 @@ void main() {
 
   group('ActionCreator', () {
     testWidgets('opens with tap on Create-Button', (WidgetTester tester) async {
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
       when(terminService.ladeTermine(any)).thenAnswer((_) async => []);
 
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(termineSeiteWidget);
 
       expect(find.byKey(Key('action creator')), findsNothing);
 
@@ -284,8 +258,6 @@ void main() {
 
     testWidgets('new actions from server are added and sorted into action list',
         (WidgetTester tester) async {
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
       var today = DateTime.now();
       var yesterday = today.subtract(Duration(days: 1));
       var tomorrow = today.add(Duration(days: 1));
@@ -297,10 +269,7 @@ void main() {
             TerminTestDaten.anActionFrom(dayAfterTomorrow),
           ]);
 
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(termineSeiteWidget);
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
@@ -348,8 +317,6 @@ void main() {
 
     testWidgets('uses created action from server with id',
         (WidgetTester tester) async {
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
       var today = DateTime.now();
       var yesterday = today.subtract(Duration(days: 1));
       var tomorrow = today.add(Duration(days: 1));
@@ -361,10 +328,7 @@ void main() {
             TerminTestDaten.anActionFrom(dayAfterTomorrow),
           ]);
 
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(termineSeiteWidget);
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
@@ -409,8 +373,6 @@ void main() {
     });
 
     testWidgets('new actions are saved to server', (WidgetTester tester) async {
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
       reset(terminService);
 
       var today = DateTime.now();
@@ -427,10 +389,7 @@ void main() {
             TerminTestDaten.anActionFrom(dayAfterTomorrow),
           ]);
 
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(termineSeiteWidget);
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
@@ -470,8 +429,6 @@ void main() {
 
     testWidgets('shows alert popup on RestFehler from create request',
         (WidgetTester tester) async {
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
       var today = DateTime.now();
       var yesterday = today.subtract(Duration(days: 1));
       var tomorrow = today.add(Duration(days: 1));
@@ -496,10 +453,7 @@ void main() {
       when(storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [1337]);
 
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(termineSeiteWidget);
 
       await tester.tap(find.byKey(Key('create termin button')));
       await tester.pump();
@@ -549,19 +503,13 @@ void main() {
       when(storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [0]);
 
-      await tester.pumpWidget(MultiProvider(
-          providers: [
-            Provider<AbstractTermineService>.value(value: terminService),
-            Provider<StorageService>.value(value: storageService)
-          ],
-          child: MaterialApp(
-              home: TermineSeite(title: 'Titel', key: Key('action page')))));
+      await tester.pumpWidget(termineSeiteWidget);
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
 
       TermineSeiteState termineSeite =
-          await tester.state(find.byKey(Key('action page')));
+          tester.state(find.byKey(Key('action page')));
 
       expect(termineSeite.termine.map((action) => action.id),
           containsAllInOrder([1, 2, 3]));
@@ -587,19 +535,13 @@ void main() {
       when(storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [0]);
 
-      await tester.pumpWidget(MultiProvider(
-          providers: [
-            Provider<AbstractTermineService>.value(value: terminService),
-            Provider<StorageService>.value(value: storageService)
-          ],
-          child: MaterialApp(
-              home: TermineSeite(title: 'Titel', key: Key('action page')))));
+      await tester.pumpWidget(termineSeiteWidget);
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
 
       TermineSeiteState termineSeite =
-          await tester.state(find.byKey(Key('action page')));
+          tester.state(find.byKey(Key('action page')));
 
       when(terminService.saveAction(any, any)).thenThrow(AuthFehler('message'));
 
@@ -621,19 +563,13 @@ void main() {
       when(storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [0]);
 
-      await tester.pumpWidget(MultiProvider(
-          providers: [
-            Provider<AbstractTermineService>.value(value: terminService),
-            Provider<StorageService>.value(value: storageService)
-          ],
-          child: MaterialApp(
-              home: TermineSeite(title: 'Titel', key: Key('action page')))));
+      await tester.pumpWidget(termineSeiteWidget);
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
 
       TermineSeiteState termineSeite =
-          await tester.state(find.byKey(Key('action page')));
+          tester.state(find.byKey(Key('action page')));
 
       when(terminService.saveAction(any, any)).thenThrow(RestFehler('message'));
 
@@ -648,8 +584,6 @@ void main() {
   group('now-line', () {
     testWidgets('lies between past and future actions',
         (WidgetTester tester) async {
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
       DateTime today = DateTime.now();
       DateTime twoDaysAgo = today.subtract(Duration(days: 2));
       DateTime yesterday = today.subtract(Duration(days: 1));
@@ -661,10 +595,7 @@ void main() {
             TerminTestDaten.anActionFrom(twoDaysAgo),
           ]);
 
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(termineSeiteWidget);
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
@@ -690,8 +621,6 @@ void main() {
 
     testWidgets('hides if no past actions present',
         (WidgetTester tester) async {
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
       DateTime today = DateTime.now();
       DateTime nextHour = today.add(Duration(hours: 1));
       DateTime nextDay = today.add(Duration(days: 1));
@@ -703,10 +632,7 @@ void main() {
             TerminTestDaten.anActionFrom(nextWeek),
           ]);
 
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(termineSeiteWidget);
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
@@ -718,8 +644,6 @@ void main() {
 
     testWidgets('is at end if no future actions present',
         (WidgetTester tester) async {
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
       DateTime today = DateTime.now();
       DateTime threeHoursAgo = today.subtract(Duration(hours: 3));
       DateTime lastDay = today.subtract(Duration(days: 1));
@@ -731,10 +655,7 @@ void main() {
             TerminTestDaten.anActionFrom(lastWeek),
           ]);
 
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(termineSeiteWidget);
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
@@ -759,14 +680,9 @@ void main() {
     });
 
     testWidgets('hides if no actions are present', (WidgetTester tester) async {
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
       when(terminService.ladeTermine(any)).thenAnswer((_) async => []);
 
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(termineSeiteWidget);
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
@@ -777,8 +693,6 @@ void main() {
     testWidgets(
         'lies behind actions that started in the past but end in the future',
         (WidgetTester tester) async {
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
       DateTime today = DateTime.now();
       DateTime oneMinuteAgo = today.subtract(Duration(minutes: 1));
       DateTime twentyMinutesAgo = today.subtract(Duration(minutes: 20));
@@ -790,10 +704,7 @@ void main() {
             TerminTestDaten.anActionFrom(oneMinuteAgo),
           ]);
 
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(termineSeiteWidget);
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
@@ -829,12 +740,7 @@ void main() {
       when(storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [0]);
 
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(termineSeiteWidget);
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
@@ -858,12 +764,7 @@ void main() {
       when(storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [0]);
 
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(termineSeiteWidget);
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
@@ -891,12 +792,7 @@ void main() {
       when(storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [0]);
 
-      var termineSeiteWidget = TermineSeite(title: 'Titel');
-
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService)
-      ], child: MaterialApp(home: termineSeiteWidget)));
+      await tester.pumpWidget(termineSeiteWidget);
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
@@ -922,7 +818,6 @@ void main() {
     });
 
     group('on confirmed', () {
-      var termineSeiteWidget;
       var myAction;
 
       setUp(() {
@@ -951,15 +846,10 @@ void main() {
         clearInteractions(storageService);
         when(storageService.loadAllStoredActionIds())
             .thenAnswer((_) async => [2]);
-
-        termineSeiteWidget = TermineSeite(title: 'Titel');
       });
 
       testWidgets('deletes action in backend', (WidgetTester tester) async {
-        await tester.pumpWidget(MultiProvider(providers: [
-          Provider<AbstractTermineService>.value(value: terminService),
-          Provider<StorageService>.value(value: storageService)
-        ], child: MaterialApp(home: termineSeiteWidget)));
+        await tester.pumpWidget(termineSeiteWidget);
 
         // Warten bis asynchron Termine geladen wurden
         await tester.pumpAndSettle();
@@ -979,10 +869,7 @@ void main() {
       });
 
       testWidgets('deletes action in action list', (WidgetTester tester) async {
-        await tester.pumpWidget(MultiProvider(providers: [
-          Provider<AbstractTermineService>.value(value: terminService),
-          Provider<StorageService>.value(value: storageService)
-        ], child: MaterialApp(home: termineSeiteWidget)));
+        await tester.pumpWidget(termineSeiteWidget);
 
         // Warten bis asynchron Termine geladen wurden
         await tester.pumpAndSettle();
@@ -1004,10 +891,7 @@ void main() {
       });
 
       testWidgets('deletes action id storage', (WidgetTester tester) async {
-        await tester.pumpWidget(MultiProvider(providers: [
-          Provider<AbstractTermineService>.value(value: terminService),
-          Provider<StorageService>.value(value: storageService)
-        ], child: MaterialApp(home: termineSeiteWidget)));
+        await tester.pumpWidget(termineSeiteWidget);
 
         // Warten bis asynchron Termine geladen wurden
         await tester.pumpAndSettle();
@@ -1029,10 +913,7 @@ void main() {
 
       testWidgets('closes confirmation dialog and action details',
           (WidgetTester tester) async {
-        await tester.pumpWidget(MultiProvider(providers: [
-          Provider<AbstractTermineService>.value(value: terminService),
-          Provider<StorageService>.value(value: storageService)
-        ], child: MaterialApp(home: termineSeiteWidget)));
+        await tester.pumpWidget(termineSeiteWidget);
 
         // Warten bis asynchron Termine geladen wurden
         await tester.pumpAndSettle();
@@ -1055,10 +936,7 @@ void main() {
 
       testWidgets('shows alert popup on RestFehler',
           (WidgetTester tester) async {
-        await tester.pumpWidget(MultiProvider(providers: [
-          Provider<AbstractTermineService>.value(value: terminService),
-          Provider<StorageService>.value(value: storageService)
-        ], child: MaterialApp(home: termineSeiteWidget)));
+        await tester.pumpWidget(termineSeiteWidget);
 
         // Warten bis asynchron Termine geladen wurden
         await tester.pumpAndSettle();
@@ -1081,10 +959,7 @@ void main() {
 
       testWidgets('shows alert popup on AuthFehler',
           (WidgetTester tester) async {
-        await tester.pumpWidget(MultiProvider(providers: [
-          Provider<AbstractTermineService>.value(value: terminService),
-          Provider<StorageService>.value(value: storageService)
-        ], child: MaterialApp(home: termineSeiteWidget)));
+        await tester.pumpWidget(termineSeiteWidget);
 
         // Warten bis asynchron Termine geladen wurden
         await tester.pumpAndSettle();
@@ -1108,9 +983,9 @@ void main() {
   });
 
   group('action token', () {
-    TermineSeiteState actionPage;
+    TermineSeiteState actionPageState;
     setUp(() {
-      actionPage = TermineSeiteState();
+      actionPageState = TermineSeiteState();
       TermineSeiteState.storageService = storageService;
       TermineSeiteState.termineService = terminService;
     });
@@ -1119,8 +994,8 @@ void main() {
       when(terminService.createTermin(any, any))
           .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
 
-      actionPage.createNewAction(TerminTestDaten.einTermin());
-      actionPage.createNewAction(TerminTestDaten.einTermin());
+      actionPageState.createNewAction(TerminTestDaten.einTermin());
+      actionPageState.createNewAction(TerminTestDaten.einTermin());
 
       List<dynamic> uuids =
           verify(terminService.createTermin(any, captureAny)).captured;
@@ -1137,14 +1012,8 @@ void main() {
       when(terminService.ladeTermine(any))
           .thenAnswer((_) async => [action1, action2]);
 
-      await tester.pumpWidget(MultiProvider(
-          providers: [
-            Provider<AbstractTermineService>.value(value: terminService),
-            Provider<StorageService>.value(value: storageService)
-          ],
-          child: MaterialApp(
-              home: TermineSeite(key: Key('action page'), title: 'Titel'))));
-      actionPage = tester.state(find.byKey(Key('action page')));
+      await tester.pumpWidget(termineSeiteWidget);
+      actionPageState = tester.state(find.byKey(Key('action page')));
 
       when(storageService.loadActionToken(1))
           .thenAnswer((_) async => 'storedToken1');
@@ -1152,8 +1021,8 @@ void main() {
           .thenAnswer((_) async => 'storedToken2');
       when(terminService.saveAction(any, any)).thenAnswer((_) => null);
 
-      await actionPage.saveAction(action1);
-      await actionPage.saveAction(action2);
+      await actionPageState.saveAction(action1);
+      await actionPageState.saveAction(action2);
 
       verify(terminService.saveAction(action1, 'storedToken1')).called(1);
       verify(terminService.saveAction(action2, 'storedToken2')).called(1);
@@ -1166,22 +1035,16 @@ void main() {
       when(terminService.ladeTermine(any))
           .thenAnswer((_) async => [action1, action2]);
 
-      await tester.pumpWidget(MultiProvider(
-          providers: [
-            Provider<AbstractTermineService>.value(value: terminService),
-            Provider<StorageService>.value(value: storageService)
-          ],
-          child: MaterialApp(
-              home: TermineSeite(key: Key('action page'), title: 'Titel'))));
-      actionPage = tester.state(find.byKey(Key('action page')));
+      await tester.pumpWidget(termineSeiteWidget);
+      actionPageState = tester.state(find.byKey(Key('action page')));
 
       when(storageService.loadActionToken(1))
           .thenAnswer((_) async => 'storedToken1');
       when(storageService.loadActionToken(2))
           .thenAnswer((_) async => 'storedToken2');
 
-      await actionPage.deleteAction(action1);
-      await actionPage.deleteAction(action2);
+      await actionPageState.deleteAction(action1);
+      await actionPageState.deleteAction(action2);
 
       verify(terminService.deleteAction(action1, 'storedToken1')).called(1);
       verify(terminService.deleteAction(action2, 'storedToken2')).called(1);
@@ -1189,25 +1052,25 @@ void main() {
   });
 
   group('updateAction', () {
-    var termineSeite = TermineSeiteState();
+    var actionPageState = TermineSeiteState();
     setUp(() {
-      termineSeite.termine = [
+      actionPageState.termine = [
         TerminTestDaten.einTermin()..id = 1,
         TerminTestDaten.einTermin()..id = 2,
         TerminTestDaten.einTermin()..id = 3,
       ];
-      termineSeite.myActions = [2, 3];
+      actionPageState.myActions = [2, 3];
     });
 
     test('removes action w/ remove flag', () {
-      termineSeite.updateAction(TerminTestDaten.einTermin()..id = 2, true);
-      expect(
-          termineSeite.termine.map((action) => action.id), containsAll([1, 3]));
+      actionPageState.updateAction(TerminTestDaten.einTermin()..id = 2, true);
+      expect(actionPageState.termine.map((action) => action.id),
+          containsAll([1, 3]));
     });
 
     test('removes action from myAction list w/ remove flag', () {
-      termineSeite.updateAction(TerminTestDaten.einTermin()..id = 2, true);
-      expect(termineSeite.myActions, containsAll([3]));
+      actionPageState.updateAction(TerminTestDaten.einTermin()..id = 2, true);
+      expect(actionPageState.myActions, containsAll([3]));
     });
 
     test('only updates action w/o remove flag', () {
@@ -1215,12 +1078,12 @@ void main() {
         ..id = 2
         ..ort = goerli();
 
-      termineSeite.updateAction(newAction, false);
+      actionPageState.updateAction(newAction, false);
 
-      expect(termineSeite.termine.map((action) => action.id),
+      expect(actionPageState.termine.map((action) => action.id),
           containsAll([1, 2, 3]));
       expect(
-          termineSeite.termine
+          actionPageState.termine
               .where((action) => action.id == 2)
               .toList()[0]
               .ort
@@ -1232,23 +1095,23 @@ void main() {
       var newAction = TerminTestDaten.einTermin()
         ..id = 2
         ..beginn = DateTime.now().subtract(Duration(days: 1));
-      termineSeite.updateAction(newAction, false);
-      expect(termineSeite.termine.map((action) => action.id),
+      actionPageState.updateAction(newAction, false);
+      expect(actionPageState.termine.map((action) => action.id),
           containsAll([3, 1, 2]));
     });
 
     test('does nothing with unknown actions', () {
-      termineSeite.updateAction(TerminTestDaten.einTermin()..id = 4, true);
-      expect(termineSeite.termine.map((action) => action.id),
+      actionPageState.updateAction(TerminTestDaten.einTermin()..id = 4, true);
+      expect(actionPageState.termine.map((action) => action.id),
           containsAll([1, 2, 3]));
-      expect(termineSeite.myActions, containsAll([2, 3]));
+      expect(actionPageState.myActions, containsAll([2, 3]));
     });
   });
 
   group('addAction', () {
-    var termineSeite = TermineSeiteState();
+    var actionStatePage = TermineSeiteState();
     setUp(() {
-      termineSeite.termine = [
+      actionStatePage.termine = [
         TerminTestDaten.einTermin()..id = 1,
         TerminTestDaten.einTermin()..id = 2,
         TerminTestDaten.einTermin()..id = 3,
@@ -1256,16 +1119,16 @@ void main() {
     });
 
     test('adds new action to list', () {
-      termineSeite.addAction(TerminTestDaten.einTermin()..id = 4);
-      expect(termineSeite.termine.map((action) => action.id),
+      actionStatePage.addAction(TerminTestDaten.einTermin()..id = 4);
+      expect(actionStatePage.termine.map((action) => action.id),
           containsAll([1, 2, 3, 4]));
     });
 
     test('sorts list', () {
-      termineSeite.addAction(TerminTestDaten.einTermin()
+      actionStatePage.addAction(TerminTestDaten.einTermin()
         ..id = 4
         ..beginn = DateTime.now().subtract(Duration(days: 1)));
-      expect(termineSeite.termine.map((action) => action.id),
+      expect(actionStatePage.termine.map((action) => action.id),
           containsAll([4, 1, 2, 3]));
     });
   });
@@ -1275,13 +1138,7 @@ void main() {
       when(terminService.ladeTermine(any))
           .thenAnswer((_) async => [(TerminTestDaten.einTermin())]);
 
-      await tester.pumpWidget(MultiProvider(
-          providers: [
-            Provider<AbstractTermineService>.value(value: terminService),
-            Provider<StorageService>.value(value: storageService)
-          ],
-          child: MaterialApp(
-              home: TermineSeite(key: Key('action page'), title: 'Titel'))));
+      await tester.pumpWidget(termineSeiteWidget);
 
       TermineSeiteState state = tester.state(find.byKey(Key('action page')));
       expect(state.navigation, 0);
@@ -1294,13 +1151,7 @@ void main() {
       when(terminService.ladeTermine(any))
           .thenAnswer((_) async => [(TerminTestDaten.einTermin())]);
 
-      await tester.pumpWidget(MultiProvider(
-          providers: [
-            Provider<AbstractTermineService>.value(value: terminService),
-            Provider<StorageService>.value(value: storageService)
-          ],
-          child: MaterialApp(
-              home: TermineSeite(key: Key('action page'), title: 'Titel'))));
+      await tester.pumpWidget(termineSeiteWidget);
 
       await tester.tap(find.byKey(Key('map view navigation button')));
       await tester.pump();
@@ -1316,13 +1167,7 @@ void main() {
       when(terminService.ladeTermine(any))
           .thenAnswer((_) async => [(TerminTestDaten.einTermin())]);
 
-      await tester.pumpWidget(MultiProvider(
-          providers: [
-            Provider<AbstractTermineService>.value(value: terminService),
-            Provider<StorageService>.value(value: storageService)
-          ],
-          child: MaterialApp(
-              home: TermineSeite(key: Key('action page'), title: 'Titel'))));
+      await tester.pumpWidget(termineSeiteWidget);
 
       await tester.tap(find.byKey(Key('map view navigation button')));
       await tester.pump();
