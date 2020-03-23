@@ -176,6 +176,7 @@ class TermineSeiteState extends State<TermineSeite> {
     ***REMOVED*** on RestFehler catch (error) {
       showErrorDialog('Aktion konnte nicht erstellt werden', error,
           key: Key('delete request failed dialog'));
+      return null;
     ***REMOVED***
   ***REMOVED***
 

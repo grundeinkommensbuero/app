@@ -14,18 +14,17 @@ Future showVenueDialog(
     );
 
 class VenueDialog extends StatefulWidget {
-  LatLng center;
-  LatLng initDescription;
-  VenueMarker initMarker;
-  Venue initVenue;
+  final LatLng center;
+  final LatLng initCoordinates;
+  final String initDescription;
 
-  VenueDialog(String initDescription, LatLng initCoordinates, this.center) {
-    initMarker = initCoordinates != null ? VenueMarker(initCoordinates) : null;
-    initVenue = Venue(initDescription ?? '', initCoordinates);
-  ***REMOVED***
+  VenueDialog(this.initDescription, this.initCoordinates, this.center);
 
   @override
   State<StatefulWidget> createState() {
+    VenueMarker initMarker =
+        initCoordinates != null ? VenueMarker(initCoordinates) : null;
+    Venue initVenue = Venue(initDescription ?? '', initCoordinates);
     return VenueDialogState(initVenue, initMarker, center);
   ***REMOVED***
 ***REMOVED***
@@ -100,7 +99,8 @@ class VenueDialogState extends State<VenueDialog> {
         FlatButton(
           child: Text("Abbrechen"),
           onPressed: () {
-            Navigator.pop(context, widget.initVenue);
+            Navigator.pop(
+                context, Venue(widget.initDescription, widget.initCoordinates));
           ***REMOVED***,
         ),
         FlatButton(

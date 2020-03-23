@@ -39,6 +39,6 @@ class DemoListLocationService extends AbstractListLocationService {
 
   @override
   Future<List<ListLocation>> getActiveListLocations() async {
-    return await listLocations;
+    return listLocations;
   ***REMOVED***
 ***REMOVED***

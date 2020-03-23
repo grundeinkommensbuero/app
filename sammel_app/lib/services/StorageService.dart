@@ -37,18 +37,18 @@ class StorageService {
       (list) => prefs.setStringList(_ACTIONLIST, list..remove(id.toString()))));
 
   Future<List<int>> loadAllStoredActionIds() => prefs.then((prefs) async {
-        List<String> stringList = await prefs.getStringList(_ACTIONLIST);
+        List<String> stringList = prefs.getStringList(_ACTIONLIST);
         if (stringList == null) return [];
         List<int> intList = stringList.map((id) => int.parse(id)).toList();
         return intList;
       ***REMOVED***);
 
   Future<List<String>> _getActionList() => _prefs.then((prefs) async {
-        var list = await prefs.getStringList(_ACTIONLIST);
+        var list = prefs.getStringList(_ACTIONLIST);
         return list != null ? list : [];
       ***REMOVED***);
 
-  Future<List<String>> clearAllPreferences() => _prefs.then((prefs) async {
+  clearAllPreferences() => _prefs.then((prefs) async {
         prefs.clear();
       ***REMOVED***);
 
