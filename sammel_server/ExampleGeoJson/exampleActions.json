@@ -1,0 +1,35 @@
+{
+  "features": [
+    {
+      "geometry": {
+        "coordinates": [
+          13.43759,
+          52.49655
+        ],
+        "type": "Point"
+      ***REMOVED***,
+      "name": "Sammeln",
+      "properties": {
+        "description": "kommt zahlreich!\n\nam 24.03.2020\nab 11:00 Uhr bis 02:00 Uhr\nTreffpunkt: Zeitungsviertel",
+        "name": "Sammeln"
+      ***REMOVED***,
+      "type": "Feature"
+    ***REMOVED***,
+    {
+      "geometry": {
+        "coordinates": [
+          13.47192,
+          52.48612
+        ],
+        "type": "Point"
+      ***REMOVED***,
+      "name": "Infoveranstaltung",
+      "properties": {
+        "description": "Ihr seid alle eingeladen. Lasst uns über die weitere Sammel-Strategie diskutieren.\n\nam 24.03.2020\nab 06:00 Uhr bis 08:30 Uhr\nTreffpunkt: DGB-Haus, Raum 223",
+        "name": "Infoveranstaltung"
+      ***REMOVED***,
+      "type": "Feature"
+    ***REMOVED***
+  ],
+  "type": "FeatureCollection"
+***REMOVED***
