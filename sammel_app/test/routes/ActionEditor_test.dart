@@ -35,11 +35,21 @@ class StorageServiceMock extends Mock implements StorageService {}
 final storageService = StorageServiceMock();
 
 void main() {
+  Widget actionPage;
+
   setUp(() {
     when(storageService.loadFilter()).thenAnswer((_) async => null);
     when(storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
     when(listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
+
+    actionPage = MultiProvider(providers: [
+      Provider<AbstractTermineService>.value(value: terminService),
+      Provider<StorageService>.value(value: storageService),
+      Provider<AbstractListLocationService>(
+          create: (context) => listLocationService),
+      Provider<AbstractStammdatenService>.value(value: stammdatenService)
+    ], child: MaterialApp(home: TermineSeite(title: 'Titel')));
   });
 
   testWidgets('TermineSeite opens CreateTerminDialog on click at create button',
@@ -52,29 +62,20 @@ void main() {
       Provider<StorageService>(create: (context) => storageService)
     ], child: TermineSeite(title: 'Titel'));
 
-    // konfiguriert den Termine-Service-Mock so dass er eine leere List von Terminen liefert
     when(terminService.ladeTermine(any)).thenAnswer((_) async => []);
 
-    // TermineSeite-Widget wird als eigene App gestartet
     await tester.pumpWidget(MaterialApp(home: termineSeiteWidget));
 
-    // sicherstellen, dass am Anfang noch kein Erstellen-Dialog auffindbar ist
     expect(find.byKey(Key('action creator')), findsNothing);
 
-    // Termine-Erstellen-Button finden und klicken
     await tester.tap(find.byKey(Key('create termin button')));
-    // App neu zeichnen
     await tester.pump();
 
-    // Prüfen ob der Termine-Erstellen-Dialog aufgegangen ist
     expect(find.byKey(Key('action creator')), findsOneWidget);
   });
 
   group('shows all data', () {
-    var termineSeiteWidget;
     setUp(() async {
-      termineSeiteWidget = TermineSeite(title: 'Titel');
-
       when(terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
@@ -86,7 +87,7 @@ void main() {
     });
 
     testWidgets('Type dialog opens correctly', (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_creator(tester, actionPage);
       expect(find.byKey(Key('type selection dialog')), findsNothing);
       await tester.tap(find.byKey(Key('open type selection dialog')));
       await tester.pump();
@@ -94,26 +95,25 @@ void main() {
     });
 
     testWidgets('Type dialog shows correct typ', (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_creator(tester, actionPage);
       ActionEditorState action_data =
-          tester.state(find.byKey(Key('action editor')));
-      action_data.action.typ = TerminTestDaten.einTermin().typ;
-      action_data.validateAllInput();
+          tester.state(find.byKey(Key('action creator')));
+      // ignore: invalid_use_of_protected_member
+      action_data.setState(() {
+        action_data.action.typ = TerminTestDaten.einTermin().typ;
+        action_data.validateAllInput();
+      });
       await tester.pump();
       expect(
           find.descendant(
-              of: find.byType(ActionEditor), matching: find.text("Sammeln")),
+              of: find.byType(ActionEditor), matching: find.text('Sammeln')),
           findsOneWidget);
     });
 
     testWidgets('Type dialog shows correct no typ',
         (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
-      ActionEditorState action_data =
-          tester.state(find.byKey(Key('action editor')));
-        action_data.action.typ = '';
-        action_data.validateAllInput();
-      await tester.pump();
+      await show_action_creator(tester, actionPage);
+
       expect(
           find.descendant(
               of: find.byType(ActionEditor),
@@ -122,7 +122,7 @@ void main() {
     });
 
     testWidgets('Zeitraum dialog opens correctly', (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_creator(tester, actionPage);
       expect(find.byKey(Key('from time picker')), findsNothing);
       await tester.tap(find.byKey(Key('open time span dialog')));
       await tester.pump();
@@ -130,32 +130,38 @@ void main() {
     });
 
     testWidgets('Zeitraum is correctly shown', (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_creator(tester, actionPage);
       ActionEditorState action_data =
-          tester.state(find.byKey(Key('action editor')));
+          tester.state(find.byKey(Key('action creator')));
       expect(find.text('von 12:05 bis 13:09'), findsNothing);
       TimeOfDay von = TimeOfDay(hour: 12, minute: 5);
       TimeOfDay bis = TimeOfDay(hour: 13, minute: 9);
+      // ignore: invalid_use_of_protected_member
+      action_data.setState(() {
         action_data.action.von = von;
         action_data.action.bis = bis;
         action_data.validateAllInput();
+      });
       await tester.pump();
       expect(find.text('von 12:05 bis 13:09'), findsOneWidget);
     });
 
     testWidgets('No Zeitraum is correctly shown', (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_creator(tester, actionPage);
       ActionEditorState action_data =
-          tester.state(find.byKey(Key('action editor')));
+          tester.state(find.byKey(Key('action creator')));
+      // ignore: invalid_use_of_protected_member
+      action_data.setState(() {
         action_data.action.von = null;
         action_data.action.bis = null;
         action_data.validateAllInput();
+      });
       await tester.pump();
       expect(find.text('Wähle eine Uhrzeit'), findsOneWidget);
     });
 
     testWidgets('Location dialog opens correctly', (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_editor(tester, actionPage);
       when(stammdatenService.ladeOrte()).thenAnswer((_) async => [goerli()]);
       expect(find.byKey(Key('Location Picker')), findsNothing);
       await tester.tap(find.byKey(Key('Open location dialog')));
@@ -165,71 +171,101 @@ void main() {
 
     testWidgets('Location dialog are correctly shown',
         (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_creator(tester, actionPage);
       ActionEditorState action_data =
-          tester.state(find.byKey(Key('action editor')));
+          tester.state(find.byKey(Key('action creator')));
       expect(find.text("in Görlitzer Park und Umgebung"), findsNothing);
       when(stammdatenService.ladeOrte()).thenAnswer((_) async => [goerli()]);
+      // ignore: invalid_use_of_protected_member
+      action_data.setState(() {
         action_data.action.ort = goerli();
-      await tester.pump();
+        action_data.validateAllInput();
+      });
+      await tester.pumpAndSettle();
       expect(find.text("in Görlitzer Park und Umgebung"), findsOneWidget);
     });
 
     testWidgets('changing kontakt is correctly shown',
         (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_creator(tester, actionPage);
       ActionEditorState action_data =
-          tester.state(find.byKey(Key('action editor')));
+          tester.state(find.byKey(Key('action creator')));
+      // ignore: invalid_use_of_protected_member
+      action_data.setState(() {
         action_data.action.terminDetails.kontakt = 'test1';
+        action_data.validateAllInput();
+      });
       await tester.pump();
       expect(find.text('test1'), findsOneWidget);
     });
 
     testWidgets('changing treffpunkt is correctly shown',
         (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_creator(tester, actionPage);
       ActionEditorState action_data =
-          tester.state(find.byKey(Key('action editor')));
+          tester.state(find.byKey(Key('action creator')));
+      // ignore: invalid_use_of_protected_member
+      action_data.setState(() {
         action_data.action.terminDetails.treffpunkt = 'test1';
+        action_data.action.coordinates = LatLng(52.5170365, 13.3888599);
+        action_data.validateAllInput();
+      });
       await tester.pump();
       expect(find.text('Treffpunkt: test1'), findsOneWidget);
     });
 
+    testWidgets('venue decription w/o coordinates is not displayed',
+        (WidgetTester tester) async {
+      await show_action_creator(tester, actionPage);
+      ActionEditorState action_data =
+          tester.state(find.byKey(Key('action creator')));
+      // ignore: invalid_use_of_protected_member
+      action_data.setState(() {
+        action_data.action.terminDetails.treffpunkt = 'test1';
+        action_data.validateAllInput();
+      });
+      await tester.pump();
+      expect(find.text('Gib einen Treffpunkt an'), findsOneWidget);
+    });
+
     testWidgets('changing beschreibung is correctly shown',
         (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_creator(tester, actionPage);
       ActionEditorState action_data =
-          tester.state(find.byKey(Key('action editor')));
+          tester.state(find.byKey(Key('action creator')));
+      // ignore: invalid_use_of_protected_member
+      action_data.setState(() {
         action_data.action.terminDetails.kommentar = 'test1';
+        action_data.validateAllInput();
+      });
       await tester.pump();
       expect(find.text('Beschreibung: test1'), findsOneWidget);
     });
 
     testWidgets('changing tage is correctly shown',
         (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_creator(tester, actionPage);
       ActionEditorState action_data =
-          tester.state(find.byKey(Key('action editor')));
+          tester.state(find.byKey(Key('action creator')));
+      // ignore: invalid_use_of_protected_member
+      action_data.setState(() {
         action_data.action.tage = [DateTime(2019, 12, 1)];
+        action_data.validateAllInput();
+      });
       await tester.pump();
       expect(find.text('am 01.12.,'), findsOneWidget);
     });
 
     testWidgets('no tage selection is correctly shown',
         (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
-      ActionEditorState action_data =
-          tester.state(find.byKey(Key('action editor')));
+      await show_action_creator(tester, actionPage);
 
-        action_data.action.tage = List<DateTime>();
-        action_data.validateAllInput();
-      await tester.pump();
       expect(find.text("Wähle einen Tag"), findsOneWidget);
     });
 
     testWidgets('All widgets show the correct action data',
         (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_editor(tester, actionPage);
 
       expect(find.text('Ruft an unter 012345678'), findsOneWidget);
       expect(
@@ -243,7 +279,7 @@ void main() {
     });
 
     testWidgets('Cancel button closes correctly', (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_editor(tester, actionPage);
       await tester.tap(find.byKey(Key('action editor cancel button')));
       await tester.pump();
       verifyNever(terminService.createTermin(any, any));
@@ -251,13 +287,13 @@ void main() {
 
     testWidgets('Termin adds a day if bis before von',
         (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_editor(tester, actionPage);
       ActionEditorState action_data =
           tester.state(find.byKey(Key('action editor')));
-        action_data.action.tage = [DateTime(2019, 12, 1)];
-        action_data.action.von = TimeOfDay(hour: 10, minute: 32);
-        action_data.action.bis = TimeOfDay(hour: 10, minute: 31);
-        action_data.validateAllInput();
+      action_data.action.tage = [DateTime(2019, 12, 1)];
+      action_data.action.von = TimeOfDay(hour: 10, minute: 32);
+      action_data.action.bis = TimeOfDay(hour: 10, minute: 31);
+      action_data.validateAllInput();
       List<Termin> new_termine = action_data.generateActions();
       expect(new_termine[0].ende.day, 2);
     });
@@ -426,10 +462,7 @@ void main() {
     });
   });
   group('generateActions generates actions', () {
-    var termineSeiteWidget;
     setUp(() async {
-      termineSeiteWidget = TermineSeite(title: 'Titel');
-
       when(terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
@@ -441,7 +474,7 @@ void main() {
     });
 
     testWidgets('with old start, w/o changes', (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_editor(tester, actionPage);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       Termin action = state.generateActions()[0];
@@ -450,7 +483,7 @@ void main() {
     });
 
     testWidgets('with old end, w/o changes', (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_editor(tester, actionPage);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       Termin action = state.generateActions()[0];
@@ -459,7 +492,7 @@ void main() {
     });
 
     testWidgets('with old location, w/o changes', (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_editor(tester, actionPage);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       Termin action = state.generateActions()[0];
@@ -468,7 +501,7 @@ void main() {
     });
 
     testWidgets('with old type, w/o changes', (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_editor(tester, actionPage);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       Termin action = state.generateActions()[0];
@@ -477,7 +510,7 @@ void main() {
     });
 
     testWidgets('with old id', (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_editor(tester, actionPage);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       Termin action = state.generateActions()[0];
@@ -486,7 +519,7 @@ void main() {
     });
 
     testWidgets('with old contact, w/o changes', (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_editor(tester, actionPage);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       Termin action = state.generateActions()[0];
@@ -497,7 +530,7 @@ void main() {
 
     testWidgets('with old description, w/o changes',
         (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_editor(tester, actionPage);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       Termin action = state.generateActions()[0];
@@ -508,7 +541,7 @@ void main() {
 
     testWidgets('with old venue description, w/o changes',
         (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_editor(tester, actionPage);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       Termin action = state.generateActions()[0];
@@ -519,7 +552,7 @@ void main() {
 
     testWidgets('with old coordinates, w/o changes',
         (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_editor(tester, actionPage);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       Termin action = state.generateActions()[0];
@@ -529,7 +562,7 @@ void main() {
     });
 
     testWidgets('with new start, w/ changes', (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_editor(tester, actionPage);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       var now = TimeOfDay.now();
@@ -540,7 +573,7 @@ void main() {
     });
 
     testWidgets('with new end, w/ changes', (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_editor(tester, actionPage);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       var now = TimeOfDay.now();
@@ -551,7 +584,7 @@ void main() {
     });
 
     testWidgets('with new location, w/ changes', (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_editor(tester, actionPage);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       state.action.ort = nordkiez();
@@ -561,7 +594,7 @@ void main() {
     });
 
     testWidgets('with new type, w/ changes', (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_editor(tester, actionPage);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       state.action.typ = 'Neuer Typ';
@@ -571,7 +604,7 @@ void main() {
     });
 
     testWidgets('with new contact, w/ changes', (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_editor(tester, actionPage);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       state.action.terminDetails.kontakt = 'Neuer Kontakt';
@@ -582,7 +615,7 @@ void main() {
 
     testWidgets('with new description, w/ changes',
         (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_editor(tester, actionPage);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       state.action.terminDetails.kommentar = 'Neuer Kommentar';
@@ -593,7 +626,7 @@ void main() {
 
     testWidgets('with new venue description, w/ changes',
         (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_editor(tester, actionPage);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       state.action.terminDetails.treffpunkt = 'Neuer Treffpunkt';
@@ -604,7 +637,7 @@ void main() {
 
     testWidgets('with new coordinates, w/ changes',
         (WidgetTester tester) async {
-      await show_action_editor(tester, termineSeiteWidget);
+      await show_action_editor(tester, actionPage);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       state.action.coordinates = LatLng(52.5170365, 13.3888599);
@@ -616,14 +649,8 @@ void main() {
   });
 }
 
-Future show_action_editor(WidgetTester tester, termineSeiteWidget) async {
-  await tester.pumpWidget(MultiProvider(providers: [
-    Provider<AbstractTermineService>.value(value: terminService),
-    Provider<StorageService>.value(value: storageService),
-    Provider<AbstractListLocationService>(
-        create: (context) => listLocationService),
-    Provider<AbstractStammdatenService>.value(value: stammdatenService)
-  ], child: MaterialApp(home: termineSeiteWidget)));
+Future show_action_editor(WidgetTester tester, actionPage) async {
+  await tester.pumpWidget(actionPage);
 
   // Warten bis asynchron Termine geladen wurden
   await tester.pumpAndSettle();
@@ -631,5 +658,13 @@ Future show_action_editor(WidgetTester tester, termineSeiteWidget) async {
   await tester.tap(find.byKey(Key('action card')).first);
   await tester.pump();
   await tester.tap(find.byKey(Key('action edit button')));
+  await tester.pump();
+}
+
+Future show_action_creator(WidgetTester tester, actionPage) async {
+  await tester.pumpWidget(actionPage);
+  await tester.pumpAndSettle();
+
+  await tester.tap(find.byKey(Key('create termin button')));
   await tester.pump();
 }
