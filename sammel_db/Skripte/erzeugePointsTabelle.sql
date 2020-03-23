@@ -1,6 +1,6 @@
 create table points
 (
-    id            int auto_increment not null,
+    id            char(36) unique not null,
     Name          varchar(40) unique not null,
     Strasse       varchar(40) unique not null,
     Nr            varchar(40) unique not null,
