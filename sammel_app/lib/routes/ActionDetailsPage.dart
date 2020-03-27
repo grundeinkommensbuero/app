@@ -7,14 +7,23 @@ import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/ExpandableConstrainedBox.dart';
 
-import 'ActionMap.dart';
-
 enum TerminDetailsCommand { EDIT, DELETE, CLOSE ***REMOVED***
 
 class ActionDetailsPage extends StatefulWidget {
   final Termin action;
+  Marker marker;
 
-  ActionDetailsPage(this.action);
+  ActionDetailsPage(this.action) {
+    marker = Marker(
+        anchorPos: AnchorPos.align(AnchorAlign.top),
+        point: LatLng(action.latitude, action.longitude),
+        builder: (context) =>
+            Icon(
+              Icons.location_on,
+              key: Key('action details map marker'),
+              size: 30,
+            ));
+  ***REMOVED***
 
   @override
   State<StatefulWidget> createState() {
@@ -131,20 +140,20 @@ class _ActionDetailsPage extends State<ActionDetailsPage> {
       ),
       SizedBox(
         height: 150.0,
-        width: 200.0,
+        width: 250.0,
         child: FlutterMap(
           key: Key('action details map'),
           options: MapOptions(
               center: LatLng(widget.action.latitude, widget.action.longitude),
-              zoom: 12,
+              zoom: 15,
               interactive: false,
               onTap: showActionInMap),
           layers: [
             TileLayerOptions(
                 urlTemplate:
-                    "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
+                "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
                 subdomains: ['a', 'b', 'c']),
-            MarkerLayerOptions(markers: [generateActionMarker()]),
+            MarkerLayerOptions(markers: [widget.marker]),
           ],
         ),
       ),
@@ -152,12 +161,4 @@ class _ActionDetailsPage extends State<ActionDetailsPage> {
   ***REMOVED***
 
   void showActionInMap(_) {***REMOVED***
-
-  Marker generateActionMarker() => Marker(
-      anchorPos: AnchorPos.align(AnchorAlign.top),
-      point: LatLng(widget.action.latitude, widget.action.longitude),
-      builder: (context) => Icon(
-            Icons.location_on,
-            size: 40,
-          ));
 ***REMOVED***

@@ -39,18 +39,18 @@ main() {
     testWidgets('shows marker for action', (WidgetTester tester) async {
       await tester.pumpWidget(widget);
 
-      expect(find.byKey(Key('action marker')), findsOneWidget);
+      expect(find.byKey(Key('action details map marker')), findsOneWidget);
     ***REMOVED***);
 
     testWidgets('does not react to tap on marker', (WidgetTester tester) async {
       await tester.pumpWidget(widget);
 
-      await tester.tap(find.byKey(Key('action marker')));
+      await tester.tap(find.byKey(Key('action details map marker')));
       await tester.pumpAndSettle();
 
       expect(find.byKey(Key('action details page')), findsOneWidget);
       expect(find.byKey(Key('action details map')), findsOneWidget);
-      expect(find.byKey(Key('action marker')), findsOneWidget);
+      expect(find.byKey(Key('action details map marker')), findsOneWidget);
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***
