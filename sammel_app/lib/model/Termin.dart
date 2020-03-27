@@ -7,11 +7,11 @@ class Termin {
   DateTime ende;
   Ort ort;
   String typ;
-  double lattitude;
+  double latitude;
   double longitude;
   TerminDetails details;
 
-  Termin(this.id, this.beginn, this.ende, this.ort, this.typ, this.lattitude,
+  Termin(this.id, this.beginn, this.ende, this.ort, this.typ, this.latitude,
       this.longitude, this.details);
 
   Termin.emptyAction()
@@ -20,7 +20,7 @@ class Termin {
         ende = null,
         ort = null,
         typ = null,
-        lattitude = null,
+        latitude = null,
         longitude = null,
         details = TerminDetails(null, null, null);
 
@@ -30,7 +30,7 @@ class Termin {
         ende = DateTime.parse(json['ende']),
         ort = Ort.fromJson(json['ort']),
         typ = json['typ'] ?? 'Termin',
-        lattitude = json['lattitude'] ?? null,
+        latitude = json['lattitude'] ?? null,
         longitude = json['longitude'] ?? null,
         details = json['details'] != null
             ? TerminDetails.fromJSON(json['details'])
@@ -42,7 +42,7 @@ class Termin {
         'ende': ende.toIso8601String(),
         'ort': ort,
         'typ': typ,
-        'lattitude': lattitude,
+        'lattitude': latitude,
         'longitude': longitude,
         'details': details,
       };

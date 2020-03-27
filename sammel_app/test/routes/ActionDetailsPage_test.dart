@@ -1,34 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/routes/ActionDetailsPage.dart';
 
-main() {
-  testWidgets('shows action values', (WidgetTester tester) async {
-    Termin termin = Termin(
-        1,
-        DateTime(2019, 12, 22, 12, 36, 0),
-        DateTime(2019, 12, 22, 15, 37, 0),
-        Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain-Nordkiez', 52.49653,
-            13.43762),
-        'Sammeln',
-        null,
-        null,
-        TerminDetails(
-            'Ubhf Samariterstr.',
-            'Wir machen die Frankfurter Allee runter',
-            'Ihr erkennt mich an der lila Weste'));
-    var widget = ActionDetailsPage(termin);
+import '../model/Termin_test.dart';
 
-    await tester.pumpWidget(MaterialApp(home: Dialog(child: widget)));
+main() {
+  Widget widget;
+
+  setUp(() {
+    Termin termin = TerminTestDaten.einTerminMitDetails();
+    widget = MaterialApp(home: Dialog(child: ActionDetailsPage(termin)));
+  });
+
+  testWidgets('opens', (WidgetTester tester) async {
+    await tester.pumpWidget(widget);
+
+    expect(find.byKey(Key('action details page')), findsOneWidget);
+  });
+
+  testWidgets('shows action values', (WidgetTester tester) async {
+    await tester.pumpWidget(widget);
 
     expect(find.text('Friedrichshain-Kreuzberg'), findsOneWidget);
-    expect(find.text('Friedrichshain-Nordkiez'), findsOneWidget);
-    expect(find.text('Treffpunkt: Ubhf Samariterstr.'), findsOneWidget);
-    expect(
-        find.text('Wir machen die Frankfurter Allee runter'), findsOneWidget);
-    expect(find.text('Ihr erkennt mich an der lila Weste'), findsOneWidget);
+    expect(find.text('Friedrichshain Nordkiez'), findsOneWidget);
+    expect(find.text('Treffpunkt: Weltzeituhr'), findsOneWidget);
+    expect(find.text('Bringe Westen und Klämmbretter mit'), findsOneWidget);
+    expect(find.text('Ruft an unter 012345678'), findsOneWidget);
+  });
+
+  group('map', () {
+    testWidgets('shows', (WidgetTester tester) async {
+      await tester.pumpWidget(widget);
+
+      expect(find.byKey(Key('action details map')), findsOneWidget);
+    });
+
+    testWidgets('shows marker for action', (WidgetTester tester) async {
+      await tester.pumpWidget(widget);
+
+      expect(find.byKey(Key('action marker')), findsOneWidget);
+    });
+
+    testWidgets('does not react to tap on marker', (WidgetTester tester) async {
+      await tester.pumpWidget(widget);
+
+      await tester.tap(find.byKey(Key('action marker')));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(Key('action details page')), findsOneWidget);
+      expect(find.byKey(Key('action details map')), findsOneWidget);
+      expect(find.byKey(Key('action marker')), findsOneWidget);
+    });
   });
 }
