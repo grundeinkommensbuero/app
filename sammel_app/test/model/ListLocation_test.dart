@@ -8,7 +8,7 @@ main() {
   test('deserializes', () {
     var json = jsonDecode(
         '{'
-            '"id":1,'
+            '"id":"1",'
             '"name":"Curry 36",'
             '"street":"Mehringdamm",'
             '"number":"36",'

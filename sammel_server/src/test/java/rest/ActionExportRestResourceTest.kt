@@ -97,8 +97,8 @@ class ActionExportRestResourceTest {
         assertEquals(geoJson.properties.name, terminOhneTeilnehmerMitDetails().typ)
         assertEquals(geoJson.properties.description, GeoJsonAction.generateJsonDescription(terminOhneTeilnehmerMitDetails()))
         assertEquals(geoJson.geometry.type, "Point")
-        assertEquals(geoJson.geometry.coordinates[1], terminOhneTeilnehmerMitDetails().longitude)
-        assertEquals(geoJson.geometry.coordinates[0], terminOhneTeilnehmerMitDetails().lattitude)
+        assertEquals(geoJson.geometry.coordinates[0], terminOhneTeilnehmerMitDetails().longitude)
+        assertEquals(geoJson.geometry.coordinates[1], terminOhneTeilnehmerMitDetails().lattitude)
     }
 
     @Test
