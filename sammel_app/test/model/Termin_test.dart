@@ -72,7 +72,7 @@ void main() {
       expect(termin.beginn, equals(DateTime(2020, 1, 2, 15, 0, 0)));
       expect(termin.ende, equals(DateTime(2020, 1, 2, 18, 0, 0)));
       expect(termin.typ, 'Sammeln');
-      expect(termin.lattitude, 52.52116);
+      expect(termin.latitude, 52.52116);
       expect(termin.longitude, 13.41331);
       expect(termin.ort.toString(),
           Ort(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez', 52.49653, 13.43762).toString());

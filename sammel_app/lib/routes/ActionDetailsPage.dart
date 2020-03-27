@@ -1,16 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong/latlong.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/ExpandableConstrainedBox.dart';
 
+import 'ActionMap.dart';
+
 enum TerminDetailsCommand { EDIT, DELETE, CLOSE ***REMOVED***
 
 class ActionDetailsPage extends StatefulWidget {
-  final Termin termin;
+  final Termin action;
 
-  ActionDetailsPage(this.termin);
+  ActionDetailsPage(this.action);
 
   @override
   State<StatefulWidget> createState() {
@@ -24,38 +28,6 @@ class _ActionDetailsPage extends State<ActionDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Column(key: Key('action details page'), children: [
-      Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Icon(Icons.my_location, size: 40.0),
-        SizedBox(
-          width: 10.0,
-        ),
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            'Wo? ',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          SelectableText(widget.termin.ort.bezirk),
-          Row(children: [
-            Icon(
-              Icons.subdirectory_arrow_right,
-              size: 18.0,
-            ),
-            SelectableText(widget.termin.ort.ort),
-          ]),
-          ExpandableConstrainedBox(
-            child: SelectableText(
-              'Treffpunkt: ' + widget.termin.details.treffpunkt,
-              style: TextStyle(fontWeight: FontWeight.normal),
-            ),
-            maxHeight: 40.0,
-            expandableCondition: widget.termin.details.treffpunkt.length > 70,
-          )
-        ])
-      ]),
-      SizedBox(
-        height: 10.0,
-      ),
-
       // Time
       Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Icon(Icons.access_time, size: 40.0),
@@ -68,9 +40,9 @@ class _ActionDetailsPage extends State<ActionDetailsPage> {
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           SelectableText(
-              ChronoHelfer.formatDateOfDateTime(widget.termin.beginn)),
+              ChronoHelfer.formatDateOfDateTime(widget.action.beginn)),
           SelectableText(ChronoHelfer.formatFromToTimeOfDateTimes(
-              widget.termin.beginn, widget.termin.ende))
+              widget.action.beginn, widget.action.ende))
         ])
       ]),
       SizedBox(
@@ -90,13 +62,13 @@ class _ActionDetailsPage extends State<ActionDetailsPage> {
           ),
           ExpandableConstrainedBox(
             child: SelectableText(
-              widget.termin.details.kommentar,
+              widget.action.details.kommentar,
               onTap: () => {***REMOVED***,
               // TODO: SelectableText stiehlt ExpandableContraintBox den onTap
               style: TextStyle(fontWeight: FontWeight.normal),
             ),
             maxHeight: 105.0,
-            expandableCondition: widget.termin.details.kommentar.length > 200,
+            expandableCondition: widget.action.details.kommentar.length > 200,
           )
         ])
       ]),
@@ -117,14 +89,75 @@ class _ActionDetailsPage extends State<ActionDetailsPage> {
           ),
           ExpandableConstrainedBox(
             child: SelectableText(
-              widget.termin.details.kontakt,
+              widget.action.details.kontakt,
               style: TextStyle(fontWeight: FontWeight.normal),
             ),
             maxHeight: 105.0,
-            expandableCondition: widget.termin.details.kontakt.length > 200,
+            expandableCondition: widget.action.details.kontakt.length > 200,
           )
         ])
-      ])
+      ]),
+
+      Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Icon(Icons.my_location, size: 40.0),
+        SizedBox(
+          width: 10.0,
+        ),
+        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(
+            'Wo? ',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          SelectableText(widget.action.ort.bezirk),
+          Row(children: [
+            Icon(
+              Icons.subdirectory_arrow_right,
+              size: 18.0,
+            ),
+            SelectableText(widget.action.ort.ort),
+          ]),
+          ExpandableConstrainedBox(
+            child: SelectableText(
+              'Treffpunkt: ' + widget.action.details.treffpunkt,
+              style: TextStyle(fontWeight: FontWeight.normal),
+            ),
+            maxHeight: 40.0,
+            expandableCondition: widget.action.details.treffpunkt.length > 70,
+          ),
+        ])
+      ]),
+      SizedBox(
+        height: 10.0,
+      ),
+      SizedBox(
+        height: 150.0,
+        width: 200.0,
+        child: FlutterMap(
+          key: Key('action details map'),
+          options: MapOptions(
+              center: LatLng(widget.action.latitude, widget.action.longitude),
+              zoom: 12,
+              interactive: false,
+              onTap: showActionInMap),
+          layers: [
+            TileLayerOptions(
+                urlTemplate:
+                    "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
+                subdomains: ['a', 'b', 'c']),
+            MarkerLayerOptions(markers: [generateActionMarker()]),
+          ],
+        ),
+      ),
     ]);
   ***REMOVED***
+
+  void showActionInMap(_) {***REMOVED***
+
+  Marker generateActionMarker() => Marker(
+      anchorPos: AnchorPos.align(AnchorAlign.top),
+      point: LatLng(widget.action.latitude, widget.action.longitude),
+      builder: (context) => Icon(
+            Icons.location_on,
+            size: 40,
+          ));
 ***REMOVED***

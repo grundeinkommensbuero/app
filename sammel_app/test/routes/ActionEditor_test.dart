@@ -557,7 +557,7 @@ void main() {
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       Termin action = state.generateActions()[0];
 
-      expect(action.lattitude, TerminTestDaten.einTerminMitDetails().lattitude);
+      expect(action.latitude, TerminTestDaten.einTerminMitDetails().latitude);
       expect(action.longitude, TerminTestDaten.einTerminMitDetails().longitude);
     ***REMOVED***);
 
@@ -643,7 +643,7 @@ void main() {
       state.action.coordinates = LatLng(52.5170365, 13.3888599);
       Termin action = state.generateActions()[0];
 
-      expect(action.lattitude, 52.5170365);
+      expect(action.latitude, 52.5170365);
       expect(action.longitude, 13.3888599);
     ***REMOVED***);
   ***REMOVED***);

@@ -63,9 +63,9 @@ class ActionMapState extends State<ActionMap> {
 
   List<ActionMarker> generateActionMarkers() {
     return widget.termine
-        .where((action) => action.lattitude != null && action.longitude != null)
+        .where((action) => action.latitude != null && action.longitude != null)
         .map((action) => ActionMarker(action,
-            myAction: widget.isMyAction(action.id),
+            ownAction: widget.isMyAction(action.id),
             onTap: widget.openActionDetails))
         .toList();
   ***REMOVED***
@@ -78,22 +78,23 @@ class ActionMapState extends State<ActionMap> {
 ***REMOVED***
 
 class ActionMarker extends Marker {
-  bool myAction = false;
+  bool ownAction = false;
   Function onTap;
 
-  ActionMarker(Termin action, {this.myAction, this.onTap***REMOVED***)
+  ActionMarker(Termin action, {this.ownAction, this.onTap***REMOVED***)
       : super(
           width: 30.0,
           height: 30.0,
-          point: LatLng(action.lattitude, action.longitude),
+          point: LatLng(action.latitude, action.longitude),
           builder: (context) => DecoratedBox(
               decoration: BoxDecoration(boxShadow: [
                 BoxShadow(offset: Offset(-2.0, 2.0), blurRadius: 4.0)
               ], shape: BoxShape.circle),
               child: FlatButton(
                   key: Key('action marker'),
-                  onPressed: () => onTap(context, action),
-                  color: DweTheme.actionColor(action.ende, myAction),
+                  onPressed:
+                      onTap != null ? () => onTap(context, action) : null,
+                  color: DweTheme.actionColor(action.ende, ownAction ?? false),
                   shape: CircleBorder(
                       side: BorderSide(color: DweTheme.purple, width: 1.0)),
                   padding: EdgeInsets.all(0),

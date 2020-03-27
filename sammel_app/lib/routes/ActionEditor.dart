@@ -94,7 +94,7 @@ class ActionEditorState extends State<ActionEditor> {
     if (initAction.details != null) {
       action.terminDetails = initAction.details;
     ***REMOVED***
-    action.coordinates = LatLng(initAction.lattitude, initAction.longitude);
+    action.coordinates = LatLng(initAction.latitude, initAction.longitude);
   ***REMOVED***
 
   @override

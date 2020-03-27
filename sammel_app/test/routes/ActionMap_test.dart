@@ -27,71 +27,109 @@ void main() {
     expect(actionMap.isMyAction(), isFalse);
   ***REMOVED***);
 
-  testWidgets('shows all actions', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-            body: ActionMap(
-                termine: [
-          TerminTestDaten.einTermin(),
-          TerminTestDaten.einTermin(),
-          TerminTestDaten.einTermin(),
-        ],
-                listLocations: [],
-                isMyAction: (_) => false,
-                openActionDetails: () {***REMOVED***))));
+  group('action marker', () {
+    Widget actionMap;
+    setUp(() {
+      actionMap = MaterialApp(
+          home: Scaffold(
+              body: ActionMap(
+                  termine: [
+            TerminTestDaten.einTermin()..id = 1,
+            TerminTestDaten.einTermin()..id = 2,
+            TerminTestDaten.einTermin()..id = 3,
+          ],
+                  listLocations: [],
+                  isMyAction: (_) => false,
+                  openActionDetails: () {***REMOVED***)));
+    ***REMOVED***);
 
-    expect(find.byKey(Key('action marker')), findsNWidgets(3));
+    testWidgets('show all actions', (WidgetTester tester) async {
+      await tester.pumpWidget(actionMap);
+
+      expect(find.byKey(Key('action marker')), findsNWidgets(3));
+    ***REMOVED***);
+
+    testWidgets('are hightlighted for own actions',
+        (WidgetTester tester) async {
+      var isMyAction = (id) => id == 2;
+
+      var morgen = DateTime.now()..add(Duration(days: 1));
+      await tester.pumpWidget(MaterialApp(
+          home: Scaffold(
+              body: ActionMap(
+                  termine: [
+            TerminTestDaten.anActionFrom(morgen)..id = 1,
+            TerminTestDaten.anActionFrom(morgen)..id = 2,
+            TerminTestDaten.anActionFrom(morgen)..id = 3,
+          ],
+                  listLocations: [],
+                  isMyAction: isMyAction,
+                  openActionDetails: () {***REMOVED***))));
+
+      List<FlatButton> actionMarker = tester
+          .widgetList(find.byKey(Key('action marker')))
+          .map((widget) => widget as FlatButton)
+          .toList();
+
+      expect(actionMarker.length, 3);
+
+      expect(actionMarker[0].color, DweTheme.yellowLight);
+      expect(actionMarker[1].color, DweTheme.green);
+      expect(actionMarker[2].color, DweTheme.yellowLight);
+    ***REMOVED***);
+
+    testWidgets('are higlighted for past actions', (WidgetTester tester) async {
+      var isMyAction = (id) => id == 2;
+
+      await tester.pumpWidget(MaterialApp(
+          home: Scaffold(
+              body: ActionMap(
+                  termine: [
+            TerminTestDaten.einTermin()..id = 1,
+            TerminTestDaten.einTermin()..id = 2,
+            TerminTestDaten.einTermin()..id = 3,
+          ],
+                  listLocations: [],
+                  isMyAction: isMyAction,
+                  openActionDetails: () {***REMOVED***))));
+
+      List<FlatButton> actionMarker = tester
+          .widgetList(find.byKey(Key('action marker')))
+          .map((widget) => widget as FlatButton)
+          .toList();
+
+      expect(actionMarker.length, 3);
+
+      expect(actionMarker[0].color, DweTheme.yellowBright);
+      expect(actionMarker[1].color, DweTheme.greenLight);
+      expect(actionMarker[2].color, DweTheme.yellowBright);
+    ***REMOVED***);
+
+    testWidgets('react to tap', (WidgetTester tester) async {
+      bool iHaveBeenCalled = false;
+
+      await tester.pumpWidget(MaterialApp(
+          home: Scaffold(
+              body: ActionMap(
+                  termine: [
+            TerminTestDaten.einTermin()..id = 1,
+            TerminTestDaten.einTermin()..id = 2,
+            TerminTestDaten.einTermin()..id = 3,
+          ],
+                  listLocations: [],
+                  isMyAction: (_) => false,
+                  openActionDetails: (_1,_2) => iHaveBeenCalled = true))));
+
+      expect(iHaveBeenCalled, false);
+
+      await tester.tap(find.byKey(Key('action marker')).first);
+      await tester.pump();
+
+      expect(iHaveBeenCalled, true);
+    ***REMOVED***);
   ***REMOVED***);
 
-  testWidgets('marks own actions', (WidgetTester tester) async {
-    var isMyAction = (id) => id == 2;
-
-    var morgen = DateTime.now()..add(Duration(days: 1));
-    await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-            body: ActionMap(termine: [
-      TerminTestDaten.anActionFrom(morgen)..id = 1,
-      TerminTestDaten.anActionFrom(morgen)..id = 2,
-      TerminTestDaten.anActionFrom(morgen)..id = 3,
-    ], listLocations: [], isMyAction: isMyAction, openActionDetails: () {***REMOVED***))));
-
-    List<FlatButton> actionMarker = tester
-        .widgetList(find.byKey(Key('action marker')))
-        .map((widget) => widget as FlatButton)
-        .toList();
-
-    expect(actionMarker.length, 3);
-
-    expect(actionMarker[0].color, DweTheme.yellowLight);
-    expect(actionMarker[1].color, DweTheme.green);
-    expect(actionMarker[2].color, DweTheme.yellowLight);
-  ***REMOVED***);
-
-  testWidgets('marks past actions', (WidgetTester tester) async {
-    var isMyAction = (id) => id == 2;
-
-    await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-            body: ActionMap(termine: [
-      TerminTestDaten.einTermin()..id = 1,
-      TerminTestDaten.einTermin()..id = 2,
-      TerminTestDaten.einTermin()..id = 3,
-    ], listLocations: [], isMyAction: isMyAction, openActionDetails: () {***REMOVED***))));
-
-    List<FlatButton> actionMarker = tester
-        .widgetList(find.byKey(Key('action marker')))
-        .map((widget) => widget as FlatButton)
-        .toList();
-
-    expect(actionMarker.length, 3);
-
-    expect(actionMarker[0].color, DweTheme.yellowBright);
-    expect(actionMarker[1].color, DweTheme.greenLight);
-    expect(actionMarker[2].color, DweTheme.yellowBright);
-  ***REMOVED***);
-
-  testWidgets('shows all list locations',
-      (WidgetTester tester) async {
+  testWidgets('shows all list locations', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
             body: ActionMap(
@@ -103,8 +141,7 @@ void main() {
     expect(find.byKey(Key('list location marker')), findsNWidgets(3));
   ***REMOVED***);
 
-  testWidgets('opens list location info on tap',
-      (WidgetTester tester) async {
+  testWidgets('opens list location info on tap', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
             body: ActionMap(
