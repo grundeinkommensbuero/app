@@ -576,11 +576,11 @@ void main() {
       await show_action_editor(tester, actionPage);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      var now = TimeOfDay.now();
+      var now = TimeOfDay(hour: 23,minute: 0);
       state.action.bis = now;
       Termin action = state.generateActions()[0];
 
-      expect(action.ende, DateTime(2019, 11, 05, now.hour, now.minute));
+      expect(action.ende, DateTime(2019, 11, 04, now.hour, now.minute));
     ***REMOVED***);
 
     testWidgets('with new location, w/ changes', (WidgetTester tester) async {
