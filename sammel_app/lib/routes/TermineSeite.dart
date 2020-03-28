@@ -287,7 +287,7 @@ class TermineSeiteState extends State<TermineSeite> {
 
     if (editedAction == null) return;
 
-    saveAction(editedAction);
+    await saveAction(editedAction);
 
     openTerminDetails(context, editedAction); // recursive and I know it
   ***REMOVED***
