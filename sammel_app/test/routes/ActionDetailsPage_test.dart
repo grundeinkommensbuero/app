@@ -29,28 +29,10 @@ main() {
     expect(find.text('Ruft an unter 012345678'), findsOneWidget);
   ***REMOVED***);
 
-  group('map', () {
-    testWidgets('shows', (WidgetTester tester) async {
+    testWidgets('shows map with marker', (WidgetTester tester) async {
       await tester.pumpWidget(widget);
 
       expect(find.byKey(Key('action details map')), findsOneWidget);
-    ***REMOVED***);
-
-    testWidgets('shows marker for action', (WidgetTester tester) async {
-      await tester.pumpWidget(widget);
-
       expect(find.byKey(Key('action details map marker')), findsOneWidget);
     ***REMOVED***);
-
-    testWidgets('does not react to tap on marker', (WidgetTester tester) async {
-      await tester.pumpWidget(widget);
-
-      await tester.tap(find.byKey(Key('action details map marker')));
-      await tester.pumpAndSettle();
-
-      expect(find.byKey(Key('action details page')), findsOneWidget);
-      expect(find.byKey(Key('action details map')), findsOneWidget);
-      expect(find.byKey(Key('action details map marker')), findsOneWidget);
-    ***REMOVED***);
-  ***REMOVED***);
 ***REMOVED***

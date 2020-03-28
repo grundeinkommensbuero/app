@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/src/map/flutter_map_state.dart'; // geht das?
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong/latlong.dart';
 import 'package:mockito/mockito.dart';
@@ -196,7 +197,7 @@ void main() {
       expect(find.byKey(Key('action details close button')), findsOneWidget);
     ***REMOVED***);
 
-    testWidgets('closes TerminDetails dialog with tap on Schliessen button',
+    testWidgets('loads Termin with details with tap on TermineCard',
         (WidgetTester tester) async {
       when(terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
@@ -217,7 +218,7 @@ void main() {
       verify(terminService.getTerminMitDetails(0));
     ***REMOVED***);
 
-    testWidgets('loads Termin with details with tap on TermineCard',
+    testWidgets('closes TerminDetails dialog with tap on Schliessen button',
         (WidgetTester tester) async {
       when(terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
@@ -239,6 +240,60 @@ void main() {
       await tester.pump();
 
       expect(find.byKey(Key('termin details dialog')), findsNothing);
+    ***REMOVED***);
+
+    testWidgets('closes TerminDetails dialog on tap at map',
+        (WidgetTester tester) async {
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.einTermin(),
+          ]);
+      when(terminService.getTerminMitDetails(any))
+          .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
+
+      await tester.pumpWidget(termineSeiteWidget);
+
+      // Warten bis asynchron Termine geladen wurden
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(Key('action card')).first);
+      await tester.pump();
+
+      await tester.tap(find.byKey(Key('action details map marker')));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(Key('termin details dialog')), findsNothing);
+    ***REMOVED***);
+
+    testWidgets('switches to map view and centers at action on tap at map',
+        (WidgetTester tester) async {
+      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.einTermin(),
+          ]);
+      when(terminService.getTerminMitDetails(any))
+          .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
+
+      await tester.pumpWidget(termineSeiteWidget);
+
+      // Warten bis asynchron Termine geladen wurden
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(Key('action card')).first);
+      await tester.pump();
+
+      TermineSeiteState page = tester.state(find.byKey(Key('action page')));
+      expect(page.navigation, 0);
+
+      await tester.tap(find.byKey(Key('action details map marker')));
+      await tester.pumpAndSettle();
+
+      expect(page.navigation, 1);
+      expect(find.byKey(Key('action map map')), findsOneWidget);
+      FlutterMapState map = await tester
+          .state(find.byKey(Key('action map map'))) as FlutterMapState;
+      var actionPosition = LatLng(TerminTestDaten.einTermin().latitude,
+          TerminTestDaten.einTermin().longitude);
+      expect(map.map.center, actionPosition);
+      expect(map.map.zoom, 15);
     ***REMOVED***);
   ***REMOVED***);
 
@@ -1142,8 +1197,6 @@ void main() {
 
       TermineSeiteState state = tester.state(find.byKey(Key('action page')));
       expect(state.navigation, 0);
-      expect(find.byKey(Key('action list')), findsOneWidget);
-      expect(find.byKey(Key('action map')), findsNothing);
     ***REMOVED***);
 
     testWidgets('for map view switches to map view',
@@ -1158,29 +1211,6 @@ void main() {
 
       TermineSeiteState state = tester.state(find.byKey(Key('action page')));
       expect(state.navigation, 1);
-      expect(find.byKey(Key('action map')), findsOneWidget);
-      expect(find.byKey(Key('action list')), findsNothing);
-    ***REMOVED***);
-
-    testWidgets('for list view switches to list view',
-        (WidgetTester tester) async {
-      when(terminService.ladeTermine(any))
-          .thenAnswer((_) async => [(TerminTestDaten.einTermin())]);
-
-      await tester.pumpWidget(termineSeiteWidget);
-
-      await tester.tap(find.byKey(Key('map view navigation button')));
-      await tester.pump();
-
-      TermineSeiteState state = tester.state(find.byKey(Key('action page')));
-      expect(state.navigation, 1);
-
-      await tester.tap(find.byKey(Key('list view navigation button')));
-      await tester.pump();
-
-      expect(state.navigation, 0);
-      expect(find.byKey(Key('action list')), findsOneWidget);
-      expect(find.byKey(Key('action map')), findsNothing);
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***

@@ -49,9 +49,12 @@ class VenueDialogState extends State<VenueDialog> {
           'Wähle auf der Karte einen Treffpunkt aus.',
           textScaleFactor: 0.9,
         ),
+        SizedBox(
+          height: 5.0,
+        ),
         Container(
             decoration: BoxDecoration(
-                border: Border.all(color: DweTheme.yellowBright, width: 2.0)),
+                border: Border.all(color: DweTheme.purple, width: 1.0)),
             child: SizedBox(
                 height: 300.0,
                 width: 300.0,
@@ -83,7 +86,7 @@ class VenueDialogState extends State<VenueDialog> {
           textScaleFactor: 0.9,
         ),
         SizedBox(
-          height: 10.0,
+          height: 5.0,
         ),
         TextFormField(
           key: Key('venue description input'),

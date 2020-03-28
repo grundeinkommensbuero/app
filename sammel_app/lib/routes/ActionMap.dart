@@ -14,17 +14,19 @@ class ActionMap extends StatefulWidget {
   final List<ListLocation> listLocations;
   final Function isMyAction;
   final Function openActionDetails;
+  final MapController mapController;
 
   // no better way yet: https://github.com/dart-lang/sdk/issues/4596
   static falseFunction() => false;
 
-  ActionMap(
-      {this.termine = const [],
-      this.listLocations = const [],
-      this.isMyAction = falseFunction,
-      this.openActionDetails,
-      Key key***REMOVED***)
-      : super(key: key);
+  ActionMap({
+    Key key,
+    this.termine = const [],
+    this.listLocations = const [],
+    this.isMyAction = falseFunction,
+    this.openActionDetails,
+    this.mapController,
+  ***REMOVED***) : super(key: key);
 
   @override
   ActionMapState createState() => ActionMapState();
@@ -36,15 +38,16 @@ class ActionMapState extends State<ActionMap> {
   @override
   Widget build(BuildContext context) {
     return FlutterMap(
-        options: MapOptions(
-          center: LatLng(52.5170365, 13.3888599),
-          zoom: 10.0,
-          maxZoom: 19.0,
-        ),
-        layers: [
-          TileLayerOptions(
-              urlTemplate: "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
-              subdomains: ['a', 'b', 'c']),
+      key: Key('action map map'),
+      options: MapOptions(
+        center: LatLng(52.5170365, 13.3888599),
+        zoom: 10.0,
+        maxZoom: 19.0,
+      ),
+      layers: [
+        TileLayerOptions(
+            urlTemplate: "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
+            subdomains: ['a', 'b', 'c']),
 //        PolygonLayerOptions(polygons: [
 //          Polygon(
 //              color: Color.fromARGB(40, DweTheme.purple.red, DweTheme.purple.green, DweTheme.purple.blue),
@@ -54,11 +57,13 @@ class ActionMapState extends State<ActionMap> {
 //                  .map((action) => LatLng(action.lattitude, action.longitude))
 //                  .toList())
 //        ]),
-          MarkerLayerOptions(
-              markers: <Marker>[]
-                ..addAll(generateListLocationMarkers())
-                ..addAll(generateActionMarkers())),
-        ]);
+        MarkerLayerOptions(
+            markers: <Marker>[]
+              ..addAll(generateListLocationMarkers())
+              ..addAll(generateActionMarkers())),
+      ],
+      mapController: widget.mapController ?? MapController(),
+    );
   ***REMOVED***
 
   List<ActionMarker> generateActionMarkers() {

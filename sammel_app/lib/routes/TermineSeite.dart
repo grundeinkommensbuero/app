@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
@@ -32,6 +34,7 @@ class TermineSeiteState extends State<TermineSeite> {
     color: Color.fromARGB(255, 129, 28, 98),
     fontSize: 15.0,
   );
+  static MapController mapController = MapController();
   bool _initialized = false;
 
   List<Termin> termine = [];
@@ -41,7 +44,6 @@ class TermineSeiteState extends State<TermineSeite> {
 
   List<int> myActions = [];
 
-  var view;
   int navigation = 0;
 
   @override
@@ -49,16 +51,16 @@ class TermineSeiteState extends State<TermineSeite> {
     if (!_initialized) intialize(context);
     // TODO: Memory-Leak beheben
 
-    view = [
-      ActionList(termine, isMyAction, openTerminDetails,
-          key: Key('action list')),
-      ActionMap(
-          termine: termine,
-          listLocations: listLocations,
-          isMyAction: isMyAction,
-          openActionDetails: openTerminDetails,
-          key: Key('action map')),
-    ];
+    var actionListView = ActionList(termine, isMyAction, openTerminDetails,
+        key: Key('action list'));
+    var actionMapView = ActionMap(
+      key: Key('action map'),
+      termine: termine,
+      listLocations: listLocations,
+      isMyAction: isMyAction,
+      openActionDetails: openTerminDetails,
+      mapController: mapController,
+    );
 
     return Scaffold(
       extendBody: true,
@@ -75,8 +77,12 @@ class TermineSeiteState extends State<TermineSeite> {
           )
         ],
       )),
-      body: Column(
-        children: <Widget>[filterWidget, Expanded(child: view[navigation])],
+      body: Stack(
+        alignment: Alignment.topCenter,
+        children: [IndexedStack(
+                children: [actionListView, actionMapView], index: navigation),
+          filterWidget,
+        ],
       ),
       floatingActionButton: FloatingActionButton.extended(
           key: Key('create termin button'),
@@ -237,6 +243,9 @@ class TermineSeiteState extends State<TermineSeite> {
 
     if (command == TerminDetailsCommand.EDIT)
       editAction(context, terminMitDetails);
+
+    if (command == TerminDetailsCommand.FOCUS)
+      showActionOnMap(terminMitDetails);
   ***REMOVED***
 
   List<Widget> addEditDeleteButtonsIfMyAction(
@@ -368,6 +377,13 @@ class TermineSeiteState extends State<TermineSeite> {
                 )
               ],
             ));
+  ***REMOVED***
+
+  void showActionOnMap(Termin action) {
+    mapController.move(LatLng(action.latitude, action.longitude), 15.0);
+    setState(() {
+      navigation = 1; // change to map view
+    ***REMOVED***);
   ***REMOVED***
 ***REMOVED***
 

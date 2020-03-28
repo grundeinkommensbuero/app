@@ -201,8 +201,8 @@ class ActionEditorState extends State<ActionEditor> {
         center: determineMapCenter(action));
 
     setState(() {
-      action.terminDetails.treffpunkt = ergebnis.description;
-      action.coordinates = ergebnis.coordinates;
+      action.terminDetails.treffpunkt = ergebnis?.description;
+      action.coordinates = ergebnis?.coordinates;
       validateAllInput();
     ***REMOVED***);
   ***REMOVED***
