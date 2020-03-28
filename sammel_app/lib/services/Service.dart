@@ -16,7 +16,15 @@ class BackendService {
     HttpHeaders.acceptHeader: "*/*",
   };
 
+  // Zertifikat muss nur einmal global über alle Services geladen werden
   static bool zertifikatGeladen = false;
+
+  BackendService() {
+    if (!zertifikatGeladen) {
+      ladeZertifikat();
+      zertifikatGeladen = true;
+    }
+  }
 
   // Assets müssen außerhalb von Widgets mit dieser asynchronen Funktion ermittelt werden
   // Darum kann das Zertifikat nicht bei der Initialisierung geladen werden
@@ -26,11 +34,9 @@ class BackendService {
     ByteData data =
         await rootBundle.load('assets/security/sammel-server_10.0.2.2.pem');
     clientContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
-    zertifikatGeladen = true;
   }
 
   Future<HttpClientResponseBody> get(Uri url) async {
-    if (!zertifikatGeladen) ladeZertifikat();
     var uri = Uri.https('$host:$port', url.path, url.queryParameters);
     return await client
         .getUrl(uri)
@@ -52,7 +58,6 @@ class BackendService {
   }
 
   Future<HttpClientResponseBody> post(Uri url, String data) async {
-    if (!zertifikatGeladen) ladeZertifikat();
     return await client
         .postUrl(Uri.https('$host:$port', url.toString()))
         .then((HttpClientRequest request) {
@@ -76,7 +81,6 @@ class BackendService {
   }
 
   Future<HttpClientResponseBody> delete(Uri url, String data) async {
-    if (!zertifikatGeladen) ladeZertifikat();
     return await client
         .deleteUrl(Uri.https('$host:$port', url.toString()))
         .then((HttpClientRequest request) {
