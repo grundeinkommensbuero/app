@@ -111,6 +111,9 @@ class TermineSeiteState extends State<TermineSeite> {
     );
   ***REMOVED***
 
+  // funktioniert nicht im Konstruktor, weil da der BuildContext fehlt
+  // und auch nicht im initState(), weil da InheritedWidgets nicht angefasst werden können
+  // und didChangeDependencies() wird mehrfach aufgerufen
   void intialize(BuildContext context) {
 //    Provider.of<StorageService>(context).clearAllPreferences();
 

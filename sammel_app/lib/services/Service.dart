@@ -21,8 +21,8 @@ class BackendService {
 
   BackendService() {
     if (!zertifikatGeladen) {
-      ladeZertifikat();
       zertifikatGeladen = true;
+      ladeZertifikat();
     ***REMOVED***
   ***REMOVED***
 
