@@ -5,9 +5,10 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
+import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/ExpandableConstrainedBox.dart';
 
-enum TerminDetailsCommand { EDIT, DELETE, CLOSE }
+enum TerminDetailsCommand { EDIT, DELETE, CLOSE, FOCUS }
 
 class ActionDetailsPage extends StatefulWidget {
   final Termin action;
@@ -17,8 +18,7 @@ class ActionDetailsPage extends StatefulWidget {
     marker = Marker(
         anchorPos: AnchorPos.align(AnchorAlign.top),
         point: LatLng(action.latitude, action.longitude),
-        builder: (context) =>
-            Icon(
+        builder: (context) => Icon(
               Icons.location_on,
               key: Key('action details map marker'),
               size: 30,
@@ -138,27 +138,29 @@ class _ActionDetailsPage extends State<ActionDetailsPage> {
       SizedBox(
         height: 10.0,
       ),
-      SizedBox(
-        height: 150.0,
-        width: 250.0,
-        child: FlutterMap(
-          key: Key('action details map'),
-          options: MapOptions(
-              center: LatLng(widget.action.latitude, widget.action.longitude),
-              zoom: 15,
-              interactive: false,
-              onTap: showActionInMap),
-          layers: [
-            TileLayerOptions(
-                urlTemplate:
-                "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
-                subdomains: ['a', 'b', 'c']),
-            MarkerLayerOptions(markers: [widget.marker]),
-          ],
+      InkWell(
+        child: Container(
+          height: 150.0,
+          width: 250.0,
+          decoration: BoxDecoration(
+              border: Border.all(color: DweTheme.purple, width: 1.0)),
+          child: FlutterMap(
+            key: Key('action details map'),
+            options: MapOptions(
+                center: LatLng(widget.action.latitude, widget.action.longitude),
+                zoom: 15,
+                interactive: false),
+            layers: [
+              TileLayerOptions(
+                  urlTemplate:
+                      "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
+                  subdomains: ['a', 'b', 'c']),
+              MarkerLayerOptions(markers: [widget.marker]),
+            ],
+          ),
         ),
+        onTap: () => Navigator.pop(context, TerminDetailsCommand.FOCUS),
       ),
     ]);
   }
-
-  void showActionInMap(_) {}
 }

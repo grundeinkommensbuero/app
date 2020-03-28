@@ -34,6 +34,9 @@ class ActionListState extends State<ActionList> {
         onTap: () => widget.openActionDetails(context, widget.termine[index]),
         contentPadding: EdgeInsets.only(bottom: 0.1));
     var now = DateTime.now();
+    // Abstand nach oben, damit oberste Aktion nicht von Filter verdeckt wird
+    if (index==0) return Column(children: [SizedBox(height: 50.0,), tile]);
+    // Jetzt-Zeile zwischen vergangenem und zukünftiger Aktion
     if ((widget.termine[index].beginn.isBefore(now)) &&
         (index == widget.termine.length - 1 ||
             widget.termine[index + 1].beginn.isAfter(now)))

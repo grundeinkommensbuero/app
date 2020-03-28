@@ -37,10 +37,7 @@ class FilterWidgetState extends State<FilterWidget>
   Widget build(BuildContext context) {
     if (!_initialized) initialize(context);
 
-    return AnimatedSize(
-      vsync: this,
-      duration: Duration(milliseconds: 100),
-      child: Column(
+    return Column(
         children: [
           !expanded
               ? Container(color: Color.fromARGB(255, 149, 48, 118))
@@ -96,8 +93,7 @@ class FilterWidgetState extends State<FilterWidget>
                 onPressed: onApply,
               )),
         ],
-      ),
-    );
+      );
   }
 
   // Kann nicht im Konstruktor ausgeführt werden, weil der Provider den context braucht, der ins build reingereicht wird
