@@ -6,6 +6,8 @@ import 'package:sammel_app/services/ListLocationService.dart';
 import '../TestdataStorage.dart';
 
 void main() {
+  // nöig wegen dem Laden des Zertifikats
+  TestWidgetsFlutterBinding.ensureInitialized();
   var service = DemoListLocationService();
 
   test('returns list locations', () async {
