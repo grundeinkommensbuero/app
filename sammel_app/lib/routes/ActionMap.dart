@@ -8,6 +8,7 @@ import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:user_location/user_location.dart';
 
 class ActionMap extends StatefulWidget {
   final List<Termin> termine;
@@ -33,13 +34,17 @@ class ActionMap extends StatefulWidget {
 ***REMOVED***
 
 class ActionMapState extends State<ActionMap> {
+
   ActionMapState();
 
   @override
   Widget build(BuildContext context) {
+    var markers = generateMarkers();
+
     return FlutterMap(
       key: Key('action map map'),
       options: MapOptions(
+        plugins: [UserLocationPlugin()],
         center: LatLng(52.5170365, 13.3888599),
         zoom: 10.0,
         maxZoom: 19.0,
@@ -57,10 +62,12 @@ class ActionMapState extends State<ActionMap> {
 //                  .map((action) => LatLng(action.lattitude, action.longitude))
 //                  .toList())
 //        ]),
-        MarkerLayerOptions(
-            markers: <Marker>[]
-              ..addAll(generateListLocationMarkers())
-              ..addAll(generateActionMarkers())),
+        MarkerLayerOptions(markers: markers),
+        UserLocationOptions(
+          context: context,
+          mapController: widget.mapController,
+          markers: markers,
+        ),
       ],
       mapController: widget.mapController ?? MapController(),
     );
@@ -80,6 +87,10 @@ class ActionMapState extends State<ActionMap> {
         .map((listlocation) => ListLocationMarker(listlocation))
         .toList();
   ***REMOVED***
+
+  List<Marker> generateMarkers() => <Marker>[]
+    ..addAll(generateListLocationMarkers())
+    ..addAll(generateActionMarkers());
 ***REMOVED***
 
 class ActionMarker extends Marker {
