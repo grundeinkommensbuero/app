@@ -10,6 +10,9 @@ import '../model/Ort_test.dart';
 import '../model/Termin_test.dart';
 
 void main() {
+  // nöig wegen dem Laden des Zertifikats
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   var service = DemoTermineService();
 
   test('DemoTermineService creates new Termin', () async {

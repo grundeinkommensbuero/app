@@ -1,13 +1,16 @@
 import 'dart:io';
 
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
-import 'package:test/test.dart';
 
 class HttpClientMock extends Mock implements HttpClient {}
 
 void main() {
+  // nöig wegen dem Laden des Zertifikats
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   group('DemoStammdatenService', () {
     test('liefert Orte Aus', () async {
       var testStammdatenService = DemoStammdatenService();
