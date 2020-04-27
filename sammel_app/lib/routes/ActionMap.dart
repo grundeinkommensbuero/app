@@ -34,7 +34,6 @@ class ActionMap extends StatefulWidget {
 ***REMOVED***
 
 class ActionMapState extends State<ActionMap> {
-
   ActionMapState();
 
   @override
@@ -67,6 +66,8 @@ class ActionMapState extends State<ActionMap> {
           context: context,
           mapController: widget.mapController,
           markers: markers,
+          updateMapLocationOnPositionChange: false,
+          showMoveToCurrentLocationFloatingActionButton: false,
         ),
       ],
       mapController: widget.mapController ?? MapController(),
