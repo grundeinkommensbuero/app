@@ -11,6 +11,7 @@ unit_tests_app:
   script:
     - cd sammel_app
     - flutter test --coverage
+    - lcov --list coverage/lcov.info
     - genhtml coverage/lcov.info --output=coverage
   artifacts:
     paths:
