@@ -30,7 +30,7 @@ build_android_apk:
     - flutter build apk --debug
     - mkdir ../downloads/
     - mkdir ../downloads/sammel_app/
-    - cp build/app/outputs/apk/debug/ ../downloads/sammel_app/
+    - cp -r build/app/outputs/apk/debug/ ../downloads/sammel_app/
   artifacts:
     paths:
       - downloads/
