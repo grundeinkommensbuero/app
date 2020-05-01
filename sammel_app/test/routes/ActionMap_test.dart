@@ -118,7 +118,7 @@ void main() {
           ],
                   listLocations: [],
                   isMyAction: (_) => false,
-                  openActionDetails: (_1,_2) => iHaveBeenCalled = true))));
+                  openActionDetails: (_1, _2) => iHaveBeenCalled = true))));
 
       expect(iHaveBeenCalled, false);
 
@@ -157,4 +157,48 @@ void main() {
     expect(find.byKey(Key('list location info dialog')), findsOneWidget);
     expect(find.text(curry36().name), findsOneWidget);
   ***REMOVED***);
+
+//  Funktioniert nicht wegen null-Exception im dispose vom User-Location-Plugin
+//  testWidgets('enables user location plugin when permission granted',
+//      (WidgetTester tester) async {
+//    await tester.pumpWidget(MaterialApp(
+//        home: Scaffold(
+//            body: ActionMap(
+//                termine: [],
+//                listLocations: [],
+//                isMyAction: (_) => false,
+//                openActionDetails: () {***REMOVED***))));
+//
+//    var state = tester.state<ActionMapState>(find.byType(ActionMap));
+//
+//    var map = tester.widget<FlutterMap>(find.byType(FlutterMap));
+//
+//    // before permission
+//    expect(
+//        map.layers
+//            .map((layer) => layer.runtimeType)
+//            .contains(UserLocationOptions),
+//        isFalse);
+//    expect(
+//        map.options.plugins
+//            .map((layer) => layer.runtimeType)
+//            .contains(UserLocationPlugin),
+//        isFalse);
+//
+//    state.setState(() => state.locationPermissionGranted = true);
+//    await tester.pumpAndSettle(Duration(milliseconds: 300));
+//
+//
+//    // after permission
+//    expect(
+//        map.layers
+//            .map((layer) => layer.runtimeType)
+//            .contains(UserLocationOptions),
+//        isTrue);
+//    expect(
+//        map.options.plugins
+//            .map((layer) => layer.runtimeType)
+//            .contains(UserLocationPlugin),
+//        isTrue);
+//  ***REMOVED***);
 ***REMOVED***
