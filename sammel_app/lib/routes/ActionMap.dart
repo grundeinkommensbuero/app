@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
@@ -36,22 +37,23 @@ class ActionMap extends StatefulWidget {
 class ActionMapState extends State<ActionMap> {
   ActionMapState();
 
+  var locationPermissionGranted = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Permission.location.request().then((status) =>
+        setState(() => locationPermissionGranted = status.isGranted));
+  }
+
   @override
   Widget build(BuildContext context) {
     var markers = generateMarkers();
-
-    return FlutterMap(
-      key: Key('action map map'),
-      options: MapOptions(
-        plugins: [UserLocationPlugin()],
-        center: LatLng(52.5170365, 13.3888599),
-        zoom: 10.0,
-        maxZoom: 19.0,
-      ),
-      layers: [
-        TileLayerOptions(
-            urlTemplate: "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
-            subdomains: ['a', 'b', 'c']),
+    var plugins = List<UserLocationPlugin>();
+    var layers = [
+      TileLayerOptions(
+          urlTemplate: "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
+          subdomains: ['a', 'b', 'c']),
 //        PolygonLayerOptions(polygons: [
 //          Polygon(
 //              color: Color.fromARGB(40, DweTheme.purple.red, DweTheme.purple.green, DweTheme.purple.blue),
@@ -61,15 +63,23 @@ class ActionMapState extends State<ActionMap> {
 //                  .map((action) => LatLng(action.lattitude, action.longitude))
 //                  .toList())
 //        ]),
-        MarkerLayerOptions(markers: markers),
-        UserLocationOptions(
-          context: context,
-          mapController: widget.mapController,
-          markers: markers,
-          updateMapLocationOnPositionChange: false,
-          showMoveToCurrentLocationFloatingActionButton: false,
-        ),
-      ],
+      MarkerLayerOptions(markers: markers),
+    ];
+
+    print('### locationPermissionGranted: $locationPermissionGranted');
+    if (locationPermissionGranted) {
+      addUserLocationSettings(markers, plugins, layers);
+    }
+
+    return FlutterMap(
+      key: Key('action map map'),
+      options: MapOptions(
+        plugins: plugins,
+        center: LatLng(52.5170365, 13.3888599),
+        zoom: 10.0,
+        maxZoom: 19.0,
+      ),
+      layers: layers,
       mapController: widget.mapController ?? MapController(),
     );
   }
@@ -92,6 +102,18 @@ class ActionMapState extends State<ActionMap> {
   List<Marker> generateMarkers() => <Marker>[]
     ..addAll(generateListLocationMarkers())
     ..addAll(generateActionMarkers());
+
+  void addUserLocationSettings(List<Marker> markers,
+      List<UserLocationPlugin> plugins, List<LayerOptions> layers) {
+    plugins.add(UserLocationPlugin());
+    layers.add(UserLocationOptions(
+      context: context,
+      mapController: widget.mapController,
+      markers: markers,
+      updateMapLocationOnPositionChange: false,
+      showMoveToCurrentLocationFloatingActionButton: false,
+    ));
+  }
 }
 
 class ActionMarker extends Marker {
