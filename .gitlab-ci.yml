@@ -13,7 +13,7 @@ unit_tests_app:
     - flutter test --coverage
     - lcov --list coverage/lcov.info
     - genhtml coverage/lcov.info --output=coverage
-    - cp coverage ../public/sammel_app/coverage
+    - cp -r coverage ../public/sammel_app/coverage
   artifacts:
     paths:
       - public/
@@ -25,6 +25,7 @@ build_android_apk:
   script:
     - cd sammel_app
     - flutter build apk --debug
+    - cp build/app/outputs/apk/debug/ ../downloads/sammel_app/
   artifacts:
     paths:
       - sammel_app/build/app/outputs/apk/debug/
