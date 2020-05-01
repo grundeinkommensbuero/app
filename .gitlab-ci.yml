@@ -25,10 +25,12 @@ build_android_apk:
   script:
     - cd sammel_app
     - flutter build apk --debug
+    - mkdir ../downloads/
+    - mkdir ../downloads/sammel_app/
     - cp build/app/outputs/apk/debug/ ../downloads/sammel_app/
   artifacts:
     paths:
-      - sammel_app/build/app/outputs/apk/debug/
+      - downloads/
 
 pages:
   image: alpine
