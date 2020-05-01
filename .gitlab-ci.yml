@@ -13,9 +13,10 @@ unit_tests_app:
     - flutter test --coverage
     - lcov --list coverage/lcov.info
     - genhtml coverage/lcov.info --output=coverage
+    - cp coverage ../public/sammel_app/coverage
   artifacts:
     paths:
-      - sammel_app/coverage/
+      - public/
   coverage: '/^lines\.+: |\d+\.?\d+\%/'
 
 build_android_apk:
