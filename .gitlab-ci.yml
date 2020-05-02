@@ -79,6 +79,7 @@ pages:
   stage: deploy_coverage
   dependencies:
     - unit_tests_app
+    - test_server
   script:
     - mkdir public
     - mkdir public/coverage
