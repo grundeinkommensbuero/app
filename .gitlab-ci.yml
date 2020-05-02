@@ -16,15 +16,29 @@ stages:
   - deploy_coverage
   - deploy_backend
 
+# flutter test wird möglicherweise gerade erweitert, um --coverage und --machine gleichzeitig zuzulassen
+# https://github.com/flutter/flutter/issues/30108
 unit_tests_app:
   image: cirrusci/flutter:latest
   stage: build_and_test
   script:
-    - cd sammel_app
-    - flutter test --coverage
+    - which flutter
+    - env
+    # tojunit-Parser herunterladen und aktivieren
+    - cd sammel_app/build_dependencies
+    - flutter pub get
+    - flutter pub global activate junitreport
+    - cd ..
+    # erster run für test-ergebnisse
+    - flutter test --machine | tojunit --output TEST-app.xml
+    # zweiter run für coverage
+    - - flutter test --coverage
     - lcov --list coverage/lcov.info
     - genhtml coverage/lcov.info --output=coverage
   artifacts:
+    reports:
+      junit:
+        - sammel_app/TEST-app.xml
     paths:
       - sammel_app/coverage/
   coverage: '/^lines\.+: |\d+\.?\d+\%/'
