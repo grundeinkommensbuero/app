@@ -22,7 +22,6 @@ unit_tests_app:
   image: cirrusci/flutter:latest
   stage: build_and_test
   script:
-    - which dart
     # tojunit-Parser herunterladen und aktivieren
     - cd sammel_app/build_dependencies
     - flutter pub get
