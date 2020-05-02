@@ -30,6 +30,7 @@ unit_tests_app:
     - export PATH="$PATH":"$HOME/.pub-cache/bin"
     # erster run für test-ergebnisse
     - cd ..
+    - flutter pub get
     - flutter test --machine | tojunit --output TEST-app.xml
     # zweiter run für coverage
     - - flutter test --coverage
