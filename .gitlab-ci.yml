@@ -37,14 +37,13 @@ test_server:
   stage: build_and_test
   script:
     - cd sammel_server
-    - mvn test -fae
+    - mvn verify -fae
   artifacts:
     reports:
       junit:
-        - /sammel_server/surefire-reports/TEST*.xml
+        - /sammel_server/target/surefire-reports/TEST*.xml
     paths:
-      - /sammel_server/surefire-reports/
-      - /sammel_server/target/site
+      - /sammel_server/target/site/jacoco
 
 #  image: maven:latest
 #  stage: build_and_test
@@ -73,7 +72,7 @@ pages:
     - mkdir public
     - mkdir public/coverage
     - mv sammel_app/coverage/ public/coverage/app
-    - mv sammel_server/target/site public/coverage/server
+    - mv /sammel_server/target/site/jacoco public/coverage/server
   artifacts:
     paths:
       - public
