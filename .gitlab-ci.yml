@@ -47,7 +47,7 @@ test_server:
   stage: build_and_test
   script:
     - cd sammel_server
-    - mvn verify --failt-at-end --no-transfer-progress
+    - mvn verify --fail-at-end --no-transfer-progress
   artifacts:
     reports:
       junit:
