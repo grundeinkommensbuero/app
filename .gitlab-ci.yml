@@ -1,5 +1,15 @@
 # https://gitlab.com/gableroux/gitlab_ci_flutter_example/blob/master/.gitlab-ci.yml
 # Siehe auch: https://medium.com/@chima_37359/setup-gitlab-ci-in-flutter-android-project-89f6628828e8
+
+# Caching Maven Repository
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .m2/repository
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+
 stages:
   - build_and_test
   - deploy_coverage
@@ -37,13 +47,13 @@ test_server:
   stage: build_and_test
   script:
     - cd sammel_server
-    - mvn verify -fae
+    - mvn verify --failt-at-end --no-transfer-progress
   artifacts:
     reports:
       junit:
-        - /sammel_server/target/surefire-reports/TEST*.xml
+        - sammel_server/target/surefire-reports/TEST*.xml
     paths:
-      - /sammel_server/target/site/jacoco
+      - sammel_server/target/site/jacoco
 
 #  image: maven:latest
 #  stage: build_and_test
