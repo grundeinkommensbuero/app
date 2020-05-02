@@ -66,7 +66,6 @@ class ActionMapState extends State<ActionMap> {
       MarkerLayerOptions(markers: markers),
     ];
 
-    print('### locationPermissionGranted: $locationPermissionGranted');
     if (locationPermissionGranted) {
       addUserLocationSettings(markers, plugins, layers);
     ***REMOVED***

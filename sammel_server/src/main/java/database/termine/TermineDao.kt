@@ -47,7 +47,6 @@ open class TermineDao {
         if (filterKlausel.contains(vonKlausel)) query.setParameter("von", filter.von!!.atDate(LocalDate.now()))
         if (filterKlausel.contains(bisKlausel)) query.setParameter("bis", filter.bis!!.atDate(LocalDate.now()))
         if (filterKlausel.contains(orteKlausel)) query.setParameter("orte", filter.orte.map { it.convertToOrt() ***REMOVED***)
-        LOG.debug("debug ### " + query.toString())
         return query
     ***REMOVED***
 
