@@ -26,11 +26,11 @@ build_android_apk:
     - flutter build apk --debug
     - mkdir ../downloads/
     - mkdir ../downloads/sammel_app/
-    - cp -r build/app/outputs/apk/debug/ ../downloads/sammel_app/
+    - cp build/app/outputs/apk/debug/app-debug.apk ../downloads/sammel_app/sammel-app-nightly.apk
+
   artifacts:
     paths:
       - downloads/
-
 pages:
   image: alpine
   stage: deploy_coverage
