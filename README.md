@@ -8,4 +8,6 @@ Eine umfassende Anleitung zum Aufsetzen des Projekts findet sich [hier](https://
 
 # Test-Coverage
 
-Die aktuelle Test-Coverage für die App liegt [hier](https://kybernetik.gitlab.io/sammel-app/coverage).
+Die aktuelle Test-Coverage für die App liegt [hier](https://kybernetik.gitlab.io/sammel-app/coverage/app).
+
+Die aktuelle Test-Coverage für den Server liegt [hier](https://kybernetik.gitlab.io/sammel-app/coverage/server).
