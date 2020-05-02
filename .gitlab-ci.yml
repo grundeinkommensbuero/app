@@ -22,14 +22,14 @@ unit_tests_app:
   image: cirrusci/flutter:latest
   stage: build_and_test
   script:
-    - which flutter
-    - env
+    - which dart
     # tojunit-Parser herunterladen und aktivieren
     - cd sammel_app/build_dependencies
     - flutter pub get
     - flutter pub global activate junitreport
-    - cd ..
+    - export PATH="$PATH":"$HOME/.pub-cache/bin"
     # erster run für test-ergebnisse
+    - cd ..
     - flutter test --machine | tojunit --output TEST-app.xml
     # zweiter run für coverage
     - - flutter test --coverage
