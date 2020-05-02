@@ -41,7 +41,6 @@ unit_tests_app:
         - sammel_app/TEST-app.xml
     paths:
       - sammel_app/coverage/
-  coverage: '/^lines\.+: |\d+\.?\d+\%/'
 
 build_android_apk:
   image: cirrusci/flutter:latest
