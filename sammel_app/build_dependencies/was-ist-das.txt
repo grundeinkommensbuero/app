@@ -1,0 +1,9 @@
+
+tojunit konvertiert die Flutter Test-Reports in von Gitlab lesbares JUnit-Format.
+
+Leider beißen sich tojunit 1.2.0 und flutter_test any wegen eines Dependency-Konflikts über xml 1.15.8 / 1.16.0.
+Ältere Versionen von tojunit kollidieren mit Jiffy über intl.
+
+Einzige sinnvolle Lösung ist dieses Mini-Projekt für das laden und konfigurieren von tojunit.
+
+In der aktuellsten master-Version von flutter_test gibt es keine Dependency auf xml mehr. Dann ist das hier wohl nicht mehr nötig.
