@@ -1,6 +1,6 @@
 # Sammel-App
 
-Eine Demo des Prototypen, die ohne Server läuft liegt [hier](https://gitlab.com/ChemoCosmo/sammel-app/blob/master/App-Demo/dwe.apk).
+Der Nightly Build des Prototypen, der ohne Server läuft liegt [hier](https://gitlab.com/kybernetik/sammel-app/-/jobs/artifacts/master/raw/downloads/sammel_app/debug/app-debug.apk?job=build_android_apk).
 
 # Projekt aufsetzen
 
