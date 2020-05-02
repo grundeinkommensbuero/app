@@ -31,19 +31,6 @@ build_android_apk:
   artifacts:
     paths:
       - downloads/
-pages:
-  image: alpine
-  stage: deploy_coverage
-  dependencies:
-    - unit_tests_app
-  script:
-    - mkdir public
-    - mv sammel_app/coverage/ public/coverage/
-  artifacts:
-    paths:
-      - public
-  only:
-    - master
 
 test_server:
   image: maven:latest
@@ -51,8 +38,14 @@ test_server:
   script:
     - cd sammel_server
     - mvn test -fae
+  artifacts:
+    reports:
+      junit:
+        - /sammel_server/surefire-reports/TEST*.xml
+    paths:
+      - /sammel_server/surefire-reports/
+      - /sammel_server/target/site
 
-#build_server:
 #  image: maven:latest
 #  stage: build_and_test
 #  script:
@@ -70,3 +63,19 @@ test_server:
 #  script:
 #    - docker build sammel_server -t kybernetik/sammel-server:latest
 #    - docker push kybernetik/sammel-app:sammel-server
+
+pages:
+  image: alpine
+  stage: deploy_coverage
+  dependencies:
+    - unit_tests_app
+  script:
+    - mkdir public
+    - mkdir public/coverage
+    - mv sammel_app/coverage/ public/coverage/app
+    - mv sammel_server/target/site public/coverage/server
+  artifacts:
+    paths:
+      - public
+  only:
+    - master
