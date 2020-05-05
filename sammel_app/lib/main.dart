@@ -6,12 +6,25 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/push_notification_manager.dart';
 
-void main() => runApp(MyApp());
+void main()
+{
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MyApp());
+***REMOVED***
+
 
 const Mode mode = Mode.DEMO;
 
 class MyApp extends StatelessWidget {
+
+  PushNotificationsManager pnm = PushNotificationsManager();
+
+  MyApp()
+  {
+    pnm.init();
+  ***REMOVED***
 
   @override
   Widget build(BuildContext context) {
