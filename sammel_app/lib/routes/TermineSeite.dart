@@ -66,67 +66,48 @@ class TermineSeiteState extends State<TermineSeite> {
       extendBody: true,
       drawer: SizedBox(
           width: 200.0,
-          child: Theme(
-              data: Theme.of(context).copyWith(
-                canvasColor: Colors.transparent,
-                backgroundColor: Colors.transparent,
-              ),
-              child: Drawer(
-                  key: Key('drawer menu'),
-                  child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          stops: [0.5, 1.0],
-                          colors: <Color>[DweTheme.yellow, Colors.yellowAccent],
-                        ),
+          child: Drawer(
+              key: Key('drawer menu'),
+              child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      stops: [0.5, 1.0],
+                      colors: <Color>[DweTheme.yellow, Colors.yellowAccent],
+                    ),
+                  ),
+                  child: ListView(
+                    padding:
+                        EdgeInsets.symmetric(vertical: 40.0, horizontal: 0.0),
+                    children: <Widget>[
+                      Image.asset("assets/images/dwe.png"),
+                      SizedBox(
+                        height: 25.0,
                       ),
-                      child: ListView(
-                        padding: EdgeInsets.symmetric(vertical: 40.0, horizontal: 10.0),
-                        children: <Widget>[
-                          Image.asset("assets/images/dwe.png"),
-                          SizedBox(
-                            height: 25.0,
-                          ),
-                          ListTile(
-                              title: Text(
-                                'Aktionen',
-                                style: DweTheme.menuCaption,
-                              ),
-                              subtitle: Text(
-                                  'Aktionen in einer Liste oder Karte anschauen'),
-                              onTap: () {
-                                Navigator.pop(context);
-                              }),
-                          SizedBox(
-                            height: 20.0,
-                          ),
-                          ListTile(
-                            key: Key('create termin button'),
-                            title: Text('Zum Sammeln einladen',
-                                style: DweTheme.menuCaption),
-                            subtitle:
-                                Text('Eine Sammel-Aktion ins Leben rufen'),
-                            onTap: () {
-                              Navigator.pop(context);
-                              openCreateDialog(context);
-                            },
-                          ),
-                          SizedBox(
-                            height: 20.0,
-                          ),
-                          ListTile(
-                            title: Text('Fragen und Antworten',
-                                style: DweTheme.menuCaption),
-                            subtitle:
-                                Text('Tipps, Tricks und Argumenationshilfen'),
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                          ),
-                        ],
-                      ))))),
+                      menuEntry(
+                          title: 'Aktionen',
+                          subtitle:
+                              'Aktionen in einer Liste oder Karte anschauen',
+                          selected: true,
+                          onTap: () => Navigator.pop(context)),
+                      menuEntry(
+                          key: Key('create termin button'),
+                          title: 'Zum Sammeln einladen',
+                          subtitle: 'Eine Sammel-Aktion ins Leben rufen',
+                          selected: false,
+                          onTap: () {
+                            Navigator.pop(context);
+                            openCreateDialog(context);
+                          }),
+                      menuEntry(
+                          key: Key('create termin button'),
+                          title: 'Fragen und Antworten',
+                          subtitle: 'Tipps, Tricks und Argumentationshilfen',
+                          selected: false,
+                          onTap: () => Navigator.pop(context)),
+                    ],
+                  )))),
       appBar: AppBar(
           title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -163,6 +144,28 @@ class TermineSeiteState extends State<TermineSeite> {
         ],
       ),
     );
+  }
+
+  Container menuEntry(
+      {Key key, String title, String subtitle, bool selected, var onTap}) {
+    return Container(
+        key: key,
+        padding: EdgeInsets.symmetric(vertical: selected ? 15.0 : 10.0),
+        decoration: BoxDecoration(
+            color: selected ? DweTheme.purple : Colors.transparent),
+        child: ListTile(
+            title: Text(
+              title,
+              style: selected
+                  ? DweTheme.menuCaptionSelected
+                  : DweTheme.menuCaption,
+            ),
+            subtitle: Text(
+              subtitle,
+              style: TextStyle(
+                  color: selected ? Colors.amber : Colors.black54),
+            ),
+            onTap: onTap));
   }
 
   // funktioniert nicht im Konstruktor, weil da der BuildContext fehlt
