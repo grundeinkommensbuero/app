@@ -83,8 +83,12 @@ class TermineSeiteState extends State<TermineSeite> {
                         ),
                       ),
                       child: ListView(
+                        padding: EdgeInsets.symmetric(vertical: 40.0, horizontal: 10.0),
                         children: <Widget>[
-                          Image.asset("assets/images/logo.png"),
+                          Image.asset("assets/images/dwe.png"),
+                          SizedBox(
+                            height: 25.0,
+                          ),
                           ListTile(
                               title: Text(
                                 'Aktionen',
