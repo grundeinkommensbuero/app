@@ -68,6 +68,8 @@ void main() {
 
     expect(find.byKey(Key('action creator')), findsNothing);
 
+    await tester.tap(find.byType(IconButton));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(Key('create termin button')));
     await tester.pump();
 
@@ -665,6 +667,8 @@ Future show_action_creator(WidgetTester tester, actionPage) async {
   await tester.pumpWidget(actionPage);
   await tester.pumpAndSettle();
 
+  await tester.tap(find.byType(IconButton));
+  await tester.pumpAndSettle();
   await tester.tap(find.byKey(Key('create termin button')));
   await tester.pump();
 }

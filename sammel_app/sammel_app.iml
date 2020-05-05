@@ -15,9 +15,11 @@
       <excludeFolder url="file://$MODULE_DIR$/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/build" />
-      <excludeFolder url="file://$MODULE_DIR$/build_dependencies/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/build dependencies/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/build dependencies/build" />
+      <excludeFolder url="file://$MODULE_DIR$/build_dependencies/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/build_dependencies/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/build_dependencies/build" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 29 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
