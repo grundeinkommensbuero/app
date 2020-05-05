@@ -32,7 +32,10 @@ class DweTheme {
               onError: yellow),
           buttonColor: purple,
           textTheme: ButtonTextTheme.primary),
-      iconTheme: IconThemeData(color: purple));
+      iconTheme: IconThemeData(color: purple),
+      );
+
+  static var menuCaption = TextStyle(fontSize: 20.0, color: DweTheme.purple);
 
   static Color actionColor(DateTime ende, bool isMyAction) {
     if (isMyAction)

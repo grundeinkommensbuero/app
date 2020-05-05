@@ -64,6 +64,65 @@ class TermineSeiteState extends State<TermineSeite> {
 
     return Scaffold(
       extendBody: true,
+      drawer: SizedBox(
+          width: 200.0,
+          child: Theme(
+              data: Theme.of(context).copyWith(
+                canvasColor: Colors.transparent,
+                backgroundColor: Colors.transparent,
+              ),
+              child: Drawer(
+                  key: Key('drawer menu'),
+                  child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          stops: [0.5, 1.0],
+                          colors: <Color>[DweTheme.yellow, Colors.yellowAccent],
+                        ),
+                      ),
+                      child: ListView(
+                        children: <Widget>[
+                          Image.asset("assets/images/logo.png"),
+                          ListTile(
+                              title: Text(
+                                'Aktionen',
+                                style: DweTheme.menuCaption,
+                              ),
+                              subtitle: Text(
+                                  'Aktionen in einer Liste oder Karte anschauen'),
+                              onTap: () {
+                                Navigator.pop(context);
+                              ***REMOVED***),
+                          SizedBox(
+                            height: 20.0,
+                          ),
+                          ListTile(
+                            key: Key('create termin button'),
+                            title: Text('Zum Sammeln einladen',
+                                style: DweTheme.menuCaption),
+                            subtitle:
+                                Text('Eine Sammel-Aktion ins Leben rufen'),
+                            onTap: () {
+                              Navigator.pop(context);
+                              openCreateDialog(context);
+                            ***REMOVED***,
+                          ),
+                          SizedBox(
+                            height: 20.0,
+                          ),
+                          ListTile(
+                            title: Text('Fragen und Antworten',
+                                style: DweTheme.menuCaption),
+                            subtitle:
+                                Text('Tipps, Tricks und Argumenationshilfen'),
+                            onTap: () {
+                              Navigator.pop(context);
+                            ***REMOVED***,
+                          ),
+                        ],
+                      ))))),
       appBar: AppBar(
           title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -79,21 +138,12 @@ class TermineSeiteState extends State<TermineSeite> {
       )),
       body: Stack(
         alignment: Alignment.topCenter,
-        children: [IndexedStack(
-                children: [actionListView, actionMapView], index: navigation),
+        children: [
+          IndexedStack(
+              children: [actionListView, actionMapView], index: navigation),
           filterWidget,
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-          key: Key('create termin button'),
-          onPressed: () => openCreateDialog(context),
-          icon: Icon(
-            Icons.add,
-          ),
-          label: Text("Zum Sammeln einladen"),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(16.0)))),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: navigation,
         onTap: (index) => setState(() => navigation = index),

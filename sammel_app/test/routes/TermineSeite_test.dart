@@ -305,6 +305,8 @@ void main() {
 
       expect(find.byKey(Key('action creator')), findsNothing);
 
+      await tester.tap(find.byType(IconButton));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(Key('create termin button')));
       await tester.pump();
 
@@ -331,6 +333,8 @@ void main() {
 
       expect(find.byKey(Key('action card')), findsNWidgets(3));
 
+      await tester.tap(find.byType(IconButton));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(Key('create termin button')));
       await tester.pump();
 
@@ -390,6 +394,8 @@ void main() {
 
       expect(find.byKey(Key('action card')), findsNWidgets(3));
 
+      await tester.tap(find.byType(IconButton));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(Key('create termin button')));
       await tester.pump();
 
@@ -451,6 +457,8 @@ void main() {
 
       expect(find.byKey(Key('action card')), findsNWidgets(3));
 
+      await tester.tap(find.byType(IconButton));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(Key('create termin button')));
       await tester.pump();
 
@@ -510,6 +518,8 @@ void main() {
 
       await tester.pumpWidget(termineSeiteWidget);
 
+      await tester.tap(find.byType(IconButton));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(Key('create termin button')));
       await tester.pump();
 
