@@ -36,6 +36,7 @@ class DweTheme {
       );
 
   static var menuCaption = TextStyle(fontSize: 20.0, color: DweTheme.purple);
+  static var menuCaptionSelected = TextStyle(fontSize: 20.0, color: DweTheme.yellow);
 
   static Color actionColor(DateTime ende, bool isMyAction) {
     if (isMyAction)
