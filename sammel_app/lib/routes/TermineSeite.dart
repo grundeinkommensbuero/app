@@ -64,6 +64,7 @@ class TermineSeiteState extends State<TermineSeite> {
 
     return Scaffold(
       extendBody: true,
+      drawerScrimColor: Colors.black26,
       drawer: SizedBox(
           width: 200.0,
           child: Drawer(
