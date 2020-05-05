@@ -271,5 +271,7 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.glassfish.hk2:hk2-locator:2.4.0-b34" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.javassist:javassist:3.18.1-GA" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.glassfish.hk2:osgi-resource-locator:1.0.1" level="project" />
+    <orderEntry type="library" name="Dart SDK" level="project" />
+    <orderEntry type="library" name="Dart Packages" level="project" />
   </component>
 </module>
