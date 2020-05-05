@@ -10,13 +10,7 @@ import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/shared/ChatMessageService.dart';
 import 'package:sammel_app/shared/ChatWindow.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
-import 'package:sammel_app/shared/push_notification_manager.dart';
 import 'package:sammel_app/shared/user_data.dart';
-
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
-}
 
 
 const Mode mode = Mode.LOCAL;
