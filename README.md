@@ -1,6 +1,7 @@
 # Sammel-App
 
 Der Nightly Build des Prototypen, der ohne Server läuft liegt [hier](https://gitlab.com/kybernetik/sammel-app/-/jobs/artifacts/master/raw/downloads/sammel_app/sammel-app-nightly.apk?job=build_android_apk).
+(offline wenn gerade eine CI-Pipeline läuft)
 
 # Projekt aufsetzen
 
