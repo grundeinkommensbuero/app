@@ -96,16 +96,13 @@ class TermineSeiteState extends State<TermineSeite> {
                           key: Key('create termin button'),
                           title: 'Zum Sammeln einladen',
                           subtitle: 'Eine Sammel-Aktion ins Leben rufen',
-                          selected: false,
                           onTap: () {
                             Navigator.pop(context);
                             openCreateDialog(context);
                           }),
                       menuEntry(
-                          key: Key('create termin button'),
                           title: 'Fragen und Antworten',
                           subtitle: 'Tipps, Tricks und Argumentationshilfen',
-                          selected: false,
                           onTap: () => Navigator.pop(context)),
                     ],
                   )))),
@@ -148,7 +145,11 @@ class TermineSeiteState extends State<TermineSeite> {
   }
 
   Container menuEntry(
-      {Key key, String title, String subtitle, bool selected, var onTap}) {
+      {Key key,
+      String title = '',
+      String subtitle = '',
+      bool selected = false,
+      var onTap}) {
     return Container(
         key: key,
         padding: EdgeInsets.symmetric(vertical: selected ? 15.0 : 10.0),
@@ -163,8 +164,7 @@ class TermineSeiteState extends State<TermineSeite> {
             ),
             subtitle: Text(
               subtitle,
-              style: TextStyle(
-                  color: selected ? Colors.amber : Colors.black54),
+              style: TextStyle(color: selected ? Colors.amber : Colors.black54),
             ),
             onTap: onTap));
   }
