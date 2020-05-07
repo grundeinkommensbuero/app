@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sammel_app/routes/ActionCreator.dart';
-import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/RoutingService.dart';
 import 'package:sammel_app/services/StorageService.dart';
@@ -30,11 +28,8 @@ class MyApp extends StatelessWidget {
           Provider<RoutingService>.value(value: RoutingService()),
         ],
         child: MaterialApp(
-            initialRoute: TermineSeite.NAME,
-            routes: {
-              TermineSeite.NAME: (context) => TermineSeite(),
-              ActionCreator.NAME: (context) => ActionCreator(),
-            },
+            initialRoute: RoutingService.initialRoute,
+            routes: RoutingService.routes,
             title: 'DW & Co. Enteignen',
             theme: DweTheme.themeData));
   }

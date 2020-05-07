@@ -12,6 +12,7 @@ import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/AuthFehler.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
+import 'package:sammel_app/services/RoutingService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 
@@ -46,16 +47,20 @@ void main() {
           Provider<AbstractTermineService>.value(value: terminService),
           Provider<AbstractListLocationService>.value(
               value: listLocationService),
-          Provider<StorageService>.value(value: storageService)
+          Provider<StorageService>.value(value: storageService),
+          Provider<RoutingService>.value(value: RoutingService())
         ],
         child: MaterialApp(
-            home: TermineSeite()));
+          home: TermineSeite(),
+          routes: RoutingService.routes,
+          initialRoute: RoutingService.initialRoute,
+        ));
   });
 
-  testWidgets('TermineSeite startet fehlerfrei mit leerer Liste',
+  testWidgets('TermineSeite startet fehlerfrei und zeigt richtigen Titel',
       (WidgetTester tester) async {
     await tester.pumpWidget(termineSeiteWidget);
-    expect(find.text('Titel mit Ümläüten'), findsOneWidget);
+    expect(find.text('Aktionen'), findsOneWidget);
   });
 
   group('presentation', () {
@@ -306,8 +311,8 @@ void main() {
 
       await tester.tap(find.byType(IconButton));
       await tester.pumpAndSettle();
-      await tester.tap(find.byKey(Key('create termin button')));
-      await tester.pump();
+      await tester.tap(find.byKey(Key('create action button')));
+      await tester.pumpAndSettle();
 
       expect(find.byKey(Key('action creator')), findsOneWidget);
     });
@@ -334,11 +339,11 @@ void main() {
 
       await tester.tap(find.byType(IconButton));
       await tester.pumpAndSettle();
-      await tester.tap(find.byKey(Key('create termin button')));
-      await tester.pump();
+      await tester.tap(find.byKey(Key('create action button')));
+      await tester.pumpAndSettle();
 
       ActionEditorState editorState =
-          tester.state(find.byKey(Key('action creator')));
+          tester.state(find.byKey(Key('action editor creator')));
 
       editorState.action = ActionData(
           TimeOfDay.fromDateTime(today),
@@ -395,11 +400,11 @@ void main() {
 
       await tester.tap(find.byType(IconButton));
       await tester.pumpAndSettle();
-      await tester.tap(find.byKey(Key('create termin button')));
-      await tester.pump();
+      await tester.tap(find.byKey(Key('create action button')));
+      await tester.pumpAndSettle();
 
       ActionEditorState editorState =
-          tester.state(find.byKey(Key('action creator')));
+          tester.state(find.byKey(Key('action editor creator')));
 
       editorState.action = ActionData(
           TimeOfDay.fromDateTime(today),
@@ -458,11 +463,11 @@ void main() {
 
       await tester.tap(find.byType(IconButton));
       await tester.pumpAndSettle();
-      await tester.tap(find.byKey(Key('create termin button')));
-      await tester.pump();
+      await tester.tap(find.byKey(Key('create action button')));
+      await tester.pumpAndSettle();
 
       ActionEditorState editorState =
-          tester.state(find.byKey(Key('action creator')));
+          tester.state(find.byKey(Key('action editor creator')));
 
       editorState.action = ActionData(
           TimeOfDay.fromDateTime(today),
@@ -519,11 +524,11 @@ void main() {
 
       await tester.tap(find.byType(IconButton));
       await tester.pumpAndSettle();
-      await tester.tap(find.byKey(Key('create termin button')));
-      await tester.pump();
+      await tester.tap(find.byKey(Key('create action button')));
+      await tester.pumpAndSettle();
 
       ActionEditorState editorState =
-          tester.state(find.byKey(Key('action creator')));
+          tester.state(find.byKey(Key('action editor creator')));
 
       editorState.action = ActionData(
           TimeOfDay.fromDateTime(today),
