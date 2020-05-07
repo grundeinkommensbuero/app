@@ -48,7 +48,7 @@ class NavigationDrawer extends StatelessWidget {
                         onTap: () =>
                             routeTo(context, TermineSeite, TermineSeite.NAME)),
                     menuEntry(
-                        key: Key('create termin button'),
+                        key: Key('create action button'),
                         title: 'Zum Sammeln einladen',
                         subtitle: 'Eine Sammel-Aktion ins Leben rufen',
                         selected: youAreHere == ActionCreator,
@@ -92,15 +92,12 @@ class NavigationDrawer extends StatelessWidget {
 
     // Kein Routing wenn wir schon auf der Seite sind
     if (type == youAreHere) {
-      print('### Breche ab');
       return;
     ***REMOVED***
 
     if (routingProvider.hasRouteFor(type)) {
-      print('### Rekonstruiere Route');
       Navigator.push(context, routingProvider.getRouteFor(type));
     ***REMOVED*** else {
-      print('### Erzeuge neue Route');
       Navigator.pushNamed(context, name);
       routingProvider.register(type, ModalRoute.of(context));
     ***REMOVED***

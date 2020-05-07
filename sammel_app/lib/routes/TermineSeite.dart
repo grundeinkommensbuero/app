@@ -71,7 +71,7 @@ class TermineSeiteState extends State<TermineSeite> {
           title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text('Zum Sammeln aufrufen'),
+          Text('Aktionen'),
           Image.asset('assets/images/logo.png', width: 50.0)
         ],
       )),

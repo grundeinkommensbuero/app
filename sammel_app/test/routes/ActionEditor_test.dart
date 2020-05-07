@@ -9,6 +9,7 @@ import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
+import 'package:sammel_app/services/RoutingService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
@@ -43,35 +44,35 @@ void main() {
     when(listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
 
-    actionPage = MultiProvider(providers: [
-      Provider<AbstractTermineService>.value(value: terminService),
-      Provider<StorageService>.value(value: storageService),
-      Provider<AbstractListLocationService>(
-          create: (context) => listLocationService),
-      Provider<AbstractStammdatenService>.value(value: stammdatenService)
-    ], child: MaterialApp(home: TermineSeite()));
+    actionPage = MultiProvider(
+        providers: [
+          Provider<AbstractTermineService>.value(value: terminService),
+          Provider<StorageService>.value(value: storageService),
+          Provider<AbstractListLocationService>(
+              create: (context) => listLocationService),
+          Provider<AbstractStammdatenService>.value(value: stammdatenService),
+          Provider<RoutingService>.value(value: RoutingService())
+        ],
+        child: MaterialApp(
+          home: TermineSeite(),
+          routes: RoutingService.routes,
+          initialRoute: RoutingService.initialRoute,
+        ));
   ***REMOVED***);
 
   testWidgets('TermineSeite opens CreateTerminDialog on click at create button',
       (WidgetTester tester) async {
-    // Provider liefert den Mock für den TermineService rein
-    var termineSeiteWidget = MultiProvider(providers: [
-      Provider<AbstractTermineService>(create: (context) => terminService),
-      Provider<AbstractListLocationService>(
-          create: (context) => listLocationService),
-      Provider<StorageService>(create: (context) => storageService)
-    ], child: TermineSeite());
 
     when(terminService.ladeTermine(any)).thenAnswer((_) async => []);
 
-    await tester.pumpWidget(MaterialApp(home: termineSeiteWidget));
+    await tester.pumpWidget(MaterialApp(home: actionPage));
 
     expect(find.byKey(Key('action creator')), findsNothing);
 
     await tester.tap(find.byType(IconButton));
     await tester.pumpAndSettle();
-    await tester.tap(find.byKey(Key('create termin button')));
-    await tester.pump();
+    await tester.tap(find.byKey(Key('create action button')));
+    await tester.pumpAndSettle();
 
     expect(find.byKey(Key('action creator')), findsOneWidget);
   ***REMOVED***);
@@ -99,7 +100,7 @@ void main() {
     testWidgets('Type dialog shows correct typ', (WidgetTester tester) async {
       await show_action_creator(tester, actionPage);
       ActionEditorState action_data =
-          tester.state(find.byKey(Key('action creator')));
+          tester.state(find.byKey(Key('action editor creator')));
       // ignore: invalid_use_of_protected_member
       action_data.setState(() {
         action_data.action.typ = TerminTestDaten.einTermin().typ;
@@ -134,7 +135,7 @@ void main() {
     testWidgets('Zeitraum is correctly shown', (WidgetTester tester) async {
       await show_action_creator(tester, actionPage);
       ActionEditorState action_data =
-          tester.state(find.byKey(Key('action creator')));
+          tester.state(find.byKey(Key('action editor creator')));
       expect(find.text('von 12:05 bis 13:09'), findsNothing);
       TimeOfDay von = TimeOfDay(hour: 12, minute: 5);
       TimeOfDay bis = TimeOfDay(hour: 13, minute: 9);
@@ -151,7 +152,7 @@ void main() {
     testWidgets('No Zeitraum is correctly shown', (WidgetTester tester) async {
       await show_action_creator(tester, actionPage);
       ActionEditorState action_data =
-          tester.state(find.byKey(Key('action creator')));
+          tester.state(find.byKey(Key('action editor creator')));
       // ignore: invalid_use_of_protected_member
       action_data.setState(() {
         action_data.action.von = null;
@@ -175,7 +176,7 @@ void main() {
         (WidgetTester tester) async {
       await show_action_creator(tester, actionPage);
       ActionEditorState action_data =
-          tester.state(find.byKey(Key('action creator')));
+          tester.state(find.byKey(Key('action editor creator')));
       expect(find.text("in Görlitzer Park und Umgebung"), findsNothing);
       when(stammdatenService.ladeOrte()).thenAnswer((_) async => [goerli()]);
       // ignore: invalid_use_of_protected_member
@@ -191,7 +192,7 @@ void main() {
         (WidgetTester tester) async {
       await show_action_creator(tester, actionPage);
       ActionEditorState action_data =
-          tester.state(find.byKey(Key('action creator')));
+          tester.state(find.byKey(Key('action editor creator')));
       // ignore: invalid_use_of_protected_member
       action_data.setState(() {
         action_data.action.terminDetails.kontakt = 'test1';
@@ -205,7 +206,7 @@ void main() {
         (WidgetTester tester) async {
       await show_action_creator(tester, actionPage);
       ActionEditorState action_data =
-          tester.state(find.byKey(Key('action creator')));
+          tester.state(find.byKey(Key('action editor creator')));
       // ignore: invalid_use_of_protected_member
       action_data.setState(() {
         action_data.action.terminDetails.treffpunkt = 'test1';
@@ -220,7 +221,7 @@ void main() {
         (WidgetTester tester) async {
       await show_action_creator(tester, actionPage);
       ActionEditorState action_data =
-          tester.state(find.byKey(Key('action creator')));
+          tester.state(find.byKey(Key('action editor creator')));
       // ignore: invalid_use_of_protected_member
       action_data.setState(() {
         action_data.action.terminDetails.treffpunkt = 'test1';
@@ -234,7 +235,7 @@ void main() {
         (WidgetTester tester) async {
       await show_action_creator(tester, actionPage);
       ActionEditorState action_data =
-          tester.state(find.byKey(Key('action creator')));
+          tester.state(find.byKey(Key('action editor creator')));
       // ignore: invalid_use_of_protected_member
       action_data.setState(() {
         action_data.action.terminDetails.kommentar = 'test1';
@@ -248,7 +249,7 @@ void main() {
         (WidgetTester tester) async {
       await show_action_creator(tester, actionPage);
       ActionEditorState action_data =
-          tester.state(find.byKey(Key('action creator')));
+          tester.state(find.byKey(Key('action editor creator')));
       // ignore: invalid_use_of_protected_member
       action_data.setState(() {
         action_data.action.tage = [DateTime(2019, 12, 1)];
@@ -578,7 +579,7 @@ void main() {
       await show_action_editor(tester, actionPage);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      var now = TimeOfDay(hour: 23,minute: 0);
+      var now = TimeOfDay(hour: 23, minute: 0);
       state.action.bis = now;
       Termin action = state.generateActions()[0];
 
@@ -669,6 +670,6 @@ Future show_action_creator(WidgetTester tester, actionPage) async {
 
   await tester.tap(find.byType(IconButton));
   await tester.pumpAndSettle();
-  await tester.tap(find.byKey(Key('create termin button')));
-  await tester.pump();
+  await tester.tap(find.byKey(Key('create action button')));
+  await tester.pumpAndSettle();
 ***REMOVED***

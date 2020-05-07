@@ -5,46 +5,46 @@ import 'package:sammel_app/services/RoutingService.dart';
 
 void main() {
   RoutingService routing;
-  Widget widget;
+//  Widget widget;
   setUp(() {
     routing = RoutingService();
   ***REMOVED***);
 
-  test('register stores routes for widget classes', () {
-    var textRoute = MaterialPageRoute(
-        settings: RouteSettings(name: 'Text route'),
-        builder: (BuildContext context) => Text('123'));
-    routing.register(Text, textRoute);
-    var iconRoute = MaterialPageRoute(
-        settings: RouteSettings(name: 'Icon route'),
-        builder: (BuildContext context) => Icon(Icons.update));
-    routing.register(Icon, iconRoute);
-    var buttonRoute = MaterialPageRoute(
-        settings: RouteSettings(name: 'Text route'),
-        builder: (BuildContext context) => RaisedButton(onPressed: () {***REMOVED***));
-    routing.register(RaisedButton, buttonRoute);
+//  test('register stores routes for widget classes', () {
+//    var textRoute = MaterialPageRoute(
+//        settings: RouteSettings(name: 'Text route'),
+//        builder: (BuildContext context) => Text('123'));
+//    routing.register(Text, textRoute);
+//    var iconRoute = MaterialPageRoute(
+//        settings: RouteSettings(name: 'Icon route'),
+//        builder: (BuildContext context) => Icon(Icons.update));
+//    routing.register(Icon, iconRoute);
+//    var buttonRoute = MaterialPageRoute(
+//        settings: RouteSettings(name: 'Text route'),
+//        builder: (BuildContext context) => RaisedButton(onPressed: () {***REMOVED***));
+//    routing.register(RaisedButton, buttonRoute);
+//
+//    expect(routing.registeredRoutes.values.length, 3);
+//    expect(routing.registeredRoutes[Text], equals(textRoute));
+//    expect(routing.registeredRoutes[Icon], equals(iconRoute));
+//    expect(routing.registeredRoutes[RaisedButton], equals(buttonRoute));
+//  ***REMOVED***);
 
-    expect(routing.registeredRoutes.values.length, 3);
-    expect(routing.registeredRoutes[Text], equals(textRoute));
-    expect(routing.registeredRoutes[Icon], equals(iconRoute));
-    expect(routing.registeredRoutes[RaisedButton], equals(buttonRoute));
-  ***REMOVED***);
-
-  test('register replaces routes', () {
-    routing.registeredRoutes = {
-      Text: MaterialPageRoute(
-          settings: RouteSettings(name: 'Text route 1'),
-          builder: (BuildContext context) => Text('1')),
-    ***REMOVED***
-
-    var latestRoute = MaterialPageRoute(
-        settings: RouteSettings(name: 'Text route 2'),
-        builder: (BuildContext context) => Text('2'));
-    routing.register(Text, latestRoute);
-
-    expect(routing.registeredRoutes.values.length, 1);
-    expect(routing.registeredRoutes[Text], equals(latestRoute));
-  ***REMOVED***);
+//  test('register replaces routes', () {
+//    routing.registeredRoutes = {
+//      Text: MaterialPageRoute(
+//          settings: RouteSettings(name: 'Text route 1'),
+//          builder: (BuildContext context) => Text('1')),
+//    ***REMOVED***
+//
+//    var latestRoute = MaterialPageRoute(
+//        settings: RouteSettings(name: 'Text route 2'),
+//        builder: (BuildContext context) => Text('2'));
+//    routing.register(Text, latestRoute);
+//
+//    expect(routing.registeredRoutes.values.length, 1);
+//    expect(routing.registeredRoutes[Text], equals(latestRoute));
+//  ***REMOVED***);
 
   test('hasRouteFor is false if no route for class exists', () {
     routing.registeredRoutes = {
