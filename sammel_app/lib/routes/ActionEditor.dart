@@ -99,98 +99,123 @@ class ActionEditorState extends State<ActionEditor> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      Text(
-        'Das Volksbegehren lebt von deiner Beteiligung! \n',
-        style: TextStyle(fontWeight: FontWeight.bold),
-      ),
-      Text(
-        'Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. '
-        'Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.',
-        textScaleFactor: 1.0,
-      ),
-      SizedBox(height: 15),
-      Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Icon(Icons.my_location, size: 40.0),
-        SizedBox(
-          width: 10.0,
+    return Scaffold(
+        extendBody: true,
+        body: Container(
+          decoration: BoxDecoration(color: DweTheme.yellowBright),
+          child: ListView(
+              padding: EdgeInsets.only(
+                  left: 20.0, right: 20.0, top: 15.0, bottom: 50.0),
+              children: <Widget>[
+                Text(
+                  'Das Volksbegehren lebt von deiner Beteiligung! \n',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  'Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. '
+                  'Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.',
+                  textScaleFactor: 1.0,
+                ),
+                SizedBox(height: 15),
+                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Icon(Icons.my_location, size: 40.0),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Wo? ',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        InputButton(
+                            onTap: locationSelection,
+                            child: locationButtonCaption(this.action),
+                            key: Key('Open location dialog')),
+                        InputButton(
+                            onTap: venueSelection,
+                            child: venueButtonCaption(this.action)),
+                      ])
+                ]),
+                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Icon(Icons.access_time, size: 40.0),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Wann?',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        InputButton(
+                            onTap: daysSelection, child: daysButtonCaption()),
+                        InputButton(
+                            onTap: timeSelection,
+                            child: timeButtonCaption(this.action),
+                            key: Key('open time span dialog')),
+                      ])
+                ]),
+                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Icon(Icons.info_outline, size: 40.0),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Was?',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        InputButton(
+                          onTap: typeSelection,
+                          child: typeButtonCaption(),
+                          key: Key('open type selection dialog'),
+                        ),
+                        InputButton(
+                            onTap: descriptionSelection,
+                            child: descriptionButtonCaption(this.action)),
+                      ])
+                ]),
+                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Icon(Icons.face, size: 40.0),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Wer?',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        InputButton(
+                            onTap: contactSelection,
+                            child: contactButtonCaption(this.action)),
+                      ])
+                ]),
+              ]),
         ),
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            'Wo? ',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          InputButton(
-              onTap: locationSelection,
-              child: locationButtonCaption(this.action),
-              key: Key('Open location dialog')),
-          InputButton(
-              onTap: venueSelection, child: venueButtonCaption(this.action)),
-        ])
-      ]),
-      Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Icon(Icons.access_time, size: 40.0),
-        SizedBox(
-          width: 10.0,
-        ),
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            'Wann?',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          InputButton(onTap: daysSelection, child: daysButtonCaption()),
-          InputButton(
-              onTap: timeSelection,
-              child: timeButtonCaption(this.action),
-              key: Key('open time span dialog')),
-        ])
-      ]),
-      Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Icon(Icons.info_outline, size: 40.0),
-        SizedBox(
-          width: 10.0,
-        ),
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            'Was?',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          InputButton(
-            onTap: typeSelection,
-            child: typeButtonCaption(),
-            key: Key('open type selection dialog'),
-          ),
-          InputButton(
-              onTap: descriptionSelection,
-              child: descriptionButtonCaption(this.action)),
-        ])
-      ]),
-      Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Icon(Icons.face, size: 40.0),
-        SizedBox(
-          width: 10.0,
-        ),
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
-            'Wer?',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          InputButton(
-              onTap: contactSelection,
-              child: contactButtonCaption(this.action)),
-        ])
-      ]),
-      ButtonBar(alignment: MainAxisAlignment.spaceAround, children: [
-        RaisedButton(
-            key: Key('action editor cancel button'),
-            child: Text('Abbrechen'),
-            onPressed: () => Navigator.pop(context, null)),
-        RaisedButton(
-            key: Key('action editor finish button'),
-            child: Text('Fertig'),
-            onPressed: () => fertigPressed())
-      ])
-    ]);
+        bottomSheet: Container(
+          padding: EdgeInsets.symmetric(vertical: 5.0),
+          decoration: BoxDecoration(
+              boxShadow: [BoxShadow(blurRadius: 5.0, color: Colors.black38)],
+              color: DweTheme.yellow),
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            RaisedButton(
+                key: Key('action editor cancel button'),
+                child: Text('Abbrechen'),
+                onPressed: () => Navigator.pop(context, null)),
+            RaisedButton(
+                key: Key('action editor finish button'),
+                child: Text('Fertig'),
+                onPressed: () => fertigPressed())
+          ]),
+        ));
   ***REMOVED***
 
   void venueSelection() async {
@@ -627,13 +652,8 @@ class InputButton extends StatelessWidget {
         child: Container(
             padding: EdgeInsets.only(bottom: 8.0, top: 4.0),
             child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Icon(
-                Icons.keyboard_arrow_right,
-                size: 15,
-              ),
-              SizedBox(
-                width: 5,
-              ),
+              Icon(Icons.keyboard_arrow_right, size: 15),
+              SizedBox(width: 5),
               SizedBox(width: 200.0, child: child),
             ])),
         onTap: onTap);

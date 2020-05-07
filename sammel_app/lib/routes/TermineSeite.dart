@@ -18,10 +18,12 @@ import 'package:uuid/uuid.dart';
 import 'ActionList.dart';
 import 'FilterWidget.dart';
 import 'ActionDetailsPage.dart';
+import 'NavigationDrawer.dart';
 
 class TermineSeite extends StatefulWidget {
-  TermineSeite({Key key, this.title***REMOVED***) : super(key: key);
-  final String title;
+  static String NAME = 'Action Page';
+
+  TermineSeite() : super(key: Key('action page'));
 
   @override
   TermineSeiteState createState() => TermineSeiteState();
@@ -63,60 +65,14 @@ class TermineSeiteState extends State<TermineSeite> {
     );
 
     return Scaffold(
-      extendBody: true,
       drawerScrimColor: Colors.black26,
-      drawer: SizedBox(
-          width: 200.0,
-          child: Drawer(
-              key: Key('drawer menu'),
-              child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      stops: [0.5, 1.0],
-                      colors: <Color>[DweTheme.yellow, Colors.yellowAccent],
-                    ),
-                  ),
-                  child: ListView(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 40.0, horizontal: 0.0),
-                    children: <Widget>[
-                      Image.asset("assets/images/dwe.png"),
-                      SizedBox(
-                        height: 25.0,
-                      ),
-                      menuEntry(
-                          title: 'Aktionen',
-                          subtitle:
-                              'Aktionen in einer Liste oder Karte anschauen',
-                          selected: true,
-                          onTap: () => Navigator.pop(context)),
-                      menuEntry(
-                          key: Key('create termin button'),
-                          title: 'Zum Sammeln einladen',
-                          subtitle: 'Eine Sammel-Aktion ins Leben rufen',
-                          onTap: () {
-                            Navigator.pop(context);
-                            openCreateDialog(context);
-                          ***REMOVED***),
-                      menuEntry(
-                          title: 'Fragen und Antworten',
-                          subtitle: 'Tipps, Tricks und Argumentationshilfen',
-                          onTap: () => Navigator.pop(context)),
-                    ],
-                  )))),
+      drawer: NavigationDrawer(TermineSeite),
       appBar: AppBar(
           title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(
-            widget.title,
-          ),
-          Image.asset(
-            'assets/images/logo.png',
-            width: 50.0,
-          )
+          Text('Zum Sammeln aufrufen'),
+          Image.asset('assets/images/logo.png', width: 50.0)
         ],
       )),
       body: Stack(
@@ -142,31 +98,6 @@ class TermineSeiteState extends State<TermineSeite> {
         ],
       ),
     );
-  ***REMOVED***
-
-  Container menuEntry(
-      {Key key,
-      String title = '',
-      String subtitle = '',
-      bool selected = false,
-      var onTap***REMOVED***) {
-    return Container(
-        key: key,
-        padding: EdgeInsets.symmetric(vertical: selected ? 15.0 : 10.0),
-        decoration: BoxDecoration(
-            color: selected ? DweTheme.purple : Colors.transparent),
-        child: ListTile(
-            title: Text(
-              title,
-              style: selected
-                  ? DweTheme.menuCaptionSelected
-                  : DweTheme.menuCaption,
-            ),
-            subtitle: Text(
-              subtitle,
-              style: TextStyle(color: selected ? Colors.amber : Colors.black54),
-            ),
-            onTap: onTap));
   ***REMOVED***
 
   // funktioniert nicht im Konstruktor, weil da der BuildContext fehlt

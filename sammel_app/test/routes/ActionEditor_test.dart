@@ -49,7 +49,7 @@ void main() {
       Provider<AbstractListLocationService>(
           create: (context) => listLocationService),
       Provider<AbstractStammdatenService>.value(value: stammdatenService)
-    ], child: MaterialApp(home: TermineSeite(title: 'Titel')));
+    ], child: MaterialApp(home: TermineSeite()));
   ***REMOVED***);
 
   testWidgets('TermineSeite opens CreateTerminDialog on click at create button',
@@ -60,7 +60,7 @@ void main() {
       Provider<AbstractListLocationService>(
           create: (context) => listLocationService),
       Provider<StorageService>(create: (context) => storageService)
-    ], child: TermineSeite(title: 'Titel'));
+    ], child: TermineSeite());
 
     when(terminService.ladeTermine(any)).thenAnswer((_) async => []);
 
