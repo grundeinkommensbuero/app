@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sammel_app/routes/ActionCreator.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
+import 'package:sammel_app/services/RoutingService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
@@ -25,13 +27,15 @@ class MyApp extends StatelessWidget {
                   ? DemoListLocationService()
                   : ListLocationService()),
           Provider<StorageService>.value(value: StorageService()),
+          Provider<RoutingService>.value(value: RoutingService()),
         ],
         child: MaterialApp(
-          title: 'DW & Co. Enteignen',
-          theme: DweTheme.themeData,
-          home: TermineSeite(
-              key: Key('action page'),
-              title: 'Deutsche Wohnen & Co. Enteignen'),
-        ));
+            initialRoute: TermineSeite.NAME,
+            routes: {
+              TermineSeite.NAME: (context) => TermineSeite(),
+              ActionCreator.NAME: (context) => ActionCreator(),
+            },
+            title: 'DW & Co. Enteignen',
+            theme: DweTheme.themeData));
   }
 }

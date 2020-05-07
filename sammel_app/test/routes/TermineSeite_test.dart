@@ -49,8 +49,7 @@ void main() {
           Provider<StorageService>.value(value: storageService)
         ],
         child: MaterialApp(
-            home: TermineSeite(
-                title: 'Titel mit Ümläüten', key: Key('action page'))));
+            home: TermineSeite()));
   });
 
   testWidgets('TermineSeite startet fehlerfrei mit leerer Liste',
