@@ -23,7 +23,7 @@ import 'ActionDetailsPage.dart';
 class TermineSeite extends StatefulWidget {
   static String NAME = 'Action Page';
 
-  TermineSeite({Key key}) : super(key: key);
+  TermineSeite({Key key}) : super(key: key ?? Key('action page'));
 
   @override
   TermineSeiteState createState() => TermineSeiteState();
@@ -254,24 +254,28 @@ class TermineSeiteState extends State<TermineSeite> {
               title: AppBar(
                 leading: null,
                 automaticallyImplyLeading: false,
-                title: Text('Aktion bearbeiten',
+                title: Text('Deine Aktion bearbeiten',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 22.0,
                         color: Color.fromARGB(255, 129, 28, 98))),
               ),
-              contentPadding: EdgeInsets.all(10.0),
               children: <Widget>[
-                ActionEditor(
-                    initAction: termin,
-                    onFinish: afterActionEdit,
-                    key: Key('action editor'))
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.height * 0.8,
+                  child: ActionEditor(
+                      initAction: termin,
+                      onFinish: afterActionEdit,
+                      key: Key('action editor')),
+                )
               ]);
         });
   }
 
   afterActionEdit(List<Termin> editedAction) async {
+    print('### speichere ${editedAction[0]}');
     await saveAction(editedAction[0]);
     openTerminDetails(context, editedAction[0]); // recursive and I know it
   }
@@ -314,16 +318,21 @@ class TermineSeiteState extends State<TermineSeite> {
     }
   }
 
-  createNewAction(Termin action) async {
-    String uuid = Uuid().v1();
+  createAndAddAction(Termin action) async {
     try {
-      Termin terminMitId = await termineService.createTermin(action, uuid);
-      storageService.saveActionToken(terminMitId.id, uuid);
-      setState(() => addAction(terminMitId));
+      Termin actionWithId = await createNewAction(action);
+      addAction(actionWithId);
     } on RestFehler catch (error) {
       showErrorDialog(context, 'Aktion konnte nicht erstellt werden', error,
-          key: Key('delete request failed dialog'));
+          key: Key('create request failed dialog'));
     }
+  }
+
+  Future<Termin> createNewAction(Termin action) async {
+    String uuid = Uuid().v1();
+    Termin actionWithId = await termineService.createTermin(action, uuid);
+    storageService.saveActionToken(actionWithId.id, uuid);
+    return actionWithId;
   }
 
   addAction(Termin newAction) {

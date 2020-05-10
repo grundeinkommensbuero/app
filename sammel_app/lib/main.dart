@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sammel_app/routes/Home.dart';
+import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           title: 'DW & Co. Enteignen',
           theme: DweTheme.themeData,
-          home: Home(),
+          home: Navigation(),
         ));
   }
 }
