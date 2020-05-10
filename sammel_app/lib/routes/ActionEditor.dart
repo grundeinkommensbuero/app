@@ -214,7 +214,7 @@ class ActionEditorState extends State<ActionEditor> {
                 child: Text('Abbrechen'),
                 onPressed: () {
                   action = ActionData();
-                  return Navigator.maybePop(context);
+                  Navigator.maybePop(context);
                 }),
             RaisedButton(
                 key: Key('action editor finish button'),
