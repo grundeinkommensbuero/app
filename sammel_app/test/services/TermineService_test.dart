@@ -8,12 +8,14 @@ import 'package:sammel_app/services/TermineService.dart';
 
 import '../model/Ort_test.dart';
 import '../model/Termin_test.dart';
+import '../shared/Mocks.dart';
 
 void main() {
   // nöig wegen dem Laden des Zertifikats
   TestWidgetsFlutterBinding.ensureInitialized();
 
   var service = DemoTermineService();
+  service.client = MockHttpClient();
 
   test('DemoTermineService creates new Termin', () async {
     expect((await service.ladeTermine(TermineFilter.leererFilter())).length, 4);
