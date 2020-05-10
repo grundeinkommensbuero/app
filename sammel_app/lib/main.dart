@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sammel_app/routes/Home.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
-import 'package:sammel_app/services/RoutingService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
@@ -25,12 +25,11 @@ class MyApp extends StatelessWidget {
                   ? DemoListLocationService()
                   : ListLocationService()),
           Provider<StorageService>.value(value: StorageService()),
-          Provider<RoutingService>.value(value: RoutingService()),
         ],
         child: MaterialApp(
-            initialRoute: RoutingService.initialRoute,
-            routes: RoutingService.routes,
-            title: 'DW & Co. Enteignen',
-            theme: DweTheme.themeData));
+          title: 'DW & Co. Enteignen',
+          theme: DweTheme.themeData,
+          home: Home(),
+        ));
   ***REMOVED***
 ***REMOVED***

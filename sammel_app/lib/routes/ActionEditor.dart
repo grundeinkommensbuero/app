@@ -66,11 +66,13 @@ class ActionData {
 
 class ActionEditor extends StatefulWidget {
   final Termin initAction;
+  Function onFinish = (List<Termin> _) {***REMOVED***
 
-  ActionEditor(this.initAction, {Key key***REMOVED***) : super(key: key);
+  ActionEditor({this.initAction, this.onFinish, Key key***REMOVED***) : super(key: key);
 
   @override
   ActionEditorState createState() => ActionEditorState(this.initAction);
+
 ***REMOVED***
 
 class ActionEditorState extends State<ActionEditor> {
@@ -209,11 +211,17 @@ class ActionEditorState extends State<ActionEditor> {
             RaisedButton(
                 key: Key('action editor cancel button'),
                 child: Text('Abbrechen'),
-                onPressed: () => Navigator.pop(context, null)),
+                onPressed: () {
+                  action = ActionData();
+                  return Navigator.maybePop(context);
+                ***REMOVED***),
             RaisedButton(
                 key: Key('action editor finish button'),
                 child: Text('Fertig'),
-                onPressed: () => fertigPressed())
+                onPressed: () {
+                  action = ActionData();
+                  return fertigPressed();
+                ***REMOVED***)
           ]),
         ));
   ***REMOVED***
@@ -621,7 +629,8 @@ class ActionEditorState extends State<ActionEditor> {
     if (action.validated['all'] == ValidationState.ok) {
       List<Termin> termine = generateActions();
       if (termine != null) {
-        Navigator.pop(context, generateActions());
+        widget.onFinish(generateActions());
+        Navigator.maybePop(context);
       ***REMOVED***
     ***REMOVED***
   ***REMOVED***

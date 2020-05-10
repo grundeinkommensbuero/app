@@ -14,22 +14,23 @@ import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/showErrorDialog.dart';
 import 'package:uuid/uuid.dart';
 import 'ActionList.dart';
 import 'FilterWidget.dart';
 import 'ActionDetailsPage.dart';
-import 'NavigationDrawer.dart';
 
 class TermineSeite extends StatefulWidget {
   static String NAME = 'Action Page';
 
-  TermineSeite() : super(key: Key('action page'));
+  TermineSeite({Key key***REMOVED***) : super(key: key);
 
   @override
   TermineSeiteState createState() => TermineSeiteState();
 ***REMOVED***
 
 class TermineSeiteState extends State<TermineSeite> {
+  static var filterKey = GlobalKey();
   static AbstractTermineService termineService;
   static StorageService storageService;
   static final TextStyle style = TextStyle(
@@ -65,16 +66,6 @@ class TermineSeiteState extends State<TermineSeite> {
     );
 
     return Scaffold(
-      drawerScrimColor: Colors.black26,
-      drawer: NavigationDrawer(TermineSeite),
-      appBar: AppBar(
-          title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text('Aktionen'),
-          Image.asset('assets/images/logo.png', width: 50.0)
-        ],
-      )),
       body: Stack(
         alignment: Alignment.topCenter,
         children: [
@@ -108,7 +99,7 @@ class TermineSeiteState extends State<TermineSeite> {
 
     termineService = Provider.of<AbstractTermineService>(context);
     storageService = Provider.of<StorageService>(context);
-    filterWidget = FilterWidget(ladeTermine);
+    filterWidget = FilterWidget(ladeTermine, key: filterKey);
 
     storageService
         .loadAllStoredActionIds()
@@ -132,7 +123,7 @@ class TermineSeiteState extends State<TermineSeite> {
     ***REMOVED***);
   ***REMOVED***
 
-  openCreateDialog(BuildContext context) async {
+  /*openCreateDialog(BuildContext context) async {
     List<Termin> newActions = await showDialog(
         context: context,
         barrierDismissible: false,
@@ -150,12 +141,7 @@ class TermineSeiteState extends State<TermineSeite> {
                         color: Color.fromARGB(255, 129, 28, 98))),
               ),
               contentPadding: EdgeInsets.all(10.0),
-              children: <Widget>[
-                ActionEditor(
-                  null,
-                  key: Key('action creator'),
-                )
-              ]);
+              children: <Widget>[ActionEditor(key: Key('action creator'))]);
         ***REMOVED***);
 
     if (newActions != null) {
@@ -163,20 +149,7 @@ class TermineSeiteState extends State<TermineSeite> {
             if (action != null) setState(() => addAction(action));
           ***REMOVED***));
     ***REMOVED***
-  ***REMOVED***
-
-  Future<Termin> createNewAction(Termin action) async {
-    String uuid = Uuid().v1();
-    try {
-      Termin terminMitId = await termineService.createTermin(action, uuid);
-      storageService.saveActionToken(terminMitId.id, uuid);
-      return terminMitId;
-    ***REMOVED*** on RestFehler catch (error) {
-      showErrorDialog('Aktion konnte nicht erstellt werden', error,
-          key: Key('delete request failed dialog'));
-      return null;
-    ***REMOVED***
-  ***REMOVED***
+  ***REMOVED****/
 
   void showRestError(RestFehler e) {
     showDialog(
@@ -271,14 +244,36 @@ class TermineSeiteState extends State<TermineSeite> {
     return myActions?.contains(id);
   ***REMOVED***
 
-  Future editAction(BuildContext context, Termin terminMitDetails) async {
-    Termin editedAction = await openEditDialog(context, terminMitDetails);
+  Future editAction(BuildContext context, Termin termin) async {
+    await showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return SimpleDialog(
+              titlePadding: EdgeInsets.zero,
+              title: AppBar(
+                leading: null,
+                automaticallyImplyLeading: false,
+                title: Text('Aktion bearbeiten',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22.0,
+                        color: Color.fromARGB(255, 129, 28, 98))),
+              ),
+              contentPadding: EdgeInsets.all(10.0),
+              children: <Widget>[
+                ActionEditor(
+                    initAction: termin,
+                    onFinish: afterActionEdit,
+                    key: Key('action editor'))
+              ]);
+        ***REMOVED***);
+  ***REMOVED***
 
-    if (editedAction == null) return;
-
-    await saveAction(editedAction);
-
-    openTerminDetails(context, editedAction); // recursive and I know it
+  afterActionEdit(List<Termin> editedAction) async {
+    await saveAction(editedAction[0]);
+    openTerminDetails(context, editedAction[0]); // recursive and I know it
   ***REMOVED***
 
   Future<void> saveAction(Termin editedAction) async {
@@ -287,7 +282,7 @@ class TermineSeiteState extends State<TermineSeite> {
       await termineService.saveAction(editedAction, token);
       setState(() => updateAction(editedAction, false));
     ***REMOVED*** on RestFehler catch (error) {
-      showErrorDialog('Aktion konnte nicht gespeichert werden', error,
+      showErrorDialog(context, 'Aktion konnte nicht gespeichert werden', error,
           key: Key('edit request failed dialog'));
     ***REMOVED***
   ***REMOVED***
@@ -299,7 +294,7 @@ class TermineSeiteState extends State<TermineSeite> {
       storageService.deleteActionToken(action.id);
       setState(() => updateAction(action, true));
     ***REMOVED*** on RestFehler catch (error) {
-      showErrorDialog('Aktion konnte nicht gelöscht werden', error,
+      showErrorDialog(context, 'Aktion konnte nicht gelöscht werden', error,
           key: Key('delete request failed dialog'));
     ***REMOVED***
   ***REMOVED***
@@ -319,56 +314,23 @@ class TermineSeiteState extends State<TermineSeite> {
     ***REMOVED***
   ***REMOVED***
 
+  createNewAction(Termin action) async {
+    String uuid = Uuid().v1();
+    try {
+      Termin terminMitId = await termineService.createTermin(action, uuid);
+      storageService.saveActionToken(terminMitId.id, uuid);
+      setState(() => addAction(terminMitId));
+    ***REMOVED*** on RestFehler catch (error) {
+      showErrorDialog(context, 'Aktion konnte nicht erstellt werden', error,
+          key: Key('delete request failed dialog'));
+    ***REMOVED***
+  ***REMOVED***
+
   addAction(Termin newAction) {
     myActions.add(newAction.id);
     termine
       ..add(newAction)
       ..sort(Termin.compareByStart);
-  ***REMOVED***
-
-  openEditDialog(BuildContext context, Termin termin) async {
-    List<Termin> editedAction = await showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return SimpleDialog(
-              titlePadding: EdgeInsets.zero,
-              title: AppBar(
-                leading: null,
-                automaticallyImplyLeading: false,
-                title: Text('Aktion bearbeiten',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22.0,
-                        color: Color.fromARGB(255, 129, 28, 98))),
-              ),
-              contentPadding: EdgeInsets.all(10.0),
-              children: <Widget>[
-                ActionEditor(
-                  termin,
-                  key: Key('action editor'),
-                )
-              ]);
-        ***REMOVED***);
-    if (editedAction == null) return null;
-    return editedAction[0];
-  ***REMOVED***
-
-  Future showErrorDialog(String title, RestFehler error, {key: Key***REMOVED***) {
-    return showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-              key: key,
-              title: Text(title),
-              content: Text(error.message()),
-              actions: <Widget>[
-                RaisedButton(
-                  child: Text('Okay...'),
-                  onPressed: () => Navigator.pop(context),
-                )
-              ],
-            ));
   ***REMOVED***
 
   void showActionOnMap(Termin action) {

@@ -1,24 +1,64 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sammel_app/services/RoutingService.dart';
+import 'package:sammel_app/model/Termin.dart';
+import 'package:sammel_app/routes/ActionCreator.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
-import 'package:sammel_app/routes/ActionCreator.dart';
-import 'package:sammel_app/routes/TermineSeite.dart';
+import 'TermineSeite.dart';
 
-import 'ActionCreator.dart';
+class Home extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => HomeState();
+***REMOVED***
 
-class NavigationDrawer extends StatelessWidget {
-  final Type youAreHere;
-  RoutingService routingProvider;
+class HomeState extends State<Home> {
+  int navigation = 0;
+  List<int> history = [0];
+  GlobalKey actionPage = GlobalKey(debugLabel: 'action page');
 
-  NavigationDrawer(Type this.youAreHere);
+  @override
+  void initState() {
+    super.initState();
+  ***REMOVED***
 
   @override
   Widget build(BuildContext context) {
-    if (routingProvider == null)
-      routingProvider = Provider.of<RoutingService>(context);
+    var pages = [
+      TermineSeite(key: actionPage),
+      ActionCreator(newActionCreated)
+    ];
+    List<String> titles = ['Aktionen', 'Zum Sammeln aufrufen'];
+
+    return WillPopScope(
+      onWillPop: () => navigateBack(),
+      child: Scaffold(
+        key: Key('home page'),
+        drawerScrimColor: Colors.black26,
+        drawer: buildDrawer(),
+        appBar: AppBar(
+            title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(titles[navigation]),
+            Image.asset('assets/images/logo.png', width: 50.0)
+          ],
+        )),
+        body: IndexedStack(children: pages, index: navigation),
+      ),
+    );
+  ***REMOVED***
+
+  Future<bool> navigateBack() async {
+    if (history.isEmpty)
+      return true;
+    else {
+      history.removeLast();
+      setState(() => navigation = history.last);
+      return false;
+    ***REMOVED***
+  ***REMOVED***
+
+  SizedBox buildDrawer() {
     return SizedBox(
         width: 200.0,
         child: Drawer(
@@ -44,30 +84,23 @@ class NavigationDrawer extends StatelessWidget {
                         title: 'Aktionen',
                         subtitle:
                             'Aktionen in einer Liste oder Karte anschauen',
-                        selected: youAreHere == TermineSeite,
-                        onTap: () =>
-                            routeTo(context, TermineSeite, TermineSeite.NAME)),
+                        index: 0),
                     menuEntry(
                         key: Key('create action button'),
                         title: 'Zum Sammeln einladen',
                         subtitle: 'Eine Sammel-Aktion ins Leben rufen',
-                        selected: youAreHere == ActionCreator,
-                        onTap: () => routeTo(
-                            context, ActionCreator, ActionCreator.NAME)),
+                        index: 1),
                     menuEntry(
                         title: 'Fragen und Antworten',
                         subtitle: 'Tipps, Tricks und Argumentationshilfen',
-                        onTap: () => Navigator.pop(context)),
+                        index: 0),
                   ],
                 ))));
   ***REMOVED***
 
   Container menuEntry(
-      {Key key,
-      String title = '',
-      String subtitle = '',
-      bool selected = false,
-      var onTap***REMOVED***) {
+      {Key key, String title = '', String subtitle = '', int index = 0***REMOVED***) {
+    var selected = navigation == index;
     return Container(
         key: key,
         padding: EdgeInsets.symmetric(vertical: selected ? 15.0 : 10.0),
@@ -84,22 +117,14 @@ class NavigationDrawer extends StatelessWidget {
               subtitle,
               style: TextStyle(color: selected ? Colors.amber : Colors.black54),
             ),
-            onTap: onTap));
+            onTap: () {
+              Navigator.pop(context);
+              setState(() => navigation = index);
+              history.add(navigation);
+            ***REMOVED***));
   ***REMOVED***
 
-  routeTo(BuildContext context, Type type, String name) {
-    Navigator.pop(context); // Schließe Drawer
-
-    // Kein Routing wenn wir schon auf der Seite sind
-    if (type == youAreHere) {
-      return;
-    ***REMOVED***
-
-    if (routingProvider.hasRouteFor(type)) {
-      Navigator.push(context, routingProvider.getRouteFor(type));
-    ***REMOVED*** else {
-      Navigator.pushNamed(context, name);
-      routingProvider.register(type, ModalRoute.of(context));
-    ***REMOVED***
-  ***REMOVED***
+  newActionCreated(List<Termin> actions) =>
+      actions.forEach((action) => (actionPage.currentState as TermineSeiteState)
+          .createNewAction(actions[0]));
 ***REMOVED***

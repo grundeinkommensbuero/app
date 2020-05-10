@@ -1,35 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
-
-import 'NavigationDrawer.dart';
+import 'package:sammel_app/services/StorageService.dart';
+import 'package:sammel_app/services/TermineService.dart';
+import 'package:sammel_app/services/RestFehler.dart';
+import 'package:sammel_app/shared/showErrorDialog.dart';
+import 'package:uuid/uuid.dart';
 
 class ActionCreator extends StatefulWidget {
   static String NAME = 'Action Creator';
+  var onFinish;
+
+  ActionCreator(this.onFinish);
 
   @override
   State<StatefulWidget> createState() => ActionCreatorState();
 ***REMOVED***
 
 class ActionCreatorState extends State<ActionCreator> {
+  AbstractTermineService termineService;
+  StorageService storageService;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: Key('action creator'),
-      extendBody: true,
-      drawerScrimColor: Colors.black26,
-      drawer: NavigationDrawer(ActionCreator),
-      appBar: AppBar(
-          title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text('Zum Sammeln aufrufen'),
-          Image.asset('assets/images/logo.png', width: 50.0)
-        ],
-      )),
-      body: ActionEditor(null, key: Key('action editor creator')),
-    );
+    return ActionEditor(key: Key('action editor creator'), onFinish: widget.onFinish,);
   ***REMOVED***
-
-  void openCreateDialog(BuildContext context) {***REMOVED***
 ***REMOVED***

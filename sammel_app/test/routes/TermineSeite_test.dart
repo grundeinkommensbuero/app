@@ -12,7 +12,6 @@ import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/AuthFehler.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
-import 'package:sammel_app/services/RoutingService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 
@@ -42,19 +41,11 @@ void main() {
         .thenAnswer((_) async => []);
     when(terminService.ladeTermine(any)).thenAnswer((_) async => []);
 
-    termineSeiteWidget = MultiProvider(
-        providers: [
-          Provider<AbstractTermineService>.value(value: terminService),
-          Provider<AbstractListLocationService>.value(
-              value: listLocationService),
-          Provider<StorageService>.value(value: storageService),
-          Provider<RoutingService>.value(value: RoutingService())
-        ],
-        child: MaterialApp(
-          home: TermineSeite(),
-          routes: RoutingService.routes,
-          initialRoute: RoutingService.initialRoute,
-        ));
+    termineSeiteWidget = MultiProvider(providers: [
+      Provider<AbstractTermineService>.value(value: terminService),
+      Provider<AbstractListLocationService>.value(value: listLocationService),
+      Provider<StorageService>.value(value: storageService),
+    ], child: MaterialApp(home: TermineSeite()));
   ***REMOVED***);
 
   testWidgets('TermineSeite startet fehlerfrei und zeigt richtigen Titel',
