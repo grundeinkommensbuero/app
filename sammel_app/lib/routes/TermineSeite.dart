@@ -21,7 +21,6 @@ import 'FilterWidget.dart';
 import 'ActionDetailsPage.dart';
 
 class TermineSeite extends StatefulWidget {
-  static String NAME = 'Action Page';
 
   TermineSeite({Key key***REMOVED***) : super(key: key ?? Key('action page'));
 
@@ -122,34 +121,6 @@ class TermineSeiteState extends State<TermineSeite> {
       ***REMOVED***);
     ***REMOVED***);
   ***REMOVED***
-
-  /*openCreateDialog(BuildContext context) async {
-    List<Termin> newActions = await showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return SimpleDialog(
-              titlePadding: EdgeInsets.zero,
-              title: AppBar(
-                leading: null,
-                automaticallyImplyLeading: false,
-                title: Text('Aktion erstellen',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22.0,
-                        color: Color.fromARGB(255, 129, 28, 98))),
-              ),
-              contentPadding: EdgeInsets.all(10.0),
-              children: <Widget>[ActionEditor(key: Key('action creator'))]);
-        ***REMOVED***);
-
-    if (newActions != null) {
-      newActions.forEach((action) => createNewAction(action).then((action) {
-            if (action != null) setState(() => addAction(action));
-          ***REMOVED***));
-    ***REMOVED***
-  ***REMOVED****/
 
   void showRestError(RestFehler e) {
     showDialog(
@@ -275,7 +246,6 @@ class TermineSeiteState extends State<TermineSeite> {
   ***REMOVED***
 
   afterActionEdit(List<Termin> editedAction) async {
-    print('### speichere ${editedAction[0]***REMOVED***');
     await saveAction(editedAction[0]);
     openTerminDetails(context, editedAction[0]); // recursive and I know it
   ***REMOVED***
