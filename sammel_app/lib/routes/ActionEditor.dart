@@ -24,28 +24,28 @@ class ActionData {
   Ort ort;
   String typ;
   List<DateTime> tage;
-  TerminDetails terminDetails = TerminDetails('', '', '');
+  TerminDetails terminDetails =
+  TerminDetails('treffpunkt', 'kommentar', 'kontakt');
   LatLng coordinates;
 
   ActionData.testDaten() {
     this.von = TimeOfDay.fromDateTime(DateTime.now());
     this.bis = TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 1)));
-    this.ort = Ort(
-        0, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez', null, null);
+    this.ort = Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
+        52.51579, 13.45399);
     this.typ = 'Sammeln';
     this.tage = [DateTime.now()];
     this.terminDetails =
         TerminDetails('Weltzeituhr', 'Es gibt Kuchen', 'Ich bin ich');
   ***REMOVED***
 
-  ActionData(
-      [this.von,
-      this.bis,
-      this.ort,
-      this.typ,
-      this.tage,
-      terminDetails,
-      this.coordinates]) {
+  ActionData([this.von,
+    this.bis,
+    this.ort,
+    this.typ,
+    this.tage,
+    terminDetails,
+    this.coordinates]) {
     if (this.tage == null) this.tage = [];
     if (terminDetails != null) this.terminDetails = terminDetails;
   ***REMOVED***
@@ -60,19 +60,20 @@ class ActionData {
     'venue': ValidationState.not_validated,
     'kontakt': ValidationState.not_validated,
     'kommentar': ValidationState.not_validated,
-    'fertig_pressed': false
+    'finish_pressed': false
   ***REMOVED***
 ***REMOVED***
 
 class ActionEditor extends StatefulWidget {
   final Termin initAction;
-  Function onFinish = (List<Termin> _) {***REMOVED***
+  Function onFinish;
 
-  ActionEditor({this.initAction, this.onFinish, Key key***REMOVED***) : super(key: key);
+  ActionEditor({this.initAction, this.onFinish, Key key***REMOVED***) : super(key: key) {
+    if (onFinish == null) onFinish = (List<Termin> _) {***REMOVED***
+  ***REMOVED***
 
   @override
   ActionEditorState createState() => ActionEditorState(this.initAction);
-
 ***REMOVED***
 
 class ActionEditorState extends State<ActionEditor> {
@@ -104,7 +105,7 @@ class ActionEditorState extends State<ActionEditor> {
     return Scaffold(
         extendBody: true,
         body: Container(
-          decoration: BoxDecoration(color: DweTheme.yellowBright),
+          decoration: BoxDecoration(color: DweTheme.yellowLight),
           child: ListView(
               padding: EdgeInsets.only(
                   left: 20.0, right: 20.0, top: 15.0, bottom: 50.0),
@@ -115,7 +116,7 @@ class ActionEditorState extends State<ActionEditor> {
                 ),
                 Text(
                   'Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. '
-                  'Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.',
+                      'Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.',
                   textScaleFactor: 1.0,
                 ),
                 SizedBox(height: 15),
@@ -207,7 +208,7 @@ class ActionEditorState extends State<ActionEditor> {
               boxShadow: [BoxShadow(blurRadius: 5.0, color: Colors.black38)],
               color: DweTheme.yellow),
           child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             RaisedButton(
                 key: Key('action editor cancel button'),
                 child: Text('Abbrechen'),
@@ -218,10 +219,7 @@ class ActionEditorState extends State<ActionEditor> {
             RaisedButton(
                 key: Key('action editor finish button'),
                 child: Text('Fertig'),
-                onPressed: () {
-                  action = ActionData();
-                  return fertigPressed();
-                ***REMOVED***)
+                onPressed: () => finishPressed())
           ]),
         ));
   ***REMOVED***
@@ -266,8 +264,8 @@ class ActionEditorState extends State<ActionEditor> {
     ***REMOVED***);
   ***REMOVED***
 
-  Future<String> showTextInputDialog(
-      String current_value, String title, String description, Key key) {
+  Future<String> showTextInputDialog(String current_value, String title,
+      String description, Key key) {
     String current_input = current_value;
     TextFormField input_field = TextFormField(
       minLines: 3,
@@ -287,10 +285,10 @@ class ActionEditorState extends State<ActionEditor> {
     if (description != null) {
       input_widget = SingleChildScrollView(
           child: ListBody(children: [
-        Text(description),
-        SizedBox(height: 10),
-        input_field
-      ]));
+            Text(description),
+            SizedBox(height: 10),
+            input_field
+          ]));
     ***REMOVED*** else {
       input_widget = input_field;
     ***REMOVED***
@@ -340,7 +338,8 @@ class ActionEditorState extends State<ActionEditor> {
                   titlePadding: EdgeInsets.all(15.0),
                   title: const Text('Wähle Aktions-Arten'),
                   children: <Widget>[
-                    ...moeglicheTypen.map((typ) => RadioListTile(
+                    ...moeglicheTypen.map((typ) =>
+                        RadioListTile(
                           groupValue: ausgewTyp,
                           value: typ,
                           title: Text(typ),
@@ -376,7 +375,7 @@ class ActionEditorState extends State<ActionEditor> {
 
   timeSelection() async {
     TimeRange timeRange =
-        await showTimeRangePicker(context, this.action.von, this.action.bis);
+    await showTimeRangePicker(context, this.action.von, this.action.bis);
     setState(() {
       this.action.von = timeRange.from;
       this.action.bis = timeRange.to;
@@ -386,11 +385,11 @@ class ActionEditorState extends State<ActionEditor> {
 
   locationSelection() async {
     var allLocations =
-        await Provider.of<AbstractStammdatenService>(context).ladeOrte();
+    await Provider.of<AbstractStammdatenService>(context).ladeOrte();
     var selectedLocations = await LocationPicker(
-            key: Key('Location Picker'),
-            locations: allLocations,
-            multiMode: false)
+        key: Key('Location Picker'),
+        locations: allLocations,
+        multiMode: false)
         .showLocationPicker(context, List<Ort>());
 
     setState(() {
@@ -480,7 +479,7 @@ class ActionEditorState extends State<ActionEditor> {
     if (this.action.validated['typ'] == ValidationState.ok) {
       text = Text(this.action.typ);
     ***REMOVED*** else {
-      text = Text("Wähle die Art der Aktion",
+      text = Text('Wähle die Art der Aktion',
           style: TextStyle(color: DweTheme.purple));
     ***REMOVED***
     return build_text_row(text, this.action.validated['typ']);
@@ -519,9 +518,9 @@ class ActionEditorState extends State<ActionEditor> {
   ***REMOVED***
 
   void validateAllInput() {
-    validateAgainstNull(this.action.von, 'von');
-    validateAgainstNull(this.action.bis, 'bis');
-    validateAgainstNull(this.action.ort, 'ort');
+    validateAgainstNull(action.von, 'von');
+    validateAgainstNull(action.bis, 'bis');
+    validateAgainstNull(action.ort, 'ort');
     validateDays();
     validateTyp();
     validateVenue();
@@ -529,7 +528,7 @@ class ActionEditorState extends State<ActionEditor> {
     validateContact();
 
     action.validated['all'] = ValidationState.ok;
-    for (var value in this.action.validated.values) {
+    for (var value in action.validated.values) {
       if (value == ValidationState.error ||
           value == ValidationState.not_validated) {
         action.validated['all'] = ValidationState.error;
@@ -561,9 +560,9 @@ class ActionEditorState extends State<ActionEditor> {
       this.action.validated['kommentar'] = ValidationState.error;
     ***REMOVED*** else {
       this.action.validated['kommentar'] =
-          this.action.terminDetails.kommentar == ''
-              ? ValidationState.error
-              : ValidationState.ok;
+      this.action.terminDetails.kommentar == ''
+          ? ValidationState.error
+          : ValidationState.ok;
     ***REMOVED***
   ***REMOVED***
 
@@ -589,7 +588,7 @@ class ActionEditorState extends State<ActionEditor> {
 
     if (this.action.validated['typ'] == ValidationState.ok) {
       this.action.validated['typ'] =
-          this.action.typ == '' ? ValidationState.error : ValidationState.ok;
+      this.action.typ == '' ? ValidationState.error : ValidationState.ok;
     ***REMOVED***
   ***REMOVED***
 
@@ -621,15 +620,16 @@ class ActionEditorState extends State<ActionEditor> {
     ***REMOVED***
   ***REMOVED***
 
-  fertigPressed() {
+  finishPressed() {
     setState(() {
-      action.validated['fertig_pressed'] = true;
+      action.validated['finish_pressed'] = true;
       validateAllInput();
     ***REMOVED***);
     if (action.validated['all'] == ValidationState.ok) {
       List<Termin> termine = generateActions();
       if (termine != null) {
-        widget.onFinish(generateActions());
+        widget.onFinish(termine);
+        setState(() => action = ActionData()); // reset Form for next use
         Navigator.maybePop(context);
       ***REMOVED***
     ***REMOVED***
@@ -637,7 +637,7 @@ class ActionEditorState extends State<ActionEditor> {
 
   Row build_text_row(Text text, ValidationState valState) {
     List<Widget> w = [Flexible(child: text)];
-    if (action.validated['fertig_pressed']) {
+    if (action.validated['finish_pressed']) {
       if (valState == ValidationState.ok) {
         w.add(Icon(Icons.done, color: Colors.black));
       ***REMOVED*** else {

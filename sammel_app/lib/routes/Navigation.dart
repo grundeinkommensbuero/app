@@ -1,38 +1,34 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/routes/ActionCreator.dart';
+import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
 import 'TermineSeite.dart';
 
-class Home extends StatefulWidget {
+class Navigation extends StatefulWidget {
+  Navigation() : super(key: Key('navigation'));
+
   @override
-  State<StatefulWidget> createState() => HomeState();
+  State<StatefulWidget> createState() => NavigationState();
 ***REMOVED***
 
-class HomeState extends State<Home> {
+class NavigationState extends State<Navigation> {
   int navigation = 0;
-  List<int> history = [0];
+  List<int> history = [];
   GlobalKey actionPage = GlobalKey(debugLabel: 'action page');
-
-  @override
-  void initState() {
-    super.initState();
-  ***REMOVED***
 
   @override
   Widget build(BuildContext context) {
     var pages = [
       TermineSeite(key: actionPage),
-      ActionCreator(newActionCreated)
+      ActionEditor(onFinish: newActionCreated, key: Key('action creator'))
     ];
     List<String> titles = ['Aktionen', 'Zum Sammeln aufrufen'];
 
     return WillPopScope(
       onWillPop: () => navigateBack(),
       child: Scaffold(
-        key: Key('home page'),
         drawerScrimColor: Colors.black26,
         drawer: buildDrawer(),
         appBar: AppBar(
@@ -48,21 +44,10 @@ class HomeState extends State<Home> {
     );
   ***REMOVED***
 
-  Future<bool> navigateBack() async {
-    if (history.isEmpty)
-      return true;
-    else {
-      history.removeLast();
-      setState(() => navigation = history.last);
-      return false;
-    ***REMOVED***
-  ***REMOVED***
-
   SizedBox buildDrawer() {
     return SizedBox(
         width: 200.0,
         child: Drawer(
-            key: Key('navigation drawer'),
             child: Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -81,12 +66,13 @@ class HomeState extends State<Home> {
                       height: 25.0,
                     ),
                     menuEntry(
+                        key: Key('action page button'),
                         title: 'Aktionen',
                         subtitle:
                             'Aktionen in einer Liste oder Karte anschauen',
                         index: 0),
                     menuEntry(
-                        key: Key('create action button'),
+                        key: Key('action creator button'),
                         title: 'Zum Sammeln einladen',
                         subtitle: 'Eine Sammel-Aktion ins Leben rufen',
                         index: 1),
@@ -119,12 +105,36 @@ class HomeState extends State<Home> {
             ),
             onTap: () {
               Navigator.pop(context);
-              setState(() => navigation = index);
-              history.add(navigation);
+              if (navigation != index) {
+                history.add(navigation);
+                setState(() => navigation = index);
+              ***REMOVED***
             ***REMOVED***));
   ***REMOVED***
 
-  newActionCreated(List<Termin> actions) =>
-      actions.forEach((action) => (actionPage.currentState as TermineSeiteState)
-          .createNewAction(actions[0]));
+  newActionCreated(List<Termin> actions) {
+    addActionsToActionPage(actions);
+    navigateToActionPage();
+  ***REMOVED***
+
+  void addActionsToActionPage(List<Termin> actions) {
+    actions.forEach((action) => (actionPage.currentState as TermineSeiteState)
+        .createAndAddAction(actions[0]));
+  ***REMOVED***
+
+  Future<bool> navigateBack() async {
+    var closeApp = false;
+    if (history.isEmpty)
+      closeApp = true;
+    else {
+      setState(() => navigation = history.last);
+      history.removeLast();
+    ***REMOVED***
+    return closeApp;
+  ***REMOVED***
+
+  void navigateToActionPage() {
+    setState(() => navigation = 0);
+    history.removeLast();
+  ***REMOVED***
 ***REMOVED***

@@ -1,20 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 import 'package:sammel_app/routes/ActionList.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
-import 'package:sammel_app/services/StorageService.dart';
-import 'package:sammel_app/services/TermineService.dart';
 
 import '../model/Termin_test.dart';
-
-class TermineServiceMock extends Mock implements TermineService {***REMOVED***
-
-final terminService = TermineServiceMock();
-
-class StorageServiceMock extends Mock implements StorageService {***REMOVED***
-
-final storageService = StorageServiceMock();
 
 void main() {
   testWidgets('TermineSeite shows all actions', (WidgetTester tester) async {

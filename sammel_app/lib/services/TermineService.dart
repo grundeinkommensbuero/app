@@ -48,7 +48,11 @@ class TermineService extends AbstractTermineService {
     if (response.response.statusCode == 200) {
       return Termin.fromJson(response.body);
     ***REMOVED*** else {
-      throw RestFehler.fromJson(response.body);
+      try {
+        throw RestFehler.fromJson(response.body);
+      ***REMOVED*** catch (_) {
+        throw RestFehler(response.body);
+      ***REMOVED***
     ***REMOVED***
   ***REMOVED***
 
