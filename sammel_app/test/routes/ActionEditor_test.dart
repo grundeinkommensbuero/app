@@ -9,7 +9,6 @@ import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
-import 'package:sammel_app/services/RoutingService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
@@ -50,12 +49,9 @@ void main() {
           Provider<StorageService>.value(value: storageService),
           Provider<AbstractListLocationService>(
               create: (context) => listLocationService),
-          Provider<AbstractStammdatenService>.value(value: stammdatenService),
-          Provider<RoutingService>.value(value: RoutingService())
+          Provider<AbstractStammdatenService>.value(value: stammdatenService))
         ],
         child: MaterialApp(
-          home: TermineSeite(),
-          routes: RoutingService.routes,
           initialRoute: RoutingService.initialRoute,
         ));
   });
@@ -409,7 +405,7 @@ void main() {
 
     testWidgets('triggers validation on Fertig button',
         (WidgetTester tester) async {
-      var actionEditor = ActionEditor(null);
+      var actionEditor = ActionEditor();
       await tester.pumpWidget(MaterialApp(home: Scaffold(body: actionEditor)));
 
       ActionEditorState state = tester.state(find.byWidget(actionEditor));
