@@ -4,11 +4,13 @@ import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 
 import '../TestdataStorage.dart';
+import '../shared/Mocks.dart';
 
-void main() {
+  void main() {
   // nöig wegen dem Laden des Zertifikats
   TestWidgetsFlutterBinding.ensureInitialized();
   var service = DemoListLocationService();
+  service.client = MockHttpClient();
 
   test('returns list locations', () async {
     List<ListLocation> result = await service.getActiveListLocations();

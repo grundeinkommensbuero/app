@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
@@ -12,3 +14,5 @@ class ListLocationServiceMock extends Mock
     implements AbstractListLocationService {***REMOVED***
 
 class StorageServiceMock extends Mock implements StorageService {***REMOVED***
+
+class MockHttpClient extends Mock implements HttpClient {***REMOVED***
