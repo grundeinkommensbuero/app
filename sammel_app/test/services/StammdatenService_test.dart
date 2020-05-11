@@ -1,15 +1,21 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sammel_app/model/Ort.dart';
+import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 
 void main() {
-  // nöig wegen dem Laden des Zertifikats
-  TestWidgetsFlutterBinding.ensureInitialized();
-
   group('DemoStammdatenService', () {
+    DemoStammdatenService service;
+    setUp(() {
+      service = DemoStammdatenService();
+    ***REMOVED***);
+
+    test('uses DemoBackend', () {
+      expect(service.backend is DemoBackend, true);
+    ***REMOVED***);
+
     test('liefert Orte Aus', () async {
-      var testStammdatenService = DemoStammdatenService();
-      List<Ort> ergebnis = await testStammdatenService.ladeOrte();
+      List<Ort> ergebnis = await service.ladeOrte();
       expect(ergebnis.length, 3);
       expect(ergebnis[0].id.toString() + ergebnis[0].bezirk + ergebnis[0].ort,
           '1Friedrichshain-KreuzbergFriedrichshain Nordkiez');

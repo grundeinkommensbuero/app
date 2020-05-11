@@ -1,20 +1,67 @@
-import 'dart:io';
-
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/ListLocation.dart';
+import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 
 import '../TestdataStorage.dart';
 import '../shared/Mocks.dart';
 
 void main() {
-  // nöig wegen dem Laden des Zertifikats
-  TestWidgetsFlutterBinding.ensureInitialized();
-  var service = DemoListLocationService();
-  var httpClient = HttpClientMock();
+  test('ListLocationService returns list locations', () async {
+    var backend = BackendMock();
+    var service = ListLocationService(backend);
 
-  HttpOverrides.runZoned(() {
-    test('returns list locations', () async {
+    var cafeKottiJson = {
+      'id': '2',
+      'name': 'Café Kotti',
+      'street': 'Adalbertstraße',
+      'number': '96',
+      'latitude': 52.5001477,
+      'longitude': 13.4181523
+    ***REMOVED***
+    var zukunftJson = {
+      'id': '3',
+      'name': 'Zukunft',
+      'street': 'Laskerstraße',
+      'number': '5',
+      'latitude': 52.5016524,
+      'longitude': 13.4655402
+    ***REMOVED***
+    List<Map<String, dynamic>> listlocations = [cafeKottiJson, zukunftJson];
+    var response = HttpClientResponseBodyMock(listlocations, 200);
+    when(backend.get('/service/listlocations/actives'))
+        .thenAnswer((_) async => response);
+
+    List<ListLocation> ergebnis = await service.getActiveListLocations();
+
+    expect(ergebnis.length, 2);
+
+    expect(ergebnis[0].id, '2');
+    expect(ergebnis[0].name, 'Café Kotti');
+    expect(ergebnis[0].street, 'Adalbertstraße');
+    expect(ergebnis[0].number, '96');
+    expect(ergebnis[0].latitude, 52.5001477);
+    expect(ergebnis[0].longitude, 13.4181523);
+    expect(ergebnis[1].id, '3');
+    expect(ergebnis[1].name, 'Zukunft');
+    expect(ergebnis[1].street, 'Laskerstraße');
+    expect(ergebnis[1].number, '5');
+    expect(ergebnis[1].latitude, 52.5016524);
+    expect(ergebnis[1].longitude, 13.4655402);
+  ***REMOVED***);
+
+  group('DemoListLocationService', () {
+    var service;
+    setUp(() {
+      service = DemoListLocationService();
+    ***REMOVED***);
+
+    test('uses DemoBackend', () {
+      expect(service.backend is DemoBackend, true);
+    ***REMOVED***);
+
+    test('DemoListLocationService returns list locations', () async {
       List<ListLocation> result = await service.getActiveListLocations();
       expect(result.length, 3);
 
@@ -39,5 +86,5 @@ void main() {
       expect(result[2].latitude, zukunft().latitude);
       expect(result[2].longitude, zukunft().longitude);
     ***REMOVED***);
-  ***REMOVED***, createHttpClient: (SecurityContext c) => httpClient);
+  ***REMOVED***);
 ***REMOVED***

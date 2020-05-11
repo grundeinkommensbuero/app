@@ -9,9 +9,11 @@ import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/AuthFehler.dart';
 import 'package:sammel_app/services/RestFehler.dart';
-import 'package:sammel_app/services/Service.dart';
+import 'package:sammel_app/services/BackendService.dart';
 
 abstract class AbstractTermineService extends BackendService {
+  AbstractTermineService([Backend backendMock]) : super(backendMock);
+
   Future<List<Termin>> ladeTermine(TermineFilter filter);
 
   Future<Termin> createTermin(Termin termin, String token);
@@ -24,9 +26,11 @@ abstract class AbstractTermineService extends BackendService {
 ***REMOVED***
 
 class TermineService extends AbstractTermineService {
+  TermineService([Backend backendMock]) : super(backendMock);
+
   Future<List<Termin>> ladeTermine(TermineFilter filter) async {
     HttpClientResponseBody response =
-        await post(Uri.parse('/service/termine'), jsonEncode(filter));
+        await post('/service/termine', jsonEncode(filter));
     if (response.response.statusCode == 200) {
       final termine = (response.body as List)
           .map((jsonTermin) => Termin.fromJson(jsonTermin))
@@ -43,8 +47,8 @@ class TermineService extends AbstractTermineService {
 
   Future<Termin> createTermin(Termin termin, String token) async {
     ActionWithToken actionWithToken = ActionWithToken(termin, token);
-    var response = await post(
-        Uri.parse('service/termine/neu'), jsonEncode(actionWithToken));
+    var response =
+        await post('service/termine/neu', jsonEncode(actionWithToken));
     if (response.response.statusCode == 200) {
       return Termin.fromJson(response.body);
     ***REMOVED*** else {
@@ -58,8 +62,7 @@ class TermineService extends AbstractTermineService {
 
   @override
   Future<Termin> getTerminMitDetails(int id) {
-    return get(Uri.parse('service/termine/termin?id=' + id.toString()))
-        .then((response) {
+    return get('service/termine/termin?id=' + id.toString()).then((response) {
       if (response.response.statusCode == 200)
         return Termin.fromJson(response.body);
       else
@@ -69,8 +72,8 @@ class TermineService extends AbstractTermineService {
   ***REMOVED***
 
   Future<void> saveAction(Termin action, String token) async {
-    var response = await post(Uri.parse('service/termine/termin'),
-        jsonEncode(ActionWithToken(action, token)));
+    var response = await post(
+        'service/termine/termin', jsonEncode(ActionWithToken(action, token)));
     if (response.response.statusCode == 200) {
       return;
     ***REMOVED***
@@ -81,8 +84,8 @@ class TermineService extends AbstractTermineService {
   ***REMOVED***
 
   deleteAction(Termin action, String token) async {
-    var response = await delete(Uri.parse('service/termine/termin'),
-        jsonEncode(ActionWithToken(action, token)));
+    var response = await delete(
+        'service/termine/termin', jsonEncode(ActionWithToken(action, token)));
     if (response.response.statusCode == 403) {
       throw AuthFehler.fromJson(response.body);
     ***REMOVED***
@@ -93,6 +96,8 @@ class TermineService extends AbstractTermineService {
 ***REMOVED***
 
 class DemoTermineService extends AbstractTermineService {
+  DemoTermineService() : super(DemoBackend());
+
   static Ort nordkiez = Ort(1, 'Friedrichshain-Kreuzberg',
       'Friedrichshain Nordkiez', 52.51579, 13.45399);
   static Ort treptowerPark =
