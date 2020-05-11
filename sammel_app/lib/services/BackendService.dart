@@ -4,14 +4,33 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:http_server/http_server.dart';
 
-class BackendService {
+class BackendService implements Backend {
+  Backend backend;
+
+  BackendService([Backend backendMock]) {
+    backend = backendMock ?? Backend();
+  }
+
+  @override
+  Future<HttpClientResponseBody> delete(String url, String data) =>
+      backend.delete(url, data);
+
+  @override
+  Future<HttpClientResponseBody> get(String url) => backend.get(url);
+
+  @override
+  Future<HttpClientResponseBody> post(String url, String data) =>
+      backend.post(url, data);
+}
+
+class Backend {
   static const host = '10.0.2.2';
   static const port = 18443;
 
   static final clientContext = SecurityContext();
-  HttpClient client = HttpClient(context: clientContext);
+  static HttpClient client = HttpClient(context: clientContext);
 
-  final Map<String, String> header = {
+  static final Map<String, String> header = {
     HttpHeaders.contentTypeHeader: "application/json",
     HttpHeaders.acceptHeader: "*/*",
   };
@@ -19,7 +38,7 @@ class BackendService {
   // Zertifikat muss nur einmal global über alle Services geladen werden
   static bool zertifikatGeladen = false;
 
-  BackendService() {
+  Backend() {
     if (!zertifikatGeladen) {
       zertifikatGeladen = true;
       ladeZertifikat();
@@ -29,15 +48,16 @@ class BackendService {
   // Assets müssen außerhalb von Widgets mit dieser asynchronen Funktion ermittelt werden
   // Darum kann das Zertifikat nicht bei der Initialisierung geladen werden
   // there gotta be a better way to do this...
-  ladeZertifikat() async {
+  static ladeZertifikat() async {
     // https://stackoverflow.com/questions/54104685/flutter-add-self-signed-certificate-from-asset-folder
     ByteData data =
         await rootBundle.load('assets/security/sammel-server_10.0.2.2.pem');
     clientContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
   }
 
-  Future<HttpClientResponseBody> get(Uri url) async {
-    var uri = Uri.https('$host:$port', url.path, url.queryParameters);
+  Future<HttpClientResponseBody> get(String url) async {
+    var uri = Uri.parse(url);
+    uri = Uri.https('$host:$port', uri.path, uri.queryParameters);
     return await client
         .getUrl(uri)
         .then((HttpClientRequest request) {
@@ -57,9 +77,9 @@ class BackendService {
         });
   }
 
-  Future<HttpClientResponseBody> post(Uri url, String data) async {
+  Future<HttpClientResponseBody> post(String url, String data) async {
     return await client
-        .postUrl(Uri.https('$host:$port', url.toString()))
+        .postUrl(Uri.https('$host:$port', url))
         .then((HttpClientRequest request) {
           request.headers.contentType = ContentType.json;
           request.headers.add('Accept', '*/*');
@@ -80,9 +100,9 @@ class BackendService {
         });
   }
 
-  Future<HttpClientResponseBody> delete(Uri url, String data) async {
+  Future<HttpClientResponseBody> delete(String url, String data) async {
     return await client
-        .deleteUrl(Uri.https('$host:$port', url.toString()))
+        .deleteUrl(Uri.https('$host:$port', url))
         .then((HttpClientRequest request) {
           request.headers.contentType = ContentType.json;
           request.headers.add('Accept', '*/*');
@@ -104,7 +124,7 @@ class BackendService {
   }
 
   // from https://stackoverflow.com/questions/27808848/retrieving-the-response-body-from-an-httpclientresponse
-  String body(List<dynamic> response) {
+  static String body(List<dynamic> response) {
     return response.map((dyn) => dyn as String).join();
   }
 }
@@ -114,3 +134,19 @@ class WrongResponseFormatException {
 
   WrongResponseFormatException(this.message);
 }
+
+class DemoBackend implements Backend {
+  @override
+  Future<HttpClientResponseBody> delete(String url, String data) =>
+      throw DemoBackendShouldNeverBeUsedError();
+
+  @override
+  Future<HttpClientResponseBody> get(String url) =>
+      throw DemoBackendShouldNeverBeUsedError();
+
+  @override
+  Future<HttpClientResponseBody> post(String url, String data) =>
+      throw DemoBackendShouldNeverBeUsedError();
+}
+
+class DemoBackendShouldNeverBeUsedError {}

@@ -1,12 +1,14 @@
 import 'dart:io';
 
+import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
+import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 
-class StammdatenServiceMock extends Mock implements AbstractStammdatenService {}
+class StammdatenServiceMock extends Mock implements StammdatenService {}
 
 class TermineServiceMock extends Mock implements AbstractTermineService {}
 
@@ -15,11 +17,19 @@ class ListLocationServiceMock extends Mock
 
 class StorageServiceMock extends Mock implements StorageService {}
 
-class HttpClientMock extends Mock implements HttpClient {}
+class BackendMock extends Mock implements Backend {}
 
-class MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext securityContext) {
-    return new HttpClientMock();
+class HttpClientResponseMock extends Mock implements HttpClientResponse {
+  HttpClientResponseMock(int status) {
+    when(this.statusCode).thenReturn(status);
+  }
+}
+
+class HttpClientResponseBodyMock extends Mock
+    implements HttpClientResponseBody {
+  HttpClientResponseBodyMock(dynamic content, int status) {
+    var response = HttpClientResponseMock(status);
+    when(this.body).thenReturn(content);
+    when(this.response).thenAnswer((_) => response);
   }
 }

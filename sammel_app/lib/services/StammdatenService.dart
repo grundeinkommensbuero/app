@@ -2,16 +2,20 @@ import 'package:http_server/http_server.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 
-import 'Service.dart';
+import 'BackendService.dart';
 
 abstract class AbstractStammdatenService extends BackendService {
   Future<List<Ort>> ladeOrte();
+
+  AbstractStammdatenService([Backend backendMock]) : super(backendMock);
 }
 
 class StammdatenService extends AbstractStammdatenService {
+  StammdatenService([Backend backendMock]) : super(backendMock);
+
   Future<List<Ort>> ladeOrte() async {
     HttpClientResponseBody response =
-        await get(Uri.parse('/service/stammdaten/orte'));
+        await backend.get('/service/stammdaten/orte');
     if (response.response.statusCode == 200) {
       final orte = (response.body as List)
           .map((jsonOrt) => Ort.fromJson(jsonOrt))
@@ -25,6 +29,8 @@ class StammdatenService extends AbstractStammdatenService {
 }
 
 class DemoStammdatenService extends AbstractStammdatenService {
+  DemoStammdatenService() : super(DemoBackend());
+
   static Ort nordkiez = Ort(1, 'Friedrichshain-Kreuzberg',
       'Friedrichshain Nordkiez', 52.51579, 13.45399);
   static Ort treptowerPark =

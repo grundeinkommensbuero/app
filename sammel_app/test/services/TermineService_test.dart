@@ -1,26 +1,27 @@
-import 'dart:io';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
+import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 
 import '../model/Ort_test.dart';
 import '../model/Termin_test.dart';
-import '../shared/Mocks.dart';
 
 void main() {
-  // nöig wegen dem Laden des Zertifikats
-  TestWidgetsFlutterBinding.ensureInitialized();
+  group('DemoTermineService', () {
+    var service;
+    setUp(() {
+      service = DemoTermineService();
+    });
 
-  var service = DemoTermineService();
-  var httpClient = HttpClientMock();
+    test('uses DemoBackend', () {
+      expect(service.backend is DemoBackend, true);
+    });
 
-  HttpOverrides.runZoned(() {
-    test('DemoTermineService creates new Termin', () async {
+    test('creates new Termin', () async {
       expect(
           (await service.ladeTermine(TermineFilter.leererFilter())).length, 4);
 
@@ -45,7 +46,7 @@ void main() {
           (await service.ladeTermine(TermineFilter.leererFilter())).length, 5);
     });
 
-    test('DemoTermineService deletes action', () async {
+    test('deletes action', () async {
       var actionsBefore =
           await service.ladeTermine(TermineFilter.leererFilter());
       expect(
@@ -58,7 +59,7 @@ void main() {
       expect(actionsAfter.map((action) => action.id), containsAll([1, 3, 4]));
     });
 
-    test('DemoTerminService stores new action', () async {
+    test('stores new action', () async {
       expect(service.termine[0].typ, 'Sammeln');
       expect(service.termine[0].ort.id, 1);
       expect(service.termine[0].details.kontakt, 'Ruft mich an unter 01234567');
@@ -75,5 +76,5 @@ void main() {
       expect(service.termine[0].ort.id, 2);
       expect(service.termine[0].details.kontakt, 'Test123');
     });
-  }, createHttpClient: (SecurityContext c) => httpClient);
+  });
 }
