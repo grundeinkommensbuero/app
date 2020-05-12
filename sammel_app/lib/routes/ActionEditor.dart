@@ -337,9 +337,8 @@ class ActionEditorState extends State<ActionEditor> {
                   contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
                   titlePadding: EdgeInsets.all(15.0),
                   title: const Text('Wähle Aktions-Arten'),
-                  children: <Widget>[
-                    ...moeglicheTypen.map((typ) =>
-                        RadioListTile(
+                  children: []
+                    ..addAll(moeglicheTypen.map((typ) => RadioListTile(
                           groupValue: ausgewTyp,
                           value: typ,
                           title: Text(typ),
@@ -348,11 +347,10 @@ class ActionEditorState extends State<ActionEditor> {
                               ausgewTyp = neuerWert;
                             });
                           },
-                        )),
-                    RaisedButton(
+                        )))
+                    ..add(RaisedButton(
                         child: Text('Fertig'),
-                        onPressed: () => Navigator.pop(context))
-                  ]);
+                        onPressed: () => Navigator.pop(context))));
             }));
 
     setState(() {
