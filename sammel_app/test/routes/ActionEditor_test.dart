@@ -281,7 +281,7 @@ void main() {
   group('validates', () {
     var actionEditor;
     setUp(() {
-      actionEditor = ActionEditorState(TerminTestDaten.einTermin());
+      actionEditor = ActionEditorState(TerminTestDaten.einTerminMitDetails());
     });
 
     test('all inputs valid with correct values', () {
@@ -379,7 +379,8 @@ void main() {
 
     testWidgets('triggers validation on Fertig button',
         (WidgetTester tester) async {
-      var actionEditor = ActionEditor(initAction: TerminTestDaten.einTermin());
+      var actionEditor =
+          ActionEditor(initAction: TerminTestDaten.einTerminMitDetails());
       await tester.pumpWidget(MaterialApp(home: actionEditor));
       ActionEditorState state = tester.state(find.byWidget(actionEditor));
 
