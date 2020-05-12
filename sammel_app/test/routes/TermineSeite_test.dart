@@ -1185,7 +1185,7 @@ void main() {
       await tester.pumpWidget(termineSeiteWidget);
 
       await tester.tap(find.byKey(Key('map view navigation button')));
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       TermineSeiteState state = tester.state(find.byKey(Key('action page')));
       expect(state.navigation, 1);

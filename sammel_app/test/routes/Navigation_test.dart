@@ -107,7 +107,7 @@ void main() {
     await tester.tap(find.byType(IconButton));
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(Key('action page button')));
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     NavigationState state = tester.state(find.byWidget(navigation));
     expect(state.history, [0,1]);

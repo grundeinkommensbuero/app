@@ -13,10 +13,31 @@ class Navigation extends StatefulWidget {
   State<StatefulWidget> createState() => NavigationState();
 }
 
-class NavigationState extends State<Navigation> {
+class NavigationState extends State<Navigation>
+    with SingleTickerProviderStateMixin {
   int navigation = 0;
   List<int> history = [];
   GlobalKey actionPage = GlobalKey(debugLabel: 'action page');
+  AnimationController _controller;
+  Animation<Offset> _slide;
+  Animation<double> _fade;
+  bool swipeUp = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 150),
+      vsync: this,
+    );
+    _fade = Tween<double>(
+      begin: 1,
+      end: 0,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.linear,
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,21 +47,36 @@ class NavigationState extends State<Navigation> {
     ];
     List<String> titles = ['Aktionen', 'Zum Sammeln aufrufen'];
 
+    _slide = Tween<Offset>(
+      begin: Offset.zero,
+      end: Offset(0, swipeUp ? -0.3 : 0.3),
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeIn,
+    ));
+
     return WillPopScope(
       onWillPop: () => navigateBack(),
       child: Scaffold(
-        drawerScrimColor: Colors.black26,
-        drawer: buildDrawer(),
-        appBar: AppBar(
-            title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text(titles[navigation]),
-            Image.asset('assets/images/logo.png', width: 50.0)
-          ],
-        )),
-        body: IndexedStack(children: pages, index: navigation),
-      ),
+          drawerScrimColor: Colors.black26,
+          drawer: buildDrawer(),
+          appBar: AppBar(
+              title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(titles[navigation]),
+              Image.asset('assets/images/logo.png', width: 50.0)
+            ],
+          )),
+          body: Container(
+            color: DweTheme.yellowLight,
+            child: FadeTransition(
+              opacity: _fade,
+              child: SlideTransition(
+                  position: _slide,
+                  child: IndexedStack(children: pages, index: navigation)),
+            ),
+          )),
     );
   }
 
@@ -104,12 +140,22 @@ class NavigationState extends State<Navigation> {
               style: TextStyle(color: selected ? Colors.amber : Colors.black54),
             ),
             onTap: () {
-              Navigator.pop(context);
               if (navigation != index) {
                 history.add(navigation);
-                setState(() => navigation = index);
+                switchPage(index);
               }
+              Navigator.pop(context);
             }));
+  }
+
+  void switchPage(int index) async {
+    await setState(() => swipeUp = index > navigation);
+    await _controller.forward();
+    await setState(() {
+      navigation = index;
+      swipeUp = !swipeUp;
+    });
+    await _controller.reverse();
   }
 
   newActionCreated(List<Termin> actions) {
