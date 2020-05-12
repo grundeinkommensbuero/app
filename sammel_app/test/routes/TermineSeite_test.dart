@@ -453,7 +453,7 @@ void main() {
               editorState.action.terminDetails));
 
       await tester.tap(find.byKey(Key('action editor finish button')));
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       verify(_terminService.createTermin(any, any)).called(1);
     ***REMOVED***);
@@ -506,7 +506,7 @@ void main() {
           .thenThrow(RestFehler('message'));
 
       await tester.tap(find.byKey(Key('action editor finish button')));
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       expect(find.byKey(Key('create request failed dialog')), findsOneWidget);
     ***REMOVED***);
