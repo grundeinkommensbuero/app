@@ -34,8 +34,7 @@ dependencies:
   f_datetimerangepicker: ^0.1.1
   calendarro: ^1.1.2
   jiffy: ^2.1.2
-  # shared_preferences sollte eigentlich ^0.5.6 sein, aber da ich mein flutter gerade nicht auf >1.12.13 kriege...
-  shared_preferences: ^0.5.0
+  shared_preferences: ^0.5.6
   validators: ^2.0.0
   uuid: ^2.0.4
   flutter_map: ^0.8.2
@@ -50,6 +49,7 @@ dev_dependencies:
   test: ^1.5.1
   flutter_launcher_icons: 0.7.3
   mockito: 4.1.1
+  flutter_test_ui: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
