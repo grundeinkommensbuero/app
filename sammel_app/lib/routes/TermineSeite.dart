@@ -21,14 +21,14 @@ import 'FilterWidget.dart';
 import 'ActionDetailsPage.dart';
 
 class TermineSeite extends StatefulWidget {
-
   TermineSeite({Key key***REMOVED***) : super(key: key ?? Key('action page'));
 
   @override
   TermineSeiteState createState() => TermineSeiteState();
 ***REMOVED***
 
-class TermineSeiteState extends State<TermineSeite> {
+class TermineSeiteState extends State<TermineSeite>
+    with SingleTickerProviderStateMixin {
   static var filterKey = GlobalKey();
   static AbstractTermineService termineService;
   static StorageService storageService;
@@ -47,11 +47,39 @@ class TermineSeiteState extends State<TermineSeite> {
   List<int> myActions = [];
 
   int navigation = 0;
+  AnimationController _controller;
+  Animation<Offset> _slide;
+  Animation<double> _fade;
+  bool swipeLeft = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 100),
+      vsync: this,
+    );
+    _fade = Tween<double>(
+      begin: 1,
+      end: 0,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.linear,
+    ));
+  ***REMOVED***
 
   @override
   Widget build(BuildContext context) {
     if (!_initialized) intialize(context);
     // TODO: Memory-Leak beheben
+
+    _slide = Tween<Offset>(
+      begin: Offset.zero,
+      end: Offset(swipeLeft ? -0.5 : 0.5, 0),
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeIn,
+    ));
 
     var actionListView = ActionList(termine, isMyAction, openTerminDetails,
         key: Key('action list'));
@@ -68,14 +96,20 @@ class TermineSeiteState extends State<TermineSeite> {
       body: Stack(
         alignment: Alignment.topCenter,
         children: [
-          IndexedStack(
-              children: [actionListView, actionMapView], index: navigation),
+          FadeTransition(
+            opacity: _fade,
+            child: SlideTransition(
+              position: _slide,
+              child: IndexedStack(
+                  children: [actionListView, actionMapView], index: navigation),
+            ),
+          ),
           filterWidget,
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: navigation,
-        onTap: (index) => setState(() => navigation = index),
+        onTap: swithPage,
         backgroundColor: DweTheme.purple,
         items: [
           BottomNavigationBarItem(
@@ -88,6 +122,17 @@ class TermineSeiteState extends State<TermineSeite> {
         ],
       ),
     );
+  ***REMOVED***
+
+  swithPage(index) async {
+    if (index == navigation) return;
+    await setState(() => swipeLeft = index > navigation);
+    await _controller.forward();
+    await setState(() {
+      navigation = index;
+      swipeLeft = !swipeLeft;
+    ***REMOVED***);
+    await _controller.reverse();
   ***REMOVED***
 
   // funktioniert nicht im Konstruktor, weil da der BuildContext fehlt
