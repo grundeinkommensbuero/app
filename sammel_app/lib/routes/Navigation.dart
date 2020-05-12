@@ -173,14 +173,14 @@ class NavigationState extends State<Navigation>
     if (history.isEmpty)
       closeApp = true;
     else {
-      setState(() => navigation = history.last);
+      switchPage(history.last);
       history.removeLast();
     }
     return closeApp;
   }
 
   void navigateToActionPage() {
-    setState(() => navigation = 0);
+    switchPage(0);
     history.removeLast();
   }
 }
