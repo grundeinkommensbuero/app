@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/src/map/flutter_map_state.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_test_ui/flutter_test_ui.dart';
 import 'package:latlong/latlong.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
@@ -512,8 +513,7 @@ void main() {
   ***REMOVED***);
 
   group('ActionEditor', () {
-    testWidgets('re-sorts edited actions into action list',
-        (WidgetTester tester) async {
+    setUpUI((WidgetTester tester) async {
       var myAction = TerminTestDaten.einTermin()
         ..id = 3
         ..beginn = DateTime.now().add(Duration(days: 1));
@@ -532,14 +532,32 @@ void main() {
       when(_terminService.getTerminMitDetails(any))
           .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
       when(_storageService.loadAllStoredActionIds())
-          .thenAnswer((_) async => [0]);
+          .thenAnswer((_) async => [1]);
 
       await tester.pumpWidget(termineSeiteWidget);
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
+    ***REMOVED***);
 
-      TermineSeiteState termineSeite =
+    testUI('closes after action edit', (WidgetTester tester) async {
+      await tester.tap(find.byKey(Key('action card')).first);
+      await tester.pump();
+
+      await tester.tap(find.byKey(Key('action edit button')));
+      await tester.pump();
+
+      expect(find.byKey(Key('action editor')), findsOneWidget);
+
+      await tester.tap(find.byKey(Key('action editor finish button')));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(Key('action editor')), findsNothing);
+    ***REMOVED***);
+
+    testUI('re-sorts edited actions into action list',
+        (WidgetTester tester) async {
+          TermineSeiteState termineSeite =
           tester.state(find.byKey(Key('action page')));
 
       expect(termineSeite.termine.map((action) => action.id),
@@ -552,25 +570,10 @@ void main() {
 
       expect(termineSeite.termine.map((action) => action.id),
           containsAllInOrder([1, 3, 2]));
-    ***REMOVED***);
+        ***REMOVED***);
 
-    testWidgets('shows alert popup on AuthFehler from save request',
+    testUI('shows alert popup on AuthFehler from save request',
         (WidgetTester tester) async {
-      when(_terminService.ladeTermine(any)).thenAnswer((_) async => [
-            TerminTestDaten.einTermin()
-              ..id = 3
-              ..beginn = DateTime.now().subtract(Duration(days: 1)),
-          ]);
-      when(_terminService.getTerminMitDetails(any))
-          .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
-      when(_storageService.loadAllStoredActionIds())
-          .thenAnswer((_) async => [0]);
-
-      await tester.pumpWidget(termineSeiteWidget);
-
-      // Warten bis asynchron Termine geladen wurden
-      await tester.pumpAndSettle();
-
       TermineSeiteState termineSeite =
           tester.state(find.byKey(Key('action page')));
 
@@ -585,21 +588,8 @@ void main() {
       expect(termineSeite.termine[0].typ, 'Sammeln');
     ***REMOVED***);
 
-    testWidgets('shows alert popup on RestFehler from save request',
+    testUI('shows alert popup on RestFehler from save request',
         (WidgetTester tester) async {
-      when(_terminService.ladeTermine(any)).thenAnswer((_) async => [
-            TerminTestDaten.einTermin()..id = 1,
-          ]);
-      when(_terminService.getTerminMitDetails(any))
-          .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
-      when(_storageService.loadAllStoredActionIds())
-          .thenAnswer((_) async => [0]);
-
-      await tester.pumpWidget(termineSeiteWidget);
-
-      // Warten bis asynchron Termine geladen wurden
-      await tester.pumpAndSettle();
-
       TermineSeiteState termineSeite =
           tester.state(find.byKey(Key('action page')));
 

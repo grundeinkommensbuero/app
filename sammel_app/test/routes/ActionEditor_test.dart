@@ -20,9 +20,7 @@ import '../shared/Mocks.dart';
 
 final stammdatenService = StammdatenServiceMock();
 final terminService = TermineServiceMock();
-
 final listLocationService = ListLocationServiceMock();
-
 final storageService = StorageServiceMock();
 
 void main() {
@@ -621,6 +619,87 @@ void main() {
 
       expect(action.latitude, 52.5170365);
       expect(action.longitude, 13.3888599);
+    ***REMOVED***);
+  ***REMOVED***);
+  group('finish button', () {
+    Future<ActionEditorState> pumActionEditor(WidgetTester tester,
+        {Function onFinish***REMOVED***) async {
+      onFinish = onFinish ?? (_) {***REMOVED***
+
+      var actionEditor = ActionEditor(onFinish: onFinish);
+      await tester.pumpWidget(Provider<AbstractStammdatenService>.value(
+          value: stammdatenService, child: MaterialApp(home: actionEditor)));
+
+      ActionEditorState state = tester.state(find.byWidget(actionEditor));
+      state.setState(() => state.action = ActionData.testDaten());
+      await tester.pumpAndSettle();
+      return state;
+    ***REMOVED***
+
+    testWidgets('fires onFinish', (WidgetTester tester) async {
+      bool fired = false;
+      await pumActionEditor(tester, onFinish: (_) => fired = true);
+
+      expect(fired, isFalse);
+
+      await tester.tap(find.byKey(Key('action editor finish button')));
+      await tester.pumpAndSettle();
+
+      expect(fired, isTrue);
+    ***REMOVED***);
+
+    testWidgets('clears data', (WidgetTester tester) async {
+      var state = await pumActionEditor(tester);
+
+      expect(state.action.von, isNotNull);
+      expect(state.action.bis, isNotNull);
+      expect(state.action.ort, isNotNull);
+      expect(state.action.typ, isNotNull);
+      expect(state.action.tage, isNotEmpty);
+      expect(state.action.terminDetails.kommentar, isNotEmpty);
+      expect(state.action.terminDetails.kontakt, isNotEmpty);
+      expect(state.action.terminDetails.treffpunkt, isNotEmpty);
+      expect(state.action.coordinates, isNotNull);
+
+      await tester.tap(find.byKey(Key('action editor finish button')));
+      await tester.pumpAndSettle();
+
+      expect(state.action.von, isNull);
+      expect(state.action.bis, isNull);
+      expect(state.action.ort, isNull);
+      expect(state.action.typ, isNull);
+      expect(state.action.tage, isEmpty);
+      expect(state.action.terminDetails.kommentar, isEmpty);
+      expect(state.action.terminDetails.kontakt, isEmpty);
+      expect(state.action.terminDetails.treffpunkt, isEmpty);
+      expect(state.action.coordinates, isNull);
+    ***REMOVED***);
+
+    testWidgets('cancel clears data', (WidgetTester tester) async {
+      var state = await pumActionEditor(tester);
+
+      expect(state.action.von, isNotNull);
+      expect(state.action.bis, isNotNull);
+      expect(state.action.ort, isNotNull);
+      expect(state.action.typ, isNotNull);
+      expect(state.action.tage, isNotEmpty);
+      expect(state.action.terminDetails.kommentar, isNotEmpty);
+      expect(state.action.terminDetails.kontakt, isNotEmpty);
+      expect(state.action.terminDetails.treffpunkt, isNotEmpty);
+      expect(state.action.coordinates, isNotNull);
+
+      await tester.tap(find.byKey(Key('action editor cancel button')));
+      await tester.pumpAndSettle();
+
+      expect(state.action.von, isNull);
+      expect(state.action.bis, isNull);
+      expect(state.action.ort, isNull);
+      expect(state.action.typ, isNull);
+      expect(state.action.tage, isEmpty);
+      expect(state.action.terminDetails.kommentar, isEmpty);
+      expect(state.action.terminDetails.kontakt, isEmpty);
+      expect(state.action.terminDetails.treffpunkt, isEmpty);
+      expect(state.action.coordinates, isNull);
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***

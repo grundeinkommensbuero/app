@@ -24,8 +24,7 @@ class ActionData {
   Ort ort;
   String typ;
   List<DateTime> tage;
-  TerminDetails terminDetails =
-  TerminDetails('treffpunkt', 'kommentar', 'kontakt');
+  TerminDetails terminDetails;
   LatLng coordinates;
 
   ActionData.testDaten() {
@@ -33,21 +32,23 @@ class ActionData {
     this.bis = TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 1)));
     this.ort = Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
         52.51579, 13.45399);
+    this.coordinates = LatLng(52.51579, 13.45399);
     this.typ = 'Sammeln';
     this.tage = [DateTime.now()];
     this.terminDetails =
         TerminDetails('Weltzeituhr', 'Es gibt Kuchen', 'Ich bin ich');
   ***REMOVED***
 
-  ActionData([this.von,
-    this.bis,
-    this.ort,
-    this.typ,
-    this.tage,
-    terminDetails,
-    this.coordinates]) {
-    if (this.tage == null) this.tage = [];
-    if (terminDetails != null) this.terminDetails = terminDetails;
+  ActionData(
+      [this.von,
+      this.bis,
+      this.ort,
+      this.typ,
+      this.tage,
+      this.terminDetails,
+      this.coordinates]) {
+    this.tage = this.tage ?? [];
+    this.terminDetails = this.terminDetails ?? TerminDetails('', '', '');
   ***REMOVED***
 
   var validated = {
@@ -116,7 +117,7 @@ class ActionEditorState extends State<ActionEditor> {
                 ),
                 Text(
                   'Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. '
-                      'Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.',
+                  'Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.',
                   textScaleFactor: 1.0,
                 ),
                 SizedBox(height: 15),
@@ -208,7 +209,7 @@ class ActionEditorState extends State<ActionEditor> {
               boxShadow: [BoxShadow(blurRadius: 5.0, color: Colors.black38)],
               color: DweTheme.yellow),
           child:
-          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             RaisedButton(
                 key: Key('action editor cancel button'),
                 child: Text('Abbrechen'),
@@ -264,8 +265,8 @@ class ActionEditorState extends State<ActionEditor> {
     ***REMOVED***);
   ***REMOVED***
 
-  Future<String> showTextInputDialog(String current_value, String title,
-      String description, Key key) {
+  Future<String> showTextInputDialog(
+      String current_value, String title, String description, Key key) {
     String current_input = current_value;
     TextFormField input_field = TextFormField(
       minLines: 3,
@@ -285,10 +286,10 @@ class ActionEditorState extends State<ActionEditor> {
     if (description != null) {
       input_widget = SingleChildScrollView(
           child: ListBody(children: [
-            Text(description),
-            SizedBox(height: 10),
-            input_field
-          ]));
+        Text(description),
+        SizedBox(height: 10),
+        input_field
+      ]));
     ***REMOVED*** else {
       input_widget = input_field;
     ***REMOVED***
@@ -373,7 +374,7 @@ class ActionEditorState extends State<ActionEditor> {
 
   timeSelection() async {
     TimeRange timeRange =
-    await showTimeRangePicker(context, this.action.von, this.action.bis);
+        await showTimeRangePicker(context, this.action.von, this.action.bis);
     setState(() {
       this.action.von = timeRange.from;
       this.action.bis = timeRange.to;
@@ -383,11 +384,11 @@ class ActionEditorState extends State<ActionEditor> {
 
   locationSelection() async {
     var allLocations =
-    await Provider.of<AbstractStammdatenService>(context).ladeOrte();
+        await Provider.of<AbstractStammdatenService>(context).ladeOrte();
     var selectedLocations = await LocationPicker(
-        key: Key('Location Picker'),
-        locations: allLocations,
-        multiMode: false)
+            key: Key('Location Picker'),
+            locations: allLocations,
+            multiMode: false)
         .showLocationPicker(context, List<Ort>());
 
     setState(() {
@@ -558,9 +559,9 @@ class ActionEditorState extends State<ActionEditor> {
       this.action.validated['kommentar'] = ValidationState.error;
     ***REMOVED*** else {
       this.action.validated['kommentar'] =
-      this.action.terminDetails.kommentar == ''
-          ? ValidationState.error
-          : ValidationState.ok;
+          this.action.terminDetails.kommentar == ''
+              ? ValidationState.error
+              : ValidationState.ok;
     ***REMOVED***
   ***REMOVED***
 
@@ -586,7 +587,7 @@ class ActionEditorState extends State<ActionEditor> {
 
     if (this.action.validated['typ'] == ValidationState.ok) {
       this.action.validated['typ'] =
-      this.action.typ == '' ? ValidationState.error : ValidationState.ok;
+          this.action.typ == '' ? ValidationState.error : ValidationState.ok;
     ***REMOVED***
   ***REMOVED***
 
