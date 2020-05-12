@@ -261,7 +261,7 @@ void main() {
     testWidgets('Cancel button closes correctly', (WidgetTester tester) async {
       await _openActionCreator(tester);
       await tester.tap(find.byKey(Key('action editor cancel button')));
-      await tester.pump();
+      await tester.pumpAndSettle();
       verifyNever(terminService.createTermin(any, any));
     });
 
