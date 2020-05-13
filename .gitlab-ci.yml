@@ -34,6 +34,7 @@ unit_tests_app:
     # zweiter run für coverage
     - - flutter test --coverage
     - lcov --list coverage/lcov.info
+    - lcov --remove 'coverage/lcov.info' -o coverage/lcov.info '**/BackendService.dart' # untestbares BackendService entfernen
     - genhtml coverage/lcov.info --output=coverage
   artifacts:
     reports:
