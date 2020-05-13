@@ -60,7 +60,7 @@
                 <server-identities>
                     <ssl>
                         <keystore path="application.keystore" relative-to="jboss.server.config.dir"
-                                  keystore-password="password" alias="server" key-password="password"
+                                  keystore-password="${KEY_PASSWORD***REMOVED***" alias="server" key-password="${KEY_PASSWORD***REMOVED***"
                                   generate-self-signed-certificate-host="localhost"/>
                     </ssl>
                 </server-identities>
@@ -174,7 +174,7 @@
                 </datasource>
                 <datasource jndi-name="java:jboss/datasources/mariaDBDS" pool-name="mariaDBDS"
                             statistics-enabled="${wildfly.datasources.statistics-enabled:${wildfly.statistics-enabled:false***REMOVED******REMOVED***">
-                    <connection-url>jdbc:mariadb://db:3306/db</connection-url>
+                    <connection-url>jdbc:mariadb://${DB_URL***REMOVED***:${DB_PORT***REMOVED***/${DB_SCHEMA***REMOVED***</connection-url>
                     <driver>mariaDB</driver>
                     <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
                     <pool>
@@ -182,8 +182,8 @@
                         <max-pool-size>200</max-pool-size>
                     </pool>
                     <security>
-                        <user-name>user</user-name>
-                        <password>password</password>
+                        <user-name>${DB_USER***REMOVED***</user-name>
+                        <password>${DB_PASSWORD***REMOVED***</password>
                     </security>
                     <validation>
                         <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLValidConnectionChecker"/>
@@ -406,7 +406,7 @@
                 <key-stores>
                     <key-store name="dweKeyStore">
                         <credential-reference
-                                clear-text="password"/>
+                                clear-text="${KEY_PASSWORD***REMOVED***"/>
                         <implementation type="PKCS12"/>
                         <file path="sammel-app.keystore.p12" relative-to="jboss.server.config.dir"/>
                     </key-store>
@@ -414,7 +414,7 @@
                 <key-managers>
                     <key-manager name="dweKeyManager" key-store="dweKeyStore">
                         <credential-reference
-                                clear-text="password"/>
+                                clear-text="${KEY_PASSWORD***REMOVED***"/>
                     </key-manager>
                 </key-managers>
                 <server-ssl-contexts>

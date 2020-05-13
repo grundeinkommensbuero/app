@@ -25,7 +25,13 @@ services:
     build: ./sammel_server
     container_name: server
     restart: always
-    environment: {***REMOVED***
+    environment:
+      - DB_URL=db
+      - DB_PORT=3306
+      - DB_SCHEMA=db
+      - DB_USER=user
+      - DB_PASSWORD=password
+      - KEY_PASSWORD=password
     ports:
      - '19990:9990'
      - '18080:8080'
