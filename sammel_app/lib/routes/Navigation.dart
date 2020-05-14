@@ -27,7 +27,7 @@ class NavigationState extends State<Navigation>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 150),
+      duration: const Duration(milliseconds: 250),
       vsync: this,
     );
     _fade = Tween<double>(
@@ -35,7 +35,7 @@ class NavigationState extends State<Navigation>
       end: 0,
     ).animate(CurvedAnimation(
       parent: _controller,
-      curve: Curves.linear,
+      curve: Curves.easeIn,
     ));
   }
 

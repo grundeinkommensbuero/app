@@ -56,7 +56,7 @@ class TermineSeiteState extends State<TermineSeite>
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 100),
+      duration: const Duration(milliseconds: 250),
       vsync: this,
     );
     _fade = Tween<double>(
@@ -64,7 +64,7 @@ class TermineSeiteState extends State<TermineSeite>
       end: 0,
     ).animate(CurvedAnimation(
       parent: _controller,
-      curve: Curves.linear,
+      curve: Curves.easeIn,
     ));
   }
 
