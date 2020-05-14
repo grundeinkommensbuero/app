@@ -20,23 +20,23 @@ class NavigationState extends State<Navigation>
   GlobalKey actionPage = GlobalKey(debugLabel: 'action page');
   AnimationController _controller;
   Animation<Offset> _slide;
-  Animation<double> _fade;
+//  Animation<double> _fade;
   bool swipeUp = false;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 250),
+      duration: const Duration(milliseconds: 150),
       vsync: this,
     );
-    _fade = Tween<double>(
-      begin: 1,
-      end: 0,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeIn,
-    ));
+//    _fade = Tween<double>(
+//      begin: 1,
+//      end: 0,
+//    ).animate(CurvedAnimation(
+//      parent: _controller,
+//      curve: Curves.easeIn,
+//    ));
   ***REMOVED***
 
   @override
@@ -70,12 +70,12 @@ class NavigationState extends State<Navigation>
           )),
           body: Container(
             color: DweTheme.yellowLight,
-            child: FadeTransition(
+            child: /*FadeTransition(
               opacity: _fade,
-              child: SlideTransition(
+              child: */SlideTransition(
                   position: _slide,
                   child: IndexedStack(children: pages, index: navigation)),
-            ),
+//            ),
           )),
     );
   ***REMOVED***
