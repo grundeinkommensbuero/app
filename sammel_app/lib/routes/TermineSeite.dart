@@ -49,7 +49,7 @@ class TermineSeiteState extends State<TermineSeite>
   int navigation = 0;
   AnimationController _controller;
   Animation<Offset> _slide;
-//  Animation<double> _fade;
+  Animation<double> _fade;
   bool swipeLeft = false;
 
   @override
@@ -59,13 +59,13 @@ class TermineSeiteState extends State<TermineSeite>
       duration: const Duration(milliseconds: 150),
       vsync: this,
     );
-//    _fade = Tween<double>(
-//      begin: 1,
-//      end: 0,
-//    ).animate(CurvedAnimation(
-//      parent: _controller,
-//      curve: Curves.easeIn,
-//    ));
+    _fade = Tween<double>(
+      begin: 1,
+      end: 0,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeIn,
+    ));
   }
 
   @override
@@ -95,15 +95,15 @@ class TermineSeiteState extends State<TermineSeite>
     return Scaffold(
       body: Stack(
         alignment: Alignment.topCenter,
-        children: [/*
+        children: [
           FadeTransition(
             opacity: _fade,
-            child: */SlideTransition(
+            child: SlideTransition(
               position: _slide,
               child: IndexedStack(
                   children: [actionListView, actionMapView], index: navigation),
             ),
-//          ),
+          ),
           filterWidget,
         ],
       ),
