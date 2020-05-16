@@ -22,8 +22,8 @@ class MyApp extends StatelessWidget {
   PushNotificationsManager pnm = PushNotificationsManager();
 
   MyApp()
-  {
-    pnm.init();
+   {
+     pnm.init();
   }
 
   @override
