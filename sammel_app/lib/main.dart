@@ -21,8 +21,8 @@ class MyApp extends StatelessWidget {
   ChatMessageService cms = ChatMessageService();
 
   MyApp() {
-    pnm.init();
-    pnm.register_message_callback(PushDataTypes.SimpleChatMessage, cms);
+   pnm.init();
+     pnm.register_message_callback(PushDataTypes.SimpleChatMessage, cms);
   }
 
   @override
