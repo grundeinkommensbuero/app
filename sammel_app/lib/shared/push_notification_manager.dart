@@ -29,7 +29,6 @@ class PushNotificationsManager {
       // For testing purposes print the Firebase Messaging token
       String token = await _firebaseMessaging.getToken();
       print("FirebaseMessaging token: $token");
-
       _initialized = true;
     ***REMOVED***
   ***REMOVED***
@@ -51,4 +50,11 @@ class PushNotificationsManager {
     this.callback_map[id] = callback;
   ***REMOVED***
 
+  void subscribeToChannel(String topic) async {
+    _firebaseMessaging.subscribeToTopic(topic);
+  ***REMOVED***
+
+  void unsubscribeFromChannel(String topic) async {
+    _firebaseMessaging.unsubscribeFromTopic(topic);
+  ***REMOVED***
 ***REMOVED***
