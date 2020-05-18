@@ -9,19 +9,20 @@ import 'package:sammel_app/shared/DweTheme.dart';
 
 void main() => runApp(MyApp());
 
+const Mode mode = Mode.DEMO;
+
 class MyApp extends StatelessWidget {
-  final demoModus = true;
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
           Provider<AbstractTermineService>.value(
-              value: demoModus ? DemoTermineService() : TermineService()),
+              value: demoMode ? DemoTermineService() : TermineService()),
           Provider<AbstractStammdatenService>.value(
-              value: demoModus ? DemoStammdatenService() : StammdatenService()),
+              value: demoMode ? DemoStammdatenService() : StammdatenService()),
           Provider<AbstractListLocationService>.value(
-              value: demoModus
+              value: demoMode
                   ? DemoListLocationService()
                   : ListLocationService()),
           Provider<StorageService>.value(value: StorageService()),
@@ -32,4 +33,10 @@ class MyApp extends StatelessWidget {
           home: Navigation(),
         ));
   }
+
 }
+
+enum Mode {LOCAL, DEMO, TEST}
+
+get demoMode => mode == Mode.DEMO;
+get testMode => mode == Mode.TEST;
