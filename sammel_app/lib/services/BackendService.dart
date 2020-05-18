@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/services.dart';
 import 'package:http_server/http_server.dart';
+import 'package:sammel_app/main.dart';
 
 class BackendService implements Backend {
   Backend backend;
@@ -24,7 +25,7 @@ class BackendService implements Backend {
 ***REMOVED***
 
 class Backend {
-  static const host = '10.0.2.2';
+  static final host = testMode ? '85.10.193.61' : '10.0.2.2';
   static const port = 18443;
 
   static final clientContext = SecurityContext();
@@ -50,10 +51,13 @@ class Backend {
   // there gotta be a better way to do this...
   static ladeZertifikat() async {
     // https://stackoverflow.com/questions/54104685/flutter-add-self-signed-certificate-from-asset-folder
-    ByteData data =
-        await rootBundle.load('assets/security/sammel-server_10.0.2.2.pem');
+    ByteData data = await rootBundle.load(serverCertificate);
     clientContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
   ***REMOVED***
+
+  static String get serverCertificate => testMode
+      ? 'assets/security/sammel-server_85.10.193.61.pem'
+      : 'assets/security/sammel-server_10.0.2.2.pem';
 
   Future<HttpClientResponseBody> get(String url) async {
     var uri = Uri.parse(url);
