@@ -25,8 +25,8 @@ class BackendService implements Backend {
 ***REMOVED***
 
 class Backend {
-  static final host = testMode ? '85.10.193.61' : '10.0.2.2';
-  static const port = 18443;
+  static final host = testMode ? 'dwe.idash.org' : '10.0.2.2';
+  static final port = testMode ? 443 : 18443;
 
   static final clientContext = SecurityContext();
   static HttpClient client = HttpClient(context: clientContext);
@@ -56,7 +56,7 @@ class Backend {
   ***REMOVED***
 
   static String get serverCertificate => testMode
-      ? 'assets/security/sammel-server_85.10.193.61.pem'
+      ? 'assets/security/sammel-server_dwe.idash.org.pem'
       : 'assets/security/sammel-server_10.0.2.2.pem';
 
   Future<HttpClientResponseBody> get(String url) async {
