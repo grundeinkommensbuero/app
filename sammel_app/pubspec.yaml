@@ -71,7 +71,7 @@ flutter:
    - assets/images/Sammeln_centered.png
    - assets/images/Infoveranstaltung.png
    - assets/security/sammel-server_10.0.2.2.pem
-   - assets/security/dwe-idash-org.pem
+   - assets/security/sammel-server_dwe.idash.org.pem
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
