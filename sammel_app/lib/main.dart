@@ -9,7 +9,7 @@ import 'package:sammel_app/shared/DweTheme.dart';
 
 void main() => runApp(MyApp());
 
-const Mode mode = Mode.DEMO;
+const Mode mode = Mode.TEST;
 
 class MyApp extends StatelessWidget {
 
