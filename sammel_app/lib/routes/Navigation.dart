@@ -112,10 +112,10 @@ class NavigationState extends State<Navigation>
                         title: 'Zum Sammeln einladen',
                         subtitle: 'Eine Sammel-Aktion ins Leben rufen',
                         index: 1),
-                    menuEntry(
+                    /*menuEntry(
                         title: 'Fragen und Antworten',
                         subtitle: 'Tipps, Tricks und Argumentationshilfen',
-                        index: 0),
+                        index: 0),*/
                   ],
                 ))));
   ***REMOVED***
