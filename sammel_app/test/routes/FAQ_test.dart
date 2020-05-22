@@ -9,6 +9,7 @@ import '../services/HelpService_test.dart';
 main() {
   var faq = FAQ();
   setUpUI((WidgetTester tester) async {
+    HelpService.helps = testHelps;
     await tester.pumpWidget(MaterialApp(home: faq));
   });
 
@@ -66,15 +67,13 @@ main() {
       var faqState = tester.state<FAQState>(find.byWidget(faq));
       expect(faqState.searchInputController.text, 'Suchtext');
 
-      await tester.tap(find.byKey(Key('search clear button')));
+      await tester.tap(find.byKey(Key('faq search clear button')));
       await tester.pump();
 
       expect(faqState.searchInputController.text, '');
     });
 
     testUI('input sorts items', (WidgetTester tester) async {
-      HelpService.helps = testHelps;
-
       var helpTiles = find.byKey(Key('help tile'));
       var titlesInOrder =
           tester.widgetList<HelpTile>(helpTiles).map((tile) => tile.help.title);
@@ -95,6 +94,32 @@ main() {
           titlesInOrder,
           containsAllInOrder(
               ['Lasius Niger', 'Messor Barbarus', 'Camponotus Ligniperdus']));
+    });
+
+    testUI('clear button resets item order', (WidgetTester tester) async {
+      var helpTiles = find.byKey(Key('help tile'));
+      await tester.enterText(
+          find.byKey(Key('faq search input')), 'Lasius Niger Messor');
+      await tester.pump();
+
+      var titlesInOrder =
+          tester.widgetList<HelpTile>(helpTiles).map((tile) => tile.help.title);
+
+      expect(
+          titlesInOrder,
+          containsAllInOrder(
+              ['Lasius Niger', 'Messor Barbarus', 'Camponotus Ligniperdus']));
+
+      await tester.tap(find.byKey(Key('faq search clear button')));
+      await tester.pump();
+
+      titlesInOrder =
+      tester.widgetList<HelpTile>(helpTiles).map((tile) => tile.help.title);
+
+      expect(
+          titlesInOrder,
+          containsAllInOrder(
+              ['Camponotus Ligniperdus', 'Lasius Niger', 'Messor Barbarus', ]));
     });
   });
 }
