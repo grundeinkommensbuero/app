@@ -40,7 +40,7 @@ void main() {
 
     expect(nav.navigation, isNot(1));
 
-    await tester.tap(find.byType(IconButton));
+    await tester.tap(find.byIcon(Icons.menu));
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(Key('action creator navigation button')));
     await tester.pumpAndSettle();
@@ -753,7 +753,7 @@ Future _openActionCreator(WidgetTester tester) async {
   await _pumpNavigation(tester);
   await tester.pumpAndSettle();
 
-  await tester.tap(find.byType(IconButton));
+  await tester.tap(find.byIcon(Icons.menu));
   await tester.pumpAndSettle();
   await tester.tap(find.byKey(Key('action creator navigation button')));
   await tester.pumpAndSettle();

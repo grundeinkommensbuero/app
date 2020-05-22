@@ -301,7 +301,7 @@ void main() {
 
       expect(find.byKey(Key('action card')), findsNWidgets(3));
 
-      await tester.tap(find.byType(IconButton));
+      await tester.tap(find.byIcon(Icons.menu));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(Key('action creator navigation button')));
       await tester.pumpAndSettle();
@@ -362,7 +362,7 @@ void main() {
 
       expect(find.byKey(Key('action card')), findsNWidgets(3));
 
-      await tester.tap(find.byType(IconButton));
+      await tester.tap(find.byIcon(Icons.menu));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(Key('action creator navigation button')));
       await tester.pumpAndSettle();
@@ -424,7 +424,7 @@ void main() {
 
       expect(find.byKey(Key('action card')), findsNWidgets(3));
 
-      await tester.tap(find.byType(IconButton));
+      await tester.tap(find.byIcon(Icons.menu));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(Key('action creator navigation button')));
       await tester.pumpAndSettle();
@@ -485,7 +485,7 @@ void main() {
           .thenAnswer((_) async => [1337]);
 
       await _pumpNavigation(tester);
-      await tester.tap(find.byType(IconButton));
+      await tester.tap(find.byIcon(Icons.menu));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(Key('action creator navigation button')));
       await tester.pumpAndSettle();
