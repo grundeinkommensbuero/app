@@ -27,20 +27,25 @@ class ActionListState extends State<ActionList> {
   }
 
   Widget cardListBuilder(context, index) {
-    // insert "Jetzt" line
-    var tile = ListTile(
+    Widget tile = ListTile(
         title: TerminCard(widget.termine[index],
             widget.isMyAction(widget.termine[index].id), Key('action card')),
         onTap: () => widget.openActionDetails(context, widget.termine[index]),
         contentPadding: EdgeInsets.only(bottom: 0.1));
     var now = DateTime.now();
-    // Abstand nach oben, damit oberste Aktion nicht von Filter verdeckt wird
-    if (index==0) return Column(children: [SizedBox(height: 50.0,), tile]);
-    // Jetzt-Zeile zwischen vergangenem und zukünftiger Aktion
+    // An erstes Element Abstand nach oben anhängen, damit oberste Aktion nicht von Filter verdeckt wird
+    if (index == 0)
+      tile = Column(children: [
+        SizedBox(
+          height: 50.0,
+        ),
+        tile
+      ]);
+    // Jetzt-Zeile an die zuletzt vergangene Aktion anhängen
     if ((widget.termine[index].beginn.isBefore(now)) &&
         (index == widget.termine.length - 1 ||
             widget.termine[index + 1].beginn.isAfter(now)))
-      return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      tile = Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         tile,
         Text(
           'Jetzt',
@@ -48,7 +53,6 @@ class ActionListState extends State<ActionList> {
           style: TextStyle(color: DweTheme.purple, fontSize: 16.0),
         ),
       ]);
-    else
-      return tile;
+    return tile;
   }
 }
