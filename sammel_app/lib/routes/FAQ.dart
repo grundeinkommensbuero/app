@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sammel_app/model/Help.dart';
 import 'package:sammel_app/services/HelpService.dart';
@@ -57,6 +56,7 @@ class FAQState extends State<FAQ> {
                         opened = null;
                       else
                         opened = helps[index].id;
+                      primaryFocus.unfocus();
                     }),
                 child: HelpTile(helps[index],
                     extended: opened == helps[index].id))),

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
