@@ -79,6 +79,21 @@ void main() {
       expect(find.text('Zum Sammeln aufrufen'), findsOneWidget);
     });
 
+    testUI('switches to FAQ page with tap on FAQ Button',
+        (WidgetTester tester) async {
+      NavigationState state = tester.state(find.byWidget(navigation));
+      expect(state.navigation, isNot(2));
+
+      await tester.tap(find.byType(IconButton));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(Key('faq navigation button')));
+      await tester.pumpAndSettle();
+
+      expect(state.navigation, 2);
+      expect(find.byKey(Key('faq page')), findsOneWidget);
+      expect(find.text('Fragen und Antworten'), findsOneWidget);
+    });
+
     testUI('returns to same ActionPage page with tap on Actions-Button',
         (WidgetTester tester) async {
       NavigationState state = tester.state(find.byWidget(navigation));
