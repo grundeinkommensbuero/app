@@ -12,8 +12,10 @@ class HelpService {
         Text('Dies ist der zweite Eintrag und er ist noch besser'),
         Text('Dies ist der zweite Eintrag und er ist...'),
         ['Tag']),
-    Help(3, 'Dritter Eintrag',
-        Text('Dies ist der dritte Eintrag und er ist der beste'),
+    Help(3, 'Dritter Eintrag    ',
+        Column(children: [
+          Text('Dies ist der dritte Eintrag und er ist der beste. Außerdem hat er ein Bild:'),
+          Image.asset('assets/images/dwe.png')]),
         Text('Dies ist der dritte Eintrag und er ist...'), ['Tag2'])
   ];
 ***REMOVED***

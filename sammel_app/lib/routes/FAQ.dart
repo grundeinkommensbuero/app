@@ -12,13 +12,22 @@ class FAQ extends StatefulWidget {
 ***REMOVED***
 
 class FAQState extends State<FAQ> {
+  int opened;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: ListView.builder(
             itemCount: HelpService.helps.length,
-            itemBuilder: (BuildContext context, int index) =>
-                HelpTile(HelpService.helps[index], extended: false)));
+            itemBuilder: (BuildContext context, int index) => InkWell(
+                onTap: () => setState(() {
+                      if (opened == index)
+                        opened = null;
+                      else
+                        opened = index;
+                    ***REMOVED***),
+                child: HelpTile(HelpService.helps[index],
+                    extended: opened == index))));
   ***REMOVED***
 ***REMOVED***
 
@@ -32,18 +41,32 @@ class HelpTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: EdgeInsets.all(2.0),
+      contentPadding: EdgeInsets.only(bottom: 2.0),
       title: Container(
         padding: EdgeInsets.all(10.0),
-        decoration: BoxDecoration(color: DweTheme.yellowLight, boxShadow: [
-          BoxShadow(
-              color: Colors.grey,
-              offset: Offset(1.0, 1.0),
-              blurRadius: 3.0,
-              spreadRadius: 1.0)
-        ]),
-        child: Column(children: [
-          Text(help.title),
+        decoration: BoxDecoration(
+            color: extended ? DweTheme.yellowLight : DweTheme.yellowBright,
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.grey,
+                  offset: Offset(1.0, 1.0),
+                  blurRadius: 3.0,
+                  spreadRadius: 1.0)
+            ]),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+          Text(
+            help.title,
+            style: TextStyle(
+                color: DweTheme.purple,
+                fontWeight: FontWeight.bold,
+                fontSize: 20.0),
+            textAlign: TextAlign.start,
+          ),
+          SizedBox(
+            height: 10.0,
+          ),
           extended ? help.content : help.shortContent
         ]),
       ),
