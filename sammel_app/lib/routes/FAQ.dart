@@ -12,7 +12,9 @@ class FAQ extends StatefulWidget {
 }
 
 class FAQState extends State<FAQ> {
+  final searchInputController = TextEditingController();
   int opened;
+  List<Help> helps = HelpService.loadHelps('');
 
   @override
   Widget build(BuildContext context) {
@@ -23,40 +25,51 @@ class FAQState extends State<FAQ> {
         color: DweTheme.purple,
         child: SizedBox(
           child: Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0), color: Colors.white),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20.0), color: Colors.white),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Expanded(
-                        child: TextField(
-                          maxLines: 1,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
-                              border: InputBorder.none,
-                              hintText: 'Durchsuchen'),
-                        ),
-                      ),
+                    child: TextField(
+                      controller: searchInputController,
+                      key: Key('faq search input'),
+                      maxLines: 1,
+                      decoration: InputDecoration(
+//                        suffixIcon: IconButton(icon: Icon(Icons.clear), onPressed: () {}),
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 10.0),
+                          border: InputBorder.none,
+                          hintText: 'Durchsuchen'),
+                      onChanged: (text) =>
+                          setState(() => helps = HelpService.loadHelps(text)),
+                    ),
+                  ),
                   IconButton(
+                      key: Key('search clear button'),
                       icon: Icon(Icons.close),
                       color: DweTheme.purple,
-                      onPressed: () {}),
+                      onPressed: () => setState(() {
+                            searchInputController.text = '';
+                            helps = HelpService.loadHelps('');
+                          })),
                 ]),
           ),
         ),
       ),
       Expanded(
         child: ListView.builder(
-            itemCount: HelpService.helps.length,
+            itemCount: helps.length,
             itemBuilder: (BuildContext context, int index) => InkWell(
                 onTap: () => setState(() {
-                      if (opened == index)
+                      if (opened == helps[index].id)
                         opened = null;
                       else
-                        opened = index;
+                        opened = helps[index].id;
                     }),
-                child: HelpTile(HelpService.helps[index],
-                    extended: opened == index))),
+                child: HelpTile(helps[index],
+                    extended: opened == helps[index].id))),
       )
     ]));
   }
