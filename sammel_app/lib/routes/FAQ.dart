@@ -24,37 +24,27 @@ class FAQState extends State<FAQ> {
         padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 35.0),
         color: DweTheme.purple,
         child: SizedBox(
-          child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20.0), color: Colors.white),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: searchInputController,
-                      key: Key('faq search input'),
-                      maxLines: 1,
-                      decoration: InputDecoration(
-//                        suffixIcon: IconButton(icon: Icon(Icons.clear), onPressed: () {***REMOVED***),
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 10.0),
-                          border: InputBorder.none,
-                          hintText: 'Durchsuchen'),
-                      onChanged: (text) =>
-                          setState(() => helps = HelpService.loadHelps(text)),
-                    ),
-                  ),
-                  IconButton(
-                      key: Key('search clear button'),
-                      icon: Icon(Icons.close),
-                      color: DweTheme.purple,
-                      onPressed: () => setState(() {
-                            searchInputController.text = '';
-                            helps = HelpService.loadHelps('');
-                          ***REMOVED***)),
-                ]),
+          child: TextField(
+            controller: searchInputController,
+            key: Key('faq search input'),
+            maxLines: 1,
+            decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                suffixIcon: IconButton(
+                    key: Key('faq search clear button'),
+                    icon: Icon(Icons.clear, color: DweTheme.purple),
+                    onPressed: () => setState(() {
+                          searchInputController.clear();
+                          helps = HelpService.loadHelps('');
+                        ***REMOVED***)),
+                contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
+                border: OutlineInputBorder(
+                    borderSide: BorderSide.none,
+                    borderRadius: BorderRadius.circular(20.0)),
+                hintText: 'Durchsuchen'),
+            onChanged: (text) =>
+                setState(() => helps = HelpService.loadHelps(text)),
           ),
         ),
       ),
