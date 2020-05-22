@@ -632,7 +632,7 @@ void main() {
           value: stammdatenService, child: MaterialApp(home: actionEditor)));
 
       ActionEditorState state = tester.state(find.byWidget(actionEditor));
-      state.setState(() => state.action = ActionData.testDaten());
+      state.action = ActionData.testDaten();
       await tester.pumpAndSettle();
       return state;
     ***REMOVED***

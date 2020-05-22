@@ -72,7 +72,7 @@ void main() {
   testUI('returns to same ActionPage page with tap on Actions-Button',
       (WidgetTester tester) async {
     NavigationState state = tester.state(find.byWidget(navigation));
-    state.setState(() => state.navigation = 1);
+    state.navigation = 1;
     await tester.pump();
 
     expect(state.navigation, isNot(0));

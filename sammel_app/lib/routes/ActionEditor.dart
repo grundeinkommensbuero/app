@@ -65,6 +65,7 @@ class ActionData {
   ***REMOVED***
 ***REMOVED***
 
+// ignore: must_be_immutable
 class ActionEditor extends StatefulWidget {
   final Termin initAction;
   Function onFinish;

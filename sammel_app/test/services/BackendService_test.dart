@@ -30,15 +30,15 @@ main() {
   group('DemoBackendService', () {
     var demoBackend = DemoBackend();
     test('throws error when get called', () async {
-      await expect(() => demoBackend.get('any url'),
+      expect(() => demoBackend.get('any url'),
           throwsA((e) => e is DemoBackendShouldNeverBeUsedError));
     ***REMOVED***);
     test('throws error when post called', () async {
-      await expect(() => demoBackend.post('any url', ''),
+      expect(() => demoBackend.post('any url', ''),
           throwsA((e) => e is DemoBackendShouldNeverBeUsedError));
     ***REMOVED***);
     test('throws error when delete called', () async {
-      await expect(() => demoBackend.delete('any url', ''),
+      expect(() => demoBackend.delete('any url', ''),
           throwsA((e) => e is DemoBackendShouldNeverBeUsedError));
     ***REMOVED***);
   ***REMOVED***);
