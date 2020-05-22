@@ -276,6 +276,20 @@ void main() {
       List<Termin> newTermine = actionData.generateActions();
       expect(newTermine[0].ende.day, 2);
     ***REMOVED***);
+
+    testWidgets('shows motivation text in ActionCreator',
+        (WidgetTester tester) async {
+      await _openActionCreator(tester);
+
+      expect(find.byKey(Key('motivation text')), findsOneWidget);
+    ***REMOVED***);
+
+    testWidgets('shows no motivation text in ActionEditor',
+        (WidgetTester tester) async {
+      await _openActionEditor(tester);
+
+      expect(find.byKey(Key('motivation text')), findsNothing);
+    ***REMOVED***);
   ***REMOVED***);
 
   group('validates', () {

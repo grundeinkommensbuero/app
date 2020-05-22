@@ -102,6 +102,8 @@ class ActionEditorState extends State<ActionEditor> {
     action.coordinates = LatLng(initAction.latitude, initAction.longitude);
   ***REMOVED***
 
+  get isNewAction => widget.initAction == null;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,15 +114,7 @@ class ActionEditorState extends State<ActionEditor> {
               padding: EdgeInsets.only(
                   left: 20.0, right: 20.0, top: 15.0, bottom: 50.0),
               children: <Widget>[
-                Text(
-                  'Das Volksbegehren lebt von deiner Beteiligung! \n',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  'Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. '
-                  'Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.',
-                  textScaleFactor: 1.0,
-                ),
+                isNewAction ? motivationText : Container(),
                 SizedBox(height: 15),
                 Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Icon(Icons.my_location, size: 40.0),
@@ -225,6 +219,18 @@ class ActionEditorState extends State<ActionEditor> {
           ]),
         ));
   ***REMOVED***
+
+  static Widget motivationText = Column(key: Key('motivation text'), children: [
+    Text(
+      'Das Volksbegehren lebt von deiner Beteiligung! \n',
+      style: TextStyle(fontWeight: FontWeight.bold),
+    ),
+    Text(
+      'Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. '
+          'Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.',
+      textScaleFactor: 1.0,
+    )
+  ]);
 
   void venueSelection() async {
     Venue ergebnis = await showVenueDialog(
