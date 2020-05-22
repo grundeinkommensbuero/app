@@ -4,6 +4,7 @@ import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
+import 'FAQ.dart';
 import 'TermineSeite.dart';
 
 class Navigation extends StatefulWidget {
@@ -43,9 +44,14 @@ class NavigationState extends State<Navigation>
   Widget build(BuildContext context) {
     var pages = [
       TermineSeite(key: actionPage),
-      ActionEditor(onFinish: newActionCreated, key: Key('action creator'))
+      ActionEditor(onFinish: newActionCreated, key: Key('action creator')),
+      FAQ()
     ];
-    List<String> titles = ['Aktionen', 'Zum Sammeln aufrufen'];
+    List<String> titles = [
+      'Aktionen',
+      'Zum Sammeln aufrufen',
+      'Fragen und Antworten',
+    ];
 
     _slide = Tween<Offset>(
       begin: Offset.zero,
@@ -116,7 +122,7 @@ class NavigationState extends State<Navigation>
                         key: Key('faq navigation button'),
                         title: 'Fragen und Antworten',
                         subtitle: 'Tipps, Tricks und Argumentationshilfen',
-                        index: 0),
+                        index: 2),
                   ],
                 ))));
   }
