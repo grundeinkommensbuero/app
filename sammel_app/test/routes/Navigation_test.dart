@@ -19,131 +19,164 @@ final listLocationService = ListLocationServiceMock();
 final storageService = StorageServiceMock();
 
 void main() {
-  Navigation navigation;
+  group('Navigation', () {
+    Navigation navigation;
 
-  setUpUI((WidgetTester tester) async {
-    navigation = Navigation();
-    when(storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
-    when(listLocationService.getActiveListLocations())
-        .thenAnswer((_) async => []);
-    when(storageService.loadFilter())
-        .thenAnswer((_) async => TermineFilter.leererFilter());
-    when(termineService.ladeTermine(any)).thenAnswer((_) async => []);
+    setUpUI((WidgetTester tester) async {
+      navigation = Navigation();
+      when(storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
+      when(listLocationService.getActiveListLocations())
+          .thenAnswer((_) async => []);
+      when(storageService.loadFilter())
+          .thenAnswer((_) async => TermineFilter.leererFilter());
+      when(termineService.ladeTermine(any)).thenAnswer((_) async => []);
 
-    await tester.pumpWidget(MultiProvider(providers: [
-      Provider<AbstractTermineService>.value(value: termineService),
-      Provider<AbstractListLocationService>.value(value: listLocationService),
-      Provider<StorageService>.value(value: storageService),
-    ], child: MaterialApp(home: navigation)));
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractTermineService>.value(value: termineService),
+        Provider<AbstractListLocationService>.value(value: listLocationService),
+        Provider<StorageService>.value(value: storageService),
+      ], child: MaterialApp(home: navigation)));
+    });
+
+    testUI('starts and shows correct Titel', (WidgetTester tester) async {
+      expect(find.text('Aktionen'), findsOneWidget);
+    });
+
+    testUI('shows all items', (WidgetTester tester) async {
+      await tester.tap(find.byType(IconButton));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(Key('action page navigation button')), findsOneWidget);
+      expect(
+          find.byKey(Key('action creator navigation button')), findsOneWidget);
+      expect(find.byKey(Key('faq navigation button')), findsOneWidget);
+    });
+
+    testUI('starts with ActionPage ', (WidgetTester tester) async {
+      NavigationState state = tester.state(find.byWidget(navigation));
+      expect(state.navigation, 0);
+      expect(find.byKey(state.actionPage), findsOneWidget);
+    });
+
+    testUI('creates ActionPage and ActionCreator', (WidgetTester tester) async {
+      NavigationState state = tester.state(find.byWidget(navigation));
+      expect(find.byKey(state.actionPage), findsOneWidget);
+      expect(find.byKey(Key('action creator')), findsOneWidget);
+    });
+
+    testUI('switches to Action Creator with tap on Create Action Button',
+        (WidgetTester tester) async {
+      NavigationState state = tester.state(find.byWidget(navigation));
+      expect(state.navigation, isNot(1));
+
+      await tester.tap(find.byType(IconButton));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(Key('action creator navigation button')));
+      await tester.pumpAndSettle();
+
+      expect(state.navigation, 1);
+      expect(find.byKey(Key('action creator')), findsOneWidget);
+      expect(find.text('Zum Sammeln aufrufen'), findsOneWidget);
+    });
+
+    testUI('returns to same ActionPage page with tap on Actions-Button',
+        (WidgetTester tester) async {
+      NavigationState state = tester.state(find.byWidget(navigation));
+      state.navigation = 1;
+      await tester.pump();
+
+      expect(state.navigation, isNot(0));
+
+      await openActionPage(tester);
+
+      expect(state.navigation, 0);
+      expect(find.byKey(state.actionPage), findsOneWidget);
+    });
+
+    testUI('stores navigation history', (WidgetTester tester) async {
+      await openActionCreator(tester);
+      await openActionPage(tester);
+
+      NavigationState state = tester.state(find.byWidget(navigation));
+      expect(state.history, [0, 1]);
+    });
+
+    testUI('returns to last page and pops history with back button',
+        (WidgetTester tester) async {
+      await openActionCreator(tester);
+      await openActionPage(tester);
+
+      NavigationState state = tester.state(find.byWidget(navigation));
+      expect(state.history, [0, 1]);
+
+      await maybePop(state, tester);
+
+      expect(state.navigation, 1);
+      expect(state.history, [0]);
+
+      await maybePop(state, tester);
+
+      expect(state.navigation, 0);
+      expect(state.history, isEmpty);
+
+      await maybePop(state, tester);
+
+      // Test auf Schließen der App scheint nicht möglich
+      expect(state.navigation, 0);
+      expect(state.history, isEmpty);
+    });
+
+    testUI('returns action page after action creation',
+        (WidgetTester tester) async {
+      when(termineService.createTermin(any, any))
+          .thenAnswer((_) async => TerminTestDaten.einTermin());
+      await openActionCreator(tester);
+
+      ActionEditorState editor =
+          tester.state(find.byKey(Key('action creator')));
+      editor.action = ActionData.testDaten();
+
+      await tester.tap(find.byKey(Key('action editor finish button')));
+      await tester.pumpAndSettle();
+
+      NavigationState navigation = tester.state(find.byKey(Key('navigation')));
+      expect(navigation.navigation, 0);
+    });
   });
 
-  testUI('Navigation starts and shows correct Titel',
-      (WidgetTester tester) async {
-    expect(find.text('Aktionen'), findsOneWidget);
-  });
+  group('menuEntry', () {
+    final title = 'Title';
+    final subtitle = 'Subtitle';
 
-  testUI('starts with ActionPage ', (WidgetTester tester) async {
-    NavigationState state = tester.state(find.byWidget(navigation));
-    expect(state.navigation, 0);
-    expect(find.byKey(state.actionPage), findsOneWidget);
-  });
+    setUpUI((WidgetTester tester) async {
+      var navigationState = NavigationState();
+      var menuEntry = navigationState.menuEntry(
+        key: Key('menu entry'),
+        title: title,
+        subtitle: subtitle,
+      );
+      await tester.pumpWidget(MaterialApp(home: Scaffold(body: menuEntry)));
+    });
 
-  testUI('creates ActionPage and ActionCreator', (WidgetTester tester) async {
-    NavigationState state = tester.state(find.byWidget(navigation));
-    expect(find.byKey(state.actionPage), findsOneWidget);
-    expect(find.byKey(Key('action creator')), findsOneWidget);
-  });
-
-  testUI('switches to Action Creator with tap on Create Action Button',
-      (WidgetTester tester) async {
-    NavigationState state = tester.state(find.byWidget(navigation));
-    expect(state.navigation, isNot(1));
-
-    await tester.tap(find.byType(IconButton));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byKey(Key('action creator button')));
-    await tester.pumpAndSettle();
-
-    expect(state.navigation, 1);
-    expect(find.byKey(Key('action creator')), findsOneWidget);
-    expect(find.text('Zum Sammeln aufrufen'), findsOneWidget);
-  });
-
-  testUI('returns to same ActionPage page with tap on Actions-Button',
-      (WidgetTester tester) async {
-    NavigationState state = tester.state(find.byWidget(navigation));
-    state.navigation = 1;
-    await tester.pump();
-
-    expect(state.navigation, isNot(0));
-
-    await openActionPage(tester);
-
-    expect(state.navigation, 0);
-    expect(find.byKey(state.actionPage), findsOneWidget);
-  });
-
-  testUI('stores navigation history', (WidgetTester tester) async {
-    await openActionCreator(tester);
-    await openActionPage(tester);
-
-    NavigationState state = tester.state(find.byWidget(navigation));
-    expect(state.history, [0, 1]);
-  });
-
-  testUI('returns to last page and pops history with back button',
-      (WidgetTester tester) async {
-    await openActionCreator(tester);
-    await openActionPage(tester);
-
-    NavigationState state = tester.state(find.byWidget(navigation));
-    expect(state.history, [0, 1]);
-
-    await maybePop(state, tester);
-
-    expect(state.navigation, 1);
-    expect(state.history, [0]);
-
-    await maybePop(state, tester);
-
-    expect(state.navigation, 0);
-    expect(state.history, isEmpty);
-
-    await maybePop(state, tester);
-
-    // Test auf Schließen der App scheint nicht möglich
-    expect(state.navigation, 0);
-    expect(state.history, isEmpty);
-  });
-
-  testUI('returns action page after action creation',
-      (WidgetTester tester) async {
-    when(termineService.createTermin(any, any))
-        .thenAnswer((_) async => TerminTestDaten.einTermin());
-    await openActionCreator(tester);
-
-    ActionEditorState editor = tester.state(find.byKey(Key('action creator')));
-    editor.action = ActionData.testDaten();
-
-    await tester.tap(find.byKey(Key('action editor finish button')));
-    await tester.pumpAndSettle();
-
-    NavigationState navigation = tester.state(find.byKey(Key('navigation')));
-    expect(navigation.navigation, 0);
+    testUI('shows title and subtitle', (WidgetTester _) async {
+      expect(find.byKey(Key('menu entry')), findsOneWidget);
+      expect(find.text(title), findsOneWidget);
+      expect(find.text(subtitle), findsOneWidget);
+    });
   });
 }
 
 Future openActionCreator(WidgetTester tester) async {
   await tester.tap(find.byType(IconButton));
   await tester.pumpAndSettle();
-  await tester.tap(find.byKey(Key('action creator button')));
+  await tester.tap(find.byKey(Key('action creator navigation button')));
   await tester.pumpAndSettle();
 }
 
 Future openActionPage(WidgetTester tester) async {
   await tester.tap(find.byType(IconButton));
   await tester.pumpAndSettle();
-  await tester.tap(find.byKey(Key('action page button')));
+  await tester.tap(find.byKey(Key('action page navigation button')));
   await tester.pumpAndSettle();
 }
 
