@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
@@ -23,6 +22,7 @@ class NavigationState extends State<Navigation>
   Animation<Offset> _slide;
   Animation<double> _fade;
   bool swipeUp = false;
+  FAQ faq;
 
   @override
   void initState() {
@@ -45,7 +45,7 @@ class NavigationState extends State<Navigation>
     var pages = [
       TermineSeite(key: actionPage),
       ActionEditor(onFinish: newActionCreated, key: Key('action creator')),
-      FAQ()
+      faq = FAQ()
     ];
     List<String> titles = [
       'Aktionen',
@@ -163,6 +163,8 @@ class NavigationState extends State<Navigation>
       swipeUp = !swipeUp;
     ***REMOVED***);
     await _animationController.reverse();
+
+    primaryFocus.unfocus(); // sonst nimmt man die Tastatur mit
   ***REMOVED***
 
   newActionCreated(List<Termin> actions) {
