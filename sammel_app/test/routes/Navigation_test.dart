@@ -91,7 +91,7 @@ void main() {
 
       expect(state.navigation, 2);
       expect(find.byKey(Key('faq page')), findsOneWidget);
-      expect(find.text('Fragen und Antworten'), findsOneWidget);
+      expect(find.text('Tipps und Argumente'), findsOneWidget);
     });
 
     testUI('returns to same ActionPage page with tap on Actions-Button',

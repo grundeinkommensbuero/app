@@ -17,7 +17,36 @@ class FAQState extends State<FAQ> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: ListView.builder(
+        body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      Container(
+        padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 35.0),
+        color: DweTheme.purple,
+        child: SizedBox(
+          child: Container(
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0), color: Colors.white),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                        child: TextField(
+                          maxLines: 1,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
+                              border: InputBorder.none,
+                              hintText: 'Durchsuchen'),
+                        ),
+                      ),
+                  IconButton(
+                      icon: Icon(Icons.close),
+                      color: DweTheme.purple,
+                      onPressed: () {}),
+                ]),
+          ),
+        ),
+      ),
+      Expanded(
+        child: ListView.builder(
             itemCount: HelpService.helps.length,
             itemBuilder: (BuildContext context, int index) => InkWell(
                 onTap: () => setState(() {
@@ -27,7 +56,9 @@ class FAQState extends State<FAQ> {
                         opened = index;
                     }),
                 child: HelpTile(HelpService.helps[index],
-                    extended: opened == index))));
+                    extended: opened == index))),
+      )
+    ]));
   }
 }
 
@@ -53,9 +84,7 @@ class HelpTile extends StatelessWidget {
                   blurRadius: 3.0,
                   spreadRadius: 1.0)
             ]),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
             help.title,
             style: TextStyle(

@@ -50,7 +50,7 @@ class NavigationState extends State<Navigation>
     List<String> titles = [
       'Aktionen',
       'Zum Sammeln aufrufen',
-      'Fragen und Antworten',
+      'Tipps und Argumente',
     ];
 
     _slide = Tween<Offset>(
