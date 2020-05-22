@@ -102,25 +102,26 @@ class NavigationState extends State<Navigation>
                       height: 25.0,
                     ),
                     menuEntry(
-                        key: Key('action page button'),
+                        key: Key('action page navigation button'),
                         title: 'Aktionen',
                         subtitle:
                             'Aktionen in einer Liste oder Karte anschauen',
                         index: 0),
                     menuEntry(
-                        key: Key('action creator button'),
+                        key: Key('action creator navigation button'),
                         title: 'Zum Sammeln einladen',
                         subtitle: 'Eine Sammel-Aktion ins Leben rufen',
                         index: 1),
-                    /*menuEntry(
+                    menuEntry(
+                        key: Key('faq navigation button'),
                         title: 'Fragen und Antworten',
                         subtitle: 'Tipps, Tricks und Argumentationshilfen',
-                        index: 0),*/
+                        index: 0),
                   ],
                 ))));
   ***REMOVED***
 
-  Container menuEntry(
+  Widget menuEntry(
       {Key key, String title = '', String subtitle = '', int index = 0***REMOVED***) {
     var selected = navigation == index;
     return Container(

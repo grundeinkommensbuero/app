@@ -42,7 +42,7 @@ void main() {
 
     await tester.tap(find.byType(IconButton));
     await tester.pumpAndSettle();
-    await tester.tap(find.byKey(Key('action creator button')));
+    await tester.tap(find.byKey(Key('action creator navigation button')));
     await tester.pumpAndSettle();
 
     expect(find.byKey(Key('action creator')), findsOneWidget);
@@ -755,7 +755,7 @@ Future _openActionCreator(WidgetTester tester) async {
 
   await tester.tap(find.byType(IconButton));
   await tester.pumpAndSettle();
-  await tester.tap(find.byKey(Key('action creator button')));
+  await tester.tap(find.byKey(Key('action creator navigation button')));
   await tester.pumpAndSettle();
 ***REMOVED***
 
