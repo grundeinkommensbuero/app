@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:sammel_app/model/Help.dart';
+import 'package:sammel_app/services/HelpService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
 class FAQ extends StatefulWidget {
@@ -10,33 +12,40 @@ class FAQ extends StatefulWidget {
 ***REMOVED***
 
 class FAQState extends State<FAQ> {
-  var helps = [];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: ListView(children: helps.map((help) => HelpCard(help)).toList()));
+        body: ListView.builder(
+            itemCount: HelpService.helps.length,
+            itemBuilder: (BuildContext context, int index) =>
+                HelpTile(HelpService.helps[index], extended: false)));
   ***REMOVED***
 ***REMOVED***
 
-class HelpCard extends StatelessWidget {
-  final help;
+// ignore: must_be_immutable
+class HelpTile extends StatelessWidget {
+  final Help help;
+  final bool extended;
 
-  HelpCard(this.help) : super(key: Key('help tile'));
+  HelpTile(this.help, {this.extended***REMOVED***) : super(key: Key('help tile'));
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(10.0),
-      decoration: BoxDecoration(color: DweTheme.yellowLight, boxShadow: [
-        BoxShadow(
-            color: Colors.grey,
-            offset: Offset(1.0, 1.0),
-            blurRadius: 3.0,
-            spreadRadius: 1.0)
-      ]),
-      child: Column(
-        children: [Text('Title')],
+    return ListTile(
+      contentPadding: EdgeInsets.all(2.0),
+      title: Container(
+        padding: EdgeInsets.all(10.0),
+        decoration: BoxDecoration(color: DweTheme.yellowLight, boxShadow: [
+          BoxShadow(
+              color: Colors.grey,
+              offset: Offset(1.0, 1.0),
+              blurRadius: 3.0,
+              spreadRadius: 1.0)
+        ]),
+        child: Column(children: [
+          Text(help.title),
+          extended ? help.content : help.shortContent
+        ]),
       ),
     );
   ***REMOVED***
