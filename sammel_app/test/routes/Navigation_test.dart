@@ -43,7 +43,7 @@ void main() {
     ***REMOVED***);
 
     testUI('shows all items', (WidgetTester tester) async {
-      await tester.tap(find.byType(IconButton));
+      await tester.tap(find.byIcon(Icons.menu));
       await tester.pumpAndSettle();
 
       expect(find.byKey(Key('action page navigation button')), findsOneWidget);
@@ -69,7 +69,7 @@ void main() {
       NavigationState state = tester.state(find.byWidget(navigation));
       expect(state.navigation, isNot(1));
 
-      await tester.tap(find.byType(IconButton));
+      await tester.tap(find.byIcon(Icons.menu));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(Key('action creator navigation button')));
       await tester.pumpAndSettle();
@@ -84,7 +84,7 @@ void main() {
       NavigationState state = tester.state(find.byWidget(navigation));
       expect(state.navigation, isNot(2));
 
-      await tester.tap(find.byType(IconButton));
+      await tester.tap(find.byIcon(Icons.menu));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(Key('faq navigation button')));
       await tester.pumpAndSettle();
@@ -182,14 +182,14 @@ void main() {
 ***REMOVED***
 
 Future openActionCreator(WidgetTester tester) async {
-  await tester.tap(find.byType(IconButton));
+  await tester.tap(find.byIcon(Icons.menu));
   await tester.pumpAndSettle();
   await tester.tap(find.byKey(Key('action creator navigation button')));
   await tester.pumpAndSettle();
 ***REMOVED***
 
 Future openActionPage(WidgetTester tester) async {
-  await tester.tap(find.byType(IconButton));
+  await tester.tap(find.byIcon(Icons.menu));
   await tester.pumpAndSettle();
   await tester.tap(find.byKey(Key('action page navigation button')));
   await tester.pumpAndSettle();
