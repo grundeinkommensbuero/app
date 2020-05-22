@@ -17,9 +17,9 @@ class DweTheme {
       appBarTheme: AppBarTheme(
           color: yellow,
           textTheme: TextTheme(
-              title: TextStyle(
+              headline6: TextStyle(
                   fontWeight: FontWeight.bold, fontSize: 20.0, color: purple),
-              headline: TextStyle(color: purple))),
+              headline5: TextStyle(color: purple))),
       dialogBackgroundColor: yellowLight,
       buttonTheme: ButtonThemeData(
           colorScheme: ColorScheme.light(

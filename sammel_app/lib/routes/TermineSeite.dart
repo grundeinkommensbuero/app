@@ -47,7 +47,7 @@ class TermineSeiteState extends State<TermineSeite>
   List<int> myActions = [];
 
   int navigation = 0;
-  AnimationController _controller;
+  AnimationController _animationController;
   Animation<Offset> _slide;
   Animation<double> _fade;
   bool swipeLeft = false;
@@ -55,7 +55,7 @@ class TermineSeiteState extends State<TermineSeite>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+    _animationController = AnimationController(
       duration: const Duration(milliseconds: 150),
       vsync: this,
     );
@@ -63,7 +63,7 @@ class TermineSeiteState extends State<TermineSeite>
       begin: 1,
       end: 0,
     ).animate(CurvedAnimation(
-      parent: _controller,
+      parent: _animationController,
       curve: Curves.easeIn,
     ));
   }
@@ -77,7 +77,7 @@ class TermineSeiteState extends State<TermineSeite>
       begin: Offset.zero,
       end: Offset(swipeLeft ? -0.5 : 0.5, 0),
     ).animate(CurvedAnimation(
-      parent: _controller,
+      parent: _animationController,
       curve: Curves.easeIn,
     ));
 
@@ -126,13 +126,13 @@ class TermineSeiteState extends State<TermineSeite>
 
   swithPage(index) async {
     if (index == navigation) return;
-    await setState(() => swipeLeft = index > navigation);
-    await _controller.forward();
-    await setState(() {
+    setState(() => swipeLeft = index > navigation);
+    await _animationController.forward();
+    setState(() {
       navigation = index;
       swipeLeft = !swipeLeft;
     });
-    await _controller.reverse();
+    await _animationController.reverse();
   }
 
   // funktioniert nicht im Konstruktor, weil da der BuildContext fehlt

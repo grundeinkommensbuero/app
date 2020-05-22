@@ -10,6 +10,7 @@ import 'package:sammel_app/shared/ExpandableConstrainedBox.dart';
 
 enum TerminDetailsCommand { EDIT, DELETE, CLOSE, FOCUS }
 
+// ignore: must_be_immutable
 class ActionDetailsPage extends StatefulWidget {
   final Termin action;
   Marker marker;

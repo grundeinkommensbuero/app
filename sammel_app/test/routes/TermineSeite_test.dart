@@ -272,12 +272,12 @@ void main() {
 
       expect(page.navigation, 1);
       expect(find.byKey(Key('action map map')), findsOneWidget);
-      FlutterMapState map = await tester
-          .state(find.byKey(Key('action map map'))) as FlutterMapState;
+      FlutterMapState mapState =
+          tester.state(find.byKey(Key('action map map'))) as FlutterMapState;
       var actionPosition = LatLng(TerminTestDaten.einTermin().latitude,
           TerminTestDaten.einTermin().longitude);
-      expect(map.map.center, actionPosition);
-      expect(map.map.zoom, 15);
+      expect(mapState.map.center, actionPosition);
+      expect(mapState.map.zoom, 15);
     });
   });
 
@@ -557,7 +557,7 @@ void main() {
 
     testUI('re-sorts edited actions into action list',
         (WidgetTester tester) async {
-          TermineSeiteState termineSeite =
+      TermineSeiteState termineSeite =
           tester.state(find.byKey(Key('action page')));
 
       expect(termineSeite.termine.map((action) => action.id),
@@ -570,7 +570,7 @@ void main() {
 
       expect(termineSeite.termine.map((action) => action.id),
           containsAllInOrder([1, 3, 2]));
-        });
+    });
 
     testUI('shows alert popup on AuthFehler from save request',
         (WidgetTester tester) async {
@@ -1182,7 +1182,6 @@ void main() {
     });
   });
 }
-
 
 _pumpNavigation(WidgetTester tester) async {
   await tester.pumpWidget(MultiProvider(

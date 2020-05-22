@@ -242,6 +242,8 @@ void main() {
   });
 }
 
+// nur eine Testklasse
+// ignore: must_be_immutable
 class VenueDialogTester extends StatelessWidget {
   final String initDescription;
   final LatLng initCoordinates;

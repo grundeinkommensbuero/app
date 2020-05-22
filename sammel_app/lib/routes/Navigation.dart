@@ -18,7 +18,7 @@ class NavigationState extends State<Navigation>
   int navigation = 0;
   List<int> history = [];
   GlobalKey actionPage = GlobalKey(debugLabel: 'action page');
-  AnimationController _controller;
+  AnimationController _animationController;
   Animation<Offset> _slide;
   Animation<double> _fade;
   bool swipeUp = false;
@@ -26,7 +26,7 @@ class NavigationState extends State<Navigation>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+    _animationController = AnimationController(
       duration: const Duration(milliseconds: 150),
       vsync: this,
     );
@@ -34,7 +34,7 @@ class NavigationState extends State<Navigation>
       begin: 1,
       end: 0,
     ).animate(CurvedAnimation(
-      parent: _controller,
+      parent: _animationController,
       curve: Curves.easeIn,
     ));
   }
@@ -51,7 +51,7 @@ class NavigationState extends State<Navigation>
       begin: Offset.zero,
       end: Offset(0, swipeUp ? -0.3 : 0.3),
     ).animate(CurvedAnimation(
-      parent: _controller,
+      parent: _animationController,
       curve: Curves.easeIn,
     ));
 
@@ -149,13 +149,13 @@ class NavigationState extends State<Navigation>
   }
 
   void switchPage(int index) async {
-    await setState(() => swipeUp = index > navigation);
-    await _controller.forward();
-    await setState(() {
+    setState(() => swipeUp = index > navigation);
+    await _animationController.forward();
+    setState(() {
       navigation = index;
       swipeUp = !swipeUp;
     });
-    await _controller.reverse();
+    await _animationController.reverse();
   }
 
   newActionCreated(List<Termin> actions) {
