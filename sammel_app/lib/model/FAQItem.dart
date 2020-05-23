@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Help {
+class FAQItem {
   int id;
   String title;
   Widget content;
@@ -8,6 +8,6 @@ class Help {
   String plainText;
   List<String> tags;
 
-  Help(this.id, this.title, this.content, this.shortContent, this.plainText,
+  FAQItem(this.id, this.title, this.content, this.shortContent, this.plainText,
       this.tags);
 ***REMOVED***
