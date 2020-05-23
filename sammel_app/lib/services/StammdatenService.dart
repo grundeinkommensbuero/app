@@ -22,7 +22,7 @@ class StammdatenService extends AbstractStammdatenService {
           .toList();
       return orte;
     } else {
-      throw RestFehler("Unerwarteter Fehler: "
+      throw RestFehler('Unerwarteter Fehler: '
           "${response.response.statusCode} - ${response.body}");
     }
   }
