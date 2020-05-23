@@ -1,9 +1,90 @@
-import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/services/BackendService.dart';
+import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
+import 'package:test/test.dart';
+
+import '../shared/Mocks.dart';
 
 void main() {
+  Backend mock;
+  StammdatenService service;
+
+  setUp(() {
+    mock = BackendMock();
+    service = StammdatenService(mock);
+  ***REMOVED***);
+
+  group('StammdatenServer', () {
+    test('delivers locations with status code 200', () async {
+      when(mock.get(any)).thenAnswer((_) async =>
+          HttpClientResponseBodyMock([
+            {
+              'id': 1,
+              'bezirk': 'Friedrichshain-Kreuzberg',
+              'ort': 'Friedrichshain Nordkiez',
+              'lattitude': 52.51579,
+              'longitude': 13.45399
+            ***REMOVED***,
+            {
+              'id': 2,
+              'bezirk': 'Friedrichshain-Kreuzberg',
+              'ort': 'Görlitzer Park und Umgebung',
+              'lattitude': 52.48993,
+              'longitude': 13.46839
+            ***REMOVED***,
+            {
+              'id': 3,
+              'bezirk': 'Treptow-Köpenick',
+              'ort': 'Treptower Park',
+              'lattitude': 52.49653,
+              'longitude': 13.43762
+            ***REMOVED***,
+          ], 200));
+
+      var result = await service.ladeOrte();
+
+      verify(mock.get('/service/stammdaten/orte')).called(1);
+
+      expect(result.length, 3);
+      expect(result[0].id, 1);
+      expect(result[0].bezirk, 'Friedrichshain-Kreuzberg');
+      expect(result[0].ort, 'Friedrichshain Nordkiez');
+      expect(result[0].lattitude, 52.51579);
+      expect(result[0].longitude, 13.45399);
+      expect(result[1].id, 2);
+      expect(result[1].bezirk, 'Friedrichshain-Kreuzberg');
+      expect(result[1].ort, 'Görlitzer Park und Umgebung');
+      expect(result[1].lattitude, 52.48993);
+      expect(result[1].longitude, 13.46839);
+      expect(result[2].id, 3);
+      expect(result[2].bezirk, 'Treptow-Köpenick');
+      expect(result[2].ort, 'Treptower Park');
+      expect(result[2].lattitude, 52.49653);
+      expect(result[2].longitude, 13.43762);
+    ***REMOVED***);
+
+    test('throws error on non-200 status code', () {
+      when(mock.get(any)).thenAnswer(
+              (_) async =>
+              HttpClientResponseBodyMock('Dies ist ein Fehler', 400));
+
+      expect(
+              () => service.ladeOrte(),
+          throwsA((RestFehler e) => e is RestFehler));
+    ***REMOVED***);
+
+    test('can handle empty lists', () async {
+      when(mock.get(any)).thenAnswer((_) async =>
+          HttpClientResponseBodyMock([], 200));
+
+      var result = await service.ladeOrte();
+
+      expect(result, isEmpty);
+    ***REMOVED***);
+  ***REMOVED***);
+
   group('DemoStammdatenService', () {
     DemoStammdatenService service;
     setUp(() {

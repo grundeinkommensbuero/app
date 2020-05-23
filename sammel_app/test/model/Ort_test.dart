@@ -108,4 +108,4 @@ Ort goerli() => Ort(0, "Friedrichshain-Kreuzberg",
     "Görlitzer Park und Umgebung", 52.48993, 13.46839);
 
 Ort treptowerPark() =>
-    Ort(2, "Friedrichshain-Kreuzberg", "Treptower Park", 52.49653, 13.43762);
+    Ort(2, "Treptow-Köpenick", "Treptower Park", 52.49653, 13.43762);
