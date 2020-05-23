@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sammel_app/model/Help.dart';
-import 'package:sammel_app/services/HelpService.dart';
+import 'package:sammel_app/model/FAQItem.dart';
+import 'package:sammel_app/services/FAQService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
 class FAQ extends StatefulWidget {
@@ -13,7 +13,7 @@ class FAQ extends StatefulWidget {
 class FAQState extends State<FAQ> {
   final searchInputController = TextEditingController();
   int opened;
-  List<Help> helps = HelpService.loadHelps('');
+  List<FAQItem> items = FAQService.loadItems('');
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class FAQState extends State<FAQ> {
                     icon: Icon(Icons.clear, color: DweTheme.purple),
                     onPressed: () => setState(() {
                           searchInputController.clear();
-                          helps = HelpService.loadHelps('');
+                          items = FAQService.loadItems('');
                         })),
                 contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
                 border: OutlineInputBorder(
@@ -43,34 +43,34 @@ class FAQState extends State<FAQ> {
                     borderRadius: BorderRadius.circular(20.0)),
                 hintText: 'Durchsuchen'),
             onChanged: (text) =>
-                setState(() => helps = HelpService.loadHelps(text)),
+                setState(() => items = FAQService.loadItems(text)),
           ),
         ),
       ),
       Expanded(
         child: ListView.builder(
-            itemCount: helps.length,
+            itemCount: items.length,
             itemBuilder: (BuildContext context, int index) => InkWell(
                 onTap: () => setState(() {
-                      if (opened == helps[index].id)
+                      if (opened == items[index].id)
                         opened = null;
                       else
-                        opened = helps[index].id;
+                        opened = items[index].id;
                       primaryFocus.unfocus();
                     }),
-                child: HelpTile(helps[index],
-                    extended: opened == helps[index].id))),
+                child: FAQTile(items[index],
+                    extended: opened == items[index].id))),
       )
     ]));
   }
 }
 
 // ignore: must_be_immutable
-class HelpTile extends StatelessWidget {
-  final Help help;
+class FAQTile extends StatelessWidget {
+  final FAQItem item;
   final bool extended;
 
-  HelpTile(this.help, {this.extended}) : super(key: Key('help tile'));
+  FAQTile(this.item, {this.extended}) : super(key: Key('item tile'));
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +89,7 @@ class HelpTile extends StatelessWidget {
             ]),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
-            help.title,
+            item.title,
             style: TextStyle(
                 color: DweTheme.purple,
                 fontWeight: FontWeight.bold,
@@ -99,7 +99,7 @@ class HelpTile extends StatelessWidget {
           SizedBox(
             height: 10.0,
           ),
-          extended ? help.content : help.shortContent
+          extended ? item.content : item.shortContent
         ]),
       ),
     );

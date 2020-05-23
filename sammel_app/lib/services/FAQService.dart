@@ -1,10 +1,10 @@
 import 'package:flutter/widgets.dart';
 import 'package:quiver/strings.dart';
-import 'package:sammel_app/model/Help.dart';
+import 'package:sammel_app/model/FAQItem.dart';
 
-class HelpService {
-  static List<Help> helps = [
-    Help(
+class FAQService {
+  static List<FAQItem> items = [
+    FAQItem(
         1,
         'Was kostet Enteignung? Unsere Modellrechnungen zur Entschädigungshöhe',
         Text(
@@ -18,7 +18,7 @@ class HelpService {
             'Mit verschiedenen Modellen kommen wir so auf eine Summe von 1,5 bis 2,4 Mrd, die vom Landeshaushalt direkt getragen werden müssten.\n\n'
             'Der Rest ist, wie allgemein üblich beim Erwerb von Immobilien, kreditfinanziert und wird über bezahlbare Mieten abbezahlt. Die gesamte Entschädigungssumme beläuft sich für 200.000 Wohnungen somit auf 7,3 bis 12 Mrd. Euro, exklusive der Möglichkeit der nominellen Entschädigung.',
         ['Kosten', 'Modell', 'Entschädigung']),
-    Help(
+    FAQItem(
         2,
         'Enteignung kann haushaltsneutral sein',
         Text(
@@ -34,7 +34,7 @@ class HelpService {
             'Klar ist jedoch: Bei einem Tilgungszeitraum von 45 Jahren können die gesamten Kapitalkos­ten einer Entschädigung in Höhe von 18,1 Milliarden Euro zzgl. Erwerbsnebenkosten voll­ständig aus den Mieteinnahmen der AöR getragen werden. Die Mieten lassen sich sogar so­fort um monatlich 0,97 € pro m² senken. Für das Land Berlin wäre die Vergesellschaftung haushaltsneutral, wäh­rend für eine halbe Million Mieter*innen die Mieten sinken. Dies, wohlgemerkt, mit den Metho­den und Zahlen des Senats gerechnet.\n\n'
             'Legt man das von uns vorge­schlagene Faire-Mieten-Mo­dell („Zweckentschädigungsverfahren“) zugrunde, das die Interes­sen der Allgemeinheit an einer Vergesellschaftung angemessen berücksichtigt und sozialverträg­liche Mieten in den Mittelpunkt der Berechnung stellt, so können die Belastungen noch geringer ausfallen. Vergesellschaftung ist daher nicht teuer: Die AöR kann die gesamten Vergesellschaf­tungskosten allein aus den Mieten stemmen, die sogar gesenkt werden können. Nach Tilgung ste­hen erhebliche Mittel für weitere Mietsenkungen und für die Finanzierung von Neubau zur Ver­fügung.',
         ['Kosten', 'Haushalt', 'Kosten', 'Kapital']),
-    Help(
+    FAQItem(
         3,
         'Corona-Krise: Sicherheit für Mieter*innen, statt Profite für Immobilienkonzerne!',
         Column(children: [
@@ -49,7 +49,7 @@ class HelpService {
         ['Corona', 'Profite', 'Immobilienkonzerne', 'Vermieter', 'Sicherheit'])
   ];
 
-  static List<Help> loadHelps(String search) {
+  static List<FAQItem> loadItems(String search) {
     if (search == null) search = '';
 
     var searchWords = search
@@ -57,16 +57,16 @@ class HelpService {
         .map((word) => word.toLowerCase())
         .where((word) => isNotBlank(word));
 
-    // Erzeugt eine Map die für jedes help das Gewicht (~ Anzahl Treffer) speichert
-    Map<Help, int> weight =
-        Map.fromIterable(helps, key: (help) => help, value: (_) => 0);
+    // Erzeugt eine Map die für jedes item das Gewicht (~ Anzahl Treffer) speichert
+    Map<FAQItem, int> weight =
+        Map.fromIterable(items, key: (item) => item, value: (_) => 0);
 
     // Suche in Schlagwörtern
     searchWords.forEach((word) {
-      helps.forEach((help) {
-        for (var tag in help.tags) {
+      items.forEach((item) {
+        for (var tag in item.tags) {
           if (tag.toLowerCase().contains(word)) {
-            weight[help] += 100; // Schlagwörter haben schweres Gewicht
+            weight[item] += 100; // Schlagwörter haben schweres Gewicht
             break; // nicht mehrere Treffer pro Stichwort
           }
         }
@@ -75,24 +75,24 @@ class HelpService {
 
     // Suche im Titel
     searchWords.forEach((word) {
-      helps.forEach((help) {
-        if (help.title.toLowerCase().contains(word))
-          weight[help] += 10; // Titel-Treffer haben mittleres Gewicht
+      items.forEach((item) {
+        if (item.title.toLowerCase().contains(word))
+          weight[item] += 10; // Titel-Treffer haben mittleres Gewicht
       });
     });
 
     // Suche im Text
     searchWords.forEach((word) {
-      helps.forEach((help) {
-        if (help.plainText.toLowerCase().contains(word))
-          weight[help] += 1; // Text-Treffer haben niedriges Gewicht
+      items.forEach((item) {
+        if (item.plainText.toLowerCase().contains(word))
+          weight[item] += 1; // Text-Treffer haben niedriges Gewicht
       });
     });
 
-    List<Help> orderedHelps = List<Help>.of(helps); // Kopie zum sortieren
-    orderedHelps.sort((help1, help2) =>
-        Comparable.compare(weight[help1], weight[help2]) * -1);
+    List<FAQItem> orderedItems = List<FAQItem>.of(items); // Kopie zum sortieren
+    orderedItems.sort((item1, item2) =>
+        Comparable.compare(weight[item1], weight[item2]) * -1);
 
-    return orderedHelps;
+    return orderedItems;
   }
 }

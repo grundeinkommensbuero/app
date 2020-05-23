@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sammel_app/model/Help.dart';
-import 'package:sammel_app/services/HelpService.dart';
+import 'package:sammel_app/model/FAQItem.dart';
+import 'package:sammel_app/services/FAQService.dart';
 
 main() {
-  group('loadHelps', () {
-    HelpService.helps = testHelps;
+  group('loaditems', () {
+    FAQService.items = testItems;
 
     test('orders by number of hits in tags', () {
-      List<Help> orderedHelps = HelpService.loadHelps('Ameise rot Holz');
+      List<FAQItem> orderedItems = FAQService.loadItems('Ameise rot Holz');
 
       expect(
-          orderedHelps.map((help) => help.title),
+          orderedItems.map((item) => item.title),
           containsAllInOrder([
             'Camponotus Ligniperdus',
             'Messor Barbarus',
@@ -20,10 +20,10 @@ main() {
     });
 
     test('orders by number of hits in title', () {
-      List<Help> orderedHelps = HelpService.loadHelps('Lasius Niger Messor');
+      List<FAQItem> orderedItems = FAQService.loadItems('Lasius Niger Messor');
 
       expect(
-          orderedHelps.map((help) => help.title),
+          orderedItems.map((item) => item.title),
           containsAllInOrder([
             'Lasius Niger',
             'Messor Barbarus',
@@ -32,10 +32,10 @@ main() {
     });
 
     test('hits in tags outweight hits in title', () {
-      List<Help> orderedHelps = HelpService.loadHelps('Holz Lasius Niger');
+      List<FAQItem> orderedItems = FAQService.loadItems('Holz Lasius Niger');
 
       expect(
-          orderedHelps.map((help) => help.title),
+          orderedItems.map((item) => item.title),
           containsAllInOrder([
             'Camponotus Ligniperdus',
             'Lasius Niger',
@@ -44,11 +44,11 @@ main() {
     });
 
     test('orders by number of hits in content text', () {
-      List<Help> orderedHelps = HelpService.loadHelps(
+      List<FAQItem> orderedItems = FAQService.loadItems(
           'Netter Fleißig friedlich dickste Herrscher Mitteleuropa');
 
       expect(
-          orderedHelps.map((help) => help.title),
+          orderedItems.map((item) => item.title),
           containsAllInOrder([
             'Messor Barbarus',
             'Camponotus Ligniperdus',
@@ -57,11 +57,11 @@ main() {
     });
 
     test('hits in title outweight hits in text', () {
-      List<Help> orderedHelps =
-          HelpService.loadHelps('Netter Fleißig friedlich Ligniperdus');
+      List<FAQItem> orderedItems =
+          FAQService.loadItems('Netter Fleißig friedlich Ligniperdus');
 
       expect(
-          orderedHelps.map((help) => help.title),
+          orderedItems.map((item) => item.title),
           containsAllInOrder([
             'Camponotus Ligniperdus',
             'Messor Barbarus',
@@ -70,11 +70,11 @@ main() {
     });
 
     test('is not case sensitive', () {
-      List<Help> orderedHelps =
-          HelpService.loadHelps('RäUbEr CaMpoNoTuS lIgNiPeRdUs');
+      List<FAQItem> orderedItems =
+          FAQService.loadItems('RäUbEr CaMpoNoTuS lIgNiPeRdUs');
 
       expect(
-          orderedHelps.map((help) => help.title),
+          orderedItems.map((item) => item.title),
           containsAllInOrder([
             'Lasius Niger',
             'Camponotus Ligniperdus',
@@ -83,11 +83,11 @@ main() {
     });
 
     test('finds sub-words', () {
-      List<Help> orderedHelps =
-          HelpService.loadHelps('europa unscheinbar welt');
+      List<FAQItem> orderedItems =
+          FAQService.loadItems('europa unscheinbar welt');
 
       expect(
-          orderedHelps.map((help) => help.title),
+          orderedItems.map((item) => item.title),
           containsAllInOrder([
             'Lasius Niger',
             'Camponotus Ligniperdus',
@@ -95,11 +95,11 @@ main() {
           ]));
     });
 
-    test('does not change original helps order', () {
-      HelpService.loadHelps('Lasius Messor Barbarus');
+    test('does not change original items order', () {
+      FAQService.loadItems('Lasius Messor Barbarus');
 
       expect(
-          HelpService.helps.map((help) => help.title),
+          FAQService.items.map((item) => item.title),
           containsAllInOrder([
             'Camponotus Ligniperdus',
             'Lasius Niger',
@@ -108,10 +108,10 @@ main() {
     });
 
     test('can handle multiple spaces and all kind of blanks', () {
-      var orderedHelps = HelpService.loadHelps('Lasius     Messor\n\tBarbarus');
+      var orderedItems = FAQService.loadItems('Lasius     Messor\n\tBarbarus');
 
       expect(
-          orderedHelps.map((help) => help.title),
+          orderedItems.map((item) => item.title),
           containsAllInOrder([
             'Messor Barbarus',
             'Lasius Niger',
@@ -121,22 +121,22 @@ main() {
   });
 }
 
-var testHelps = [
-  Help(
+var testItems = [
+  FAQItem(
       1,
       'Camponotus Ligniperdus',
       Text('Anzeige-Text'),
       Text('Kurztext'),
       'Die dickste Ameise in Mitteleuropa',
       ['Holz', 'Ameise', 'rot', 'schwarz']),
-  Help(
+  FAQItem(
       2,
       'Lasius Niger',
       Text('Anzeige-Text'),
       Text('Kurztext'),
       'Die unscheinbaren Herrscher der Krabbelwelt',
       ['Räuber', 'Erdnester', 'schwarz']),
-  Help(
+  FAQItem(
       3,
       'Messor Barbarus',
       Text('Anzeige-Text'),

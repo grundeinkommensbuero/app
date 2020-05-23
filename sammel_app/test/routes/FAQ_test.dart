@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_test_ui/flutter_test_ui.dart';
 import 'package:sammel_app/routes/FAQ.dart';
-import 'package:sammel_app/services/HelpService.dart';
+import 'package:sammel_app/services/FAQService.dart';
 
-import '../services/HelpService_test.dart';
+import '../services/FAQService_test.dart';
 
 main() {
   var faq = FAQ();
   setUpUI((WidgetTester tester) async {
-    HelpService.helps = testHelps;
+    FAQService.items = testItems;
     await tester.pumpWidget(MaterialApp(home: faq));
   });
 
@@ -18,43 +18,43 @@ main() {
       expect(find.byKey(Key('faq page')), findsOneWidget);
     });
 
-    testUI('shows all helps', (WidgetTester _) async {
-      expect(find.byKey(Key('help tile')),
-          findsNWidgets(HelpService.helps.length));
+    testUI('shows all items', (WidgetTester _) async {
+      expect(find.byKey(Key('item tile')),
+          findsNWidgets(FAQService.items.length));
     });
 
-    testUI('initially shows all helps closed', (WidgetTester tester) async {
-      var helpTiles = tester.widgetList<HelpTile>(find.byKey(Key('help tile')));
+    testUI('initially shows all items closed', (WidgetTester tester) async {
+      var itemTiles = tester.widgetList<FAQTile>(find.byKey(Key('item tile')));
 
-      helpTiles.forEach((tile) => expect(tile.extended, isFalse));
-      HelpService.helps.forEach(
-          (help) => expect(find.byWidget(help.shortContent), findsOneWidget));
-      HelpService.helps
-          .forEach((help) => expect(find.byWidget(help.content), findsNothing));
+      itemTiles.forEach((tile) => expect(tile.extended, isFalse));
+      FAQService.items.forEach(
+          (item) => expect(find.byWidget(item.shortContent), findsOneWidget));
+      FAQService.items
+          .forEach((item) => expect(find.byWidget(item.content), findsNothing));
     });
   });
 
   group('open/close', () {
     testUI('opens on tap at tile', (WidgetTester tester) async {
-      await tester.tap(find.byWidget(HelpService.helps[0].shortContent));
+      await tester.tap(find.byWidget(FAQService.items[0].shortContent));
       await tester.pump();
 
-      expect(find.byWidget(HelpService.helps[0].shortContent), findsNothing);
-      expect(find.byWidget(HelpService.helps[0].content), findsOneWidget);
+      expect(find.byWidget(FAQService.items[0].shortContent), findsNothing);
+      expect(find.byWidget(FAQService.items[0].content), findsOneWidget);
     });
 
     testUI('closes on second tap at tile', (WidgetTester tester) async {
-      await tester.tap(find.byWidget(HelpService.helps[1].shortContent));
+      await tester.tap(find.byWidget(FAQService.items[1].shortContent));
       await tester.pump();
 
-      expect(find.byWidget(HelpService.helps[1].shortContent), findsNothing);
-      expect(find.byWidget(HelpService.helps[1].content), findsOneWidget);
+      expect(find.byWidget(FAQService.items[1].shortContent), findsNothing);
+      expect(find.byWidget(FAQService.items[1].content), findsOneWidget);
 
-      await tester.tap(find.byWidget(HelpService.helps[1].content));
+      await tester.tap(find.byWidget(FAQService.items[1].content));
       await tester.pump();
 
-      expect(find.byWidget(HelpService.helps[1].shortContent), findsOneWidget);
-      expect(find.byWidget(HelpService.helps[1].content), findsNothing);
+      expect(find.byWidget(FAQService.items[1].shortContent), findsOneWidget);
+      expect(find.byWidget(FAQService.items[1].content), findsNothing);
     });
   });
 
@@ -74,9 +74,9 @@ main() {
     });
 
     testUI('input sorts items', (WidgetTester tester) async {
-      var helpTiles = find.byKey(Key('help tile'));
+      var itemTiles = find.byKey(Key('item tile'));
       var titlesInOrder =
-          tester.widgetList<HelpTile>(helpTiles).map((tile) => tile.help.title);
+          tester.widgetList<FAQTile>(itemTiles).map((tile) => tile.item.title);
 
       expect(
           titlesInOrder,
@@ -88,7 +88,7 @@ main() {
       await tester.pump();
 
       titlesInOrder =
-          tester.widgetList<HelpTile>(helpTiles).map((tile) => tile.help.title);
+          tester.widgetList<FAQTile>(itemTiles).map((tile) => tile.item.title);
 
       expect(
           titlesInOrder,
@@ -97,13 +97,13 @@ main() {
     });
 
     testUI('clear button resets item order', (WidgetTester tester) async {
-      var helpTiles = find.byKey(Key('help tile'));
+      var itemTiles = find.byKey(Key('item tile'));
       await tester.enterText(
           find.byKey(Key('faq search input')), 'Lasius Niger Messor');
       await tester.pump();
 
       var titlesInOrder =
-          tester.widgetList<HelpTile>(helpTiles).map((tile) => tile.help.title);
+          tester.widgetList<FAQTile>(itemTiles).map((tile) => tile.item.title);
 
       expect(
           titlesInOrder,
@@ -114,7 +114,7 @@ main() {
       await tester.pump();
 
       titlesInOrder =
-      tester.widgetList<HelpTile>(helpTiles).map((tile) => tile.help.title);
+      tester.widgetList<FAQTile>(itemTiles).map((tile) => tile.item.title);
 
       expect(
           titlesInOrder,
