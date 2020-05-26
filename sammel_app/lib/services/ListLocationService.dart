@@ -1,7 +1,6 @@
 import 'package:http_server/http_server.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 
-import 'RestFehler.dart';
 import 'BackendService.dart';
 
 abstract class AbstractListLocationService extends BackendService {
@@ -20,16 +19,11 @@ class ListLocationService extends AbstractListLocationService {
     if (cache != null) return cache;
     HttpClientResponseBody response =
         await get('/service/listlocations/actives');
-    if (response.response.statusCode == 200) {
-      final listLocations = (response.body as List)
-          .map((jsonListLocation) => ListLocation.fromJson(jsonListLocation))
-          .toList();
-      cache = listLocations;
-      return listLocations;
-    } else {
-      throw RestFehler("Unerwarteter Fehler: "
-          "${response.response.statusCode} - ${response.body}");
-    }
+    final listLocations = (response.body as List)
+        .map((jsonListLocation) => ListLocation.fromJson(jsonListLocation))
+        .toList();
+    cache = listLocations;
+    return listLocations;
   }
 }
 

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
+import 'package:sammel_app/services/PushService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/push_notification_manager.dart';
 
-void main()
-{
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
 }
@@ -21,9 +21,8 @@ class MyApp extends StatelessWidget {
 
   PushNotificationsManager pnm = PushNotificationsManager();
 
-  MyApp()
-   {
-     pnm.init();
+  MyApp() {
+    pnm.init();
   }
 
   @override
@@ -35,10 +34,11 @@ class MyApp extends StatelessWidget {
           Provider<AbstractStammdatenService>.value(
               value: demoMode ? DemoStammdatenService() : StammdatenService()),
           Provider<AbstractListLocationService>.value(
-              value: demoMode
-                  ? DemoListLocationService()
-                  : ListLocationService()),
+              value:
+                  demoMode ? DemoListLocationService() : ListLocationService()),
           Provider<StorageService>.value(value: StorageService()),
+          Provider<PushService>.value(
+              value: demoMode ? DemoPushService() : PushService()),
         ],
         child: MaterialApp(
           title: 'DW & Co. Enteignen',
@@ -46,10 +46,10 @@ class MyApp extends StatelessWidget {
           home: Navigation(),
         ));
   }
-
 }
 
-enum Mode {LOCAL, DEMO, TEST}
+enum Mode { LOCAL, DEMO, TEST }
 
 get demoMode => mode == Mode.DEMO;
+
 get testMode => mode == Mode.TEST;
