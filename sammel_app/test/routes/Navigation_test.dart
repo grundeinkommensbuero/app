@@ -8,6 +8,7 @@ import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
+import 'package:sammel_app/services/PushService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 
@@ -17,6 +18,7 @@ import '../shared/Mocks.dart';
 final termineService = TermineServiceMock();
 final listLocationService = ListLocationServiceMock();
 final storageService = StorageServiceMock();
+final pushService = PushServiceMock();
 
 void main() {
   group('Navigation', () {
@@ -35,6 +37,7 @@ void main() {
         Provider<AbstractTermineService>.value(value: termineService),
         Provider<AbstractListLocationService>.value(value: listLocationService),
         Provider<StorageService>.value(value: storageService),
+        Provider<PushService>.value(value: pushService),
       ], child: MaterialApp(home: navigation)));
     ***REMOVED***);
 

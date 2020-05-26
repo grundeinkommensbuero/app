@@ -10,6 +10,7 @@ import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
+import 'package:sammel_app/services/PushService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
@@ -22,6 +23,7 @@ final stammdatenService = StammdatenServiceMock();
 final terminService = TermineServiceMock();
 final listLocationService = ListLocationServiceMock();
 final storageService = StorageServiceMock();
+final pushService = PushServiceMock();
 
 void main() {
   setUp(() {
@@ -726,7 +728,8 @@ _pumpNavigation(WidgetTester tester) async {
         Provider<StorageService>.value(value: storageService),
         Provider<AbstractListLocationService>(
             create: (context) => listLocationService),
-        Provider<AbstractStammdatenService>.value(value: stammdatenService)
+        Provider<AbstractStammdatenService>.value(value: stammdatenService),
+        Provider<PushService>.value(value: pushService),
       ],
       child: MaterialApp(
         home: Navigation(),

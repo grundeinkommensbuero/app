@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
+import 'package:sammel_app/services/PushService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
 import 'FAQ.dart';
@@ -24,6 +27,8 @@ class NavigationState extends State<Navigation>
   bool swipeUp = false;
   FAQ faq;
 
+  PushService pushService;
+
   @override
   void initState() {
     super.initState();
@@ -42,6 +47,8 @@ class NavigationState extends State<Navigation>
 
   @override
   Widget build(BuildContext context) {
+    pushService = Provider.of<PushService>(context);
+
     var pages = [
       TermineSeite(key: actionPage),
       ActionEditor(onFinish: newActionCreated, key: Key('action creator')),
@@ -64,25 +71,31 @@ class NavigationState extends State<Navigation>
     return WillPopScope(
       onWillPop: () => navigateBack(),
       child: Scaffold(
-          drawerScrimColor: Colors.black26,
-          drawer: buildDrawer(),
-          appBar: AppBar(
-              title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(titles[navigation]),
-              Image.asset('assets/images/logo.png', width: 50.0)
-            ],
-          )),
-          body: Container(
-            color: DweTheme.yellowLight,
-            child: FadeTransition(
-              opacity: _fade,
-              child: SlideTransition(
-                  position: _slide,
-                  child: IndexedStack(children: pages, index: navigation)),
-            ),
-          )),
+        drawerScrimColor: Colors.black26,
+        drawer: buildDrawer(),
+        appBar: AppBar(
+            title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(titles[navigation]),
+            Image.asset('assets/images/logo.png', width: 50.0)
+          ],
+        )),
+        body: Container(
+          color: DweTheme.yellowLight,
+          child: FadeTransition(
+            opacity: _fade,
+            child: SlideTransition(
+                position: _slide,
+                child: IndexedStack(children: pages, index: navigation)),
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.send),
+            onPressed: () => pushService.pushToDevices([
+                  'cZNkv4W8F4yJIfrrwAEyVF:APA91bE01SmxS-52-VC3sx5T51f529RMPi6Ndgp0oqf1Yt3mkenOj4Qb1GjnbEQUJEYrrG4sCDUo1chWVsWg7jQmWk63YTJRZtRz-MQlYW2aj7CyDhF0MZfMtM3Za62FceKRCHp8Z0ED'
+                ], ExampleData('infos'), PushNotification("Titel", "Inhalt"))),
+      ),
     );
   ***REMOVED***
 
