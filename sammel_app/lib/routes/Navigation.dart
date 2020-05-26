@@ -93,7 +93,7 @@ class NavigationState extends State<Navigation>
         floatingActionButton: FloatingActionButton(
             child: Icon(Icons.send),
             onPressed: () => pushService.pushToDevices([
-                  'cZNkv4W8F4yJIfrrwAEyVF:APA91bE01SmxS-52-VC3sx5T51f529RMPi6Ndgp0oqf1Yt3mkenOj4Qb1GjnbEQUJEYrrG4sCDUo1chWVsWg7jQmWk63YTJRZtRz-MQlYW2aj7CyDhF0MZfMtM3Za62FceKRCHp8Z0ED'
+                  '<CLIENT_KEY>'
                 ], ExampleData('infos'), PushNotification("Titel", "Inhalt"))),
       ),
     );
