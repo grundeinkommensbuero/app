@@ -28,7 +28,7 @@ open class PushNotificationResource {
     @Path("topic")
     @POST
     open fun pushToTopic(nachricht: PushMessageDto) {
-        if (nachricht.recipients.isNullOrEmpty())
+        if (nachricht.topic.isNullOrEmpty())
             throw MissingMessageTarget("Die Nachricht enthält kein Topic")
         firebase.sendePushNachrichtAnTopic(nachricht.notification, nachricht.data, nachricht.topic!!)
     ***REMOVED***
