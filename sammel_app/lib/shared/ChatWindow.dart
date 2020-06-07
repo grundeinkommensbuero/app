@@ -2,37 +2,48 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/user_data.dart';
 
 class ChatWindow extends StatefulWidget {
 
   Channel channel = null;
+  User user = null;
 
   ChatWindow(Channel c, {Key key***REMOVED***) : super(key: key)
   {
     channel = c;
+    user = Provider<StorageService>.loadUser();
   ***REMOVED***
 
   @override
-  ChatWindowState createState() => ChatWindowState(channel);
+  ChatWindowState createState() => ChatWindowState(channel, user);
 ***REMOVED***
 
 
 class ChatWindowState extends State<ChatWindow> {
 
-  ChatWindowState(Channel c)
+  ChatWindowState(Channel c, User u)
   {
     channel = c;
+    user = u;
   ***REMOVED***
 
   Channel channel = null;
+  User user = null;
 
   @override
   Widget build(BuildContext context) {
+    if(user == null)
+      {
+        StorageService storageService = Provider.of<StorageService>(context);
+        storageService.loadUser().then((value) => this.user = value;)
+      ***REMOVED***
     return Column(
       children: <Widget>[
         // List of messages
-        buildHeader(),
+        buildHeader('TestChannel'),
         buildListMessage(),
 
       ],
@@ -49,7 +60,16 @@ class ChatWindowState extends State<ChatWindow> {
   ***REMOVED***
 
   Widget create_widget_for_message(Message message) {
-    return Card(child: Column(children: [Text(message.sender_name), Text(message.text), Text(message.sending_time)]);
+    Align alignment = null;
+    Card card = Card(color: message.message_color,child: Column(children: [Text(message.sender_name), Text(message.text), Text(message.sending_time.toString())]);
+    if(message.sender_name == user.nick_name)
+    {
+      alignment = Align(child: card, alignment: Alignment.topRight);
+    ***REMOVED***else
+      {
+        alignment = Align(child: card, alignment: Alignment.topLeft,);
+      ***REMOVED***
+    return alignment;
   ***REMOVED***
 
   buildHeader(String channel_name) {
