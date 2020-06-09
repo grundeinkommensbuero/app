@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/services/BackendService.dart';
 
+
 class PushService extends BackendService {
   PushService([Backend backendMock]) : super(backendMock);
 
