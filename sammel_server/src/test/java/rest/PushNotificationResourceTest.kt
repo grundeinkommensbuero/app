@@ -10,8 +10,8 @@ import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
-import rest.PushNotificationResource.MissingMessageTarget
 import services.FirebaseService
+import services.FirebaseService.MissingMessageTarget
 import kotlin.test.assertEquals
 
 class PushNotificationResourceTest {
@@ -28,10 +28,6 @@ class PushNotificationResourceTest {
     @Test(expected = MissingMessageTarget::class)
     fun `pushToDevices erwartet Empfaenger`() =
             resource.pushToDevices(PushMessageDto(notification = PushNotificationDto(), data = emptyMap()))
-
-    @Test(expected = MissingMessageTarget::class)
-    fun `pushToDevices erwartet nichtleere Liste von Empfaenger`() =
-            resource.pushToDevices(PushMessageDto(notification = PushNotificationDto(), data = emptyMap(), recipients = emptyList()))
 
     @Test()
     fun `pushToDevices sendet Nachricht an Firebase weiter mit leeren Daten und Benachrichtigung`() {
@@ -78,10 +74,6 @@ class PushNotificationResourceTest {
     @Test(expected = MissingMessageTarget::class)
     fun `pushToTopic erwartet Topic`() =
             resource.pushToTopic(PushMessageDto(notification = PushNotificationDto(), data = emptyMap()))
-
-    @Test(expected = MissingMessageTarget::class)
-    fun `pushToTopic erwartet  nichtleeres Topic`() =
-            resource.pushToTopic(PushMessageDto(notification = PushNotificationDto(), data = emptyMap(), topic = ""))
 
     @Test()
     fun `pushToTopic sendet Nachricht an Firebase weiter mit leeren Daten und Benachrichtigung`() {
