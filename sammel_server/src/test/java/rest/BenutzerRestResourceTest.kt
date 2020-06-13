@@ -39,15 +39,6 @@ class BenutzerRestResourceTest {
     ***REMOVED***
 
     @Test
-    fun `legeNeuenBenutzerAn erwartet Benutzernamen`() {
-        val response = resource.legeNeuenBenutzerAn(Login("11111111", "AAAAAAAA", BenutzerDto(null, null)))
-
-        assertEquals(response.status, 412)
-        assertEquals(response.entity is RestFehlermeldung, true)
-        assertEquals((response.entity as RestFehlermeldung).meldung, "Benutzername darf nicht leer sein")
-    ***REMOVED***
-
-    @Test
     fun `legeNeuenBenutzerAn erwartet secret`() {
         val response = resource.legeNeuenBenutzerAn(Login("", "AAAAAAAA", BenutzerDto(null, "Karl Marx")))
 
@@ -74,6 +65,13 @@ class BenutzerRestResourceTest {
         assertEquals(response.status, 412)
         assertEquals(response.entity is RestFehlermeldung, true)
         assertEquals((response.entity as RestFehlermeldung).meldung, "Benutzername ist bereits vergeben")
+    ***REMOVED***
+
+    @Test
+    fun `legeNeuenBenutzerAn prueft Nahmensaehnlichkeit nicht bei fehlendem Namen`() {
+        resource.legeNeuenBenutzerAn(Login("11111111", "AAAAAAAA", BenutzerDto(null, null)))
+
+        verify(dao, never()).benutzernameExistiert(anyString())
     ***REMOVED***
 
     @Test

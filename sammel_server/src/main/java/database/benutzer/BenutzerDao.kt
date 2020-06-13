@@ -28,7 +28,6 @@ open class BenutzerDao {
         ***REMOVED***
         try {
             entityManager.persist(benutzer)
-            entityManager.flush()
             return benutzer
         ***REMOVED*** catch (e: Exception) {
             throw BenutzerAnlegenGescheitertException("Beim Anlegen eines neuen Benutzers ist ein unerwartetes technisches Problem aufgetreten")
@@ -38,7 +37,6 @@ open class BenutzerDao {
 
     open fun legeNeueCredentialsAn(credentials: Credentials) {
         entityManager.persist(credentials)
-        entityManager.flush()
     ***REMOVED***
 
     open fun benutzernameExistiert(name: String): Boolean {
