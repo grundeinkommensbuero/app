@@ -6,11 +6,9 @@ import javax.persistence.*
 @Table(name = "Benutzer")
 class Benutzer() {
 
-    constructor(id: Long, name: String, passwort: String, telefonnummer: String?) : this() {
+    constructor(id: Long, name: String) : this() {
         this.id = id
         this.name = name
-        this.telefonnummer = telefonnummer
-        this.passwort = passwort
     ***REMOVED***
 
     @Id
@@ -19,11 +17,5 @@ class Benutzer() {
 
     @Column
     var name: String = ""
-
-    @Column
-    var passwort: String = ""
-
-    @Column
-    var telefonnummer: String? = null
 ***REMOVED***
 
