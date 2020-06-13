@@ -14,7 +14,6 @@ import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import javax.persistence.EntityManager
 import javax.persistence.TypedQuery
-import kotlin.test.assertFailsWith
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
 import database.benutzer.BenutzerDao as BenutzerDao
@@ -45,42 +44,10 @@ class BenutzerDaoTest {
     ***REMOVED***
 
     @Test
-    fun legtNeuenBenutzerAnGibtDatenbankBenutzerZurueck() {
-        val karl = Benutzer(1, "Karl Marx")
-        whenever(entityManager.createQuery(anyString(), any<Class<Benutzer>>()))
-                .thenReturn(typedQuery)
-        whenever(typedQuery.setParameter(anyString(), anyOrNull()))
-                .thenReturn(typedQuery)
-        whenever(typedQuery.resultList)
-                .thenReturn(listOf(karl))
-
-        val benutzer = Benutzer(0, "Karl Marx")
-        val ergebnis = dao.legeNeuenBenutzerAn(benutzer)
-
-        assertSame(ergebnis, karl)
-    ***REMOVED***
-
-    @Test
-    fun legtNeuenBenutzerAnGibtFehlerAusWennAngelegterBenutzerNichtAuffindbarIst() {
-        whenever(entityManager.createQuery(anyString(), any<Class<Benutzer>>()))
-                .thenReturn(typedQuery)
-        whenever(typedQuery.setParameter(anyString(), anyOrNull()))
-                .thenReturn(typedQuery)
-        whenever(typedQuery.resultList)
-                .thenReturn(emptyList())
-
-
-        assertFailsWith<BenutzerDao.BenutzerAnlegenGescheitertException> {
-            val benutzer = Benutzer(0, "Karl Marx")
-            dao.legeNeuenBenutzerAn(benutzer)
-        ***REMOVED***
-    ***REMOVED***
-
-    @Test
     fun `benutzernameExistiert gibt true zurueck, wenn mindestens ein Benutzer mit dem Namen existiert`() {
-        whenever(entityManager.createQuery("select benutzer from Benutzer benutzer where benutzer.name = :name", any<Class<Benutzer>>()))
+        whenever(entityManager.createQuery(anyString(), any<Class<Benutzer>>()))
                 .thenReturn(typedQuery)
-        whenever(typedQuery.setParameter(anyString(), "name"))
+        whenever(typedQuery.setParameter("name", "name"))
                 .thenReturn(typedQuery)
         whenever(typedQuery.resultList)
                 .thenReturn(listOf(Benutzer()))
