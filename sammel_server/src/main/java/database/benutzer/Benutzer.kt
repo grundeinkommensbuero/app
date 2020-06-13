@@ -6,7 +6,7 @@ import javax.persistence.*
 @Table(name = "Benutzer")
 class Benutzer() {
 
-    constructor(id: Long, name: String) : this() {
+    constructor(id: Long, name: String?) : this() {
         this.id = id
         this.name = name
     }
@@ -16,6 +16,6 @@ class Benutzer() {
     var id: Long = 0
 
     @Column
-    var name: String = ""
+    var name: String? = null
 }
 

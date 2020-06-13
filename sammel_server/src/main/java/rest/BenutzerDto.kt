@@ -11,10 +11,10 @@ data class Login(
 
 data class BenutzerDto(
         var id: Long? = 0,
-        var name: String? = "") {
+        var name: String? = null) {
 
     fun convertToBenutzer(): Benutzer {
-        return Benutzer(id ?: 0, name ?: "")
+        return Benutzer(id ?: 0, name)
     }
 
     companion object {

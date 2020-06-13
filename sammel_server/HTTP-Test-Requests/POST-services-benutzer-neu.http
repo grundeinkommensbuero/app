@@ -4,9 +4,11 @@ Cache-Control: no-cache
 Content-Type: application/json
 
 {
-  "name": "Karl Marx",
-  "passwort": "hashed_password_3",
-  "telefonnummer": "0173 738 2345"
+  "secret": "geheimnis",
+  "firebasKey": "firebase key",
+  "benutzer": {
+    "name": "Karl Marx",
+  }
 }
 
 ###

@@ -1,6 +1,5 @@
 package rest
 
-import database.benutzer.Benutzer
 import database.benutzer.BenutzerDao
 import database.benutzer.Credentials
 import org.jboss.logging.Logger
@@ -28,12 +27,6 @@ open class BenutzerRestResource {
     @Produces(APPLICATION_JSON)
     open fun legeNeuenBenutzerAn(login: Login): Response {
         val benutzer = login.benutzer
-        if (benutzer.name.isNullOrEmpty()) {
-            return Response
-                    .status(412)
-                    .entity(RestFehlermeldung("Benutzername darf nicht leer sein"))
-                    .build()
-        }
         if (login.secret.isEmpty()) {
             return Response
                     .status(412)
@@ -48,9 +41,9 @@ open class BenutzerRestResource {
         }
 
         // Zum Vermeiden optisch ähnlicher Namen
-        login.benutzer.name = login.benutzer.name!!.trim()
+        login.benutzer.name = login.benutzer.name?.trim()
 
-        if(dao.benutzernameExistiert(benutzer.name!!)) {
+        if(benutzer.name != null && dao.benutzernameExistiert(benutzer.name!!)) {
             return Response
                     .status(412)
                     .entity(RestFehlermeldung("Benutzername ist bereits vergeben"))

@@ -7,7 +7,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "Credentials")
-open class Credentials() {
+class Credentials() {
 
     @Id
     var id: Long = 0
