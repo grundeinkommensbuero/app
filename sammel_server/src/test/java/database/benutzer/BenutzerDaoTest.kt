@@ -1,7 +1,10 @@
 package database.benutzer
 
 import com.nhaarman.mockitokotlin2.anyOrNull
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
+import org.junit.Assert.assertFalse
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentMatchers.*
@@ -12,8 +15,8 @@ import org.mockito.junit.MockitoRule
 import javax.persistence.EntityManager
 import javax.persistence.TypedQuery
 import kotlin.test.assertFailsWith
-import kotlin.test.assertNull
 import kotlin.test.assertSame
+import kotlin.test.assertTrue
 import database.benutzer.BenutzerDao as BenutzerDao
 
 class BenutzerDaoTest {
@@ -31,55 +34,19 @@ class BenutzerDaoTest {
     private lateinit var dao: BenutzerDao
 
     @Test
-    fun getBenutzerLiefertFehlermeldungBeiMultiplenErgebnissen() {
-        val response = listOf(
-                Benutzer(1, "Karl Marx", "hash1", ""),
-                Benutzer(3, "Karl Marx", "hash2", "")
-        )
-        whenever(entityManager.createQuery(anyString(), any<Class<Benutzer>>()))
-                .thenReturn(typedQuery)
-        whenever(typedQuery.setParameter(anyString(), anyString()))
-                .thenReturn(typedQuery)
-        whenever(typedQuery.resultList)
-                .thenReturn(response)
+    fun `getBenutzer liefert Ergebnis aus DB`() {
+        val karl = Benutzer(1L, "Karl Marx")
+        whenever(entityManager.find(Benutzer::class.java, 1L))
+                .thenReturn(karl)
 
-        assertFailsWith<BenutzerDao.BenutzerMehrfachVorhandenException> {
-            dao.getBenutzer("Karl Marx")
-        }
-    }
-
-    @Test
-    fun getBenutzerLiefertNullBeiKeinenErgebnissen() {
-        val response = emptyList<Benutzer>()
-        whenever(entityManager.createQuery(anyString(), any<Class<Benutzer>>()))
-                .thenReturn(typedQuery)
-        whenever(typedQuery.setParameter(anyString(), anyOrNull()))
-                .thenReturn(typedQuery)
-        whenever(typedQuery.resultList)
-                .thenReturn(response)
-
-        assertNull(dao.getBenutzer("Antonio Gramsci"))
-    }
-
-    @Test
-    fun getBenutzerLiefertBenutzerBeiEinzelnemErgebnis() {
-        val karl = Benutzer(1, "Karl Marx", "hash1", "")
-        val response = listOf(karl)
-        whenever(entityManager.createQuery(anyString(), any<Class<Benutzer>>()))
-                .thenReturn(typedQuery)
-        whenever(typedQuery.setParameter(anyString(), anyOrNull()))
-                .thenReturn(typedQuery)
-        whenever(typedQuery.resultList)
-                .thenReturn(response)
-
-        val ergebnis = dao.getBenutzer("Karl Marx")
+        val ergebnis = dao.getBenutzer(1L)
 
         assertSame(ergebnis, karl)
     }
 
     @Test
     fun legtNeuenBenutzerAnGibtDatenbankBenutzerZurueck() {
-        val karl = Benutzer(1, "Karl Marx", "hash1", null)
+        val karl = Benutzer(1, "Karl Marx")
         whenever(entityManager.createQuery(anyString(), any<Class<Benutzer>>()))
                 .thenReturn(typedQuery)
         whenever(typedQuery.setParameter(anyString(), anyOrNull()))
@@ -87,7 +54,7 @@ class BenutzerDaoTest {
         whenever(typedQuery.resultList)
                 .thenReturn(listOf(karl))
 
-        val benutzer = Benutzer(0, "Karl Marx", "hash1", null)
+        val benutzer = Benutzer(0, "Karl Marx")
         val ergebnis = dao.legeNeuenBenutzerAn(benutzer)
 
         assertSame(ergebnis, karl)
@@ -104,8 +71,45 @@ class BenutzerDaoTest {
 
 
         assertFailsWith<BenutzerDao.BenutzerAnlegenGescheitertException> {
-            val benutzer = Benutzer(0, "Karl Marx", "hash1", null)
+            val benutzer = Benutzer(0, "Karl Marx")
             dao.legeNeuenBenutzerAn(benutzer)
         }
+    }
+
+    @Test
+    fun `benutzernameExistiert gibt true zurueck, wenn mindestens ein Benutzer mit dem Namen existiert`() {
+        whenever(entityManager.createQuery("select benutzer from Benutzer benutzer where benutzer.name = :name", any<Class<Benutzer>>()))
+                .thenReturn(typedQuery)
+        whenever(typedQuery.setParameter(anyString(), "name"))
+                .thenReturn(typedQuery)
+        whenever(typedQuery.resultList)
+                .thenReturn(listOf(Benutzer()))
+
+        val ergebnis = dao.benutzernameExistiert("name")
+
+        assertTrue(ergebnis)
+    }
+
+    @Test
+    fun `benutzernameExistiert gibt false zurueck, wenn kein Benutzer mit dem Namen existiert`() {
+        whenever(entityManager.createQuery(anyString(), any<Class<Benutzer>>()))
+                .thenReturn(typedQuery)
+        whenever(typedQuery.setParameter(anyString(), anyOrNull()))
+                .thenReturn(typedQuery)
+        whenever(typedQuery.resultList)
+                .thenReturn(emptyList())
+
+        val ergebnis = dao.benutzernameExistiert("name")
+
+        assertFalse(ergebnis)
+    }
+
+    @Test
+    fun `legeNeueCredentialsAn reicht Credentials an Datenbank weiter`() {
+        val credentials = Credentials()
+
+        dao.legeNeueCredentialsAn(credentials)
+
+        verify(entityManager, times(1)).persist(credentials)
     }
 }

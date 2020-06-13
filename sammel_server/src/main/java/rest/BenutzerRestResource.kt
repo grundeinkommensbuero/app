@@ -1,7 +1,12 @@
 package rest
 
+import database.benutzer.Benutzer
 import database.benutzer.BenutzerDao
+import database.benutzer.Credentials
 import org.jboss.logging.Logger
+import shared.Security
+import shared.Security.HashMitSalt
+import java.lang.Exception
 import javax.ejb.EJB
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType.APPLICATION_JSON
@@ -14,36 +19,8 @@ open class BenutzerRestResource {
     @EJB
     private lateinit var dao: BenutzerDao
 
-    @GET
-    @Produces(APPLICATION_JSON)
-    open fun getBenutzer(@QueryParam("name") name: String?): Response {
-        if (name.isNullOrEmpty()) {
-            return Response
-                    .status(412)
-                    .entity(RestFehlermeldung("Parameter 'name' fehlt oder ist leer"))
-                    .build()
-        }
-        try {
-            val ergebnis = dao.getBenutzer(name)
-            if (ergebnis == null) {
-                return Response
-                        .status(404)
-                        .entity(RestFehlermeldung("Benutzer nicht vorhanden"))
-                        .build()
-
-            } else {
-                return Response
-                        .ok()
-                        .entity(ergebnis)
-                        .build()
-            }
-        } catch (fehler: BenutzerDao.BenutzerMehrfachVorhandenException) {
-            return Response
-                    .serverError()
-                    .entity(RestFehlermeldung(fehler.message))
-                    .build()
-        }
-    }
+    @EJB
+    private lateinit var security: Security
 
     @POST
     @Path("neu")
@@ -57,13 +34,39 @@ open class BenutzerRestResource {
                     .entity(RestFehlermeldung("Benutzername darf nicht leer sein"))
                     .build()
         }
-        if (dao.getBenutzer(benutzer.name!!) == null) {
-            dao.legeNeuenBenutzerAn(benutzer.convertToBenutzer(login.passwortHash))
-            return Response.ok().build()
-        } else {
+        if (login.secret.isEmpty()) {
             return Response
                     .status(412)
-                    .entity(RestFehlermeldung("Benutzername bereits vergeben"))
+                    .entity(RestFehlermeldung("Secret darf nicht leer sein"))
+                    .build()
+        }
+        if (login.firebaseKey.isEmpty()) {
+            return Response
+                    .status(412)
+                    .entity(RestFehlermeldung("Firebase Key darf nicht leer sein"))
+                    .build()
+        }
+
+        // Zum Vermeiden optisch ähnlicher Namen
+        login.benutzer.name = login.benutzer.name!!.trim()
+
+        if(dao.benutzernameExistiert(benutzer.name!!)) {
+            return Response
+                    .status(412)
+                    .entity(RestFehlermeldung("Benutzername ist bereits vergeben"))
+                    .build()
+        }
+        try {
+            val benutzerAusDb = dao.legeNeuenBenutzerAn(benutzer.convertToBenutzer())
+
+            val hashMitSalt = security.hashSecret(login.secret)
+            dao.legeNeueCredentialsAn(Credentials(benutzerAusDb.id, hashMitSalt.hash, hashMitSalt.salt, login.firebaseKey))
+
+            return Response.ok().entity(benutzerAusDb).build()
+        } catch (e: Exception) {
+            return Response
+                    .status(500)
+                    .entity(RestFehlermeldung("Ein technisches Problem ist aufgetreten"))
                     .build()
         }
     }
@@ -73,24 +76,38 @@ open class BenutzerRestResource {
     @Produces(APPLICATION_JSON)
     open fun authentifiziereBenutzer(login: Login): Response {
         val benutzer = login.benutzer
-        if (benutzer.name.isNullOrEmpty()) {
+        if (benutzer.id == null) {
             return Response
                     .status(412)
-                    .entity(RestFehlermeldung("Benutzername darf nicht leer sein"))
+                    .entity(RestFehlermeldung("Benutzer-ID darf nicht leer sein"))
                     .build()
         }
-        val benutzerAusDb = dao.getBenutzer(benutzer.name!!)
-        if (benutzerAusDb == null) {
+        if (login.secret.isEmpty()) {
+            return Response
+                    .status(412)
+                    .entity(RestFehlermeldung("Secret darf nicht leer sein"))
+                    .build()
+        }
+        val credentials: Credentials?
+        try {
+            credentials = dao.getCredentials(benutzer.id!!)
+        } catch (e: java.lang.IllegalArgumentException) {
+            return Response
+                    .status(412)
+                    .entity(RestFehlermeldung("Benutzer-ID ist ungültig"))
+                    .build()
+        }
+        if (credentials == null) {
             return Response
                     .status(401)
-                    .entity(RestFehlermeldung("Unbekannter Nutzername"))
+                    .entity(RestFehlermeldung("Unbekannter Benutzer"))
                     .build()
         }
-        if (!benutzerAusDb.passwort.equals(login.passwortHash)) {
+        if (!security.verifiziereSecretMitHash(login.secret, HashMitSalt(credentials.secret, credentials.salt))) {
             LOG.info("Falscher Login mit Benutzer ${login.benutzer.id}")
             return Response
                     .status(401)
-                    .entity(RestFehlermeldung("{Security} Nutzername und Passwort stimmen nicht überein"))
+                    .entity(RestFehlermeldung("Nutzername und Passwort stimmen nicht überein"))
                     .build()
         }
         return Response

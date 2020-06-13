@@ -2,24 +2,24 @@ package rest
 
 import database.benutzer.Benutzer
 
-// NUR FÜR REGISTRIERUNG BENUTZEN AN LESENDER SCHNITTSSTELLE!
+// NUR FÜR REGISTRIERUNG/AUTHENTIFIZIERUNG BENUTZEN!
 data class Login(
-        var passwortHash: String = "",
-        var benutzer: BenutzerDto = BenutzerDto()){
+        var secret: String = "",
+        var firebaseKey: String = "",
+        var benutzer: BenutzerDto = BenutzerDto()) {
 }
 
 data class BenutzerDto(
         var id: Long? = 0,
-        var name: String? = "",
-        var telefonnummer: String? = null) {
+        var name: String? = "") {
 
-    fun convertToBenutzer(passwortHash: String = ""): Benutzer {
-        return Benutzer(id ?: 0, name ?: "", passwortHash, telefonnummer)
+    fun convertToBenutzer(): Benutzer {
+        return Benutzer(id ?: 0, name ?: "")
     }
 
     companion object {
         fun convertFromBenutzer(benutzer: Benutzer): BenutzerDto {
-            return BenutzerDto(benutzer.id, benutzer.name, benutzer.telefonnummer)
+            return BenutzerDto(benutzer.id, benutzer.name)
         }
     }
 }

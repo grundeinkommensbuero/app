@@ -5,7 +5,6 @@ import javax.ejb.Stateless
 import javax.inject.Inject
 import javax.persistence.EntityManager
 import javax.persistence.PersistenceContext
-import kotlin.Exception
 
 @Stateless
 open class BenutzerDao {
@@ -15,36 +14,41 @@ open class BenutzerDao {
     @PersistenceContext(unitName = "mariaDB")
     private lateinit var entityManager: EntityManager
 
-    @Throws(BenutzerMehrfachVorhandenException::class)
-    open fun getBenutzer(name: String): Benutzer? {
-        val query = "select benutzer from Benutzer benutzer where benutzer.name = :name"
-        val benutzerListe = entityManager
-                .createQuery(query, Benutzer::class.java)
-                .setParameter("name", name)
-                .resultList
-        if (benutzerListe.size > 1) {
-            val message = "Benutzer $name ist mehrfach vorhanden"
-            LOG.warn("Inkonsistente Daten in der Datenbank: $message")
-            throw BenutzerMehrfachVorhandenException(message)
-        }
-        if (benutzerListe.size == 0) {
-            return null
-        }
-        return benutzerListe.first()
+    open fun getBenutzer(id: Long): Benutzer? {
+        return entityManager.find(Benutzer::class.java, id)
     }
 
-    class BenutzerMehrfachVorhandenException(message: String) : Exception(message)
+    open fun getCredentials(id: Long): Credentials? {
+        return entityManager.find(Credentials::class.java, id)
+    }
 
     open fun legeNeuenBenutzerAn(benutzer: Benutzer): Benutzer {
-        entityManager.persist(benutzer)
-        val benutzerAusDb = getBenutzer(benutzer.name)
-        if (benutzerAusDb == null) {
-            LOG.warn("Benutzer ${benutzer.name} (${benutzer.id}) wurde fehlerfrei in Datenbank angelegt aber nicht wieder gefunden")
-            throw BenutzerAnlegenGescheitertException("Beim Anlegen des Benutzers ist ein Fehler aufgetreten")
+        if (benutzer.id != 0L) {
+            throw NeuerBenutzerHatBereitsIdException()
         }
-        return benutzerAusDb
+        try {
+            entityManager.persist(benutzer)
+            entityManager.flush()
+            return benutzer
+        } catch (e: Exception) {
+            throw BenutzerAnlegenGescheitertException("Beim Anlegen eines neuen Benutzers ist ein unerwartetes technisches Problem aufgetreten")
+        }
     }
 
-    class BenutzerAnlegenGescheitertException(message: String) : java.lang.Exception(message)
 
+    open fun legeNeueCredentialsAn(credentials: Credentials) {
+        entityManager.persist(credentials)
+        entityManager.flush()
+    }
+
+    open fun benutzernameExistiert(name: String): Boolean {
+        return entityManager
+                .createQuery("select benutzer from Benutzer benutzer where benutzer.name = :name", Benutzer::class.java)
+                .setParameter("name", name)
+                .resultList
+                .isNotEmpty()
+    }
+
+    class NeuerBenutzerHatBereitsIdException : Exception()
+    class BenutzerAnlegenGescheitertException(message: String) : java.lang.Exception(message)
 }
