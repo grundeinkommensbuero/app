@@ -5,6 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:http_server/http_server.dart';
 import 'package:sammel_app/main.dart';
 
+import 'AuthFehler.dart';
+import 'RestFehler.dart';
+
 class BackendService implements Backend {
   Backend backend;
 
@@ -13,15 +16,48 @@ class BackendService implements Backend {
   }
 
   @override
-  Future<HttpClientResponseBody> delete(String url, String data) =>
-      backend.delete(url, data);
+  Future<HttpClientResponseBody> delete(String url, String data) async {
+    var response = await backend.delete(url, data);
+
+    if (response.response.statusCode >= 200 &&
+        response.response.statusCode < 300) return response;
+
+    if (response.response.statusCode == 403)
+      throw AuthFehler.fromJson(response.body);
+
+    // else
+    throw RestFehler(response.body.toString());
+  }
 
   @override
-  Future<HttpClientResponseBody> get(String url) => backend.get(url);
+  Future<HttpClientResponseBody> get(String url) async {
+    var response = await backend.get(url);
+
+    if (response.response.statusCode >= 200 &&
+        response.response.statusCode < 300)
+      return response;
+
+    if (response.response.statusCode == 403)
+      throw AuthFehler(response.body);
+
+    print(response.response.statusCode);
+    // else
+    throw RestFehler(response.body.toString());
+  }
 
   @override
-  Future<HttpClientResponseBody> post(String url, String data) =>
-      backend.post(url, data);
+  Future<HttpClientResponseBody> post(String url, String data) async {
+    var response = await backend.post(url, data);
+
+    if (response.response.statusCode >= 200 &&
+        response.response.statusCode < 300) return response;
+
+    if (response.response.statusCode == 403)
+      throw AuthFehler.fromJson(response.body);
+
+    // else
+    throw RestFehler(response.body.toString());
+  }
 }
 
 class Backend {

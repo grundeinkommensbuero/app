@@ -1,0 +1,17 @@
+POST http://127.0.0.1:18080/service/push/devices
+Accept: */*
+Cache-Control: no-cache
+Content-Type: application/json
+
+{
+    "recipients":[
+        "<CLIENT-TOKEN>"
+    ],
+    "data":{
+        "type":"Typ"
+    },
+    "notification":{
+        "title":"Titel",
+        "body":"Meldung"
+    }
+}

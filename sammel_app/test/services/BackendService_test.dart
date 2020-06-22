@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:sammel_app/services/AuthFehler.dart';
 import 'package:sammel_app/services/BackendService.dart';
+import 'package:sammel_app/services/RestFehler.dart';
 
 import '../shared/Mocks.dart';
 
@@ -14,14 +16,22 @@ main() {
     });
 
     test('for get', () {
+      when(mock.get(any))
+          .thenAnswer((_) async => HttpClientResponseBodyMock('response', 200));
       service.get('any URL');
       verify(mock.get('any URL')).called(1);
     });
+
     test('for post', () {
+      when(mock.post(any, any))
+          .thenAnswer((_) async => HttpClientResponseBodyMock('response', 200));
       service.post('any URL', 'any data');
       verify(mock.post('any URL', 'any data')).called(1);
     });
+
     test('for delete', () {
+      when(mock.delete(any, any))
+          .thenAnswer((_) async => HttpClientResponseBodyMock('response', 200));
       service.delete('any URL', 'any data');
       verify(mock.delete('any URL', 'any data')).called(1);
     });
@@ -40,6 +50,28 @@ main() {
     test('throws error when delete called', () async {
       expect(() => demoBackend.delete('any url', ''),
           throwsA((e) => e is DemoBackendShouldNeverBeUsedError));
+    });
+  });
+  group('error handling', () {
+    BackendService service;
+    Backend mock;
+    setUp(() {
+      mock = BackendMock();
+      service = BackendService(mock);
+    });
+
+    test('throws rest error on non-200 and non-403 status code', () {
+      when(mock.get(any)).thenAnswer(
+          (_) async => HttpClientResponseBodyMock('Dies ist ein Fehler', 400));
+
+      expect(() => service.get('anyUrl'), throwsA((e) => e is RestFehler));
+    });
+
+    test('throws auth error on 403 status code', () {
+      when(mock.get(any)).thenAnswer(
+          (_) async => HttpClientResponseBodyMock('Dies ist ein Fehler', 403));
+
+      expect(() => service.get('anyUrl'), throwsA((e) => e is AuthFehler));
     });
   });
 }
