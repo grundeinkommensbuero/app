@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
+import 'package:sammel_app/shared/user_data.dart';
+
 class PushMessage {
   List<String> recipients;
   String topic;
@@ -27,6 +32,11 @@ class PushNotification {
       };
 }
 
+class PushDataTypes
+{
+  static final SimpleChatMessage = 'SimpleChatMessage';
+}
+
 // Alle Data-Objekte müssen in eine flache Map<String, String> serialisiert werden können
 class PushData {
   String type;
@@ -36,6 +46,30 @@ class PushData {
   PushData.fromJson(Map<dynamic, dynamic> json) {}
 
   toJson() => {'type': type};
+}
+
+class MessagePushData extends PushData {
+
+  Message message = null;
+  String channel_name = null;
+  final String type = PushDataTypes.SimpleChatMessage;
+
+  MessagePushData(this.message, this.channel_name);
+
+
+  toJson()
+  {
+    var json_message = message.toJson();
+    json_message['type'] = type;
+    json_message['channel_name'] = this.channel_name;
+    return json_message;
+  }
+
+  MessagePushData.fromJson(Map <dynamic, dynamic> json)
+  {
+    this.message = Message.fromJSON(json);// Message(text: json['text'], sender_name: json['sender_name'], message_color: Color(json['color']));
+    this.channel_name = json['channel_name'];
+  }
 }
 
 class ExampleData extends PushData {

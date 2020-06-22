@@ -12,16 +12,13 @@ class ChatMessageService implements PushNotificationListener {
     MessagePushData mpd = MessagePushData.fromJson(data);
     Channel receiver = channels[mpd.channel_name];
     Message message = mpd.message;
-    receiver.channelCallback(message);
+    if(receiver != null) {
+      receiver.channelCallback(message);
+    }
   }
 
   void register_channel(Channel channel)
   {
     channels[channel.name] = channel;
   }
-
-
-
-
-
 }
