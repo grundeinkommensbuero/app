@@ -208,6 +208,8 @@ class ChatWindowState extends State<ChatWindow>
           backArrowPressed(context);
         ***REMOVED***,
       )*/
+    ]);
+      )*/
         ]);
   ***REMOVED***
 
