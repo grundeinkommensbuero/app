@@ -6,9 +6,11 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/model/Termin.dart';
+import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/PushService.dart';
 import 'package:sammel_app/services/StorageService.dart';
+import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/user_data.dart';
 
 import 'ChronoHelfer.dart';
@@ -26,20 +28,14 @@ class ChatWindow extends StatefulWidget {
 
 
 abstract class ChannelChangeListener {
-
   void channelChanged(Channel channel);
-
 ***REMOVED***
-
 
 class ChatWindowState extends State<ChatWindow>
     implements ChannelChangeListener {
-
-
   FocusNode myFocusNode;
 
   bool textFieldHasFocus = false;
-
 
   ChatWindowState(this.channel) {***REMOVED***
 
@@ -47,9 +43,7 @@ class ChatWindowState extends State<ChatWindow>
   User user = null;
   AbstractPushService pushService = null;
   TextEditingController textEditingController = TextEditingController();
-  GlobalKey _formKey = new GlobalKey(debugLabel:'TextField');
-
-
+  GlobalKey _formKey = new GlobalKey(debugLabel: 'TextField');
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +51,7 @@ class ChatWindowState extends State<ChatWindow>
       StorageService storageService = Provider.of<StorageService>(context);
       user = User(1, 'test_name1312', Color.fromRGBO(255, 255, 0, 1.0));
       storageService.saveUser(user);
-      storageService.loadUser().then((value) =>
-          setState(() {
+      storageService.loadUser().then((value) => setState(() {
             this.user = value;
           ***REMOVED***));
       pushService = Provider.of<AbstractPushService>(context);
@@ -68,33 +61,35 @@ class ChatWindowState extends State<ChatWindow>
     var widget_list = ListView(children: buildListMessage());
     var inputWidget = buildInput();
     var header_widget = buildHeader(widget.termin);
-    Scaffold page = Scaffold( appBar: header_widget,
+    Scaffold page = Scaffold(
+        appBar: header_widget,
         body: Padding(child: widget_list, padding: EdgeInsets.only(bottom: 40)),
         bottomSheet: SizedBox(child: inputWidget, height: 40));
     if (textFieldHasFocus) {
-    //  myFocusNode.unfocus();
-    //  print('has functions 1 ' + myFocusNode.hasFocus.toString());
-    //  FocusScope.of(context).requestFocus(FocusNode());
-   //   print('has functions 2 ' + myFocusNode.hasFocus.toString());
+      //  myFocusNode.unfocus();
+      //  print('has functions 1 ' + myFocusNode.hasFocus.toString());
+      //  FocusScope.of(context).requestFocus(FocusNode());
+      //   print('has functions 2 ' + myFocusNode.hasFocus.toString());
 
-        FocusScope.of(context).requestFocus(myFocusNode);
-    //  print('has functions 3 ' + myFocusNode.hasFocus.toString());
-    //  myFocusNode.requestFocus();
+      FocusScope.of(context).requestFocus(myFocusNode);
+      //  print('has functions 3 ' + myFocusNode.hasFocus.toString());
+      //  myFocusNode.requestFocus();
     ***REMOVED***
     print(textFieldHasFocus.toString());
     print('has functions' + myFocusNode.hasFocus.toString());
     return page;
   ***REMOVED***
 
-
   Widget buildInput() {
-    return Container(key: Key('InputWidgetContainer'),
+    return Container(
+      key: Key('InputWidgetContainer'),
       child: Row(
         children: <Widget>[
           // Edit text
           Flexible(
             child: Container(
-              child: TextField(key:_formKey,
+              child: TextField(
+                key: _formKey,
                 style: TextStyle(color: DweTheme.purple, fontSize: 15.0),
                 controller: textEditingController,
                 focusNode: myFocusNode,
@@ -128,7 +123,6 @@ class ChatWindowState extends State<ChatWindow>
     );
   ***REMOVED***
 
-
   List<Widget> buildListMessage() {
     List<Message> message_list = channel.getAllMessages();
     if (message_list == null) {
@@ -145,30 +139,65 @@ class ChatWindowState extends State<ChatWindow>
     Align alignment = null;
     Container card = null;
     if (message.sender_name == user.name) {
-      card = Container(constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.8, maxHeight: MediaQuery.of(context).size.height * 0.8),
-          child: Card(color: message.message_color, child: Padding(
-              padding: EdgeInsets.only(left:10.0, top: 8.0, right: 10.0, bottom: 8.0), child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children:
-      [
-        Text(
-          message.sender_name, style: TextStyle(fontWeight: FontWeight.bold),),
-              Padding(
-                  padding: EdgeInsets.only(top: 3.0, bottom: 5.0), child: Text(message.text, textScaleFactor: 1.2,)),
-        Text(formatDateTime(message.sending_time), textScaleFactor: 0.8,)
-      ]))));
-          alignment = Align(child: card, alignment: Alignment.topRight);
+      card = Container(
+          constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 0.8,
+              maxHeight: MediaQuery.of(context).size.height * 0.8),
+          child: Card(
+              color: message.message_color,
+              child: Padding(
+                  padding: EdgeInsets.only(
+                      left: 10.0, top: 8.0, right: 10.0, bottom: 8.0),
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          message.sender_name,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Padding(
+                            padding: EdgeInsets.only(top: 3.0, bottom: 5.0),
+                            child: Text(
+                              message.text,
+                              textScaleFactor: 1.2,
+                            )),
+                        Text(
+                          formatDateTime(message.sending_time),
+                          textScaleFactor: 0.8,
+                        )
+                      ]))));
+      alignment = Align(child: card, alignment: Alignment.topRight);
     ***REMOVED*** else {
-      card = Container(constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.8, maxHeight: MediaQuery.of(context).size.height * 0.8),
-          child: Card(color: message.message_color, child: Padding(
-              padding: EdgeInsets.only(left:10.0, top: 8.0, right: 10.0, bottom: 8.0), child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children:
-      [
-        Text(
-          message.sender_name, style: TextStyle(fontWeight: FontWeight.bold),),
-              Padding(
-                  padding: EdgeInsets.only(top: 3.0, bottom: 5.0), child:
-              Text(message.text, textScaleFactor: 1.2,)),
-        Text(formatDateTime(message.sending_time), textScaleFactor: 0.8,)
-      ]))));
-          alignment = Align(child: card, alignment: Alignment.topLeft);
+      card = Container(
+          constraints: BoxConstraints(
+              maxWidth: MediaQuery.of(context).size.width * 0.8,
+              maxHeight: MediaQuery.of(context).size.height * 0.8),
+          child: Card(
+              color: message.message_color,
+              child: Padding(
+                  padding: EdgeInsets.only(
+                      left: 10.0, top: 8.0, right: 10.0, bottom: 8.0),
+                  child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          message.sender_name,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        Padding(
+                            padding: EdgeInsets.only(top: 3.0, bottom: 5.0),
+                            child: Text(
+                              message.text,
+                              textScaleFactor: 1.2,
+                            )),
+                        Text(
+                          formatDateTime(message.sending_time),
+                          textScaleFactor: 0.8,
+                        )
+                      ]))));
+      alignment = Align(child: card, alignment: Alignment.topLeft);
     ***REMOVED***
     return alignment;
   ***REMOVED***
@@ -190,7 +219,7 @@ class ChatWindowState extends State<ChatWindow>
             Text(
                 'am ${ChronoHelfer.formatDateOfDateTime(termin.beginn)***REMOVED***, um ${ChronoHelfer.dateTimeToStringHHmm(termin.beginn)***REMOVED*** Uhr',
                 style:
-                TextStyle(fontSize: 13.0, fontWeight: FontWeight.normal)),
+                    TextStyle(fontSize: 13.0, fontWeight: FontWeight.normal)),
           ],
         ),
         actions: <Widget>[
@@ -208,7 +237,7 @@ class ChatWindowState extends State<ChatWindow>
           backArrowPressed(context);
         ***REMOVED***,
       )*/
-    ]);
+        ]);
       )*/
         ]);
   ***REMOVED***
@@ -233,22 +262,22 @@ class ChatWindowState extends State<ChatWindow>
     List<String> member_names = channel.get_member_names();
     if (member_names == null) {
       return Text('no members yet in the channel');
-    ***REMOVED***
-    else {
+    ***REMOVED*** else {
       return Column(children: member_names.map((name) => Text(name)).toList());
     ***REMOVED***
   ***REMOVED***
 
   onSendMessage(String text) {
-    Message message = Message(text: text,
+    Message message = Message(
+        text: text,
         sending_time: DateTime.now(),
         message_color: user.color,
         sender_name: user.name);
     MessagePushData mpd = MessagePushData(message, channel.id);
-    pushService.pushToDevices(
-      ['cZNkv4W8F4yJIfrrwAEyVF:APA91bE01SmxS-52-VC3sx5T51f529RMPi6Ndgp0oqf1Yt3mkenOj4Qb1GjnbEQUJEYrrG4sCDUo1chWVsWg7jQmWk63YTJRZtRz-MQlYW2aj7CyDhF0MZfMtM3Za62FceKRCHp8Z0ED',
-        'c1IT42MZGJM:APA91bEh1qV_idNeKrusB1Ccl6BeBUB6iSV3e_W4BIOi3BjZTMhMlL5DqvGwOlCCdVa7V6J0nA4PdYeB7jVFhJIQhbedu0w3WqcdBsKiC3q_eoISKQHilBFpaIwuy1cMUzH3bCxWUUpp'],
-     mpd, PushNotification("New Chat Message", "Open App to view Message"));
+    pushService.pushToDevices([
+      'cZNkv4W8F4yJIfrrwAEyVF:APA91bE01SmxS-52-VC3sx5T51f529RMPi6Ndgp0oqf1Yt3mkenOj4Qb1GjnbEQUJEYrrG4sCDUo1chWVsWg7jQmWk63YTJRZtRz-MQlYW2aj7CyDhF0MZfMtM3Za62FceKRCHp8Z0ED',
+      'c1IT42MZGJM:APA91bEh1qV_idNeKrusB1Ccl6BeBUB6iSV3e_W4BIOi3BjZTMhMlL5DqvGwOlCCdVa7V6J0nA4PdYeB7jVFhJIQhbedu0w3WqcdBsKiC3q_eoISKQHilBFpaIwuy1cMUzH3bCxWUUpp'
+    ], mpd, PushNotification("New Chat Message", "Open App to view Message"));
     textEditingController.clear();
     myFocusNode.unfocus();
   ***REMOVED***
@@ -267,7 +296,6 @@ class ChatWindowState extends State<ChatWindow>
     myFocusNode.addListener(onFocusChange);
   ***REMOVED***
 
-
   @override
   void dispose() {
     this.channel.dispose_widget();
@@ -283,27 +311,19 @@ class ChatWindowState extends State<ChatWindow>
     ***REMOVED***
   ***REMOVED***
 
-  String formatDateTime(DateTime date)
-  {
+  String formatDateTime(DateTime date) {
     Duration message_sent = DateTime.now().difference(date);
-    if(message_sent<Duration(minutes: 1)){
-      return 'now';
+    if (message_sent < Duration(minutes: 1)) {
+      return 'gerade eben';
+    ***REMOVED*** else if (message_sent < Duration(hours: 1)) {
+      return '${message_sent.inMinutes***REMOVED*** Minuten';
+    ***REMOVED*** else if (message_sent < Duration(hours: 12)) {
+      return '${message_sent.inHours***REMOVED*** Stunden';
+    ***REMOVED*** else if (DateTime.now().difference(date) < Duration(days: 1)) {
+      return ChronoHelfer.dateTimeToStringHHmm(date);
+    ***REMOVED*** else if (DateTime.now().difference(date) < Duration(days: 7)) {
+      return DateFormat('EEE, hh:mm').format(date);
     ***REMOVED***
-    else if(message_sent<Duration(hours: 1))
-    {
-      return '${message_sent.inMinutes***REMOVED***m';
-    ***REMOVED***
-    else if(message_sent<Duration(hours: 12))
-      {
-        return '${message_sent.inHours***REMOVED***h';
-      ***REMOVED***
-    else if(DateTime.now().difference(date)<Duration(days: 1)){
-      return DateFormat('hh:mm').format(date);
-    ***REMOVED***
-    else if(DateTime.now().difference(date)<Duration(days: 7))
-      {
-        return DateFormat('EEE, hh:mm').format(date);
-      ***REMOVED***
 
     return DateFormat('MMM d, hh:mm').format(date);
   ***REMOVED***
@@ -312,8 +332,7 @@ class ChatWindowState extends State<ChatWindow>
     if (textFieldHasFocus) {
       textFieldHasFocus = false;
       FocusScope.of(context).requestFocus(FocusNode());
-    ***REMOVED***
-    else {
+    ***REMOVED*** else {
       Navigator.pop(context);
     ***REMOVED***
   ***REMOVED***
