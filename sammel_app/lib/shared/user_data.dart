@@ -1,6 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
+import 'package:sammel_app/shared/ChatWindow.dart';
 
 class Message
 {
@@ -15,15 +16,15 @@ class Message
   {
     text = json_message_data['text'];
     sender_name = json_message_data['sender_name'];
-    sending_time = json_message_data['sending_time'];
-    message_color = json_message_data['color'];
+    sending_time = DateTime.parse(json_message_data['sending_time']);
+    message_color = Color(int.parse(json_message_data['color']));
   ***REMOVED***
 
   Map<String, dynamic> toJson() => {
     'text': text,
     'sender_name': sender_name,
     'sending_time': sending_time.toString(),
-    'color': message_color.toString()
+    'color': message_color.value
   ***REMOVED***
 ***REMOVED***
 
@@ -35,7 +36,7 @@ abstract class Channel
 
   Channel(this.name, {this.channel_messages, this.member_names***REMOVED***);
 
-  void channelCallback(Message message);
+  Future<void> channelCallback(Message message);
 
   getAllMessages() {
     return channel_messages;
@@ -48,13 +49,45 @@ abstract class Channel
 
 class SimpleMessageChannel extends Channel
 {
-  SimpleMessageChannel(String name) : super(name);
+
+  List<Message> channel_messages = null;
+  ChannelChangeListener ccl = null;
+
+  SimpleMessageChannel(String name) : super(name){
+    this.channel_messages = List<Message>();
+  ***REMOVED***
 
   @override
-  void channelCallback(Message message) {
+  Future<void> channelCallback(Message message) {
     // TODO: implement channelCallback
-      channel_messages.add(message);
+      if(!channel_messages.contains(message))
+        {
+          channel_messages.add(message);
+        ***REMOVED***
+
+      if(ccl != null)
+        {
+          ccl.channelChanged(this);
+        ***REMOVED***
   ***REMOVED***
+
+  void register_widget(ChannelChangeListener c)
+  {
+    if(ccl == null)
+      {
+        ccl = c;
+      ***REMOVED***
+    else
+      {
+        print('The Channel is already associated toa widget');
+      ***REMOVED***
+  ***REMOVED***
+
+  void dispose_widget()
+  {
+    ccl = null;
+  ***REMOVED***
+
 ***REMOVED***
 
 class User
