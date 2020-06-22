@@ -25,17 +25,17 @@ void main() {
   group('formatDateOfDateTime', () {
 
     test('formats null', () {
-      expect(ChronoHelfer.formatDateOfDateTime(null), '');
+      expect(ChronoHelfer.formatDateOfDateTimeMitWochentag(null), '');
     });
 
     test('formats regular date', () {
       expect(
-          ChronoHelfer.formatDateOfDateTime(DateTime(2019, 12, 21, 22, 23, 24)),
+          ChronoHelfer.formatDateOfDateTimeMitWochentag(DateTime(2019, 12, 21, 22, 23, 24)),
           'Samstag, 21. Dezember 2019');
     });
 
     test('formats date w/o time', () {
-      expect(ChronoHelfer.formatDateOfDateTime(DateTime(2019, 12, 21)),
+      expect(ChronoHelfer.formatDateOfDateTimeMitWochentag(DateTime(2019, 12, 21)),
           'Samstag, 21. Dezember 2019');
     });
   });

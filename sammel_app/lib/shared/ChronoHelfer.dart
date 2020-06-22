@@ -83,9 +83,14 @@ class ChronoHelfer {
     return _dateFormatHHmm.format(DateTime(0, 1, 1, time.hour, time.minute, 0));
   }
 
-  static String formatDateOfDateTime(DateTime date) {
+  static String formatDateOfDateTimeMitWochentag(DateTime date) {
     if (date == null) return '';
     return '${wochentag(date)}, ${date.day.toString()}. ${monthName(date.month)} ${date.year.toString()}';
+  }
+
+  static String formatDateOfDateTime(DateTime date) {
+    if (date == null) return '';
+    return '${date.day.toString()}. ${monthName(date.month)} ${date.year.toString()}';
   }
 
   static String formatFromToTimeOfDateTimes(DateTime start, DateTime end) {

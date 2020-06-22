@@ -14,11 +14,10 @@ import 'DweTheme.dart';
 
 class ChatWindow extends StatefulWidget {
 
-  Channel channel = null;
+  Channel channel;
+  String name;
 
-  ChatWindow(Channel c, {Key key}) : super(key: key) {
-    channel = c;
-  }
+  ChatWindow(this.channel, this.name, {Key key}) : super(key: key) {}
 
   @override
   ChatWindowState createState() => ChatWindowState(channel);
@@ -40,9 +39,7 @@ class ChatWindowState extends State<ChatWindow>
   bool textFieldHasFocus = false;
 
 
-  ChatWindowState(SimpleMessageChannel c) {
-    channel = c;
-  }
+  ChatWindowState(this.channel) {}
 
   SimpleMessageChannel channel = null;
   User user = null;
@@ -68,7 +65,7 @@ class ChatWindowState extends State<ChatWindow>
 
     var widget_list = ListView(children: buildListMessage());
     var inputWidget = buildInput();
-    var header_widget = buildHeader(channel.name);
+    var header_widget = buildHeader(widget.name);
     Scaffold page = Scaffold( appBar: header_widget,
         body: Padding(child: widget_list, padding: EdgeInsets.only(bottom: 40)),
         bottomSheet: SizedBox(child: inputWidget, height: 40));
@@ -173,7 +170,7 @@ class ChatWindowState extends State<ChatWindow>
   }
 
   buildHeader(String channel_name) {
-    return AppBar(title: Text(channel_name), actions: <Widget>[IconButton(
+    return AppBar(title: Text(channel_name, style: TextStyle(fontSize: 13.0)), actions: <Widget>[IconButton(
       icon: const Icon(Icons.people),
       tooltip: 'Show Chat Member',
       onPressed: () {
@@ -219,7 +216,7 @@ class ChatWindowState extends State<ChatWindow>
         sending_time: DateTime.now(),
         message_color: user.color,
         sender_name: user.name);
-    MessagePushData mpd = MessagePushData(message, channel.name);
+    MessagePushData mpd = MessagePushData(message, channel.id);
     pushService.pushToDevices(
       ['cZNkv4W8F4yJIfrrwAEyVF:APA91bE01SmxS-52-VC3sx5T51f529RMPi6Ndgp0oqf1Yt3mkenOj4Qb1GjnbEQUJEYrrG4sCDUo1chWVsWg7jQmWk63YTJRZtRz-MQlYW2aj7CyDhF0MZfMtM3Za62FceKRCHp8Z0ED',
         'c1IT42MZGJM:APA91bEh1qV_idNeKrusB1Ccl6BeBUB6iSV3e_W4BIOi3BjZTMhMlL5DqvGwOlCCdVa7V6J0nA4PdYeB7jVFhJIQhbedu0w3WqcdBsKiC3q_eoISKQHilBFpaIwuy1cMUzH3bCxWUUpp'],
