@@ -29,7 +29,6 @@ class MyApp extends StatelessWidget {
   MyApp() {
     pnm.init();
     pnm.register_message_callback(PushDataTypes.SimpleChatMessage, cms);
-
   }
 
   @override
@@ -54,7 +53,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           title: 'DW & Co. Enteignen',
           theme: DweTheme.themeData,
-          home: ChatWindow(smc)//Navigation()//ChatWindow(smc), //Navigation()
+          home: Navigation()
         ));
   }
 }
