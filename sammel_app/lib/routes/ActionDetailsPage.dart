@@ -51,7 +51,7 @@ class _ActionDetailsPage extends State<ActionDetailsPage> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               SelectableText(
-                  ChronoHelfer.formatDateOfDateTime(widget.action.beginn)),
+                  ChronoHelfer.formatDateOfDateTimeMitWochentag(widget.action.beginn)),
               SelectableText(ChronoHelfer.formatFromToTimeOfDateTimes(
                   widget.action.beginn, widget.action.ende))
             ])

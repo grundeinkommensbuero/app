@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
-import 'package:provider/provider.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
@@ -17,6 +16,7 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/shared/ChatMessageService.dart';
 import 'package:sammel_app/shared/ChatWindow.dart';
+import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/user_data.dart';
@@ -437,11 +437,12 @@ class TermineSeiteState extends State<TermineSeite>
     ***REMOVED***);
   ***REMOVED***
 
-  void openChatWindow(BuildContext context ,Termin terminMitDetails) {
+  void openChatWindow(BuildContext context ,Termin termin) {
 
-    String channel_name = '${terminMitDetails.ort.toString()***REMOVED*** ${terminMitDetails.beginn.toString()***REMOVED***';
-    Channel message_channel = Provider.of<ChatMessageService>(context).get_simple_message_channel(channel_name);
-    Navigator.push(context, MaterialPageRoute(builder: (context) => ChatWindow(message_channel)));
+    String channel_id = '${termin.id***REMOVED***';
+    String chat_name = '${termin.typ***REMOVED*** in ${termin.ort.ort***REMOVED***\n${ChronoHelfer.formatDateOfDateTime(termin.beginn)***REMOVED*** um ${ChronoHelfer.dateTimeToStringHHmmss(termin.beginn)***REMOVED***';
+    Channel message_channel = Provider.of<ChatMessageService>(context).get_simple_message_channel(channel_id);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => ChatWindow(message_channel, chat_name)));
   ***REMOVED***
 
   Future<void> joinAction(Termin termin) async {
