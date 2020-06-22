@@ -157,11 +157,13 @@ class ChatWindowState extends State<ChatWindow>
     ***REMOVED*** else {
       card = Container(constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.8, maxHeight: MediaQuery.of(context).size.height * 0.8),
           child: Card(color: message.message_color, child: Padding(
-              padding: EdgeInsets.only(left:5.0, top: 5.0, right: 5.0, bottom: 5.0), child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children:
+              padding: EdgeInsets.only(left:10.0, top: 8.0, right: 10.0, bottom: 8.0), child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children:
       [
         Text(
           message.sender_name, style: TextStyle(fontWeight: FontWeight.bold),),
-        Text(message.text, textScaleFactor: 1.2,),
+              Padding(
+                  padding: EdgeInsets.only(top: 3.0, bottom: 5.0), child:
+              Text(message.text, textScaleFactor: 1.2,)),
         Text(formatDateTime(message.sending_time), textScaleFactor: 0.8,)
       ]))));
           alignment = Align(child: card, alignment: Alignment.topLeft);
