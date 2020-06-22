@@ -18,6 +18,15 @@ class ChatMessageService implements PushNotificationListener {
     }
   }
 
+  Channel get_simple_message_channel(String name)
+  {
+    if(!channels.containsKey(name))
+      {
+        channels[name] = SimpleMessageChannel(name);
+      }
+    return channels[name];
+  }
+
   void register_channel(Channel channel)
   {
     channels[channel.name] = channel;
