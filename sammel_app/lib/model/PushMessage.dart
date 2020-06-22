@@ -1,7 +1,5 @@
-import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
-import 'package:sammel_app/shared/user_data.dart';
+import 'Message.dart';
 
 class PushMessage {
   List<String> recipients;

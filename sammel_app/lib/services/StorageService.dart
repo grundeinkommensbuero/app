@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:sammel_app/model/TermineFilter.dart';
-import 'package:sammel_app/shared/user_data.dart';
+import 'package:sammel_app/model/User.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageService {
@@ -50,10 +50,6 @@ class StorageService {
         return list != null ? list : [];
       });
 
-  clearAllPreferences() => _prefs.then((prefs) async {
-        prefs.clear();
-      });
-
   // Filter Properties
 
   Future<bool> saveFilter(TermineFilter filter) => prefs
@@ -65,14 +61,18 @@ class StorageService {
         return TermineFilter.fromJSON(jsonDecode(filter));
       });
 
-  Future<bool> saveUser(User user) => prefs
-      .then((prefs) => prefs.setString(_USER, jsonEncode(user.toJson())));
+  // User
+
+  Future<bool> saveUser(User user) =>
+      prefs.then((prefs) => prefs.setString(_USER, jsonEncode(user.toJson())));
 
   Future<User> loadUser() => prefs.then((prefs) {
-    var user = prefs.getString(_USER);
-    if (user == null) return null;
-    return User.fromJSON(jsonDecode(user));
-  });
+        var user = prefs.getString(_USER);
+        if (user == null) return null;
+        return User.fromJSON(jsonDecode(user));
+      });
 
-
+  clearAllPreferences() => _prefs.then((prefs) async {
+        prefs.clear();
+      });
 }

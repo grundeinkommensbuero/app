@@ -8,7 +8,6 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/shared/ChatMessageService.dart';
-import 'package:sammel_app/shared/ChatWindow.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/push_notification_manager.dart';
 import 'package:sammel_app/shared/user_data.dart';
