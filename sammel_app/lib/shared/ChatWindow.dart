@@ -100,7 +100,7 @@ class ChatWindowState extends State<ChatWindow>
                 controller: textEditingController,
                 focusNode: myFocusNode,
                 decoration: InputDecoration.collapsed(
-                  hintText: 'Type your message...',
+                  hintText: 'Nachricht eingeben...',
                   hintStyle: TextStyle(color: Colors.grey),
                 ),
               ),
@@ -148,11 +148,12 @@ class ChatWindowState extends State<ChatWindow>
     if (message.sender_name == user.name) {
       card = Container(constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.8, maxHeight: MediaQuery.of(context).size.height * 0.8),
           child: Card(color: message.message_color, child: Padding(
-              padding: EdgeInsets.only(left:5.0, top: 5.0, right: 5.0, bottom: 5.0), child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children:
+              padding: EdgeInsets.only(left:10.0, top: 8.0, right: 10.0, bottom: 8.0), child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children:
       [
         Text(
           message.sender_name, style: TextStyle(fontWeight: FontWeight.bold),),
-        Text(message.text, textScaleFactor: 1.2,),
+              Padding(
+                  padding: EdgeInsets.only(top: 3.0, bottom: 5.0), child: Text(message.text, textScaleFactor: 1.2,)),
         Text(formatDateTime(message.sending_time), textScaleFactor: 0.8,)
       ]))));
           alignment = Align(child: card, alignment: Alignment.topRight);
@@ -178,13 +179,13 @@ class ChatWindowState extends State<ChatWindow>
       onPressed: () {
         openMemberPage(context);
       ***REMOVED***,),
-      IconButton(
+     /* IconButton(
         icon: const Icon(Icons.arrow_back),
         tooltip: 'Back',
         onPressed: () {
           backArrowPressed(context);
         ***REMOVED***,
-      )
+      )*/
     ]);
   ***REMOVED***
 
@@ -219,9 +220,10 @@ class ChatWindowState extends State<ChatWindow>
         message_color: user.color,
         sender_name: user.name);
     MessagePushData mpd = MessagePushData(message, channel.name);
-    pushService.pushToDevices([
-      'c1IT42MZGJM:APA91bEh1qV_idNeKrusB1Ccl6BeBUB6iSV3e_W4BIOi3BjZTMhMlL5DqvGwOlCCdVa7V6J0nA4PdYeB7jVFhJIQhbedu0w3WqcdBsKiC3q_eoISKQHilBFpaIwuy1cMUzH3bCxWUUpp'
-    ], mpd, PushNotification("New Chat Message", "Open App to view Message"));
+    pushService.pushToDevices(
+      ['cZNkv4W8F4yJIfrrwAEyVF:APA91bE01SmxS-52-VC3sx5T51f529RMPi6Ndgp0oqf1Yt3mkenOj4Qb1GjnbEQUJEYrrG4sCDUo1chWVsWg7jQmWk63YTJRZtRz-MQlYW2aj7CyDhF0MZfMtM3Za62FceKRCHp8Z0ED',
+        'c1IT42MZGJM:APA91bEh1qV_idNeKrusB1Ccl6BeBUB6iSV3e_W4BIOi3BjZTMhMlL5DqvGwOlCCdVa7V6J0nA4PdYeB7jVFhJIQhbedu0w3WqcdBsKiC3q_eoISKQHilBFpaIwuy1cMUzH3bCxWUUpp'],
+     mpd, PushNotification("New Chat Message", "Open App to view Message"));
     textEditingController.clear();
     myFocusNode.unfocus();
   ***REMOVED***
@@ -273,7 +275,12 @@ class ChatWindowState extends State<ChatWindow>
     else if(DateTime.now().difference(date)<Duration(days: 1)){
       return DateFormat('hh:mm').format(date);
     ***REMOVED***
-    return date.toString();
+    else if(DateTime.now().difference(date)<Duration(days: 7))
+      {
+        return DateFormat('EEE, hh:mm').format(date);
+      ***REMOVED***
+
+    return DateFormat('MMM d, hh:mm').format(date);
   ***REMOVED***
 
   void backArrowPressed(BuildContext context) {
