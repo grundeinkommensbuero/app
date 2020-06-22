@@ -1,7 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:sammel_app/model/PushMessage.dart';
 
 class PushNotificationListener
 {
@@ -16,7 +13,6 @@ class PushNotificationsManager {
 
   static final PushNotificationsManager _instance = PushNotificationsManager._();
 
-  final Firestore _db = Firestore.instance;
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   bool _initialized = false;
