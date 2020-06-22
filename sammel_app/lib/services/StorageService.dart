@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:sammel_app/model/TermineFilter.dart';
+import 'package:sammel_app/shared/user_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageService {
@@ -12,6 +13,7 @@ class StorageService {
   static const String _ACTION = 'action';
   static const String _ACTIONLIST = 'actionlist';
   static const String _FILTER = 'filter';
+  static const String _USER = 'user';
 
   StorageService() {
     _prefs = SharedPreferences.getInstance();
@@ -62,4 +64,15 @@ class StorageService {
         if (filter == null) return TermineFilter.leererFilter();
         return TermineFilter.fromJSON(jsonDecode(filter));
       ***REMOVED***);
+
+  Future<bool> saveUser(User user) => prefs
+      .then((prefs) => prefs.setString(_USER, jsonEncode(user.toJson())));
+
+  Future<User> loadUser() => prefs.then((prefs) {
+    var user = prefs.getString(_USER);
+    if (user == null) return null;
+    return User.fromJSON(jsonDecode(user));
+  ***REMOVED***);
+
+
 ***REMOVED***

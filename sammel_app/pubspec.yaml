@@ -40,6 +40,11 @@ dependencies:
   flutter_map: ^0.8.2
   latlong: ^0.6.1
   url_launcher: ^5.4.2
+  firebase_messaging: ^6.0.13
+  firebase_core: ^0.4.0
+  firebase_auth: ^0.11.1+6
+  cloud_firestore: ^0.12.5
+  google_sign_in: ^4.4.4
   user_location: any
   permission_handler: ^5.0.0+hotfix.4
 

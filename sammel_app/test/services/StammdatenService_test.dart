@@ -1,7 +1,6 @@
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/services/BackendService.dart';
-import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:test/test.dart';
 
@@ -63,16 +62,6 @@ void main() {
       expect(result[2].ort, 'Treptower Park');
       expect(result[2].lattitude, 52.49653);
       expect(result[2].longitude, 13.43762);
-    ***REMOVED***);
-
-    test('throws error on non-200 status code', () {
-      when(mock.get(any)).thenAnswer(
-              (_) async =>
-              HttpClientResponseBodyMock('Dies ist ein Fehler', 400));
-
-      expect(
-              () => service.ladeOrte(),
-          throwsA((RestFehler e) => e is RestFehler));
     ***REMOVED***);
 
     test('can handle empty lists', () async {

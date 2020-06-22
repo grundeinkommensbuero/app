@@ -1,6 +1,5 @@
 import 'package:http_server/http_server.dart';
 import 'package:sammel_app/model/Ort.dart';
-import 'package:sammel_app/services/RestFehler.dart';
 
 import 'BackendService.dart';
 
@@ -16,15 +15,11 @@ class StammdatenService extends AbstractStammdatenService {
   Future<List<Ort>> ladeOrte() async {
     HttpClientResponseBody response =
         await backend.get('/service/stammdaten/orte');
-    if (response.response.statusCode == 200) {
-      final orte = (response.body as List)
-          .map((jsonOrt) => Ort.fromJson(jsonOrt))
-          .toList();
-      return orte;
-    ***REMOVED*** else {
-      throw RestFehler('Unerwarteter Fehler: '
-          "${response.response.statusCode***REMOVED*** - ${response.body***REMOVED***");
-    ***REMOVED***
+
+    final orte = (response.body as List)
+        .map((jsonOrt) => Ort.fromJson(jsonOrt))
+        .toList();
+    return orte;
   ***REMOVED***
 ***REMOVED***
 

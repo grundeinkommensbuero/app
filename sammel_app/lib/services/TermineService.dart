@@ -49,49 +49,22 @@ class TermineService extends AbstractTermineService {
     ActionWithToken actionWithToken = ActionWithToken(termin, token);
     var response =
         await post('service/termine/neu', jsonEncode(actionWithToken));
-    if (response.response.statusCode == 200) {
-      return Termin.fromJson(response.body);
-    ***REMOVED*** else {
-      try {
-        throw RestFehler.fromJson(response.body);
-      ***REMOVED*** catch (_) {
-        throw RestFehler(response.body);
-      ***REMOVED***
-    ***REMOVED***
+    return Termin.fromJson(response.body);
   ***REMOVED***
 
   @override
-  Future<Termin> getTerminMitDetails(int id) {
-    return get('service/termine/termin?id=' + id.toString()).then((response) {
-      if (response.response.statusCode == 200)
-        return Termin.fromJson(response.body);
-      else
-        throw RestFehler('${response.response.statusCode***REMOVED*** - '
-            '${RestFehler.fromJson(response.body)***REMOVED***');
-    ***REMOVED***);
+  Future<Termin> getTerminMitDetails(int id) async {
+    var response = await get('service/termine/termin?id=' + id.toString());
+    return Termin.fromJson(response.body);
   ***REMOVED***
 
-  Future<void> saveAction(Termin action, String token) async {
-    var response = await post(
-        'service/termine/termin', jsonEncode(ActionWithToken(action, token)));
-    if (response.response.statusCode == 200) {
-      return;
-    ***REMOVED***
-    if (response.response.statusCode == 403) {
-      throw AuthFehler.fromJson(response.body);
-    ***REMOVED***
-    throw RestFehler.fromJson(response.body);
+  Future<void> saveAction(Termin action, String token) {
+    post('service/termine/termin', jsonEncode(ActionWithToken(action, token)));
   ***REMOVED***
 
-  deleteAction(Termin action, String token) async {
-    var response = await delete(
+  deleteAction(Termin action, String token) {
+    delete(
         'service/termine/termin', jsonEncode(ActionWithToken(action, token)));
-    if (response.response.statusCode == 403) {
-      throw AuthFehler.fromJson(response.body);
-    ***REMOVED***
-    if (response.response.statusCode != 200) {
-      throw RestFehler.fromJson(response.body);
-    ***REMOVED***
   ***REMOVED***
 ***REMOVED***
 
