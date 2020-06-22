@@ -204,29 +204,34 @@ class TermineSeiteState extends State<TermineSeite>
               builder: (BuildContext context, setDialogState) => SimpleDialog(
                 titlePadding: EdgeInsets.zero,
                 backgroundColor: determineColor(terminMitDetails),
-                title: AppBar(
-                    leading: null,
-                    automaticallyImplyLeading: false,
-                    title: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Image.asset(terminMitDetails.getAsset(),
-                              width: 30.0),
-                          Container(width: 10.0),
-                          Text(terminMitDetails.typ,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 22.0,
-                                  color: Color.fromARGB(255, 129, 28, 98))),
-                        ])),
-                key: Key('termin details dialog'),
-                contentPadding: EdgeInsets.all(10.0),
-                children: <Widget>[
-                  ActionDetailsPage(terminMitDetails),
-                  Row(                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[RaisedButton(key: Key('open chat window'), child: Text('Zum Chat'), onPressed: () => openChatWindow(context, terminMitDetails)),],),
-                  Row(                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              title: AppBar(
+                  leading: null,
+                  automaticallyImplyLeading: false,
+                  title: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Image.asset(terminMitDetails.getAsset(), width: 30.0),
+                        Container(width: 10.0),
+                        Text(terminMitDetails.typ,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 22.0,
+                                color: Color.fromARGB(255, 129, 28, 98))),
+                      ])),
+              key: Key('termin details dialog'),
+              contentPadding: EdgeInsets.all(10.0),
+              children: <Widget>[
+                ActionDetailsPage(terminMitDetails),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    RaisedButton(
+                        key: Key('open chat window'),
+                        child: Text('Zum Chat'),
+                        onPressed: () => openChatWindow(terminMitDetails)),
+                  ],
+                ),Row(                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[RaisedButton(key: Key('open chat window'), child: Text('Zum Chat'), onPressed: () => openChatWindow(context, terminMitDetails)),],),
                 Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -437,12 +442,14 @@ class TermineSeiteState extends State<TermineSeite>
     });
   }
 
-  void openChatWindow(BuildContext context ,Termin termin) {
-
+  void openChatWindow(Termin termin) {
     String channel_id = '${termin.id}';
-    String chat_name = '${termin.typ} in ${termin.ort.ort}\n${ChronoHelfer.formatDateOfDateTime(termin.beginn)} um ${ChronoHelfer.dateTimeToStringHHmmss(termin.beginn)}';
-    Channel message_channel = Provider.of<ChatMessageService>(context).get_simple_message_channel(channel_id);
-    Navigator.push(context, MaterialPageRoute(builder: (context) => ChatWindow(message_channel, chat_name)));
+    Channel message_channel = Provider.of<ChatMessageService>(context)
+        .get_simple_message_channel(channel_id);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ChatWindow(message_channel, termin)));
   }
 
   Future<void> joinAction(Termin termin) async {
