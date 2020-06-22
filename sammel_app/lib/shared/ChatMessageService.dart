@@ -1,3 +1,4 @@
+import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/shared/push_notification_manager.dart';
 import 'package:sammel_app/shared/user_data.dart';
