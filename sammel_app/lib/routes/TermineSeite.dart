@@ -15,9 +15,9 @@ import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
-import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChatMessageService.dart';
 import 'package:sammel_app/shared/ChatWindow.dart';
+import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/user_data.dart';
 import 'package:uuid/uuid.dart';
@@ -226,7 +226,9 @@ class TermineSeiteState extends State<TermineSeite>
                   ActionDetailsPage(terminMitDetails),
                   Row(                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[RaisedButton(key: Key('open chat window'), child: Text('Zum Chat'), onPressed: () => openChatWindow(context, terminMitDetails)),],),
-                  Row(
+                  Row(                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: <Widget>[RaisedButton(key: Key('open chat window'), child: Text('Zum Chat'), onPressed: () => openChatWindow(context, terminMitDetails)),],),
+                Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children:
                             addEditDeleteButtonsIfMyAction(termin, context)
@@ -433,6 +435,13 @@ class TermineSeiteState extends State<TermineSeite>
     setState(() {
       navigation = 1; // change to map view
     });
+  }
+
+  void openChatWindow(BuildContext context ,Termin terminMitDetails) {
+
+    String channel_name = '${terminMitDetails.ort.toString()} ${terminMitDetails.beginn.toString()}';
+    Channel message_channel = Provider.of<ChatMessageService>(context).get_simple_message_channel(channel_name);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => ChatWindow(message_channel)));
   }
 
   Future<void> joinAction(Termin termin) async {
