@@ -7,6 +7,7 @@ import 'package:sammel_app/services/PushService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
+import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChatMessageService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/push_notification_manager.dart';
@@ -17,43 +18,47 @@ void main() {
   runApp(MyApp());
 ***REMOVED***
 
-
 const Mode mode = Mode.LOCAL;
 
 class MyApp extends StatelessWidget {
-
   PushNotificationsManager pnm = PushNotificationsManager();
-  ChatMessageService cms = ChatMessageService();
+  static var termineService =
+      demoMode ? DemoTermineService() : TermineService();
+  static var stammdatenService =
+      demoMode ? DemoStammdatenService() : StammdatenService();
+  static var listLocationService =
+      demoMode ? DemoListLocationService() : ListLocationService();
+  static var storageService = StorageService();
+  static var pushService = demoMode ? DemoPushService() : PushService();
+  static var chatMessageService = ChatMessageService();
+  static var userService = UserService(storageService);
 
   MyApp() {
     pnm.init();
-    pnm.register_message_callback(PushDataTypes.SimpleChatMessage, cms);
+    pnm.register_message_callback(
+        PushDataTypes.SimpleChatMessage, chatMessageService);
   ***REMOVED***
 
   @override
   Widget build(BuildContext context) {
     SimpleMessageChannel smc = SimpleMessageChannel('SimpleMessageChannel');
-    cms.register_channel(smc);
+    chatMessageService.register_channel(smc);
 
     return MultiProvider(
         providers: [
-          Provider<AbstractTermineService>.value(
-              value: demoMode ? DemoTermineService() : TermineService()),
-          Provider<AbstractStammdatenService>.value(
-              value: demoMode ? DemoStammdatenService() : StammdatenService()),
+          Provider<AbstractTermineService>.value(value: termineService),
+          Provider<AbstractStammdatenService>.value(value: stammdatenService),
           Provider<AbstractListLocationService>.value(
-              value:
-                  demoMode ? DemoListLocationService() : ListLocationService()),
-          Provider<StorageService>.value(value: StorageService()),
-          Provider<PushService>.value(
-              value: demoMode ? DemoPushService() : PushService()),
-         Provider<PushNotificationsManager>.value(value: pnm),
-         Provider<ChatMessageService>.value(value: cms)],
+              value: listLocationService),
+          Provider<StorageService>.value(value: storageService),
+          Provider<PushService>.value(value: pushService),
+          Provider<PushNotificationsManager>.value(value: pnm),
+          Provider<ChatMessageService>.value(value: chatMessageService)
+        ],
         child: MaterialApp(
-          title: 'DW & Co. Enteignen',
-          theme: DweTheme.themeData,
-          home: Navigation()
-        ));
+            title: 'DW & Co. Enteignen',
+            theme: DweTheme.themeData,
+            home: Navigation()));
   ***REMOVED***
 ***REMOVED***
 
