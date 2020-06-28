@@ -3,6 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 
+class PushNotificationListener
+{
+  void receive_message(Map<dynamic, dynamic> data){}
+}
+
 class PushNotificationsManager {
 
   PushNotificationsManager._();
@@ -47,7 +52,7 @@ class PushNotificationsManager {
      }
   }
 
-  void register_message_callback(String id, Function callback)
+  void register_message_callback(String id, PushNotificationListener callback)
   {
     this.callback_map[id] = callback;
   }

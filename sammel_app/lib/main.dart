@@ -8,12 +8,18 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/shared/ChatMessageService.dart';
-import 'package:sammel_app/shared/ChatWindow.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/user_data.dart';
 
+import 'shared/push_notification_manager.dart';
+
 
 const Mode mode = Mode.LOCAL;
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
 
@@ -29,7 +35,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     SimpleMessageChannel smc = SimpleMessageChannel('SimpleMessageChannel');
     cms.register_channel(smc);
-
+  
     return MultiProvider(
         providers: [
           Provider<AbstractTermineService>.value(
