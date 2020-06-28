@@ -14,6 +14,7 @@ class StorageService {
   static const String _ACTIONLIST = 'actionlist';
   static const String _FILTER = 'filter';
   static const String _USER = 'user';
+  static const String _SECRET = 'secret';
 
   StorageService() {
     _prefs = SharedPreferences.getInstance();
@@ -75,4 +76,10 @@ class StorageService {
   clearAllPreferences() => _prefs.then((prefs) async {
         prefs.clear();
       });
+
+  Future<String> loadSecret() =>
+      prefs.then((prefs) => prefs.getString(_SECRET));
+
+  Future<void> saveSecret(String secret) =>
+      prefs.then((prefs) => prefs.setString(_SECRET, secret));
 }

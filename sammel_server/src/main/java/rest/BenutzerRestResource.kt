@@ -91,20 +91,22 @@ open class BenutzerRestResource {
                     .build()
         }
         if (credentials == null) {
+            LOG.info("Login mit unbekanntem Benutzer ${login.user.id}")
             return Response
-                    .status(401)
-                    .entity(RestFehlermeldung("Unbekannter Benutzer"))
+                    .ok()
+                    .entity(false)
                     .build()
         }
         if (!security.verifiziereSecretMitHash(login.secret, HashMitSalt(credentials.secret, credentials.salt))) {
             LOG.info("Falscher Login mit Benutzer ${login.user.id}")
             return Response
-                    .status(401)
-                    .entity(RestFehlermeldung("Nutzername und Passwort stimmen nicht überein"))
+                    .ok()
+                    .entity(false)
                     .build()
         }
         return Response
                 .ok()
+                .entity(true)
                 .build()
     }
 }

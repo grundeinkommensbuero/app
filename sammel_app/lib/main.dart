@@ -21,7 +21,7 @@ void main() {
 const Mode mode = Mode.LOCAL;
 
 class MyApp extends StatelessWidget {
-  PushNotificationsManager pnm = PushNotificationsManager();
+  static var pushNotificationManager = PushNotificationsManager();
   static var termineService =
       demoMode ? DemoTermineService() : TermineService();
   static var stammdatenService =
@@ -31,11 +31,11 @@ class MyApp extends StatelessWidget {
   static var storageService = StorageService();
   static var pushService = demoMode ? DemoPushService() : PushService();
   static var chatMessageService = ChatMessageService();
-  static var userService = UserService(storageService);
+  static var userService = UserService(storageService, pushNotificationManager);
 
   MyApp() {
-    pnm.init();
-    pnm.register_message_callback(
+    pushNotificationManager.init();
+    pushNotificationManager.register_message_callback(
         PushDataTypes.SimpleChatMessage, chatMessageService);
   }
 
@@ -52,7 +52,8 @@ class MyApp extends StatelessWidget {
               value: listLocationService),
           Provider<StorageService>.value(value: storageService),
           Provider<PushService>.value(value: pushService),
-          Provider<PushNotificationsManager>.value(value: pnm),
+          Provider<PushNotificationsManager>.value(
+              value: pushNotificationManager),
           Provider<ChatMessageService>.value(value: chatMessageService)
         ],
         child: MaterialApp(

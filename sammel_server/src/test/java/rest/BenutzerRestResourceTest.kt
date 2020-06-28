@@ -162,9 +162,8 @@ class BenutzerRestResourceTest {
         val response = resource.authentifiziereBenutzer(Login("falsch", "AAAAAAAA", BenutzerDto(1L, "Karl Marx")))
 
         verify(security, times(1)).verifiziereSecretMitHash(anyString(), any())
-        assertEquals(response.status, 401)
-        assertEquals(response.entity is RestFehlermeldung, true)
-        assertEquals((response.entity as RestFehlermeldung).meldung, "Nutzername und Passwort stimmen nicht überein")
+        assertEquals(response.status, 200)
+        assertEquals(response.entity, false)
     }
 
     @Test
@@ -172,9 +171,8 @@ class BenutzerRestResourceTest {
         whenever(dao.getCredentials(1L)).thenReturn(null)
         val response = resource.authentifiziereBenutzer(Login("falsch", "AAAAAAAA", BenutzerDto(1L, "Karl Marx")))
 
-        assertEquals(response.status, 401)
-        assertEquals(response.entity is RestFehlermeldung, true)
-        assertEquals((response.entity as RestFehlermeldung).meldung, "Unbekannter Benutzer")
+        assertEquals(response.status, 200)
+        assertEquals(response.entity, false)
     }
 
     @Test

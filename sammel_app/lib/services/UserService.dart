@@ -1,14 +1,22 @@
 import 'dart:convert';
+import 'dart:math';
+import 'dart:ui';
 
+import 'package:sammel_app/model/Login.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/StorageService.dart';
+import 'package:sammel_app/shared/push_notification_manager.dart';
+import 'package:uuid/uuid.dart';
 
 class UserService extends BackendService {
   StorageService storageService;
+  PushNotificationsManager firebase;
   Future<User> user;
 
-  UserService(StorageService this.storageService, [Backend backend])
+  UserService(StorageService this.storageService,
+      PushNotificationsManager this.firebase,
+      [Backend backend])
       : super(backend) {
     user = determineUser();
   }
@@ -22,22 +30,46 @@ class UserService extends BackendService {
   }
 
   Future<User> createNewUser() async {
-    var response = await post(
-        'service/benutzer/neu', jsonEncode(User(0, null, null).toJson()));
+    String secret = await generateSecret();
+    String firebaseKey = await firebase.firebaseToken;
+    Color color = _randomColor();
+    User user = User(0, null, color);
+
+    Login login = Login(user, secret, firebaseKey);
+    var response =
+        await post('service/benutzer/neu', jsonEncode(login.toJson()));
     var userFromServer = User.fromJSON(jsonDecode(response.body));
+
     storageService.saveUser(userFromServer);
+
     return userFromServer;
   }
 
   Future<User> verifyUser(User user) async {
+    String secret = await storageService.loadSecret();
+    String firebaseKey = await firebase.firebaseToken;
+
+    Login login = Login(user, secret, firebaseKey);
     var response = await post(
-        'service/benutzer/authentifiziere', jsonEncode(user.toJson()));
+        'service/benutzer/authentifiziere', jsonEncode(login.toJson()));
     bool authenticated = response.body;
     if (authenticated)
       return user;
     else
       throw InvalidUserException();
   }
+
+  Future<String> generateSecret() async {
+    String secret = Uuid().v1();
+    await storageService.saveSecret(secret);
+    return secret;
+  }
+}
+
+Color _randomColor() {
+  var rng = new Random();
+  var values = new List.generate(3, (_) => rng.nextInt(256));
+  Color.fromRGBO(values[0], values[1], values[2], 0.5);
 }
 
 class InvalidUserException implements Exception {}
