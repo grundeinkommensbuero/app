@@ -7,8 +7,6 @@ import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
-import 'package:sammel_app/services/AuthFehler.dart';
-import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/BackendService.dart';
 
 abstract class AbstractTermineService extends BackendService {
@@ -31,18 +29,10 @@ class TermineService extends AbstractTermineService {
   Future<List<Termin>> ladeTermine(TermineFilter filter) async {
     HttpClientResponseBody response =
         await post('/service/termine', jsonEncode(filter));
-    if (response.response.statusCode == 200) {
-      final termine = (response.body as List)
-          .map((jsonTermin) => Termin.fromJson(jsonTermin))
-          .toList();
-      // Sortierung auf Client-Seite um Server und Datenbank skalierbar zu halten
-      return termine;
-    }
-    if (response.response.statusCode == 403) {
-      throw AuthFehler.fromJson(response.body);
-    }
-    // else
-    throw RestFehler.fromJson(response.body);
+    final termine = (response.body as List)
+        .map((jsonTermin) => Termin.fromJson(jsonTermin))
+        .toList();
+    return termine;
   }
 
   Future<Termin> createTermin(Termin termin, String token) async {

@@ -8,6 +8,7 @@ import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/routes/ActionMap.dart';
+import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StorageService.dart';
@@ -163,7 +164,7 @@ class TermineSeiteState extends State<TermineSeite>
       setState(() {
         this.termine = termine..sort(Termin.compareByStart);
       });
-    });
+    }).catchError((e) => ErrorService.handleError(e));
   }
 
   void showRestError(RestFehler e) {
