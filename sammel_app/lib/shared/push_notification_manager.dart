@@ -15,7 +15,7 @@ class PushNotificationsManager {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   bool _initialized = false;
-  Map<String, PushNotificationListener> callback_map = Map();
+  Map callback_map = Map();
 
   Future<String> get firebaseToken async => await _firebaseMessaging.getToken();
 
@@ -37,10 +37,21 @@ class PushNotificationsManager {
       // For testing purposes print the Firebase Messaging token
       String token = await _firebaseMessaging.getToken();
       print("FirebaseMessaging token: $token");
+
       _initialized = true;
     }
   }
 
+  void onMessageCallback(Map<String, dynamic> message) async
+  {
+     Map<String, dynamic> data = message['data'];
+     if(data.containsKey('type')) {
+       String type = data['type'];
+       if (callback_map.containsKey(type)) {
+         data.remove('type');
+         callback_map[type](data);
+       }
+     }
   void onMessageCallback(Map<String, dynamic> message) async {
     print('message received' + message.toString());
     Map<dynamic, dynamic> data = message['data'];
@@ -57,11 +68,4 @@ class PushNotificationsManager {
     this.callback_map[id] = callback;
   }
 
-  void subscribeToChannel(String topic) async {
-    _firebaseMessaging.subscribeToTopic(topic);
-  }
-
-  void unsubscribeFromChannel(String topic) async {
-    _firebaseMessaging.unsubscribeFromTopic(topic);
-  }
 }

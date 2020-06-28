@@ -71,31 +71,25 @@ class NavigationState extends State<Navigation>
     return WillPopScope(
       onWillPop: () => navigateBack(),
       child: Scaffold(
-        drawerScrimColor: Colors.black26,
-        drawer: buildDrawer(),
-        appBar: AppBar(
-            title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text(titles[navigation]),
-            Image.asset('assets/images/logo.png', width: 50.0)
-          ],
-        )),
-        body: Container(
-          color: DweTheme.yellowLight,
-          child: FadeTransition(
-            opacity: _fade,
-            child: SlideTransition(
-                position: _slide,
-                child: IndexedStack(children: pages, index: navigation)),
-          ),
-        ),
-        floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.send),
-            onPressed: () => pushService.pushToDevices([
-                  '<CLIENT_KEY>'
-                ], ExampleData('infos'), PushNotification("Titel", "Inhalt"))),
-      ),
+          drawerScrimColor: Colors.black26,
+          drawer: buildDrawer(),
+          appBar: AppBar(
+              title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(titles[navigation]),
+              Image.asset('assets/images/logo.png', width: 50.0)
+            ],
+          )),
+          body: Container(
+            color: DweTheme.yellowLight,
+            child: FadeTransition(
+              opacity: _fade,
+              child: SlideTransition(
+                  position: _slide,
+                  child: IndexedStack(children: pages, index: navigation)),
+            ),
+          )),
     );
   }
 
