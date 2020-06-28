@@ -4,20 +4,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/User.dart';
+import 'package:sammel_app/services/BackendService.dart';
+import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
+import 'package:sammel_app/shared/push_notification_manager.dart';
 
 import '../shared/Mocks.dart';
 
 void main() {
-  var storageService = StorageServiceMock();
-  var backendMock = BackendMock();
+  StorageService storageService;
+  PushNotificationsManager firebase;
+  Backend backendMock;
 
   group('initialially', () {
     setUp(() {
       storageService = StorageServiceMock();
       backendMock = BackendMock();
+      firebase = PushNotificationsManagerMock();
+
+      //defaults
       when(storageService.loadUser())
           .thenAnswer((_) async => User(1, 'Karl Marx', Colors.red));
+      when(storageService.loadSecret()).thenAnswer((_) async => 'secret');
+      when(firebase.firebaseToken).thenAnswer((_) async => 'firebaseToken');
       when(backendMock.post('service/benutzer/authentifiziere', any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(true, 200));
       when(backendMock.post('service/benutzer/neu', any)).thenAnswer(
@@ -26,7 +35,7 @@ void main() {
     ***REMOVED***);
 
     test('loads user from storage', () async {
-      UserService(storageService, backendMock);
+      UserService(storageService, firebase, backendMock);
 
       verify(storageService.loadUser()).called(1);
     ***REMOVED***);
@@ -34,20 +43,27 @@ void main() {
     test('registers new user to server, if none stored', () async {
       when(storageService.loadUser()).thenAnswer((_) async => null);
 
-      UserService(storageService, backendMock);
+      UserService(storageService, firebase, backendMock);
 
       await Future.delayed(Duration(milliseconds: 10));
 
-      verify(backendMock.post(
-              'service/benutzer/neu', jsonEncode(User(0, null, null).toJson())))
-          .called(1);
+      var login = jsonDecode(
+          verify(backendMock.post('service/benutzer/neu', captureAny))
+              .captured
+              .single);
+
+      expect(login['user']['id'], 0);
+      expect(login['user']['name'], isNull);
+      expect(login['user']['color'], isNull);
+      expect(login['secret'], isNotEmpty);
+      expect(login['firebaseKey'], 'firebaseToken');
     ***REMOVED***);
 
     test('saves new user to storage', () async {
       var user = User(1, '', Colors.red);
       when(storageService.loadUser()).thenAnswer((_) async => null);
 
-      UserService(storageService, backendMock);
+      UserService(storageService, firebase, backendMock);
 
       await Future.delayed(Duration(milliseconds: 100));
 
@@ -59,7 +75,7 @@ void main() {
     test('verifies stored user', () async {
       var user = User(1, 'Karl Marx', Colors.red);
 
-      UserService(storageService, backendMock);
+      UserService(storageService, firebase, backendMock);
 
       await Future.delayed(Duration(milliseconds: 100));
 
@@ -67,20 +83,22 @@ void main() {
               backendMock.post('service/benutzer/authentifiziere', captureAny))
           .captured
           .single;
-      expect(equals(User.fromJSON(jsonDecode(argument)), user), true);
+      expect(equals(User.fromJSON(jsonDecode(argument)['user']), user), true);
+      expect(jsonDecode(argument)['secret'], 'secret');
+      expect(jsonDecode(argument)['firebaseKey'], 'firebaseToken');
     ***REMOVED***);
 
     test('serves created user', () async {
       when(storageService.loadUser()).thenAnswer((_) async => null);
 
-      var userService = UserService(storageService, backendMock);
+      var userService = UserService(storageService, firebase, backendMock);
 
-      userService.user
-          .then((user) => expect(equals(user, User(1, '', Colors.red)), isTrue));
+      userService.user.then(
+          (user) => expect(equals(user, User(1, '', Colors.red)), isTrue));
     ***REMOVED***);
 
     test('serves verified user', () async {
-      var userService = UserService(storageService, backendMock);
+      var userService = UserService(storageService, firebase, backendMock);
 
       userService.user.then((user) =>
           expect(equals(user, User(1, 'Karl Marx', Colors.red)), isTrue));
@@ -90,7 +108,7 @@ void main() {
       when(backendMock.post('service/benutzer/authentifiziere', any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(false, 200));
 
-      var userService = UserService(storageService, backendMock);
+      var userService = UserService(storageService, firebase, backendMock);
 
       expect(() => userService.user, throwsA((e) => e is InvalidUserException));
     ***REMOVED***);

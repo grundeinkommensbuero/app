@@ -179,4 +179,25 @@ void main() async {
       expect(readFilter.orte.length, 0);
     ***REMOVED***);
   ***REMOVED***);
+
+  group('secret', () {
+    test('is stored correctly', () async {
+      await service.saveSecret("123789456");
+
+      expect(_prefs.containsKey('secret'), true);
+      expect(_prefs.getString("secret"), "123789456");
+    ***REMOVED***);
+
+    test('is read correctly', () async {
+      await _prefs.setString('secret', '123789456');
+
+      var secret = await service.loadSecret();
+
+      expect(secret, '123789456');
+    ***REMOVED***);
+  ***REMOVED***);
+
+  group('user',  () {
+    //TODO
+  ***REMOVED***);
 ***REMOVED***
