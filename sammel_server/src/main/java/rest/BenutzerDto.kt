@@ -4,8 +4,8 @@ import database.benutzer.Benutzer
 
 // NUR FÜR REGISTRIERUNG/AUTHENTIFIZIERUNG BENUTZEN!
 data class Login(
-        var secret: String = "",
-        var firebaseKey: String = "",
+        var secret: String? = null,
+        var firebaseKey: String? = null,
         var user: BenutzerDto = BenutzerDto()) {
 }
 
