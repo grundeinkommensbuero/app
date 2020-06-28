@@ -31,7 +31,7 @@ void main() {
           .thenAnswer((_) async => HttpClientResponseBodyMock(true, 200));
       when(backendMock.post('service/benutzer/neu', any)).thenAnswer(
           (_) async => HttpClientResponseBodyMock(
-              jsonEncode(User(1, '', Colors.red).toJson()), 200));
+              User(1, '', Colors.red).toJson(), 200));
     ***REMOVED***);
 
     test('loads user from storage', () async {
@@ -54,7 +54,7 @@ void main() {
 
       expect(login['user']['id'], 0);
       expect(login['user']['name'], isNull);
-      expect(login['user']['color'], isNull);
+      expect(login['user']['color'], isNotNull);
       expect(login['secret'], isNotEmpty);
       expect(login['firebaseKey'], 'firebaseToken');
     ***REMOVED***);
