@@ -8,7 +8,7 @@ Future showErrorDialog(BuildContext context, String title, RestFehler error,
       builder: (_) => AlertDialog(
             key: key,
             title: Text(title),
-            content: Text(error.message()),
+            content: Text(error.message),
             actions: <Widget>[
               RaisedButton(
                 key: Key('error dialog close button'),
