@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:sammel_app/model/Login.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/BackendService.dart';
@@ -10,10 +11,15 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/push_notification_manager.dart';
 import 'package:uuid/uuid.dart';
 
-class UserService extends BackendService {
+abstract class AbstractUserService extends BackendService {
+  Future<User> user;
+
+  AbstractUserService([Backend backend]) : super(backend);
+***REMOVED***
+
+class UserService extends AbstractUserService {
   StorageService storageService;
   PushNotificationsManager firebase;
-  Future<User> user;
 
   UserService(StorageService this.storageService,
       PushNotificationsManager this.firebase,
@@ -85,3 +91,9 @@ Color _randomColor() {
 ***REMOVED***
 
 class InvalidUserException implements Exception {***REMOVED***
+
+class DemoUserService extends AbstractUserService {
+  DemoUserService() : super() {
+    user = Future.value(User(1, 'Karl Marx', Colors.red));
+  ***REMOVED***
+***REMOVED***
