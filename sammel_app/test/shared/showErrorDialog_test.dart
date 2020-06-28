@@ -31,7 +31,7 @@ main() {
     expect(find.text('Titel'), findsOneWidget);
     expect(
         find.text(
-            'there is a reason for everything\n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com'),
+            'there is a reason for everything\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com'),
         findsOneWidget);
   });
 
