@@ -1,6 +1,7 @@
 package rest
 
 import services.FirebaseService
+import services.FirebaseService.MissingMessageTarget
 import java.lang.Exception
 import javax.ejb.EJB
 import javax.ws.rs.Consumes
@@ -20,7 +21,7 @@ open class PushNotificationResource {
     @Path("devices")
     @POST
     open fun pushToDevices(nachricht: PushMessageDto) {
-        if (nachricht.recipients.isNullOrEmpty())
+        if (nachricht.recipients == null)
             throw MissingMessageTarget("Die Nachricht enthält keine Empfänger")
         firebase.sendePushNachrichtAnEmpfaenger(nachricht.notification, nachricht.data, nachricht.recipients!!)
     ***REMOVED***
@@ -28,10 +29,8 @@ open class PushNotificationResource {
     @Path("topic")
     @POST
     open fun pushToTopic(nachricht: PushMessageDto) {
-        if (nachricht.topic.isNullOrEmpty())
+        if (nachricht.topic == null)
             throw MissingMessageTarget("Die Nachricht enthält kein Topic")
         firebase.sendePushNachrichtAnTopic(nachricht.notification, nachricht.data, nachricht.topic!!)
     ***REMOVED***
-
-    class MissingMessageTarget(message: String) : Exception(message)
 ***REMOVED***
