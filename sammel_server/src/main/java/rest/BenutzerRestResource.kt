@@ -26,7 +26,7 @@ open class BenutzerRestResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun legeNeuenBenutzerAn(login: Login): Response {
-        val benutzer = login.benutzer
+        val benutzer = login.user
         if (login.secret.isEmpty()) {
             return Response
                     .status(412)
@@ -41,7 +41,7 @@ open class BenutzerRestResource {
         ***REMOVED***
 
         // Zum Vermeiden optisch ähnlicher Namen
-        login.benutzer.name = login.benutzer.name?.trim()
+        login.user.name = login.user.name?.trim()
 
         if(benutzer.name != null && dao.benutzernameExistiert(benutzer.name!!)) {
             return Response
@@ -68,7 +68,7 @@ open class BenutzerRestResource {
     @Path("authentifiziere")
     @Produces(APPLICATION_JSON)
     open fun authentifiziereBenutzer(login: Login): Response {
-        val benutzer = login.benutzer
+        val benutzer = login.user
         if (benutzer.id == null) {
             return Response
                     .status(412)
@@ -97,7 +97,7 @@ open class BenutzerRestResource {
                     .build()
         ***REMOVED***
         if (!security.verifiziereSecretMitHash(login.secret, HashMitSalt(credentials.secret, credentials.salt))) {
-            LOG.info("Falscher Login mit Benutzer ${login.benutzer.id***REMOVED***")
+            LOG.info("Falscher Login mit Benutzer ${login.user.id***REMOVED***")
             return Response
                     .status(401)
                     .entity(RestFehlermeldung("Nutzername und Passwort stimmen nicht überein"))

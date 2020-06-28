@@ -17,12 +17,12 @@ void main() {
       storageService = StorageServiceMock();
       backendMock = BackendMock();
       when(storageService.loadUser())
-          .thenAnswer((_) async => User("Karl Marx", "1", Colors.red));
+          .thenAnswer((_) async => User(1, 'Karl Marx', Colors.red));
       when(backendMock.post('service/benutzer/authentifiziere', any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(true, 200));
       when(backendMock.post('service/benutzer/neu', any)).thenAnswer(
           (_) async => HttpClientResponseBodyMock(
-              jsonEncode(User('', "1", Colors.red).toJson()), 200));
+              jsonEncode(User(1, '', Colors.red).toJson()), 200));
     ***REMOVED***);
 
     test('loads user from storage', () async {
@@ -38,13 +38,13 @@ void main() {
 
       await Future.delayed(Duration(milliseconds: 10));
 
-      verify(backendMock.post('service/benutzer/neu',
-              jsonEncode(User('', null, null).toJson())))
+      verify(backendMock.post(
+              'service/benutzer/neu', jsonEncode(User(0, null, null).toJson())))
           .called(1);
     ***REMOVED***);
 
     test('saves new user to storage', () async {
-      var user = User('', "1", Colors.red);
+      var user = User(1, '', Colors.red);
       when(storageService.loadUser()).thenAnswer((_) async => null);
 
       UserService(storageService, backendMock);
@@ -53,11 +53,11 @@ void main() {
 
       var argument =
           verify(storageService.saveUser(captureAny)).captured.single as User;
-      expect(argument.equals(user), true);
+      expect(equals(argument, user), true);
     ***REMOVED***);
 
     test('verifies stored user', () async {
-      var user = User('Karl Marx', "1", Colors.red);
+      var user = User(1, 'Karl Marx', Colors.red);
 
       UserService(storageService, backendMock);
 
@@ -67,7 +67,7 @@ void main() {
               backendMock.post('service/benutzer/authentifiziere', captureAny))
           .captured
           .single;
-      expect(User.fromJSON(jsonDecode(argument)).equals(user), true);
+      expect(equals(User.fromJSON(jsonDecode(argument)), user), true);
     ***REMOVED***);
 
     test('serves created user', () async {
@@ -75,15 +75,15 @@ void main() {
 
       var userService = UserService(storageService, backendMock);
 
-      userService.user.then(
-          (user) => expect(user.equals(User('', '1', Colors.red)), isTrue));
+      userService.user
+          .then((user) => expect(equals(user, User(1, '', Colors.red)), isTrue));
     ***REMOVED***);
 
     test('serves verified user', () async {
       var userService = UserService(storageService, backendMock);
 
       userService.user.then((user) =>
-          expect(user.equals(User('Karl Marx', '1', Colors.red)), isTrue));
+          expect(equals(user, User(1, 'Karl Marx', Colors.red)), isTrue));
     ***REMOVED***);
 
     test('throws exception with authentication fail', () async {
@@ -96,3 +96,8 @@ void main() {
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***
+
+bool equals(User user1, User user2) =>
+    user1.id == user2?.id &&
+    user1.name == user2?.name &&
+    user1.color?.value == user2?.color?.value;

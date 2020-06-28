@@ -23,7 +23,7 @@ class UserService extends BackendService {
 
   Future<User> createNewUser() async {
     var response = await post(
-        'service/benutzer/neu', jsonEncode(User('', null, null).toJson()));
+        'service/benutzer/neu', jsonEncode(User(0, null, null).toJson()));
     var userFromServer = User.fromJSON(jsonDecode(response.body));
     storageService.saveUser(userFromServer);
     return userFromServer;

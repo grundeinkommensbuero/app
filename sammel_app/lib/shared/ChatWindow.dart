@@ -56,7 +56,7 @@ class ChatWindowState extends State<ChatWindow>
   Widget build(BuildContext context) {
     if (user == null) {
       StorageService storageService = Provider.of<StorageService>(context);
-      user = User('test_name1312', 'test_id134', Color.fromRGBO(255, 255, 0, 1.0));
+      user = User(1, 'test_name1312', Color.fromRGBO(255, 255, 0, 1.0));
       storageService.saveUser(user);
       storageService.loadUser().then((value) =>
           setState(() {
@@ -145,7 +145,7 @@ class ChatWindowState extends State<ChatWindow>
   Widget create_widget_for_message(Message message) {
     Align alignment = null;
     Container card = null;
-    if (message.sender_name == user.nick_name) {
+    if (message.sender_name == user.name) {
       card = Container(constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.8, maxHeight: MediaQuery.of(context).size.height * 0.8),
           child: Card(color: message.message_color, child: Padding(
               padding: EdgeInsets.only(left:5.0, top: 5.0, right: 5.0, bottom: 5.0), child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children:
@@ -216,8 +216,8 @@ class ChatWindowState extends State<ChatWindow>
   onSendMessage(String text) {
     Message message = Message(text: text,
         sending_time: DateTime.now(),
-        message_color: user.user_color,
-        sender_name: user.nick_name);
+        message_color: user.color,
+        sender_name: user.name);
     MessagePushData mpd = MessagePushData(message, channel.name);
     pushService.pushToDevices([
       'c1IT42MZGJM:APA91bEh1qV_idNeKrusB1Ccl6BeBUB6iSV3e_W4BIOi3BjZTMhMlL5DqvGwOlCCdVa7V6J0nA4PdYeB7jVFhJIQhbedu0w3WqcdBsKiC3q_eoISKQHilBFpaIwuy1cMUzH3bCxWUUpp'

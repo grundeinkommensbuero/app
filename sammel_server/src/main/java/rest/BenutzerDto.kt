@@ -6,7 +6,7 @@ import database.benutzer.Benutzer
 data class Login(
         var secret: String = "",
         var firebaseKey: String = "",
-        var benutzer: BenutzerDto = BenutzerDto()) {
+        var user: BenutzerDto = BenutzerDto()) {
 ***REMOVED***
 
 data class BenutzerDto(
