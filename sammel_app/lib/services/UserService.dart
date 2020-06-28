@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:sammel_app/model/Login.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/BackendService.dart';
+import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/push_notification_manager.dart';
 import 'package:uuid/uuid.dart';
@@ -36,9 +37,14 @@ class UserService extends BackendService {
     User user = User(0, null, color);
 
     Login login = Login(user, secret, firebaseKey);
-    var response =
-        await post('service/benutzer/neu', jsonEncode(login.toJson()));
-    var userFromServer = User.fromJSON(jsonDecode(response.body));
+    var response;
+    try {
+      response = await post('service/benutzer/neu', jsonEncode(login.toJson()));
+    ***REMOVED*** catch (e) {
+      ErrorService.handleError(e);
+      throw e;
+    ***REMOVED***
+    var userFromServer = User.fromJSON(response.body);
 
     storageService.saveUser(userFromServer);
 
@@ -50,8 +56,14 @@ class UserService extends BackendService {
     String firebaseKey = await firebase.firebaseToken;
 
     Login login = Login(user, secret, firebaseKey);
-    var response = await post(
-        'service/benutzer/authentifiziere', jsonEncode(login.toJson()));
+    var response;
+    try {
+      response = await post(
+          'service/benutzer/authentifiziere', jsonEncode(login.toJson()));
+    ***REMOVED*** catch (e) {
+      ErrorService.handleError(e);
+      throw e;
+    ***REMOVED***
     bool authenticated = response.body;
     if (authenticated)
       return user;
@@ -69,7 +81,7 @@ class UserService extends BackendService {
 Color _randomColor() {
   var rng = new Random();
   var values = new List.generate(3, (_) => rng.nextInt(256));
-  Color.fromRGBO(values[0], values[1], values[2], 0.5);
+  return Color.fromRGBO(values[0], values[1], values[2], 0.5);
 ***REMOVED***
 
 class InvalidUserException implements Exception {***REMOVED***

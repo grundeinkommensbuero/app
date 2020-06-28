@@ -27,13 +27,13 @@ open class BenutzerRestResource {
     @Produces(APPLICATION_JSON)
     open fun legeNeuenBenutzerAn(login: Login): Response {
         val benutzer = login.user
-        if (login.secret.isEmpty()) {
+        if (login.secret.isNullOrEmpty()) {
             return Response
                     .status(412)
                     .entity(RestFehlermeldung("Secret darf nicht leer sein"))
                     .build()
         ***REMOVED***
-        if (login.firebaseKey.isEmpty()) {
+        if (login.firebaseKey.isNullOrEmpty()) {
             return Response
                     .status(412)
                     .entity(RestFehlermeldung("Firebase Key darf nicht leer sein"))
@@ -43,7 +43,7 @@ open class BenutzerRestResource {
         // Zum Vermeiden optisch ähnlicher Namen
         login.user.name = login.user.name?.trim()
 
-        if(benutzer.name != null && dao.benutzernameExistiert(benutzer.name!!)) {
+        if (benutzer.name != null && dao.benutzernameExistiert(benutzer.name!!)) {
             return Response
                     .status(412)
                     .entity(RestFehlermeldung("Benutzername ist bereits vergeben"))
@@ -52,8 +52,8 @@ open class BenutzerRestResource {
         try {
             val benutzerAusDb = dao.legeNeuenBenutzerAn(benutzer.convertToBenutzer())
 
-            val hashMitSalt = security.hashSecret(login.secret)
-            dao.legeNeueCredentialsAn(Credentials(benutzerAusDb.id, hashMitSalt.hash, hashMitSalt.salt, login.firebaseKey))
+            val hashMitSalt = security.hashSecret(login.secret!!)
+            dao.legeNeueCredentialsAn(Credentials(benutzerAusDb.id, hashMitSalt.hash, hashMitSalt.salt, login.firebaseKey!!))
 
             return Response.ok().entity(benutzerAusDb).build()
         ***REMOVED*** catch (e: Exception) {
@@ -75,7 +75,7 @@ open class BenutzerRestResource {
                     .entity(RestFehlermeldung("Benutzer-ID darf nicht leer sein"))
                     .build()
         ***REMOVED***
-        if (login.secret.isEmpty()) {
+        if (login.secret.isNullOrEmpty()) {
             return Response
                     .status(412)
                     .entity(RestFehlermeldung("Secret darf nicht leer sein"))
@@ -97,7 +97,7 @@ open class BenutzerRestResource {
                     .entity(false)
                     .build()
         ***REMOVED***
-        if (!security.verifiziereSecretMitHash(login.secret, HashMitSalt(credentials.secret, credentials.salt))) {
+        if (!security.verifiziereSecretMitHash(login.secret!!, HashMitSalt(credentials.secret, credentials.salt))) {
             LOG.info("Falscher Login mit Benutzer ${login.user.id***REMOVED***")
             return Response
                     .ok()

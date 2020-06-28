@@ -172,7 +172,7 @@ class TermineSeiteState extends State<TermineSeite>
         context: context,
         child: AlertDialog(
           title: Text('Aktion konnte nicht angelegt werden'),
-          content: SelectableText(e.message()),
+          content: SelectableText(e.message),
           actions: <Widget>[
             RaisedButton(
               child: Text('Okay...'),

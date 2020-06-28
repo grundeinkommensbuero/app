@@ -1,13 +1,10 @@
-class RestFehler {
-  String reason;
+class RestFehler implements Exception {
+  String message;
 
   RestFehler(String reason) {
-    this.reason = reason;
+    this.message =
+        '$reason\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com';
   ***REMOVED***
 
-  String message() => '$reason\n\n'
-      'Wenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com';
-
-  RestFehler.fromJson(Map<String, dynamic> json)
-      : reason = json['meldung'];
+  RestFehler.fromJson(Map<String, dynamic> json) : message = json['meldung'];
 ***REMOVED***
