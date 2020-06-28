@@ -33,7 +33,9 @@ class MyApp extends StatelessWidget {
   static var storageService = StorageService();
   static var pushService = demoMode ? DemoPushService() : PushService();
   static var chatMessageService = ChatMessageService();
-  final userService = UserService(storageService, pushNotificationManager);
+  final userService = demoMode
+      ? DemoUserService()
+      : UserService(storageService, pushNotificationManager);
 
   MyApp() {
     pushNotificationManager.init();
