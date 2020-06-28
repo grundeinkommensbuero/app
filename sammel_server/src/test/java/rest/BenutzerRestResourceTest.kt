@@ -40,7 +40,7 @@ class BenutzerRestResourceTest {
 
     @Test
     fun `legeNeuenBenutzerAn erwartet secret`() {
-        val response = resource.legeNeuenBenutzerAn(Login("", "AAAAAAAA", BenutzerDto(null, "Karl Marx")))
+        val response = resource.legeNeuenBenutzerAn(Login("", "AAAAAAAA", BenutzerDto(null, "Karl Marx", 4294198070)))
 
         assertEquals(response.status, 412)
         assertEquals(response.entity is RestFehlermeldung, true)
@@ -49,7 +49,7 @@ class BenutzerRestResourceTest {
 
     @Test
     fun `legeNeuenBenutzerAn erwartet firebaseKey`() {
-        val response = resource.legeNeuenBenutzerAn(Login("11111111", "", BenutzerDto(1L, "Karl Marx")))
+        val response = resource.legeNeuenBenutzerAn(Login("11111111", "", BenutzerDto(1L, "Karl Marx", 4294198070)))
 
         assertEquals(response.status, 412)
         assertEquals(response.entity is RestFehlermeldung, true)
@@ -60,7 +60,7 @@ class BenutzerRestResourceTest {
     fun `legeNeuenBenutzerAn lehnt bereits bestehende Benutzernamen ab`() {
         whenever(dao.benutzernameExistiert("Karl Marx")).thenReturn(true)
 
-        val response = resource.legeNeuenBenutzerAn(Login("11111111", "AAAAAAAA", BenutzerDto(null, "Karl Marx")))
+        val response = resource.legeNeuenBenutzerAn(Login("11111111", "AAAAAAAA", BenutzerDto(null, "Karl Marx", 4294198070)))
 
         assertEquals(response.status, 412)
         assertEquals(response.entity is RestFehlermeldung, true)
@@ -79,7 +79,7 @@ class BenutzerRestResourceTest {
         whenever(dao.benutzernameExistiert("Karl Marx")).thenReturn(false)
         whenever(dao.legeNeuenBenutzerAn(any())).thenReturn(Benutzer())
 
-        resource.legeNeuenBenutzerAn(Login("11111111", "AAAAAAAA", BenutzerDto(null, "Karl Marx")))
+        resource.legeNeuenBenutzerAn(Login("11111111", "AAAAAAAA", BenutzerDto(null, "Karl Marx", 4294198070)))
 
         verify(dao, times(1)).legeNeuenBenutzerAn(any())
     ***REMOVED***
@@ -89,7 +89,7 @@ class BenutzerRestResourceTest {
         whenever(dao.benutzernameExistiert("Karl Marx")).thenReturn(false)
         whenever(dao.legeNeuenBenutzerAn(any())).thenReturn(Benutzer())
 
-        resource.legeNeuenBenutzerAn(Login("11111111", "AAAAAAAA", BenutzerDto(null, "  Karl Marx  ")))
+        resource.legeNeuenBenutzerAn(Login("11111111", "AAAAAAAA", BenutzerDto(null, "  Karl Marx  ", 4294198070)))
 
         val captor = argumentCaptor<Benutzer>()
         verify(dao, times(1)).legeNeuenBenutzerAn(captor.capture())
@@ -99,9 +99,9 @@ class BenutzerRestResourceTest {
     @Test
     fun `legeNeuenBenutzerAn erzeugt Credentials fuer Benutzer`() {
         whenever(dao.benutzernameExistiert("Karl Marx")).thenReturn(false)
-        whenever(dao.legeNeuenBenutzerAn(any())).thenReturn(Benutzer(1L, "Karl Marx"))
+        whenever(dao.legeNeuenBenutzerAn(any())).thenReturn(Benutzer(1L, "Karl Marx", 4294198070))
 
-        resource.legeNeuenBenutzerAn(Login("11111111", "AAAAAAAA", BenutzerDto(null, "  Karl Marx  ")))
+        resource.legeNeuenBenutzerAn(Login("11111111", "AAAAAAAA", BenutzerDto(null, "  Karl Marx  ", 4294198070)))
 
         val captor = argumentCaptor<Credentials>()
         verify(dao, times(1)).legeNeueCredentialsAn(captor.capture())
@@ -114,9 +114,9 @@ class BenutzerRestResourceTest {
     @Test
     fun `legeNeuenBenutzerAn hasht Secret und speichert gehashtes Secret mit Salt in Datenbank`() {
         whenever(dao.benutzernameExistiert("Karl Marx")).thenReturn(false)
-        whenever(dao.legeNeuenBenutzerAn(any())).thenReturn(Benutzer(1L, "Karl Marx"))
+        whenever(dao.legeNeuenBenutzerAn(any())).thenReturn(Benutzer(1L, "Karl Marx", 4294198070))
 
-        resource.legeNeuenBenutzerAn(Login("11111111", "AAAAAAAA", BenutzerDto(null, "  Karl Marx  ")))
+        resource.legeNeuenBenutzerAn(Login("11111111", "AAAAAAAA", BenutzerDto(null, "  Karl Marx  ", 4294198070)))
 
         val captor = argumentCaptor<Credentials>()
         verify(dao, times(1)).legeNeueCredentialsAn(captor.capture())
@@ -147,7 +147,7 @@ class BenutzerRestResourceTest {
 
     @Test
     fun `authentifiziereBenutzer erwartet secret`() {
-        val response = resource.authentifiziereBenutzer(Login("", "AAAAAAAA", BenutzerDto(1L, "Karl Marx")))
+        val response = resource.authentifiziereBenutzer(Login("", "AAAAAAAA", BenutzerDto(1L, "Karl Marx", 4294198070)))
 
         assertEquals(response.status, 412)
         assertEquals(response.entity is RestFehlermeldung, true)
@@ -159,7 +159,7 @@ class BenutzerRestResourceTest {
         whenever(dao.getCredentials(1L)).thenReturn(Credentials(1L, "hash", "salt", "Firebase-Key"))
         whenever(security.verifiziereSecretMitHash(anyString(), any())).thenReturn(false)
 
-        val response = resource.authentifiziereBenutzer(Login("falsch", "AAAAAAAA", BenutzerDto(1L, "Karl Marx")))
+        val response = resource.authentifiziereBenutzer(Login("falsch", "AAAAAAAA", BenutzerDto(1L, "Karl Marx", 4294198070)))
 
         verify(security, times(1)).verifiziereSecretMitHash(anyString(), any())
         assertEquals(response.status, 200)
@@ -169,7 +169,7 @@ class BenutzerRestResourceTest {
     @Test
     fun `authentifiziereBenutzer weist unbekannte Benutzer zurueck`() {
         whenever(dao.getCredentials(1L)).thenReturn(null)
-        val response = resource.authentifiziereBenutzer(Login("falsch", "AAAAAAAA", BenutzerDto(1L, "Karl Marx")))
+        val response = resource.authentifiziereBenutzer(Login("falsch", "AAAAAAAA", BenutzerDto(1L, "Karl Marx", 4294198070)))
 
         assertEquals(response.status, 200)
         assertEquals(response.entity, false)
@@ -180,7 +180,7 @@ class BenutzerRestResourceTest {
         whenever(dao.getCredentials(1L)).thenReturn(Credentials(1L, "hash", "salt", "Firebase-Key"))
         whenever(security.verifiziereSecretMitHash(anyString(), any())).thenReturn(true)
 
-        val response = resource.authentifiziereBenutzer(Login("richtig", "AAAAAAAA", BenutzerDto(1L, "Karl Marx")))
+        val response = resource.authentifiziereBenutzer(Login("richtig", "AAAAAAAA", BenutzerDto(1L, "Karl Marx", 4294198070)))
 
         verify(security, times(1)).verifiziereSecretMitHash(anyString(), any())
         assertEquals(response.status, 200)

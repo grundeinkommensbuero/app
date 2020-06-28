@@ -6,9 +6,10 @@ import javax.persistence.*
 @Table(name = "Benutzer")
 class Benutzer() {
 
-    constructor(id: Long, name: String?) : this() {
+    constructor(id: Long, name: String?, color: Long?) : this() {
         this.id = id
         this.name = name
+        this.color = color
     ***REMOVED***
 
     @Id
@@ -17,5 +18,8 @@ class Benutzer() {
 
     @Column
     var name: String? = null
+
+    @Column
+    var color: Long? = null
 ***REMOVED***
 

@@ -29,11 +29,11 @@ class TestdatenVorrat {
         ***REMOVED***
 
         fun karl(): Benutzer {
-            return Benutzer(1, "Karl Marx")
+            return Benutzer(1, "Karl Marx", 0)
         ***REMOVED***
 
         fun rosa(): Benutzer {
-            return Benutzer(1, "Rosa Luxemburg")
+            return Benutzer(1, "Rosa Luxemburg", 0)
         ***REMOVED***
 
         fun terminOhneTeilnehmerOhneDetails(): Termin {

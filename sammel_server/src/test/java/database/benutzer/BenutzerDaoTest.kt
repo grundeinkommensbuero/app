@@ -34,7 +34,7 @@ class BenutzerDaoTest {
 
     @Test
     fun `getBenutzer liefert Ergebnis aus DB`() {
-        val karl = Benutzer(1L, "Karl Marx")
+        val karl = Benutzer(1L, "Karl Marx",0)
         whenever(entityManager.find(Benutzer::class.java, 1L))
                 .thenReturn(karl)
 
