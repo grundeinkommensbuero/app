@@ -8,8 +8,11 @@ class ActionList extends StatefulWidget {
   final List<Termin> termine;
   final Function openActionDetails;
   final Function isMyAction;
+  final Function iAmParticipant;
 
-  ActionList(this.termine, this.isMyAction, this.openActionDetails, {Key key***REMOVED***)
+  ActionList(this.termine, this.isMyAction, this.iAmParticipant,
+      this.openActionDetails,
+      {Key key***REMOVED***)
       : super(key: key);
 
   @override
@@ -27,8 +30,11 @@ class ActionListState extends State<ActionList> {
 
   Widget cardListBuilder(context, index) {
     Widget tile = ListTile(
-        title: TerminCard(widget.termine[index],
-            widget.isMyAction(widget.termine[index].id), Key('action card')),
+        title: TerminCard(
+            widget.termine[index],
+            widget.isMyAction(widget.termine[index].id),
+            widget.iAmParticipant(widget.termine[index].participants),
+            Key('action card')),
         onTap: () => widget.openActionDetails(context, widget.termine[index]),
         contentPadding: EdgeInsets.only(bottom: 0.1));
     var now = DateTime.now();

@@ -14,6 +14,7 @@ class ActionMap extends StatefulWidget {
   final List<Termin> termine;
   final List<ListLocation> listLocations;
   final Function isMyAction;
+  final Function iAmParticipant;
   final Function openActionDetails;
   final MapController mapController;
 
@@ -27,6 +28,7 @@ class ActionMap extends StatefulWidget {
     this.isMyAction = falseFunction,
     this.openActionDetails,
     this.mapController,
+    this.iAmParticipant,
   ***REMOVED***) : super(key: key);
 
   @override
@@ -87,6 +89,7 @@ class ActionMapState extends State<ActionMap> {
         .where((action) => action.latitude != null && action.longitude != null)
         .map((action) => ActionMarker(action,
             ownAction: widget.isMyAction(action.id),
+            participant: widget.iAmParticipant(action.participants),
             onTap: widget.openActionDetails))
         .toList();
   ***REMOVED***
@@ -117,8 +120,9 @@ class ActionMapState extends State<ActionMap> {
 class ActionMarker extends Marker {
   bool ownAction = false;
   Function onTap;
+  bool participant;
 
-  ActionMarker(Termin action, {this.ownAction, this.onTap***REMOVED***)
+  ActionMarker(Termin action, {this.ownAction, this.onTap, this.participant***REMOVED***)
       : super(
           width: 30.0,
           height: 30.0,
@@ -131,7 +135,8 @@ class ActionMarker extends Marker {
                   key: Key('action marker'),
                   onPressed:
                       onTap != null ? () => onTap(context, action) : null,
-                  color: DweTheme.actionColor(action.ende, ownAction ?? false),
+                  color:
+                      DweTheme.actionColor(action.ende, ownAction, participant),
                   shape: CircleBorder(
                       side: BorderSide(color: DweTheme.purple, width: 1.0)),
                   padding: EdgeInsets.all(0),
