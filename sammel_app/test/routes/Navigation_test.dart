@@ -11,6 +11,7 @@ import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/PushService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
+import 'package:sammel_app/services/UserService.dart';
 
 import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';
@@ -19,6 +20,7 @@ final termineService = TermineServiceMock();
 final listLocationService = ListLocationServiceMock();
 final storageService = StorageServiceMock();
 final pushService = PushServiceMock();
+final userService = UserServiceMock();
 
 void main() {
   group('Navigation', () {
@@ -32,12 +34,14 @@ void main() {
       when(storageService.loadFilter())
           .thenAnswer((_) async => TermineFilter.leererFilter());
       when(termineService.ladeTermine(any)).thenAnswer((_) async => []);
+      when(userService.user).thenAnswer((_) async => karl());
 
       await tester.pumpWidget(MultiProvider(providers: [
         Provider<AbstractTermineService>.value(value: termineService),
         Provider<AbstractListLocationService>.value(value: listLocationService),
         Provider<StorageService>.value(value: storageService),
         Provider<PushService>.value(value: pushService),
+        Provider<AbstractUserService>.value(value: userService),
       ], child: MaterialApp(home: navigation)));
     ***REMOVED***);
 

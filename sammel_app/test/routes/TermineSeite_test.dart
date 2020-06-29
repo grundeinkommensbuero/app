@@ -19,6 +19,7 @@ import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
+import 'package:sammel_app/services/UserService.dart';
 
 import '../model/Ort_test.dart';
 import '../model/Termin_test.dart';
@@ -29,6 +30,7 @@ final _terminService = TermineServiceMock();
 final _listLocationService = ListLocationServiceMock();
 final _storageService = StorageServiceMock();
 final _pushService = PushServiceMock();
+final _userService = UserServiceMock();
 
 void main() {
   Widget termineSeiteWidget;
@@ -39,6 +41,7 @@ void main() {
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
     when(_terminService.ladeTermine(any)).thenAnswer((_) async => []);
+    when(_userService.user).thenAnswer((_) async => karl());
 
     termineSeiteWidget = MultiProvider(
         providers: [
@@ -46,6 +49,7 @@ void main() {
           Provider<AbstractListLocationService>.value(
               value: _listLocationService),
           Provider<StorageService>.value(value: _storageService),
+          Provider<AbstractUserService>.value(value: _userService),
         ],
         child: MaterialApp(home: Builder(builder: (BuildContext context) {
           ErrorService.setContext(context);
@@ -1212,6 +1216,7 @@ _pumpNavigation(WidgetTester tester) async {
             create: (context) => _listLocationService),
         Provider<AbstractStammdatenService>.value(value: stammdatenService),
         Provider<PushService>.value(value: _pushService),
+        Provider<AbstractUserService>.value(value: _userService),
       ],
       child: MaterialApp(
         home: Navigation(),
