@@ -1,6 +1,7 @@
 package rest
 
 import database.DatabaseException
+import database.benutzer.BenutzerDao
 import database.stammdaten.Ort
 import database.termine.Termin
 import database.termine.TerminDetails
@@ -26,6 +27,9 @@ open class TermineRestResource {
     @EJB
     private lateinit var dao: TermineDao
 
+    @EJB
+    private lateinit var benutzerDao: BenutzerDao
+
     @POST
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
@@ -42,6 +46,11 @@ open class TermineRestResource {
     @Produces(APPLICATION_JSON)
     open fun getTermin(@QueryParam("id") id: Long): Response {
         val termin = dao.getTermin(id)
+        if(termin==null)
+            return Response
+                    .status(433)
+                    .entity("Unbekannte Aktion angegeben")
+                    .build()
         termin.details
         return Response
                 .ok()
@@ -95,12 +104,14 @@ open class TermineRestResource {
     @Produces(APPLICATION_JSON)
     @Path("termin")
     open fun deleteAction(actionAndToken: ActionWithTokenDto): Response {
-        if (actionAndToken.action == null || actionAndToken.action!!.id == null) return noValidActionResponse
+        if (actionAndToken.action?.id == null)
+            return noValidActionResponse
 
         val tokenFromDb = dao.loadToken(actionAndToken.action!!.id!!)?.token
-        if (tokenFromDb != null && !tokenFromDb.equals(actionAndToken.token)) return Response.status(403)
-                .entity(RestFehlermeldung("Löschen dieser Aktion ist unautorisiert"))
-                .build()
+        if (tokenFromDb != null && !tokenFromDb.equals(actionAndToken.token))
+            return Response.status(403)
+                    .entity(RestFehlermeldung("Löschen dieser Aktion ist unautorisiert"))
+                    .build()
 
         try {
             dao.deleteAction(actionAndToken.action!!.convertToTermin())
@@ -109,6 +120,76 @@ open class TermineRestResource {
             return Response.status(404).entity(e.message).build()
         ***REMOVED***
         return Response.ok().build()
+    ***REMOVED***
+
+    @POST
+    @Path("teilnahme")
+    open fun meldeTeilnahmeAn(participation: Participation): Response {
+        if (participation.action.id == null)
+            return Response.status(422)
+                    .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
+                    .build()
+        val terminAusDb = dao.getTermin(participation.action.id!!)
+        if (terminAusDb == null)
+            return Response.status(422)
+                    .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
+                    .build()
+
+        if(participation.user.id == null)
+            return Response
+                    .status(422)
+                    .entity(RestFehlermeldung("Der angegebene Benutzer ist ungültig"))
+                    .build()
+        val userAusDb = benutzerDao.getBenutzer(participation.user.id!!)
+        if(userAusDb == null)
+            return Response
+                    .status(422)
+                    .entity(RestFehlermeldung("Der angegebene Benutzer ist ungültig"))
+                    .build()
+
+        if(terminAusDb.teilnehmer.map { it.id ***REMOVED***.contains(userAusDb.id))
+            return Response.accepted().build()
+
+        terminAusDb.teilnehmer = terminAusDb.teilnehmer.plus(userAusDb)
+        dao.aktualisiereTermin(terminAusDb)
+
+        return Response.accepted().build()
+    ***REMOVED***
+
+    @POST
+    @Path("absage")
+    open fun sageTeilnahmeAb(participation: Participation): Response {
+        if (participation.action.id == null)
+            return Response.status(422)
+                    .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
+                    .build()
+        val terminAusDb = dao.getTermin(participation.action.id!!)
+        if (terminAusDb == null)
+            return Response.status(422)
+                    .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
+                    .build()
+
+        if(participation.user.id == null)
+            return Response
+                    .status(422)
+                    .entity(RestFehlermeldung("Der angegebene Benutzer ist ungültig"))
+                    .build()
+        val userAusDb = benutzerDao.getBenutzer(participation.user.id!!)
+        if(userAusDb == null)
+            return Response
+                    .status(422)
+                    .entity(RestFehlermeldung("Der angegebene Benutzer ist ungültig"))
+                    .build()
+
+        val userAusListe = terminAusDb.teilnehmer.find { it.id == userAusDb.id ***REMOVED***
+
+        if(userAusListe == null)
+            return Response.accepted().build()
+
+        terminAusDb.teilnehmer -= userAusListe
+        dao.aktualisiereTermin(terminAusDb)
+
+        return Response.accepted().build()
     ***REMOVED***
 
     data class TerminDto(
@@ -182,5 +263,9 @@ open class TermineRestResource {
             ***REMOVED***
         ***REMOVED***
     ***REMOVED***
+
+    data class Participation(
+            var user: BenutzerDto,
+            var action: TerminDto)
 ***REMOVED***
 

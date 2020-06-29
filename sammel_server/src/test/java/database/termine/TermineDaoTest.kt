@@ -226,7 +226,7 @@ class TermineDaoTest {
         val termin = dao.getTermin(1L)
 
         assertEquals(termin, terminInDb)
-        assertEquals(termin.details, terminInDb.details)
+        assertEquals(termin!!.details, terminInDb.details)
     ***REMOVED***
 
     @Test

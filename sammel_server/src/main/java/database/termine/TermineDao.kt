@@ -50,7 +50,7 @@ open class TermineDao {
         return query
     ***REMOVED***
 
-    open fun getTermin(id: Long): Termin {
+    open fun getTermin(id: Long): Termin? {
         return entityManager.find(Termin::class.java, id)
     ***REMOVED***
 
