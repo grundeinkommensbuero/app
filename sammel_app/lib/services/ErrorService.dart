@@ -8,10 +8,10 @@ class ErrorService {
 
   static void setContext(context) {
     ErrorService._context = context;
-    messageQueue.forEach((message) {
-      messageQueue.remove(message);
-      showErrorDialog(message[0], message[1]);
-    });
+    List<List<String>> queueCopy = List<List<String>>.from(messageQueue);
+    messageQueue.clear();
+    queueCopy.forEach((error) =>
+        showErrorDialog(error[0], error[1], key: Key('error dialog')));
   }
 
   static handleError(e) {
@@ -19,11 +19,13 @@ class ErrorService {
       pushMessage(
           'Der hinterlegte Benutzer konnte nicht authentifiziert werden',
           e.message);
+      return;
     }
     if (e is RestFehler) {
       pushMessage(
           'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten',
           e.message);
+      return;
     }
   }
 
@@ -32,7 +34,7 @@ class ErrorService {
       messageQueue.add([titel, message]);
     else {
       print('Ein Fehler ist aufgetreten: $titel - $message');
-      showErrorDialog(titel, message);
+      showErrorDialog(titel, message, key: Key('error dialog'));
     }
   }
 
