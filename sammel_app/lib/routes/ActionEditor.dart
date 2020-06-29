@@ -6,7 +6,9 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
+import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
+import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/LocationPicker.dart';
@@ -597,7 +599,7 @@ class ActionEditorState extends State<ActionEditor> {
     ***REMOVED***
   ***REMOVED***
 
-  List<Termin> generateActions() {
+  Future<List<Termin>> generateActions() async {
     validateAllInput();
     if (action.validated['all'] == ValidationState.ok) {
       List<Termin> termine = new List<Termin>();
@@ -609,6 +611,7 @@ class ActionEditorState extends State<ActionEditor> {
         if (ChronoHelfer.isTimeOfDayBefore(this.action.bis, this.action.von)) {
           end = end.add(Duration(days: 1));
         ***REMOVED***
+        User me = await Provider.of<AbstractUserService>(context).user;
         termine.add(Termin(
             widget.initAction?.id,
             begin,
@@ -617,7 +620,7 @@ class ActionEditorState extends State<ActionEditor> {
             this.action.typ,
             action.coordinates.latitude,
             action.coordinates.longitude,
-            [],
+            [me],
             this.action.terminDetails));
       ***REMOVED***
       return termine;
@@ -626,13 +629,13 @@ class ActionEditorState extends State<ActionEditor> {
     ***REMOVED***
   ***REMOVED***
 
-  finishPressed() {
+  finishPressed() async {
     setState(() {
       action.validated['finish_pressed'] = true;
       validateAllInput();
     ***REMOVED***);
     if (action.validated['all'] == ValidationState.ok) {
-      List<Termin> termine = generateActions();
+      List<Termin> termine = await generateActions();
       if (termine != null) {
         widget.onFinish(termine);
         setState(() => action = ActionData()); // reset Form for next use
