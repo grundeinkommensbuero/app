@@ -12,7 +12,7 @@ import '../model/Termin_test.dart';
 
 void main() {
   group('DemoTermineService', () {
-    var service;
+    DemoTermineService service;
     setUp(() {
       service = DemoTermineService();
     });
@@ -76,6 +76,42 @@ void main() {
       expect(service.termine[0].typ, 'Infoveranstaltung');
       expect(service.termine[0].ort.id, 2);
       expect(service.termine[0].details.kontakt, 'Test123');
+    });
+
+    test('attendAction adds user to action', () async {
+      service.termine[0].participants = [rosa()];
+
+      await service.attendAction(service.termine[0], karl());
+
+      expect(service.termine[0].participants.map((e) => e.id),
+          containsAll([1, 2]));
+    });
+
+    test('attendAction ignores if user already partakes', () async {
+      service.termine[0].participants = [rosa(), karl()];
+
+      await service.attendAction(service.termine[0], karl());
+
+      expect(service.termine[0].participants.map((e) => e.id),
+          containsAll([1, 2]));
+    });
+
+    test('dismissAction removes user from action', () async {
+      service.termine[0].participants = [rosa(), karl()];
+
+      await service.dismissAction(service.termine[0], karl());
+
+      expect(
+          service.termine[0].participants.map((e) => e.id), containsAll([2]));
+    });
+
+    test('dismissAction ignores if user doesnt partake', () async {
+      service.termine[0].participants = [rosa()];
+
+      await service.dismissAction(service.termine[0], karl());
+
+      expect(
+          service.termine[0].participants.map((e) => e.id), containsAll([2]));
     });
   });
 }
