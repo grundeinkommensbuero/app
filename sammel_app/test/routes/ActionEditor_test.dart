@@ -57,7 +57,7 @@ void main() {
             TerminTestDaten.einTermin(),
           ]);
       when(terminService.getTerminMitDetails(any))
-          .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
+          .thenAnswer((_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       when(storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [0]);
@@ -297,7 +297,7 @@ void main() {
   group('validates', () {
     var actionEditor;
     setUp(() {
-      actionEditor = ActionEditorState(TerminTestDaten.einTerminMitDetails());
+      actionEditor = ActionEditorState(TerminTestDaten.einTerminMitTeilisUndDetails());
     });
 
     test('all inputs valid with correct values', () {
@@ -396,7 +396,7 @@ void main() {
     testWidgets('triggers validation on Fertig button',
         (WidgetTester tester) async {
       var actionEditor =
-          ActionEditor(initAction: TerminTestDaten.einTerminMitDetails());
+          ActionEditor(initAction: TerminTestDaten.einTerminMitTeilisUndDetails());
       await tester.pumpWidget(MaterialApp(home: actionEditor));
       ActionEditorState state = tester.state(find.byWidget(actionEditor));
 
@@ -458,7 +458,7 @@ void main() {
             TerminTestDaten.einTermin(),
           ]);
       when(terminService.getTerminMitDetails(any))
-          .thenAnswer((_) async => TerminTestDaten.einTerminMitDetails());
+          .thenAnswer((_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       when(storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [0]);
@@ -516,7 +516,7 @@ void main() {
       Termin action = state.generateActions()[0];
 
       expect(action.details.kontakt,
-          TerminTestDaten.einTerminMitDetails().details.kontakt);
+          TerminTestDaten.einTerminMitTeilisUndDetails().details.kontakt);
     });
 
     testWidgets('with old description, w/o changes',
@@ -527,7 +527,7 @@ void main() {
       Termin action = state.generateActions()[0];
 
       expect(action.details.kommentar,
-          TerminTestDaten.einTerminMitDetails().details.kommentar);
+          TerminTestDaten.einTerminMitTeilisUndDetails().details.kommentar);
     });
 
     testWidgets('with old venue description, w/o changes',
@@ -538,7 +538,7 @@ void main() {
       Termin action = state.generateActions()[0];
 
       expect(action.details.treffpunkt,
-          TerminTestDaten.einTerminMitDetails().details.treffpunkt);
+          TerminTestDaten.einTerminMitTeilisUndDetails().details.treffpunkt);
     });
 
     testWidgets('with old coordinates, w/o changes',
@@ -548,8 +548,8 @@ void main() {
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       Termin action = state.generateActions()[0];
 
-      expect(action.latitude, TerminTestDaten.einTerminMitDetails().latitude);
-      expect(action.longitude, TerminTestDaten.einTerminMitDetails().longitude);
+      expect(action.latitude, TerminTestDaten.einTerminMitTeilisUndDetails().latitude);
+      expect(action.longitude, TerminTestDaten.einTerminMitTeilisUndDetails().longitude);
     });
 
     testWidgets('with new start, w/ changes', (WidgetTester tester) async {

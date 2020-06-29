@@ -29,7 +29,7 @@ class TestdatenVorrat {
         }
 
         fun karl(): Benutzer {
-            return Benutzer(1, "Karl Marx", 0)
+            return Benutzer(1, "Karl Marx", 4294198070)
         }
 
         fun rosa(): Benutzer {

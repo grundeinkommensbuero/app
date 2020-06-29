@@ -9,7 +9,7 @@ main() {
   Widget widget;
 
   setUp(() {
-    Termin termin = TerminTestDaten.einTerminMitDetails();
+    Termin termin = TerminTestDaten.einTerminMitTeilisUndDetails();
     widget = MaterialApp(home: Dialog(child: ActionDetailsPage(termin)));
   });
 

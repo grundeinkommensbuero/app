@@ -35,6 +35,7 @@ void main() {
               'Sammeln',
               52.52116,
               13.41331,
+              [karl()],
               TerminDetails(
                   'U-Bahnhof Samariterstraße',
                   'wir gehen die Frankfurter Allee hoch',

@@ -7,7 +7,7 @@ import '../model/Ort_test.dart';
 void main() {
   testWidgets('TerminCard startet fehlerfrei', (WidgetTester tester) async {
     var termin = Termin(0, DateTime.now(), DateTime.now(), nordkiez(),
-        'Sammeln', 52.52116, 13.41331, null);
+        'Sammeln', 52.52116, 13.41331, [], null);
 
     await tester.pumpWidget(MaterialApp(home: TerminCard(termin)));
 

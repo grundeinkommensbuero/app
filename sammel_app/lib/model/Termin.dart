@@ -1,3 +1,5 @@
+import 'package:sammel_app/model/User.dart';
+
 import 'Ort.dart';
 import 'TerminDetails.dart';
 
@@ -9,10 +11,11 @@ class Termin {
   String typ;
   double latitude;
   double longitude;
+  List<User> participants;
   TerminDetails details;
 
   Termin(this.id, this.beginn, this.ende, this.ort, this.typ, this.latitude,
-      this.longitude, this.details);
+      this.longitude, this.participants, this.details);
 
   Termin.emptyAction()
       : id = null,
@@ -22,6 +25,7 @@ class Termin {
         typ = null,
         latitude = null,
         longitude = null,
+        participants = [],
         details = TerminDetails(null, null, null);
 
   Termin.fromJson(Map<String, dynamic> json)
@@ -32,6 +36,9 @@ class Termin {
         typ = json['typ'] ?? 'Termin',
         latitude = json['lattitude'] ?? null,
         longitude = json['longitude'] ?? null,
+        participants = (json['participants'] as List)
+            ?.map((user) => User.fromJSON(user))
+            ?.toList(),
         details = json['details'] != null
             ? TerminDetails.fromJSON(json['details'])
             : null;
@@ -44,6 +51,7 @@ class Termin {
         'typ': typ,
         'lattitude': latitude,
         'longitude': longitude,
+        'participants': participants?.map((user) => user.toJson())?.toList(),
         'details': details,
       };
 

@@ -46,7 +46,7 @@ open class TermineRestResource {
     @Produces(APPLICATION_JSON)
     open fun getTermin(@QueryParam("id") id: Long): Response {
         val termin = dao.getTermin(id)
-        if(termin==null)
+        if (termin == null)
             return Response
                     .status(433)
                     .entity("Unbekannte Aktion angegeben")
@@ -135,19 +135,19 @@ open class TermineRestResource {
                     .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
                     .build()
 
-        if(participation.user.id == null)
+        if (participation.user.id == null)
             return Response
                     .status(422)
                     .entity(RestFehlermeldung("Der angegebene Benutzer ist ungültig"))
                     .build()
         val userAusDb = benutzerDao.getBenutzer(participation.user.id!!)
-        if(userAusDb == null)
+        if (userAusDb == null)
             return Response
                     .status(422)
                     .entity(RestFehlermeldung("Der angegebene Benutzer ist ungültig"))
                     .build()
 
-        if(terminAusDb.teilnehmer.map { it.id }.contains(userAusDb.id))
+        if (terminAusDb.teilnehmer.map { it.id }.contains(userAusDb.id))
             return Response.accepted().build()
 
         terminAusDb.teilnehmer = terminAusDb.teilnehmer.plus(userAusDb)
@@ -169,13 +169,13 @@ open class TermineRestResource {
                     .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
                     .build()
 
-        if(participation.user.id == null)
+        if (participation.user.id == null)
             return Response
                     .status(422)
                     .entity(RestFehlermeldung("Der angegebene Benutzer ist ungültig"))
                     .build()
         val userAusDb = benutzerDao.getBenutzer(participation.user.id!!)
-        if(userAusDb == null)
+        if (userAusDb == null)
             return Response
                     .status(422)
                     .entity(RestFehlermeldung("Der angegebene Benutzer ist ungültig"))
@@ -183,7 +183,7 @@ open class TermineRestResource {
 
         val userAusListe = terminAusDb.teilnehmer.find { it.id == userAusDb.id }
 
-        if(userAusListe == null)
+        if (userAusListe == null)
             return Response.accepted().build()
 
         terminAusDb.teilnehmer -= userAusListe
@@ -200,6 +200,7 @@ open class TermineRestResource {
             var typ: String? = null,
             var lattitude: Double? = null,
             var longitude: Double? = null,
+            var participants: List<BenutzerDto>? = emptyList(),
             var details: TerminDetailsDto? = TerminDetailsDto()) {
 
         fun convertToTermin(): Termin {
@@ -211,7 +212,7 @@ open class TermineRestResource {
                     typ = typ,
                     lattitude = lattitude,
                     longitude = longitude,
-                    teilnehmer = emptyList(),
+                    teilnehmer = if (participants == null) emptyList() else participants!!.map { it.convertToBenutzer() },
                     details = details?.convertToTerminDetails())
         }
 

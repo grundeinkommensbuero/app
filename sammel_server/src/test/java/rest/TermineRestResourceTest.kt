@@ -1,6 +1,7 @@
 package rest
 
 import TestdatenVorrat.Companion.karl
+import TestdatenVorrat.Companion.nordkiez
 import TestdatenVorrat.Companion.terminDto
 import TestdatenVorrat.Companion.terminOhneTeilnehmerMitDetails
 import TestdatenVorrat.Companion.terminOhneTeilnehmerOhneDetails
@@ -18,6 +19,7 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import rest.TermineRestResource.*
+import java.time.LocalDateTime.now
 import javax.ejb.EJBException
 import javax.ws.rs.core.Response
 import kotlin.test.*
@@ -35,6 +37,29 @@ class TermineRestResourceTest {
 
     @InjectMocks
     private lateinit var resource: TermineRestResource
+
+    @Test
+    fun TerminDtoKonvertiertZuTerminMitTeilnehmern() {
+        val beginn = now()
+        val ende = now()
+        val terminDto = TerminDto(1L, beginn, ende, nordkiez(), "Sammeln", 0.0, 1.0,
+                listOf(BenutzerDto.convertFromBenutzer(karl())),
+                TerminDetailsDto(1L, "treffpunkt", "kommentar", "kontakt"))
+
+        val termin = terminDto.convertToTermin()
+
+        assertEquals(termin.id, 1L)
+        assertEquals(termin.typ, "Sammeln")
+        assertEquals(termin.beginn, beginn)
+        assertEquals(termin.ende, ende)
+        assertEquals(termin.ort?.id, 1)
+        assertEquals(termin.lattitude, terminDto.lattitude)
+        assertEquals(termin.longitude, terminDto.longitude)
+        assertEquals(termin.teilnehmer.size, 1)
+        assertEquals(termin.teilnehmer[0].id, 1L)
+        assertEquals(termin.teilnehmer[0].name, "Karl Marx")
+        assertEquals(termin.teilnehmer[0].color, 4294198070)
+    }
 
     @Test
     fun getTerminLiefertTerminMitDetails() {

@@ -2,11 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:http_server/http_server.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
+import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/BackendService.dart';
 
 abstract class AbstractTermineService extends BackendService {
@@ -49,7 +51,8 @@ class TermineService extends AbstractTermineService {
   }
 
   saveAction(Termin action, String token) async {
-    await post('service/termine/termin', jsonEncode(ActionWithToken(action, token)));
+    await post(
+        'service/termine/termin', jsonEncode(ActionWithToken(action, token)));
   }
 
   deleteAction(Termin action, String token) {
@@ -77,6 +80,7 @@ class DemoTermineService extends AbstractTermineService {
         'Sammeln',
         52.52116,
         13.41331,
+        [],
         TerminDetails('Weltzeituhr', 'Bringe Westen und Klämmbretter mit',
             'Ruft mich an unter 01234567')),
     Termin(
@@ -87,6 +91,7 @@ class DemoTermineService extends AbstractTermineService {
         'Sammeln',
         52.48756,
         13.46336,
+        [User(1, "Karl Marx", Colors.red)],
         TerminDetails('Hinter der 3. Parkbank links',
             'wir machen die Parkeingänge', 'Schreibt mir unter e@mail.de')),
     Termin(
@@ -97,6 +102,10 @@ class DemoTermineService extends AbstractTermineService {
         'Sammeln',
         52.49655,
         13.43759,
+        [
+          User(1, "Karl Marx", Colors.red),
+          User(1, "Karl Marx", Colors.purple),
+        ],
         TerminDetails('wir telefonieren uns zusammen', 'bitte seid pünktlich',
             'Meine Handynummer ist 01234567')),
     Termin(
@@ -107,6 +116,7 @@ class DemoTermineService extends AbstractTermineService {
         'Infoveranstaltung',
         52.48612,
         13.47192,
+        [User(1, "Rosa Luxemburg", Colors.purple)],
         TerminDetails(
             'DGB-Haus, Raum 1312',
             'Ihr seid alle herzlich eingeladen zur Strategiediskussion',
