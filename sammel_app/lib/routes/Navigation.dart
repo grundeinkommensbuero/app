@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
+import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/PushService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
@@ -46,6 +47,7 @@ class NavigationState extends State<Navigation>
 
   @override
   Widget build(BuildContext context) {
+    ErrorService.setContext(context);
     pushService = Provider.of<PushService>(context);
 
     var pages = [

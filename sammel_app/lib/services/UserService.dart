@@ -7,6 +7,7 @@ import 'package:sammel_app/model/Login.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
+import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/push_notification_manager.dart';
 import 'package:uuid/uuid.dart';
