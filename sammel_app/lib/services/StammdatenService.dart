@@ -1,5 +1,6 @@
 import 'package:http_server/http_server.dart';
 import 'package:sammel_app/model/Ort.dart';
+import 'package:sammel_app/services/ErrorService.dart';
 
 import 'BackendService.dart';
 
@@ -13,13 +14,18 @@ class StammdatenService extends AbstractStammdatenService {
   StammdatenService([Backend backendMock]) : super(backendMock);
 
   Future<List<Ort>> ladeOrte() async {
-    HttpClientResponseBody response =
-        await backend.get('/service/stammdaten/orte');
+    try {
+      HttpClientResponseBody response =
+          await backend.get('/service/stammdaten/orte');
 
-    final orte = (response.body as List)
-        .map((jsonOrt) => Ort.fromJson(jsonOrt))
-        .toList();
-    return orte;
+      final orte = (response.body as List)
+          .map((jsonOrt) => Ort.fromJson(jsonOrt))
+          .toList();
+      return orte;
+    ***REMOVED*** catch (e) {
+      ErrorService.handleError(e);
+      return [];
+    ***REMOVED***
   ***REMOVED***
 ***REMOVED***
 

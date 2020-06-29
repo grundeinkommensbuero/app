@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/services/BackendService.dart';
-
+import 'package:sammel_app/services/ErrorService.dart';
 
 class PushService extends BackendService {
   PushService([Backend backendMock]) : super(backendMock);
@@ -14,13 +14,14 @@ class PushService extends BackendService {
           "Für Push-Nachrichten an Geräte muss mindestens ein Empfänger angegeben werden.");
     ***REMOVED***
 
-    print(
-        '# sende Nachricht: ${jsonEncode(PushMessage(data, notification, recipients: recipients).toJson())***REMOVED***');
-
-    post(
-        'service/push/devices',
-        jsonEncode(
-            PushMessage(data, notification, recipients: recipients).toJson()));
+    try {
+      post(
+          'service/push/devices',
+          jsonEncode(PushMessage(data, notification, recipients: recipients)
+              .toJson()));
+    ***REMOVED*** catch (e) {
+      ErrorService.handleError(e);
+    ***REMOVED***
   ***REMOVED***
 
   pushToTopic(String topic, PushData data, PushNotification notification) {
@@ -29,8 +30,12 @@ class PushService extends BackendService {
           "Für Push-Nachrichten an Topics muss ein Topic angegeben werden.");
     ***REMOVED***
 
-    post('service/push/topic',
-        jsonEncode(PushMessage(data, notification, topic: topic).toJson()));
+    try {
+      post('service/push/topic',
+          jsonEncode(PushMessage(data, notification, topic: topic).toJson()));
+    ***REMOVED*** catch (e) {
+      ErrorService.handleError(e);
+    ***REMOVED***
   ***REMOVED***
 ***REMOVED***
 
