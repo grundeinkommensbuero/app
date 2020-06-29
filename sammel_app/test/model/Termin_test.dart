@@ -237,3 +237,4 @@ class TerminTestDaten {
 ***REMOVED***
 
 User karl() => User(1, 'Karl Marx', Colors.red);
+User rosa() => User(2, 'Rosa Luxemburg', Colors.purple);

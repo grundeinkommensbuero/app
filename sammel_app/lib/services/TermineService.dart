@@ -23,6 +23,10 @@ abstract class AbstractTermineService extends BackendService {
   Future<void> saveAction(Termin action, String token);
 
   deleteAction(Termin action, String token);
+
+  attendAction(Termin action, User user);
+
+  dismissAction(Termin action, User user);
 ***REMOVED***
 
 class TermineService extends AbstractTermineService {
@@ -59,6 +63,10 @@ class TermineService extends AbstractTermineService {
     delete(
         'service/termine/termin', jsonEncode(ActionWithToken(action, token)));
   ***REMOVED***
+
+  attendAction(Termin action, User user) {***REMOVED***
+
+  dismissAction(Termin action, User user) {***REMOVED***
 ***REMOVED***
 
 class DemoTermineService extends AbstractTermineService {
@@ -171,5 +179,17 @@ class DemoTermineService extends AbstractTermineService {
   @override
   deleteAction(Termin action, String token) {
     termine.removeAt(termine.indexWhere((a) => a.id == action.id));
+  ***REMOVED***
+
+  attendAction(Termin action, User user) {
+    var stored = termine.firstWhere((a) => a.id == action.id);
+    if (!stored.participants.map((e) => e.id).contains(user.id))
+      stored.participants.add(user);
+  ***REMOVED***
+
+  dismissAction(Termin action, User user) {
+    var stored = termine.firstWhere((a) => a.id == action.id);
+    if (stored.participants.map((e) => e.id).contains(user.id))
+      stored.participants.remove(user);
   ***REMOVED***
 ***REMOVED***
