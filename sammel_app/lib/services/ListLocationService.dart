@@ -1,5 +1,6 @@
 import 'package:http_server/http_server.dart';
 import 'package:sammel_app/model/ListLocation.dart';
+import 'package:sammel_app/services/ErrorService.dart';
 
 import 'BackendService.dart';
 
@@ -17,8 +18,13 @@ class ListLocationService extends AbstractListLocationService {
   @override
   Future<List<ListLocation>> getActiveListLocations() async {
     if (cache != null) return cache;
-    HttpClientResponseBody response =
-        await get('/service/listlocations/actives');
+    HttpClientResponseBody response;
+    try {
+      response = await get('/service/listlocations/actives');
+    } catch (e) {
+      ErrorService.handleError(e);
+      return [];
+    }
     final listLocations = (response.body as List)
         .map((jsonListLocation) => ListLocation.fromJson(jsonListLocation))
         .toList();

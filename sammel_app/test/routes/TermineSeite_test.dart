@@ -12,6 +12,7 @@ import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/AuthFehler.dart';
+import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/PushService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
@@ -39,11 +40,17 @@ void main() {
         .thenAnswer((_) async => []);
     when(_terminService.ladeTermine(any)).thenAnswer((_) async => []);
 
-    termineSeiteWidget = MultiProvider(providers: [
-      Provider<AbstractTermineService>.value(value: _terminService),
-      Provider<AbstractListLocationService>.value(value: _listLocationService),
-      Provider<StorageService>.value(value: _storageService),
-    ], child: MaterialApp(home: TermineSeite()));
+    termineSeiteWidget = MultiProvider(
+        providers: [
+          Provider<AbstractTermineService>.value(value: _terminService),
+          Provider<AbstractListLocationService>.value(
+              value: _listLocationService),
+          Provider<StorageService>.value(value: _storageService),
+        ],
+        child: MaterialApp(home: Builder(builder: (BuildContext context) {
+          ErrorService.setContext(context);
+          return TermineSeite();
+        })));
   });
 
   group('presentation', () {
@@ -510,7 +517,11 @@ void main() {
       await tester.tap(find.byKey(Key('action editor finish button')));
       await tester.pumpAndSettle();
 
-      expect(find.byKey(Key('create request failed dialog')), findsOneWidget);
+      expect(find.byKey(Key('error dialog')), findsOneWidget);
+      expect(
+          find.text(
+              'message\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com'),
+          findsOneWidget);
     });
   });
 
@@ -979,7 +990,9 @@ void main() {
         await tester.tap(find.byKey(Key('delete confirmation yes button')));
         await tester.pump();
 
-        expect(find.byKey(Key('delete request failed dialog')), findsOneWidget);
+        expect(find.byKey(Key('error dialog')), findsOneWidget);
+        expect(
+            find.text('Aktion konnte nicht gelöscht werden'), findsOneWidget);
       });
 
       testWidgets('shows alert popup on AuthFehler',
@@ -1002,7 +1015,9 @@ void main() {
         await tester.tap(find.byKey(Key('delete confirmation yes button')));
         await tester.pump();
 
-        expect(find.byKey(Key('delete request failed dialog')), findsOneWidget);
+        expect(find.byKey(Key('error dialog')), findsOneWidget);
+        expect(
+            find.text('Aktion konnte nicht gelöscht werden'), findsOneWidget);
       });
     });
   });

@@ -14,7 +14,6 @@ import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
-import 'package:sammel_app/shared/showErrorDialog.dart';
 import 'package:uuid/uuid.dart';
 import 'ActionList.dart';
 import 'FilterWidget.dart';
@@ -183,50 +182,56 @@ class TermineSeiteState extends State<TermineSeite>
   }
 
   openTerminDetails(BuildContext context, Termin termin) async {
-    var terminMitDetails = await termineService.getTerminMitDetails(termin.id);
-    TerminDetailsCommand command = await showDialog(
-        context: context,
-        builder: (BuildContext context) => SimpleDialog(
-              titlePadding: EdgeInsets.zero,
-              title: AppBar(
-                  leading: null,
-                  automaticallyImplyLeading: false,
-                  title: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Image.asset(terminMitDetails.getAsset(), width: 30.0),
-                        Container(width: 10.0),
-                        Text(terminMitDetails.typ,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 22.0,
-                                color: Color.fromARGB(255, 129, 28, 98))),
-                      ])),
-              key: Key('termin details dialog'),
-              contentPadding: EdgeInsets.all(10.0),
-              children: <Widget>[
-                ActionDetailsPage(terminMitDetails),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: addEditDeleteButtonsIfMyAction(termin, context)
-                    ..add(RaisedButton(
-                      key: Key('action details close button'),
-                      child: Text('Schließen'),
-                      onPressed: () =>
-                          Navigator.pop(context, TerminDetailsCommand.CLOSE),
-                    )),
-                ),
-              ],
-            ));
+    try {
+      var terminMitDetails =
+          await termineService.getTerminMitDetails(termin.id);
+      TerminDetailsCommand command = await showDialog(
+          context: context,
+          builder: (BuildContext context) => SimpleDialog(
+                titlePadding: EdgeInsets.zero,
+                title: AppBar(
+                    leading: null,
+                    automaticallyImplyLeading: false,
+                    title: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Image.asset(terminMitDetails.getAsset(), width: 30.0),
+                          Container(width: 10.0),
+                          Text(terminMitDetails.typ,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 22.0,
+                                  color: Color.fromARGB(255, 129, 28, 98))),
+                        ])),
+                key: Key('termin details dialog'),
+                contentPadding: EdgeInsets.all(10.0),
+                children: <Widget>[
+                  ActionDetailsPage(terminMitDetails),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: addEditDeleteButtonsIfMyAction(termin, context)
+                      ..add(RaisedButton(
+                        key: Key('action details close button'),
+                        child: Text('Schließen'),
+                        onPressed: () =>
+                            Navigator.pop(context, TerminDetailsCommand.CLOSE),
+                      )),
+                  ),
+                ],
+              ));
 
-    if (command == TerminDetailsCommand.DELETE) deleteAction(terminMitDetails);
+      if (command == TerminDetailsCommand.DELETE)
+        deleteAction(terminMitDetails);
 
-    if (command == TerminDetailsCommand.EDIT)
-      editAction(context, terminMitDetails);
+      if (command == TerminDetailsCommand.EDIT)
+        editAction(context, terminMitDetails);
 
-    if (command == TerminDetailsCommand.FOCUS)
-      showActionOnMap(terminMitDetails);
+      if (command == TerminDetailsCommand.FOCUS)
+        showActionOnMap(terminMitDetails);
+    } catch(e) {
+      ErrorService.handleError(e);
+    }
   }
 
   List<Widget> addEditDeleteButtonsIfMyAction(
@@ -300,9 +305,8 @@ class TermineSeiteState extends State<TermineSeite>
       String token = await storageService.loadActionToken(editedAction.id);
       await termineService.saveAction(editedAction, token);
       setState(() => updateAction(editedAction, false));
-    } on RestFehler catch (error) {
-      showErrorDialog(context, 'Aktion konnte nicht gespeichert werden', error,
-          key: Key('edit request failed dialog'));
+    } catch (error) {
+      ErrorService.handleError(error);
     }
   }
 
@@ -313,8 +317,8 @@ class TermineSeiteState extends State<TermineSeite>
       storageService.deleteActionToken(action.id);
       setState(() => updateAction(action, true));
     } on RestFehler catch (error) {
-      showErrorDialog(context, 'Aktion konnte nicht gelöscht werden', error,
-          key: Key('delete request failed dialog'));
+      ErrorService.pushMessage(
+          'Aktion konnte nicht gelöscht werden', error.message);
     }
   }
 
@@ -337,9 +341,8 @@ class TermineSeiteState extends State<TermineSeite>
     try {
       Termin actionWithId = await createNewAction(action);
       addAction(actionWithId);
-    } on RestFehler catch (error) {
-      showErrorDialog(context, 'Aktion konnte nicht erstellt werden', error,
-          key: Key('create request failed dialog'));
+    } catch (error) {
+      ErrorService.handleError(error);
     }
   }
 
