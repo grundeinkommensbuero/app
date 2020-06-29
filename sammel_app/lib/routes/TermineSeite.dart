@@ -196,40 +196,45 @@ class TermineSeiteState extends State<TermineSeite>
           await termineService.getTerminMitDetails(termin.id);
       TerminDetailsCommand command = await showDialog(
           context: context,
-          builder: (BuildContext context) => SimpleDialog(
-                titlePadding: EdgeInsets.zero,
-                backgroundColor: determineColor(terminMitDetails),
-                title: AppBar(
-                    leading: null,
-                    automaticallyImplyLeading: false,
-                    title: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Image.asset(terminMitDetails.getAsset(), width: 30.0),
-                          Container(width: 10.0),
-                          Text(terminMitDetails.typ,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 22.0,
-                                  color: Color.fromARGB(255, 129, 28, 98))),
-                        ])),
-                key: Key('termin details dialog'),
-                contentPadding: EdgeInsets.all(10.0),
-                children: <Widget>[
-                  ActionDetailsPage(terminMitDetails),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: addEditDeleteButtonsIfMyAction(termin, context)
-                      ..add(RaisedButton(
-                        key: Key('action details close button'),
-                        child: Text('Schließen'),
-                        onPressed: () =>
-                            Navigator.pop(context, TerminDetailsCommand.CLOSE),
-                      )),
-                  ),
-                ],
-              ));
+          builder: (context) => StatefulBuilder(
+              builder: (BuildContext context, setDialogState) => SimpleDialog(
+                    titlePadding: EdgeInsets.zero,
+                    backgroundColor: determineColor(terminMitDetails),
+                    title: AppBar(
+                        leading: null,
+                        automaticallyImplyLeading: false,
+                        title: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Image.asset(terminMitDetails.getAsset(),
+                                  width: 30.0),
+                              Container(width: 10.0),
+                              Text(terminMitDetails.typ,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 22.0,
+                                      color: Color.fromARGB(255, 129, 28, 98))),
+                            ])),
+                    key: Key('termin details dialog'),
+                    contentPadding: EdgeInsets.all(10.0),
+                    children: <Widget>[
+                      ActionDetailsPage(terminMitDetails),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: addEditDeleteButtonsIfMyAction(
+                            termin, context)
+                          ..addAll(addJoinLeaveButtonIfNotMyAction(
+                              terminMitDetails, setDialogState))
+                          ..add(RaisedButton(
+                            key: Key('action details close button'),
+                            child: Text('Schließen'),
+                            onPressed: () => Navigator.pop(
+                                context, TerminDetailsCommand.CLOSE),
+                          )),
+                      ),
+                    ],
+                  )));
 
       if (command == TerminDetailsCommand.DELETE)
         deleteAction(terminMitDetails);
@@ -247,7 +252,9 @@ class TermineSeiteState extends State<TermineSeite>
   Color determineColor(Termin terminMitDetails) {
     bool participator =
         terminMitDetails.participants.map((e) => e.id).contains(me?.id);
-    bool owner = terminMitDetails.participants[0].id == me.id;
+    bool owner = terminMitDetails.participants.isNotEmpty
+        ? terminMitDetails.participants[0]?.id == me?.id
+        : false;
 
     if (owner) return DweTheme.blueLight;
 
@@ -279,6 +286,33 @@ class TermineSeiteState extends State<TermineSeite>
       ];
     else
       return [];
+  }
+
+  List<Widget> addJoinLeaveButtonIfNotMyAction(
+      Termin terminMitDetails, Function setDialogState) {
+    if (isMyAction(terminMitDetails.id)) return [];
+    if (!participant(terminMitDetails))
+      return [
+        RaisedButton(
+            key: Key('join action button'),
+            child: Text('Mitmachen'),
+            onPressed: () {
+              joinAction(terminMitDetails);
+              setDialogState(() => terminMitDetails.participants.add(me));
+            })
+      ];
+    else
+      return [
+        RaisedButton(
+            key: Key('leave action button'),
+            child: Text('Absagen'),
+            onPressed: () {
+              leaveAction(terminMitDetails);
+              setDialogState(() => terminMitDetails.participants.remove(
+                  terminMitDetails.participants
+                      .firstWhere((u) => u.id == me.id)));
+            })
+      ];
   }
 
   bool isMyAction(int id) {
@@ -387,6 +421,21 @@ class TermineSeiteState extends State<TermineSeite>
     mapController.move(LatLng(action.latitude, action.longitude), 15.0);
     setState(() {
       navigation = 1; // change to map view
+    });
+  }
+
+  Future<void> joinAction(Termin termin) async {
+    await termineService.joinAction(termin, me);
+    setState(() {
+      termine.firstWhere((t) => t.id == termin.id).participants.add(me);
+    });
+  }
+
+  Future<void> leaveAction(Termin termin) async {
+    await termineService.leaveAction(termin, me);
+    setState(() {
+      var actionFromList = termine.firstWhere((t) => t.id == termin.id);
+      actionFromList.participants.removeWhere((user) => user.id == me.id);
     });
   }
 

@@ -35,8 +35,6 @@ open class TermineRestResource {
     @Produces(APPLICATION_JSON)
     open fun getTermine(filter: TermineFilter?): Response {
         val termine = dao.getTermine(filter ?: TermineFilter())
-        LOG.warn(termine)
-        LOG.warn(termine.map { termin -> convertFromTerminWithoutDetails(termin) })
         return Response
                 .ok()
                 .entity(termine.map { termin -> convertFromTerminWithoutDetails(termin) })
@@ -127,22 +125,23 @@ open class TermineRestResource {
     @POST
     @Path("teilnahme")
     open fun meldeTeilnahmeAn(participation: Participation): Response {
-        if (participation.action.id == null)
+        if (participation.action?.id == null)
             return Response.status(422)
                     .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
                     .build()
-        val terminAusDb = dao.getTermin(participation.action.id!!)
+        val terminAusDb = dao.getTermin(participation.action!!.id!!)
         if (terminAusDb == null)
             return Response.status(422)
                     .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
                     .build()
 
-        if (participation.user.id == null)
+        if (participation.user?.id == null)
             return Response
                     .status(422)
                     .entity(RestFehlermeldung("Der angegebene Benutzer ist ungültig"))
                     .build()
-        val userAusDb = benutzerDao.getBenutzer(participation.user.id!!)
+        val userAusDb = benutzerDao.getBenutzer(participation.user!!.id!!)
+        LOG.warn("Lade Benutzer aus Datenbank: $userAusDb")
         if (userAusDb == null)
             return Response
                     .status(422)
@@ -161,22 +160,22 @@ open class TermineRestResource {
     @POST
     @Path("absage")
     open fun sageTeilnahmeAb(participation: Participation): Response {
-        if (participation.action.id == null)
+        if (participation.action?.id == null)
             return Response.status(422)
                     .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
                     .build()
-        val terminAusDb = dao.getTermin(participation.action.id!!)
+        val terminAusDb = dao.getTermin(participation.action!!.id!!)
         if (terminAusDb == null)
             return Response.status(422)
                     .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
                     .build()
 
-        if (participation.user.id == null)
+        if (participation.user?.id == null)
             return Response
                     .status(422)
                     .entity(RestFehlermeldung("Der angegebene Benutzer ist ungültig"))
                     .build()
-        val userAusDb = benutzerDao.getBenutzer(participation.user.id!!)
+        val userAusDb = benutzerDao.getBenutzer(participation.user!!.id!!)
         if (userAusDb == null)
             return Response
                     .status(422)
@@ -268,7 +267,7 @@ open class TermineRestResource {
     }
 
     data class Participation(
-            var user: BenutzerDto,
-            var action: TerminDto)
+            var user: BenutzerDto? = null,
+            var action: TerminDto? = null)
 }
 

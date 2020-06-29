@@ -82,37 +82,37 @@ void main() {
       expect(service.termine[0].details.kontakt, 'Test123');
     });
 
-    test('attendAction adds user to action', () async {
+    test('joinAction adds user to action', () async {
       service.termine[0].participants = [rosa()];
 
-      await service.attendAction(service.termine[0], karl());
+      await service.joinAction(service.termine[0], karl());
 
       expect(service.termine[0].participants.map((e) => e.id),
           containsAll([1, 2]));
     });
 
-    test('attendAction ignores if user already partakes', () async {
+    test('joinAction ignores if user already partakes', () async {
       service.termine[0].participants = [rosa(), karl()];
 
-      await service.attendAction(service.termine[0], karl());
+      await service.joinAction(service.termine[0], karl());
 
       expect(service.termine[0].participants.map((e) => e.id),
           containsAll([1, 2]));
     });
 
-    test('dismissAction removes user from action', () async {
+    test('leaveAction removes user from action', () async {
       service.termine[0].participants = [rosa(), karl()];
 
-      await service.dismissAction(service.termine[0], karl());
+      await service.leaveAction(service.termine[0], karl());
 
       expect(
           service.termine[0].participants.map((e) => e.id), containsAll([2]));
     });
 
-    test('dismissAction ignores if user doesnt partake', () async {
+    test('leaveAction ignores if user doesnt partake', () async {
       service.termine[0].participants = [rosa()];
 
-      await service.dismissAction(service.termine[0], karl());
+      await service.leaveAction(service.termine[0], karl());
 
       expect(
           service.termine[0].participants.map((e) => e.id), containsAll([2]));
@@ -140,11 +140,11 @@ void main() {
       service = TermineService(backend);
     });
 
-    test('attendAction calls correct path', () {
+    test('joinAction calls correct path', () {
       when(backend.post('service/termine/teilnahme', any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(null, 202));
 
-      service.attendAction(TerminTestDaten.einTermin(), karl());
+      service.joinAction(TerminTestDaten.einTermin(), karl());
 
       verify(backend.post(
           'service/termine/teilnahme',
@@ -152,11 +152,11 @@ void main() {
               '"user":${jsonEncode(karl())}}'));
     });
 
-    test('dismissAction calls correct path', () {
+    test('leaveAction calls correct path', () {
       when(backend.post('service/termine/absage', any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(null, 202));
 
-      service.dismissAction(TerminTestDaten.einTermin(), karl());
+      service.leaveAction(TerminTestDaten.einTermin(), karl());
 
       verify(backend.post(
           'service/termine/absage',

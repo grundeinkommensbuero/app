@@ -7,6 +7,7 @@ import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
+import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
@@ -34,6 +35,7 @@ final _userService = UserServiceMock();
 
 void main() {
   Widget termineSeiteWidget;
+  User me;
 
   setUp(() {
     when(_storageService.loadFilter()).thenAnswer((_) async => null);
@@ -41,7 +43,8 @@ void main() {
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
     when(_terminService.ladeTermine(any)).thenAnswer((_) async => []);
-    when(_userService.user).thenAnswer((_) async => karl());
+    me = karl();
+    when(_userService.user).thenAnswer((_) async => me);
 
     termineSeiteWidget = MultiProvider(
         providers: [
@@ -102,8 +105,8 @@ void main() {
             TerminTestDaten.einTermin()..id = 2,
             TerminTestDaten.einTermin()..id = 3,
           ]);
-      when(_terminService.getTerminMitDetails(any))
-          .thenAnswer((_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
+      when(_terminService.getTerminMitDetails(any)).thenAnswer(
+          (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       when(_storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [2]);
@@ -179,8 +182,8 @@ void main() {
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getTerminMitDetails(any))
-          .thenAnswer((_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
+      when(_terminService.getTerminMitDetails(any)).thenAnswer(
+          (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       await tester.pumpWidget(termineSeiteWidget);
 
@@ -202,8 +205,8 @@ void main() {
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getTerminMitDetails(any))
-          .thenAnswer((_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
+      when(_terminService.getTerminMitDetails(any)).thenAnswer(
+          (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       await tester.pumpWidget(termineSeiteWidget);
 
@@ -223,8 +226,8 @@ void main() {
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getTerminMitDetails(any))
-          .thenAnswer((_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
+      when(_terminService.getTerminMitDetails(any)).thenAnswer(
+          (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       await tester.pumpWidget(termineSeiteWidget);
 
@@ -245,8 +248,8 @@ void main() {
       when(_terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getTerminMitDetails(any))
-          .thenAnswer((_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
+      when(_terminService.getTerminMitDetails(any)).thenAnswer(
+          (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       await tester.pumpWidget(termineSeiteWidget);
 
@@ -267,8 +270,8 @@ void main() {
       when(_terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getTerminMitDetails(any))
-          .thenAnswer((_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
+      when(_terminService.getTerminMitDetails(any)).thenAnswer(
+          (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       await tester.pumpWidget(termineSeiteWidget);
       // Warten bis asynchron Termine geladen wurden
@@ -291,6 +294,70 @@ void main() {
           TerminTestDaten.einTermin().longitude);
       expect(mapState.map.center, actionPosition);
       expect(mapState.map.zoom, 15);
+    });
+
+    testWidgets(
+        'triggers server call and highlihgts action with tap on join button',
+        (WidgetTester tester) async {
+      when(_terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.einTermin(),
+            TerminTestDaten.einTermin(),
+            TerminTestDaten.einTermin(),
+          ]);
+      var action = TerminTestDaten.einTerminOhneTeilisMitDetails();
+      when(_terminService.getTerminMitDetails(any))
+          .thenAnswer((_) async => action);
+
+      await tester.pumpWidget(termineSeiteWidget);
+
+      // Warten bis asynchron Termine geladen wurden
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(Key('action card')).first);
+      await tester.pump();
+
+      var state = tester.state<TermineSeiteState>(find.byType(TermineSeite));
+      expect(state.termine[0].participants, isEmpty);
+
+      await tester.tap(find.byKey(Key('join action button')));
+      await tester.pump();
+
+      verify(_terminService.joinAction(action, me)).called(1);
+      expect(state.termine[0].participants, containsAll([me]));
+      expect(find.byKey(Key('join action button')), findsNothing);
+      expect(find.byKey(Key('leave action button')), findsOneWidget);
+    });
+
+    testWidgets(
+        'triggers server call and highlihgts action with tap on leave button',
+        (WidgetTester tester) async {
+      when(_terminService.ladeTermine(any)).thenAnswer((_) async => [
+            TerminTestDaten.einTermin()..participants = [me],
+            TerminTestDaten.einTermin(),
+            TerminTestDaten.einTermin(),
+          ]);
+      var action = TerminTestDaten.einTerminMitTeilisUndDetails();
+      when(_terminService.getTerminMitDetails(any))
+          .thenAnswer((_) async => action);
+
+      await tester.pumpWidget(termineSeiteWidget);
+
+      // Warten bis asynchron Termine geladen wurden
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(Key('action card')).first);
+      await tester.pump();
+
+      var state = tester.state<TermineSeiteState>(find.byType(TermineSeite));
+      expect(state.termine[0].participants, containsAll([me]));
+
+      await tester.tap(find.byKey(Key('leave action button')));
+      await tester.pump();
+
+      verify(_terminService.leaveAction(action, me)).called(1);
+      expect(state.termine[0].participants, isEmpty);
+      expect(find.byKey(Key('leave action button')), findsNothing);
+      expect(find.byKey(Key('join action button')), findsOneWidget);
     });
   });
 
@@ -424,8 +491,8 @@ void main() {
       var tomorrow = today.subtract(Duration(days: 1));
       var dayAfterTomorrow = today.add(Duration(days: 2));
 
-      when(_terminService.createTermin(any, any))
-          .thenAnswer((_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
+      when(_terminService.createTermin(any, any)).thenAnswer(
+          (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       when(_terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.anActionFrom(yesterday),
@@ -480,8 +547,8 @@ void main() {
       var yesterday = today.subtract(Duration(days: 1));
       var tomorrow = today.add(Duration(days: 1));
 
-      when(_terminService.createTermin(any, any))
-          .thenAnswer((_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
+      when(_terminService.createTermin(any, any)).thenAnswer(
+          (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       when(_terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.anActionFrom(yesterday),
@@ -549,8 +616,8 @@ void main() {
           myAction
         ];
       });
-      when(_terminService.getTerminMitDetails(any))
-          .thenAnswer((_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
+      when(_terminService.getTerminMitDetails(any)).thenAnswer(
+          (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
       when(_storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [1]);
 
@@ -777,8 +844,8 @@ void main() {
       when(_terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getTerminMitDetails(any))
-          .thenAnswer((_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
+      when(_terminService.getTerminMitDetails(any)).thenAnswer(
+          (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       when(_storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [0]);
@@ -802,8 +869,8 @@ void main() {
       when(_terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getTerminMitDetails(any))
-          .thenAnswer((_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
+      when(_terminService.getTerminMitDetails(any)).thenAnswer(
+          (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
       when(_storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [0]);
 
@@ -829,8 +896,8 @@ void main() {
       when(_terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getTerminMitDetails(any))
-          .thenAnswer((_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
+      when(_terminService.getTerminMitDetails(any)).thenAnswer(
+          (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       when(_storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [0]);
@@ -1038,8 +1105,8 @@ void main() {
     });
 
     test('is uniquely generated at action creation and sent to server', () {
-      when(_terminService.createTermin(any, any))
-          .thenAnswer((_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
+      when(_terminService.createTermin(any, any)).thenAnswer(
+          (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       actionPageState.createNewAction(TerminTestDaten.einTermin());
       actionPageState.createNewAction(TerminTestDaten.einTermin());
