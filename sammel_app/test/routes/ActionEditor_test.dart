@@ -751,6 +751,7 @@ _pumpNavigation(WidgetTester tester) async {
             create: (context) => listLocationService),
         Provider<AbstractStammdatenService>.value(value: stammdatenService),
         Provider<PushService>.value(value: pushService),
+        Provider<AbstractUserService>.value(value: userService),
       ],
       child: MaterialApp(
         home: Navigation(),
