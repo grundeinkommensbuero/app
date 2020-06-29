@@ -406,6 +406,7 @@ class TermineRestResourceTest {
     @Test
     fun sageTeilnahmeAbLiefert422BeiUnbekannterBenutzerId() {
         whenever(dao.getTermin(1L)).thenReturn(terminOhneTeilnehmerMitDetails())
+        whenever(benutzerDao.getBenutzer(1L)).thenReturn(null)
 
         val response = resource.meldeTeilnahmeAn(
                 Participation(user = BenutzerDto.convertFromBenutzer(karl()), action = terminDto()))
