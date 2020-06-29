@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
@@ -9,6 +12,7 @@ import 'package:sammel_app/services/TermineService.dart';
 
 import '../model/Ort_test.dart';
 import '../model/Termin_test.dart';
+import '../shared/Mocks.dart';
 
 void main() {
   group('DemoTermineService', () {
@@ -112,6 +116,52 @@ void main() {
 
       expect(
           service.termine[0].participants.map((e) => e.id), containsAll([2]));
+    ***REMOVED***);
+  ***REMOVED***);
+
+  group('Participation serialises', () {
+    test('empty', () {
+      expect(
+          jsonEncode(Participation(null, null)), '{"action":null,"user":null***REMOVED***');
+    ***REMOVED***);
+
+    test('filled', () {
+      expect(jsonEncode(Participation(TerminTestDaten.einTermin(), karl())),
+          '{"action":${jsonEncode(TerminTestDaten.einTermin())***REMOVED***,"user":{"id":1,"name":"Karl Marx","color":4294198070***REMOVED******REMOVED***');
+    ***REMOVED***);
+  ***REMOVED***);
+
+  group('TermineService', () {
+    Backend backend;
+    TermineService service;
+
+    setUp(() {
+      backend = BackendMock();
+      service = TermineService(backend);
+    ***REMOVED***);
+
+    test('attendAction calls correct path', () {
+      when(backend.post('service/termine/teilnahme', any))
+          .thenAnswer((_) async => HttpClientResponseBodyMock(null, 202));
+
+      service.attendAction(TerminTestDaten.einTermin(), karl());
+
+      verify(backend.post(
+          'service/termine/teilnahme',
+          '{"action":${jsonEncode(TerminTestDaten.einTermin())***REMOVED***,'
+              '"user":${jsonEncode(karl())***REMOVED******REMOVED***'));
+    ***REMOVED***);
+
+    test('dismissAction calls correct path', () {
+      when(backend.post('service/termine/absage', any))
+          .thenAnswer((_) async => HttpClientResponseBodyMock(null, 202));
+
+      service.dismissAction(TerminTestDaten.einTermin(), karl());
+
+      verify(backend.post(
+          'service/termine/absage',
+          '{"action":${jsonEncode(TerminTestDaten.einTermin())***REMOVED***,'
+              '"user":${jsonEncode(karl())***REMOVED******REMOVED***'));
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***

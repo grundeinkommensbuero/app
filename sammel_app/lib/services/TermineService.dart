@@ -64,9 +64,27 @@ class TermineService extends AbstractTermineService {
         'service/termine/termin', jsonEncode(ActionWithToken(action, token)));
   ***REMOVED***
 
-  attendAction(Termin action, User user) {***REMOVED***
+  attendAction(Termin action, User user) async {
+    await post(
+        'service/termine/teilnahme', jsonEncode(Participation(action, user)));
+  ***REMOVED***
 
-  dismissAction(Termin action, User user) {***REMOVED***
+  dismissAction(Termin action, User user) async {
+    await post(
+        'service/termine/absage', jsonEncode(Participation(action, user)));
+  ***REMOVED***
+***REMOVED***
+
+class Participation {
+  Termin action;
+  User user;
+
+  Participation(this.action, this.user);
+
+  toJson() => {
+        'action': action,
+        'user': user,
+      ***REMOVED***
 ***REMOVED***
 
 class DemoTermineService extends AbstractTermineService {
