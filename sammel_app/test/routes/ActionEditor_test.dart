@@ -76,12 +76,12 @@ void main() {
 
     testWidgets('Type dialog shows correct typ', (WidgetTester tester) async {
       await _openActionCreator(tester);
-      ActionEditorState action_data =
+      ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
       // ignore: invalid_use_of_protected_member
-      action_data.setState(() {
-        action_data.action.typ = TerminTestDaten.einTermin().typ;
-        action_data.validateAllInput();
+      actionData.setState(() {
+        actionData.action.typ = TerminTestDaten.einTermin().typ;
+        actionData.validateAllInput();
       });
       await tester.pump();
       expect(
@@ -112,16 +112,16 @@ void main() {
 
     testWidgets('Zeitraum is correctly shown', (WidgetTester tester) async {
       await _openActionCreator(tester);
-      ActionEditorState action_data =
+      ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
       expect(find.text('von 12:05 bis 13:09'), findsNothing);
       TimeOfDay von = TimeOfDay(hour: 12, minute: 5);
       TimeOfDay bis = TimeOfDay(hour: 13, minute: 9);
       // ignore: invalid_use_of_protected_member
-      action_data.setState(() {
-        action_data.action.von = von;
-        action_data.action.bis = bis;
-        action_data.validateAllInput();
+      actionData.setState(() {
+        actionData.action.von = von;
+        actionData.action.bis = bis;
+        actionData.validateAllInput();
       });
       await tester.pump();
       expect(find.text('von 12:05 bis 13:09'), findsOneWidget);
@@ -129,13 +129,13 @@ void main() {
 
     testWidgets('No Zeitraum is correctly shown', (WidgetTester tester) async {
       await _openActionCreator(tester);
-      ActionEditorState action_data =
+      ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
       // ignore: invalid_use_of_protected_member
-      action_data.setState(() {
-        action_data.action.von = null;
-        action_data.action.bis = null;
-        action_data.validateAllInput();
+      actionData.setState(() {
+        actionData.action.von = null;
+        actionData.action.bis = null;
+        actionData.validateAllInput();
       });
       await tester.pump();
       expect(find.text('Wähle eine Uhrzeit'), findsOneWidget);
@@ -153,14 +153,14 @@ void main() {
     testWidgets('Location dialog are correctly shown',
         (WidgetTester tester) async {
       await _openActionCreator(tester);
-      ActionEditorState action_data =
+      ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
       expect(find.text("in Görlitzer Park und Umgebung"), findsNothing);
       when(stammdatenService.ladeOrte()).thenAnswer((_) async => [goerli()]);
       // ignore: invalid_use_of_protected_member
-      action_data.setState(() {
-        action_data.action.ort = goerli();
-        action_data.validateAllInput();
+      actionData.setState(() {
+        actionData.action.ort = goerli();
+        actionData.validateAllInput();
       });
       await tester.pumpAndSettle();
       expect(find.text("in Görlitzer Park und Umgebung"), findsOneWidget);
@@ -169,12 +169,12 @@ void main() {
     testWidgets('changing kontakt is correctly shown',
         (WidgetTester tester) async {
       await _openActionCreator(tester);
-      ActionEditorState action_data =
+      ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
       // ignore: invalid_use_of_protected_member
-      action_data.setState(() {
-        action_data.action.terminDetails.kontakt = 'test1';
-        action_data.validateAllInput();
+      actionData.setState(() {
+        actionData.action.terminDetails.kontakt = 'test1';
+        actionData.validateAllInput();
       });
       await tester.pump();
       expect(find.text('test1'), findsOneWidget);
@@ -183,13 +183,13 @@ void main() {
     testWidgets('changing treffpunkt is correctly shown',
         (WidgetTester tester) async {
       await _openActionCreator(tester);
-      ActionEditorState action_data =
+      ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
       // ignore: invalid_use_of_protected_member
-      action_data.setState(() {
-        action_data.action.terminDetails.treffpunkt = 'test1';
-        action_data.action.coordinates = LatLng(52.5170365, 13.3888599);
-        action_data.validateAllInput();
+      actionData.setState(() {
+        actionData.action.terminDetails.treffpunkt = 'test1';
+        actionData.action.coordinates = LatLng(52.5170365, 13.3888599);
+        actionData.validateAllInput();
       });
       await tester.pump();
       expect(find.text('Treffpunkt: test1'), findsOneWidget);
@@ -198,12 +198,12 @@ void main() {
     testWidgets('venue decription w/o coordinates is not displayed',
         (WidgetTester tester) async {
       await _openActionCreator(tester);
-      ActionEditorState action_data =
+      ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
       // ignore: invalid_use_of_protected_member
-      action_data.setState(() {
-        action_data.action.terminDetails.treffpunkt = 'test1';
-        action_data.validateAllInput();
+      actionData.setState(() {
+        actionData.action.terminDetails.treffpunkt = 'test1';
+        actionData.validateAllInput();
       });
       await tester.pump();
       expect(find.text('Gib einen Treffpunkt an'), findsOneWidget);
@@ -212,12 +212,12 @@ void main() {
     testWidgets('changing beschreibung is correctly shown',
         (WidgetTester tester) async {
       await _openActionCreator(tester);
-      ActionEditorState action_data =
+      ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
       // ignore: invalid_use_of_protected_member
-      action_data.setState(() {
-        action_data.action.terminDetails.kommentar = 'test1';
-        action_data.validateAllInput();
+      actionData.setState(() {
+        actionData.action.terminDetails.kommentar = 'test1';
+        actionData.validateAllInput();
       });
       await tester.pump();
       expect(find.text('Beschreibung: test1'), findsOneWidget);
@@ -226,12 +226,12 @@ void main() {
     testWidgets('changing tage is correctly shown',
         (WidgetTester tester) async {
       await _openActionCreator(tester);
-      ActionEditorState action_data =
+      ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
       // ignore: invalid_use_of_protected_member
-      action_data.setState(() {
-        action_data.action.tage = [DateTime(2019, 12, 1)];
-        action_data.validateAllInput();
+      actionData.setState(() {
+        actionData.action.tage = [DateTime(2019, 12, 1)];
+        actionData.validateAllInput();
       });
       await tester.pump();
       expect(find.text('am 01.12.,'), findsOneWidget);
