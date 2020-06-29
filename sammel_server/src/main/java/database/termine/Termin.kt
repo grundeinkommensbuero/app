@@ -45,6 +45,7 @@ class Termin {
     @JoinColumn(name = "details", referencedColumnName = "id")
     var details: TerminDetails? = null
 
+    @Suppress("unused")
     constructor()
 
     constructor(id: Long,
