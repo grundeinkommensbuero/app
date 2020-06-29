@@ -40,7 +40,6 @@ class BackendService implements Backend {
     if (response.response.statusCode == 403)
       throw AuthFehler(response.body);
 
-    print(response.response.statusCode);
     // else
     throw RestFehler(response.body.toString());
   }

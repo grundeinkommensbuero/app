@@ -141,7 +141,6 @@ open class TermineRestResource {
                     .entity(RestFehlermeldung("Der angegebene Benutzer ist ungültig"))
                     .build()
         val userAusDb = benutzerDao.getBenutzer(participation.user!!.id!!)
-        LOG.warn("Lade Benutzer aus Datenbank: $userAusDb")
         if (userAusDb == null)
             return Response
                     .status(422)
