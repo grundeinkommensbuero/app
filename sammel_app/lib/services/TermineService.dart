@@ -48,8 +48,8 @@ class TermineService extends AbstractTermineService {
     return Termin.fromJson(response.body);
   ***REMOVED***
 
-  Future<void> saveAction(Termin action, String token) {
-    post('service/termine/termin', jsonEncode(ActionWithToken(action, token)));
+  saveAction(Termin action, String token) async {
+    await post('service/termine/termin', jsonEncode(ActionWithToken(action, token)));
   ***REMOVED***
 
   deleteAction(Termin action, String token) {

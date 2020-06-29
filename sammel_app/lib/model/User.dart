@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 class User {
-  int id = null;
-  String name = null;
-  Color color = null;
+  int id;
+  String name;
+  Color color;
 
   User(this.id, this.name, this.color);
 

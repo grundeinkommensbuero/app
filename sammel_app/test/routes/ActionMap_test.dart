@@ -111,7 +111,7 @@ void main() {
           ],
                   listLocations: [],
                   isMyAction: (_) => false,
-                  openActionDetails: (_1, _2) => iHaveBeenCalled = true))));
+                  openActionDetails: (_, __) => iHaveBeenCalled = true))));
 
       expect(iHaveBeenCalled, false);
 
