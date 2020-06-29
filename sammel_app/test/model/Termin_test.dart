@@ -13,16 +13,17 @@ void main() {
   group('serialisere', () {
     test('serialisiert Temin ohne Teilnehmer oder Details', () {
       print(Termin(
-          1,
-          DateTime(2020, 1, 2, 15, 0, 0),
-          DateTime(2020, 1, 2, 18, 0, 0),
-          Ort(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez', 52.49653,
-              13.43762),
-          'Sammeln',
-          52.52116,
-          13.41331,
-          [],
-          null).toJson());
+              1,
+              DateTime(2020, 1, 2, 15, 0, 0),
+              DateTime(2020, 1, 2, 18, 0, 0),
+              Ort(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez', 52.49653,
+                  13.43762),
+              'Sammeln',
+              52.52116,
+              13.41331,
+              [],
+              null)
+          .toJson());
       expect(
           jsonEncode(Termin(
               1,
@@ -224,7 +225,10 @@ class TerminTestDaten {
       [],
       null);
 
-  static Termin einTerminMitTeilisUndDetails() => Termin(
+  static Termin einTerminMitTeilisUndDetails() =>
+      einTerminOhneTeilisMitDetails()..participants = [karl()];
+
+  static Termin einTerminOhneTeilisMitDetails() => Termin(
       0,
       DateTime(2019, 11, 4, 17, 9, 0),
       DateTime(2019, 11, 4, 18, 9, 0),
@@ -232,9 +236,10 @@ class TerminTestDaten {
       'Sammeln',
       52.52116,
       13.41331,
-      [karl()],
+      [],
       TerminDetailsTestDaten.terminDetailsTestDaten());
 ***REMOVED***
 
 User karl() => User(1, 'Karl Marx', Colors.red);
+
 User rosa() => User(2, 'Rosa Luxemburg', Colors.purple);

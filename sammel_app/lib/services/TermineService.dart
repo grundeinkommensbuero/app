@@ -24,9 +24,9 @@ abstract class AbstractTermineService extends BackendService {
 
   deleteAction(Termin action, String token);
 
-  attendAction(Termin action, User user);
+  joinAction(Termin action, User user);
 
-  dismissAction(Termin action, User user);
+  leaveAction(Termin action, User user);
 ***REMOVED***
 
 class TermineService extends AbstractTermineService {
@@ -59,17 +59,17 @@ class TermineService extends AbstractTermineService {
         'service/termine/termin', jsonEncode(ActionWithToken(action, token)));
   ***REMOVED***
 
-  deleteAction(Termin action, String token) {
-    delete(
+  deleteAction(Termin action, String token) async {
+    await delete(
         'service/termine/termin', jsonEncode(ActionWithToken(action, token)));
   ***REMOVED***
 
-  attendAction(Termin action, User user) async {
+  joinAction(Termin action, User user) async {
     await post(
         'service/termine/teilnahme', jsonEncode(Participation(action, user)));
   ***REMOVED***
 
-  dismissAction(Termin action, User user) async {
+  leaveAction(Termin action, User user) async {
     await post(
         'service/termine/absage', jsonEncode(Participation(action, user)));
   ***REMOVED***
@@ -199,13 +199,13 @@ class DemoTermineService extends AbstractTermineService {
     termine.removeAt(termine.indexWhere((a) => a.id == action.id));
   ***REMOVED***
 
-  attendAction(Termin action, User user) {
+  joinAction(Termin action, User user) {
     var stored = termine.firstWhere((a) => a.id == action.id);
     if (!stored.participants.map((e) => e.id).contains(user.id))
       stored.participants.add(user);
   ***REMOVED***
 
-  dismissAction(Termin action, User user) {
+  leaveAction(Termin action, User user) {
     var stored = termine.firstWhere((a) => a.id == action.id);
     if (stored.participants.map((e) => e.id).contains(user.id))
       stored.participants.remove(user);

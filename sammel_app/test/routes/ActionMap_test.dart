@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/routes/ActionMap.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
@@ -33,6 +34,7 @@ void main() {
           ],
                   listLocations: [],
                   isMyAction: (_) => false,
+                  iAmParticipant: (_) => false,
                   openActionDetails: () {***REMOVED***)));
     ***REMOVED***);
 
@@ -57,6 +59,7 @@ void main() {
           ],
                   listLocations: [],
                   isMyAction: isMyAction,
+                  iAmParticipant: (_) => false,
                   openActionDetails: () {***REMOVED***))));
 
       List<FlatButton> actionMarker = tester
@@ -67,12 +70,13 @@ void main() {
       expect(actionMarker.length, 3);
 
       expect(actionMarker[0].color, DweTheme.yellowLight);
-      expect(actionMarker[1].color, DweTheme.green);
+      expect(actionMarker[1].color, DweTheme.blueLight);
       expect(actionMarker[2].color, DweTheme.yellowLight);
     ***REMOVED***);
 
     testWidgets('are higlighted for past actions', (WidgetTester tester) async {
       var isMyAction = (id) => id == 2;
+      var iAmParticipant = (List<User> users) => users.isNotEmpty;
 
       await tester.pumpWidget(MaterialApp(
           home: Scaffold(
@@ -80,10 +84,44 @@ void main() {
                   termine: [
             TerminTestDaten.einTermin()..id = 1,
             TerminTestDaten.einTermin()..id = 2,
-            TerminTestDaten.einTermin()..id = 3,
+            TerminTestDaten.einTermin()
+              ..id = 3
+              ..participants = [karl()],
           ],
                   listLocations: [],
                   isMyAction: isMyAction,
+                  iAmParticipant: iAmParticipant,
+                  openActionDetails: () {***REMOVED***))));
+
+      List<FlatButton> actionMarker = tester
+          .widgetList(find.byKey(Key('action marker')))
+          .map((widget) => widget as FlatButton)
+          .toList();
+
+      expect(actionMarker.length, 3);
+
+      expect(actionMarker[0].color, DweTheme.yellowBright);
+      expect(actionMarker[1].color, DweTheme.blueBright);
+      expect(actionMarker[2].color, DweTheme.greenLight);
+    ***REMOVED***);
+
+    testWidgets('are higlighted for joined actions',
+        (WidgetTester tester) async {
+      var iAmParticipant = (List<User> users) => users.isNotEmpty;
+
+      await tester.pumpWidget(MaterialApp(
+          home: Scaffold(
+              body: ActionMap(
+                  termine: [
+            TerminTestDaten.einTermin()..id = 1,
+            TerminTestDaten.einTermin()
+              ..id = 2
+              ..participants = [karl()],
+            TerminTestDaten.einTermin()..id = 3,
+          ],
+                  listLocations: [],
+                  isMyAction: (_) => false,
+                  iAmParticipant: iAmParticipant,
                   openActionDetails: () {***REMOVED***))));
 
       List<FlatButton> actionMarker = tester
@@ -111,6 +149,7 @@ void main() {
           ],
                   listLocations: [],
                   isMyAction: (_) => false,
+                  iAmParticipant: (_) => false,
                   openActionDetails: (_, __) => iHaveBeenCalled = true))));
 
       expect(iHaveBeenCalled, false);
