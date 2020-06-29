@@ -617,6 +617,7 @@ class ActionEditorState extends State<ActionEditor> {
             this.action.typ,
             action.coordinates.latitude,
             action.coordinates.longitude,
+            [],
             this.action.terminDetails));
       ***REMOVED***
       return termine;
