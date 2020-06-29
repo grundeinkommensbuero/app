@@ -14,6 +14,7 @@ import 'package:sammel_app/services/PushService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
+import 'package:sammel_app/services/UserService.dart';
 
 import '../model/Ort_test.dart';
 import '../model/Termin_test.dart';
@@ -24,6 +25,7 @@ final terminService = TermineServiceMock();
 final listLocationService = ListLocationServiceMock();
 final storageService = StorageServiceMock();
 final pushService = PushServiceMock();
+final userService = UserServiceMock();
 
 void main() {
   setUp(() {
@@ -32,6 +34,7 @@ void main() {
     when(listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
     when(terminService.ladeTermine(any)).thenAnswer((_) async => []);
+    when(userService.user).thenAnswer((_) async => karl());
   });
 
   testWidgets('TermineSeite opens CreateTerminDialog on click at menu button',
@@ -56,8 +59,8 @@ void main() {
       when(terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
-      when(terminService.getTerminMitDetails(any))
-          .thenAnswer((_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
+      when(terminService.getTerminMitDetails(any)).thenAnswer(
+          (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       when(storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [0]);
@@ -275,7 +278,7 @@ void main() {
       actionData.action.tage = [DateTime(2019, 12, 1)];
       actionData.action.von = TimeOfDay(hour: 10, minute: 32);
       actionData.action.bis = TimeOfDay(hour: 10, minute: 31);
-      List<Termin> newTermine = actionData.generateActions();
+      List<Termin> newTermine = await actionData.generateActions();
       expect(newTermine[0].ende.day, 2);
     });
 
@@ -297,7 +300,8 @@ void main() {
   group('validates', () {
     var actionEditor;
     setUp(() {
-      actionEditor = ActionEditorState(TerminTestDaten.einTerminMitTeilisUndDetails());
+      actionEditor =
+          ActionEditorState(TerminTestDaten.einTerminMitTeilisUndDetails());
     });
 
     test('all inputs valid with correct values', () {
@@ -395,8 +399,8 @@ void main() {
 
     testWidgets('triggers validation on Fertig button',
         (WidgetTester tester) async {
-      var actionEditor =
-          ActionEditor(initAction: TerminTestDaten.einTerminMitTeilisUndDetails());
+      var actionEditor = ActionEditor(
+          initAction: TerminTestDaten.einTerminMitTeilisUndDetails());
       await tester.pumpWidget(MaterialApp(home: actionEditor));
       ActionEditorState state = tester.state(find.byWidget(actionEditor));
 
@@ -457,8 +461,8 @@ void main() {
       when(terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
-      when(terminService.getTerminMitDetails(any))
-          .thenAnswer((_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
+      when(terminService.getTerminMitDetails(any)).thenAnswer(
+          (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       when(storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [0]);
@@ -468,7 +472,7 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      Termin action = state.generateActions()[0];
+      Termin action = (await state.generateActions())[0];
 
       expect(action.beginn, TerminTestDaten.einTermin().beginn);
     });
@@ -477,7 +481,7 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      Termin action = state.generateActions()[0];
+      Termin action = (await state.generateActions())[0];
 
       expect(action.ende, TerminTestDaten.einTermin().ende);
     });
@@ -486,7 +490,7 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      Termin action = state.generateActions()[0];
+      Termin action = (await state.generateActions())[0];
 
       expect(action.ort.equals(TerminTestDaten.einTermin().ort), true);
     });
@@ -495,7 +499,7 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      Termin action = state.generateActions()[0];
+      Termin action = (await state.generateActions())[0];
 
       expect(action.typ, TerminTestDaten.einTermin().typ);
     });
@@ -504,7 +508,7 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      Termin action = state.generateActions()[0];
+      Termin action = (await state.generateActions())[0];
 
       expect(action.id, TerminTestDaten.einTermin().id);
     });
@@ -513,7 +517,7 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      Termin action = state.generateActions()[0];
+      Termin action = (await state.generateActions())[0];
 
       expect(action.details.kontakt,
           TerminTestDaten.einTerminMitTeilisUndDetails().details.kontakt);
@@ -524,7 +528,7 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      Termin action = state.generateActions()[0];
+      Termin action = (await state.generateActions())[0];
 
       expect(action.details.kommentar,
           TerminTestDaten.einTerminMitTeilisUndDetails().details.kommentar);
@@ -535,7 +539,7 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      Termin action = state.generateActions()[0];
+      Termin action = (await state.generateActions())[0];
 
       expect(action.details.treffpunkt,
           TerminTestDaten.einTerminMitTeilisUndDetails().details.treffpunkt);
@@ -546,10 +550,12 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      Termin action = state.generateActions()[0];
+      Termin action = (await state.generateActions())[0];
 
-      expect(action.latitude, TerminTestDaten.einTerminMitTeilisUndDetails().latitude);
-      expect(action.longitude, TerminTestDaten.einTerminMitTeilisUndDetails().longitude);
+      expect(action.latitude,
+          TerminTestDaten.einTerminMitTeilisUndDetails().latitude);
+      expect(action.longitude,
+          TerminTestDaten.einTerminMitTeilisUndDetails().longitude);
     });
 
     testWidgets('with new start, w/ changes', (WidgetTester tester) async {
@@ -558,7 +564,7 @@ void main() {
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       var now = TimeOfDay.now();
       state.action.von = now;
-      Termin action = state.generateActions()[0];
+      Termin action = (await state.generateActions())[0];
 
       expect(action.beginn, DateTime(2019, 11, 04, now.hour, now.minute));
     });
@@ -569,7 +575,7 @@ void main() {
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       var now = TimeOfDay(hour: 23, minute: 0);
       state.action.bis = now;
-      Termin action = state.generateActions()[0];
+      Termin action = (await state.generateActions())[0];
 
       expect(action.ende, DateTime(2019, 11, 04, now.hour, now.minute));
     });
@@ -579,7 +585,7 @@ void main() {
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       state.action.ort = nordkiez();
-      Termin action = state.generateActions()[0];
+      Termin action = (await state.generateActions())[0];
 
       expect(action.ort.equals(nordkiez()), true);
     });
@@ -589,7 +595,7 @@ void main() {
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       state.action.typ = 'Neuer Typ';
-      Termin action = state.generateActions()[0];
+      Termin action = (await state.generateActions())[0];
 
       expect(action.typ, 'Neuer Typ');
     });
@@ -599,7 +605,7 @@ void main() {
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       state.action.terminDetails.kontakt = 'Neuer Kontakt';
-      Termin action = state.generateActions()[0];
+      Termin action = (await state.generateActions())[0];
 
       expect(action.details.kontakt, 'Neuer Kontakt');
     });
@@ -610,7 +616,7 @@ void main() {
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       state.action.terminDetails.kommentar = 'Neuer Kommentar';
-      Termin action = state.generateActions()[0];
+      Termin action = (await state.generateActions())[0];
 
       expect(action.details.kommentar, 'Neuer Kommentar');
     });
@@ -621,7 +627,7 @@ void main() {
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       state.action.terminDetails.treffpunkt = 'Neuer Treffpunkt';
-      Termin action = state.generateActions()[0];
+      Termin action = (await state.generateActions())[0];
 
       expect(action.details.treffpunkt, 'Neuer Treffpunkt');
     });
@@ -632,10 +638,23 @@ void main() {
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       state.action.coordinates = LatLng(52.5170365, 13.3888599);
-      Termin action = state.generateActions()[0];
+      Termin action = (await state.generateActions())[0];
 
       expect(action.latitude, 52.5170365);
       expect(action.longitude, 13.3888599);
+    });
+
+    testWidgets('stores user from UserService to participants list',
+        (WidgetTester tester) async {
+      await _openActionEditor(tester);
+
+      ActionEditorState state = tester.state(find.byType(ActionEditor));
+      Termin action = (await state.generateActions())[0];
+
+      expect(action.participants.length, 1);
+      expect(action.participants[0].id, 1);
+      expect(action.participants[0].name, 'Karl Marx');
+      expect(action.participants[0].color.value, 4294198070);
     });
   });
   group('finish button', () {
@@ -644,8 +663,10 @@ void main() {
       onFinish = onFinish ?? (_) {};
 
       var actionEditor = ActionEditor(onFinish: onFinish);
-      await tester.pumpWidget(Provider<AbstractStammdatenService>.value(
-          value: stammdatenService, child: MaterialApp(home: actionEditor)));
+      await tester.pumpWidget(MultiProvider(providers: [
+        Provider<AbstractStammdatenService>.value(value: stammdatenService),
+        Provider<AbstractUserService>.value(value: userService),
+      ], child: MaterialApp(home: actionEditor)));
 
       ActionEditorState state = tester.state(find.byWidget(actionEditor));
       state.action = ActionData.testDaten();
@@ -744,7 +765,8 @@ _pumpActionPage(WidgetTester tester) async {
         Provider<StorageService>.value(value: storageService),
         Provider<AbstractListLocationService>(
             create: (context) => listLocationService),
-        Provider<AbstractStammdatenService>.value(value: stammdatenService)
+        Provider<AbstractStammdatenService>.value(value: stammdatenService),
+        Provider<AbstractUserService>.value(value: userService),
       ],
       child: MaterialApp(
         home: TermineSeite(),

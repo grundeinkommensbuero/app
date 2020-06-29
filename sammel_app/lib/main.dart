@@ -57,7 +57,8 @@ class MyApp extends StatelessWidget {
           Provider<PushService>.value(value: pushService),
           Provider<PushNotificationsManager>.value(
               value: pushNotificationManager),
-          Provider<ChatMessageService>.value(value: chatMessageService)
+          Provider<ChatMessageService>.value(value: chatMessageService),
+          Provider<AbstractUserService>.value(value: userService),
         ],
         child: MaterialApp(
             title: 'DW & Co. Enteignen',

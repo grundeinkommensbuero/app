@@ -8,6 +8,7 @@ import 'package:sammel_app/services/PushService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
+import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/push_notification_manager.dart';
 
 class StammdatenServiceMock extends Mock implements StammdatenService {}
@@ -23,6 +24,8 @@ class PushServiceMock extends Mock implements PushService {}
 
 class PushNotificationsManagerMock extends Mock
     implements PushNotificationsManager {}
+
+class UserServiceMock extends Mock implements UserService {}
 
 class BackendMock extends Mock implements Backend {}
 
