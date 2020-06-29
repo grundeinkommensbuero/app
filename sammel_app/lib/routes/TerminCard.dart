@@ -13,15 +13,17 @@ class TerminCard extends StatelessWidget {
   );
 
   final bool myAction;
+  final bool participant;
 
-  TerminCard(this.termin, [this.myAction = false, Key key])
+  TerminCard(this.termin,
+      [this.myAction = false, this.participant = false, Key key])
       : super(key: key);
 
   build(context) {
     return Container(
       padding: EdgeInsets.all(10.0),
       decoration: BoxDecoration(
-          color: DweTheme.actionColor(termin.ende, myAction),
+          color: DweTheme.actionColor(termin.ende, myAction, participant),
           boxShadow: [
             BoxShadow(
                 color: Colors.grey,

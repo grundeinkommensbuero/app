@@ -35,6 +35,8 @@ open class TermineRestResource {
     @Produces(APPLICATION_JSON)
     open fun getTermine(filter: TermineFilter?): Response {
         val termine = dao.getTermine(filter ?: TermineFilter())
+        LOG.warn(termine)
+        LOG.warn(termine.map { termin -> convertFromTerminWithoutDetails(termin) })
         return Response
                 .ok()
                 .entity(termine.map { termin -> convertFromTerminWithoutDetails(termin) })
@@ -231,7 +233,7 @@ open class TermineRestResource {
                     termin.typ,
                     termin.lattitude,
                     termin.longitude,
-                    null)
+                    termin.teilnehmer.map { BenutzerDto.convertFromBenutzer(it) })
         }
     }
 

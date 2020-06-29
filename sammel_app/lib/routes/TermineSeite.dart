@@ -5,6 +5,7 @@ import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
+import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/routes/ActionMap.dart';
@@ -13,6 +14,7 @@ import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
+import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:uuid/uuid.dart';
 import 'ActionList.dart';
@@ -44,6 +46,7 @@ class TermineSeiteState extends State<TermineSeite>
   FilterWidget filterWidget;
 
   List<int> myActions = [];
+  User me;
 
   int navigation = 0;
   AnimationController _animationController;
@@ -80,13 +83,15 @@ class TermineSeiteState extends State<TermineSeite>
       curve: Curves.easeIn,
     ));
 
-    var actionListView = ActionList(termine, isMyAction, openTerminDetails,
+    var actionListView = ActionList(
+        termine, isMyAction, iAmParticipant, openTerminDetails,
         key: Key('action list'));
     var actionMapView = ActionMap(
       key: Key('action map'),
       termine: termine,
       listLocations: listLocations,
       isMyAction: isMyAction,
+      iAmParticipant: iAmParticipant,
       openActionDetails: openTerminDetails,
       mapController: mapController,
     );
@@ -155,6 +160,10 @@ class TermineSeiteState extends State<TermineSeite>
       });
     });
 
+    Provider.of<AbstractUserService>(context)
+        .user
+        .then((user) => setState(() => me = user));
+
     _initialized = true;
   }
 
@@ -189,6 +198,7 @@ class TermineSeiteState extends State<TermineSeite>
           context: context,
           builder: (BuildContext context) => SimpleDialog(
                 titlePadding: EdgeInsets.zero,
+                backgroundColor: determineColor(terminMitDetails),
                 title: AppBar(
                     leading: null,
                     automaticallyImplyLeading: false,
@@ -229,9 +239,19 @@ class TermineSeiteState extends State<TermineSeite>
 
       if (command == TerminDetailsCommand.FOCUS)
         showActionOnMap(terminMitDetails);
-    } catch(e) {
+    } catch (e) {
       ErrorService.handleError(e);
     }
+  }
+
+  Color determineColor(Termin terminMitDetails) {
+    bool participator =
+        terminMitDetails.participants.map((e) => e.id).contains(me?.id);
+    bool owner = terminMitDetails.participants[0].id == me.id;
+
+    if (owner) return DweTheme.blueLight;
+
+    return participator ? DweTheme.green : DweTheme.yellowLight;
   }
 
   List<Widget> addEditDeleteButtonsIfMyAction(
@@ -264,6 +284,9 @@ class TermineSeiteState extends State<TermineSeite>
   bool isMyAction(int id) {
     return myActions?.contains(id);
   }
+
+  bool iAmParticipant(List<User> participants) =>
+      participants.map((e) => e.id).contains(me?.id);
 
   Future editAction(BuildContext context, Termin termin) async {
     await showDialog(
@@ -366,6 +389,9 @@ class TermineSeiteState extends State<TermineSeite>
       navigation = 1; // change to map view
     });
   }
+
+  participant(Termin termin) =>
+      termin.participants.map((e) => e.id).contains(me?.id);
 }
 
 AlertDialog confirmDeleteDialog(BuildContext context) => AlertDialog(
