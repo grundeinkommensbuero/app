@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/routes/Navigation.dart';
-import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/PushService.dart';
 import 'package:sammel_app/services/StorageService.dart';
@@ -45,7 +44,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ErrorService.setContext(context);
     SimpleMessageChannel smc = SimpleMessageChannel('SimpleMessageChannel');
     chatMessageService.register_channel(smc);
 
