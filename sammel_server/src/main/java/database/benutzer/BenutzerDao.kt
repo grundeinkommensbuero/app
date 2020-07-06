@@ -47,6 +47,14 @@ open class BenutzerDao {
                 .isNotEmpty()
     ***REMOVED***
 
+    open fun getFirebaseKeys(benutzerListe: List<Benutzer>): List<String> {
+        // TODO Tests
+        return entityManager
+                .createQuery("select creds.firebaseKey from Credentials creds where creds.id in (:ids)", String::class.java)
+                .setParameter("ids", benutzerListe.map { it.id ***REMOVED***)
+                .resultList
+    ***REMOVED***
+
     class NeuerBenutzerHatBereitsIdException : Exception()
     class BenutzerAnlegenGescheitertException(message: String) : java.lang.Exception(message)
 ***REMOVED***
