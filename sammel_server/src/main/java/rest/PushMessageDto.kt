@@ -3,7 +3,6 @@ package rest
 data class PushMessageDto (
         var notification: PushNotificationDto? = null,
         var data: Map<String, String>? = null,
-        var topic: String? = null,
         var recipients: List<String>? = null
 )
 

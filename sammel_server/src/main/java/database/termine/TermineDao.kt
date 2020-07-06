@@ -1,7 +1,6 @@
 package database.termine
 
 import database.DatabaseException
-import org.jboss.logging.Logger
 import rest.TermineFilter
 import shared.toDate
 import java.time.LocalDate
@@ -13,7 +12,6 @@ import javax.persistence.TypedQuery
 
 @Stateless
 open class TermineDao {
-    private val LOG = Logger.getLogger(TermineDao::class.java)
 
     @Inject
     @PersistenceContext(unitName = "mariaDB")
