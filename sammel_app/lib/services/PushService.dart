@@ -47,7 +47,7 @@ class PushService extends AbstractPushService {
     }
   }
 
-  pushToAction(String actionId, PushData data, PushNotification notification) {
+  pushToAction(int actionId, PushData data, PushNotification notification) {
     if (actionId == null) {
       throw MissingTargetError(
           "Für Push-Nachrichten an Aktionen muss die Aktions-ID angegeben werden.");

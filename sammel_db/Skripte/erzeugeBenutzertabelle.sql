@@ -2,7 +2,7 @@ create table Benutzer
 (
     id            int auto_increment not null,
     name          varchar(40) unique null,
-    color         int null,
+    color         long null,
     constraint Benutzer_pk
         primary key (id)
 );
@@ -15,5 +15,5 @@ create table Credentials
     firebasekey   varchar(256) not null,
     constraint Credentials_pk
         primary key (id)
-)
-fue
+);
+
