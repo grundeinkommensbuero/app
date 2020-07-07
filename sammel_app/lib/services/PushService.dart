@@ -63,6 +63,20 @@ class PushService extends AbstractPushService {
       ErrorService.handleError(e);
     ***REMOVED***
   ***REMOVED***
+
+  pushToAction(String actionId, PushData data, PushNotification notification) {
+    if (actionId == null) {
+      throw MissingTargetError(
+          "Für Push-Nachrichten an Aktionen muss die Aktions-ID angegeben werden.");
+    ***REMOVED***
+
+    try {
+      post('service/push/topic/$actionId',
+          jsonEncode(PushMessage(data, notification).toJson()));
+    ***REMOVED*** catch (e) {
+      ErrorService.handleError(e);
+    ***REMOVED***
+  ***REMOVED***
 ***REMOVED***
 
 class DemoPushService extends AbstractPushService {
