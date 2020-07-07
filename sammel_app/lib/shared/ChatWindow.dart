@@ -5,23 +5,25 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
+import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/PushService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/user_data.dart';
 
+import 'ChronoHelfer.dart';
 import 'DweTheme.dart';
 
 class ChatWindow extends StatefulWidget {
-
   Channel channel;
-  String name;
+  Termin termin;
 
-  ChatWindow(this.channel, this.name, {Key key***REMOVED***) : super(key: key) {***REMOVED***
+  ChatWindow(this.channel, this.termin, {Key key***REMOVED***) : super(key: key) {***REMOVED***
 
   @override
   ChatWindowState createState() => ChatWindowState(channel);
 ***REMOVED***
+
 
 abstract class ChannelChangeListener {
 
@@ -65,7 +67,7 @@ class ChatWindowState extends State<ChatWindow>
 
     var widget_list = ListView(children: buildListMessage());
     var inputWidget = buildInput();
-    var header_widget = buildHeader(widget.name);
+    var header_widget = buildHeader(widget.termin);
     Scaffold page = Scaffold( appBar: header_widget,
         body: Padding(child: widget_list, padding: EdgeInsets.only(bottom: 40)),
         bottomSheet: SizedBox(child: inputWidget, height: 40));
@@ -171,22 +173,44 @@ class ChatWindowState extends State<ChatWindow>
     return alignment;
   ***REMOVED***
 
-  buildHeader(String channel_name) {
-    return AppBar(title: Text(channel_name, style: TextStyle(fontSize: 13.0)), actions: <Widget>[IconButton(
-      icon: const Icon(Icons.people),
-      tooltip: 'Show Chat Member',
-      onPressed: () {
-        openMemberPage(context);
-      ***REMOVED***,),
-     /* IconButton(
+  buildHeader(Termin termin) {
+    return AppBar(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              children: <Widget>[
+                Text(termin.typ, style: TextStyle(fontSize: 13.0)),
+                Text(' in ',
+                    style: TextStyle(
+                        fontSize: 13.0, fontWeight: FontWeight.normal)),
+                Text(termin.ort.ort, style: TextStyle(fontSize: 13.0)),
+              ],
+            ),
+            Text(
+                'am ${ChronoHelfer.formatDateOfDateTime(termin.beginn)***REMOVED***, um ${ChronoHelfer.dateTimeToStringHHmm(termin.beginn)***REMOVED*** Uhr',
+                style:
+                TextStyle(fontSize: 13.0, fontWeight: FontWeight.normal)),
+          ],
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.people),
+            tooltip: 'Show Chat Member',
+            onPressed: () {
+              openMemberPage(context);
+            ***REMOVED***,
+          ),
+          /* IconButton(
         icon: const Icon(Icons.arrow_back),
         tooltip: 'Back',
         onPressed: () {
           backArrowPressed(context);
         ***REMOVED***,
       )*/
-    ]);
+        ]);
   ***REMOVED***
+
 
   void openMemberPage(BuildContext context) {
     Navigator.push(context, MaterialPageRoute(

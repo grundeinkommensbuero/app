@@ -16,7 +16,10 @@ import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
+import 'package:sammel_app/shared/ChatMessageService.dart';
+import 'package:sammel_app/shared/ChatWindow.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/user_data.dart';
 import 'package:uuid/uuid.dart';
 import 'ActionList.dart';
 import 'FilterWidget.dart';
@@ -252,6 +255,17 @@ class TermineSeiteState extends State<TermineSeite>
     ***REMOVED***
   ***REMOVED***
 
+
+  void openChatWindow(BuildContext context, Termin termin) {
+    String channel_id = '${termin.id***REMOVED***';
+    Channel message_channel = Provider.of<ChatMessageService>(context)
+        .get_simple_message_channel(channel_id);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ChatWindow(message_channel, termin)));
+  ***REMOVED***
+
   Color determineColor(Termin action) {
     bool participant = action.participants.map((e) => e.id).contains(me?.id);
     bool owner = isMyAction(action.id);
@@ -422,6 +436,8 @@ class TermineSeiteState extends State<TermineSeite>
   ***REMOVED***
 
   Future<void> joinAction(Termin termin) async {
+    Provider.of<ChatMessageService>(context)
+        .get_simple_message_channel("channel:${termin.id***REMOVED***");
     await termineService.joinAction(termin, me);
     setState(() {
       termine.firstWhere((t) => t.id == termin.id).participants.add(me);
