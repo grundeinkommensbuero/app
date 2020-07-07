@@ -40,8 +40,8 @@ class PushService extends AbstractPushService {
     }
 
     try {
-      post('service/push/topic',
-          jsonEncode(PushMessage(data, notification, topic: topic).toJson()));
+      post('service/push/topic/$topic',
+          jsonEncode(PushMessage(data, notification).toJson()));
     } catch (e) {
       ErrorService.handleError(e);
     }
@@ -54,7 +54,7 @@ class PushService extends AbstractPushService {
     }
 
     try {
-      post('service/push/topic/$actionId',
+      post('service/push/action/$actionId',
           jsonEncode(PushMessage(data, notification).toJson()));
     } catch (e) {
       ErrorService.handleError(e);
