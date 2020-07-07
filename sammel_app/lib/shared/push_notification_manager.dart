@@ -41,7 +41,7 @@ class PushNotificationsManager {
       _initialized = true;
     }
   }
-
+  /*
   void onMessageCallback(Map<String, dynamic> message) async {
     Map<String, dynamic> data = message['data'];
     if (data.containsKey('type')) {
@@ -51,6 +51,8 @@ class PushNotificationsManager {
         callback_map[type](data);
       }
     }
+   */
+
     void onMessageCallback(Map<String, dynamic> message) async {
       print('message received' + message.toString());
       Map<dynamic, dynamic> data = message['data'];
@@ -62,7 +64,7 @@ class PushNotificationsManager {
         }
       }
     }
-  }
+  
 
   void register_message_callback(String id, PushNotificationListener callback) {
     this.callback_map[id] = callback;
