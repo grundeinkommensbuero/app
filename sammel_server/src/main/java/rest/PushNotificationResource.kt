@@ -34,9 +34,9 @@ open class PushNotificationResource {
     @POST
     open fun pushToParticipants(nachricht: PushMessageDto, @PathParam("actionId") actionId: Long) {
         val teilnehmer = termineDao.getTermin(actionId)?.teilnehmer
-        if (teilnehmer == null) return;
+        if (teilnehmer == null) return
         val empfaenger = benutzerDao.getFirebaseKeys(teilnehmer)
-        if (empfaenger.isEmpty()) return;
+        if (empfaenger.isEmpty()) return
         firebase.sendePushNachrichtAnEmpfaenger(nachricht.notification, nachricht.data, empfaenger)
     }
 
