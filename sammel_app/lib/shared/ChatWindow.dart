@@ -269,10 +269,13 @@ class ChatWindowState extends State<ChatWindow>
         message_color: user.color,
         sender_name: user.name);
     MessagePushData mpd = MessagePushData(message, channel.id);
+    pushService.pushToAction(widget.termin.id, mpd, PushNotification("New Chat Message", "Open App to view Message"));
+    /*
     pushService.pushToDevices([
       'cZNkv4W8F4yJIfrrwAEyVF:APA91bE01SmxS-52-VC3sx5T51f529RMPi6Ndgp0oqf1Yt3mkenOj4Qb1GjnbEQUJEYrrG4sCDUo1chWVsWg7jQmWk63YTJRZtRz-MQlYW2aj7CyDhF0MZfMtM3Za62FceKRCHp8Z0ED',
       'c1IT42MZGJM:APA91bEh1qV_idNeKrusB1Ccl6BeBUB6iSV3e_W4BIOi3BjZTMhMlL5DqvGwOlCCdVa7V6J0nA4PdYeB7jVFhJIQhbedu0w3WqcdBsKiC3q_eoISKQHilBFpaIwuy1cMUzH3bCxWUUpp'
     ], mpd, PushNotification("New Chat Message", "Open App to view Message"));
+     */
     textEditingController.clear();
     myFocusNode.unfocus();
   ***REMOVED***
