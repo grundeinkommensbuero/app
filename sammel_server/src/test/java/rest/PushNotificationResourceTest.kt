@@ -10,7 +10,6 @@ import database.termine.TermineDao
 import org.junit.Test
 
 import org.junit.Rule
-import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.any
 import org.mockito.ArgumentMatchers.anyList
 import org.mockito.InjectMocks
@@ -165,7 +164,6 @@ class PushNotificationResourceTest {
 
     @Test()
     fun `pushToParticipants sendet Nachricht an Firebase weiter an keine Teilnehmer`() {
-        val karl = Benutzer(10L, "Karl Marx", 4294198070L)
         whenever(termineDao.getTermin(1L))
                 .thenReturn(Termin(1, null, null, null, null,
                         emptyList(),

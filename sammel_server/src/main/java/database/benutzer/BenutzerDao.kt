@@ -15,10 +15,12 @@ open class BenutzerDao {
     private lateinit var entityManager: EntityManager
 
     open fun getBenutzer(id: Long): Benutzer? {
+        LOG.debug("Lade Benutzer für Nutzer-ID $id")
         return entityManager.find(Benutzer::class.java, id)
     ***REMOVED***
 
     open fun getCredentials(id: Long): Credentials? {
+        LOG.debug("Lade Credentials für Nutzer-ID $id")
         return entityManager.find(Credentials::class.java, id)
     ***REMOVED***
 
@@ -26,6 +28,8 @@ open class BenutzerDao {
         if (benutzer.id != 0L) {
             throw NeuerBenutzerHatBereitsIdException()
         ***REMOVED***
+        LOG.debug("Neuen Benutzer anlegen " +
+                if (benutzer.name.isNullOrBlank()) "ohne Namen" else "mit Name ${benutzer.name***REMOVED***")
         try {
             entityManager.persist(benutzer)
             return benutzer
@@ -40,6 +44,7 @@ open class BenutzerDao {
     ***REMOVED***
 
     open fun benutzernameExistiert(name: String): Boolean {
+        LOG.debug("Ermittle ob Benutzer ${name***REMOVED*** existiert")
         return entityManager
                 .createQuery("select benutzer from Benutzer benutzer where benutzer.name = :name", Benutzer::class.java)
                 .setParameter("name", name)
@@ -48,7 +53,7 @@ open class BenutzerDao {
     ***REMOVED***
 
     open fun getFirebaseKeys(benutzerListe: List<Benutzer>): List<String> {
-        // TODO Tests
+        LOG.debug("Sammle Firebase-Keys für Nutzer ${benutzerListe.map { it.id ***REMOVED******REMOVED***")
         return entityManager
                 .createQuery("select creds.firebaseKey from Credentials creds where creds.id in (:ids)", String::class.java)
                 .setParameter("ids", benutzerListe.map { it.id ***REMOVED***)

@@ -1,13 +1,14 @@
 package database.benutzer
 
-import com.nhaarman.mockitokotlin2.anyOrNull
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import TestdatenVorrat.Companion.karl
+import TestdatenVorrat.Companion.rosa
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentMatchers.*
+import org.mockito.ArgumentMatchers.any
 import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
@@ -28,6 +29,8 @@ class BenutzerDaoTest {
     private lateinit var entityManager: EntityManager
     @Mock
     private lateinit var typedQuery: TypedQuery<Benutzer>
+    @Mock
+    private lateinit var typedStringQuery: TypedQuery<String>
 
     @InjectMocks
     private lateinit var dao: BenutzerDao
@@ -69,6 +72,41 @@ class BenutzerDaoTest {
         val ergebnis = dao.benutzernameExistiert("name")
 
         assertFalse(ergebnis)
+    ***REMOVED***
+
+    @Test
+    fun `getFirebaseKeys reicht Liste von Keys weiter`() {
+        val benutzer = listOf(karl(), rosa())
+        whenever(entityManager.createQuery(anyString(), any<Class<String>>()))
+                .thenReturn(typedStringQuery)
+        whenever(typedStringQuery.setParameter(anyString(), anyList<String>()))
+                .thenReturn(typedStringQuery)
+        whenever(typedStringQuery.resultList)
+                .thenReturn(listOf("key1", "key2"))
+
+        val ergebnis: List<String> = dao.getFirebaseKeys(benutzer)
+
+        val captor = argumentCaptor<List<Long>>()
+        verify(typedStringQuery, times(1)).setParameter(anyString(), captor.capture())
+        val argument = captor.firstValue
+        assertTrue(argument.containsAll(benutzer.map { it.id ***REMOVED***))
+        assertTrue(ergebnis.containsAll(listOf("key1", "key2")))
+    ***REMOVED***
+
+    @Test
+    fun `getFirebaseKeys akzeptiert leeres Suchergebnis`() {
+        val benutzer = emptyList<Benutzer>()
+        whenever(entityManager.createQuery(anyString(), any<Class<String>>()))
+                .thenReturn(typedStringQuery)
+        whenever(typedStringQuery.setParameter(anyString(), anyList<String>()))
+                .thenReturn(typedStringQuery)
+        whenever(typedStringQuery.resultList)
+                .thenReturn(emptyList())
+
+        val ergebnis: List<String> = dao.getFirebaseKeys(benutzer)
+
+        verify(typedStringQuery, times(1)).setParameter(anyString(), anyList<Long>())
+        assertTrue(ergebnis.isEmpty())
     ***REMOVED***
 
     @Test
