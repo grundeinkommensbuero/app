@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/PushService.dart';
 import 'package:sammel_app/services/StorageService.dart';
@@ -25,7 +24,6 @@ class ChatWindow extends StatefulWidget {
   @override
   ChatWindowState createState() => ChatWindowState(channel);
 }
-
 
 abstract class ChannelChangeListener {
   void channelChanged(Channel channel);
@@ -238,10 +236,7 @@ class ChatWindowState extends State<ChatWindow>
         },
       )*/
         ]);
-      )*/
-        ]);
   }
-
 
   void openMemberPage(BuildContext context) {
     Navigator.push(context, MaterialPageRoute(

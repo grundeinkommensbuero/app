@@ -16,7 +16,6 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/shared/ChatMessageService.dart';
 import 'package:sammel_app/shared/ChatWindow.dart';
-import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/user_data.dart';
@@ -202,52 +201,53 @@ class TermineSeiteState extends State<TermineSeite>
           context: context,
           builder: (context) => StatefulBuilder(
               builder: (BuildContext context, setDialogState) => SimpleDialog(
-                titlePadding: EdgeInsets.zero,
-                backgroundColor: determineColor(terminMitDetails),
-              title: AppBar(
-                  leading: null,
-                  automaticallyImplyLeading: false,
-                  title: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Image.asset(terminMitDetails.getAsset(), width: 30.0),
-                        Container(width: 10.0),
-                        Text(terminMitDetails.typ,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 22.0,
-                                color: Color.fromARGB(255, 129, 28, 98))),
-                      ])),
-              key: Key('termin details dialog'),
-              contentPadding: EdgeInsets.all(10.0),
-              children: <Widget>[
-                ActionDetailsPage(terminMitDetails),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    RaisedButton(
-                        key: Key('open chat window'),
-                        child: Text('Zum Chat'),
-                        onPressed: () => openChatWindow(terminMitDetails)),
-                  ],
-                ),Row(                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: <Widget>[RaisedButton(key: Key('open chat window'), child: Text('Zum Chat'), onPressed: () => openChatWindow(context, terminMitDetails)),],),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    titlePadding: EdgeInsets.zero,
+                    backgroundColor: determineColor(terminMitDetails),
+                    title: AppBar(
+                        leading: null,
+                        automaticallyImplyLeading: false,
+                        title: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Image.asset(terminMitDetails.getAsset(),
+                                  width: 30.0),
+                              Container(width: 10.0),
+                              Text(terminMitDetails.typ,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 22.0,
+                                      color: Color.fromARGB(255, 129, 28, 98))),
+                            ])),
+                    key: Key('termin details dialog'),
+                    contentPadding: EdgeInsets.all(10.0),
+                    children: <Widget>[
+                      ActionDetailsPage(terminMitDetails),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: <Widget>[
+                          RaisedButton(
+                              key: Key('open chat window'),
+                              child: Text('Zum Chat'),
+                              onPressed: () =>
+                                  openChatWindow(terminMitDetails)),
+                        ],
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children:
                             addEditDeleteButtonsIfMyAction(termin, context)
-                      ..addAll(addJoinLeaveButtonIfNotMyAction(
-                          terminMitDetails, setDialogState))
-                      ..add(RaisedButton(
-                        key: Key('action details close button'),
-                        child: Text('Schließen'),
-                        onPressed: () => Navigator.pop(
-                            context, TerminDetailsCommand.CLOSE),
-                      )),
-                  ),
-                ],
-              )));
+                              ..addAll(addJoinLeaveButtonIfNotMyAction(
+                                  terminMitDetails, setDialogState))
+                              ..add(RaisedButton(
+                                key: Key('action details close button'),
+                                child: Text('Schließen'),
+                                onPressed: () => Navigator.pop(
+                                    context, TerminDetailsCommand.CLOSE),
+                              )),
+                      ),
+                    ],
+                  )));
 
       if (command == TerminDetailsCommand.DELETE)
         deleteAction(terminMitDetails);
@@ -262,8 +262,7 @@ class TermineSeiteState extends State<TermineSeite>
     }
   }
 
-
-  void openChatWindow(BuildContext context, Termin termin) {
+  void openChatWindow(Termin termin) {
     String channel_id = '${termin.id}';
     Channel message_channel = Provider.of<ChatMessageService>(context)
         .get_simple_message_channel(channel_id);
@@ -440,16 +439,6 @@ class TermineSeiteState extends State<TermineSeite>
     setState(() {
       navigation = 1; // change to map view
     });
-  }
-
-  void openChatWindow(Termin termin) {
-    String channel_id = '${termin.id}';
-    Channel message_channel = Provider.of<ChatMessageService>(context)
-        .get_simple_message_channel(channel_id);
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ChatWindow(message_channel, termin)));
   }
 
   Future<void> joinAction(Termin termin) async {
