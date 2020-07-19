@@ -92,6 +92,6 @@ class InvalidUserException implements Exception {***REMOVED***
 
 class DemoUserService extends AbstractUserService {
   DemoUserService() : super() {
-    user = Future.value(User(1, 'Karl Marx', Colors.red));
+    user = Future.value(User(1, 'Ich', Colors.red));
   ***REMOVED***
 ***REMOVED***

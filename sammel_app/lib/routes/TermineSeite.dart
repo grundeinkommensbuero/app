@@ -222,16 +222,16 @@ class TermineSeiteState extends State<TermineSeite>
                       ActionDetailsPage(terminMitDetails),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: addEditDeleteButtonsIfMyAction(
-                            termin, context)
-                          ..addAll(addJoinLeaveButtonIfNotMyAction(
-                              terminMitDetails, setDialogState))
-                          ..add(RaisedButton(
-                            key: Key('action details close button'),
-                            child: Text('Schließen'),
-                            onPressed: () => Navigator.pop(
-                                context, TerminDetailsCommand.CLOSE),
-                          )),
+                        children:
+                            addEditDeleteButtonsIfMyAction(termin, context)
+                              ..addAll(addJoinLeaveButtonIfNotMyAction(
+                                  terminMitDetails, setDialogState))
+                              ..add(RaisedButton(
+                                key: Key('action details close button'),
+                                child: Text('Schließen'),
+                                onPressed: () => Navigator.pop(
+                                    context, TerminDetailsCommand.CLOSE),
+                              )),
                       ),
                     ],
                   )));
@@ -249,16 +249,10 @@ class TermineSeiteState extends State<TermineSeite>
     ***REMOVED***
   ***REMOVED***
 
-  Color determineColor(Termin terminMitDetails) {
-    bool participator =
-        terminMitDetails.participants.map((e) => e.id).contains(me?.id);
-    bool owner = terminMitDetails.participants.isNotEmpty
-        ? terminMitDetails.participants[0]?.id == me?.id
-        : false;
-
-    if (owner) return DweTheme.blueLight;
-
-    return participator ? DweTheme.green : DweTheme.yellowLight;
+  Color determineColor(Termin action) {
+    bool participant = action.participants.map((e) => e.id).contains(me?.id);
+    bool owner = isMyAction(action.id);
+    return DweTheme.actionColor(action.ende, owner, participant);
   ***REMOVED***
 
   List<Widget> addEditDeleteButtonsIfMyAction(
