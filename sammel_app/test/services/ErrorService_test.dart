@@ -66,6 +66,16 @@ void main() {
       expect(ErrorService.messageQueue[0][1],
           'Nachricht\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com');
     });
+
+    test('adds optional message to Error text', () {
+      ErrorService.handleError(RestFehler('Nachricht'),
+          additional: 'Zusätzliche Info');
+
+      expect(ErrorService.messageQueue.length, 1);
+      expect(ErrorService.messageQueue[0][1],
+          'Nachricht. Zusätzliche Info\n'
+          'Wenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com');
+    });
   });
 
   group('showErrorDialog', () {
@@ -144,8 +154,7 @@ void main() {
       expect(find.text('Titel3'), findsOneWidget);
     });
 
-    testUI('shows no dialog with empty queue',
-        (WidgetTester tester) async {
+    testUI('shows no dialog with empty queue', (WidgetTester tester) async {
       ErrorService.setContext(context);
       await tester.pumpAndSettle();
 

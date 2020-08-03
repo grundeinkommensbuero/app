@@ -23,15 +23,20 @@ class UserService extends AbstractUserService {
 
   UserService(this.storageService, this.firebase, [Backend backend])
       : super(backend) {
-    user = determineUser();
+    user = getOrCreateUser();
   }
 
-  Future<User> determineUser() async {
-    var userFromStorage = await storageService.loadUser();
-    if (userFromStorage == null)
+  Future<User> getOrCreateUser() async {
+    var foundUser = await storageService.loadUser();
+    if (foundUser != null)
+      return verifyUser(foundUser).catchError((e) {
+        ErrorService.handleError(e,
+            additional: 'Ein neuer Benutzer wird angelegt.');
+        return createNewUser();
+      }, test: (e) => e is InvalidUserException);
+    else {
       return await createNewUser();
-    else
-      return await verifyUser(userFromStorage);
+    }
   }
 
   Future<User> createNewUser() async {

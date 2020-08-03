@@ -6,6 +6,9 @@ class ErrorService {
   static BuildContext _context;
   static List<List<String>> messageQueue = List<List<String>>();
 
+  static const EMAIL =
+      '\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com';
+
   static void setContext(context) {
     ErrorService._context = context;
     List<List<String>> queueCopy = List<List<String>>.from(messageQueue);
@@ -14,19 +17,25 @@ class ErrorService {
         showErrorDialog(error[0], error[1], key: Key('error dialog')));
   }
 
-  static handleError(e) {
+  static handleError(e, {String additional}) {
+    if (additional == null)
+      additional = '';
+    else
+      additional = '. $additional';
+
     if (e is AuthFehler) {
       pushMessage(
           'Der hinterlegte Benutzer konnte nicht authentifiziert werden',
-          e.message);
+          '${e.message}${additional}$EMAIL');
       return;
     }
     if (e is RestFehler) {
       pushMessage(
           'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten',
-          e.message);
+          '${e.message}${additional}$EMAIL');
       return;
     }
+    pushMessage('Ein Fehler ist aufgetreten', '$additional$EMAIL');
   }
 
   static void pushMessage(String titel, String message) {
