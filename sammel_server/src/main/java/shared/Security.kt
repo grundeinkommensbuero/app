@@ -1,5 +1,6 @@
 package shared
 
+import org.apache.commons.codec.DecoderException
 import org.apache.commons.codec.binary.Hex.*
 import org.jboss.logging.Logger
 import java.time.Instant.now
@@ -30,6 +31,7 @@ open class Security {
         return hash
     }
 
+    @Throws(DecoderException::class)
     open fun verifiziereSecretMitHash(secret: String, hashMitSalt: HashMitSalt): Boolean {
         val hashAusSecret = hasheSecretMitSalt(secret, decodeHex(hashMitSalt.salt))
         val originalerHash = decodeHex(hashMitSalt.hash)

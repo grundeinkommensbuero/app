@@ -97,7 +97,16 @@ open class BenutzerRestResource {
                     .entity(false)
                     .build()
         }
-        if (!security.verifiziereSecretMitHash(login.secret!!, HashMitSalt(credentials.secret, credentials.salt))) {
+        val verifiziert: Boolean?
+        try {
+            verifiziert = security.verifiziereSecretMitHash(login.secret!!, HashMitSalt(credentials.secret, credentials.salt))
+        } catch (e: Exception) {
+            val meldung = "Technischer Fehler beim Verifizieren: ${e.localizedMessage}"
+            LOG.info(meldung)
+            return Response.status(500).entity(RestFehlermeldung(meldung)).build()
+        }
+
+        if (!verifiziert) {
             LOG.info("Falscher Login mit Benutzer ${login.user.id}")
             return Response
                     .ok()
