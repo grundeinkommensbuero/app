@@ -210,7 +210,7 @@ class ActionEditorState extends State<ActionEditor> {
                 key: Key('action editor cancel button'),
                 child: Text('Abbrechen'),
                 onPressed: () {
-                  action = ActionData();
+                  setState(() => action = ActionData());
                   Navigator.maybePop(context);
                 ***REMOVED***),
             RaisedButton(
