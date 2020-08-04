@@ -31,68 +31,69 @@ class FilterWidgetState extends State<FilterWidget>
   var expanded = false;
 
   StorageService storageService;
+  var allLocations;
 
   @override
   Widget build(BuildContext context) {
     if (!_initialized) initialize(context);
 
     return Column(
-        children: [
-          !expanded
-              ? Container(color: Color.fromARGB(255, 149, 48, 118))
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    FilterElement(
-                      key: Key("type button"),
-                      child: Text(artButtonBeschriftung()),
-                      selectionFunction: typeSelection,
-                      resetFunction: resetType,
-                    ),
-                    FilterElement(
-                      key: Key("days button"),
-                      child: tageButtonBeschriftung(),
-                      selectionFunction: daysSelection,
-                      resetFunction: resetDays,
-                    ),
-                    FilterElement(
-                        key: Key("time button"),
-                        child: Text(uhrzeitButtonBeschriftung(filter)),
-                        selectionFunction: timeSelection,
-                        resetFunction: resetTime),
-                    FilterElement(
-                      key: Key("locations button"),
-                      child: Text(ortButtonBeschriftung(filter)),
-                      selectionFunction: locationSelection,
-                      resetFunction: resetLocations,
-                    ),
-                  ],
-                ),
-          SizedBox(
-              width: double.infinity,
-              height: 50.0,
-              child: RaisedButton(
-                key: Key("filter button"),
-                color: Color.fromARGB(255, 129, 28, 98),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                        top: Radius.zero,
-                        bottom: Radius.elliptical(15.0, 20.0))),
-                textColor: Colors.amberAccent,
-                materialTapTargetSize: _zeroPadding,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Icon(Icons.playlist_add_check),
-                    Text(buttonText,
-                        key: Key('filter button text'), textScaleFactor: 1.2),
-                    Icon(expanded ? Icons.done : Icons.arrow_drop_down),
-                  ],
-                ),
-                onPressed: onApply,
-              )),
-        ],
-      );
+      children: [
+        !expanded
+            ? Container(color: Color.fromARGB(255, 149, 48, 118))
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  FilterElement(
+                    key: Key("type button"),
+                    child: Text(artButtonBeschriftung()),
+                    selectionFunction: typeSelection,
+                    resetFunction: resetType,
+                  ),
+                  FilterElement(
+                    key: Key("days button"),
+                    child: tageButtonBeschriftung(),
+                    selectionFunction: daysSelection,
+                    resetFunction: resetDays,
+                  ),
+                  FilterElement(
+                      key: Key("time button"),
+                      child: Text(uhrzeitButtonBeschriftung(filter)),
+                      selectionFunction: timeSelection,
+                      resetFunction: resetTime),
+                  FilterElement(
+                    key: Key("locations button"),
+                    child: Text(ortButtonBeschriftung(filter)),
+                    selectionFunction:
+                        allLocations != null ? locationSelection : null,
+                    resetFunction: resetLocations,
+                  ),
+                ],
+              ),
+        SizedBox(
+            width: double.infinity,
+            height: 50.0,
+            child: RaisedButton(
+              key: Key("filter button"),
+              color: Color.fromARGB(255, 129, 28, 98),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                      top: Radius.zero, bottom: Radius.elliptical(15.0, 20.0))),
+              textColor: Colors.amberAccent,
+              materialTapTargetSize: _zeroPadding,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Icon(Icons.playlist_add_check),
+                  Text(buttonText,
+                      key: Key('filter button text'), textScaleFactor: 1.2),
+                  Icon(expanded ? Icons.done : Icons.arrow_drop_down),
+                ],
+              ),
+              onPressed: onApply,
+            )),
+      ],
+    );
   ***REMOVED***
 
   // Kann nicht im Konstruktor ausgeführt werden, weil der Provider den context braucht, der ins build reingereicht wird
@@ -102,6 +103,9 @@ class FilterWidgetState extends State<FilterWidget>
           this.filter = filter != null ? filter : TermineFilter.leererFilter();
           widget.onApply(filter); //lade initial Termine
         ***REMOVED***));
+    Provider.of<AbstractStammdatenService>(context)
+        .ladeOrte()
+        .then((locations) => setState(() => allLocations = locations));
     _initialized = true;
   ***REMOVED***
 
@@ -190,9 +194,7 @@ class FilterWidgetState extends State<FilterWidget>
                             onPressed: () => Navigator.pop(context))));
             ***REMOVED***));
 
-    setState(() {
-      filter.typen = ausgewTypen;
-    ***REMOVED***);
+    setState(() => filter.typen = ausgewTypen);
   ***REMOVED***
 
   resetType() => setState(() => filter.typen = []);
@@ -223,18 +225,13 @@ class FilterWidgetState extends State<FilterWidget>
       ***REMOVED***);
 
   locationSelection() async {
-    var allLocations =
-        await Provider.of<AbstractStammdatenService>(context).ladeOrte();
-
     var selectedLocations = await LocationPicker(
             locations: allLocations,
             key: Key('locations selection dialog'),
             multiMode: true)
         .showLocationPicker(context, filter.orte);
 
-    setState(() {
-      filter.orte = selectedLocations;
-    ***REMOVED***);
+    setState(() => filter.orte = selectedLocations);
   ***REMOVED***
 
   resetLocations() => setState(() => filter.orte = []);
@@ -260,33 +257,36 @@ class FilterElement extends StatelessWidget {
             materialTapTargetSize: _zeroPadding,
             padding: EdgeInsetsDirectional.zero,
             onPressed: selectionFunction,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                      child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Flexible(child: child),
-                                Icon(
-                                  Icons.create,
-                                  size: 18.0,
-                                )
-                              ]))),
-                  FlatButton(
-                    color: Color.fromARGB(255, 149, 48, 118),
-                    textColor: Colors.amberAccent,
-                    shape: Border(
-                        left: BorderSide(width: 2.0, color: DweTheme.purple)),
-                    materialTapTargetSize: _zeroPadding,
-                    onPressed: resetFunction,
-                    child: Icon(
-                      Icons.clear,
-                      size: 18.0,
-                    ),
-                  )
-                ])));
+            child: Container(
+              color: Color.fromARGB(255, 149, 48, 118),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                        child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Flexible(child: child),
+                                  Icon(
+                                    Icons.create,
+                                    size: 18.0,
+                                  )
+                                ]))),
+                    FlatButton(
+                      textColor: Colors.amberAccent,
+                      shape: Border(
+                          left: BorderSide(width: 2.0, color: DweTheme.purple)),
+                      materialTapTargetSize: _zeroPadding,
+                      onPressed: resetFunction,
+                      child: Icon(
+                        Icons.clear,
+                        size: 18.0,
+                      ),
+                    )
+                  ]),
+            )));
   ***REMOVED***
 ***REMOVED***

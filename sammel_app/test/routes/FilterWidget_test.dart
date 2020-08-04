@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_test_ui/flutter_test_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
@@ -24,425 +25,319 @@ final _stammdatenService = StammdatenServiceMock();
 final _storageService = StorageServiceMock();
 
 void main() {
-  setUp(() {
-    when(_storageService.loadFilter()).thenAnswer((_) async => null);
-  ***REMOVED***);
+  group('ui', () {
+    setUpUI((WidgetTester tester) async {
+      when(_storageService.loadFilter()).thenAnswer((_) async => null);
+      when(_stammdatenService.ladeOrte()).thenAnswer((_) async => [
+            Ort(0, 'district1', 'place1', 52.49653, 13.43762),
+            Ort(1, 'district2', 'place2', 52.49653, 13.43762)
+          ]);
+      await pumpFilterWidget(tester);
+    ***REMOVED***);
 
-  testWidgets('Filter starts successfully', (WidgetTester tester) async {
-    FilterWidget filterWidget = FilterWidget(
-      iWasCalled,
-      key: Key("filter"),
-    );
+    testUI('Filter starts successfully', (WidgetTester tester) async {
+      expect(find.byKey(Key('filter')), findsOneWidget);
+      expect(find.text('Filter'), findsOneWidget);
+    ***REMOVED***);
 
-    await tester.pumpWidget(MaterialApp(
-        home: Provider<StorageService>(
-            create: (context) => _storageService, child: filterWidget)));
+    testUI('Filter opens with click', (WidgetTester tester) async {
+      await tester.tap(find.text('Filter'));
 
-    expect(find.byKey(Key("filter")), findsOneWidget);
-    expect(find.text('Filter'), findsOneWidget);
-  ***REMOVED***);
+      await tester.pump();
 
-  testWidgets('Filter opens with click', (WidgetTester tester) async {
-    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+      expect(find.byKey(Key('type button')), findsOneWidget);
+      expect(find.byKey(Key('days button')), findsOneWidget);
+      expect(find.byKey(Key('time button')), findsOneWidget);
+      expect(find.byKey(Key('locations button')), findsOneWidget);
+    ***REMOVED***);
 
-    await tester.pumpWidget(MaterialApp(
-        home: Provider<StorageService>(
-            create: (context) => _storageService, child: filterWidget)));
+    testUI('Filter closes with click', (WidgetTester tester) async {
+      await tester.tap(find.text('Filter'));
 
-    await tester.tap(find.text("Filter"));
+      await tester.pump();
 
-    await tester.pump();
+      await tester.tap(find.text('Anwenden'));
 
-    expect(find.byKey(Key("type button")), findsOneWidget);
-    expect(find.byKey(Key("days button")), findsOneWidget);
-    expect(find.byKey(Key("time button")), findsOneWidget);
-    expect(find.byKey(Key("locations button")), findsOneWidget);
-  ***REMOVED***);
+      await tester.pump();
 
-  testWidgets('Filter closes with click', (WidgetTester tester) async {
-    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+      expect(find.byKey(Key('type button')), findsNothing);
+      expect(find.byKey(Key('days button')), findsNothing);
+      expect(find.byKey(Key('time button')), findsNothing);
+      expect(find.byKey(Key('locations button')), findsNothing);
+    ***REMOVED***);
 
-    await tester.pumpWidget(MaterialApp(
-        home: Provider<StorageService>(
-            create: (context) => _storageService, child: filterWidget)));
+    testUI('Filter changes caption of filter button with click',
+        (WidgetTester tester) async {
+      expect(find.text('Anwenden'), findsNothing);
+      expect(find.text('Filter'), findsOneWidget);
 
-    await tester.tap(find.text("Filter"));
+      await tester.tap(find.byKey(Key('filter button')));
+      await tester.pump();
 
-    await tester.pump();
+      expect(find.text('Filter'), findsNothing);
+      expect(find.text('Anwenden'), findsOneWidget);
 
-    await tester.tap(find.text('Anwenden'));
+      await tester.tap(find.byKey(Key('filter button')));
+      await tester.pump();
 
-    await tester.pump();
+      expect(find.text('Anwenden'), findsNothing);
+      expect(find.text('Filter'), findsOneWidget);
+    ***REMOVED***);
 
-    expect(find.byKey(Key("type button")), findsNothing);
-    expect(find.byKey(Key("days button")), findsNothing);
-    expect(find.byKey(Key("time button")), findsNothing);
-    expect(find.byKey(Key("locations button")), findsNothing);
-  ***REMOVED***);
+    testUI('Filter opens Type selection with click at type button',
+        (WidgetTester tester) async {
+      await tester.tap(find.byKey(Key('filter button')));
+      await tester.pump();
 
-  testWidgets('Filter changes caption of filter button with click',
-      (WidgetTester tester) async {
-    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+      await tester.tap(find.byKey(Key('type button')));
+      await tester.pump();
 
-    await tester.pumpWidget(MaterialApp(
-        home: Provider<StorageService>(
-            create: (context) => _storageService, child: filterWidget)));
+      expect(find.byKey(Key('type selection dialog')), findsOneWidget);
+    ***REMOVED***);
 
-    expect(find.text('Anwenden'), findsNothing);
-    expect(find.text('Filter'), findsOneWidget);
+    testUI('Type Selection shows all types', (WidgetTester tester) async {
+      await tester.tap(find.byKey(Key('filter button')));
+      await tester.pump();
 
-    await tester.tap(find.byKey(Key('filter button')));
-    await tester.pump();
+      await tester.tap(find.byKey(Key('type button')));
+      await tester.pump();
 
-    expect(find.text('Filter'), findsNothing);
-    expect(find.text('Anwenden'), findsOneWidget);
+      // currently hardcoded
+      expect(find.text('Sammeln'), findsOneWidget);
+      expect(find.text('Infoveranstaltung'), findsOneWidget);
+    ***REMOVED***);
 
-    await tester.tap(find.byKey(Key('filter button')));
-    await tester.pump();
+    testUI('Type Selection selects initially types from filter',
+        (WidgetTester tester) async {
+      FilterWidgetState filterState = tester.state(find.byKey(Key('filter')));
 
-    expect(find.text('Anwenden'), findsNothing);
-    expect(find.text('Filter'), findsOneWidget);
-  ***REMOVED***);
+      filterState.filter.typen = ['Sammeln'];
 
-  testWidgets('Filter opens Type selection with click at type button',
-      (WidgetTester tester) async {
-    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+      await tester.tap(find.byKey(Key('filter button')));
+      await tester.pump();
 
-    await tester.pumpWidget(MaterialApp(
-        home: Provider<StorageService>(
-            create: (context) => _storageService, child: filterWidget)));
+      await tester.tap(find.byKey(Key('type button')));
+      await tester.pump();
 
-    await tester.tap(find.byKey(Key('filter button')));
-    await tester.pump();
+      var checkboxTiles =
+          tester.widgetList<CheckboxListTile>(find.byType(CheckboxListTile));
+      var sammelTermin = checkboxTiles
+          .firstWhere((ct) => (ct.title as Text).data == 'Sammeln');
+      var andere = checkboxTiles.where((ct) => ct != sammelTermin);
 
-    await tester.tap(find.byKey(Key('type button')));
-    await tester.pump();
+      expect(sammelTermin.value, isTrue);
+      expect(andere.every((ct) => ct.value == false), true);
+    ***REMOVED***);
 
-    expect(find.byKey(Key('type selection dialog')), findsOneWidget);
-  ***REMOVED***);
+    testUI('Type Selection selects initially nothing if filter is empty',
+        (WidgetTester tester) async {
+      await tester.tap(find.byKey(Key('filter button')));
+      await tester.pump();
 
-  testWidgets('Type Selection shows all types', (WidgetTester tester) async {
-    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+      await tester.tap(find.byKey(Key('type button')));
+      await tester.pump();
 
-    await tester.pumpWidget(MaterialApp(
-        home: Provider<StorageService>(
-            create: (context) => _storageService, child: filterWidget)));
+      var checkboxTiles =
+          tester.widgetList<CheckboxListTile>(find.byType(CheckboxListTile));
 
-    await tester.tap(find.byKey(Key('filter button')));
-    await tester.pump();
+      expect(checkboxTiles.every((ct) => ct.value == false), true);
+    ***REMOVED***);
 
-    await tester.tap(find.byKey(Key('type button')));
-    await tester.pump();
+    testUI('Type Selection saves selected types to filter',
+        (WidgetTester tester) async {
+      FilterWidgetState filterState = tester.state(find.byKey(Key('filter')));
 
-    // currently hardcoded
-    expect(find.text('Sammeln'), findsOneWidget);
-    expect(find.text('Infoveranstaltung'), findsOneWidget);
-  ***REMOVED***);
+      await tester.tap(find.byKey(Key('filter button')));
+      await tester.pump();
 
-  testWidgets('Type Selection selects initially types from filter',
-      (WidgetTester tester) async {
-    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+      await tester.tap(find.byKey(Key('type button')));
+      await tester.pump();
 
-    await tester.pumpWidget(MaterialApp(
-        home: Provider<StorageService>(
-            create: (context) => _storageService, child: filterWidget)));
+      await tester.tap(find.text('Sammeln'));
+      await tester.pump();
 
-    FilterWidgetState filterState = tester.state(find.byWidget(filterWidget));
+      await tester.tap(find.text('Fertig'));
+      await tester.pump();
 
-    filterState.filter.typen = ['Sammeln'];
+      await tester.tap(find.byKey(Key('filter button')));
+      await tester.pump();
 
-    await tester.tap(find.byKey(Key('filter button')));
-    await tester.pump();
+      expect(filterState.filter.typen, containsAll(['Sammeln']));
+    ***REMOVED***);
 
-    await tester.tap(find.byKey(Key('type button')));
-    await tester.pump();
+    testUI('Filter opens Days selection with click at days button',
+        (WidgetTester tester) async {
+      await tester.tap(find.byKey(Key('filter button')));
+      await tester.pump();
 
-    var checkboxTiles =
-        tester.widgetList<CheckboxListTile>(find.byType(CheckboxListTile));
-    var sammelTermin =
-        checkboxTiles.firstWhere((ct) => (ct.title as Text).data == 'Sammeln');
-    var andere = checkboxTiles.where((ct) => ct != sammelTermin);
+      await tester.tap(find.byKey(Key('days button')));
+      await tester.pump();
 
-    expect(sammelTermin.value, isTrue);
-    expect(andere.every((ct) => ct.value == false), true);
-  ***REMOVED***);
+      expect(find.byKey(Key('days selection dialog')), findsOneWidget);
+    ***REMOVED***);
 
-  testWidgets('Type Selection selects initially nothing if filter is empty',
-      (WidgetTester tester) async {
-    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+    testUI('Filter opens Locations selection with click at locations button',
+        (WidgetTester tester) async {
+      when(_stammdatenService.ladeOrte()).thenAnswer((_) async => []);
 
-    await tester.pumpWidget(MaterialApp(
-        home: Provider<StorageService>(
-            create: (context) => _storageService, child: filterWidget)));
+      await pumpFilterWidget(tester);
 
-    await tester.tap(find.byKey(Key('filter button')));
-    await tester.pump();
+      await tester.tap(find.byKey(Key('filter button')));
+      await tester.pump();
 
-    await tester.tap(find.byKey(Key('type button')));
-    await tester.pump();
+      await tester.tap(find.byKey(Key('locations button')));
+      await tester.pump();
 
-    var checkboxTiles =
-        tester.widgetList<CheckboxListTile>(find.byType(CheckboxListTile));
+      expect(find.byKey(Key('locations selection dialog')), findsOneWidget);
+    ***REMOVED***);
 
-    expect(checkboxTiles.every((ct) => ct.value == false), true);
-  ***REMOVED***);
+    testUI('Filter passes locations ot Locations selection',
+        (WidgetTester tester) async {
+      await tester.tap(find.byKey(Key('filter button')));
+      await tester.pump();
 
-  testWidgets('Type Selection saves selected types to filter',
-      (WidgetTester tester) async {
-    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+      await tester.tap(find.byKey(Key('locations button')));
+      await tester.pump();
 
-    await tester.pumpWidget(MaterialApp(
-        home: Provider<StorageService>(
-            create: (context) => _storageService, child: filterWidget)));
+      expect(find.text('district1'), findsOneWidget);
+      expect(find.text('district2'), findsOneWidget);
+    ***REMOVED***);
 
-    FilterWidgetState filterState = tester.state(find.byWidget(filterWidget));
+    testUI('Filter opens From Time selection with click at Zeit button',
+        (WidgetTester tester) async {
+      await tester.tap(find.byKey(Key('filter button')));
+      await tester.pump();
 
-    await tester.tap(find.byKey(Key('filter button')));
-    await tester.pump();
+      await tester.tap(find.byKey(Key('time button')));
+      await tester.pump();
 
-    await tester.tap(find.byKey(Key('type button')));
-    await tester.pump();
+      expect(find.text('von'), findsOneWidget);
+      expect(find.byKey(Key('from time picker')), findsOneWidget);
+    ***REMOVED***);
 
-    await tester.tap(find.text('Sammeln'));
-    await tester.pump();
+    testUI('Filter opens To Time selection when From Time selection is closed',
+        (WidgetTester tester) async {
+      await tester.tap(find.byKey(Key('filter button')));
+      await tester.pump();
 
-    await tester.tap(find.text('Fertig'));
-    await tester.pump();
+      await tester.tap(find.byKey(Key('time button')));
+      await tester.pump();
 
-    await tester.tap(find.byKey(Key('filter button')));
-    await tester.pump();
+      await tester.tap(find.text('OK'));
+      await tester.pump();
 
-    expect(filterState.filter.typen, containsAll(['Sammeln']));
-  ***REMOVED***);
+      expect(find.text('bis'), findsOneWidget);
+      expect(find.byKey(Key('to time picker')), findsOneWidget);
+    ***REMOVED***);
 
-  testWidgets('Filter opens Days selection with click at days button',
-      (WidgetTester tester) async {
-    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+    testUI('Filter intially shows time from filter in from time selection',
+        (WidgetTester tester) async {
+      FilterWidgetState filterState = tester.state(find.byKey(Key('filter')));
 
-    await tester.pumpWidget(MaterialApp(
-        home: Provider<StorageService>(
-            create: (context) => _storageService, child: filterWidget)));
+      filterState.filter.von = TimeOfDay(hour: 19, minute: 15);
+      filterState.filter.bis = TimeOfDay(hour: 20, minute: 21);
 
-    await tester.tap(find.byKey(Key('filter button')));
-    await tester.pump();
+      await tester.tap(find.byKey(Key('filter button')));
+      await tester.pump();
 
-    await tester.tap(find.byKey(Key('days button')));
-    await tester.pump();
+      await tester.tap(find.byKey(Key('time button')));
+      await tester.pump();
 
-    expect(find.byKey(Key('days selection dialog')), findsOneWidget);
-  ***REMOVED***);
+      expect(find.text('19'), findsOneWidget);
+      expect(find.text('15'), findsOneWidget);
 
-  testWidgets('Filter opens Locations selection with click at locations button',
-      (WidgetTester tester) async {
-    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+      await tester.tap(find.text('OK'));
+      await tester.pump();
 
-    when(_stammdatenService.ladeOrte()).thenAnswer((_) async => []);
+      expect(find.text('20'), findsOneWidget);
+      expect(find.text('21'), findsOneWidget);
+    ***REMOVED***);
 
-    await tester.pumpWidget(MultiProvider(providers: [
-      Provider<AbstractStammdatenService>.value(value: _stammdatenService),
-      Provider<StorageService>.value(value: _storageService)
-    ], child: MaterialApp(home: filterWidget)));
+    testUI('Filter intially shows default time if filter is empty',
+        (WidgetTester tester) async {
+      await tester.tap(find.byKey(Key('filter button')));
+      await tester.pump();
 
-    await tester.tap(find.byKey(Key('filter button')));
-    await tester.pump();
+      await tester.tap(find.byKey(Key('time button')));
+      await tester.pump();
 
-    await tester.tap(find.byKey(Key('locations button')));
-    await tester.pump();
+      expect(find.text('12'), findsOneWidget);
+      expect(find.text('00'), findsOneWidget);
 
-    expect(find.byKey(Key('locations selection dialog')), findsOneWidget);
-  ***REMOVED***);
+      await tester.tap(find.text('OK'));
+      await tester.pump();
 
-  testWidgets('Filter passes locations ot Locations selection',
-      (WidgetTester tester) async {
-    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+      expect(find.text('12'), findsOneWidget);
+      expect(find.text('00'), findsOneWidget);
+    ***REMOVED***);
 
-    when(_stammdatenService.ladeOrte()).thenAnswer((_) async => [
-          Ort(0, 'district1', 'place1', 52.49653, 13.43762),
-          Ort(1, 'district2', 'place2', 52.49653, 13.43762)
-        ]);
+    testUI('Filter saves selected time to filter', (WidgetTester tester) async {
+      FilterWidgetState filterState = tester.state(find.byKey(Key('filter')));
 
-    await tester.pumpWidget(MultiProvider(providers: [
-      Provider<AbstractStammdatenService>.value(value: _stammdatenService),
-      Provider<StorageService>.value(value: _storageService)
-    ], child: MaterialApp(home: filterWidget)));
+      await tester.tap(find.byKey(Key('filter button')));
+      await tester.pump();
 
-    await tester.tap(find.byKey(Key('filter button')));
-    await tester.pump();
+      await tester.tap(find.byKey(Key('time button')));
+      await tester.pump();
 
-    await tester.tap(find.byKey(Key('locations button')));
-    await tester.pump();
+      expect(find.byKey(Key('from time picker')), findsOneWidget);
 
-    expect(find.text('district1'), findsOneWidget);
-    expect(find.text('district2'), findsOneWidget);
-  ***REMOVED***);
+      await tester.tap(find.text('OK'));
+      await tester.pump();
 
-  testWidgets('Filter opens From Time selection with click at Zeit button',
-      (WidgetTester tester) async {
-    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+      expect(find.byKey(Key('to time picker')), findsOneWidget);
 
-    await tester.pumpWidget(MaterialApp(
-        home: Provider<StorageService>(
-            create: (context) => _storageService, child: filterWidget)));
+      await tester.tap(find.text('OK'));
+      await tester.pump();
 
-    await tester.tap(find.byKey(Key('filter button')));
-    await tester.pump();
+      expect(ChronoHelfer.timeToStringHHmm(filterState.filter.von), '12:00');
+      expect(ChronoHelfer.timeToStringHHmm(filterState.filter.von), '12:00');
+    ***REMOVED***);
 
-    await tester.tap(find.byKey(Key('time button')));
-    await tester.pump();
+    testUI('Filter is applied on Anwenden button', (WidgetTester tester) async {
+      FilterWidgetState filterState = tester.state(find.byKey(Key('filter')));
 
-    expect(find.text('von'), findsOneWidget);
-    expect(find.byKey(Key('from time picker')), findsOneWidget);
-  ***REMOVED***);
+      await tester.tap(find.byKey(Key('filter button')));
+      await tester.pump();
 
-  testWidgets(
-      'Filter opens To Time selection when From Time selection is closed',
-      (WidgetTester tester) async {
-    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+      filterState.filter = TermineFilter(
+          ['Sammeln'],
+          [DateTime(2019, 12, 16)],
+          TimeOfDay(hour: 19, minute: 15),
+          TimeOfDay(hour: 20, minute: 21),
+          [Ort(1, 'district', 'place', 52.49653, 13.43762)]);
 
-    await tester.pumpWidget(MaterialApp(
-        home: Provider<StorageService>(
-            create: (context) => _storageService, child: filterWidget)));
+      numberOfTimesCalled = 0;
+      iWasCalledResult = null;
 
-    await tester.tap(find.byKey(Key('filter button')));
-    await tester.pump();
+      await tester.tap(find.byKey(Key('filter button')));
+      await tester.pump();
 
-    await tester.tap(find.byKey(Key('time button')));
-    await tester.pump();
-
-    await tester.tap(find.text('OK'));
-    await tester.pump();
-
-    expect(find.text('bis'), findsOneWidget);
-    expect(find.byKey(Key('to time picker')), findsOneWidget);
-  ***REMOVED***);
-
-  testWidgets('Filter intially shows time from filter in from time selection',
-      (WidgetTester tester) async {
-    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
-
-    await tester.pumpWidget(MaterialApp(
-        home: Provider<StorageService>(
-            create: (context) => _storageService, child: filterWidget)));
-
-    FilterWidgetState filterState = tester.state(find.byWidget(filterWidget));
-
-    filterState.filter.von = TimeOfDay(hour: 19, minute: 15);
-    filterState.filter.bis = TimeOfDay(hour: 20, minute: 21);
-
-    await tester.tap(find.byKey(Key('filter button')));
-    await tester.pump();
-
-    await tester.tap(find.byKey(Key('time button')));
-    await tester.pump();
-
-    expect(find.text('19'), findsOneWidget);
-    expect(find.text('15'), findsOneWidget);
-
-    await tester.tap(find.text('OK'));
-    await tester.pump();
-
-    expect(find.text('20'), findsOneWidget);
-    expect(find.text('21'), findsOneWidget);
-  ***REMOVED***);
-
-  testWidgets('Filter intially shows default time if filter is empty',
-      (WidgetTester tester) async {
-    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
-
-    await tester.pumpWidget(MaterialApp(
-        home: Provider<StorageService>(
-            create: (context) => _storageService, child: filterWidget)));
-
-    await tester.tap(find.byKey(Key('filter button')));
-    await tester.pump();
-
-    await tester.tap(find.byKey(Key('time button')));
-    await tester.pump();
-
-    expect(find.text('12'), findsOneWidget);
-    expect(find.text('00'), findsOneWidget);
-
-    await tester.tap(find.text('OK'));
-    await tester.pump();
-
-    expect(find.text('12'), findsOneWidget);
-    expect(find.text('00'), findsOneWidget);
-  ***REMOVED***);
-
-  testWidgets('Filter saves selected time to filter',
-      (WidgetTester tester) async {
-    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
-
-    await tester.pumpWidget(MaterialApp(
-        home: Provider<StorageService>(
-            create: (context) => _storageService, child: filterWidget)));
-
-    FilterWidgetState filterState = tester.state(find.byWidget(filterWidget));
-
-    await tester.tap(find.byKey(Key('filter button')));
-    await tester.pump();
-
-    await tester.tap(find.byKey(Key('time button')));
-    await tester.pump();
-
-    expect(find.byKey(Key('from time picker')), findsOneWidget);
-
-    await tester.tap(find.text('OK'));
-    await tester.pump();
-
-    expect(find.byKey(Key('to time picker')), findsOneWidget);
-
-    await tester.tap(find.text('OK'));
-    await tester.pump();
-
-    expect(ChronoHelfer.timeToStringHHmm(filterState.filter.von), '12:00');
-    expect(ChronoHelfer.timeToStringHHmm(filterState.filter.von), '12:00');
-  ***REMOVED***);
-
-  testWidgets('Filter is applied on Anwenden button',
-      (WidgetTester tester) async {
-    FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
-
-    await tester.pumpWidget(MaterialApp(
-        home: Provider<StorageService>(
-            create: (context) => _storageService, child: filterWidget)));
-
-    FilterWidgetState filterState = tester.state(find.byWidget(filterWidget));
-
-    await tester.tap(find.byKey(Key('filter button')));
-    await tester.pump();
-
-    filterState.filter = TermineFilter(
-        ['Sammeln'],
-        [DateTime(2019, 12, 16)],
-        TimeOfDay(hour: 19, minute: 15),
-        TimeOfDay(hour: 20, minute: 21),
-        [Ort(1, 'district', 'place', 52.49653, 13.43762)]);
-
-    numberOfTimesCalled = 0;
-    iWasCalledResult = null;
-
-    await tester.tap(find.byKey(Key('filter button')));
-    await tester.pump();
-
-    expect(numberOfTimesCalled, 1);
-    expect(iWasCalledResult.typen, containsAll(['Sammeln']));
-    expect(ChronoHelfer.timeToStringHHmm(iWasCalledResult.von), '19:15');
-    expect(ChronoHelfer.timeToStringHHmm(iWasCalledResult.bis), '20:21');
-    expect(iWasCalledResult.tage.map((t) => DateFormat.yMd().format(t)),
-        containsAll(['12/16/2019']));
-    expect(iWasCalledResult.orte.map((o) => o.id), containsAll([1]));
+      expect(numberOfTimesCalled, 1);
+      expect(iWasCalledResult.typen, containsAll(['Sammeln']));
+      expect(ChronoHelfer.timeToStringHHmm(iWasCalledResult.von), '19:15');
+      expect(ChronoHelfer.timeToStringHHmm(iWasCalledResult.bis), '20:21');
+      expect(iWasCalledResult.tage.map((t) => DateFormat.yMd().format(t)),
+          containsAll(['12/16/2019']));
+      expect(iWasCalledResult.orte.map((o) => o.id), containsAll([1]));
+    ***REMOVED***);
   ***REMOVED***);
 
   group('storage function', () {
-    testWidgets('initializes filter with default values if no storage is found',
-        (WidgetTester tester) async {
-      FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+    setUpUI((WidgetTester tester) async {
+      when(_stammdatenService.ladeOrte()).thenAnswer((_) async => [
+            Ort(0, 'district1', 'place1', 52.49653, 13.43762),
+            Ort(1, 'district2', 'place2', 52.49653, 13.43762)
+          ]);
+    ***REMOVED***);
 
-      await tester.pumpWidget(MaterialApp(
-          home: Provider<StorageService>(
-              create: (context) => _storageService, child: filterWidget)));
-      FilterWidgetState filterState = tester.state(find.byWidget(filterWidget));
+    testUI('initializes filter with default values if no storage is found',
+        (WidgetTester tester) async {
+      when(_storageService.loadFilter()).thenAnswer((_) async => null);
+
+      await pumpFilterWidget(tester);
+
+      FilterWidgetState filterState = tester.state(find.byKey(Key('filter')));
 
       expect(filterState.filter.typen, []);
       expect(filterState.filter.tage, []);
@@ -451,7 +346,7 @@ void main() {
       expect(filterState.filter.orte, []);
     ***REMOVED***);
 
-    testWidgets('loads initially filter from storage if found',
+    testUI('loads initially filter from storage if found',
         (WidgetTester tester) async {
       when(_storageService.loadFilter()).thenAnswer((_) async => TermineFilter(
           ['Sammeln', 'Infoveranstaltung'],
@@ -465,13 +360,9 @@ void main() {
                 52.49653, 13.43762)
           ]));
 
-      FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key("filter"));
+      await pumpFilterWidget(tester);
 
-      await tester.pumpWidget(MaterialApp(
-          home: Provider<StorageService>(
-              create: (context) => _storageService, child: filterWidget)));
-
-      FilterWidgetState filterState = tester.state(find.byWidget(filterWidget));
+      FilterWidgetState filterState = tester.state(find.byKey(Key('filter')));
       var filter = filterState.filter;
 
       expect(filter.typen, containsAll(['Sammeln', 'Infoveranstaltung']));
@@ -500,4 +391,13 @@ void main() {
           ]));
     ***REMOVED***);
   ***REMOVED***);
+***REMOVED***
+
+Future pumpFilterWidget(WidgetTester tester) async {
+  FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key('filter'));
+
+  await tester.pumpWidget(MultiProvider(providers: [
+    Provider<AbstractStammdatenService>.value(value: _stammdatenService),
+    Provider<StorageService>.value(value: _storageService)
+  ], child: MaterialApp(home: filterWidget)));
 ***REMOVED***
