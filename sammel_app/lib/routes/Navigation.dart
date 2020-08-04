@@ -183,7 +183,7 @@ class NavigationState extends State<Navigation>
 
   void addActionsToActionPage(List<Termin> actions) {
     actions.forEach((action) => (actionPage.currentState as TermineSeiteState)
-        .createAndAddAction(actions[0]));
+        .createAndAddAction(action));
   ***REMOVED***
 
   Future<bool> navigateBack() async {
