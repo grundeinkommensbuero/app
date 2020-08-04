@@ -228,7 +228,7 @@ class ActionEditorState extends State<ActionEditor> {
     ),
     Text(
       'Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. '
-          'Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.',
+      'Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.',
       textScaleFactor: 1.0,
     )
   ]);
@@ -638,8 +638,10 @@ class ActionEditorState extends State<ActionEditor> {
       List<Termin> termine = await generateActions();
       if (termine != null) {
         widget.onFinish(termine);
-        setState(() => action = ActionData()); // reset Form for next use
-        Navigator.maybePop(context);
+        if (isNewAction)
+          setState(() => action = ActionData()); // reset Form for next use
+        else
+          Navigator.maybePop(context);
       ***REMOVED***
     ***REMOVED***
   ***REMOVED***
