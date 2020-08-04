@@ -158,6 +158,7 @@ class NavigationState extends State<Navigation>
             onTap: () {
               if (navigation != index) {
                 history.add(navigation);
+                print('Navigiere');
                 switchPage(index);
               }
               Navigator.pop(context);
@@ -165,6 +166,7 @@ class NavigationState extends State<Navigation>
   }
 
   void switchPage(int index) async {
+    print('Gehe zu Seite $index');
     setState(() => swipeUp = index > navigation);
     await _animationController.forward();
     setState(() {
@@ -191,6 +193,7 @@ class NavigationState extends State<Navigation>
     if (history.isEmpty)
       closeApp = true;
     else {
+      print('Navigiere zurück');
       switchPage(history.last);
       history.removeLast();
     }
@@ -198,6 +201,7 @@ class NavigationState extends State<Navigation>
   }
 
   void navigateToActionPage() {
+    print('Navigiere zur Aktionen-Seite');
     switchPage(0);
     history.removeLast();
   }
