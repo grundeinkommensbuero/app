@@ -12,6 +12,7 @@ class PushMessage {
   toJson() =>
       {
         'recipients': recipients,
+        'topic': topic,
         'data': data,
         'notification': notification,
       };
