@@ -46,7 +46,7 @@ class ChatWindowState extends State<ChatWindow>
 
   SimpleMessageChannel channel = null;
   User user = null;
-  PushService pushService = null;
+  AbstractPushService pushService = null;
   TextEditingController textEditingController = TextEditingController();
   GlobalKey _formKey = new GlobalKey(debugLabel:'TextField');
 
@@ -62,7 +62,7 @@ class ChatWindowState extends State<ChatWindow>
           setState(() {
             this.user = value;
           ***REMOVED***));
-      pushService = Provider.of<PushService>(context);
+      pushService = Provider.of<AbstractPushService>(context);
       channel.register_widget(this);
     ***REMOVED***
 

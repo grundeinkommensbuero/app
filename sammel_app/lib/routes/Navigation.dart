@@ -27,7 +27,7 @@ class NavigationState extends State<Navigation>
   bool swipeUp = false;
   FAQ faq;
 
-  PushService pushService;
+  AbstractPushService pushService;
 
   @override
   void initState() {
@@ -48,7 +48,7 @@ class NavigationState extends State<Navigation>
   @override
   Widget build(BuildContext context) {
     ErrorService.setContext(context);
-    pushService = Provider.of<PushService>(context);
+    pushService = Provider.of<AbstractPushService>(context);
 
     var pages = [
       TermineSeite(key: actionPage),
