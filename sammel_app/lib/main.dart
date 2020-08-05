@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
           Provider<AbstractListLocationService>.value(
               value: listLocationService),
           Provider<StorageService>.value(value: storageService),
-          Provider<PushService>.value(value: pushService),
+          Provider<AbstractPushService>.value(value: pushService),
           Provider<PushNotificationsManager>.value(
               value: pushNotificationManager),
           Provider<ChatMessageService>.value(value: chatMessageService),
