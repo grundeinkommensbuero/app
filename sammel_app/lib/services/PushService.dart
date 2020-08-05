@@ -14,6 +14,7 @@ abstract class AbstractPushService extends BackendService {
 ***REMOVED***
 
 class PushService extends AbstractPushService {
+  PushService([Backend backendMock]) : super(backendMock);
 
   pushToDevices(List<String> recipients, PushData data,
       PushNotification notification) async {
@@ -48,6 +49,8 @@ class PushService extends AbstractPushService {
 ***REMOVED***
 
 class DemoPushService extends AbstractPushService {
+  DemoPushService() : super(DemoBackend());
+
   @override
   pushToDevices(List<String> recipients, PushData data,
       PushNotification notification) async {
