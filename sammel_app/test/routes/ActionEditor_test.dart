@@ -268,7 +268,7 @@ void main() {
       await _openActionCreator(tester);
       await tester.tap(find.byKey(Key('action editor cancel button')));
       await tester.pumpAndSettle();
-      verifyNever(_terminService.createTermin(any, any));
+      verifyNever(_terminService.createAction(any, any));
     });
 
     testWidgets('Termin adds a day if bis before von',
@@ -416,7 +416,7 @@ void main() {
           TerminDetails('treffpunkt', 'kommentar', 'kontakt'),
           LatLng(52.48993, 13.46839));
 
-      when(_terminService.createTermin(any, any))
+      when(_terminService.createAction(any, any))
           .thenAnswer((_) async => TerminTestDaten.einTermin());
       await tester.tap(find.byKey(Key('action editor finish button')));
 

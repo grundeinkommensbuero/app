@@ -154,7 +154,7 @@ void main() {
 
     testUI('returns action page after action creation',
         (WidgetTester tester) async {
-      when(_termineService.createTermin(any, any))
+      when(_termineService.createAction(any, any))
           .thenAnswer((_) async => TerminTestDaten.einTermin());
       await openActionCreator(tester);
 
