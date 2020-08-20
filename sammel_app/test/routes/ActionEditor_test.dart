@@ -20,21 +20,22 @@ import '../model/Ort_test.dart';
 import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';
 
-final stammdatenService = StammdatenServiceMock();
-final terminService = TermineServiceMock();
-final listLocationService = ListLocationServiceMock();
-final storageService = StorageServiceMock();
-final pushService = PushServiceMock();
-final userService = UserServiceMock();
+final _stammdatenService = StammdatenServiceMock();
+final _terminService = TermineServiceMock();
+final _listLocationService = ListLocationServiceMock();
+final _storageService = StorageServiceMock();
+final _pushService = PushServiceMock();
+final _userService = UserServiceMock();
 
 void main() {
   setUp(() {
-    when(storageService.loadFilter()).thenAnswer((_) async => null);
-    when(storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
-    when(listLocationService.getActiveListLocations())
+    when(_storageService.loadFilter()).thenAnswer((_) async => null);
+    when(_storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
+    when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
-    when(terminService.ladeTermine(any)).thenAnswer((_) async => []);
-    when(userService.user).thenAnswer((_) async => karl());
+    when(_terminService.ladeTermine(any)).thenAnswer((_) async => []);
+    when(_userService.user).thenAnswer((_) async => karl());
+    when(_stammdatenService.ladeOrte()).thenAnswer((_) async => []);
   });
 
   testWidgets('TermineSeite opens CreateTerminDialog on click at menu button',
@@ -56,13 +57,13 @@ void main() {
 
   group('shows all data', () {
     setUp(() async {
-      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+      when(_terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
-      when(terminService.getTerminMitDetails(any)).thenAnswer(
+      when(_terminService.getTerminMitDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
-      when(storageService.loadAllStoredActionIds())
+      when(_storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [0]);
     });
 
@@ -146,7 +147,7 @@ void main() {
 
     testWidgets('Location dialog opens correctly', (WidgetTester tester) async {
       await _openActionCreator(tester);
-      when(stammdatenService.ladeOrte()).thenAnswer((_) async => [goerli()]);
+      when(_stammdatenService.ladeOrte()).thenAnswer((_) async => [goerli()]);
       expect(find.byKey(Key('Location Picker')), findsNothing);
       await tester.tap(find.byKey(Key('Open location dialog')));
       await tester.pump();
@@ -159,7 +160,7 @@ void main() {
       ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
       expect(find.text("in Görlitzer Park und Umgebung"), findsNothing);
-      when(stammdatenService.ladeOrte()).thenAnswer((_) async => [goerli()]);
+      when(_stammdatenService.ladeOrte()).thenAnswer((_) async => [goerli()]);
       // ignore: invalid_use_of_protected_member
       actionData.setState(() {
         actionData.action.ort = goerli();
@@ -267,7 +268,7 @@ void main() {
       await _openActionCreator(tester);
       await tester.tap(find.byKey(Key('action editor cancel button')));
       await tester.pumpAndSettle();
-      verifyNever(terminService.createTermin(any, any));
+      verifyNever(_terminService.createTermin(any, any));
     });
 
     testWidgets('Termin adds a day if bis before von',
@@ -415,7 +416,7 @@ void main() {
           TerminDetails('treffpunkt', 'kommentar', 'kontakt'),
           LatLng(52.48993, 13.46839));
 
-      when(terminService.createTermin(any, any))
+      when(_terminService.createTermin(any, any))
           .thenAnswer((_) async => TerminTestDaten.einTermin());
       await tester.tap(find.byKey(Key('action editor finish button')));
 
@@ -458,13 +459,13 @@ void main() {
   });
   group('generateActions generates actions', () {
     setUp(() async {
-      when(terminService.ladeTermine(any)).thenAnswer((_) async => [
+      when(_terminService.ladeTermine(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
-      when(terminService.getTerminMitDetails(any)).thenAnswer(
+      when(_terminService.getTerminMitDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
-      when(storageService.loadAllStoredActionIds())
+      when(_storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [0]);
     });
 
@@ -664,8 +665,8 @@ void main() {
 
       var actionEditor = ActionEditor(onFinish: onFinish);
       await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractStammdatenService>.value(value: stammdatenService),
-        Provider<AbstractUserService>.value(value: userService),
+        Provider<AbstractStammdatenService>.value(value: _stammdatenService),
+        Provider<AbstractUserService>.value(value: _userService),
       ], child: MaterialApp(home: actionEditor)));
 
       ActionEditorState state = tester.state(find.byWidget(actionEditor));
@@ -745,13 +746,13 @@ void main() {
 _pumpNavigation(WidgetTester tester) async {
   await tester.pumpWidget(MultiProvider(
       providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService),
+        Provider<AbstractTermineService>.value(value: _terminService),
+        Provider<StorageService>.value(value: _storageService),
         Provider<AbstractListLocationService>(
-            create: (context) => listLocationService),
-        Provider<AbstractStammdatenService>.value(value: stammdatenService),
-        Provider<PushService>.value(value: pushService),
-        Provider<AbstractUserService>.value(value: userService),
+            create: (context) => _listLocationService),
+        Provider<AbstractStammdatenService>.value(value: _stammdatenService),
+        Provider<AbstractPushService>.value(value: _pushService),
+        Provider<AbstractUserService>.value(value: _userService),
       ],
       child: MaterialApp(
         home: Navigation(),
@@ -762,12 +763,13 @@ _pumpNavigation(WidgetTester tester) async {
 _pumpActionPage(WidgetTester tester) async {
   await tester.pumpWidget(MultiProvider(
       providers: [
-        Provider<AbstractTermineService>.value(value: terminService),
-        Provider<StorageService>.value(value: storageService),
+        Provider<AbstractTermineService>.value(value: _terminService),
+        Provider<StorageService>.value(value: _storageService),
         Provider<AbstractListLocationService>(
-            create: (context) => listLocationService),
-        Provider<AbstractStammdatenService>.value(value: stammdatenService),
-        Provider<AbstractUserService>.value(value: userService),
+            create: (context) => _listLocationService),
+        Provider<AbstractStammdatenService>.value(value: _stammdatenService),
+        Provider<AbstractUserService>.value(value: _userService),
+        Provider<PushService>.value(value: _pushService),
       ],
       child: MaterialApp(
         home: TermineSeite(),

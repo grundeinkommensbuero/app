@@ -25,8 +25,8 @@ import 'package:sammel_app/services/UserService.dart';
 import '../model/Ort_test.dart';
 import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';
-import 'ActionEditor_test.dart';
 
+final _stammdatenService = StammdatenServiceMock();
 final _terminService = TermineServiceMock();
 final _listLocationService = ListLocationServiceMock();
 final _storageService = StorageServiceMock();
@@ -45,6 +45,7 @@ void main() {
     when(_terminService.ladeTermine(any)).thenAnswer((_) async => []);
     me = karl();
     when(_userService.user).thenAnswer((_) async => me);
+    when(_stammdatenService.ladeOrte()).thenAnswer((_) async => []);
 
     termineSeiteWidget = MultiProvider(
         providers: [
@@ -53,6 +54,7 @@ void main() {
               value: _listLocationService),
           Provider<StorageService>.value(value: _storageService),
           Provider<AbstractUserService>.value(value: _userService),
+          Provider<AbstractStammdatenService>.value(value: _stammdatenService),
         ],
         child: MaterialApp(home: Builder(builder: (BuildContext context) {
           ErrorService.setContext(context);
@@ -1281,9 +1283,10 @@ _pumpNavigation(WidgetTester tester) async {
         Provider<StorageService>.value(value: _storageService),
         Provider<AbstractListLocationService>(
             create: (context) => _listLocationService),
-        Provider<AbstractStammdatenService>.value(value: stammdatenService),
+        Provider<AbstractStammdatenService>.value(value: _stammdatenService),
         Provider<PushService>.value(value: _pushService),
         Provider<AbstractUserService>.value(value: _userService),
+        Provider<AbstractPushService>.value(value: _pushService),
       ],
       child: MaterialApp(
         home: Navigation(),
