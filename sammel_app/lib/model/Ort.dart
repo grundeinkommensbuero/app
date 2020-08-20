@@ -2,14 +2,14 @@ class Ort {
   int id;
   String bezirk;
   String ort;
-  double lattitude;
+  double latitude;
   double longitude;
 
   Ort(id, bezirk, ort, lattitude, longitude) {
     this.id = id;
     this.ort = ort;
     this.bezirk = bezirk;
-    this.lattitude = lattitude;
+    this.latitude = lattitude;
     this.longitude = longitude;
   }
 
@@ -17,14 +17,14 @@ class Ort {
       : id = json['id'],
         bezirk = json['bezirk'] ?? '',
         ort = json['ort'] ?? '',
-        lattitude = json['lattitude'] ?? null,
+        latitude = json['lattitude'] ?? null,
         longitude = json['longitude'] ?? null;
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'bezirk': bezirk,
         'ort': ort,
-        'lattitude': lattitude,
+        'lattitude': latitude,
         'longitude': longitude,
       };
 
@@ -32,6 +32,6 @@ class Ort {
       this.id == that.id &&
       this.bezirk == that.bezirk &&
       this.ort == that.ort &&
-      this.lattitude == that.lattitude &&
+      this.latitude == that.latitude &&
       this.longitude == that.longitude;
 }

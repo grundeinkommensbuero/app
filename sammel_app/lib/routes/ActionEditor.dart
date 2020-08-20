@@ -253,8 +253,8 @@ class ActionEditorState extends State<ActionEditor> {
         action.coordinates?.longitude != null)
       return LatLng(action.coordinates.latitude, action.coordinates.longitude);
     // at location
-    if (action.ort?.lattitude != null && action.ort?.lattitude != null)
-      return LatLng(action.ort.lattitude, action.ort.longitude);
+    if (action.ort?.latitude != null && action.ort?.latitude != null)
+      return LatLng(action.ort.latitude, action.ort.longitude);
 
     return null;
   }

@@ -35,7 +35,7 @@ void main() {
           .thenAnswer((_) async => []);
       when(_storageService.loadFilter())
           .thenAnswer((_) async => TermineFilter.leererFilter());
-      when(_termineService.ladeTermine(any)).thenAnswer((_) async => []);
+      when(_termineService.loadActions(any)).thenAnswer((_) async => []);
       when(_userService.user).thenAnswer((_) async => karl());
       when(_stammdatenService.ladeOrte()).thenAnswer((_) async => []);
 

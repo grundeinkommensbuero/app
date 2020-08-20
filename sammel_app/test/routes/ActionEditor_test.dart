@@ -33,7 +33,7 @@ void main() {
     when(_storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
-    when(_terminService.ladeTermine(any)).thenAnswer((_) async => []);
+    when(_terminService.loadActions(any)).thenAnswer((_) async => []);
     when(_userService.user).thenAnswer((_) async => karl());
     when(_stammdatenService.ladeOrte()).thenAnswer((_) async => []);
   });
@@ -57,7 +57,7 @@ void main() {
 
   group('shows all data', () {
     setUp(() async {
-      when(_terminService.ladeTermine(any)).thenAnswer((_) async => [
+      when(_terminService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
       when(_terminService.getTerminMitDetails(any)).thenAnswer(
@@ -459,7 +459,7 @@ void main() {
   });
   group('generateActions generates actions', () {
     setUp(() async {
-      when(_terminService.ladeTermine(any)).thenAnswer((_) async => [
+      when(_terminService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
       when(_terminService.getTerminMitDetails(any)).thenAnswer(
