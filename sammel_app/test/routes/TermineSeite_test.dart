@@ -107,7 +107,7 @@ void main() {
             TerminTestDaten.einTermin()..id = 2,
             TerminTestDaten.einTermin()..id = 3,
           ]);
-      when(_terminService.getTerminMitDetails(any)).thenAnswer(
+      when(_terminService.getActionWithDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       when(_storageService.loadAllStoredActionIds())
@@ -184,7 +184,7 @@ void main() {
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getTerminMitDetails(any)).thenAnswer(
+      when(_terminService.getActionWithDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       await tester.pumpWidget(termineSeiteWidget);
@@ -207,7 +207,7 @@ void main() {
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getTerminMitDetails(any)).thenAnswer(
+      when(_terminService.getActionWithDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       await tester.pumpWidget(termineSeiteWidget);
@@ -218,7 +218,7 @@ void main() {
       await tester.tap(find.byKey(Key('action card')).first);
       await tester.pump();
 
-      verify(_terminService.getTerminMitDetails(0));
+      verify(_terminService.getActionWithDetails(0));
     ***REMOVED***);
 
     testWidgets('closes TerminDetails dialog with tap on Schliessen button',
@@ -228,7 +228,7 @@ void main() {
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getTerminMitDetails(any)).thenAnswer(
+      when(_terminService.getActionWithDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       await tester.pumpWidget(termineSeiteWidget);
@@ -250,7 +250,7 @@ void main() {
       when(_terminService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getTerminMitDetails(any)).thenAnswer(
+      when(_terminService.getActionWithDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       await tester.pumpWidget(termineSeiteWidget);
@@ -272,7 +272,7 @@ void main() {
       when(_terminService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getTerminMitDetails(any)).thenAnswer(
+      when(_terminService.getActionWithDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       await tester.pumpWidget(termineSeiteWidget);
@@ -307,7 +307,7 @@ void main() {
             TerminTestDaten.einTermin(),
           ]);
       var action = TerminTestDaten.einTerminOhneTeilisMitDetails();
-      when(_terminService.getTerminMitDetails(any))
+      when(_terminService.getActionWithDetails(any))
           .thenAnswer((_) async => action);
 
       await tester.pumpWidget(termineSeiteWidget);
@@ -339,7 +339,7 @@ void main() {
             TerminTestDaten.einTermin(),
           ]);
       var action = TerminTestDaten.einTerminMitTeilisUndDetails();
-      when(_terminService.getTerminMitDetails(any))
+      when(_terminService.getActionWithDetails(any))
           .thenAnswer((_) async => action);
 
       await tester.pumpWidget(termineSeiteWidget);
@@ -560,7 +560,7 @@ void main() {
               ..typ = 'Infoveranstaltung',
           ]);
 
-      when(_terminService.getTerminMitDetails(any)).thenAnswer(
+      when(_terminService.getActionWithDetails(any)).thenAnswer(
         (_) async => TerminTestDaten.einTerminMitTeilisUndDetails()
           ..id = 1337
           ..typ = 'Infoveranstaltung',
@@ -618,7 +618,7 @@ void main() {
           myAction
         ];
       ***REMOVED***);
-      when(_terminService.getTerminMitDetails(any)).thenAnswer(
+      when(_terminService.getActionWithDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
       when(_storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [1]);
@@ -846,7 +846,7 @@ void main() {
       when(_terminService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getTerminMitDetails(any)).thenAnswer(
+      when(_terminService.getActionWithDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       when(_storageService.loadAllStoredActionIds())
@@ -871,7 +871,7 @@ void main() {
       when(_terminService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getTerminMitDetails(any)).thenAnswer(
+      when(_terminService.getActionWithDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
       when(_storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [0]);
@@ -898,7 +898,7 @@ void main() {
       when(_terminService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getTerminMitDetails(any)).thenAnswer(
+      when(_terminService.getActionWithDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       when(_storageService.loadAllStoredActionIds())
@@ -952,7 +952,7 @@ void main() {
 
         // mittlere Aktion um sicherzustellen, dass nicht einfach immer die erste oder letzte Aktion gelöscht wird
         myAction = TerminTestDaten.einTerminMitTeilisUndDetails()..id = 2;
-        when(_terminService.getTerminMitDetails(any))
+        when(_terminService.getActionWithDetails(any))
             .thenAnswer((_) async => myAction);
 
         clearInteractions(_storageService);

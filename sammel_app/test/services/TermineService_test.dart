@@ -247,9 +247,7 @@ void main() {
               '***REMOVED***'));
     ***REMOVED***);
 
-    test(
-        'createTermin deserializes action correctly',
-        () async {
+    test('createTermin deserializes action correctly', () async {
       when(backend.post('service/termine/neu', any)).thenAnswer((_) async =>
           HttpClientResponseBodyMock(
               TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200));
@@ -272,8 +270,44 @@ void main() {
       expect(action.participants[0].id, 1);
       expect(action.participants[0].name, 'Karl Marx');
       expect(action.participants[0].color.value, Colors.red.value);
-      expect(
-          action.details.kommentar, 'Bringe Westen und Klämmbretter mit');
+      expect(action.details.kommentar, 'Bringe Westen und Klämmbretter mit');
+      expect(action.details.treffpunkt, 'Weltzeituhr');
+      expect(action.details.kontakt, 'Ruft an unter 012345678');
+    ***REMOVED***);
+
+    test('getActionWithDetails calls right path', () {
+      when(backend.get('service/termine/termin?id=0')).thenAnswer((_) async =>
+          HttpClientResponseBodyMock(
+              TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200));
+
+      service.getActionWithDetails(0);
+
+      verify(backend.get('service/termine/termin?id=0'));
+    ***REMOVED***);
+
+    test('getActionWithDetails deserializes action correctly', () async {
+      when(backend.get('service/termine/termin?id=0')).thenAnswer((_) async =>
+          HttpClientResponseBodyMock(
+              TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200));
+
+      var action = await service.getActionWithDetails(0);
+
+      expect(action.id, 0);
+      expect(action.beginn, DateTime(2019, 11, 4, 17, 9, 0));
+      expect(action.ende, DateTime(2019, 11, 4, 18, 9, 0));
+      expect(action.ort.id, 1);
+      expect(action.ort.bezirk, 'Friedrichshain-Kreuzberg');
+      expect(action.ort.ort, 'Friedrichshain Nordkiez');
+      expect(action.ort.latitude, 52.51579);
+      expect(action.ort.longitude, 13.45399);
+      expect(action.typ, 'Sammeln');
+      expect(action.latitude, 52.52116);
+      expect(action.longitude, 13.41331);
+      expect(action.participants.length, 1);
+      expect(action.participants[0].id, 1);
+      expect(action.participants[0].name, 'Karl Marx');
+      expect(action.participants[0].color.value, Colors.red.value);
+      expect(action.details.kommentar, 'Bringe Westen und Klämmbretter mit');
       expect(action.details.treffpunkt, 'Weltzeituhr');
       expect(action.details.kontakt, 'Ruft an unter 012345678');
     ***REMOVED***);

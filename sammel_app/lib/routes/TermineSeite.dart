@@ -193,7 +193,7 @@ class TermineSeiteState extends State<TermineSeite>
   openTerminDetails(BuildContext context, Termin termin) async {
     try {
       var terminMitDetails =
-          await termineService.getTerminMitDetails(termin.id);
+          await termineService.getActionWithDetails(termin.id);
       TerminDetailsCommand command = await showDialog(
           context: context,
           builder: (context) => StatefulBuilder(
