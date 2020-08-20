@@ -312,6 +312,86 @@ void main() {
       expect(action.details.kontakt, 'Ruft an unter 012345678');
     });
 
+    test(
+        'saveAction calls right path and serialises action and token correctly',
+        () {
+      when(backend.post('service/termine/termin', any))
+          .thenAnswer((_) async => HttpClientResponseBodyMock({}, 200));
+
+      service.saveAction(
+          TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
+
+      verify(backend.post(
+          'service/termine/termin',
+          '{'
+              '"action":'
+              '{'
+              '"id":0,'
+              '"beginn":"2019-11-04T17:09:00.000",'
+              '"ende":"2019-11-04T18:09:00.000",'
+              '"ort":'
+              '{'
+              '"id":1,'
+              '"bezirk":"Friedrichshain-Kreuzberg",'
+              '"ort":"Friedrichshain Nordkiez",'
+              '"lattitude":52.51579,'
+              '"longitude":13.45399'
+              '},'
+              '"typ":"Sammeln",'
+              '"lattitude":52.52116,'
+              '"longitude":13.41331,'
+              '"participants":[{"id":1,"name":"Karl Marx","color":4294198070}],'
+              '"details":'
+              '{'
+              '"id":null,'
+              '"treffpunkt":"Weltzeituhr",'
+              '"kommentar":"Bringe Westen und Klämmbretter mit",'
+              '"kontakt":"Ruft an unter 012345678"}'
+              '},'
+              '"token":"Token"'
+              '}'));
+    });
+
+    test(
+        'deleteAction calls right path and serialises action and token correctly',
+        () {
+      when(backend.delete('service/termine/termin', any))
+          .thenAnswer((_) async => HttpClientResponseBodyMock({}, 200));
+
+      service.deleteAction(
+          TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
+
+      verify(backend.delete(
+          'service/termine/termin',
+          '{'
+              '"action":'
+              '{'
+              '"id":0,'
+              '"beginn":"2019-11-04T17:09:00.000",'
+              '"ende":"2019-11-04T18:09:00.000",'
+              '"ort":'
+              '{'
+              '"id":1,'
+              '"bezirk":"Friedrichshain-Kreuzberg",'
+              '"ort":"Friedrichshain Nordkiez",'
+              '"lattitude":52.51579,'
+              '"longitude":13.45399'
+              '},'
+              '"typ":"Sammeln",'
+              '"lattitude":52.52116,'
+              '"longitude":13.41331,'
+              '"participants":[{"id":1,"name":"Karl Marx","color":4294198070}],'
+              '"details":'
+              '{'
+              '"id":null,'
+              '"treffpunkt":"Weltzeituhr",'
+              '"kommentar":"Bringe Westen und Klämmbretter mit",'
+              '"kontakt":"Ruft an unter 012345678"}'
+              '},'
+              '"token":"Token"'
+              '}'));
+    });
+
     test('joinAction calls correct path', () {
       when(backend.post('service/termine/teilnahme', any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(null, 202));
