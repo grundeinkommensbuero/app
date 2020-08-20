@@ -400,7 +400,7 @@ void main() {
           TerminDetails('test1', 'test2', 'test3'),
           LatLng(52.49653, 13.43762));
 
-      when(_terminService.createTermin(any, any)).thenAnswer((_) async =>
+      when(_terminService.createAction(any, any)).thenAnswer((_) async =>
           Termin(
               1337,
               today,
@@ -462,7 +462,7 @@ void main() {
           TerminDetails('test1', 'test2', 'test3'),
           LatLng(52.49653, 13.43762));
 
-      when(_terminService.createTermin(any, any)).thenAnswer(
+      when(_terminService.createAction(any, any)).thenAnswer(
         (_) async => Termin(
             1337,
             today,
@@ -493,7 +493,7 @@ void main() {
       var tomorrow = today.subtract(Duration(days: 1));
       var dayAfterTomorrow = today.add(Duration(days: 2));
 
-      when(_terminService.createTermin(any, any)).thenAnswer(
+      when(_terminService.createAction(any, any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       when(_terminService.loadActions(any)).thenAnswer((_) async => [
@@ -525,7 +525,7 @@ void main() {
           TerminDetails('test1', 'test2', 'test3'),
           LatLng(52.49653, 13.43762));
 
-      when(_terminService.createTermin(any, any)).thenAnswer((_) async =>
+      when(_terminService.createAction(any, any)).thenAnswer((_) async =>
           Termin(
               1337,
               today,
@@ -540,7 +540,7 @@ void main() {
       await tester.tap(find.byKey(Key('action editor finish button')));
       await tester.pumpAndSettle();
 
-      verify(_terminService.createTermin(any, any)).called(1);
+      verify(_terminService.createAction(any, any)).called(1);
     ***REMOVED***);
 
     testWidgets('shows alert popup on RestFehler from create request',
@@ -549,7 +549,7 @@ void main() {
       var yesterday = today.subtract(Duration(days: 1));
       var tomorrow = today.add(Duration(days: 1));
 
-      when(_terminService.createTermin(any, any)).thenAnswer(
+      when(_terminService.createAction(any, any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       when(_terminService.loadActions(any)).thenAnswer((_) async => [
@@ -587,7 +587,7 @@ void main() {
           TerminDetails('test1', 'test2', 'test3'),
           LatLng(52.49653, 13.43762));
 
-      when(_terminService.createTermin(any, any))
+      when(_terminService.createAction(any, any))
           .thenThrow(RestFehler('message'));
 
       await tester.tap(find.byKey(Key('action editor finish button')));
@@ -1107,14 +1107,14 @@ void main() {
     ***REMOVED***);
 
     test('is uniquely generated at action creation and sent to server', () {
-      when(_terminService.createTermin(any, any)).thenAnswer(
+      when(_terminService.createAction(any, any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       actionPageState.createNewAction(TerminTestDaten.einTermin());
       actionPageState.createNewAction(TerminTestDaten.einTermin());
 
       List<dynamic> uuids =
-          verify(_terminService.createTermin(any, captureAny)).captured;
+          verify(_terminService.createAction(any, captureAny)).captured;
 
       expect(uuids[0], isNotEmpty);
       expect(uuids[1], isNotEmpty);

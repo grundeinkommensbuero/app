@@ -16,7 +16,7 @@ abstract class AbstractTermineService extends BackendService {
 
   Future<List<Termin>> loadActions(TermineFilter filter);
 
-  Future<Termin> createTermin(Termin termin, String token);
+  Future<Termin> createAction(Termin termin, String token);
 
   Future<Termin> getTerminMitDetails(int id);
 
@@ -41,7 +41,7 @@ class TermineService extends AbstractTermineService {
     return termine;
   ***REMOVED***
 
-  Future<Termin> createTermin(Termin termin, String token) async {
+  Future<Termin> createAction(Termin termin, String token) async {
     ActionWithToken actionWithToken = ActionWithToken(termin, token);
     var response =
         await post('service/termine/neu', jsonEncode(actionWithToken));
@@ -176,7 +176,7 @@ class DemoTermineService extends AbstractTermineService {
   ***REMOVED***
 
   @override
-  Future<Termin> createTermin(Termin termin, String token) async {
+  Future<Termin> createAction(Termin termin, String token) async {
     int highestId = termine.map((termin) => termin.id).reduce(max);
     termin.id = highestId + 1;
     termine.add(termin);

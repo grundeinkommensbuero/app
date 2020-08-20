@@ -30,7 +30,7 @@ void main() {
       expect(
           (await service.loadActions(TermineFilter.leererFilter())).length, 4);
 
-      var response = await service.createTermin(
+      var response = await service.createAction(
           Termin(
               null,
               DateTime.now(),
@@ -184,7 +184,8 @@ void main() {
       expect(actions[0].participants[0].id, 1);
       expect(actions[0].participants[0].name, 'Karl Marx');
       expect(actions[0].participants[0].color.value, Colors.red.value);
-      expect(actions[0].details.kommentar, 'Bringe Westen und Klämmbretter mit');
+      expect(
+          actions[0].details.kommentar, 'Bringe Westen und Klämmbretter mit');
       expect(actions[0].details.treffpunkt, 'Weltzeituhr');
       expect(actions[0].details.kontakt, 'Ruft an unter 012345678');
       expect(actions[1].id, 0);
@@ -199,9 +200,82 @@ void main() {
       expect(actions[1].latitude, 52.52116);
       expect(actions[1].longitude, 13.41331);
       expect(actions[1].participants.length, 0);
-      expect(actions[1].details.kommentar, 'Bringe Westen und Klämmbretter mit');
+      expect(
+          actions[1].details.kommentar, 'Bringe Westen und Klämmbretter mit');
       expect(actions[1].details.treffpunkt, 'Weltzeituhr');
       expect(actions[1].details.kontakt, 'Ruft an unter 012345678');
+    ***REMOVED***);
+
+    test(
+        'createTermin calls right path and serializes action and token correctly',
+        () {
+      when(backend.post('service/termine/neu', any)).thenAnswer((_) async =>
+          HttpClientResponseBodyMock(
+              TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200));
+
+      service.createAction(
+          TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
+
+      verify(backend.post(
+          'service/termine/neu',
+          '{'
+              '"action":'
+              '{'
+              '"id":0,'
+              '"beginn":"2019-11-04T17:09:00.000",'
+              '"ende":"2019-11-04T18:09:00.000",'
+              '"ort":'
+              '{'
+              '"id":1,'
+              '"bezirk":"Friedrichshain-Kreuzberg",'
+              '"ort":"Friedrichshain Nordkiez",'
+              '"lattitude":52.51579,'
+              '"longitude":13.45399'
+              '***REMOVED***,'
+              '"typ":"Sammeln",'
+              '"lattitude":52.52116,'
+              '"longitude":13.41331,'
+              '"participants":[{"id":1,"name":"Karl Marx","color":4294198070***REMOVED***],'
+              '"details":'
+              '{'
+              '"id":null,'
+              '"treffpunkt":"Weltzeituhr",'
+              '"kommentar":"Bringe Westen und Klämmbretter mit",'
+              '"kontakt":"Ruft an unter 012345678"***REMOVED***'
+              '***REMOVED***,'
+              '"token":"Token"'
+              '***REMOVED***'));
+    ***REMOVED***);
+
+    test(
+        'createTermin deserializes action correctly',
+        () async {
+      when(backend.post('service/termine/neu', any)).thenAnswer((_) async =>
+          HttpClientResponseBodyMock(
+              TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200));
+
+      var action = await service.createAction(
+          TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
+
+      expect(action.id, 0);
+      expect(action.beginn, DateTime(2019, 11, 4, 17, 9, 0));
+      expect(action.ende, DateTime(2019, 11, 4, 18, 9, 0));
+      expect(action.ort.id, 1);
+      expect(action.ort.bezirk, 'Friedrichshain-Kreuzberg');
+      expect(action.ort.ort, 'Friedrichshain Nordkiez');
+      expect(action.ort.latitude, 52.51579);
+      expect(action.ort.longitude, 13.45399);
+      expect(action.typ, 'Sammeln');
+      expect(action.latitude, 52.52116);
+      expect(action.longitude, 13.41331);
+      expect(action.participants.length, 1);
+      expect(action.participants[0].id, 1);
+      expect(action.participants[0].name, 'Karl Marx');
+      expect(action.participants[0].color.value, Colors.red.value);
+      expect(
+          action.details.kommentar, 'Bringe Westen und Klämmbretter mit');
+      expect(action.details.treffpunkt, 'Weltzeituhr');
+      expect(action.details.kontakt, 'Ruft an unter 012345678');
     ***REMOVED***);
 
     test('joinAction calls correct path', () {

@@ -399,7 +399,7 @@ class TermineSeiteState extends State<TermineSeite>
 
   Future<Termin> createNewAction(Termin action) async {
     String uuid = Uuid().v1();
-    Termin actionWithId = await termineService.createTermin(action, uuid);
+    Termin actionWithId = await termineService.createAction(action, uuid);
     storageService.saveActionToken(actionWithId.id, uuid);
     return actionWithId;
   ***REMOVED***
