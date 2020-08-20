@@ -9,6 +9,7 @@ import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/PushService.dart';
+import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
@@ -16,11 +17,12 @@ import 'package:sammel_app/services/UserService.dart';
 import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';
 
-final termineService = TermineServiceMock();
-final listLocationService = ListLocationServiceMock();
-final storageService = StorageServiceMock();
-final pushService = PushServiceMock();
-final userService = UserServiceMock();
+final _stammdatenService = StammdatenServiceMock();
+final _termineService = TermineServiceMock();
+final _listLocationService = ListLocationServiceMock();
+final _storageService = StorageServiceMock();
+final _pushService = PushServiceMock();
+final _userService = UserServiceMock();
 
 void main() {
   group('Navigation', () {
@@ -28,20 +30,22 @@ void main() {
 
     setUpUI((WidgetTester tester) async {
       navigation = Navigation();
-      when(storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
-      when(listLocationService.getActiveListLocations())
+      when(_storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
+      when(_listLocationService.getActiveListLocations())
           .thenAnswer((_) async => []);
-      when(storageService.loadFilter())
+      when(_storageService.loadFilter())
           .thenAnswer((_) async => TermineFilter.leererFilter());
-      when(termineService.ladeTermine(any)).thenAnswer((_) async => []);
-      when(userService.user).thenAnswer((_) async => karl());
+      when(_termineService.ladeTermine(any)).thenAnswer((_) async => []);
+      when(_userService.user).thenAnswer((_) async => karl());
+      when(_stammdatenService.ladeOrte()).thenAnswer((_) async => []);
 
       await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractTermineService>.value(value: termineService),
-        Provider<AbstractListLocationService>.value(value: listLocationService),
-        Provider<StorageService>.value(value: storageService),
-        Provider<PushService>.value(value: pushService),
-        Provider<AbstractUserService>.value(value: userService),
+        Provider<AbstractTermineService>.value(value: _termineService),
+        Provider<AbstractListLocationService>.value(value: _listLocationService),
+        Provider<StorageService>.value(value: _storageService),
+        Provider<AbstractPushService>.value(value: _pushService),
+        Provider<AbstractUserService>.value(value: _userService),
+        Provider<AbstractStammdatenService>.value(value: _stammdatenService),
       ], child: MaterialApp(home: navigation)));
     ***REMOVED***);
 
@@ -150,7 +154,7 @@ void main() {
 
     testUI('returns action page after action creation',
         (WidgetTester tester) async {
-      when(termineService.createTermin(any, any))
+      when(_termineService.createTermin(any, any))
           .thenAnswer((_) async => TerminTestDaten.einTermin());
       await openActionCreator(tester);
 
