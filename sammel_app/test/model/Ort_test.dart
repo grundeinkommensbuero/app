@@ -101,11 +101,11 @@ void main() {
   ***REMOVED***);
 ***REMOVED***
 
-Ort nordkiez() => Ort(1, "Friedrichshain-Kreuzberg", "Friedrichshain Nordkiez",
+Ort nordkiez() => Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
     52.51579, 13.45399);
 
-Ort goerli() => Ort(0, "Friedrichshain-Kreuzberg",
-    "Görlitzer Park und Umgebung", 52.48993, 13.46839);
+Ort goerli() => Ort(0, 'Friedrichshain-Kreuzberg',
+    'Görlitzer Park und Umgebung', 52.48993, 13.46839);
 
 Ort treptowerPark() =>
-    Ort(2, "Treptow-Köpenick", "Treptower Park", 52.49653, 13.43762);
+    Ort(2, 'Treptow-Köpenick', 'Treptower Park', 52.49653, 13.43762);

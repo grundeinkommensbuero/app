@@ -168,7 +168,7 @@ class TermineSeiteState extends State<TermineSeite>
   ***REMOVED***
 
   void ladeTermine(TermineFilter filter) {
-    termineService.ladeTermine(filter).then((termine) {
+    termineService.loadActions(filter).then((termine) {
       setState(() {
         this.termine = termine..sort(Termin.compareByStart);
       ***REMOVED***);

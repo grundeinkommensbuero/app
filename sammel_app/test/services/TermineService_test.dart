@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:mockito/mockito.dart';
@@ -27,7 +28,7 @@ void main() {
 
     test('creates new Termin', () async {
       expect(
-          (await service.ladeTermine(TermineFilter.leererFilter())).length, 4);
+          (await service.loadActions(TermineFilter.leererFilter())).length, 4);
 
       var response = await service.createTermin(
           Termin(
@@ -48,19 +49,19 @@ void main() {
 
       expect(response.id, 5);
       expect(
-          (await service.ladeTermine(TermineFilter.leererFilter())).length, 5);
+          (await service.loadActions(TermineFilter.leererFilter())).length, 5);
     ***REMOVED***);
 
     test('deletes action', () async {
       var actionsBefore =
-          await service.ladeTermine(TermineFilter.leererFilter());
+          await service.loadActions(TermineFilter.leererFilter());
       expect(
           actionsBefore.map((action) => action.id), containsAll([1, 2, 3, 4]));
 
       await service.deleteAction(actionsBefore[1], '');
 
       var actionsAfter =
-          await service.ladeTermine(TermineFilter.leererFilter());
+          await service.loadActions(TermineFilter.leererFilter());
       expect(actionsAfter.map((action) => action.id), containsAll([1, 3, 4]));
     ***REMOVED***);
 
@@ -140,6 +141,69 @@ void main() {
       service = TermineService(backend);
     ***REMOVED***);
 
+    test('loadActions calls right path and serializes Filter correctly', () {
+      when(backend.post('service/termine', any))
+          .thenAnswer((_) async => HttpClientResponseBodyMock([], 200));
+
+      service.loadActions(einFilter());
+
+      verify(backend.post(
+          'service/termine',
+          ''
+              '{'
+              '"typen":["Sammeln"],'
+              '"tage":["2020-08-20"],'
+              '"von":"15:00:00",'
+              '"bis":"18:30:00",'
+              '"orte":[{"id":1,"bezirk":"Friedrichshain-Kreuzberg","ort":"Friedrichshain Nordkiez","lattitude":52.51579,"longitude":13.45399***REMOVED***]'
+              '***REMOVED***'));
+    ***REMOVED***);
+
+    test('loadActions deserializes actions correctly', () async {
+      when(backend.post('service/termine', any))
+          .thenAnswer((_) async => HttpClientResponseBodyMock([
+                TerminTestDaten.einTerminMitTeilisUndDetails().toJson(),
+                TerminTestDaten.einTerminOhneTeilisMitDetails().toJson()
+              ], 200));
+
+      var actions = await service.loadActions(einFilter());
+
+      expect(actions.length, 2);
+      expect(actions[0].id, 0);
+      expect(actions[0].beginn, DateTime(2019, 11, 4, 17, 9, 0));
+      expect(actions[0].ende, DateTime(2019, 11, 4, 18, 9, 0));
+      expect(actions[0].ort.id, 1);
+      expect(actions[0].ort.bezirk, 'Friedrichshain-Kreuzberg');
+      expect(actions[0].ort.ort, 'Friedrichshain Nordkiez');
+      expect(actions[0].ort.latitude, 52.51579);
+      expect(actions[0].ort.longitude, 13.45399);
+      expect(actions[0].typ, 'Sammeln');
+      expect(actions[0].latitude, 52.52116);
+      expect(actions[0].longitude, 13.41331);
+      expect(actions[0].participants.length, 1);
+      expect(actions[0].participants[0].id, 1);
+      expect(actions[0].participants[0].name, 'Karl Marx');
+      expect(actions[0].participants[0].color.value, Colors.red.value);
+      expect(actions[0].details.kommentar, 'Bringe Westen und Klämmbretter mit');
+      expect(actions[0].details.treffpunkt, 'Weltzeituhr');
+      expect(actions[0].details.kontakt, 'Ruft an unter 012345678');
+      expect(actions[1].id, 0);
+      expect(actions[1].beginn, DateTime(2019, 11, 4, 17, 9, 0));
+      expect(actions[1].ende, DateTime(2019, 11, 4, 18, 9, 0));
+      expect(actions[1].ort.id, 1);
+      expect(actions[1].ort.bezirk, 'Friedrichshain-Kreuzberg');
+      expect(actions[1].ort.ort, 'Friedrichshain Nordkiez');
+      expect(actions[1].ort.latitude, 52.51579);
+      expect(actions[1].ort.longitude, 13.45399);
+      expect(actions[1].typ, 'Sammeln');
+      expect(actions[1].latitude, 52.52116);
+      expect(actions[1].longitude, 13.41331);
+      expect(actions[1].participants.length, 0);
+      expect(actions[1].details.kommentar, 'Bringe Westen und Klämmbretter mit');
+      expect(actions[1].details.treffpunkt, 'Weltzeituhr');
+      expect(actions[1].details.kontakt, 'Ruft an unter 012345678');
+    ***REMOVED***);
+
     test('joinAction calls correct path', () {
       when(backend.post('service/termine/teilnahme', any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(null, 202));
@@ -164,4 +228,13 @@ void main() {
               '"user":${jsonEncode(karl())***REMOVED******REMOVED***'));
     ***REMOVED***);
   ***REMOVED***);
+***REMOVED***
+
+TermineFilter einFilter() {
+  var datum = DateTime.parse('2020-08-20');
+  var start = DateTime.parse('2020-08-20 15:00:00');
+  var end = DateTime.parse('2020-08-20 18:30:00');
+  var einFilter = TermineFilter(["Sammeln"], [datum],
+      TimeOfDay.fromDateTime(start), TimeOfDay.fromDateTime(end), [nordkiez()]);
+  return einFilter;
 ***REMOVED***

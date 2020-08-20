@@ -50,17 +50,17 @@ void main() {
       expect(result[0].id, 1);
       expect(result[0].bezirk, 'Friedrichshain-Kreuzberg');
       expect(result[0].ort, 'Friedrichshain Nordkiez');
-      expect(result[0].lattitude, 52.51579);
+      expect(result[0].latitude, 52.51579);
       expect(result[0].longitude, 13.45399);
       expect(result[1].id, 2);
       expect(result[1].bezirk, 'Friedrichshain-Kreuzberg');
       expect(result[1].ort, 'Görlitzer Park und Umgebung');
-      expect(result[1].lattitude, 52.48993);
+      expect(result[1].latitude, 52.48993);
       expect(result[1].longitude, 13.46839);
       expect(result[2].id, 3);
       expect(result[2].bezirk, 'Treptow-Köpenick');
       expect(result[2].ort, 'Treptower Park');
-      expect(result[2].lattitude, 52.49653);
+      expect(result[2].latitude, 52.49653);
       expect(result[2].longitude, 13.43762);
     ***REMOVED***);
 

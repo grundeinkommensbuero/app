@@ -14,7 +14,7 @@ import 'package:sammel_app/services/BackendService.dart';
 abstract class AbstractTermineService extends BackendService {
   AbstractTermineService([Backend backendMock]) : super(backendMock);
 
-  Future<List<Termin>> ladeTermine(TermineFilter filter);
+  Future<List<Termin>> loadActions(TermineFilter filter);
 
   Future<Termin> createTermin(Termin termin, String token);
 
@@ -32,9 +32,9 @@ abstract class AbstractTermineService extends BackendService {
 class TermineService extends AbstractTermineService {
   TermineService([Backend backendMock]) : super(backendMock);
 
-  Future<List<Termin>> ladeTermine(TermineFilter filter) async {
+  Future<List<Termin>> loadActions(TermineFilter filter) async {
     HttpClientResponseBody response =
-        await post('/service/termine', jsonEncode(filter));
+        await post('service/termine', jsonEncode(filter));
     final termine = (response.body as List)
         .map((jsonTermin) => Termin.fromJson(jsonTermin))
         .toList();
@@ -150,7 +150,7 @@ class DemoTermineService extends AbstractTermineService {
   ];
 
   @override
-  Future<List<Termin>> ladeTermine(TermineFilter filter) async {
+  Future<List<Termin>> loadActions(TermineFilter filter) async {
     return termine.where((termin) {
       var von = DateTime(termin.beginn?.year, termin.beginn.month,
           termin.beginn.day, filter.von?.hour ?? 0, filter.von?.minute ?? 0);
