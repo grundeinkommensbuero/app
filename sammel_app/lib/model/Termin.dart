@@ -17,17 +17,6 @@ class Termin {
   Termin(this.id, this.beginn, this.ende, this.ort, this.typ, this.latitude,
       this.longitude, this.participants, this.details);
 
-  Termin.emptyAction()
-      : id = null,
-        beginn = null,
-        ende = null,
-        ort = null,
-        typ = null,
-        latitude = null,
-        longitude = null,
-        participants = [],
-        details = TerminDetails(null, null, null);
-
   Termin.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         beginn = DateTime.parse(json['beginn']),
@@ -79,7 +68,7 @@ class UnkownActionTypeException extends Error {
 
   @override
   String toString() {
-    return '${super.toString()}: $message';
+    return 'UnkownActionTypeException: $message';
   }
 }
 

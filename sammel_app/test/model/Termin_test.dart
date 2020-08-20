@@ -11,7 +11,7 @@ import 'TerminDetails_test.dart';
 
 void main() {
   group('serialisere', () {
-    test('serialisiert Temin ohne Teilnehmer oder Details', () {
+    test('serialisiert Termin ohne Teilnehmer oder Details', () {
       expect(
           jsonEncode(Termin(
               1,
@@ -35,7 +35,7 @@ void main() {
           '"participants":null,'
           '"details":null}');
     });
-    test('serialisiert Temin mit Teilnehmer und ohne Details', () {
+    test('serialisiert Termin mit Teilnehmer und ohne Details', () {
       expect(
           jsonEncode(Termin(
               1,
@@ -60,7 +60,7 @@ void main() {
           '"details":null}');
     });
 
-    test('serialisiert Temin mit Teilnehmern und Details', () {
+    test('serialisiert Termin mit Teilnehmern und Details', () {
       expect(
           jsonEncode(Termin(
               1,
@@ -89,9 +89,27 @@ void main() {
           '"kontakt":"Ruft an unter 012345678"}'
           '}');
     });
+
+    test('serializes filled ActionWithToken', () {
+      expect(
+          jsonEncode(ActionWithToken(TerminTestDaten.einTermin(), 'Token')),
+          '{'
+          '"action":${jsonEncode(TerminTestDaten.einTermin())},'
+          '"token":"Token"'
+          '}');
+    });
+
+    test('serializes empty ActionWithToken', () {
+      expect(
+          jsonEncode(ActionWithToken(null, null)),
+          '{'
+          '"action":null,'
+          '"token":null'
+          '}');
+    });
   });
   group('deserialisiere', () {
-    test('deserialisiert Temin ohne Teilnehmer und Details', () {
+    test('deserialisiert Termin ohne Teilnehmer und Details', () {
       var termin = Termin.fromJson(jsonDecode('{'
           '"id":1,'
           '"beginn":"2020-01-02T15:00:00.000",'
@@ -115,7 +133,7 @@ void main() {
       expect(termin.details, isNull);
     });
 
-    test('deserialisiert Temin mit Teilnehmer und Details', () {
+    test('deserialisiert Termin mit Teilnehmer und Details', () {
       var termin = Termin.fromJson(jsonDecode('{'
           '"beginn":"2020-02-05T09:00:00",'
           '"participants":[{"id":1,"name":"Karl Marx", "color":4294198070}],'
@@ -187,6 +205,39 @@ void main() {
 
     // first lesser then second by start, but not by end
     expect(Termin.compareByStart(action4, action1), -1);
+  });
+
+  group('getAsset', () {
+    var infoveranstaltung = TerminTestDaten.einTermin();
+
+    test('returns asset icon path if exists', () {
+      infoveranstaltung.typ = 'Infoveranstaltung';
+      expect(
+          infoveranstaltung.getAsset(), 'assets/images/Infoveranstaltung.png');
+    });
+
+    test('throws Error when type is unknown', () {
+      infoveranstaltung.typ = 'Unbekannt';
+      expect(() => infoveranstaltung.getAsset(),
+          throwsA((e) => e is UnkownActionTypeException));
+    });
+
+    test('returns non-centered icon path', () {
+      infoveranstaltung.typ = 'Sammeln';
+      expect(infoveranstaltung.getAsset(centered: false),
+          'assets/images/Sammeln.png');
+    });
+
+    test('returns centered icon path', () {
+      infoveranstaltung.typ = 'Sammeln';
+      expect(infoveranstaltung.getAsset(centered: true),
+          'assets/images/Sammeln_centered.png');
+    });
+  });
+
+  test('UnkownActionTypeException.toString generates message', () {
+    expect(UnkownActionTypeException('this is the message').toString(),
+        'UnkownActionTypeException: this is the message');
   });
 }
 
