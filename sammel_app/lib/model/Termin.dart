@@ -47,12 +47,12 @@ class Termin {
         'id': id,
         'beginn': beginn.toIso8601String(),
         'ende': ende.toIso8601String(),
-        'ort': ort.toJson(),
+        'ort':  ort == null ? null : ort.toJson(),
         'typ': typ,
         'lattitude': latitude,
         'longitude': longitude,
         'participants': participants?.map((user) => user.toJson())?.toList(),
-        'details': details.toJson(),
+        'details': details == null ? null : details.toJson(),
       };
 
   String getAsset({bool centered = false}) {
