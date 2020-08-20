@@ -18,7 +18,7 @@ abstract class AbstractTermineService extends BackendService {
 
   Future<Termin> createAction(Termin termin, String token);
 
-  Future<Termin> getTerminMitDetails(int id);
+  Future<Termin> getActionWithDetails(int id);
 
   Future<void> saveAction(Termin action, String token);
 
@@ -49,7 +49,7 @@ class TermineService extends AbstractTermineService {
   }
 
   @override
-  Future<Termin> getTerminMitDetails(int id) async {
+  Future<Termin> getActionWithDetails(int id) async {
     var response = await get('service/termine/termin?id=' + id.toString());
     return Termin.fromJson(response.body);
   }
@@ -184,7 +184,7 @@ class DemoTermineService extends AbstractTermineService {
   }
 
   @override
-  Future<Termin> getTerminMitDetails(int id) async {
+  Future<Termin> getActionWithDetails(int id) async {
     return termine.firstWhere((termin) => termin.id == id);
   }
 

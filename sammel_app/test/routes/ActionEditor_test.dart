@@ -60,7 +60,7 @@ void main() {
       when(_terminService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getTerminMitDetails(any)).thenAnswer(
+      when(_terminService.getActionWithDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       when(_storageService.loadAllStoredActionIds())
@@ -462,7 +462,7 @@ void main() {
       when(_terminService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getTerminMitDetails(any)).thenAnswer(
+      when(_terminService.getActionWithDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       when(_storageService.loadAllStoredActionIds())
