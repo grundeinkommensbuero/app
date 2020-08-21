@@ -8,6 +8,8 @@ import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../model/Termin_test.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences.setMockInitialValues({}); //set values here
@@ -58,10 +60,21 @@ void main() async {
       expect(_prefs.getStringList("actionlist"), isEmpty);
     });
 
-    tearDown(() {
-      // Cleanup
-      _prefs.remove("action:1");
-      expect(_prefs.getString("action:1"), null);
+    test('loadAllStoredActionIds returns saved ids as integers', () async {
+      await _prefs.setStringList('actionlist', ['1', '2', '3']);
+
+      var list = await service.loadAllStoredActionIds();
+
+      expect(list, containsAll([1, 2, 3]));
+    });
+
+    test('loadAllStoredActionIds returns empty list if storage empty',
+        () async {
+      await _prefs.setStringList('actionlist', null);
+
+      var list = await service.loadAllStoredActionIds();
+
+      expect(list, []);
     });
   });
 
@@ -197,7 +210,51 @@ void main() async {
     });
   });
 
-  group('user',  () {
-    //TODO
+  group('user', () {
+    test('saveUser saves user to storage', () async {
+      await service.saveUser(karl());
+
+      expect(_prefs.getString('user'),
+          '{"id":1,"name":"Karl Marx","color":4294198070}');
+    });
+
+    test('loadUser loads user from storage', () async {
+      _prefs.setString(
+          'user', '{"id":1,"name":"Karl Marx","color":4294198070}');
+
+      var user = await service.loadUser();
+
+      expect(user.id, 1);
+      expect(user.name, 'Karl Marx');
+      expect(user.color.value, 4294198070);
+    });
+
+    test('loadUser returns null if no user stored', () async {
+      _prefs.remove('user');
+
+      var user = await service.loadUser();
+
+      expect(user, null);
+    });
+  });
+
+  test('clearAllPreferences clears whole storage', () async {
+    _prefs.setString('user', '{"id":1,"name":"Karl Marx","color":4294198070}');
+    _prefs.setStringList('actionlist', ['1', '2', '3']);
+    _prefs.setInt('anyInt', 1);
+    _prefs.setBool('anyBool', true);
+    _prefs.setDouble('anyDouble', 1.0);
+
+    await service.clearAllPreferences();
+
+    expect(_prefs.getString('user'), null);
+    expect(_prefs.getStringList('actionlist'), null);
+    expect(_prefs.getInt('anyInt'), null);
+    expect(_prefs.getBool('anyBool'), null);
+    expect(_prefs.getDouble('anyDouble'), null);
+  });
+
+  tearDown(() async {
+    await service.clearAllPreferences();
   });
 }

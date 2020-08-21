@@ -73,13 +73,13 @@ class StorageService {
         return User.fromJSON(jsonDecode(user));
       });
 
-  clearAllPreferences() => _prefs.then((prefs) async {
-        prefs.clear();
-      });
-
   Future<String> loadSecret() =>
       prefs.then((prefs) => prefs.getString(_SECRET));
 
   Future<void> saveSecret(String secret) =>
       prefs.then((prefs) => prefs.setString(_SECRET, secret));
+
+  clearAllPreferences() => _prefs.then((prefs) async {
+    prefs.clear();
+  });
 }
