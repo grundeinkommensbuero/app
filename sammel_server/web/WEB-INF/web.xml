@@ -10,4 +10,14 @@
         <servlet-name>org.jboss.spec.javax.ws.rs.core.Application</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
+    <login-config>
+        <auth-method>BASIC</auth-method>
+        <realm-name>database-security-domain</realm-name>
+    </login-config>
+
+    <security-role>
+        <role-name>admin</role-name>
+        <role-name>user</role-name>
+        <role-name>named</role-name>
+    </security-role>
 </web-app>

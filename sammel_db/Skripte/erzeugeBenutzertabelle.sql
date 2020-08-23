@@ -13,7 +13,7 @@ create table Credentials
     secret        varchar(1024) not null,
     salt          varchar(1024) not null,
     firebasekey   varchar(256) not null,
+    roles         varchar(256) null,
     constraint Credentials_pk
         primary key (id)
-)
-fue
+);
