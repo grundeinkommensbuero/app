@@ -186,10 +186,12 @@
                         <password>${DB_PASSWORD***REMOVED***</password>
                     </security>
                     <validation>
-                        <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLValidConnectionChecker"/>
+                        <valid-connection-checker
+                                class-name="org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLValidConnectionChecker"/>
                         <validate-on-match>true</validate-on-match>
                         <background-validation>false</background-validation>
-                        <exception-sorter class-name="org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLExceptionSorter"/>
+                        <exception-sorter
+                                class-name="org.jboss.jca.adapters.jdbc.extensions.mysql.MySQLExceptionSorter"/>
                     </validation>
                 </datasource>
                 <drivers>
@@ -291,6 +293,10 @@
             <default-missing-method-permissions-deny-access value="true"/>
             <statistics enabled="${wildfly.ejb3.statistics-enabled:${wildfly.statistics-enabled:false***REMOVED******REMOVED***"/>
             <log-system-exceptions value="true"/>
+            <application-security-domains>
+                <application-security-domain name="database-ejb-security-domain"
+                                             security-domain="database-security-domain"/>
+            </application-security-domains>
         </subsystem>
         <subsystem xmlns="urn:wildfly:elytron:7.0" final-providers="combined-providers"
                    disallowed-providers="OracleUcrypto">
@@ -316,6 +322,10 @@
                     <realm name="ManagementRealm" role-decoder="groups-to-roles"/>
                     <realm name="local" role-mapper="super-user-mapper"/>
                 </security-domain>
+                <security-domain name="database-security-domain" default-realm="database-security-realm"
+                                 permission-mapper="default-permission-mapper">
+                    <realm name="database-security-realm" role-decoder="groups-to-roles"/>
+                </security-domain>
             </security-domains>
             <security-realms>
                 <identity-realm name="local" identity="$local"/>
@@ -329,6 +339,16 @@
                                       digest-realm-name="ManagementRealm"/>
                     <groups-properties path="mgmt-groups.properties" relative-to="jboss.server.config.dir"/>
                 </properties-realm>
+                <jdbc-realm name="database-security-realm">
+                    <principal-query
+                            sql="select creds.secret, creds.salt, creds.roles from Credentials creds where creds.id="
+                            data-source="mariaDBDS">
+                        <bcrypt-mapper password-index="1" salt-index="2" iteration-count-index="10000"/>
+                        <attribute-mapping>
+                            <attribute to="groups" index="3"/>
+                        </attribute-mapping>
+                    </principal-query>
+                </jdbc-realm>
             </security-realms>
             <mappers>
                 <simple-permission-mapper name="default-permission-mapper" mapping-mode="first">
@@ -365,6 +385,15 @@
                     <mechanism-configuration>
                         <mechanism mechanism-name="DIGEST">
                             <mechanism-realm realm-name="ManagementRealm"/>
+                        </mechanism>
+                    </mechanism-configuration>
+                </http-authentication-factory>
+                <http-authentication-factory name="database-application-http-authentication-factory"
+                                             security-domain="database-security-domain"
+                                             http-server-mechanism-factory="global">
+                    <mechanism-configuration>
+                        <mechanism mechanism-name="BASIC">
+                            <mechanism-realm realm-name="database-security-domain"/>
                         </mechanism>
                     </mechanism-configuration>
                 </http-authentication-factory>
@@ -515,38 +544,6 @@
         <subsystem xmlns="urn:jboss:domain:request-controller:1.0"/>
         <subsystem xmlns="urn:jboss:domain:resource-adapters:5.0"/>
         <subsystem xmlns="urn:jboss:domain:sar:1.0"/>
-        <subsystem xmlns="urn:jboss:domain:security:2.0">
-            <security-domains>
-                <security-domain name="other" cache-type="default">
-                    <authentication>
-                        <login-module code="Remoting" flag="optional">
-                            <module-option name="password-stacking" value="useFirstPass"/>
-                        </login-module>
-                        <login-module code="RealmDirect" flag="required">
-                            <module-option name="password-stacking" value="useFirstPass"/>
-                        </login-module>
-                    </authentication>
-                </security-domain>
-                <security-domain name="jboss-web-policy" cache-type="default">
-                    <authorization>
-                        <policy-module code="Delegating" flag="required"/>
-                    </authorization>
-                </security-domain>
-                <security-domain name="jaspitest" cache-type="default">
-                    <authentication-jaspi>
-                        <login-module-stack name="dummy">
-                            <login-module code="Dummy" flag="optional"/>
-                        </login-module-stack>
-                        <auth-module code="Dummy"/>
-                    </authentication-jaspi>
-                </security-domain>
-                <security-domain name="jboss-ejb-policy" cache-type="default">
-                    <authorization>
-                        <policy-module code="Delegating" flag="required"/>
-                    </authorization>
-                </security-domain>
-            </security-domains>
-        </subsystem>
         <subsystem xmlns="urn:jboss:domain:security-manager:1.0">
             <deployment-permissions>
                 <maximum-set>
@@ -587,6 +584,9 @@
             <handlers>
                 <file name="welcome-content" path="${jboss.home.dir***REMOVED***/welcome-content"/>
             </handlers>
+            <application-security-domains>
+                <application-security-domain name="undertow-application-domain" http-authentication-factory="database-application-http-authentication-factory"/>
+            </application-security-domains>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:webservices:2.0"
                    statistics-enabled="${wildfly.webservices.statistics-enabled:${wildfly.statistics-enabled:false***REMOVED******REMOVED***">

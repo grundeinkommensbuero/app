@@ -10,15 +10,19 @@ import database.termine.Token
 import org.jboss.logging.Logger
 import rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithoutDetails
 import java.time.LocalDateTime
+import javax.annotation.Resource
+import javax.annotation.security.PermitAll
 import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
 import javax.ejb.EJBException
-import javax.persistence.Basic
-import javax.resource.spi.AuthenticationMechanism
+import javax.ejb.SessionContext
+import javax.ejb.Stateless
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType.APPLICATION_JSON
 import javax.ws.rs.core.Response
 
+
+@Stateless
 @Path("termine")
 open class TermineRestResource {
     private val LOG = Logger.getLogger(TermineRestResource::class.java)
@@ -34,9 +38,11 @@ open class TermineRestResource {
     private lateinit var benutzerDao: BenutzerDao
 
     @POST
+    @PermitAll
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun getTermine(filter: TermineFilter?): Response {
+        context
         val termine = dao.getTermine(filter ?: TermineFilter())
         return Response
                 .ok()
@@ -46,6 +52,7 @@ open class TermineRestResource {
 
     @GET
     @Path("termin")
+    @RolesAllowed("user")
     @Produces(APPLICATION_JSON)
     open fun getTermin(@QueryParam("id") id: Long?): Response {
         if (id == null)
@@ -90,7 +97,7 @@ open class TermineRestResource {
         if (actionAndToken.action == null || actionAndToken.action!!.id == null) return noValidActionResponse
 
         val tokenFromDb = dao.loadToken(actionAndToken.action!!.id!!)?.token
-        if (tokenFromDb != null && !tokenFromDb.equals(actionAndToken.token)) return Response.status(403)
+        if (tokenFromDb != null && tokenFromDb != actionAndToken.token) return Response.status(403)
                 .entity(RestFehlermeldung("Bearbeiten dieser Aktion ist unautorisiert"))
                 .build()
 
@@ -116,7 +123,7 @@ open class TermineRestResource {
             return noValidActionResponse
 
         val tokenFromDb = dao.loadToken(actionAndToken.action!!.id!!)?.token
-        if (tokenFromDb != null && !tokenFromDb.equals(actionAndToken.token))
+        if (tokenFromDb != null && tokenFromDb != actionAndToken.token)
             return Response.status(403)
                     .entity(RestFehlermeldung("Löschen dieser Aktion ist unautorisiert"))
                     .build()
