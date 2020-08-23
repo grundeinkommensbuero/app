@@ -76,9 +76,16 @@ class TermineRestResourceTest {
     }
 
     @Test
-    fun getTerminLiefer433BeiUnbekannterId() {
-        whenever(dao.getTermin(1L)).thenReturn(terminOhneTeilnehmerMitDetails())
+    fun getTerminLiefert422BeiFehlenderId() {
+        val response = resource.getTermin(null)
 
+        assertEquals(response.status, 422)
+        val entity = response.entity as String
+        assertEquals(entity, "Keine Aktions-ID angegeben")
+    }
+
+    @Test
+    fun getTerminLiefert433BeiUnbekannterId() {
         val response = resource.getTermin(2L)
 
         verify(dao, atLeastOnce()).getTermin(2L)

@@ -10,8 +10,11 @@ import database.termine.Token
 import org.jboss.logging.Logger
 import rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithoutDetails
 import java.time.LocalDateTime
+import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
 import javax.ejb.EJBException
+import javax.persistence.Basic
+import javax.resource.spi.AuthenticationMechanism
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType.APPLICATION_JSON
 import javax.ws.rs.core.Response
@@ -44,12 +47,17 @@ open class TermineRestResource {
     @GET
     @Path("termin")
     @Produces(APPLICATION_JSON)
-    open fun getTermin(@QueryParam("id") id: Long): Response {
+    open fun getTermin(@QueryParam("id") id: Long?): Response {
+        if (id == null)
+            return Response
+                    .status(422)
+                    .entity("Keine Aktions-ID angegeben")
+                    .build()
         val termin = dao.getTermin(id)
         if (termin == null)
             return Response
                     .status(433)
-                    .entity("Unbekannte Aktion angegeben")
+                    .entity("Unbekannte Aktion abgefragt")
                     .build()
         termin.details
         return Response
