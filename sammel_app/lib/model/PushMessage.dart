@@ -3,10 +3,11 @@ import 'Message.dart';
 
 class PushMessage {
   List<String> recipients;
+  String topic;
   PushData data;
   PushNotification notification;
 
-  PushMessage(this.data, this.notification, {this.recipients***REMOVED***);
+  PushMessage(this.data, this.notification, {this.recipients, this.topic***REMOVED***);
 
   toJson() =>
       {
