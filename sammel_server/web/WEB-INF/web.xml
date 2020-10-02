@@ -12,7 +12,7 @@
     </servlet-mapping>
     <login-config>
         <auth-method>BASIC</auth-method>
-        <realm-name>database-security-domain</realm-name>
+        <realm-name>ElytronApplicationRealm</realm-name>
     </login-config>
 
     <security-role>
