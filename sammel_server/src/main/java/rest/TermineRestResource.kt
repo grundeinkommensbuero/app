@@ -13,6 +13,7 @@ import java.time.LocalDateTime
 import javax.annotation.Resource
 import javax.annotation.security.PermitAll
 import javax.annotation.security.RolesAllowed
+import javax.annotation.security.RunAs
 import javax.ejb.EJB
 import javax.ejb.EJBException
 import javax.ejb.SessionContext
@@ -20,7 +21,6 @@ import javax.ejb.Stateless
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType.APPLICATION_JSON
 import javax.ws.rs.core.Response
-
 
 @Stateless
 @Path("termine")
@@ -42,12 +42,27 @@ open class TermineRestResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun getTermine(filter: TermineFilter?): Response {
-        context
         val termine = dao.getTermine(filter ?: TermineFilter())
         return Response
                 .ok()
                 .entity(termine.map { termin -> convertFromTerminWithoutDetails(termin) ***REMOVED***)
                 .build()
+    ***REMOVED***
+
+    @GET
+    @Path("abgesichert")
+    @RolesAllowed("user")
+    @Produces(APPLICATION_JSON)
+    open fun abgesichert(): Response {
+        return Response.ok().build();
+    ***REMOVED***
+
+    @GET
+    @Path("ungesichert")
+    @PermitAll()
+    @Produces(APPLICATION_JSON)
+    open fun ungesichert(): Response {
+        return Response.ok().build();
     ***REMOVED***
 
     @GET

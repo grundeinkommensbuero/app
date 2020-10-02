@@ -39,15 +39,6 @@
     <management>
         <security-realms>
             <security-realm name="ManagementRealm">
-                <!--                <server-identities>-->
-                <!--                    <ssl>-->
-                <!--                        <keystore path="wildfly.keystore.jks" relative-to="jboss.server.config.dir"-->
-                <!--                                  keystore-password="I thought what I'd do was I'd pretend I was one of those deaf-mutes"-->
-                <!--                                  alias="wildfly_admin"-->
-                <!--                                  key-password="I thought what I'd do was I'd pretend I was one of those deaf-mutes"-->
-                <!--                                  generate-self-signed-certificate-host="localhost"/>-->
-                <!--                    </ssl>-->
-                <!--                </server-identities>-->
                 <authentication>
                     <local default-user="$local" skip-group-loading="true"/>
                     <properties path="mgmt-users.properties" relative-to="jboss.server.config.dir"/>
@@ -56,7 +47,7 @@
                     <properties path="mgmt-groups.properties" relative-to="jboss.server.config.dir"/>
                 </authorization>
             </security-realm>
-            <security-realm name="ApplicationRealm">
+            <security-realm name="ElytronApplicationRealm">
                 <server-identities>
                     <ssl>
                         <keystore path="application.keystore" relative-to="jboss.server.config.dir"
@@ -90,9 +81,7 @@
         <management-interfaces>
             <http-interface security-realm="ManagementRealm">
                 <http-upgrade enabled="true"/>
-                <!-- Costum Configuration -->
                 <socket-binding http="management-http"/>
-                <!--                <socket-binding https="management-https"/>-->
             </http-interface>
         </management-interfaces>
         <access-control provider="simple">
@@ -106,7 +95,7 @@
         </access-control>
     </management>
     <profile>
-        <subsystem xmlns="urn:jboss:domain:logging:7.0">
+        <subsystem xmlns="urn:jboss:domain:logging:8.0">
             <console-handler name="CONSOLE">
                 <level name="INFO"/>
                 <formatter>
@@ -132,6 +121,12 @@
             </logger>
             <logger category="sun.rmi">
                 <level name="WARN"/>
+            </logger>
+            <logger category="org.wildfly.security">
+                <level name="TRACE"/>
+            </logger>
+            <logger category="org.wildfly.extension.undertow">
+                <level name="TRACE"/>
             </logger>
             <root-logger>
                 <level name="INFO"/>
@@ -210,9 +205,9 @@
                                 runtime-failure-causes-rollback="${jboss.deployment.scanner.rollback.on.failure:false***REMOVED***"/>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:discovery:1.0"/>
-        <subsystem xmlns="urn:jboss:domain:distributable-web:1.0" default-session-management="default"
+        <subsystem xmlns="urn:jboss:domain:distributable-web:2.0" default-session-management="default"
                    default-single-sign-on-management="default">
-            <infinispan-session-management name="default" granularity="SESSION" cache-container="web">
+            <infinispan-session-management name="default" cache-container="web" granularity="SESSION">
                 <primary-owner-affinity/>
             </infinispan-session-management>
             <infinispan-single-sign-on-management name="default" cache-container="web" cache="sso"/>
@@ -248,7 +243,7 @@
                               managed-thread-factory="java:jboss/ee/concurrency/factory/default"/>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:ee-security:1.0"/>
-        <subsystem xmlns="urn:jboss:domain:ejb3:5.0">
+        <subsystem xmlns="urn:jboss:domain:ejb3:6.0">
             <session-bean>
                 <stateless>
                     <bean-instance-pool-ref pool-name="slsb-strict-max-pool"/>
@@ -294,11 +289,10 @@
             <statistics enabled="${wildfly.ejb3.statistics-enabled:${wildfly.statistics-enabled:false***REMOVED******REMOVED***"/>
             <log-system-exceptions value="true"/>
             <application-security-domains>
-                <application-security-domain name="database-ejb-security-domain"
-                                             security-domain="database-security-domain"/>
+                <application-security-domain name="ElytronApplicationDomain" security-domain="ElytronApplicationDomain"/>
             </application-security-domains>
         </subsystem>
-        <subsystem xmlns="urn:wildfly:elytron:7.0" final-providers="combined-providers"
+        <subsystem xmlns="urn:wildfly:elytron:8.0" final-providers="combined-providers"
                    disallowed-providers="OracleUcrypto">
             <providers>
                 <aggregate-providers name="combined-providers">
@@ -312,43 +306,28 @@
                 <file-audit-log name="local-audit" path="audit.log" relative-to="jboss.server.log.dir" format="JSON"/>
             </audit-logging>
             <security-domains>
-                <security-domain name="ApplicationDomain" default-realm="ApplicationRealm"
-                                 permission-mapper="default-permission-mapper">
-                    <realm name="ApplicationRealm" role-decoder="groups-to-roles"/>
-                    <realm name="local"/>
-                </security-domain>
                 <security-domain name="ManagementDomain" default-realm="ManagementRealm"
                                  permission-mapper="default-permission-mapper">
                     <realm name="ManagementRealm" role-decoder="groups-to-roles"/>
                     <realm name="local" role-mapper="super-user-mapper"/>
                 </security-domain>
-                <security-domain name="database-security-domain" default-realm="database-security-realm"
+                <security-domain name="ElytronApplicationDomain" default-realm="ElytronApplicationRealm"
                                  permission-mapper="default-permission-mapper">
-                    <realm name="database-security-realm" role-decoder="groups-to-roles"/>
+                    <realm name="ElytronApplicationRealm" role-decoder="groups-to-roles"/>
                 </security-domain>
             </security-domains>
             <security-realms>
                 <identity-realm name="local" identity="$local"/>
-                <properties-realm name="ApplicationRealm">
-                    <users-properties path="application-users.properties" relative-to="jboss.server.config.dir"
-                                      digest-realm-name="ApplicationRealm"/>
-                    <groups-properties path="application-roles.properties" relative-to="jboss.server.config.dir"/>
-                </properties-realm>
                 <properties-realm name="ManagementRealm">
                     <users-properties path="mgmt-users.properties" relative-to="jboss.server.config.dir"
                                       digest-realm-name="ManagementRealm"/>
                     <groups-properties path="mgmt-groups.properties" relative-to="jboss.server.config.dir"/>
                 </properties-realm>
-                <jdbc-realm name="database-security-realm">
-                    <principal-query
-                            sql="select creds.secret, creds.salt, creds.roles from Credentials creds where creds.id="
-                            data-source="mariaDBDS">
-                        <bcrypt-mapper password-index="1" salt-index="2" iteration-count-index="10000"/>
-                        <attribute-mapping>
-                            <attribute to="groups" index="3"/>
-                        </attribute-mapping>
-                    </principal-query>
-                </jdbc-realm>
+                <properties-realm name="ElytronApplicationRealm" groups-attribute="groups">
+                    <users-properties path="example-users.properties" relative-to="jboss.server.config.dir"
+                                      plain-text="true"/>
+                    <groups-properties path="example-roles.properties" relative-to="jboss.server.config.dir"/>
+                </properties-realm>
             </security-realms>
             <mappers>
                 <simple-permission-mapper name="default-permission-mapper" mapping-mode="first">
@@ -388,12 +367,11 @@
                         </mechanism>
                     </mechanism-configuration>
                 </http-authentication-factory>
-                <http-authentication-factory name="database-application-http-authentication-factory"
-                                             security-domain="database-security-domain"
+                <http-authentication-factory name="example-http-auth" security-domain="ElytronApplicationDomain"
                                              http-server-mechanism-factory="global">
                     <mechanism-configuration>
                         <mechanism mechanism-name="BASIC">
-                            <mechanism-realm realm-name="database-security-domain"/>
+                            <mechanism-realm realm-name="ElytronApplicationDomain"/>
                         </mechanism>
                     </mechanism-configuration>
                 </http-authentication-factory>
@@ -401,11 +379,11 @@
             </http>
             <sasl>
                 <sasl-authentication-factory name="application-sasl-authentication" sasl-server-factory="configured"
-                                             security-domain="ApplicationDomain">
+                                             security-domain="ElytronApplicationDomain">
                     <mechanism-configuration>
                         <mechanism mechanism-name="JBOSS-LOCAL-USER" realm-mapper="local"/>
-                        <mechanism mechanism-name="DIGEST-MD5">
-                            <mechanism-realm realm-name="ApplicationRealm"/>
+                        <mechanism mechanism-name="BASIC">
+                            <mechanism-realm realm-name="ElytronApplicationRealm"/>
                         </mechanism>
                     </mechanism-configuration>
                 </sasl-authentication-factory>
@@ -430,21 +408,17 @@
                 </mechanism-provider-filtering-sasl-server-factory>
                 <provider-sasl-server-factory name="global"/>
             </sasl>
-            <!-- Costum Configuration -->
             <tls>
                 <key-stores>
                     <key-store name="dweKeyStore">
-                        <credential-reference
-                                clear-text="${KEY_PASSWORD***REMOVED***"/>
+                        <credential-reference clear-text="${KEY_PASSWORD***REMOVED***"/>
                         <implementation type="PKCS12"/>
                         <file path="sammel-app.local-keystore.p12" relative-to="jboss.server.config.dir"/>
-<!--                        <file path="sammel-app.test-keystore.p12" relative-to="jboss.server.config.dir"/>-->
                     </key-store>
                 </key-stores>
                 <key-managers>
                     <key-manager name="dweKeyManager" key-store="dweKeyStore">
-                        <credential-reference
-                                clear-text="${KEY_PASSWORD***REMOVED***"/>
+                        <credential-reference clear-text="${KEY_PASSWORD***REMOVED***"/>
                     </key-manager>
                 </key-managers>
                 <server-ssl-contexts>
@@ -452,7 +426,7 @@
                 </server-ssl-contexts>
             </tls>
         </subsystem>
-        <subsystem xmlns="urn:jboss:domain:infinispan:8.0">
+        <subsystem xmlns="urn:jboss:domain:infinispan:9.0">
             <cache-container name="web" default-cache="passivation" module="org.wildfly.clustering.web.infinispan">
                 <local-cache name="passivation">
                     <locking isolation="REPEATABLE_READ"/>
@@ -530,7 +504,7 @@
             </mail-session>
         </subsystem>
         <subsystem xmlns="urn:wildfly:microprofile-config-smallrye:1.0"/>
-        <subsystem xmlns="urn:wildfly:microprofile-health-smallrye:1.0" security-enabled="false"/>
+        <subsystem xmlns="urn:wildfly:microprofile-health-smallrye:2.0" security-enabled="false"/>
         <subsystem xmlns="urn:wildfly:microprofile-metrics-smallrye:2.0" security-enabled="false" exposed-subsystems="*"
                    prefix="${wildfly.metrics.prefix:wildfly***REMOVED***"/>
         <subsystem xmlns="urn:wildfly:microprofile-opentracing-smallrye:1.0"/>
@@ -539,11 +513,43 @@
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:pojo:1.0"/>
         <subsystem xmlns="urn:jboss:domain:remoting:4.0">
-            <http-connector name="http-remoting-connector" connector-ref="default" security-realm="ApplicationRealm"/>
+            <http-connector name="http-remoting-connector" connector-ref="default" security-realm="ElytronApplicationRealm"/>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:request-controller:1.0"/>
         <subsystem xmlns="urn:jboss:domain:resource-adapters:5.0"/>
         <subsystem xmlns="urn:jboss:domain:sar:1.0"/>
+     <!--   <subsystem xmlns="urn:jboss:domain:security:2.0">
+            <security-domains>
+                <security-domain name="LegacyApplicationDomain" cache-type="default">
+                    <authentication>
+                        <login-module code="Remoting" flag="optional">
+                            <module-option name="password-stacking" value="useFirstPass"/>
+                        </login-module>
+                        <login-module code="RealmDirect" flag="required">
+                            <module-option name="password-stacking" value="useFirstPass"/>
+                        </login-module>
+                    </authentication>
+                </security-domain>
+                <security-domain name="jboss-web-policy" cache-type="default">
+                    <authorization>
+                        <policy-module code="Delegating" flag="required"/>
+                    </authorization>
+                </security-domain>
+                <security-domain name="jaspitest" cache-type="default">
+                    <authentication-jaspi>
+                        <login-module-stack name="dummy">
+                            <login-module code="Dummy" flag="optional"/>
+                        </login-module-stack>
+                        <auth-module code="Dummy"/>
+                    </authentication-jaspi>
+                </security-domain>
+                <security-domain name="jboss-ejb-policy" cache-type="default">
+                    <authorization>
+                        <policy-module code="Delegating" flag="required"/>
+                    </authorization>
+                </security-domain>
+            </security-domains>
+        </subsystem>-->
         <subsystem xmlns="urn:jboss:domain:security-manager:1.0">
             <deployment-permissions>
                 <maximum-set>
@@ -562,19 +568,17 @@
                     statistics-enabled="${wildfly.transactions.statistics-enabled:${wildfly.statistics-enabled:false***REMOVED******REMOVED***"/>
             <object-store path="tx-object-store" relative-to="jboss.server.data.dir"/>
         </subsystem>
-        <subsystem xmlns="urn:jboss:domain:undertow:9.0" default-server="default-server"
+        <subsystem xmlns="urn:jboss:domain:undertow:10.0" default-server="default-server"
                    default-virtual-host="default-host" default-servlet-container="default"
                    default-security-domain="other"
                    statistics-enabled="${wildfly.undertow.statistics-enabled:${wildfly.statistics-enabled:false***REMOVED******REMOVED***">
             <buffer-cache name="default"/>
             <server name="default-server">
                 <http-listener name="default" socket-binding="http" redirect-socket="https" enable-http2="true"/>
-                <!-- Costum Configuration -->
-                <https-listener name="https" socket-binding="https" ssl-context="dweSSLContext"
-                                enable-http2="true"/>
+                <https-listener name="https" socket-binding="https" ssl-context="dweSSLContext" enable-http2="true"/>
                 <host name="default-host" alias="localhost">
                     <location name="/" handler="welcome-content"/>
-                    <http-invoker security-realm="ApplicationRealm"/>
+                    <http-invoker security-realm="ElytronApplicationRealm"/>
                 </host>
             </server>
             <servlet-container name="default">
@@ -585,7 +589,8 @@
                 <file name="welcome-content" path="${jboss.home.dir***REMOVED***/welcome-content"/>
             </handlers>
             <application-security-domains>
-                <application-security-domain name="undertow-application-domain" http-authentication-factory="database-application-http-authentication-factory"/>
+                <application-security-domain name="ElytronApplicationDomain"
+                                             http-authentication-factory="example-http-auth"/>
             </application-security-domains>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:webservices:2.0"
@@ -612,11 +617,11 @@
     </interfaces>
     <socket-binding-group name="standard-sockets" default-interface="public"
                           port-offset="${jboss.socket.binding.port-offset:0***REMOVED***">
-        <socket-binding name="management-http" interface="management" port="${jboss.management.http.port:9990***REMOVED***"/>
-        <socket-binding name="management-https" interface="management" port="${jboss.management.https.port:9993***REMOVED***"/>
         <socket-binding name="ajp" port="${jboss.ajp.port:8009***REMOVED***"/>
         <socket-binding name="http" port="${jboss.http.port:8080***REMOVED***"/>
         <socket-binding name="https" port="${jboss.https.port:8443***REMOVED***"/>
+        <socket-binding name="management-http" interface="management" port="${jboss.management.http.port:9990***REMOVED***"/>
+        <socket-binding name="management-https" interface="management" port="${jboss.management.https.port:9993***REMOVED***"/>
         <socket-binding name="txn-recovery-environment" port="4712"/>
         <socket-binding name="txn-status-manager" port="4713"/>
         <outbound-socket-binding name="mail-smtp">
