@@ -47,7 +47,7 @@
                     <properties path="mgmt-groups.properties" relative-to="jboss.server.config.dir"/>
                 </authorization>
             </security-realm>
-            <security-realm name="ElytronApplicationRealm">
+            <security-realm name="ApplicationRealm">
                 <server-identities>
                     <ssl>
                         <keystore path="application.keystore" relative-to="jboss.server.config.dir"
@@ -289,7 +289,7 @@
             <statistics enabled="${wildfly.ejb3.statistics-enabled:${wildfly.statistics-enabled:false}}"/>
             <log-system-exceptions value="true"/>
             <application-security-domains>
-                <application-security-domain name="ElytronApplicationDomain" security-domain="ElytronApplicationDomain"/>
+                <application-security-domain name="ApplicationDomain" security-domain="ApplicationDomain"/>
             </application-security-domains>
         </subsystem>
         <subsystem xmlns="urn:wildfly:elytron:8.0" final-providers="combined-providers"
@@ -311,9 +311,9 @@
                     <realm name="ManagementRealm" role-decoder="groups-to-roles"/>
                     <realm name="local" role-mapper="super-user-mapper"/>
                 </security-domain>
-                <security-domain name="ElytronApplicationDomain" default-realm="ElytronApplicationRealm"
+                <security-domain name="ApplicationDomain" default-realm="ApplicationRealm"
                                  permission-mapper="default-permission-mapper">
-                    <realm name="ElytronApplicationRealm" role-decoder="groups-to-roles"/>
+                    <realm name="ApplicationRealm" role-decoder="groups-to-roles"/>
                 </security-domain>
             </security-domains>
             <security-realms>
@@ -323,7 +323,7 @@
                                       digest-realm-name="ManagementRealm"/>
                     <groups-properties path="mgmt-groups.properties" relative-to="jboss.server.config.dir"/>
                 </properties-realm>
-                <properties-realm name="ElytronApplicationRealm" groups-attribute="groups">
+                <properties-realm name="ApplicationRealm" groups-attribute="groups">
                     <users-properties path="example-users.properties" relative-to="jboss.server.config.dir"
                                       plain-text="true"/>
                     <groups-properties path="example-roles.properties" relative-to="jboss.server.config.dir"/>
@@ -359,7 +359,7 @@
                 </permission-set>
             </permission-sets>
             <http>
-                <http-authentication-factory name="management-http-authentication" security-domain="ManagementDomain"
+                <http-authentication-factory name="management-http-authentication" security-domain="ApplicationDomain"
                                              http-server-mechanism-factory="global">
                     <mechanism-configuration>
                         <mechanism mechanism-name="DIGEST">
@@ -367,11 +367,11 @@
                         </mechanism>
                     </mechanism-configuration>
                 </http-authentication-factory>
-                <http-authentication-factory name="example-http-auth" security-domain="ElytronApplicationDomain"
+                <http-authentication-factory name="example-http-auth" security-domain="ApplicationDomain"
                                              http-server-mechanism-factory="global">
                     <mechanism-configuration>
                         <mechanism mechanism-name="BASIC">
-                            <mechanism-realm realm-name="ElytronApplicationDomain"/>
+                            <mechanism-realm realm-name="ApplicationDomain"/>
                         </mechanism>
                     </mechanism-configuration>
                 </http-authentication-factory>
@@ -379,11 +379,11 @@
             </http>
             <sasl>
                 <sasl-authentication-factory name="application-sasl-authentication" sasl-server-factory="configured"
-                                             security-domain="ElytronApplicationDomain">
+                                             security-domain="ApplicationDomain">
                     <mechanism-configuration>
                         <mechanism mechanism-name="JBOSS-LOCAL-USER" realm-mapper="local"/>
                         <mechanism mechanism-name="BASIC">
-                            <mechanism-realm realm-name="ElytronApplicationRealm"/>
+                            <mechanism-realm realm-name="ApplicationRealm"/>
                         </mechanism>
                     </mechanism-configuration>
                 </sasl-authentication-factory>
@@ -513,12 +513,12 @@
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:pojo:1.0"/>
         <subsystem xmlns="urn:jboss:domain:remoting:4.0">
-            <http-connector name="http-remoting-connector" connector-ref="default" security-realm="ElytronApplicationRealm"/>
+            <http-connector name="http-remoting-connector" connector-ref="default" security-realm="ApplicationRealm"/>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:request-controller:1.0"/>
         <subsystem xmlns="urn:jboss:domain:resource-adapters:5.0"/>
         <subsystem xmlns="urn:jboss:domain:sar:1.0"/>
-     <!--   <subsystem xmlns="urn:jboss:domain:security:2.0">
+        <subsystem xmlns="urn:jboss:domain:security:2.0">
             <security-domains>
                 <security-domain name="LegacyApplicationDomain" cache-type="default">
                     <authentication>
@@ -549,7 +549,7 @@
                     </authorization>
                 </security-domain>
             </security-domains>
-        </subsystem>-->
+        </subsystem>
         <subsystem xmlns="urn:jboss:domain:security-manager:1.0">
             <deployment-permissions>
                 <maximum-set>
@@ -578,7 +578,7 @@
                 <https-listener name="https" socket-binding="https" ssl-context="dweSSLContext" enable-http2="true"/>
                 <host name="default-host" alias="localhost">
                     <location name="/" handler="welcome-content"/>
-                    <http-invoker security-realm="ElytronApplicationRealm"/>
+                    <http-invoker security-realm="ApplicationRealm"/>
                 </host>
             </server>
             <servlet-container name="default">
@@ -589,7 +589,7 @@
                 <file name="welcome-content" path="${jboss.home.dir}/welcome-content"/>
             </handlers>
             <application-security-domains>
-                <application-security-domain name="ElytronApplicationDomain"
+                <application-security-domain name="ApplicationDomain"
                                              http-authentication-factory="example-http-auth"/>
             </application-security-domains>
         </subsystem>
