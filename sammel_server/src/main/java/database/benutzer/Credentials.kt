@@ -1,9 +1,7 @@
 package database.benutzer
 
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
-import javax.persistence.Table
+import javax.persistence.*
+import javax.persistence.FetchType.EAGER
 
 @Entity
 @Table(name = "Credentials")
@@ -20,6 +18,11 @@ class Credentials() {
 
     @Column
     var firebaseKey: String = ""
+
+    @ElementCollection(fetch = EAGER)
+    @CollectionTable(name = "Roles", joinColumns = [JoinColumn(name = "id")])
+    @Column(name = "role")
+    var roles: List<String> = emptyList()
 
     constructor(id: Long, secret: String, salt: String, firebaseKey: String) : this() {
         this.id = id

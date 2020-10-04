@@ -328,6 +328,14 @@
                                       plain-text="true"/>
                     <groups-properties path="example-roles.properties" relative-to="jboss.server.config.dir"/>
                 </properties-realm>
+<!--                <jdbc-realm name="ApplicationRealm">-->
+<!--                    <principal-query sql="SELECT roles, password FROM Credentials WHERE id = ?" data-source="mariaDBDS">-->
+<!--                        <attribute-mapping>-->
+<!--                            <attribute to="Roles" index="1"/>-->
+<!--                        </attribute-mapping>-->
+<!--                        <simple-digest-mapper password-index="2"/>-->
+<!--                    </principal-query>-->
+<!--                </jdbc-realm>-->
             </security-realms>
             <mappers>
                 <simple-permission-mapper name="default-permission-mapper" mapping-mode="first">
