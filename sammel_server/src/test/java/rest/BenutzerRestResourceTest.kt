@@ -156,7 +156,7 @@ class BenutzerRestResourceTest {
 
     @Test
     fun `authentifiziereBenutzer lehnt falsches Secret ab`() {
-        whenever(dao.getCredentials(1L)).thenReturn(Credentials(1L, "hash", "salt", "Firebase-Key"))
+        whenever(dao.getCredentials(1L)).thenReturn(Credentials(1L, "hash", "salt", "Firebase-Key", emptyList()))
         whenever(security.verifiziereSecretMitHash(anyString(), any())).thenReturn(false)
 
         val response = resource.authentifiziereBenutzer(Login("falsch", "AAAAAAAA", BenutzerDto(1L, "Karl Marx", 4294198070)))
@@ -177,7 +177,7 @@ class BenutzerRestResourceTest {
 
     @Test
     fun `authentifiziereBenutzer akzeptiert korrektes Secret`() {
-        whenever(dao.getCredentials(1L)).thenReturn(Credentials(1L, "hash", "salt", "Firebase-Key"))
+        whenever(dao.getCredentials(1L)).thenReturn(Credentials(1L, "hash", "salt", "Firebase-Key", emptyList()))
         whenever(security.verifiziereSecretMitHash(anyString(), any())).thenReturn(true)
 
         val response = resource.authentifiziereBenutzer(Login("richtig", "AAAAAAAA", BenutzerDto(1L, "Karl Marx", 4294198070)))

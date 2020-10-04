@@ -1,9 +1,11 @@
 package shared
 
+import org.apache.commons.codec.binary.Hex
 import org.junit.Test
 
 import org.junit.Assert.*
 import shared.Security.HashMitSalt
+import java.security.SecureRandom
 
 class SecurityTest {
 
@@ -43,7 +45,9 @@ class SecurityTest {
     @Test
     fun `verifiziereSecretMitHash unterscheidet bei abweichendem Salt`() {
         val hashUndSalt = security.hashSecret("secret")
-        val falschesHashUndSalt = HashMitSalt(hashUndSalt.hash, hashUndSalt.salt.substring(hashUndSalt.salt.length - 1) + "A")
+        val falschesSalt = ByteArray(16)
+        SecureRandom().nextBytes(falschesSalt)
+        val falschesHashUndSalt = HashMitSalt(hashUndSalt.hash, Hex.encodeHexString(falschesSalt))
 
         assertFalse(security.verifiziereSecretMitHash("secret", falschesHashUndSalt))
     ***REMOVED***

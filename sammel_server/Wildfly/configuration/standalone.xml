@@ -313,7 +313,7 @@
                 </security-domain>
                 <security-domain name="ApplicationDomain" default-realm="ApplicationRealm"
                                  permission-mapper="default-permission-mapper">
-                    <realm name="ApplicationRealm" role-decoder="groups-to-roles"/>
+                    <realm name="ApplicationRealm" role-decoder="from-roles-attribute"/>
                 </security-domain>
             </security-domains>
             <security-realms>
@@ -323,19 +323,21 @@
                                       digest-realm-name="ManagementRealm"/>
                     <groups-properties path="mgmt-groups.properties" relative-to="jboss.server.config.dir"/>
                 </properties-realm>
-                <properties-realm name="ApplicationRealm" groups-attribute="groups">
-                    <users-properties path="example-users.properties" relative-to="jboss.server.config.dir"
-                                      plain-text="true"/>
-                    <groups-properties path="example-roles.properties" relative-to="jboss.server.config.dir"/>
-                </properties-realm>
-<!--                <jdbc-realm name="ApplicationRealm">-->
-<!--                    <principal-query sql="SELECT roles, password FROM Credentials WHERE id = ?" data-source="mariaDBDS">-->
-<!--                        <attribute-mapping>-->
-<!--                            <attribute to="Roles" index="1"/>-->
-<!--                        </attribute-mapping>-->
-<!--                        <simple-digest-mapper password-index="2"/>-->
-<!--                    </principal-query>-->
-<!--                </jdbc-realm>-->
+                <jdbc-realm name="ApplicationRealm">
+                    <principal-query
+                            sql="select c.secret, c.salt, c.iterations from Credentials as c where c.id = ?"
+                            data-source="mariaDBDS">
+                        <bcrypt-mapper password-index="1" hash-encoding="hex"
+                                       salt-index="2" salt-encoding="hex"
+                                       iteration-count-index="3"/>
+                    </principal-query>
+                    <principal-query
+                            sql="select r.role from Roles as r where id = ?" data-source="mariaDBDS">
+                        <attribute-mapping>
+                            <attribute to="roles" index="1"/>
+                        </attribute-mapping>
+                    </principal-query>
+                </jdbc-realm>
             </security-realms>
             <mappers>
                 <simple-permission-mapper name="default-permission-mapper" mapping-mode="first">
@@ -349,10 +351,10 @@
                     </permission-mapping>
                 </simple-permission-mapper>
                 <constant-realm-mapper name="local" realm-name="local"/>
-                <simple-role-decoder name="groups-to-roles" attribute="groups"/>
                 <constant-role-mapper name="super-user-mapper">
                     <role name="SuperUser"/>
                 </constant-role-mapper>
+                <simple-role-decoder name="from-roles-attribute" attribute="roles"/>
             </mappers>
             <permission-sets>
                 <permission-set name="login-permission">

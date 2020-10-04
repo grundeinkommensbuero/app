@@ -7,7 +7,6 @@ import shared.Security
 import shared.Security.HashMitSalt
 import java.lang.Exception
 import javax.annotation.security.PermitAll
-import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType.APPLICATION_JSON
@@ -55,7 +54,7 @@ open class BenutzerRestResource {
             val benutzerAusDb = dao.legeNeuenBenutzerAn(benutzer.convertToBenutzer())
 
             val hashMitSalt = security.hashSecret(login.secret!!)
-            dao.legeNeueCredentialsAn(Credentials(benutzerAusDb.id, hashMitSalt.hash, hashMitSalt.salt, login.firebaseKey!!))
+            dao.legeNeueCredentialsAn(Credentials(benutzerAusDb.id, hashMitSalt.hash, hashMitSalt.salt, login.firebaseKey!!, emptyList()))
 
             return Response.ok().entity(benutzerAusDb).build()
         ***REMOVED*** catch (e: Exception) {
