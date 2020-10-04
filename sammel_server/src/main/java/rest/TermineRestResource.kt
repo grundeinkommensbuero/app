@@ -10,14 +10,9 @@ import database.termine.Token
 import org.jboss.logging.Logger
 import rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithoutDetails
 import java.time.LocalDateTime
-import javax.annotation.Resource
 import javax.annotation.security.PermitAll
 import javax.annotation.security.RolesAllowed
-import javax.annotation.security.RunAs
-import javax.ejb.EJB
-import javax.ejb.EJBException
-import javax.ejb.SessionContext
-import javax.ejb.Stateless
+import javax.ejb.*
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType.APPLICATION_JSON
 import javax.ws.rs.core.Response
@@ -54,15 +49,15 @@ open class TermineRestResource {
     @RolesAllowed("user")
     @Produces(APPLICATION_JSON)
     open fun abgesichert(): Response {
-        return Response.ok().build();
+        return Response.ok().build()
     ***REMOVED***
 
     @GET
     @Path("ungesichert")
-    @PermitAll()
+    @PermitAll
     @Produces(APPLICATION_JSON)
     open fun ungesichert(): Response {
-        return Response.ok().build();
+        return Response.ok().build()
     ***REMOVED***
 
     @GET

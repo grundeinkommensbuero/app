@@ -284,10 +284,9 @@
                     <keepalive-time time="100" unit="milliseconds"/>
                 </thread-pool>
             </thread-pools>
-            <default-security-domain value="other"/>
             <default-missing-method-permissions-deny-access value="true"/>
             <statistics enabled="${wildfly.ejb3.statistics-enabled:${wildfly.statistics-enabled:false***REMOVED******REMOVED***"/>
-            <log-system-exceptions value="true"/>
+            <log-system-exceptions value="false"/>
             <application-security-domains>
                 <application-security-domain name="ApplicationDomain" security-domain="ApplicationDomain"/>
             </application-security-domains>
@@ -529,8 +528,8 @@
         <subsystem xmlns="urn:jboss:domain:request-controller:1.0"/>
         <subsystem xmlns="urn:jboss:domain:resource-adapters:5.0"/>
         <subsystem xmlns="urn:jboss:domain:sar:1.0"/>
-        <subsystem xmlns="urn:jboss:domain:security:2.0">
-            <security-domains>
+<!--        <subsystem xmlns="urn:jboss:domain:security:2.0">-->
+            <!--<security-domains>
                 <security-domain name="LegacyApplicationDomain" cache-type="default">
                     <authentication>
                         <login-module code="Remoting" flag="optional">
@@ -559,8 +558,15 @@
                         <policy-module code="Delegating" flag="required"/>
                     </authorization>
                 </security-domain>
-            </security-domains>
-        </subsystem>
+            </security-domains>-->
+<!--            <security-domains>-->
+<!--                <security-domain name="ApplicationDomain" cache-type="default">-->
+<!--                    <authorization>-->
+<!--                        <policy-module code="Delegating" flag="required"/>-->
+<!--                    </authorization>-->
+<!--                </security-domain>-->
+<!--            </security-domains>-->
+<!--        </subsystem>-->
         <subsystem xmlns="urn:jboss:domain:security-manager:1.0">
             <deployment-permissions>
                 <maximum-set>
