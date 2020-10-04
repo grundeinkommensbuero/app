@@ -6,6 +6,8 @@ import org.jboss.logging.Logger
 import shared.Security
 import shared.Security.HashMitSalt
 import java.lang.Exception
+import javax.annotation.security.PermitAll
+import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType.APPLICATION_JSON
@@ -66,6 +68,7 @@ open class BenutzerRestResource {
 
     @POST
     @Path("authentifiziere")
+    @PermitAll
     @Produces(APPLICATION_JSON)
     open fun authentifiziereBenutzer(login: Login): Response {
         val benutzer = login.user
@@ -97,6 +100,7 @@ open class BenutzerRestResource {
                     .entity(false)
                     .build()
         ***REMOVED***
+        LOG.warn(credentials.roles)
         val verifiziert: Boolean?
         try {
             verifiziert = security.verifiziereSecretMitHash(login.secret!!, HashMitSalt(credentials.secret, credentials.salt))

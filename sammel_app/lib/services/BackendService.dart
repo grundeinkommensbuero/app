@@ -102,6 +102,7 @@ class Backend {
         .then((HttpClientRequest request) {
           request.headers.contentType = ContentType.json;
           request.headers.add('Accept', 'application/json');
+          request.headers.add('Authorization','Basic dXNlcjE6cGFzc3dvcmQxMjM=');
           return request.close();
         ***REMOVED***)
         .then(HttpBodyHandler.processResponse)
