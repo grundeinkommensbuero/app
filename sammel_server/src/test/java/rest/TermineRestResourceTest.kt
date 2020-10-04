@@ -92,7 +92,7 @@ class TermineRestResourceTest {
 
         assertEquals(response.status, 433)
         val entity = response.entity as String
-        assertEquals(entity, "Unbekannte Aktion angegeben")
+        assertEquals(entity, "Unbekannte Aktion abgefragt")
     }
 
     @Test
