@@ -16,6 +16,10 @@ class Credentials() {
     @Column
     var salt: String = ""
 
+    @Suppress("unused")
+    @Column
+    var iterations: Int = 10
+
     @Column
     var firebaseKey: String = ""
 
@@ -24,10 +28,11 @@ class Credentials() {
     @Column(name = "role")
     var roles: List<String> = emptyList()
 
-    constructor(id: Long, secret: String, salt: String, firebaseKey: String) : this() {
+    constructor(id: Long, secret: String, salt: String, firebaseKey: String, roles: List<String>) : this() {
         this.id = id
         this.secret = secret
         this.salt = salt
         this.firebaseKey = firebaseKey
+        this.roles = roles
     }
 }
