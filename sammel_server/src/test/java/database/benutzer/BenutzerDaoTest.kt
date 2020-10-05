@@ -4,8 +4,6 @@ import TestdatenVorrat.Companion.karl
 import TestdatenVorrat.Companion.rosa
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertThat
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentMatchers.*
