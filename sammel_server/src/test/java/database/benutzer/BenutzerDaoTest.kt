@@ -18,11 +18,11 @@ import javax.persistence.EntityManager
 import javax.persistence.TypedQuery
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
-/*import database.benutzer.BenutzerDao as BenutzerDao*/
+import database.benutzer.BenutzerDao as BenutzerDao
 
 class BenutzerDaoTest {
 
-/*    @Rule
+    @Rule
     @JvmField
     var mockitoRule: MockitoRule = MockitoJUnit.rule()
 
@@ -31,12 +31,11 @@ class BenutzerDaoTest {
     @Mock
     private lateinit var typedQuery: TypedQuery<Benutzer>
     @Mock
-    private lateinit var typedStringQuery: TypedQuery<String>*/
+    private lateinit var typedStringQuery: TypedQuery<String>
 
-//    @InjectMocks
-//    private lateinit var dao: BenutzerDao
+    @InjectMocks
+    private lateinit var dao: BenutzerDao
 
-    /*@Ignore
     @Test
     fun `getBenutzer liefert Ergebnis aus DB`() {
         val karl = Benutzer(1L, "Karl Marx",0)
@@ -48,7 +47,6 @@ class BenutzerDaoTest {
         assertSame(ergebnis, karl)
     }
 
-    @Ignore
     @Test
     fun `benutzernameExistiert gibt true zurueck, wenn mindestens ein Benutzer mit dem Namen existiert`() {
         whenever(entityManager.createQuery(anyString(), any<Class<Benutzer>>()))
@@ -63,7 +61,6 @@ class BenutzerDaoTest {
         assertTrue(ergebnis)
     }
 
-    @Ignore
     @Test
     fun `benutzernameExistiert gibt false zurueck, wenn kein Benutzer mit dem Namen existiert`() {
         whenever(entityManager.createQuery(anyString(), any<Class<Benutzer>>()))
@@ -78,7 +75,6 @@ class BenutzerDaoTest {
         assertFalse(ergebnis)
     }
 
-    @Ignore
     @Test
     fun `getFirebaseKeys reicht Liste von Keys weiter`() {
         val benutzer = listOf(karl(), rosa())
@@ -98,7 +94,6 @@ class BenutzerDaoTest {
         assertTrue(ergebnis.containsAll(listOf("key1", "key2")))
     }
 
-    @Ignore
     @Test
     fun `getFirebaseKeys akzeptiert leeres Suchergebnis`() {
         val benutzer = emptyList<Benutzer>()
@@ -115,7 +110,6 @@ class BenutzerDaoTest {
         assertTrue(ergebnis.isEmpty())
     }
 
-    @Ignore
     @Test
     fun `legeNeueCredentialsAn reicht Credentials an Datenbank weiter`() {
         val credentials = Credentials()
@@ -123,5 +117,5 @@ class BenutzerDaoTest {
         dao.legeNeueCredentialsAn(credentials)
 
         verify(entityManager, times(1)).persist(credentials)
-    }*/
+    }
 }
