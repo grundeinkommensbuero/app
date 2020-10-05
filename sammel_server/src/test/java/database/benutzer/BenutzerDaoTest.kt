@@ -5,24 +5,24 @@ import TestdatenVorrat.Companion.rosa
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertThat
-import org.junit.Ignore*/
+import org.junit.Ignore
 import org.junit.Rule
-/*import org.junit.Test
+import org.junit.Test
 import org.mockito.ArgumentMatchers.*
 import org.mockito.ArgumentMatchers.any
-import org.mockito.InjectMocks*/
+import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import javax.persistence.EntityManager
 import javax.persistence.TypedQuery
-/*import kotlin.test.assertSame
+import kotlin.test.assertSame
 import kotlin.test.assertTrue
 import database.benutzer.BenutzerDao as BenutzerDao*/
 
 class BenutzerDaoTest {
 
-    @Rule
+/*    @Rule
     @JvmField
     var mockitoRule: MockitoRule = MockitoJUnit.rule()
 
@@ -31,7 +31,7 @@ class BenutzerDaoTest {
     @Mock
     private lateinit var typedQuery: TypedQuery<Benutzer>
     @Mock
-    private lateinit var typedStringQuery: TypedQuery<String>
+    private lateinit var typedStringQuery: TypedQuery<String>*/
 
 //    @InjectMocks
 //    private lateinit var dao: BenutzerDao
