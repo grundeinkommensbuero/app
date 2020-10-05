@@ -38,6 +38,9 @@ open class BenutzerDao {
         }
     }
 
+    open fun aktualisiereUser(benutzer: Benutzer): Benutzer {
+        return entityManager.merge(benutzer)
+    }
 
     open fun legeNeueCredentialsAn(credentials: Credentials) {
         entityManager.persist(credentials)
