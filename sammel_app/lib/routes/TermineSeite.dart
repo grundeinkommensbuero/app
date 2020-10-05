@@ -223,6 +223,7 @@ class TermineSeiteState extends State<TermineSeite>
                     contentPadding: EdgeInsets.all(10.0),
                     children: <Widget>[
                       ActionDetailsPage(terminMitDetails),
+                      participant(terminMitDetails) ?
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: <Widget>[
@@ -232,7 +233,7 @@ class TermineSeiteState extends State<TermineSeite>
                               onPressed: () =>
                                   openChatWindow(terminMitDetails)),
                         ],
-                      ),
+                      ) : null,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children:
@@ -246,7 +247,7 @@ class TermineSeiteState extends State<TermineSeite>
                                     context, TerminDetailsCommand.CLOSE),
                               )),
                       ),
-                    ],
+                    ].where((element) => element != null).toList(),
                   )));
 
       if (command == TerminDetailsCommand.DELETE)
