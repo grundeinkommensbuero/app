@@ -65,6 +65,29 @@ open class BenutzerRestResource {
     ***REMOVED***
 
     @POST
+    @Path("aktualisiere")
+    @Produces(APPLICATION_JSON)
+    open fun aktualisiereBenutzer(benutzerDto: BenutzerDto): Response {
+        if(benutzerDto.id == null || benutzerDto.id == 0L) {
+            return Response
+                    .status(412)
+                    .entity(RestFehlermeldung("Der Benutzer ist noch nicht angelegt"))
+                    .build()
+        ***REMOVED***
+        if(benutzerDto.name.isNullOrBlank()) {
+            return Response
+                    .status(412)
+                    .entity(RestFehlermeldung("Benutzername darf nicht leer sein"))
+                    .build()
+        ***REMOVED***
+        val aktualisierterBenutzer = dao.aktualisiereUser(benutzerDto.convertToBenutzer())
+        return Response
+                .status(200)
+                .entity(BenutzerDto.convertFromBenutzer(aktualisierterBenutzer))
+                .build()
+    ***REMOVED***
+
+    @POST
     @Path("authentifiziere")
     @Produces(APPLICATION_JSON)
     open fun authentifiziereBenutzer(login: Login): Response {
