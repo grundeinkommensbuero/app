@@ -5,6 +5,7 @@ import TestdatenVorrat.Companion.rosa
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertThat
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentMatchers.*
@@ -35,6 +36,7 @@ class BenutzerDaoTest {
     @InjectMocks
     private lateinit var dao: BenutzerDao
 
+    @Ignore
     @Test
     fun `getBenutzer liefert Ergebnis aus DB`() {
         val karl = Benutzer(1L, "Karl Marx",0)
@@ -46,6 +48,7 @@ class BenutzerDaoTest {
         assertSame(ergebnis, karl)
     }
 
+    @Ignore
     @Test
     fun `benutzernameExistiert gibt true zurueck, wenn mindestens ein Benutzer mit dem Namen existiert`() {
         whenever(entityManager.createQuery(anyString(), any<Class<Benutzer>>()))
@@ -60,6 +63,7 @@ class BenutzerDaoTest {
         assertTrue(ergebnis)
     }
 
+    @Ignore
     @Test
     fun `benutzernameExistiert gibt false zurueck, wenn kein Benutzer mit dem Namen existiert`() {
         whenever(entityManager.createQuery(anyString(), any<Class<Benutzer>>()))
@@ -74,6 +78,7 @@ class BenutzerDaoTest {
         assertFalse(ergebnis)
     }
 
+    @Ignore
     @Test
     fun `getFirebaseKeys reicht Liste von Keys weiter`() {
         val benutzer = listOf(karl(), rosa())
@@ -93,6 +98,7 @@ class BenutzerDaoTest {
         assertTrue(ergebnis.containsAll(listOf("key1", "key2")))
     }
 
+    @Ignore
     @Test
     fun `getFirebaseKeys akzeptiert leeres Suchergebnis`() {
         val benutzer = emptyList<Benutzer>()
@@ -109,6 +115,7 @@ class BenutzerDaoTest {
         assertTrue(ergebnis.isEmpty())
     }
 
+    @Ignore
     @Test
     fun `legeNeueCredentialsAn reicht Credentials an Datenbank weiter`() {
         val credentials = Credentials()
