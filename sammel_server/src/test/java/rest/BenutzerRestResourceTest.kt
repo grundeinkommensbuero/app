@@ -185,4 +185,45 @@ class BenutzerRestResourceTest {
         verify(security, times(1)).verifiziereSecretMitHash(anyString(), any())
         assertEquals(response.status, 200)
     }
+
+    @Test
+    fun `aktualisiereBenutzer weist Benutzer ohne Namen zurueck`() {
+        var response = resource.aktualisiereBenutzer(BenutzerDto(1, null, color = 12345678))
+        assertEquals(response.status, 412)
+        assertEquals((response.entity as RestFehlermeldung).meldung, "Benutzername darf nicht leer sein")
+
+        response = resource.aktualisiereBenutzer(BenutzerDto(1, "", color = 12345678))
+        assertEquals(response.status, 412)
+
+        response = resource.aktualisiereBenutzer(BenutzerDto(1, "   ", color = 12345678))
+        assertEquals(response.status, 412)
+    }
+
+    @Test
+    fun `aktualisiereBenutzer weist Benutzer ohne ID zurueck`() {
+        var response = resource.aktualisiereBenutzer(BenutzerDto(0, "ein Name", color = 12345678))
+        assertEquals(response.status, 412)
+        assertEquals((response.entity as RestFehlermeldung).meldung, "Der Benutzer ist noch nicht angelegt")
+
+        response = resource.aktualisiereBenutzer(BenutzerDto(null, "ein Name", color = 12345678))
+        assertEquals(response.status, 412)
+    }
+
+    @Test
+    fun `aktualisiereBenutzer reicht Benutzer zum speichern in DB weiter`() {
+        whenever(dao.aktualisiereUser(any())).thenReturn(Benutzer(1, "ein neuer Name", color = 12345678))
+
+        val response = resource.aktualisiereBenutzer(BenutzerDto(1, "ein neuer Name", color = 12345678))
+
+        val benutzerCaptor = argumentCaptor<Benutzer>()
+        verify(dao, times(1)).aktualisiereUser(benutzerCaptor.capture())
+        assertEquals(benutzerCaptor.firstValue.id, 1)
+        assertEquals(benutzerCaptor.firstValue.name, "ein neuer Name")
+        assertEquals(benutzerCaptor.firstValue.color, 12345678)
+
+        assertEquals(response.status, 200)
+        assertEquals((response.entity as BenutzerDto).id, 1)
+        assertEquals((response.entity as BenutzerDto).name, "ein neuer Name")
+        assertEquals((response.entity as BenutzerDto).color, 12345678)
+    }
 }

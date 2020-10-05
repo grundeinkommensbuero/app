@@ -17,7 +17,6 @@ abstract class AbstractUserService extends BackendService {
   AbstractUserService([Backend backend]) : super(backend);
 
   Future<void> updateUser(User user);
-
 }
 
 class UserService extends AbstractUserService {
@@ -89,11 +88,20 @@ class UserService extends AbstractUserService {
     return secret;
   }
 
-  Future<void> updateUser(User user)
-  {
-    storageService.saveUser(user);
-  }
+  Future<User> updateUser(User user) async {
+    try {
+      var response =
+          await post('service/benutzer/aktualisiere', jsonEncode(user));
 
+      var userFromServer = User.fromJSON(response.body);
+      storageService.saveUser(userFromServer);
+
+      return userFromServer;
+    } catch (e) {
+      ErrorService.handleError(e);
+      throw e;
+    }
+  }
 }
 
 Color _randomColor() {
@@ -109,8 +117,5 @@ class DemoUserService extends AbstractUserService {
     user = Future.value(User(1, 'Ich', Colors.red));
   }
 
-  Future<void> updateUser(User user)
-  {
-  }
-
+  Future<void> updateUser(User user) {}
 }
