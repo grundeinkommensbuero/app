@@ -117,4 +117,13 @@ class BenutzerDaoTest {
 
         verify(entityManager, times(1)).persist(credentials)
     ***REMOVED***
+
+    @Test
+    fun `aktualisiereUser speichert User in Datenbank`() {
+        val user = karl()
+
+        dao.aktualisiereUser(user)
+
+        verify(entityManager, times(1)).merge(user)
+    ***REMOVED***
 ***REMOVED***
