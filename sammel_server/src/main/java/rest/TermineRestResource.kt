@@ -45,22 +45,6 @@ open class TermineRestResource {
     ***REMOVED***
 
     @GET
-    @Path("abgesichert")
-    @RolesAllowed("user")
-    @Produces(APPLICATION_JSON)
-    open fun abgesichert(): Response {
-        return Response.ok().build()
-    ***REMOVED***
-
-    @GET
-    @Path("ungesichert")
-    @PermitAll
-    @Produces(APPLICATION_JSON)
-    open fun ungesichert(): Response {
-        return Response.ok().build()
-    ***REMOVED***
-
-    @GET
     @Path("termin")
     @RolesAllowed("user")
     @Produces(APPLICATION_JSON)

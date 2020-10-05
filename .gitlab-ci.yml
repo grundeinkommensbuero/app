@@ -61,9 +61,6 @@ test_server:
   image: maven:latest
   stage: build_and_test
   script:
-    - javac -version
-    - java -version
-    - which java
     - cd sammel_server
     - mvn verify --fail-at-end --no-transfer-progress
   artifacts:
