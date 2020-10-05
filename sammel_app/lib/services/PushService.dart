@@ -11,7 +11,10 @@ abstract class AbstractPushService extends BackendService {
       PushNotification notification);
 
   pushToTopic(String topic, PushData data, PushNotification notification);
-***REMOVED***
+  pushToAction(int actionId, PushData data, PushNotification notification);
+
+
+  ***REMOVED***
 
 class PushService extends AbstractPushService {
   PushService([Backend backendMock]) : super(backendMock);
@@ -80,6 +83,10 @@ class DemoPushService extends AbstractPushService {
       throw MissingTargetError(
           "Für Push-Nachrichten an Topics muss ein Topic angegeben werden.");
     ***REMOVED***
+  ***REMOVED***
+
+  pushToAction(int actionId, PushData data, PushNotification notification) {
+    //TODO
   ***REMOVED***
 ***REMOVED***
 

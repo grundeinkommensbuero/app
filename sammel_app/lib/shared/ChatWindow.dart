@@ -7,8 +7,10 @@ import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/User.dart';
+import 'package:sammel_app/routes/CreateUserDialog.dart';
 import 'package:sammel_app/services/PushService.dart';
 import 'package:sammel_app/services/StorageService.dart';
+import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/user_data.dart';
 
@@ -46,12 +48,9 @@ class ChatWindowState extends State<ChatWindow>
   @override
   Widget build(BuildContext context) {
     if (user == null) {
-      StorageService storageService = Provider.of<StorageService>(context);
-      user = User(1, 'test_name1312', Color.fromRGBO(255, 255, 0, 1.0));
-      storageService.saveUser(user);
-      storageService.loadUser().then((value) => setState(() {
-            this.user = value;
-          ***REMOVED***));
+      Provider.of<AbstractUserService>(context)
+          .user
+          .then((user) => setState(() => this.user = user));
       pushService = Provider.of<AbstractPushService>(context);
       channel.register_widget(this);
     ***REMOVED***
@@ -262,7 +261,38 @@ class ChatWindowState extends State<ChatWindow>
     ***REMOVED***
   ***REMOVED***
 
-  onSendMessage(String text) {
+   onSendMessage(String text) async {
+
+    if(text == "")
+      {
+        return;
+      ***REMOVED***
+
+    if(user.name == "" || user.name == null)
+    {
+      user = await showCreateUserDialog(context: context, user: user);
+      if(user.name == "" || user.name == null)
+      {
+        showDialog<void>(context: context,
+            barrierDismissible: false, // user must tap button!
+            builder: (BuildContext context) {
+              return AlertDialog( title: Text('Error'),
+                content: Text('Please enter valid user name to chat.'),
+                actions: <Widget>[FlatButton(
+                  child: Text('Ok'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  ***REMOVED***,),],
+              );
+            ***REMOVED***);
+        return;
+      ***REMOVED***
+      else
+        {
+          Provider.of<AbstractUserService>(context).updateUser(user);
+        ***REMOVED***
+
+    ***REMOVED***
     Message message = Message(
         text: text,
         sending_time: DateTime.now(),
@@ -270,12 +300,6 @@ class ChatWindowState extends State<ChatWindow>
         sender_name: user.name);
     MessagePushData mpd = MessagePushData(message, channel.id);
     pushService.pushToAction(widget.termin.id, mpd, PushNotification("New Chat Message", "Open App to view Message"));
-    /*
-    pushService.pushToDevices([
-      'cZNkv4W8F4yJIfrrwAEyVF:APA91bE01SmxS-52-VC3sx5T51f529RMPi6Ndgp0oqf1Yt3mkenOj4Qb1GjnbEQUJEYrrG4sCDUo1chWVsWg7jQmWk63YTJRZtRz-MQlYW2aj7CyDhF0MZfMtM3Za62FceKRCHp8Z0ED',
-      'c1IT42MZGJM:APA91bEh1qV_idNeKrusB1Ccl6BeBUB6iSV3e_W4BIOi3BjZTMhMlL5DqvGwOlCCdVa7V6J0nA4PdYeB7jVFhJIQhbedu0w3WqcdBsKiC3q_eoISKQHilBFpaIwuy1cMUzH3bCxWUUpp'
-    ], mpd, PushNotification("New Chat Message", "Open App to view Message"));
-     */
     textEditingController.clear();
     myFocusNode.unfocus();
   ***REMOVED***

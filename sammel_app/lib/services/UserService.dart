@@ -15,6 +15,9 @@ abstract class AbstractUserService extends BackendService {
   Future<User> user;
 
   AbstractUserService([Backend backend]) : super(backend);
+
+  Future<void> updateUser(User user);
+
 ***REMOVED***
 
 class UserService extends AbstractUserService {
@@ -85,6 +88,12 @@ class UserService extends AbstractUserService {
     await storageService.saveSecret(secret);
     return secret;
   ***REMOVED***
+
+  Future<void> updateUser(User user)
+  {
+    storageService.saveUser(user);
+  ***REMOVED***
+
 ***REMOVED***
 
 Color _randomColor() {
@@ -99,4 +108,9 @@ class DemoUserService extends AbstractUserService {
   DemoUserService() : super() {
     user = Future.value(User(1, 'Ich', Colors.red));
   ***REMOVED***
+
+  Future<void> updateUser(User user)
+  {
+  ***REMOVED***
+
 ***REMOVED***
