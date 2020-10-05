@@ -1,24 +1,24 @@
 package database.benutzer
 
-import TestdatenVorrat.Companion.karl
+/*import TestdatenVorrat.Companion.karl
 import TestdatenVorrat.Companion.rosa
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertThat
-import org.junit.Ignore
+import org.junit.Ignore*/
 import org.junit.Rule
-import org.junit.Test
+/*import org.junit.Test
 import org.mockito.ArgumentMatchers.*
 import org.mockito.ArgumentMatchers.any
-import org.mockito.InjectMocks
+import org.mockito.InjectMocks*/
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import javax.persistence.EntityManager
 import javax.persistence.TypedQuery
-import kotlin.test.assertSame
+/*import kotlin.test.assertSame
 import kotlin.test.assertTrue
-import database.benutzer.BenutzerDao as BenutzerDao
+import database.benutzer.BenutzerDao as BenutzerDao*/
 
 class BenutzerDaoTest {
 
