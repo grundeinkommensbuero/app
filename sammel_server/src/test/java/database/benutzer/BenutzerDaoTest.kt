@@ -1,6 +1,6 @@
 package database.benutzer
 
-/*import TestdatenVorrat.Companion.karl
+import TestdatenVorrat.Companion.karl
 import TestdatenVorrat.Companion.rosa
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.assertFalse
@@ -18,7 +18,7 @@ import javax.persistence.EntityManager
 import javax.persistence.TypedQuery
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
-import database.benutzer.BenutzerDao as BenutzerDao*/
+/*import database.benutzer.BenutzerDao as BenutzerDao*/
 
 class BenutzerDaoTest {
 
