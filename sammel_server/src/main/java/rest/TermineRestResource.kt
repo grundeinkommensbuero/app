@@ -10,7 +10,6 @@ import database.termine.Token
 import org.jboss.logging.Logger
 import rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithoutDetails
 import java.time.LocalDateTime
-import javax.annotation.security.PermitAll
 import javax.annotation.security.RolesAllowed
 import javax.ejb.*
 import javax.ws.rs.*
@@ -33,7 +32,7 @@ open class TermineRestResource {
     private lateinit var benutzerDao: BenutzerDao
 
     @POST
-    @PermitAll
+    @RolesAllowed("app")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun getTermine(filter: TermineFilter?): Response {
@@ -68,9 +67,10 @@ open class TermineRestResource {
     ***REMOVED***
 
     @POST
+    @Path("neu")
+    @RolesAllowed("named")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
-    @Path("neu")
     open fun legeNeuenTerminAn(actionAndToken: ActionWithTokenDto): Response {
         if (actionAndToken.action != null) {
             val updatedAction = dao.erstelleNeuenTermin(actionAndToken.action!!.convertToTermin())
@@ -84,9 +84,10 @@ open class TermineRestResource {
     ***REMOVED***
 
     @POST
+    @Path("termin")
+    @RolesAllowed("named")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
-    @Path("termin")
     open fun aktualisiereTermin(actionAndToken: ActionWithTokenDto): Response {
         if (actionAndToken.action == null || actionAndToken.action!!.id == null) return noValidActionResponse
 
@@ -109,9 +110,10 @@ open class TermineRestResource {
     ***REMOVED***
 
     @DELETE
+    @Path("termin")
+    @RolesAllowed("named")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
-    @Path("termin")
     open fun deleteAction(actionAndToken: ActionWithTokenDto): Response {
         if (actionAndToken.action?.id == null)
             return noValidActionResponse
@@ -132,7 +134,10 @@ open class TermineRestResource {
     ***REMOVED***
 
     @POST
+    @RolesAllowed("user")
     @Path("teilnahme")
+    @Consumes(APPLICATION_JSON)
+    @Produces(APPLICATION_JSON)
     open fun meldeTeilnahmeAn(participation: Participation): Response {
         if (participation.action?.id == null)
             return Response.status(422)
@@ -167,6 +172,9 @@ open class TermineRestResource {
 
     @POST
     @Path("absage")
+    @RolesAllowed("user")
+    @Consumes(APPLICATION_JSON)
+    @Produces(APPLICATION_JSON)
     open fun sageTeilnahmeAb(participation: Participation): Response {
         if (participation.action?.id == null)
             return Response.status(422)

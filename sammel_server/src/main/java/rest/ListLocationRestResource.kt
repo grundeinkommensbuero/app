@@ -15,7 +15,7 @@ open class ListLocationRestResource {
     private lateinit var dao: ListLocationDao
 
     @GET
-    @Path("actives")
+    @Path("named")
     @Produces("application/json")
     open fun getActiveListLocations(): Response {
         val listLocations: List<ListLocation>? = dao.getActiveListLocations()
