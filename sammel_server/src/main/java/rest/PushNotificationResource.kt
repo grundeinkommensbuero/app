@@ -4,6 +4,7 @@ import database.benutzer.BenutzerDao
 import database.termine.TermineDao
 import services.FirebaseService
 import services.FirebaseService.MissingMessageTarget
+import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
@@ -23,6 +24,7 @@ open class PushNotificationResource {
     private lateinit var termineDao: TermineDao
 
     @Path("devices")
+    @RolesAllowed("named")
     @POST
     open fun pushToDevices(nachricht: PushMessageDto) {
         if (nachricht.recipients == null)
@@ -31,6 +33,7 @@ open class PushNotificationResource {
     }
 
     @Path("action/{actionId}")
+    @RolesAllowed("named")
     @POST
     open fun pushToParticipants(nachricht: PushMessageDto, @PathParam("actionId") actionId: Long) {
         val teilnehmer = termineDao.getTermin(actionId)?.teilnehmer
@@ -41,6 +44,7 @@ open class PushNotificationResource {
     }
 
     @Path("topic/{topic}")
+    @RolesAllowed("named")
     @POST
     open fun pushToTopic(nachricht: PushMessageDto, @PathParam("topic") topic: String) {
         firebase.sendePushNachrichtAnTopic(nachricht.notification, nachricht.data, topic)

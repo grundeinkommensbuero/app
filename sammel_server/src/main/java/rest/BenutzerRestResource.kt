@@ -4,9 +4,8 @@ import database.benutzer.BenutzerDao
 import database.benutzer.Credentials
 import org.jboss.logging.Logger
 import shared.Security
-import shared.Security.HashMitSalt
 import java.lang.Exception
-import javax.annotation.security.PermitAll
+import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType.APPLICATION_JSON
@@ -24,6 +23,7 @@ open class BenutzerRestResource {
 
     @POST
     @Path("neu")
+    @RolesAllowed("app")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun legeNeuenBenutzerAn(login: Login): Response {
@@ -67,55 +67,9 @@ open class BenutzerRestResource {
 
     @POST
     @Path("authentifiziere")
-    @PermitAll
+    @RolesAllowed("user")
     @Produces(APPLICATION_JSON)
     open fun authentifiziereBenutzer(login: Login): Response {
-        val benutzer = login.user
-        if (benutzer.id == null) {
-            return Response
-                    .status(412)
-                    .entity(RestFehlermeldung("Benutzer-ID darf nicht leer sein"))
-                    .build()
-        }
-        if (login.secret.isNullOrEmpty()) {
-            return Response
-                    .status(412)
-                    .entity(RestFehlermeldung("Secret darf nicht leer sein"))
-                    .build()
-        }
-        val credentials: Credentials?
-        try {
-            credentials = dao.getCredentials(benutzer.id!!)
-        } catch (e: java.lang.IllegalArgumentException) {
-            return Response
-                    .status(412)
-                    .entity(RestFehlermeldung("Benutzer-ID ist ungültig"))
-                    .build()
-        }
-        if (credentials == null) {
-            LOG.info("Login mit unbekanntem Benutzer ${login.user.id}")
-            return Response
-                    .ok()
-                    .entity(false)
-                    .build()
-        }
-        LOG.warn(credentials.roles)
-        val verifiziert: Boolean?
-        try {
-            verifiziert = security.verifiziereSecretMitHash(login.secret!!, HashMitSalt(credentials.secret, credentials.salt))
-        } catch (e: Exception) {
-            val meldung = "Technischer Fehler beim Verifizieren: ${e.localizedMessage}"
-            LOG.info(meldung)
-            return Response.status(500).entity(RestFehlermeldung(meldung)).build()
-        }
-
-        if (!verifiziert) {
-            LOG.info("Falscher Login mit Benutzer ${login.user.id}")
-            return Response
-                    .ok()
-                    .entity(false)
-                    .build()
-        }
         return Response
                 .ok()
                 .entity(true)
