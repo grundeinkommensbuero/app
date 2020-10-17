@@ -5,5 +5,5 @@ for script in $files
 do
   echo -n "-> /home/Skripte/$script "
   mysql -D db -u root --password=$MYSQL_ROOT_PASSWORD < /home/Skripte/$script && echo "✓"
-  sleep 1
+  sleep 0.3
 done
