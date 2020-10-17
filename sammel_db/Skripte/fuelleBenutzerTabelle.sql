@@ -15,9 +15,9 @@ INSERT INTO Credentials (id, secret, salt, iterations, firebasekey) VALUES (11, 
 # Secret 76f19030-05ee-11eb-afef-a5be559f6b58
 INSERT INTO Credentials (id, secret, salt, iterations, firebasekey) VALUES (12, '7deda08f740e1c27f50e1ce5749fe36f50fe61e53be7b1', '527d86a9d319f00b72af9a9bf554df76', 10, 'BBBBBBBB');
 
-INSERT INTO Roles (id, role) VALUES (1, 'app')
-INSERT INTO Roles (id, role) VALUES (2, 'website')
-INSERT INTO Roles (id, role) VALUES (11, 'user')
-INSERT INTO Roles (id, role) VALUES (11, 'app')
-INSERT INTO Roles (id, role) VALUES (12, 'user')
-INSERT INTO Roles (id, role) VALUES (12, 'app')
+INSERT INTO Roles (id, role) VALUES (1, 'app');
+INSERT INTO Roles (id, role) VALUES (2, 'website');
+INSERT INTO Roles (id, role) VALUES (11, 'user');
+INSERT INTO Roles (id, role) VALUES (11, 'app');
+INSERT INTO Roles (id, role) VALUES (12, 'user');
+INSERT INTO Roles (id, role) VALUES (12, 'app');
