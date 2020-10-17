@@ -653,7 +653,7 @@ void main() {
       Termin action = (await state.generateActions())[0];
 
       expect(action.participants.length, 1);
-      expect(action.participants[0].id, 1);
+      expect(action.participants[0].id, 11);
       expect(action.participants[0].name, 'Karl Marx');
       expect(action.participants[0].color.value, 4294198070);
     });

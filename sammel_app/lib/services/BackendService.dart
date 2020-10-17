@@ -4,18 +4,20 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:http_server/http_server.dart';
 import 'package:sammel_app/main.dart';
+import 'package:sammel_app/services/UserService.dart';
 
 import 'AuthFehler.dart';
 import 'RestFehler.dart';
 
-class BackendService implements Backend {
+class BackendService {
   Backend backend;
+  AbstractUserService userService;
 
   BackendService([Backend backendMock]) {
     backend = backendMock ?? Backend();
+    this.userService = MyApp.userService;
   }
 
-  @override
   Future<HttpClientResponseBody> delete(String url, String data) async {
     var response = await backend.delete(url, data);
 
@@ -29,22 +31,18 @@ class BackendService implements Backend {
     throw RestFehler(response.body.toString());
   }
 
-  @override
   Future<HttpClientResponseBody> get(String url) async {
     var response = await backend.get(url);
 
     if (response.response.statusCode >= 200 &&
-        response.response.statusCode < 300)
-      return response;
+        response.response.statusCode < 300) return response;
 
-    if (response.response.statusCode == 403)
-      throw AuthFehler(response.body);
+    if (response.response.statusCode == 403) throw AuthFehler(response.body);
 
     // else
     throw RestFehler(response.body.toString());
   }
 
-  @override
   Future<HttpClientResponseBody> post(String url, String data) async {
     var response = await backend.post(url, data);
 

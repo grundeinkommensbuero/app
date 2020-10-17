@@ -127,7 +127,7 @@ class PushNotificationResourceTest {
 
     @Test()
     fun `pushToParticipants sendet Nachricht an Firebase weiter an korrekten Teilnehmer`() {
-        val karl = Benutzer(10L, "Karl Marx", 4294198070L)
+        val karl = Benutzer(11L, "Karl Marx", 4294198070L)
         whenever(termineDao.getTermin(1L))
                 .thenReturn(Termin(1, null, null, null, null,
                         singletonList(karl),
@@ -145,7 +145,7 @@ class PushNotificationResourceTest {
 
     @Test()
     fun `pushToParticipants sendet Nachricht an Firebase weiter an mehrere Teilnehmer`() {
-        val karl = Benutzer(10L, "Karl Marx", 4294198070L)
+        val karl = Benutzer(11L, "Karl Marx", 4294198070L)
         whenever(termineDao.getTermin(1L))
                 .thenReturn(Termin(1, null, null, null, null,
                         singletonList(karl),
@@ -179,7 +179,7 @@ class PushNotificationResourceTest {
 
     @Test()
     fun `pushToParticipants sendet Nachricht an Firebase weiter an keine Firebase-Keys`() {
-        val karl = Benutzer(10L, "Karl Marx", 4294198070L)
+        val karl = Benutzer(11L, "Karl Marx", 4294198070L)
         whenever(termineDao.getTermin(1L))
                 .thenReturn(Termin(1, null, null, null, null,
                         singletonList(karl),

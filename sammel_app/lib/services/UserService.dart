@@ -13,6 +13,8 @@ import 'package:uuid/uuid.dart';
 
 abstract class AbstractUserService extends BackendService {
   Future<User> user;
+  static String APP_AUTH = '';
+  Stream<String> auth = Stream.value(APP_AUTH);
 
   AbstractUserService([Backend backend]) : super(backend);
 }
@@ -23,7 +25,9 @@ class UserService extends AbstractUserService {
 
   UserService(this.storageService, this.firebase, [Backend backend])
       : super(backend) {
+    this.userService = this;
     user = getOrCreateUser();
+    // auth = createAuth();
   }
 
   Future<User> getOrCreateUser() async {
@@ -84,6 +88,14 @@ class UserService extends AbstractUserService {
     String secret = Uuid().v1();
     await storageService.saveSecret(secret);
     return secret;
+  }
+
+  createAuth() async {
+    var me = await user;
+    var secret = await storageService.loadSecret();
+    List<int> input = '$user:$secret'.codeUnits;
+    // auth = Future.value(Base64Encoder().convert(input));
+    return auth;
   }
 }
 

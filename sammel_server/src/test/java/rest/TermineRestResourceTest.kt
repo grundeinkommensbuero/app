@@ -52,7 +52,7 @@ class TermineRestResourceTest {
         assertEquals(termin.typ, "Sammeln")
         assertEquals(termin.beginn, beginn)
         assertEquals(termin.ende, ende)
-        assertEquals(termin.ort?.id, 1)
+        assertEquals(termin.ort?.id, 11)
         assertEquals(termin.lattitude, terminDto.lattitude)
         assertEquals(termin.longitude, terminDto.longitude)
         assertEquals(termin.teilnehmer.size, 1)
@@ -346,7 +346,7 @@ class TermineRestResourceTest {
     @Test
     fun meldeTeilnahmeAnErgaenztTerminTeilnehmerUmBenutzer() {
         whenever(dao.getTermin(1L)).thenReturn(terminOhneTeilnehmerMitDetails())
-        whenever(benutzerDao.getBenutzer(1L)).thenReturn(karl())
+        whenever(benutzerDao.getBenutzer(11L)).thenReturn(karl())
 
         val response = resource.meldeTeilnahmeAn(
                 Participation(user = BenutzerDto.convertFromBenutzer(karl()), action = terminDto()))
@@ -354,7 +354,7 @@ class TermineRestResourceTest {
         val captor = argumentCaptor<Termin>()
         verify(dao, times(1)).aktualisiereTermin(captor.capture())
         assertEquals(captor.firstValue.teilnehmer.size, 1)
-        assertEquals(captor.firstValue.teilnehmer[0].id, 1L)
+        assertEquals(captor.firstValue.teilnehmer[0].id, 11L)
         assertEquals(response.status, 202)
     }
 
@@ -363,7 +363,7 @@ class TermineRestResourceTest {
         val termin = terminOhneTeilnehmerMitDetails()
         termin.teilnehmer = listOf(karl())
         whenever(dao.getTermin(1L)).thenReturn(termin)
-        whenever(benutzerDao.getBenutzer(1L)).thenReturn(karl())
+        whenever(benutzerDao.getBenutzer(11L)).thenReturn(karl())
 
         val response = resource.meldeTeilnahmeAn(
                 Participation(user = BenutzerDto.convertFromBenutzer(karl()), action = terminDto()))

@@ -215,16 +215,16 @@ void main() async {
       await service.saveUser(karl());
 
       expect(_prefs.getString('user'),
-          '{"id":1,"name":"Karl Marx","color":4294198070}');
+          '{"id":11,"name":"Karl Marx","color":4294198070}');
     });
 
     test('loadUser loads user from storage', () async {
       _prefs.setString(
-          'user', '{"id":1,"name":"Karl Marx","color":4294198070}');
+          'user', '{"id":11,"name":"Karl Marx","color":4294198070}');
 
       var user = await service.loadUser();
 
-      expect(user.id, 1);
+      expect(user.id, 11);
       expect(user.name, 'Karl Marx');
       expect(user.color.value, 4294198070);
     });
@@ -239,7 +239,7 @@ void main() async {
   });
 
   test('clearAllPreferences clears whole storage', () async {
-    _prefs.setString('user', '{"id":1,"name":"Karl Marx","color":4294198070}');
+    _prefs.setString('user', '{"id":11,"name":"Karl Marx","color":4294198070}');
     _prefs.setStringList('actionlist', ['1', '2', '3']);
     _prefs.setInt('anyInt', 1);
     _prefs.setBool('anyBool', true);

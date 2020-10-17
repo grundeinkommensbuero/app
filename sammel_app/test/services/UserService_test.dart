@@ -24,7 +24,7 @@ void main() {
 
       //defaults
       when(storageService.loadUser())
-          .thenAnswer((_) async => User(1, 'Karl Marx', Colors.red));
+          .thenAnswer((_) async => User(11, 'Karl Marx', Colors.red));
       when(storageService.loadSecret()).thenAnswer((_) async => 'secret');
       when(firebase.firebaseToken).thenAnswer((_) async => 'firebaseToken');
       when(backendMock.post('service/benutzer/authentifiziere', any))
@@ -73,7 +73,7 @@ void main() {
     });
 
     test('verifies stored user', () async {
-      var user = User(1, 'Karl Marx', Colors.red);
+      var user = User(11, 'Karl Marx', Colors.red);
 
       UserService(storageService, firebase, backendMock);
 
@@ -101,7 +101,7 @@ void main() {
       var userService = UserService(storageService, firebase, backendMock);
 
       userService.user.then((user) =>
-          expect(equals(user, User(1, 'Karl Marx', Colors.red)), isTrue));
+          expect(equals(user, User(11, 'Karl Marx', Colors.red)), isTrue));
     });
 
     test('registers new user if authentication to server fails', () async {

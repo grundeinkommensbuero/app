@@ -128,7 +128,7 @@ void main() {
 
     test('filled', () {
       expect(jsonEncode(Participation(TerminTestDaten.einTermin(), karl())),
-          '{"action":${jsonEncode(TerminTestDaten.einTermin())},"user":{"id":1,"name":"Karl Marx","color":4294198070}}');
+          '{"action":${jsonEncode(TerminTestDaten.einTermin())},"user":{"id":11,"name":"Karl Marx","color":4294198070}}');
     });
   });
 
@@ -181,7 +181,7 @@ void main() {
       expect(actions[0].latitude, 52.52116);
       expect(actions[0].longitude, 13.41331);
       expect(actions[0].participants.length, 1);
-      expect(actions[0].participants[0].id, 1);
+      expect(actions[0].participants[0].id, 11);
       expect(actions[0].participants[0].name, 'Karl Marx');
       expect(actions[0].participants[0].color.value, Colors.red.value);
       expect(
