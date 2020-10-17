@@ -22,19 +22,19 @@ void main() {
 const Mode mode = Mode.DEMO;
 
 class MyApp extends StatelessWidget {
+  static var storageService = StorageService();
   static var pushNotificationManager = PushNotificationsManager();
+  static final userService = demoMode
+      ? DemoUserService()
+      : UserService(storageService, pushNotificationManager);
   static var termineService =
       demoMode ? DemoTermineService() : TermineService();
   static var stammdatenService =
       demoMode ? DemoStammdatenService() : StammdatenService();
   static var listLocationService =
       demoMode ? DemoListLocationService() : ListLocationService();
-  static var storageService = StorageService();
   static var pushService = demoMode ? DemoPushService() : PushService();
   static var chatMessageService = ChatMessageService();
-  final userService = demoMode
-      ? DemoUserService()
-      : UserService(storageService, pushNotificationManager);
 
   MyApp() {
     pushNotificationManager.init();

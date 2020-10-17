@@ -117,7 +117,7 @@ class DemoTermineService extends AbstractTermineService {
         'Sammeln',
         52.48756,
         13.46336,
-        [User(1, "Karl Marx", Colors.red)],
+        [User(11, "Karl Marx", Colors.red)],
         TerminDetails('Hinter der 3. Parkbank links',
             'wir machen die Parkeingänge', 'Schreibt mir unter e@mail.de')),
     Termin(
@@ -129,8 +129,8 @@ class DemoTermineService extends AbstractTermineService {
         52.49655,
         13.43759,
         [
-          User(1, "Karl Marx", Colors.red),
-          User(1, "Karl Marx", Colors.purple),
+          User(11, "Karl Marx", Colors.red),
+          User(11, "Karl Marx", Colors.purple),
         ],
         TerminDetails('wir telefonieren uns zusammen', 'bitte seid pünktlich',
             'Meine Handynummer ist 01234567')),
@@ -142,7 +142,7 @@ class DemoTermineService extends AbstractTermineService {
         'Infoveranstaltung',
         52.48612,
         13.47192,
-        [User(1, "Rosa Luxemburg", Colors.purple)],
+        [User(12, "Rosa Luxemburg", Colors.purple)],
         TerminDetails(
             'DGB-Haus, Raum 1312',
             'Ihr seid alle herzlich eingeladen zur Strategiediskussion',

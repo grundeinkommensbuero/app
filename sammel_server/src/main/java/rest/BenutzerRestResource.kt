@@ -2,7 +2,6 @@ package rest
 
 import database.benutzer.BenutzerDao
 import database.benutzer.Credentials
-import org.jboss.logging.Logger
 import shared.Security
 import java.lang.Exception
 import javax.annotation.security.RolesAllowed
@@ -13,7 +12,6 @@ import javax.ws.rs.core.Response
 
 @Path("benutzer")
 open class BenutzerRestResource {
-    private val LOG = Logger.getLogger(this::class.java)
 
     @EJB
     private lateinit var dao: BenutzerDao
@@ -50,11 +48,17 @@ open class BenutzerRestResource {
                     .entity(RestFehlermeldung("Benutzername ist bereits vergeben"))
                     .build()
         ***REMOVED***
+
         try {
             val benutzerAusDb = dao.legeNeuenBenutzerAn(benutzer.convertToBenutzer())
 
             val hashMitSalt = security.hashSecret(login.secret!!)
-            dao.legeNeueCredentialsAn(Credentials(benutzerAusDb.id, hashMitSalt.hash, hashMitSalt.salt, login.firebaseKey!!, emptyList()))
+            dao.legeNeueCredentialsAn(Credentials(
+                    benutzerAusDb.id,
+                    hashMitSalt.hash,
+                    hashMitSalt.salt,
+                    login.firebaseKey!!,
+                    listOf("app", "user")))
 
             return Response.ok().entity(benutzerAusDb).build()
         ***REMOVED*** catch (e: Exception) {
