@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   db:
-    image: mariadb/server:10.3
+    build: ./sammel_db
     container_name: mariadb
     restart: always
     environment:
