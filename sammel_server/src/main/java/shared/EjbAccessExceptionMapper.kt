@@ -10,6 +10,6 @@ import javax.ws.rs.ext.Provider
 class EjbAccessExceptionMapper : ExceptionMapper<EJBException?> {
     override
     fun toResponse(exception: EJBException?): Response {
-        return Response.status(FORBIDDEN).entity("Du hast nicht die notwendigen Rechte um diese Funktion auszuführen").build()
+        return Response.status(FORBIDDEN).entity("{message: Du hast nicht die notwendigen Rechte um diese Funktion auszuführen***REMOVED***").build()
     ***REMOVED***
 ***REMOVED***

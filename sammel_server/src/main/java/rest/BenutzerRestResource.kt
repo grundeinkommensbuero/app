@@ -71,7 +71,7 @@ open class BenutzerRestResource {
 
     @POST
     @Path("authentifiziere")
-    @RolesAllowed("user")
+    @RolesAllowed("app")
     @Produces(APPLICATION_JSON)
     open fun authentifiziereBenutzer(login: Login): Response {
         return Response

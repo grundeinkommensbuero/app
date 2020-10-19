@@ -30,7 +30,7 @@ void main() {
     ***REMOVED***
     List<Map<String, dynamic>> listlocations = [cafeKottiJson, zukunftJson];
     var response = HttpClientResponseBodyMock(listlocations, 200);
-    when(backend.get('/service/listlocations/actives'))
+    when(backend.get('/service/listlocations/actives', any))
         .thenAnswer((_) async => response);
 
     List<ListLocation> ergebnis = await service.getActiveListLocations();

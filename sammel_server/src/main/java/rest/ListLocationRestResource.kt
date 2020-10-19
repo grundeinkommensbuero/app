@@ -2,6 +2,7 @@ package rest
 
 import database.listlocations.ListLocation
 import database.listlocations.ListLocationDao
+import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
 import javax.ws.rs.GET
 import javax.ws.rs.Path
@@ -15,7 +16,8 @@ open class ListLocationRestResource {
     private lateinit var dao: ListLocationDao
 
     @GET
-    @Path("named")
+    @Path("actives")
+    @RolesAllowed("user")
     @Produces("application/json")
     open fun getActiveListLocations(): Response {
         val listLocations: List<ListLocation>? = dao.getActiveListLocations()

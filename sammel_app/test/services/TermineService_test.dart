@@ -139,10 +139,12 @@ void main() {
     setUp(() {
       backend = BackendMock();
       service = TermineService(backend);
+      var userService = UserServiceMock();
+      service.userService = userService;
     ***REMOVED***);
 
     test('loadActions calls right path and serializes Filter correctly', () {
-      when(backend.post('service/termine', any))
+      when(backend.post('service/termine', any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock([], 200));
 
       service.loadActions(einFilter());
@@ -156,11 +158,11 @@ void main() {
               '"von":"15:00:00",'
               '"bis":"18:30:00",'
               '"orte":[{"id":1,"bezirk":"Friedrichshain-Kreuzberg","ort":"Friedrichshain Nordkiez","lattitude":52.51579,"longitude":13.45399***REMOVED***]'
-              '***REMOVED***'));
+              '***REMOVED***', any));
     ***REMOVED***);
 
     test('loadActions deserializes actions correctly', () async {
-      when(backend.post('service/termine', any))
+      when(backend.post('service/termine', any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock([
                 TerminTestDaten.einTerminMitTeilisUndDetails().toJson(),
                 TerminTestDaten.einTerminOhneTeilisMitDetails().toJson()
@@ -209,7 +211,7 @@ void main() {
     test(
         'createTermin calls right path and serializes action and token correctly',
         () {
-      when(backend.post('service/termine/neu', any)).thenAnswer((_) async =>
+      when(backend.post('service/termine/neu', any, any)).thenAnswer((_) async =>
           HttpClientResponseBodyMock(
               TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200));
 
@@ -244,11 +246,11 @@ void main() {
               '"kontakt":"Ruft an unter 012345678"***REMOVED***'
               '***REMOVED***,'
               '"token":"Token"'
-              '***REMOVED***'));
+              '***REMOVED***', any));
     ***REMOVED***);
 
     test('createTermin deserializes action correctly', () async {
-      when(backend.post('service/termine/neu', any)).thenAnswer((_) async =>
+      when(backend.post('service/termine/neu', any, any)).thenAnswer((_) async =>
           HttpClientResponseBodyMock(
               TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200));
 
@@ -276,17 +278,17 @@ void main() {
     ***REMOVED***);
 
     test('getActionWithDetails calls right path', () {
-      when(backend.get('service/termine/termin?id=0')).thenAnswer((_) async =>
+      when(backend.get('service/termine/termin?id=0', any)).thenAnswer((_) async =>
           HttpClientResponseBodyMock(
               TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200));
 
       service.getActionWithDetails(0);
 
-      verify(backend.get('service/termine/termin?id=0'));
+      verify(backend.get('service/termine/termin?id=0', any));
     ***REMOVED***);
 
     test('getActionWithDetails deserializes action correctly', () async {
-      when(backend.get('service/termine/termin?id=0')).thenAnswer((_) async =>
+      when(backend.get('service/termine/termin?id=0', any)).thenAnswer((_) async =>
           HttpClientResponseBodyMock(
               TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200));
 
@@ -315,8 +317,8 @@ void main() {
     test(
         'saveAction calls right path and serialises action and token correctly',
         () {
-      when(backend.post('service/termine/termin', any))
-          .thenAnswer((_) async => HttpClientResponseBodyMock({***REMOVED***, 200));
+      when(backend.post('service/termine/termin', any, any))
+          .thenAnswer((_) async => HttpClientResponseBodyMock(any, 200));
 
       service.saveAction(
           TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
@@ -349,14 +351,14 @@ void main() {
               '"kontakt":"Ruft an unter 012345678"***REMOVED***'
               '***REMOVED***,'
               '"token":"Token"'
-              '***REMOVED***'));
+              '***REMOVED***', any));
     ***REMOVED***);
 
     test(
         'deleteAction calls right path and serialises action and token correctly',
         () {
-      when(backend.delete('service/termine/termin', any))
-          .thenAnswer((_) async => HttpClientResponseBodyMock({***REMOVED***, 200));
+      when(backend.delete('service/termine/termin', any, any))
+          .thenAnswer((_) async => HttpClientResponseBodyMock(any, 200));
 
       service.deleteAction(
           TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
@@ -389,11 +391,11 @@ void main() {
               '"kontakt":"Ruft an unter 012345678"***REMOVED***'
               '***REMOVED***,'
               '"token":"Token"'
-              '***REMOVED***'));
+              '***REMOVED***', any));
     ***REMOVED***);
 
     test('joinAction calls correct path', () {
-      when(backend.post('service/termine/teilnahme', any))
+      when(backend.post('service/termine/teilnahme', any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(null, 202));
 
       service.joinAction(TerminTestDaten.einTermin(), karl());
@@ -401,11 +403,11 @@ void main() {
       verify(backend.post(
           'service/termine/teilnahme',
           '{"action":${jsonEncode(TerminTestDaten.einTermin())***REMOVED***,'
-              '"user":${jsonEncode(karl())***REMOVED******REMOVED***'));
+              '"user":${jsonEncode(karl())***REMOVED******REMOVED***', any));
     ***REMOVED***);
 
     test('leaveAction calls correct path', () {
-      when(backend.post('service/termine/absage', any))
+      when(backend.post('service/termine/absage', any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(null, 202));
 
       service.leaveAction(TerminTestDaten.einTermin(), karl());
@@ -413,7 +415,7 @@ void main() {
       verify(backend.post(
           'service/termine/absage',
           '{"action":${jsonEncode(TerminTestDaten.einTermin())***REMOVED***,'
-              '"user":${jsonEncode(karl())***REMOVED******REMOVED***'));
+              '"user":${jsonEncode(karl())***REMOVED******REMOVED***', any));
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***

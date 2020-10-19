@@ -32,7 +32,7 @@ open class TermineRestResource {
     private lateinit var benutzerDao: BenutzerDao
 
     @POST
-    @RolesAllowed("app")
+    @RolesAllowed("user")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun getTermine(filter: TermineFilter?): Response {

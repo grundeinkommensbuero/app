@@ -27,9 +27,9 @@ void main() {
           .thenAnswer((_) async => User(11, 'Karl Marx', Colors.red));
       when(storageService.loadSecret()).thenAnswer((_) async => 'secret');
       when(firebase.firebaseToken).thenAnswer((_) async => 'firebaseToken');
-      when(backendMock.post('service/benutzer/authentifiziere', any))
+      when(backendMock.post('service/benutzer/authentifiziere', any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(true, 200));
-      when(backendMock.post('service/benutzer/neu', any)).thenAnswer(
+      when(backendMock.post('service/benutzer/neu', any, any)).thenAnswer(
           (_) async => HttpClientResponseBodyMock(
               User(1, '', Colors.red).toJson(), 200));
     ***REMOVED***);
@@ -48,7 +48,7 @@ void main() {
       await Future.delayed(Duration(milliseconds: 10));
 
       var login = jsonDecode(
-          verify(backendMock.post('service/benutzer/neu', captureAny))
+          verify(backendMock.post('service/benutzer/neu', captureAny, any))
               .captured
               .single);
 
@@ -79,10 +79,8 @@ void main() {
 
       await Future.delayed(Duration(milliseconds: 100));
 
-      var argument = verify(
-              backendMock.post('service/benutzer/authentifiziere', captureAny))
-          .captured
-          .single;
+      var argument = verify(backendMock.post(
+          'service/benutzer/authentifiziere', captureAny, any)).captured.single;
       expect(equals(User.fromJSON(jsonDecode(argument)['user']), user), true);
       expect(jsonDecode(argument)['secret'], 'secret');
       expect(jsonDecode(argument)['firebaseKey'], 'firebaseToken');
@@ -105,7 +103,7 @@ void main() {
     ***REMOVED***);
 
     test('registers new user if authentication to server fails', () async {
-      when(backendMock.post('service/benutzer/authentifiziere', any))
+      when(backendMock.post('service/benutzer/authentifiziere', any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(false, 200));
 
       UserService(storageService, firebase, backendMock);
@@ -113,7 +111,7 @@ void main() {
       await Future.delayed(Duration(milliseconds: 10));
 
       var login = jsonDecode(
-          verify(backendMock.post('service/benutzer/neu', captureAny))
+          verify(backendMock.post('service/benutzer/neu', captureAny, any))
               .captured
               .single);
 
@@ -135,6 +133,34 @@ void main() {
         return userService.user;
       ***REMOVED***, throwsException);
     ***REMOVED***);*/
+  ***REMOVED***);
+
+  group('generateAuth', () {
+    setUp(() {
+      storageService = StorageServiceMock();
+      backendMock = BackendMock();
+      firebase = PushNotificationsManagerMock();
+
+      //defaults
+      when(storageService.loadSecret())
+          .thenAnswer((_) async => "mySecret");
+      when(firebase.firebaseToken).thenAnswer((_) async => 'firebaseToken');
+      when(backendMock.post('service/benutzer/authentifiziere', any, any))
+          .thenAnswer((_) async => HttpClientResponseBodyMock(true, 200));
+      when(backendMock.post('service/benutzer/neu', any, any)).thenAnswer(
+          (_) async => HttpClientResponseBodyMock(
+              User(1, '', Colors.red).toJson(), 200));
+    ***REMOVED***);
+
+    test('erzeugt korrektes Basic Auth', () async {
+      var userService = UserService(storageService, firebase, backendMock);
+      Future<User> user = Future.delayed(
+          Duration(milliseconds: 200), () => User(1, '', Colors.red));
+
+      var auth = await userService.generateAuth(user);
+
+      expect(auth, 'MTpteVNlY3JldA==');
+    ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***
 
