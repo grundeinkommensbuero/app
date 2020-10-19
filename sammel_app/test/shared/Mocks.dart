@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
+import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/PushService.dart';
@@ -25,7 +27,12 @@ class PushServiceMock extends Mock implements PushService {***REMOVED***
 class PushNotificationsManagerMock extends Mock
     implements PushNotificationsManager {***REMOVED***
 
-class UserServiceMock extends Mock implements UserService {***REMOVED***
+class UserServiceMock extends Mock implements UserService {
+  @override
+  Future<String> get userAuthCreds => Future.value("userCreds");
+  @override
+  Future<User> get user => Future.value(User(11, "Karl Marx", Colors.red));
+***REMOVED***
 
 class BackendMock extends Mock implements Backend {***REMOVED***
 

@@ -18,23 +18,16 @@ abstract class AbstractUserService extends BackendService {
   Future<User> user;
   Future<String> userAuthCreds;
 
-  AbstractUserService([Backend backend]) : super(backend);
+  AbstractUserService([Backend backendService]) : super(null, backendService);
 ***REMOVED***
 
 class UserService extends AbstractUserService {
   StorageService storageService;
   PushNotificationsManager firebase;
 
-  UserService(this.storageService, this.firebase, [Backend backend])
-      : super(backend) {
-    this.userService = this;
+  UserService(this.storageService, this.firebase, [Backend backend]) {
     user = getOrCreateUser();
     userAuthCreds = generateAuth(user);
-
-    this.userHeaders = userService.userAuthCreds
-        .asStream()
-        .map((creds) => {"Authorization": "Basic $creds"***REMOVED***)
-        .first;
   ***REMOVED***
 
   Future<User> getOrCreateUser() async {
@@ -81,7 +74,8 @@ class UserService extends AbstractUserService {
     var response;
     try {
       response = await post(
-          'service/benutzer/authentifiziere', jsonEncode(login.toJson()), appAuth: true);
+          'service/benutzer/authentifiziere', jsonEncode(login.toJson()),
+          appAuth: true);
     ***REMOVED*** catch (e) {
       ErrorService.handleError(e);
       throw e;

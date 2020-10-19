@@ -11,8 +11,11 @@ import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/BackendService.dart';
 
+import 'UserService.dart';
+
 abstract class AbstractTermineService extends BackendService {
-  AbstractTermineService([Backend backendMock]) : super(backendMock);
+  AbstractTermineService(UserService userService, [Backend backendMock])
+      : super(userService, backendMock);
 
   Future<List<Termin>> loadActions(TermineFilter filter);
 
@@ -30,7 +33,8 @@ abstract class AbstractTermineService extends BackendService {
 ***REMOVED***
 
 class TermineService extends AbstractTermineService {
-  TermineService([Backend backendMock]) : super(backendMock);
+  TermineService(UserService userService, [Backend backendMock])
+      : super(userService, backendMock);
 
   Future<List<Termin>> loadActions(TermineFilter filter) async {
     HttpClientResponseBody response =
@@ -88,7 +92,8 @@ class Participation {
 ***REMOVED***
 
 class DemoTermineService extends AbstractTermineService {
-  DemoTermineService() : super(DemoBackend());
+  DemoTermineService(UserService userService)
+      : super(userService, DemoBackend());
 
   static Ort nordkiez = Ort(1, 'Friedrichshain-Kreuzberg',
       'Friedrichshain Nordkiez', 52.51579, 13.45399);

@@ -10,16 +10,24 @@ import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/TermineService.dart';
+import 'package:sammel_app/services/UserService.dart';
 
 import '../model/Ort_test.dart';
 import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';
+import '../shared/TestdatenVorrat.dart';
 
 void main() {
+  UserService userService;
+
+  setUp(() {
+    userService = UserServiceMock();
+  ***REMOVED***);
+
   group('DemoTermineService', () {
     DemoTermineService service;
     setUp(() {
-      service = DemoTermineService();
+      service = DemoTermineService(userService);
     ***REMOVED***);
 
     test('uses DemoBackend', () {
@@ -138,8 +146,7 @@ void main() {
 
     setUp(() {
       backend = BackendMock();
-      service = TermineService(backend);
-      var userService = UserServiceMock();
+      service = TermineService(userService, backend);
       service.userService = userService;
     ***REMOVED***);
 
