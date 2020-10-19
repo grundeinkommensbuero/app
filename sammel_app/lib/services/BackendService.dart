@@ -20,11 +20,12 @@ class BackendService {
 
   BackendService.userService() {***REMOVED***
 
-  BackendService(UserService userService, [Backend backendMock]) {
+  BackendService(userService, [Backend backendMock]) {
     backend = backendMock ?? Backend();
 
     // UserService ist sein eigener UserService
     if (!(this is AbstractUserService)) {
+      if (userService == null) throw ArgumentError.notNull('userService');
       this.userService = userService;
 
       userHeaders = this

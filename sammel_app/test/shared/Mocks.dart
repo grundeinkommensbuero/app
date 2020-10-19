@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/User.dart';
@@ -12,6 +11,8 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/push_notification_manager.dart';
+
+import 'TestdatenVorrat.dart';
 
 class StammdatenServiceMock extends Mock implements StammdatenService {***REMOVED***
 
@@ -31,7 +32,7 @@ class UserServiceMock extends Mock implements UserService {
   @override
   Future<String> get userAuthCreds => Future.value("userCreds");
   @override
-  Future<User> get user => Future.value(User(11, "Karl Marx", Colors.red));
+  Future<User> get user => Future.value(karl());
 ***REMOVED***
 
 class BackendMock extends Mock implements Backend {***REMOVED***
