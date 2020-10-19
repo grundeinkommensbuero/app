@@ -2,6 +2,7 @@ package rest
 
 import database.benutzer.BenutzerDao
 import database.benutzer.Credentials
+import org.jboss.logging.Logger
 import shared.Security
 import java.lang.Exception
 import javax.annotation.security.RolesAllowed
@@ -18,6 +19,8 @@ open class BenutzerRestResource {
 
     @EJB
     private lateinit var security: Security
+
+    private val LOG = Logger.getLogger(this::class.java)
 
     @POST
     @Path("neu")
@@ -74,6 +77,52 @@ open class BenutzerRestResource {
     @RolesAllowed("app")
     @Produces(APPLICATION_JSON)
     open fun authentifiziereBenutzer(login: Login): Response {
+        val benutzer = login.user
+        if (benutzer.id == null) {
+            return Response
+                    .status(412)
+                    .entity(RestFehlermeldung("Benutzer-ID darf nicht leer sein"))
+                    .build()
+        }
+        if (login.secret.isNullOrEmpty()) {
+            return Response
+                    .status(412)
+                    .entity(RestFehlermeldung("Secret darf nicht leer sein"))
+                    .build()
+        }
+        val credentials: Credentials?
+        try {
+            credentials = dao.getCredentials(benutzer.id!!)
+        } catch (e: java.lang.IllegalArgumentException) {
+            return Response
+                    .status(412)
+                    .entity(RestFehlermeldung("Benutzer-ID ist ungültig"))
+                    .build()
+        }
+        if (credentials == null) {
+            LOG.info("Login mit unbekanntem Benutzer ${login.user.id}")
+            return Response
+                    .ok()
+                    .entity(false)
+                    .build()
+        }
+        LOG.warn(credentials.roles)
+        val verifiziert: Boolean?
+        try {
+            verifiziert = security.verifiziereSecretMitHash(login.secret!!, Security.HashMitSalt(credentials.secret, credentials.salt))
+        } catch (e: Exception) {
+            val meldung = "Technischer Fehler beim Verifizieren: ${e.localizedMessage}"
+            LOG.info(meldung)
+            return Response.status(500).entity(RestFehlermeldung(meldung)).build()
+        }
+
+        if (!verifiziert) {
+            LOG.info("Falscher Login mit Benutzer ${login.user.id}")
+            return Response
+                    .ok()
+                    .entity(false)
+                    .build()
+        }
         return Response
                 .ok()
                 .entity(true)
