@@ -2,6 +2,7 @@ import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
+import 'package:sammel_app/services/UserService.dart';
 import 'package:test/test.dart';
 
 import '../shared/Mocks.dart';
@@ -9,6 +10,7 @@ import '../shared/Mocks.dart';
 void main() {
   Backend mock;
   StammdatenService service;
+  UserService userService = UserServiceMock();
 
   setUp(() {
     mock = BackendMock();
@@ -77,7 +79,7 @@ void main() {
   group('DemoStammdatenService', () {
     DemoStammdatenService service;
     setUp(() {
-      service = DemoStammdatenService();
+      service = DemoStammdatenService(userService);
     ***REMOVED***);
 
     test('uses DemoBackend', () {

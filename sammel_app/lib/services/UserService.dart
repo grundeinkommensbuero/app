@@ -28,6 +28,15 @@ class UserService extends AbstractUserService {
   UserService(this.storageService, this.firebase, [Backend backend]) {
     user = getOrCreateUser();
     userAuthCreds = generateAuth(user);
+
+    this.userService = this;
+
+    userHeaders = this
+        .userService
+        .userAuthCreds
+        .asStream()
+        .map((creds) => {"Authorization": "Basic $creds"***REMOVED***)
+        .first;
   ***REMOVED***
 
   Future<User> getOrCreateUser() async {

@@ -28,12 +28,15 @@ class MyApp extends StatelessWidget {
       ? DemoUserService()
       : UserService(storageService, pushNotificationManager);
   var termineService =
-      demoMode ? DemoTermineService() : TermineService();
-  static var stammdatenService =
-      demoMode ? DemoStammdatenService() : StammdatenService();
-  static var listLocationService =
-      demoMode ? DemoListLocationService() : ListLocationService();
-  static var pushService = demoMode ? DemoPushService() : PushService();
+      demoMode ? DemoTermineService(userService) : TermineService(userService);
+  static var stammdatenService = demoMode
+      ? DemoStammdatenService(userService)
+      : StammdatenService(userService);
+  static var listLocationService = demoMode
+      ? DemoListLocationService(userService)
+      : ListLocationService(userService);
+  static var pushService =
+      demoMode ? DemoPushService(userService) : PushService(userService);
   static var chatMessageService = ChatMessageService();
 
   MyApp() {

@@ -3,11 +3,14 @@ import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
+import 'package:sammel_app/services/UserService.dart';
 
 import '../TestdataStorage.dart';
 import '../shared/Mocks.dart';
 
 void main() {
+  UserService userService = UserServiceMock();
+
   test('ListLocationService returns list locations', () async {
     var backend = BackendMock();
     var service = ListLocationService(backend);
@@ -54,7 +57,7 @@ void main() {
   group('DemoListLocationService', () {
     var service;
     setUp(() {
-      service = DemoListLocationService();
+      service = DemoListLocationService(userService);
     ***REMOVED***);
 
     test('uses DemoBackend', () {

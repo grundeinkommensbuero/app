@@ -23,17 +23,17 @@ class BackendService {
   BackendService(UserService userService, [Backend backendMock]) {
     backend = backendMock ?? Backend();
 
-    if (this is AbstractUserService)
-      this.userService = this;
-    else
+    // UserService ist sein eigener UserService
+    if (!(this is AbstractUserService)) {
       this.userService = userService;
 
-    userHeaders = this
-        .userService
-        .userAuthCreds
-        .asStream()
-        .map((creds) => {"Authorization": "Basic $creds"***REMOVED***)
-        .first;
+      userHeaders = this
+          .userService
+          .userAuthCreds
+          .asStream()
+          .map((creds) => {"Authorization": "Basic $creds"***REMOVED***)
+          .first;
+    ***REMOVED***
   ***REMOVED***
 
   Future<HttpClientResponseBody> delete(String url, String data,

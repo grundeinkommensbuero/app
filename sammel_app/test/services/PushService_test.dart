@@ -2,10 +2,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/services/PushService.dart';
+import 'package:sammel_app/services/UserService.dart';
 
 import '../shared/Mocks.dart';
 
 main() {
+  UserService userService = UserServiceMock();
+
   AbstractPushService service;
   var backendMock = BackendMock();
 
@@ -67,7 +70,7 @@ main() {
   group('DemoPushService', () {
     setUp(() {
       reset(backendMock);
-      service = DemoPushService();
+      service = DemoPushService(userService);
     ***REMOVED***);
 
     test('pushToDevices erwartet Empfänger', () {
