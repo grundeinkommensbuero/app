@@ -41,16 +41,14 @@ class UserService extends AbstractUserService {
 
   Future<User> getOrCreateUser() async {
     var foundUser = await storageService.loadUser();
-    if (foundUser != null) {
+    if (foundUser != null)
       return verifyUser(foundUser).catchError((e) {
         ErrorService.handleError(e,
             additional: 'Ein neuer Benutzer wird angelegt.');
         return createNewUser();
       }, test: (e) => e is InvalidUserException);
-    } else {
-      var user = await createNewUser();
-      return user;
-    }
+    else
+      return await createNewUser();
   }
 
   Future<User> createNewUser() async {
