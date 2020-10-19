@@ -7,12 +7,14 @@ import 'package:sammel_app/services/RestFehler.dart';
 import '../shared/Mocks.dart';
 
 main() {
+  var userService = UserServiceMock();
+
   group('BackendService uses backend mock', () {
     BackendService service;
     Backend mock;
     setUp(() {
       mock = BackendMock();
-      service = BackendService(mock);
+      service = BackendService(userService, mock);
     });
 
     test('for get', () {
@@ -57,7 +59,7 @@ main() {
     Backend mock;
     setUp(() {
       mock = BackendMock();
-      service = BackendService(mock);
+      service = BackendService(userService, mock);
     });
 
     test('throws rest error on non-200 and non-403 status code', () {
