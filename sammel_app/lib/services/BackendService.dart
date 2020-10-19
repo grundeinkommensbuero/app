@@ -14,7 +14,7 @@ class BackendService {
   AbstractUserService userService;
 
   static Map<String, String> appHeaders = {
-    "Authorization": "Basic ${AbstractUserService.appAuth***REMOVED***"
+    'Authorization': 'Basic ${AbstractUserService.appAuth***REMOVED***'
   ***REMOVED***
   Future<Map<String, String>> userHeaders;
 
@@ -86,7 +86,7 @@ class BackendService {
   ***REMOVED***
 ***REMOVED***
 
-mixin NoUserAuthException implements Exception {***REMOVED***
+class NoUserAuthException implements Exception {***REMOVED***
 
 class Backend {
   static final host = testMode ? 'dwe.idash.org' : '10.0.2.2';
@@ -206,7 +206,7 @@ class Backend {
   ***REMOVED***
 ***REMOVED***
 
-class WrongResponseFormatException {
+class WrongResponseFormatException implements Exception {
   final String message;
 
   WrongResponseFormatException(this.message);

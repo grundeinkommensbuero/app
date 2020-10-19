@@ -10,6 +10,7 @@ import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/push_notification_manager.dart';
 
 import '../shared/Mocks.dart';
+import '../shared/TestdatenVorrat.dart';
 
 void main() {
   StorageService storageService;
@@ -32,6 +33,17 @@ void main() {
       when(backendMock.post('service/benutzer/neu', any, any)).thenAnswer(
           (_) async => HttpClientResponseBodyMock(
               User(1, '', Colors.red).toJson(), 200));
+    ***REMOVED***);
+
+    test('assigns itself as userService and determines userHeader', () async {
+      when(storageService.loadSecret()).thenAnswer((_) async => 'secret');
+      when(storageService.loadUser()).thenAnswer((_) async => karl());
+
+      var service = UserService(storageService, firebase, BackendMock());
+      var userHeaders = await service.userHeaders;
+
+      expect(service.userService, service);
+      expect(userHeaders['Authorization'], 'Basic MTE6c2VjcmV0');
     ***REMOVED***);
 
     test('loads user from storage', () async {
@@ -80,7 +92,9 @@ void main() {
       await Future.delayed(Duration(milliseconds: 100));
 
       var argument = verify(backendMock.post(
-          'service/benutzer/authentifiziere', captureAny, any)).captured.single;
+              'service/benutzer/authentifiziere', captureAny, any))
+          .captured
+          .single;
       expect(equals(User.fromJSON(jsonDecode(argument)['user']), user), true);
       expect(jsonDecode(argument)['secret'], 'secret');
       expect(jsonDecode(argument)['firebaseKey'], 'firebaseToken');
@@ -142,8 +156,7 @@ void main() {
       firebase = PushNotificationsManagerMock();
 
       //defaults
-      when(storageService.loadSecret())
-          .thenAnswer((_) async => "mySecret");
+      when(storageService.loadSecret()).thenAnswer((_) async => "mySecret");
       when(firebase.firebaseToken).thenAnswer((_) async => 'firebaseToken');
       when(backendMock.post('service/benutzer/authentifiziere', any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(true, 200));
