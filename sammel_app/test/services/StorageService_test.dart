@@ -8,7 +8,7 @@ import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../model/Termin_test.dart';
+import '../shared/TestdatenVorrat.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

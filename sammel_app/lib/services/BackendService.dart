@@ -18,17 +18,22 @@ class BackendService {
   };
   Future<Map<String, String>> userHeaders;
 
-  BackendService([Backend backendMock]) {
+  BackendService.userService() {}
+
+  BackendService(UserService userService, [Backend backendMock]) {
     backend = backendMock ?? Backend();
 
-    if (!(this is AbstractUserService)) {
-      this.userService = MyApp.userService;
+    if (this is AbstractUserService)
+      this.userService = this;
+    else
+      this.userService = userService;
 
-      userHeaders = userService.userAuthCreds
-          .asStream()
-          .map((creds) => {"Authorization": "Basic $creds"})
-          .first;
-    }
+    userHeaders = this
+        .userService
+        .userAuthCreds
+        .asStream()
+        .map((creds) => {"Authorization": "Basic $creds"})
+        .first;
   }
 
   Future<HttpClientResponseBody> delete(String url, String data,

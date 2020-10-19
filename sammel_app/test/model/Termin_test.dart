@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/model/User.dart';
 import 'package:test/test.dart';
 
+import '../shared/TestdatenVorrat.dart';
 import 'Ort_test.dart';
 import 'TerminDetails_test.dart';
 
@@ -278,7 +278,3 @@ class TerminTestDaten {
       [],
       TerminDetailsTestDaten.terminDetailsTestDaten());
 }
-
-User karl() => User(11, 'Karl Marx', Colors.red);
-
-User rosa() => User(12, 'Rosa Luxemburg', Colors.purple);
