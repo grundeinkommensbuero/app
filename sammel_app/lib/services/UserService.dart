@@ -25,7 +25,8 @@ class UserService extends AbstractUserService {
   StorageService storageService;
   PushNotificationsManager firebase;
 
-  UserService(this.storageService, this.firebase, [Backend backend]) {
+  UserService(this.storageService, this.firebase, [Backend backend])
+      : super(backend) {
     user = getOrCreateUser();
     userAuthCreds = generateAuth(user);
 

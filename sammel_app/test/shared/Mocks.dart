@@ -29,13 +29,20 @@ class PushNotificationsManagerMock extends Mock
     implements PushNotificationsManager {}
 
 class UserServiceMock extends Mock implements UserService {
-  @override
-  Future<String> get userAuthCreds => Future.value("userCreds");
-  @override
-  Future<User> get user => Future.value(karl());
+  UserServiceMock() {
+    when(this.user)
+        .thenAnswer((_) async => karl());
+    when(this.userAuthCreds)
+        .thenAnswer((_) async => 'userCreds');
+  }
 }
 
-class BackendMock extends Mock implements Backend {}
+class BackendMock extends Mock implements Backend {
+  BackendMock() {
+    when(this.post('service/benutzer/authentifiziere', any, any))
+        .thenAnswer((_) async => HttpClientResponseBodyMock(true, 200));
+  }
+}
 
 class HttpClientResponseMock extends Mock implements HttpClientResponse {
   HttpClientResponseMock(int status) {
