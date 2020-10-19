@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
   static final userService = demoMode
       ? DemoUserService()
       : UserService(storageService, pushNotificationManager);
-  static var termineService =
+  var termineService =
       demoMode ? DemoTermineService() : TermineService();
   static var stammdatenService =
       demoMode ? DemoStammdatenService() : StammdatenService();

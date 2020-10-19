@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sammel_app/services/AuthFehler.dart';
+import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 
 class ErrorService {
@@ -30,6 +31,12 @@ class ErrorService {
       return;
     }
     if (e is RestFehler) {
+      pushMessage(
+          'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten',
+          '${e.message}${additional}$EMAIL');
+      return;
+    }
+    if (e is WrongResponseFormatException) {
       pushMessage(
           'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten',
           '${e.message}${additional}$EMAIL');

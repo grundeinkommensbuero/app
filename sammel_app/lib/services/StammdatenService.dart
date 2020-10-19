@@ -16,7 +16,7 @@ class StammdatenService extends AbstractStammdatenService {
   Future<List<Ort>> ladeOrte() async {
     try {
       HttpClientResponseBody response =
-          await backend.get('/service/stammdaten/orte');
+          await get('/service/stammdaten/orte');
 
       final orte = (response.body as List)
           .map((jsonOrt) => Ort.fromJson(jsonOrt))

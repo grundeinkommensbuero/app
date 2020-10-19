@@ -28,12 +28,15 @@ main() {
     });
 
     test('pushToDevices sendet Push-Nachricht an Server', () async {
-      when(backendMock.post(any, any))
+      when(backendMock.post(any, any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(null, 200));
       await service.pushToDevices(
           ['Empfänger'], PushData(), PushNotification('Titel', 'Inhalt'));
 
-      verify(backendMock.post('service/push/devices', '{"recipients":["Empfänger"],"topic":null,"data":{"type":null},"notification":{"title":"Titel","body":"Inhalt"}}'));
+      verify(backendMock.post(
+          'service/push/devices',
+          '{"recipients":["Empfänger"],"topic":null,"data":{"type":null},"notification":{"title":"Titel","body":"Inhalt"}}',
+          any));
     });
 
     test('pushToTopic erwartet Thema', () {
@@ -49,12 +52,15 @@ main() {
     });
 
     test('pushToTopic sendet Push-Nachricht an Server', () async {
-      when(backendMock.post(any, any))
+      when(backendMock.post(any, any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(null, 200));
       await service.pushToTopic(
           'Thema', PushData(), PushNotification('Titel', 'Inhalt'));
 
-      verify(backendMock.post('service/push/topic', '{"recipients":null,"topic":"Thema","data":{"type":null},"notification":{"title":"Titel","body":"Inhalt"}}'));
+      verify(backendMock.post(
+          'service/push/topic',
+          '{"recipients":null,"topic":"Thema","data":{"type":null},"notification":{"title":"Titel","body":"Inhalt"}}',
+          any));
     });
   });
 

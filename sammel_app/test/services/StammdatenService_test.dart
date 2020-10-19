@@ -17,7 +17,7 @@ void main() {
 
   group('StammdatenServer', () {
     test('delivers locations with status code 200', () async {
-      when(mock.get(any)).thenAnswer((_) async =>
+      when(mock.get(any, any)).thenAnswer((_) async =>
           HttpClientResponseBodyMock([
             {
               'id': 1,
@@ -44,7 +44,7 @@ void main() {
 
       var result = await service.ladeOrte();
 
-      verify(mock.get('/service/stammdaten/orte')).called(1);
+      verify(mock.get('/service/stammdaten/orte', any)).called(1);
 
       expect(result.length, 3);
       expect(result[0].id, 1);
@@ -65,7 +65,7 @@ void main() {
     });
 
     test('can handle empty lists', () async {
-      when(mock.get(any)).thenAnswer((_) async =>
+      when(mock.get(any, any)).thenAnswer((_) async =>
           HttpClientResponseBodyMock([], 200));
 
       var result = await service.ladeOrte();
