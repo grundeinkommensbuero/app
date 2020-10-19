@@ -4,10 +4,10 @@ import com.nhaarman.mockitokotlin2.*
 import database.benutzer.Benutzer
 import database.benutzer.BenutzerDao
 import database.benutzer.Credentials
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.mockito.ArgumentMatchers
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.InjectMocks
 import org.mockito.Mock
@@ -136,8 +136,8 @@ class BenutzerRestResourceTest {
 
         val captor = argumentCaptor<Credentials>()
         verify(dao, times(1)).legeNeueCredentialsAn(captor.capture())
-        assertNotNull(captor.firstValue.roles, ArgumentMatchers.contains("app"))
-        assertNotNull(captor.firstValue.roles, ArgumentMatchers.contains("user"))
+        assertTrue(captor.firstValue.roles.contains("app"))
+        assertTrue(captor.firstValue.roles.contains("user"))
     ***REMOVED***
 
     @Test
