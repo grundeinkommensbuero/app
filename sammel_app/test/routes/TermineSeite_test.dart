@@ -7,7 +7,6 @@ import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
-import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
@@ -32,11 +31,10 @@ final _terminService = TermineServiceMock();
 final _listLocationService = ListLocationServiceMock();
 final _storageService = StorageServiceMock();
 final _pushService = PushServiceMock();
-final _userService = UserServiceMock();
+final _userService = ConfiguredUserServiceMock();
 
 void main() {
-  Widget termineSeiteWidget;
-  User me;
+  MultiProvider termineSeiteWidget;
 
   setUp(() {
     when(_storageService.loadFilter()).thenAnswer((_) async => null);
@@ -44,8 +42,6 @@ void main() {
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
     when(_terminService.loadActions(any)).thenAnswer((_) async => []);
-    me = karl();
-    when(_userService.user).thenAnswer((_) async => me);
     when(_stammdatenService.ladeOrte()).thenAnswer((_) async => []);
 
     termineSeiteWidget = MultiProvider(
@@ -69,6 +65,24 @@ void main() {
       var today = DateTime.now();
       var tomorrow = today.add(Duration(days: 1));
       var yesterday = today.subtract(Duration(days: 1));
+      var me = karl();
+
+      var userService = UserServiceMock();
+      when(userService.user).thenAnswer((realInvocation) async => me);
+      var termineSeiteWidget = MultiProvider(
+          providers: [
+            Provider<AbstractTermineService>.value(value: _terminService),
+            Provider<AbstractListLocationService>.value(
+                value: _listLocationService),
+            Provider<StorageService>.value(value: _storageService),
+            Provider<AbstractUserService>.value(value: userService),
+            Provider<AbstractStammdatenService>.value(
+                value: _stammdatenService),
+          ],
+          child: MaterialApp(home: Builder(builder: (BuildContext context) {
+            ErrorService.setContext(context);
+            return TermineSeite();
+          ***REMOVED***)));
 
       when(_terminService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.anActionFrom(today)..ort = goerli(),
@@ -179,6 +193,28 @@ void main() {
   ***REMOVED***);
 
   group('ActionDetailsDialog', () {
+    var me = karl();
+
+    setUp(() {
+      var userService = UserServiceMock();
+      when(userService.user).thenAnswer((realInvocation) async => me);
+
+      termineSeiteWidget = MultiProvider(
+          providers: [
+            Provider<AbstractTermineService>.value(value: _terminService),
+            Provider<AbstractListLocationService>.value(
+                value: _listLocationService),
+            Provider<StorageService>.value(value: _storageService),
+            Provider<AbstractUserService>.value(value: userService),
+            Provider<AbstractStammdatenService>.value(
+                value: _stammdatenService),
+          ],
+          child: MaterialApp(home: Builder(builder: (BuildContext context) {
+            ErrorService.setContext(context);
+            return TermineSeite();
+          ***REMOVED***)));
+    ***REMOVED***);
+
     testWidgets('opens with tap on TermineCard', (WidgetTester tester) async {
       when(_terminService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),

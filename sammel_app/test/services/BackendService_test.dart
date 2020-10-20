@@ -9,7 +9,7 @@ import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';
 
 main() {
-  var userService = UserServiceMock();
+  var userService = ConfiguredUserServiceMock();
 
   group('BackendService', () {
     BackendMock backend;
@@ -134,24 +134,24 @@ main() {
         service = BackendService(userService, mock);
       ***REMOVED***);
 
-      test('for get', () {
+      test('for get', () async {
         when(mock.get(any, any)).thenAnswer(
             (_) async => HttpClientResponseBodyMock('response', 200));
-        service.get('any URL');
+        await service.get('any URL');
         verify(mock.get('any URL', any)).called(1);
       ***REMOVED***);
 
-      test('for post', () {
+      test('for post', () async {
         when(mock.post(any, any, any)).thenAnswer(
             (_) async => HttpClientResponseBodyMock('response', 200));
-        service.post('any URL', 'any data');
+        await service.post('any URL', 'any data');
         verify(mock.post('any URL', 'any data', any)).called(1);
       ***REMOVED***);
 
-      test('for delete', () {
+      test('for delete', () async {
         when(mock.delete(any, any, any)).thenAnswer(
             (_) async => HttpClientResponseBodyMock('response', 200));
-        service.delete('any URL', 'any data');
+        await service.delete('any URL', 'any data');
         verify(mock.delete('any URL', 'any data', any)).called(1);
       ***REMOVED***);
     ***REMOVED***);
@@ -160,15 +160,15 @@ main() {
   group('DemoBackendService', () {
     var demoBackend = DemoBackend();
     test('throws error when get called', () async {
-      expect(() => demoBackend.get('any url', any),
+      expect(() => demoBackend.get('any url', {***REMOVED***),
           throwsA((e) => e is DemoBackendShouldNeverBeUsedError));
     ***REMOVED***);
     test('throws error when post called', () async {
-      expect(() => demoBackend.post('any url', '', any),
+      expect(() => demoBackend.post('any url', '', {***REMOVED***),
           throwsA((e) => e is DemoBackendShouldNeverBeUsedError));
     ***REMOVED***);
     test('throws error when delete called', () async {
-      expect(() => demoBackend.delete('any url', '', any),
+      expect(() => demoBackend.delete('any url', '', {***REMOVED***),
           throwsA((e) => e is DemoBackendShouldNeverBeUsedError));
     ***REMOVED***);
   ***REMOVED***);
