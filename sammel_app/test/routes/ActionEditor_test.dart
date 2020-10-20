@@ -19,14 +19,13 @@ import 'package:sammel_app/services/UserService.dart';
 import '../model/Ort_test.dart';
 import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';
-import '../shared/TestdatenVorrat.dart';
 
 final _stammdatenService = StammdatenServiceMock();
 final _terminService = TermineServiceMock();
 final _listLocationService = ListLocationServiceMock();
 final _storageService = StorageServiceMock();
 final _pushService = PushServiceMock();
-final _userService = UserServiceMock();
+final _userService = ConfiguredUserServiceMock();
 
 void main() {
   setUp(() {
@@ -35,7 +34,6 @@ void main() {
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
     when(_terminService.loadActions(any)).thenAnswer((_) async => []);
-    when(_userService.user).thenAnswer((_) async => karl());
     when(_stammdatenService.ladeOrte()).thenAnswer((_) async => []);
   });
 

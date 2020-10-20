@@ -10,11 +10,11 @@ import '../shared/Mocks.dart';
 void main() {
   Backend mock;
   StammdatenService service;
-  UserService userService = UserServiceMock();
+  UserService userService = ConfiguredUserServiceMock();
 
   setUp(() {
     mock = BackendMock();
-    service = StammdatenService(mock);
+    service = StammdatenService(userService, mock);
   });
 
   group('StammdatenServer', () {

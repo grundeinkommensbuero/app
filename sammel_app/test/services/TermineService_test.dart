@@ -21,7 +21,7 @@ void main() {
   UserService userService;
 
   setUp(() {
-    userService = UserServiceMock();
+    userService = ConfiguredUserServiceMock();
   });
 
   group('DemoTermineService', () {
@@ -97,7 +97,7 @@ void main() {
       await service.joinAction(service.termine[0], karl());
 
       expect(service.termine[0].participants.map((e) => e.id),
-          containsAll([1, 2]));
+          containsAll([11, 12]));
     });
 
     test('joinAction ignores if user already partakes', () async {
@@ -106,7 +106,7 @@ void main() {
       await service.joinAction(service.termine[0], karl());
 
       expect(service.termine[0].participants.map((e) => e.id),
-          containsAll([1, 2]));
+          containsAll([11, 12]));
     });
 
     test('leaveAction removes user from action', () async {
@@ -115,7 +115,7 @@ void main() {
       await service.leaveAction(service.termine[0], karl());
 
       expect(
-          service.termine[0].participants.map((e) => e.id), containsAll([2]));
+          service.termine[0].participants.map((e) => e.id), containsAll([12]));
     });
 
     test('leaveAction ignores if user doesnt partake', () async {
@@ -124,7 +124,7 @@ void main() {
       await service.leaveAction(service.termine[0], karl());
 
       expect(
-          service.termine[0].participants.map((e) => e.id), containsAll([2]));
+          service.termine[0].participants.map((e) => e.id), containsAll([12]));
     });
   });
 
@@ -150,11 +150,12 @@ void main() {
       service.userService = userService;
     });
 
-    test('loadActions calls right path and serializes Filter correctly', () {
+    test('loadActions calls right path and serializes Filter correctly',
+        () async {
       when(backend.post('service/termine', any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock([], 200));
 
-      service.loadActions(einFilter());
+      await service.loadActions(einFilter());
 
       verify(backend.post(
           'service/termine',
@@ -165,7 +166,8 @@ void main() {
               '"von":"15:00:00",'
               '"bis":"18:30:00",'
               '"orte":[{"id":1,"bezirk":"Friedrichshain-Kreuzberg","ort":"Friedrichshain Nordkiez","lattitude":52.51579,"longitude":13.45399}]'
-              '}', any));
+              '}',
+          any));
     });
 
     test('loadActions deserializes actions correctly', () async {
@@ -217,12 +219,12 @@ void main() {
 
     test(
         'createTermin calls right path and serializes action and token correctly',
-        () {
-      when(backend.post('service/termine/neu', any, any)).thenAnswer((_) async =>
-          HttpClientResponseBodyMock(
+        () async {
+      when(backend.post('service/termine/neu', any, any)).thenAnswer(
+          (_) async => HttpClientResponseBodyMock(
               TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200));
 
-      service.createAction(
+      await service.createAction(
           TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
 
       verify(backend.post(
@@ -244,7 +246,7 @@ void main() {
               '"typ":"Sammeln",'
               '"lattitude":52.52116,'
               '"longitude":13.41331,'
-              '"participants":[{"id":1,"name":"Karl Marx","color":4294198070}],'
+              '"participants":[{"id":11,"name":"Karl Marx","color":4294198070}],'
               '"details":'
               '{'
               '"id":null,'
@@ -253,12 +255,13 @@ void main() {
               '"kontakt":"Ruft an unter 012345678"}'
               '},'
               '"token":"Token"'
-              '}', any));
+              '}',
+          any));
     });
 
     test('createTermin deserializes action correctly', () async {
-      when(backend.post('service/termine/neu', any, any)).thenAnswer((_) async =>
-          HttpClientResponseBodyMock(
+      when(backend.post('service/termine/neu', any, any)).thenAnswer(
+          (_) async => HttpClientResponseBodyMock(
               TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200));
 
       var action = await service.createAction(
@@ -276,7 +279,7 @@ void main() {
       expect(action.latitude, 52.52116);
       expect(action.longitude, 13.41331);
       expect(action.participants.length, 1);
-      expect(action.participants[0].id, 1);
+      expect(action.participants[0].id, 11);
       expect(action.participants[0].name, 'Karl Marx');
       expect(action.participants[0].color.value, Colors.red.value);
       expect(action.details.kommentar, 'Bringe Westen und Klämmbretter mit');
@@ -284,19 +287,19 @@ void main() {
       expect(action.details.kontakt, 'Ruft an unter 012345678');
     });
 
-    test('getActionWithDetails calls right path', () {
-      when(backend.get('service/termine/termin?id=0', any)).thenAnswer((_) async =>
-          HttpClientResponseBodyMock(
+    test('getActionWithDetails calls right path', () async {
+      when(backend.get('service/termine/termin?id=0', any)).thenAnswer(
+          (_) async => HttpClientResponseBodyMock(
               TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200));
 
-      service.getActionWithDetails(0);
+      await service.getActionWithDetails(0);
 
       verify(backend.get('service/termine/termin?id=0', any));
     });
 
     test('getActionWithDetails deserializes action correctly', () async {
-      when(backend.get('service/termine/termin?id=0', any)).thenAnswer((_) async =>
-          HttpClientResponseBodyMock(
+      when(backend.get('service/termine/termin?id=0', any)).thenAnswer(
+          (_) async => HttpClientResponseBodyMock(
               TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200));
 
       var action = await service.getActionWithDetails(0);
@@ -313,7 +316,7 @@ void main() {
       expect(action.latitude, 52.52116);
       expect(action.longitude, 13.41331);
       expect(action.participants.length, 1);
-      expect(action.participants[0].id, 1);
+      expect(action.participants[0].id, 11);
       expect(action.participants[0].name, 'Karl Marx');
       expect(action.participants[0].color.value, Colors.red.value);
       expect(action.details.kommentar, 'Bringe Westen und Klämmbretter mit');
@@ -323,11 +326,11 @@ void main() {
 
     test(
         'saveAction calls right path and serialises action and token correctly',
-        () {
+        () async {
       when(backend.post('service/termine/termin', any, any))
-          .thenAnswer((_) async => HttpClientResponseBodyMock(any, 200));
+          .thenAnswer((_) async => HttpClientResponseBodyMock('response', 200));
 
-      service.saveAction(
+      await service.saveAction(
           TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
 
       verify(backend.post(
@@ -349,7 +352,7 @@ void main() {
               '"typ":"Sammeln",'
               '"lattitude":52.52116,'
               '"longitude":13.41331,'
-              '"participants":[{"id":1,"name":"Karl Marx","color":4294198070}],'
+              '"participants":[{"id":11,"name":"Karl Marx","color":4294198070}],'
               '"details":'
               '{'
               '"id":null,'
@@ -358,16 +361,17 @@ void main() {
               '"kontakt":"Ruft an unter 012345678"}'
               '},'
               '"token":"Token"'
-              '}', any));
+              '}',
+          any));
     });
 
     test(
         'deleteAction calls right path and serialises action and token correctly',
-        () {
+        () async {
       when(backend.delete('service/termine/termin', any, any))
-          .thenAnswer((_) async => HttpClientResponseBodyMock(any, 200));
+          .thenAnswer((_) async => HttpClientResponseBodyMock('response', 200));
 
-      service.deleteAction(
+      await service.deleteAction(
           TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
 
       verify(backend.delete(
@@ -389,7 +393,7 @@ void main() {
               '"typ":"Sammeln",'
               '"lattitude":52.52116,'
               '"longitude":13.41331,'
-              '"participants":[{"id":1,"name":"Karl Marx","color":4294198070}],'
+              '"participants":[{"id":11,"name":"Karl Marx","color":4294198070}],'
               '"details":'
               '{'
               '"id":null,'
@@ -398,31 +402,34 @@ void main() {
               '"kontakt":"Ruft an unter 012345678"}'
               '},'
               '"token":"Token"'
-              '}', any));
+              '}',
+          any));
     });
 
-    test('joinAction calls correct path', () {
+    test('joinAction calls correct path', () async {
       when(backend.post('service/termine/teilnahme', any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(null, 202));
 
-      service.joinAction(TerminTestDaten.einTermin(), karl());
+      await service.joinAction(TerminTestDaten.einTermin(), karl());
 
       verify(backend.post(
           'service/termine/teilnahme',
           '{"action":${jsonEncode(TerminTestDaten.einTermin())},'
-              '"user":${jsonEncode(karl())}}', any));
+              '"user":${jsonEncode(karl())}}',
+          any));
     });
 
-    test('leaveAction calls correct path', () {
+    test('leaveAction calls correct path', () async {
       when(backend.post('service/termine/absage', any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(null, 202));
 
-      service.leaveAction(TerminTestDaten.einTermin(), karl());
+      await service.leaveAction(TerminTestDaten.einTermin(), karl());
 
       verify(backend.post(
           'service/termine/absage',
           '{"action":${jsonEncode(TerminTestDaten.einTermin())},'
-              '"user":${jsonEncode(karl())}}', any));
+              '"user":${jsonEncode(karl())}}',
+          any));
     });
   });
 }

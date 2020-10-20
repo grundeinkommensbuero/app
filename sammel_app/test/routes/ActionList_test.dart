@@ -46,7 +46,7 @@ void main() {
 
   testWidgets('marks participating actions for highlighting',
       (WidgetTester tester) async {
-    var participating = (List<User> user) => user[0].id == 1;
+    var participating = (List<User> user) => user[0].id == 11;
 
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(

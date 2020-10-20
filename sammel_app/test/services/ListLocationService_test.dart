@@ -9,11 +9,11 @@ import '../TestdataStorage.dart';
 import '../shared/Mocks.dart';
 
 void main() {
-  UserService userService = UserServiceMock();
+  UserService userService = ConfiguredUserServiceMock();
 
   test('ListLocationService returns list locations', () async {
     var backend = BackendMock();
-    var service = ListLocationService(backend);
+    var service = ListLocationService(userService, backend);
 
     var cafeKottiJson = {
       'id': '2',

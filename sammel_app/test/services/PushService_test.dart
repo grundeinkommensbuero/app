@@ -7,7 +7,7 @@ import 'package:sammel_app/services/UserService.dart';
 import '../shared/Mocks.dart';
 
 main() {
-  UserService userService = UserServiceMock();
+  UserService userService = ConfiguredUserServiceMock();
 
   AbstractPushService service;
   var backendMock = BackendMock();
@@ -15,7 +15,7 @@ main() {
   group('PushService', () {
     setUp(() {
       reset(backendMock);
-      service = PushService(backendMock);
+      service = PushService(userService, backendMock);
     });
 
     test('pushToDevices erwartet Empfänger', () {

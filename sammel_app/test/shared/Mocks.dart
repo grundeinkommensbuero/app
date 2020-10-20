@@ -28,8 +28,10 @@ class PushServiceMock extends Mock implements PushService {}
 class PushNotificationsManagerMock extends Mock
     implements PushNotificationsManager {}
 
-class UserServiceMock extends Mock implements UserService {
-  UserServiceMock() {
+class UserServiceMock extends Mock implements UserService {}
+
+class ConfiguredUserServiceMock extends Mock implements UserService {
+  ConfiguredUserServiceMock() {
     when(this.user)
         .thenAnswer((_) async => karl());
     when(this.userAuthCreds)
