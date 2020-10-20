@@ -52,11 +52,11 @@ class TermineRestResourceTest {
         assertEquals(termin.typ, "Sammeln")
         assertEquals(termin.beginn, beginn)
         assertEquals(termin.ende, ende)
-        assertEquals(termin.ort?.id, 11)
+        assertEquals(termin.ort?.id, 1)
         assertEquals(termin.lattitude, terminDto.lattitude)
         assertEquals(termin.longitude, terminDto.longitude)
         assertEquals(termin.teilnehmer.size, 1)
-        assertEquals(termin.teilnehmer[0].id, 1L)
+        assertEquals(termin.teilnehmer[0].id, 11L)
         assertEquals(termin.teilnehmer[0].name, "Karl Marx")
         assertEquals(termin.teilnehmer[0].color, 4294198070)
     ***REMOVED***
@@ -428,7 +428,7 @@ class TermineRestResourceTest {
         val terminOhneTeilnehmerMitDetails = terminOhneTeilnehmerMitDetails()
         terminOhneTeilnehmerMitDetails.teilnehmer = listOf(karl())
         whenever(dao.getTermin(1L)).thenReturn(terminOhneTeilnehmerMitDetails)
-        whenever(benutzerDao.getBenutzer(1L)).thenReturn(karl())
+        whenever(benutzerDao.getBenutzer(11L)).thenReturn(karl())
 
         val response = resource.sageTeilnahmeAb(
                 Participation(user = BenutzerDto.convertFromBenutzer(karl()), action = terminDto()))
@@ -442,7 +442,7 @@ class TermineRestResourceTest {
     @Test
     fun sageTeilnahmeAbIgnoriertFehlendenBenutzerInListe() {
         whenever(dao.getTermin(1L)).thenReturn(terminOhneTeilnehmerMitDetails())
-        whenever(benutzerDao.getBenutzer(1L)).thenReturn(karl())
+        whenever(benutzerDao.getBenutzer(11L)).thenReturn(karl())
 
         val response = resource.sageTeilnahmeAb(
                 Participation(user = BenutzerDto.convertFromBenutzer(karl()), action = terminDto()))
