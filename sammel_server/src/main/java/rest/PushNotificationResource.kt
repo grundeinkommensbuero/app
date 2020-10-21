@@ -7,7 +7,11 @@ import services.FirebaseService.MissingMessageTarget
 import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
 import javax.ws.rs.*
+import javax.ws.rs.core.Context
 import javax.ws.rs.core.MediaType
+import javax.ws.rs.core.Response
+import javax.ws.rs.core.Response.Status.FORBIDDEN
+import javax.ws.rs.core.SecurityContext
 
 @Path("push")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -23,6 +27,9 @@ open class PushNotificationResource {
     @EJB
     private lateinit var termineDao: TermineDao
 
+    @Context
+    private lateinit var context: SecurityContext
+
     @Path("devices")
     @RolesAllowed("named")
     @POST
@@ -35,12 +42,21 @@ open class PushNotificationResource {
     @Path("action/{actionId}")
     @RolesAllowed("named")
     @POST
-    open fun pushToParticipants(nachricht: PushMessageDto, @PathParam("actionId") actionId: Long) {
+    open fun pushToParticipants(nachricht: PushMessageDto, @PathParam("actionId") actionId: Long): Response? {
         val teilnehmer = termineDao.getTermin(actionId)?.teilnehmer
-        if (teilnehmer == null) return
+
+        if ((teilnehmer == null || !(teilnehmer.map { it.id }.contains(context.userPrincipal.name.toLong())))) {
+            return Response
+                    .status(FORBIDDEN)
+                    .entity(RestFehlermeldung("Du bist nicht Teilnehmer dieser Aktion"))
+                    .build()
+        }
+
         val empfaenger = benutzerDao.getFirebaseKeys(teilnehmer)
-        if (empfaenger.isEmpty()) return
+        if (empfaenger.isEmpty()) return Response.accepted().build()
+
         firebase.sendePushNachrichtAnEmpfaenger(nachricht.notification, nachricht.data, empfaenger)
+        return Response.accepted().build()
     }
 
     @Path("topic/{topic}")

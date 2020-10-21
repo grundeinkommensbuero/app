@@ -15,7 +15,7 @@ open class StammdatenRestResource {
 
     @GET
     @Path("orte")
-    @RolesAllowed("user")
+    @RolesAllowed("app")
     @Produces("application/json")
     open fun getOrte(): Response {
         val ergebnis: List<Ort>?
