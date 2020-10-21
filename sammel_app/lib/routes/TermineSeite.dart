@@ -419,14 +419,14 @@ class TermineSeiteState extends State<TermineSeite>
   }
 
   Future<void> joinAction(Termin termin) async {
-    await termineService.joinAction(termin, me);
+    await termineService.joinAction(termin.id);
     setState(() {
       termine.firstWhere((t) => t.id == termin.id).participants.add(me);
     });
   }
 
   Future<void> leaveAction(Termin termin) async {
-    await termineService.leaveAction(termin, me);
+    await termineService.leaveAction(termin.id);
     setState(() {
       var actionFromList = termine.firstWhere((t) => t.id == termin.id);
       actionFromList.participants.removeWhere((user) => user.id == me.id);

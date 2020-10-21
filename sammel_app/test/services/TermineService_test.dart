@@ -94,7 +94,7 @@ void main() {
     test('joinAction adds user to action', () async {
       service.termine[0].participants = [rosa()];
 
-      await service.joinAction(service.termine[0], karl());
+      await service.joinAction(1);
 
       expect(service.termine[0].participants.map((e) => e.id),
           containsAll([11, 12]));
@@ -103,7 +103,7 @@ void main() {
     test('joinAction ignores if user already partakes', () async {
       service.termine[0].participants = [rosa(), karl()];
 
-      await service.joinAction(service.termine[0], karl());
+      await service.joinAction(1);
 
       expect(service.termine[0].participants.map((e) => e.id),
           containsAll([11, 12]));
@@ -112,7 +112,7 @@ void main() {
     test('leaveAction removes user from action', () async {
       service.termine[0].participants = [rosa(), karl()];
 
-      await service.leaveAction(service.termine[0], karl());
+      await service.leaveAction(1);
 
       expect(
           service.termine[0].participants.map((e) => e.id), containsAll([12]));
@@ -121,22 +121,10 @@ void main() {
     test('leaveAction ignores if user doesnt partake', () async {
       service.termine[0].participants = [rosa()];
 
-      await service.leaveAction(service.termine[0], karl());
+      await service.leaveAction(1);
 
       expect(
           service.termine[0].participants.map((e) => e.id), containsAll([12]));
-    });
-  });
-
-  group('Participation serialises', () {
-    test('empty', () {
-      expect(
-          jsonEncode(Participation(null, null)), '{"action":null,"user":null}');
-    });
-
-    test('filled', () {
-      expect(jsonEncode(Participation(TerminTestDaten.einTermin(), karl())),
-          '{"action":${jsonEncode(TerminTestDaten.einTermin())},"user":{"id":11,"name":"Karl Marx","color":4294198070}}');
     });
   });
 
@@ -410,26 +398,20 @@ void main() {
       when(backend.post('service/termine/teilnahme', any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(null, 202));
 
-      await service.joinAction(TerminTestDaten.einTermin(), karl());
+      await service.joinAction(0);
 
-      verify(backend.post(
-          'service/termine/teilnahme',
-          '{"action":${jsonEncode(TerminTestDaten.einTermin())},'
-              '"user":${jsonEncode(karl())}}',
-          any));
+      verify(backend.post('service/termine/teilnahme',
+          jsonEncode(TerminTestDaten.einTermin()), any));
     });
 
     test('leaveAction calls correct path', () async {
       when(backend.post('service/termine/absage', any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(null, 202));
 
-      await service.leaveAction(TerminTestDaten.einTermin(), karl());
+      await service.leaveAction(0);
 
-      verify(backend.post(
-          'service/termine/absage',
-          '{"action":${jsonEncode(TerminTestDaten.einTermin())},'
-              '"user":${jsonEncode(karl())}}',
-          any));
+      verify(backend.post('service/termine/absage',
+          jsonEncode(TerminTestDaten.einTermin()), any));
     });
   });
 }
