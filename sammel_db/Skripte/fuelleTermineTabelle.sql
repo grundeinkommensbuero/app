@@ -8,9 +8,9 @@ INSERT INTO Termine (id, beginn, ende, ort, typ, lattitude, longitude, Details) 
 INSERT INTO Termine (id, beginn, ende, ort, typ, lattitude, longitude, Details) VALUES (3, '2020-02-11 23:00:00', '2020-02-12 02:00:00', 3, 'Sammeln', 52.49655, 13.43759, 3);
 INSERT INTO Termine (id, beginn, ende, ort, typ, lattitude, longitude, Details) VALUES (4, '2020-02-13 18:00:00', '2020-02-13 20:30:00', 2, 'Infoveranstaltung', 52.48612, 13.47192, 4);
 
-INSERT INTO Termin_Teilnehmer (termin, teilnehmer) VALUES (1, 1);
-INSERT INTO Termin_Teilnehmer (termin, teilnehmer) VALUES (1, 2);
-INSERT INTO Termin_Teilnehmer (termin, teilnehmer) VALUES (2, 1);
-INSERT INTO Termin_Teilnehmer (termin, teilnehmer) VALUES (3, 2);
-INSERT INTO Termin_Teilnehmer (termin, teilnehmer) VALUES (4, 1);
-INSERT INTO Termin_Teilnehmer (termin, teilnehmer) VALUES (4, 2);
+INSERT INTO Termin_Teilnehmer (termin, teilnehmer) VALUES (1, 11);
+INSERT INTO Termin_Teilnehmer (termin, teilnehmer) VALUES (1, 12);
+INSERT INTO Termin_Teilnehmer (termin, teilnehmer) VALUES (2, 11);
+INSERT INTO Termin_Teilnehmer (termin, teilnehmer) VALUES (3, 12);
+INSERT INTO Termin_Teilnehmer (termin, teilnehmer) VALUES (4, 11);
+INSERT INTO Termin_Teilnehmer (termin, teilnehmer) VALUES (4, 12);
