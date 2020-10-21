@@ -27,9 +27,9 @@ abstract class AbstractTermineService extends BackendService {
 
   deleteAction(Termin action, String token);
 
-  joinAction(Termin action, User user);
+  joinAction(int id);
 
-  leaveAction(Termin action, User user);
+  leaveAction(int id);
 ***REMOVED***
 
 class TermineService extends AbstractTermineService {
@@ -68,27 +68,15 @@ class TermineService extends AbstractTermineService {
         'service/termine/termin', jsonEncode(ActionWithToken(action, token)));
   ***REMOVED***
 
-  joinAction(Termin action, User user) async {
+  joinAction(int id) async {
     await post(
-        'service/termine/teilnahme', jsonEncode(Participation(action, user)));
+        'service/termine/teilnahme', jsonEncode(id));
   ***REMOVED***
 
-  leaveAction(Termin action, User user) async {
+  leaveAction(int id) async {
     await post(
-        'service/termine/absage', jsonEncode(Participation(action, user)));
+        'service/termine/absage', jsonEncode(id));
   ***REMOVED***
-***REMOVED***
-
-class Participation {
-  Termin action;
-  User user;
-
-  Participation(this.action, this.user);
-
-  toJson() => {
-        'action': action,
-        'user': user,
-      ***REMOVED***
 ***REMOVED***
 
 class DemoTermineService extends AbstractTermineService {
@@ -204,15 +192,15 @@ class DemoTermineService extends AbstractTermineService {
     termine.removeAt(termine.indexWhere((a) => a.id == action.id));
   ***REMOVED***
 
-  joinAction(Termin action, User user) {
-    var stored = termine.firstWhere((a) => a.id == action.id);
-    if (!stored.participants.map((e) => e.id).contains(user.id))
-      stored.participants.add(user);
+  joinAction(int id) {
+    var stored = termine.firstWhere((a) => a.id == id);
+    if (!stored.participants.map((e) => e.id).contains(1))
+      stored.participants.add(User(11, 'Ich', Colors.red));
   ***REMOVED***
 
-  leaveAction(Termin action, User user) {
-    var stored = termine.firstWhere((a) => a.id == action.id);
-    if (stored.participants.map((e) => e.id).contains(user.id))
-      stored.participants.remove(user);
+  leaveAction(int id) {
+    var stored = termine.firstWhere((a) => a.id == id);
+    if (stored.participants.map((e) => e.id).contains(1))
+      stored.participants.remove(User(11, 'Ich', Colors.red));
   ***REMOVED***
 ***REMOVED***

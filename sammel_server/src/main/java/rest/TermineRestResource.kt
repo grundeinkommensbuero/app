@@ -11,10 +11,15 @@ import org.jboss.logging.Logger
 import rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithoutDetails
 import java.time.LocalDateTime
 import javax.annotation.security.RolesAllowed
-import javax.ejb.*
+import javax.ejb.EJB
+import javax.ejb.EJBException
+import javax.ejb.Stateless
 import javax.ws.rs.*
+import javax.ws.rs.core.Context
 import javax.ws.rs.core.MediaType.APPLICATION_JSON
 import javax.ws.rs.core.Response
+import javax.ws.rs.core.SecurityContext
+
 
 @Stateless
 @Path("termine")
@@ -30,6 +35,9 @@ open class TermineRestResource {
 
     @EJB
     private lateinit var benutzerDao: BenutzerDao
+
+    @Context
+    lateinit var context: SecurityContext
 
     @POST
     @RolesAllowed("user")
@@ -134,31 +142,27 @@ open class TermineRestResource {
     ***REMOVED***
 
     @POST
-    @RolesAllowed("user")
     @Path("teilnahme")
+    @RolesAllowed("user")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
-    open fun meldeTeilnahmeAn(participation: Participation): Response {
-        if (participation.action?.id == null)
+    open fun meldeTeilnahmeAn(@QueryParam("id") id: Long?): Response {
+        if (id == null)
             return Response.status(422)
                     .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
                     .build()
-        val terminAusDb = dao.getTermin(participation.action!!.id!!)
+
+        val terminAusDb = dao.getTermin(id)
         if (terminAusDb == null)
             return Response.status(422)
                     .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
                     .build()
 
-        if (participation.user?.id == null)
-            return Response
-                    .status(422)
-                    .entity(RestFehlermeldung("Der angegebene Benutzer ist ungültig"))
-                    .build()
-        val userAusDb = benutzerDao.getBenutzer(participation.user!!.id!!)
+        val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
         if (userAusDb == null)
             return Response
-                    .status(422)
-                    .entity(RestFehlermeldung("Der angegebene Benutzer ist ungültig"))
+                    .status(500)
+                    .entity(RestFehlermeldung("Dein Benutzer konnte nicht gefunden werden"))
                     .build()
 
         if (terminAusDb.teilnehmer.map { it.id ***REMOVED***.contains(userAusDb.id))
@@ -173,29 +177,24 @@ open class TermineRestResource {
     @POST
     @Path("absage")
     @RolesAllowed("user")
-    @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
-    open fun sageTeilnahmeAb(participation: Participation): Response {
-        if (participation.action?.id == null)
+    open fun sageTeilnahmeAb(@QueryParam("id") id: Long?): Response {
+        if (id == null)
             return Response.status(422)
                     .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
                     .build()
-        val terminAusDb = dao.getTermin(participation.action!!.id!!)
+
+        val terminAusDb = dao.getTermin(id)
         if (terminAusDb == null)
             return Response.status(422)
                     .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
                     .build()
 
-        if (participation.user?.id == null)
-            return Response
-                    .status(422)
-                    .entity(RestFehlermeldung("Der angegebene Benutzer ist ungültig"))
-                    .build()
-        val userAusDb = benutzerDao.getBenutzer(participation.user!!.id!!)
+        val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
         if (userAusDb == null)
             return Response
-                    .status(422)
-                    .entity(RestFehlermeldung("Der angegebene Benutzer ist ungültig"))
+                    .status(500)
+                    .entity(RestFehlermeldung("Dein Benutzer konnte nicht gefunden werden"))
                     .build()
 
         val userAusListe = terminAusDb.teilnehmer.find { it.id == userAusDb.id ***REMOVED***
@@ -281,9 +280,5 @@ open class TermineRestResource {
             ***REMOVED***
         ***REMOVED***
     ***REMOVED***
-
-    data class Participation(
-            var user: BenutzerDto? = null,
-            var action: TerminDto? = null)
 ***REMOVED***
 

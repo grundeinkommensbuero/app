@@ -361,7 +361,7 @@ void main() {
       await tester.tap(find.byKey(Key('join action button')));
       await tester.pump();
 
-      verify(_terminService.joinAction(action, me)).called(1);
+      verify(_terminService.joinAction(action.id)).called(1);
       expect(state.termine[0].participants, containsAll([me]));
       expect(find.byKey(Key('join action button')), findsNothing);
       expect(find.byKey(Key('leave action button')), findsOneWidget);
@@ -393,7 +393,7 @@ void main() {
       await tester.tap(find.byKey(Key('leave action button')));
       await tester.pump();
 
-      verify(_terminService.leaveAction(action, me)).called(1);
+      verify(_terminService.leaveAction(action.id)).called(1);
       expect(state.termine[0].participants, isEmpty);
       expect(find.byKey(Key('leave action button')), findsNothing);
       expect(find.byKey(Key('join action button')), findsOneWidget);
