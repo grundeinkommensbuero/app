@@ -26,7 +26,7 @@ class ErrorService {
 
     if (e is AuthFehler) {
       pushMessage(
-          'Der hinterlegte Benutzer konnte nicht authentifiziert werden',
+          'Fehler bei Nutzer-Authentifizierung',
           '${e.message}${additional}$EMAIL');
       return;
     }
