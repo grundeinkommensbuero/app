@@ -1,15 +1,30 @@
 package shared
 
+import org.jboss.logging.Logger
+import rest.RestFehlermeldung
+import javax.ejb.EJBAccessException
 import javax.ejb.EJBException
 import javax.ws.rs.core.Response
 import javax.ws.rs.core.Response.Status.FORBIDDEN
+import javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR
 import javax.ws.rs.ext.ExceptionMapper
 import javax.ws.rs.ext.Provider
 
 @Provider
 class EjbAccessExceptionMapper : ExceptionMapper<EJBException?> {
+    private val LOG = Logger.getLogger(EjbAccessExceptionMapper::class.java)
+
     override
     fun toResponse(exception: EJBException?): Response {
-        return Response.status(FORBIDDEN).entity("{message: Du hast nicht die notwendigen Rechte um diese Funktion auszuführen***REMOVED***").build()
+        if (exception is EJBAccessException)
+            return Response.status(FORBIDDEN)
+                    .entity(RestFehlermeldung("Du hast nicht die notwendigen Rechte um diese Funktion auszuführen"))
+                    .build()
+        else {
+            LOG.error("EJB-Exception aufgetreten", exception)
+            return Response.status(INTERNAL_SERVER_ERROR)
+                    .entity(RestFehlermeldung("Ein unerwarteter Fehler ist aufgetreten: ${exception!!.localizedMessage***REMOVED***"))
+                    .build()
+        ***REMOVED***
     ***REMOVED***
 ***REMOVED***
