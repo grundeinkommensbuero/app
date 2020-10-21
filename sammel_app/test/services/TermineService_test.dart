@@ -395,22 +395,22 @@ void main() {
     ***REMOVED***);
 
     test('joinAction calls correct path', () async {
-      when(backend.post('service/termine/teilnahme', any, any))
+      when(backend.post(any, any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(null, 202));
 
       await service.joinAction(0);
 
-      verify(backend.post('service/termine/teilnahme',
+      verify(backend.post('service/termine/teilnahme?id=0',
           jsonEncode(TerminTestDaten.einTermin()), any));
     ***REMOVED***);
 
     test('leaveAction calls correct path', () async {
-      when(backend.post('service/termine/absage', any, any))
+      when(backend.post(any, any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(null, 202));
 
       await service.leaveAction(0);
 
-      verify(backend.post('service/termine/absage',
+      verify(backend.post('service/termine/absage?id=0',
           jsonEncode(TerminTestDaten.einTermin()), any));
     ***REMOVED***);
   ***REMOVED***);
