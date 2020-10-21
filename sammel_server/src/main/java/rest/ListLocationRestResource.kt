@@ -17,7 +17,7 @@ open class ListLocationRestResource {
 
     @GET
     @Path("actives")
-    @RolesAllowed("user")
+    @RolesAllowed("app")
     @Produces("application/json")
     open fun getActiveListLocations(): Response {
         val listLocations: List<ListLocation>? = dao.getActiveListLocations()

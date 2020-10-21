@@ -7,6 +7,8 @@ import database.benutzer.Benutzer
 import database.benutzer.BenutzerDao
 import database.termine.Termin
 import database.termine.TermineDao
+import org.apache.http.auth.BasicUserPrincipal
+import org.junit.Before
 import org.junit.Test
 
 import org.junit.Rule
@@ -20,7 +22,9 @@ import org.mockito.junit.MockitoRule
 import services.FirebaseService
 import services.FirebaseService.MissingMessageTarget
 import java.util.Collections.singletonList
+import javax.ws.rs.core.SecurityContext
 import kotlin.test.assertEquals
+import kotlin.test.expect
 
 class PushNotificationResourceTest {
     @Rule
@@ -35,6 +39,14 @@ class PushNotificationResourceTest {
 
     @Mock
     lateinit var benutzerDao: BenutzerDao
+
+    @Mock
+    lateinit var context: SecurityContext
+
+    @Before
+    fun setUp() {
+        whenever(context.userPrincipal).thenReturn(BasicUserPrincipal("11"))
+    ***REMOVED***
 
     @InjectMocks
     lateinit var resource: PushNotificationResource
@@ -144,6 +156,40 @@ class PushNotificationResourceTest {
     ***REMOVED***
 
     @Test()
+    fun `pushToParticipants liefert 403, wenn User nicht Teilnehmer ist`() {
+        val karl = Benutzer(11L, "Karl Marx", 4294198070L)
+        whenever(termineDao.getTermin(1L))
+                .thenReturn(Termin(1, null, null, null, null,
+                        singletonList(karl),
+                        52.48612, 13.47192, null))
+        whenever(benutzerDao.getFirebaseKeys(anyList())).thenReturn(singletonList("firebase-key 1"))
+        whenever(context.userPrincipal).thenReturn(BasicUserPrincipal("12")) // rosa statt karl
+
+        val notification = PushNotificationDto()
+        val data = emptyMap<String, String>()
+
+        var response = resource.pushToParticipants(PushMessageDto(notification, data), actionId = 1L)
+
+        assertEquals(response!!.status, 403)
+        assertEquals((response.entity as RestFehlermeldung).meldung, "Du bist nicht Teilnehmer dieser Aktion")
+        verify(firebase, never()).sendePushNachrichtAnEmpfaenger(any(), anyMap(), anyList())
+
+        // ohne Teilnehmer
+        whenever(termineDao.getTermin(1L))
+                .thenReturn(Termin(1, null, null, null, null,
+                        emptyList(),
+                        52.48612, 13.47192, null))
+        whenever(benutzerDao.getFirebaseKeys(anyList())).thenReturn(singletonList("firebase-key 1"))
+        whenever(context.userPrincipal).thenReturn(BasicUserPrincipal("12")) // rosa statt karl
+
+        response = resource.pushToParticipants(PushMessageDto(notification, data), actionId = 1L)
+
+        assertEquals(response!!.status, 403)
+        assertEquals((response.entity as RestFehlermeldung).meldung, "Du bist nicht Teilnehmer dieser Aktion")
+        verify(firebase, never()).sendePushNachrichtAnEmpfaenger(any(), anyMap(), anyList())
+    ***REMOVED***
+
+    @Test()
     fun `pushToParticipants sendet Nachricht an Firebase weiter an mehrere Teilnehmer`() {
         val karl = Benutzer(11L, "Karl Marx", 4294198070L)
         whenever(termineDao.getTermin(1L))
@@ -160,21 +206,6 @@ class PushNotificationResourceTest {
 
         verify(firebase, atLeastOnce()).sendePushNachrichtAnEmpfaenger(notification, data,
                 listOf("firebase-key 1", "firebase-key 2", "firebase-key 3"))
-    ***REMOVED***
-
-    @Test()
-    fun `pushToParticipants sendet Nachricht an Firebase weiter an keine Teilnehmer`() {
-        whenever(termineDao.getTermin(1L))
-                .thenReturn(Termin(1, null, null, null, null,
-                        emptyList(),
-                        52.48612, 13.47192, null))
-
-        val notification = PushNotificationDto()
-        val data = emptyMap<String, String>()
-
-        resource.pushToParticipants(PushMessageDto(notification, data), actionId = 1L)
-
-        verify(firebase, never()).sendePushNachrichtAnEmpfaenger(any(), any(), anyList())
     ***REMOVED***
 
     @Test()
