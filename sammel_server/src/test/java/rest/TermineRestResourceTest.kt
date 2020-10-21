@@ -323,20 +323,6 @@ class TermineRestResourceTest {
     }
 
     @Test
-    fun `meldeTeilnahmeAn liefert 422 bei unbekannter BenutzerId`() {
-        whenever(dao.getTermin(1L)).thenReturn(terminOhneTeilnehmerMitDetails())
-
-        val user = BenutzerDto.convertFromBenutzer(karl())
-        user.id = null
-
-        val response = resource.meldeTeilnahmeAn(12)
-
-        assertEquals(response.status, 500)
-        assertTrue(response.entity is RestFehlermeldung)
-        assertEquals((response.entity as RestFehlermeldung).meldung, "Dein Benutzer konnte nicht gefunden werden")
-    }
-
-    @Test
     fun `meldeTeilnahmeAn ergaenzt TerminTeilnehmer um Benutzer`() {
         whenever(dao.getTermin(1L)).thenReturn(terminOhneTeilnehmerMitDetails())
         whenever(benutzerDao.getBenutzer(11L)).thenReturn(karl())
