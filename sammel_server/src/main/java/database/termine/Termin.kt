@@ -42,7 +42,7 @@ class Termin {
     var teilnehmer: List<Benutzer> = emptyList()
 
     @OneToOne(cascade = [ALL], fetch = LAZY)
-    @JoinColumn(name = "details", referencedColumnName = "id")
+    @PrimaryKeyJoinColumn
     var details: TerminDetails? = null
 
     @Suppress("unused")

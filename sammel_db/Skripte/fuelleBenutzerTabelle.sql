@@ -18,7 +18,9 @@ INSERT INTO Credentials (id, secret, salt, iterations, firebasekey) VALUES (12, 
 
 INSERT INTO Roles (id, role) VALUES (1, 'app');
 INSERT INTO Roles (id, role) VALUES (2, 'website');
-INSERT INTO Roles (id, role) VALUES (11, 'user');
 INSERT INTO Roles (id, role) VALUES (11, 'app');
-INSERT INTO Roles (id, role) VALUES (12, 'user');
+INSERT INTO Roles (id, role) VALUES (11, 'user');
+INSERT INTO Roles (id, role) VALUES (11, 'named');
 INSERT INTO Roles (id, role) VALUES (12, 'app');
+INSERT INTO Roles (id, role) VALUES (12, 'user');
+INSERT INTO Roles (id, role) VALUES (12, 'named');

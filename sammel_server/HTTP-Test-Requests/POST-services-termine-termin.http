@@ -1,34 +1,42 @@
 POST http://127.0.0.1:18080/service/termine/termin
-Accept: */*
-Cache-Control: no-cache
+Accept: application/json
 Content-Type: application/json
+Authorization: Basic MTE6YWM0MzA5NjAtMDVlYi0xMWViLThhMjYtZmRjNzY4M2E4NGJj
 
 {
-  "beginn": "2020-02-05T09:00:00",
-  "ende": "2020-02-05T12:00:00",
-  "id": 1,
-  "ort": {
-    "bezirk": "Friedrichshain-Kreuzberg",
+  "token": "token1",
+  "action": {
     "id": 1,
-    "ort": "F-Hain Nordkiez"
-  },
-  "typ": "Sammeln",
-  "teilnehmer": [
-    {
-      "id": 11,
-      "name": "Karl Marx",
-      "telefonnummer": "0176336423"
+    "typ": "Sammeln",
+    "beginn": "2020-02-05T09:00:00",
+    "ende": "2020-02-05T12:00:00",
+    "ort": {
+      "bezirk": "Friedrichshain-Kreuzberg",
+      "id": 1,
+      "lattitude": 52.51579,
+      "longitude": 13.45399,
+      "ort": "Friedrichshain Nordkiez"
     },
-    {
-      "id": 2,
-      "name": "Bini Adamczak",
-      "passwort": "hash2"
+    "lattitude": 52.52116,
+    "longitude": 13.41331,
+    "participants": [
+      {
+        "id": 11,
+        "name": "Karl Marx",
+        "color": 1
+      },
+      {
+        "id": 12,
+        "name": "Rosa Luxemburg",
+        "color": 2
+      }
+    ],
+    "details": {
+      "id": 1,
+      "kommentar": "ein anderer kommentar",
+      "kontakt": "kalle@revo.de",
+      "treffpunkt": "Weltzeituhr"
     }
-  ],
-  "details": {
-    "kommentar": "Wir sammeln um den Bersarin-Platz herum",
-    "treffpunkt": "Bersarin-Platz, Bushaltestelle",
-    "kontakt": "Meine Handynummer ist 01234567"
   }
 }
 

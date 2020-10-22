@@ -7,7 +7,7 @@ import javax.persistence.*
 class TerminDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     var id: Long = 0
 
     @Column
