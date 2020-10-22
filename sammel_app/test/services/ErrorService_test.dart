@@ -53,7 +53,7 @@ void main() {
 
       expect(ErrorService.messageQueue.length, 1);
       expect(ErrorService.messageQueue[0][0],
-          'Der hinterlegte Benutzer konnte nicht authentifiziert werden');
+          'Fehler bei Nutzer-Authentifizierung');
       expect(ErrorService.messageQueue[0][1],
           'Nachricht\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com');
     ***REMOVED***);

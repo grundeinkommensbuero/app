@@ -400,8 +400,7 @@ void main() {
 
       await service.joinAction(0);
 
-      verify(backend.post('service/termine/teilnahme?id=0',
-          jsonEncode(TerminTestDaten.einTermin()), any));
+      verify(backend.post('service/termine/teilnahme', '0', any));
     ***REMOVED***);
 
     test('leaveAction calls correct path', () async {
@@ -410,8 +409,7 @@ void main() {
 
       await service.leaveAction(0);
 
-      verify(backend.post('service/termine/absage?id=0',
-          jsonEncode(TerminTestDaten.einTermin()), any));
+      verify(backend.post('service/termine/absage', '0', any));
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***
