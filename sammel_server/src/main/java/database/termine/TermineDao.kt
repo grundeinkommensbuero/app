@@ -1,6 +1,7 @@
 package database.termine
 
 import database.DatabaseException
+import org.jboss.logging.Logger
 import rest.TermineFilter
 import shared.toDate
 import java.time.LocalDate
@@ -12,6 +13,7 @@ import javax.persistence.TypedQuery
 
 @Stateless
 open class TermineDao {
+    val LOG = Logger.getLogger(TermineDao::class.java)
 
     @Inject
     @PersistenceContext(unitName = "mariaDB")
@@ -53,12 +55,19 @@ open class TermineDao {
     }
 
     open fun aktualisiereTermin(termin: Termin): Termin {
+        LOG.debug("Aktualisiere Aktion ${termin}")
+        if (termin.id != termin.details?.termin_id) {
+            throw DatenkonsistenzException("Termin und TerminDetails stimmen nicht überein")
+        }
+        termin.details!!.termin = termin
         entityManager.merge(termin)
         entityManager.flush()
         return termin
     }
 
     open fun erstelleNeuenTermin(termin: Termin): Termin {
+        termin.details!!.termin = termin
+        LOG.debug("Speichere Aktion ${termin}")
         entityManager.persist(termin)
         entityManager.flush()
         return termin
@@ -93,6 +102,9 @@ open class TermineDao {
         // aus irgendeinem Grund funktioniert ein einfaches Remove hier nicht, sondern es muss geprüft werden
         // ob das Token vom EntityManager verwaltet wird und um ergänzt werden, bevor es gelöscht werden kann
         // Muss das bei anderen Lösch-Funktionen auch passieren?
-        entityManager.remove(if(entityManager.contains(token)) token else entityManager.merge(token))
+        entityManager.remove(if (entityManager.contains(token)) token else entityManager.merge(token))
     }
+}
+
+class DatenkonsistenzException(message: String?) : Exception(message) {
 }

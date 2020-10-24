@@ -55,7 +55,7 @@ class TermineRestResourceTest {
         val ende = now()
         val terminDto = TerminDto(1L, beginn, ende, nordkiez(), "Sammeln", 0.0, 1.0,
                 listOf(BenutzerDto.convertFromBenutzer(karl())),
-                TerminDetailsDto(1L, "treffpunkt", "kommentar", "kontakt"))
+                TerminDetailsDto("treffpunkt", "kommentar", "kontakt"))
 
         val termin = terminDto.convertToTermin()
 
@@ -83,7 +83,6 @@ class TermineRestResourceTest {
         assertEquals(response.status, 200)
         val termin = response.entity as TerminDto
         assertEquals(termin.id, terminOhneTeilnehmerMitDetails().id)
-        assertEquals(termin.details?.id, terminOhneTeilnehmerMitDetails().details!!.id)
     }
 
     @Test
@@ -184,7 +183,7 @@ class TermineRestResourceTest {
     }
 
     @Test
-    fun `aktualisiereTermin reicht Fehler weiter bei unbekannter Id`() {
+    fun `aktualisiereTermin reicht Fehler weiter bei Exception`() {
         val terminDto = terminDto()
         whenever(dao.aktualisiereTermin(any())).thenThrow(EJBException())
         whenever(dao.loadToken(any())).thenReturn(Token(1L, "token"))
