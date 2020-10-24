@@ -5,6 +5,7 @@ COPY Wildfly/mariaDB /opt/jboss/wildfly/modules/org/mariadb/main
 
 # Configuration kopieren
 COPY Wildfly/configuration /opt/jboss/wildfly/standalone/configuration/
+COPY Wildfly/bin /opt/jboss/wildfly/bin/
 
 # Artefakte zum Deployment kopieren
 COPY target/*.war /opt/jboss/wildfly/standalone/deployments/
@@ -21,3 +22,4 @@ CMD /opt/jboss/wildfly/start_wildfly_after_db.sh $DB_URL $DB_PORT $DB_SCHEMA $DB
 
 # Console Port
 EXPOSE 9990
+EXPOSE 8787
