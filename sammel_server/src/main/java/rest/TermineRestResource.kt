@@ -37,7 +37,7 @@ open class TermineRestResource {
     private lateinit var benutzerDao: BenutzerDao
 
     @Context
-    lateinit var context: SecurityContext
+    private lateinit var context: SecurityContext
 
     @POST
     @RolesAllowed("user")
@@ -80,15 +80,18 @@ open class TermineRestResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun legeNeuenTerminAn(actionAndToken: ActionWithTokenDto): Response {
-        if (actionAndToken.action != null) {
-            val updatedAction = dao.erstelleNeuenTermin(actionAndToken.action!!.convertToTermin())
-            val token = actionAndToken.token
-            if (!token.isNullOrEmpty()) dao.storeToken(updatedAction.id, token)
+        if (actionAndToken.action == null)
             return Response
-                    .ok()
-                    .entity(convertFromTerminWithoutDetails(updatedAction))
+                    .status(422)
+                    .entity(RestFehlermeldung("Keine Aktion angegeben"))
                     .build()
-        ***REMOVED*** else return Response.status(422).build()
+        val updatedAction = dao.erstelleNeuenTermin(actionAndToken.action!!.convertToTermin())
+        val token = actionAndToken.token
+        if (!token.isNullOrEmpty()) dao.storeToken(updatedAction.id, token)
+        return Response
+                .ok()
+                .entity(convertFromTerminWithoutDetails(updatedAction))
+                .build()
     ***REMOVED***
 
     @POST
@@ -97,7 +100,7 @@ open class TermineRestResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun aktualisiereTermin(actionAndToken: ActionWithTokenDto): Response {
-        if (actionAndToken.action == null || actionAndToken.action!!.id == null) return noValidActionResponse
+        if (actionAndToken.action?.id == null) return noValidActionResponse
 
         val tokenFromDb = dao.loadToken(actionAndToken.action!!.id!!)?.token
         if (tokenFromDb != null && tokenFromDb != actionAndToken.token) return Response.status(403)
@@ -107,10 +110,8 @@ open class TermineRestResource {
         try {
             dao.aktualisiereTermin(actionAndToken.action!!.convertToTermin())
         ***REMOVED*** catch (e: EJBException) {
-            LOG.error("Fehler beim Mergen eines Termins. " +
-                    "Möglicherweise hat ein Client versucht einen Termin mit unbekannter ID zu aktualisieren\n" +
-                    "Termin: ${actionAndToken.action***REMOVED***\n", e)
-            return Response.status(422).build()
+            LOG.error("Fehler beim Mergen des Termins: Termin: ${actionAndToken.action***REMOVED***\n", e)
+            return Response.status(422).entity(e.message).build()
         ***REMOVED***
         return Response
                 .ok()
@@ -229,7 +230,7 @@ open class TermineRestResource {
                     lattitude = lattitude,
                     longitude = longitude,
                     teilnehmer = if (participants == null) emptyList() else participants!!.map { it.convertToBenutzer() ***REMOVED***,
-                    details = details?.convertToTerminDetails())
+                    details = details?.convertToTerminDetails(id))
         ***REMOVED***
 
         companion object {
@@ -256,14 +257,13 @@ open class TermineRestResource {
             var token: String? = null)
 
     data class TerminDetailsDto(
-            var id: Long? = null,
             var treffpunkt: String? = null,
             var kommentar: String? = null,
             var kontakt: String? = null) {
 
-        fun convertToTerminDetails(): TerminDetails {
+        fun convertToTerminDetails(id: Long?): TerminDetails {
             return TerminDetails(
-                    id = this.id ?: 0,
+                    termin_id = id,
                     treffpunkt = this.treffpunkt,
                     kommentar = this.kommentar,
                     kontakt = this.kontakt)
@@ -273,7 +273,6 @@ open class TermineRestResource {
             fun convertFromTerminDetails(details: TerminDetails?): TerminDetailsDto? {
                 if (details == null) return null
                 return TerminDetailsDto(
-                        id = details.id,
                         treffpunkt = details.treffpunkt,
                         kommentar = details.kommentar,
                         kontakt = details.kontakt)

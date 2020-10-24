@@ -8,7 +8,7 @@ import javax.persistence.CascadeType.*
 import javax.persistence.FetchType.EAGER
 import javax.persistence.FetchType.LAZY
 
-@Entity()
+@Entity
 @Table(name = "Termine")
 class Termin {
 
@@ -41,7 +41,7 @@ class Termin {
             inverseJoinColumns = [JoinColumn(name = "Teilnehmer", referencedColumnName = "id")])
     var teilnehmer: List<Benutzer> = emptyList()
 
-    @OneToOne(cascade = [ALL], fetch = LAZY)
+    @OneToOne(cascade = [ALL], fetch = LAZY, mappedBy = "termin")
     @PrimaryKeyJoinColumn
     var details: TerminDetails? = null
 
