@@ -2,6 +2,7 @@ package rest
 
 import database.benutzer.BenutzerDao
 import database.termine.TermineDao
+import org.jboss.logging.Logger
 import services.FirebaseService
 import services.FirebaseService.MissingMessageTarget
 import javax.ejb.EJB
@@ -12,6 +13,7 @@ import javax.ws.rs.core.MediaType
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 open class PushNotificationResource {
+    private val LOG = Logger.getLogger(PushNotificationResource::class.java)
 
     @EJB
     private lateinit var firebase: FirebaseService
@@ -33,10 +35,12 @@ open class PushNotificationResource {
     @Path("action/{actionId***REMOVED***")
     @POST
     open fun pushToParticipants(nachricht: PushMessageDto, @PathParam("actionId") actionId: Long) {
+        LOG.info("Pushe Nachricht für Aktion $actionId")
         val teilnehmer = termineDao.getTermin(actionId)?.teilnehmer
         if (teilnehmer == null) return
         val empfaenger = benutzerDao.getFirebaseKeys(teilnehmer)
         if (empfaenger.isEmpty()) return
+        LOG.info("Pushe Nachricht an Keys $empfaenger")
         firebase.sendePushNachrichtAnEmpfaenger(nachricht.notification, nachricht.data, empfaenger)
     ***REMOVED***
 
