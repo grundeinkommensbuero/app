@@ -262,6 +262,7 @@ class ChatWindowState extends State<ChatWindow>
       List<Widget> users = participants.where((user) => user.name != null && user.name != '').map((user) =>
           create_user_widget(user.name, user.color)).toList();
       int a_count = participants.where((user) => user.name == null || user.name == '').length;
+      users.insert(0, Padding(padding: EdgeInsets.only(left: 5, top: 5, bottom: 5), child: Text('${users.length+a_count***REMOVED*** Teilnehmer im Chat', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))));
       if(a_count > 0)
         {
           users.add(create_user_widget('+ $a_count weitere Teilnehmer', Colors.black));
