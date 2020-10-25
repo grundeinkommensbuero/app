@@ -3,18 +3,20 @@ import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 
 import 'BackendService.dart';
+import 'UserService.dart';
 
 abstract class AbstractListLocationService extends BackendService {
   Future<List<ListLocation>> getActiveListLocations();
 
-  AbstractListLocationService(userService, [Backend backendMock])
+  AbstractListLocationService(AbstractUserService userService,
+      [Backend backendMock])
       : super(userService, backendMock);
 }
 
 class ListLocationService extends AbstractListLocationService {
   List<ListLocation> cache;
 
-  ListLocationService(userService, [Backend backendMock])
+  ListLocationService(AbstractUserService userService, [Backend backendMock])
       : super(userService, backendMock);
 
   @override

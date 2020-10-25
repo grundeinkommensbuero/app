@@ -121,5 +121,7 @@ class InvalidUserException implements Exception {}
 class DemoUserService extends AbstractUserService {
   DemoUserService() : super() {
     user = Future.value(User(1, 'Ich', Colors.red));
+    userAuthCreds = Future.value('userCreds');
+
   }
 }
