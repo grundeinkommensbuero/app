@@ -40,6 +40,7 @@ open class BenutzerDao {
 
 
     open fun legeNeueCredentialsAn(credentials: Credentials) {
+        throw(Exception("Lalilu"))
         entityManager.persist(credentials)
     ***REMOVED***
 

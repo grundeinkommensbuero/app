@@ -1,13 +1,14 @@
 POST http://127.0.0.1:18080/service/benutzer/neu
-Accept: */*
-Cache-Control: no-cache
+Accept: application/json
 Content-Type: application/json
+Authorization: Basic MTpiOTdjNzU5Ny1mNjY5LTRmZWItOWJhMi0zMjE0YzE4MjIzMzk=
 
 {
   "secret": "geheimnis",
-  "firebasKey": "firebase key",
-  "benutzer": {
-    "name": "Karl Marx",
+  "firebaseKey": "firebase key",
+  "user": {
+    "name": "Neuer Benutzer",
+    "color": 12345678
   ***REMOVED***
 ***REMOVED***
 
