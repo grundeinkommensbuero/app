@@ -71,8 +71,8 @@ class TermineService extends AbstractTermineService {
 
   joinAction(int id) async {
     try {
-      await post('service/termine/teilnahme', jsonEncode(Equipment()),
-          parameters: {"id": "1"***REMOVED***);
+      await post('service/termine/teilnahme', jsonEncode(null),
+          parameters: {'id': '$id'***REMOVED***);
     ***REMOVED*** catch (e) {
       ErrorService.handleError(e);
     ***REMOVED***
@@ -80,25 +80,11 @@ class TermineService extends AbstractTermineService {
 
   leaveAction(int id) async {
     try {
-      await post('service/termine/absage', jsonEncode(Equipment()),
-          parameters: {"id": "1"***REMOVED***);
+      await post('service/termine/absage', jsonEncode(null),
+          parameters: {'id': '$id'***REMOVED***);
     ***REMOVED*** catch (e) {
       ErrorService.handleError(e);
     ***REMOVED***
-  ***REMOVED***
-***REMOVED***
-
-class Equipment {
-  int klemmbretter;
-  int westen;
-  int listen;
-  String sonstiges;
-
-  toJson() => {
-    'klemmbretter':klemmbretter,
-    'westen':westen,
-    'listen':listen,
-    'sonstiges':sonstiges,
   ***REMOVED***
 ***REMOVED***
 

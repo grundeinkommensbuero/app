@@ -151,7 +151,7 @@ open class TermineRestResource {
     @RolesAllowed("user")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
-    open fun meldeTeilnahmeAn(@QueryParam("id") id: Long?, mitbringsel: Mitbringsel?): Response {
+    open fun meldeTeilnahmeAn(@QueryParam("id") id: Long?): Response {
         if (id == null)
             return Response.status(422)
                     .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jiffy/jiffy.dart';
@@ -394,22 +392,32 @@ void main() {
           any));
     ***REMOVED***);
 
-    test('joinAction calls correct path', () async {
+    test('joinAction calls correct path with parameters', () async {
       when(backend.post(any, any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(null, 202));
 
       await service.joinAction(0);
 
-      verify(backend.post('service/termine/teilnahme', '0', any));
+      Map<String, String> parameters = verify(
+              backend.post('service/termine/teilnahme', any, any, captureAny))
+          .captured
+          .single;
+      expect(parameters.length, 1);
+      expect(parameters['id'], '0');
     ***REMOVED***);
 
-    test('leaveAction calls correct path', () async {
+    test('leaveAction calls correct path with parameters', () async {
       when(backend.post(any, any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(null, 202));
 
       await service.leaveAction(0);
 
-      verify(backend.post('service/termine/absage', '0', any));
+      Map<String, String> parameters = verify(
+          backend.post('service/termine/absage', any, any, captureAny))
+          .captured
+          .single;
+      expect(parameters.length, 1);
+      expect(parameters['id'], '0');
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***
