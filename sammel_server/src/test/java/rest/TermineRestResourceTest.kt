@@ -347,8 +347,8 @@ class TermineRestResourceTest {
         val termin = terminOhneTeilnehmerMitDetails()
         termin.teilnehmer = listOf(karl())
         whenever(dao.getTermin(1L)).thenReturn(termin)
-        whenever(context.userPrincipal).thenReturn(BasicUserPrincipal("13"))
-        whenever(benutzerDao.getBenutzer(13L)).thenReturn(Benutzer(13, "Bini Adamczak", 3L))
+        whenever(context.userPrincipal).thenReturn(BasicUserPrincipal("11"))
+        whenever(benutzerDao.getBenutzer(11)).thenReturn(karl())
 
         val response = resource.meldeTeilnahmeAn(1)
 
@@ -402,18 +402,6 @@ class TermineRestResourceTest {
         assertEquals(response.status, 422)
         assertTrue(response.entity is RestFehlermeldung)
         assertEquals((response.entity as RestFehlermeldung).meldung, "Die angegebene Aktion ist ungültig")
-    ***REMOVED***
-
-    @Test
-    fun `sageTeilnahmeAb liefert 500 bei unbekannter BenutzerId`() {
-        whenever(dao.getTermin(1L)).thenReturn(terminOhneTeilnehmerMitDetails())
-        whenever(benutzerDao.getBenutzer(11L)).thenReturn(null)
-
-        val response = resource.meldeTeilnahmeAn(1)
-
-        assertEquals(response.status, 500)
-        assertTrue(response.entity is RestFehlermeldung)
-        assertEquals((response.entity as RestFehlermeldung).meldung, "Dein Benutzer konnte nicht gefunden werden")
     ***REMOVED***
 
     @Test
