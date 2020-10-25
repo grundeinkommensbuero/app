@@ -17,10 +17,7 @@ create table TerminDetails
     termin_id         int auto_increment        primary key,
     treffpunkt text     null,
     kommentar  longtext null,
-    kontakt    text     null,
-    constraint TerminDetails_Termine_fk
-        foreign key (termin_id) references Termine (id)
-            on update cascade on delete cascade
+    kontakt    text     null
 )
     comment 'naehere Infos zu Terminen';
 

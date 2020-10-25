@@ -24,7 +24,7 @@ class ChatWindow extends StatefulWidget {
   ChatWindow(this.channel, this.termin, {Key key}) : super(key: key) {}
 
   @override
-  ChatWindowState createState() => ChatWindowState(channel);
+  ChatWindowState createState() => ChatWindowState(channel, termin);
 }
 
 abstract class ChannelChangeListener {
@@ -37,9 +37,10 @@ class ChatWindowState extends State<ChatWindow>
 
   bool textFieldHasFocus = false;
 
-  ChatWindowState(this.channel) {}
+  ChatWindowState(this.channel, this.termin) {}
 
   SimpleMessageChannel channel = null;
+  Termin termin = null;
   User user = null;
   AbstractPushService pushService = null;
   TextEditingController textEditingController = TextEditingController();
@@ -159,10 +160,13 @@ class ChatWindowState extends State<ChatWindow>
                               message.text,
                               textScaleFactor: 1.2,
                             )),
-                        Text(
+                       Row( mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [Text(
                           formatDateTime(message.sending_time),
                           textScaleFactor: 0.8,
-                        )
+                        ), SizedBox(height: 0, width: 3,),
+                              message.obtained_from_server ? Icon(Icons.check_circle, size: 12,) : Icon(Icons.check_circle_outline, size: 12)])
                       ]))));
       alignment = Align(child: card, alignment: Alignment.topRight);
     } else {
@@ -189,10 +193,10 @@ class ChatWindowState extends State<ChatWindow>
                               message.text,
                               textScaleFactor: 1.2,
                             )),
-                        Text(
+                        Row(children: [Text(
                           formatDateTime(message.sending_time),
                           textScaleFactor: 0.8,
-                        )
+                        ), message.obtained_from_server ? Icon(Icons.check_circle_outline) : Icon(Icons.check_circle)])
                       ]))));
       alignment = Align(child: card, alignment: Alignment.topLeft);
     }
@@ -224,7 +228,7 @@ class ChatWindowState extends State<ChatWindow>
             icon: const Icon(Icons.people),
             tooltip: 'Show Chat Member',
             onPressed: () {
-              openMemberPage(context);
+              openMemberPage(context, termin.participants);
             },
           ),
           /* IconButton(
@@ -237,29 +241,36 @@ class ChatWindowState extends State<ChatWindow>
         ]);
   }
 
-  void openMemberPage(BuildContext context) {
+  void openMemberPage(BuildContext context, List<User> participants) {
     Navigator.push(context, MaterialPageRoute(
       builder: (BuildContext context) {
         return Scaffold(
           appBar: AppBar(
             title: Text('Members'),
           ),
-          body: Center(
-            child: create_member_list_widget(),
-          ),
+          body: create_member_list_widget(participants),
         );
       },
     ));
   }
 
-  Widget create_member_list_widget() {
-    List<String> member_names = channel.get_member_names();
-    if (member_names == null) {
-      return Text('no members yet in the channel');
+  Widget create_member_list_widget(List<User> participants) {
+
+    if (participants.length == 0) {
+      return Text('Keine Teilnehmer');
     } else {
-      return Column(children: member_names.map((name) => Text(name)).toList());
+      List<Widget> users = participants.where((user) => user.name != null && user.name != '').map((user) =>
+          create_user_widget(user.name, user.color)).toList();
+      int a_count = participants.where((user) => user.name == null || user.name == '').length;
+      if(a_count > 0)
+        {
+          users.add(create_user_widget('+ $a_count weitere Teilnehmer', Colors.black));
+        }
+      return Column(children: users);
     }
   }
+
+  Padding create_user_widget(String user_name, Color user_color) => Padding(padding: EdgeInsets.only(left: 5, top: 5, bottom: 5), child: Row(children: [Icon(Icons.person, color: user_color,),Text(user_name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))]));
 
    onSendMessage(String text) async {
 
@@ -302,6 +313,7 @@ class ChatWindowState extends State<ChatWindow>
     pushService.pushToAction(widget.termin.id, mpd, PushNotification("New Chat Message", "Open App to view Message"));
     textEditingController.clear();
     myFocusNode.unfocus();
+    channel.channelCallback(message);
   }
 
   @override

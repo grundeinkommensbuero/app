@@ -34,10 +34,14 @@ class SimpleMessageChannel extends Channel
   @override
   Future<void> channelCallback(Message message) {
     // TODO: implement channelCallback
-      if(!channel_messages.contains(message))
-        {
-          channel_messages.add(message);
-        }
+
+      List<Message> contains_message = channel_messages.map((e) => message.isMessageEqual(e) ? e : null).where((element) => element != null).toList();
+      if(contains_message.isEmpty) {
+        channel_messages.add(message);
+      }
+      else{
+        contains_message[0].obtained_from_server = true;
+      }
 
       if(ccl != null)
         {

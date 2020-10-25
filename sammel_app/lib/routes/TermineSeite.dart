@@ -445,7 +445,7 @@ class TermineSeiteState extends State<TermineSeite>
   Future<void> joinAction(Termin termin) async {
     Provider.of<ChatMessageService>(context)
         .get_simple_message_channel("channel:${termin.id}");
-    await termineService.joinAction(termin, me);
+    await termineService.joinAction(termin.id);
     setState(() {
       termine.firstWhere((t) => t.id == termin.id).participants.add(me);
     });
