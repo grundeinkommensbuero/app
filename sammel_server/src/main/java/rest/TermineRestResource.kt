@@ -9,6 +9,7 @@ import database.termine.TermineDao
 import database.termine.Token
 import org.jboss.logging.Logger
 import rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithoutDetails
+import services.FirebaseService
 import java.time.LocalDateTime
 import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
@@ -35,6 +36,9 @@ open class TermineRestResource {
 
     @EJB
     private lateinit var benutzerDao: BenutzerDao
+
+    @EJB
+    private lateinit var firebase: FirebaseService
 
     @Context
     private lateinit var context: SecurityContext
@@ -147,30 +151,26 @@ open class TermineRestResource {
     @RolesAllowed("user")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
-    open fun meldeTeilnahmeAn(@QueryParam("id") id: Long?): Response {
+    open fun meldeTeilnahmeAn(@QueryParam("id") id: Long?, mitbringsel: Mitbringsel?): Response {
         if (id == null)
             return Response.status(422)
                     .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
                     .build()
 
-        val terminAusDb = dao.getTermin(id)
-        if (terminAusDb == null)
+        val aktion = dao.getTermin(id)
+        if (aktion == null)
             return Response.status(422)
                     .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
                     .build()
 
         val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
-        if (userAusDb == null)
-            return Response
-                    .status(500)
-                    .entity(RestFehlermeldung("Dein Benutzer konnte nicht gefunden werden"))
-                    .build()
 
-        if (terminAusDb.teilnehmer.map { it.id ***REMOVED***.contains(userAusDb.id))
+        if (aktion.teilnehmer.map { it.id ***REMOVED***.contains(userAusDb!!.id))
             return Response.accepted().build()
 
-        terminAusDb.teilnehmer = terminAusDb.teilnehmer.plus(userAusDb)
-        dao.aktualisiereTermin(terminAusDb)
+        aktion.teilnehmer = aktion.teilnehmer.plus(userAusDb)
+        dao.aktualisiereTermin(aktion)
+        firebase.informiereUeberTeilnahme(userAusDb, aktion)
 
         return Response.accepted().build()
     ***REMOVED***
@@ -192,19 +192,14 @@ open class TermineRestResource {
                     .build()
 
         val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
-        if (userAusDb == null)
-            return Response
-                    .status(500)
-                    .entity(RestFehlermeldung("Dein Benutzer konnte nicht gefunden werden"))
-                    .build()
-
-        val userAusListe = terminAusDb.teilnehmer.find { it.id == userAusDb.id ***REMOVED***
+        val userAusListe = terminAusDb.teilnehmer.find { it.id == userAusDb!!.id ***REMOVED***
 
         if (userAusListe == null)
             return Response.accepted().build()
 
         terminAusDb.teilnehmer -= userAusListe
         dao.aktualisiereTermin(terminAusDb)
+        firebase.informiereUeberAbsage(userAusDb!!, terminAusDb)
 
         return Response.accepted().build()
     ***REMOVED***

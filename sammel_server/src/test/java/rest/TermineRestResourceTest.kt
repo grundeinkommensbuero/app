@@ -2,11 +2,14 @@ package rest
 
 import TestdatenVorrat.Companion.karl
 import TestdatenVorrat.Companion.nordkiez
+import TestdatenVorrat.Companion.rosa
 import TestdatenVorrat.Companion.terminDto
+import TestdatenVorrat.Companion.terminMitTeilnehmerMitDetails
 import TestdatenVorrat.Companion.terminOhneTeilnehmerMitDetails
 import TestdatenVorrat.Companion.terminOhneTeilnehmerOhneDetails
 import com.nhaarman.mockitokotlin2.*
 import database.DatabaseException
+import database.benutzer.Benutzer
 import database.benutzer.BenutzerDao
 import database.termine.Termin
 import database.termine.TermineDao
@@ -21,6 +24,7 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import rest.TermineRestResource.*
+import services.FirebaseService
 import java.time.LocalDateTime.now
 import javax.ejb.EJBException
 import javax.ws.rs.core.Response
@@ -37,6 +41,9 @@ class TermineRestResourceTest {
 
     @Mock
     private lateinit var benutzerDao: BenutzerDao
+
+    @Mock
+    private lateinit var firebase: FirebaseService
 
     @Mock
     private lateinit var context: SecurityContext
@@ -305,7 +312,7 @@ class TermineRestResourceTest {
 
     @Test
     fun `meldeTeilnahmeAn liefert 422 bei fehlender AktionsId`() {
-        val response = resource.meldeTeilnahmeAn(null)
+        val response = resource.meldeTeilnahmeAn(null, null)
 
         assertEquals(response.status, 422)
         assertTrue(response.entity is RestFehlermeldung)
@@ -314,7 +321,7 @@ class TermineRestResourceTest {
 
     @Test
     fun `meldeTeilnahme an liefert 422 bei unbekannter AktionsId`() {
-        val response = resource.meldeTeilnahmeAn(1)
+        val response = resource.meldeTeilnahmeAn(1, null)
 
         assertEquals(response.status, 422)
         assertTrue(response.entity is RestFehlermeldung)
@@ -326,7 +333,7 @@ class TermineRestResourceTest {
         whenever(dao.getTermin(1L)).thenReturn(terminOhneTeilnehmerMitDetails())
         whenever(benutzerDao.getBenutzer(11L)).thenReturn(karl())
 
-        val response = resource.meldeTeilnahmeAn(1)
+        val response = resource.meldeTeilnahmeAn(1, null)
 
         val captor = argumentCaptor<Termin>()
         verify(dao, times(1)).aktualisiereTermin(captor.capture())
@@ -340,12 +347,43 @@ class TermineRestResourceTest {
         val termin = terminOhneTeilnehmerMitDetails()
         termin.teilnehmer = listOf(karl())
         whenever(dao.getTermin(1L)).thenReturn(termin)
-        whenever(benutzerDao.getBenutzer(11L)).thenReturn(karl())
+        whenever(context.userPrincipal).thenReturn(BasicUserPrincipal("13"))
+        whenever(benutzerDao.getBenutzer(13L)).thenReturn(Benutzer(13, "Bini Adamczak", 3L))
 
-        val response = resource.meldeTeilnahmeAn(1)
+        val response = resource.meldeTeilnahmeAn(1, null)
 
         verify(dao, never()).aktualisiereTermin(any())
         assertEquals(response.status, 202)
+    ***REMOVED***
+
+    @Test
+    fun `meldeTeilnahmeAn informiert Ersteller*in`() {
+        val termin = terminMitTeilnehmerMitDetails()
+        termin.teilnehmer = listOf(karl())
+        whenever(dao.getTermin(2L)).thenReturn(termin)
+
+        whenever(context.userPrincipal).thenReturn(BasicUserPrincipal("13"))
+        val bini = Benutzer(13, "Bini Adamczak", 3L)
+        whenever(benutzerDao.getBenutzer(13L)).thenReturn(bini)
+
+        resource.meldeTeilnahmeAn(2, null)
+
+        verify(firebase, times(1)).informiereUeberTeilnahme(bini, termin)
+    ***REMOVED***
+
+    @Test
+    fun `sageTeilnahmeAb informiert Ersteller*in`() {
+        val termin = terminMitTeilnehmerMitDetails()
+        termin.teilnehmer = listOf(karl(), rosa())
+        whenever(dao.getTermin(2L)).thenReturn(termin)
+
+        whenever(context.userPrincipal).thenReturn(BasicUserPrincipal("11"))
+        val user = karl()
+        whenever(benutzerDao.getBenutzer(11L)).thenReturn(user)
+
+        resource.sageTeilnahmeAb(2)
+
+        verify(firebase, times(1)).informiereUeberAbsage(user, termin)
     ***REMOVED***
 
     @Test
@@ -371,7 +409,7 @@ class TermineRestResourceTest {
         whenever(dao.getTermin(1L)).thenReturn(terminOhneTeilnehmerMitDetails())
         whenever(benutzerDao.getBenutzer(11L)).thenReturn(null)
 
-        val response = resource.meldeTeilnahmeAn(1)
+        val response = resource.meldeTeilnahmeAn(1, null)
 
         assertEquals(response.status, 500)
         assertTrue(response.entity is RestFehlermeldung)
