@@ -11,8 +11,12 @@ import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/BackendService.dart';
 
+import 'ErrorService.dart';
+import 'UserService.dart';
+
 abstract class AbstractTermineService extends BackendService {
-  AbstractTermineService([Backend backendMock]) : super(backendMock);
+  AbstractTermineService(UserService userService, [Backend backendMock])
+      : super(userService, backendMock);
 
   Future<List<Termin>> loadActions(TermineFilter filter);
 
@@ -24,13 +28,14 @@ abstract class AbstractTermineService extends BackendService {
 
   deleteAction(Termin action, String token);
 
-  joinAction(Termin action, User user);
+  joinAction(int id);
 
-  leaveAction(Termin action, User user);
+  leaveAction(int id);
 ***REMOVED***
 
 class TermineService extends AbstractTermineService {
-  TermineService([Backend backendMock]) : super(backendMock);
+  TermineService(UserService userService, [Backend backendMock])
+      : super(userService, backendMock);
 
   Future<List<Termin>> loadActions(TermineFilter filter) async {
     HttpClientResponseBody response =
@@ -64,31 +69,42 @@ class TermineService extends AbstractTermineService {
         'service/termine/termin', jsonEncode(ActionWithToken(action, token)));
   ***REMOVED***
 
-  joinAction(Termin action, User user) async {
-    await post(
-        'service/termine/teilnahme', jsonEncode(Participation(action, user)));
+  joinAction(int id) async {
+    try {
+      await post('service/termine/teilnahme', jsonEncode(Equipment()),
+          parameters: {"id": "1"***REMOVED***);
+    ***REMOVED*** catch (e) {
+      ErrorService.handleError(e);
+    ***REMOVED***
   ***REMOVED***
 
-  leaveAction(Termin action, User user) async {
-    await post(
-        'service/termine/absage', jsonEncode(Participation(action, user)));
+  leaveAction(int id) async {
+    try {
+      await post('service/termine/absage', jsonEncode(Equipment()),
+          parameters: {"id": "1"***REMOVED***);
+    ***REMOVED*** catch (e) {
+      ErrorService.handleError(e);
+    ***REMOVED***
   ***REMOVED***
 ***REMOVED***
 
-class Participation {
-  Termin action;
-  User user;
-
-  Participation(this.action, this.user);
+class Equipment {
+  int klemmbretter;
+  int westen;
+  int listen;
+  String sonstiges;
 
   toJson() => {
-        'action': action,
-        'user': user,
-      ***REMOVED***
+    'klemmbretter':klemmbretter,
+    'westen':westen,
+    'listen':listen,
+    'sonstiges':sonstiges,
+  ***REMOVED***
 ***REMOVED***
 
 class DemoTermineService extends AbstractTermineService {
-  DemoTermineService() : super(DemoBackend());
+  DemoTermineService(UserService userService)
+      : super(userService, DemoBackend());
 
   static Ort nordkiez = Ort(1, 'Friedrichshain-Kreuzberg',
       'Friedrichshain Nordkiez', 52.51579, 13.45399);
@@ -117,7 +133,7 @@ class DemoTermineService extends AbstractTermineService {
         'Sammeln',
         52.48756,
         13.46336,
-        [User(1, "Karl Marx", Colors.red)],
+        [User(11, "Karl Marx", Colors.red)],
         TerminDetails('Hinter der 3. Parkbank links',
             'wir machen die Parkeingänge', 'Schreibt mir unter e@mail.de')),
     Termin(
@@ -129,8 +145,8 @@ class DemoTermineService extends AbstractTermineService {
         52.49655,
         13.43759,
         [
-          User(1, "Karl Marx", Colors.red),
-          User(1, "Karl Marx", Colors.purple),
+          User(11, "Karl Marx", Colors.red),
+          User(11, "Karl Marx", Colors.purple),
         ],
         TerminDetails('wir telefonieren uns zusammen', 'bitte seid pünktlich',
             'Meine Handynummer ist 01234567')),
@@ -142,7 +158,7 @@ class DemoTermineService extends AbstractTermineService {
         'Infoveranstaltung',
         52.48612,
         13.47192,
-        [User(1, "Rosa Luxemburg", Colors.purple)],
+        [User(12, "Rosa Luxemburg", Colors.purple)],
         TerminDetails(
             'DGB-Haus, Raum 1312',
             'Ihr seid alle herzlich eingeladen zur Strategiediskussion',
@@ -199,15 +215,15 @@ class DemoTermineService extends AbstractTermineService {
     termine.removeAt(termine.indexWhere((a) => a.id == action.id));
   ***REMOVED***
 
-  joinAction(Termin action, User user) {
-    var stored = termine.firstWhere((a) => a.id == action.id);
-    if (!stored.participants.map((e) => e.id).contains(user.id))
-      stored.participants.add(user);
+  joinAction(int id) {
+    var stored = termine.firstWhere((a) => a.id == id);
+    if (!stored.participants.map((e) => e.id).contains(1))
+      stored.participants.add(User(11, 'Ich', Colors.red));
   ***REMOVED***
 
-  leaveAction(Termin action, User user) {
-    var stored = termine.firstWhere((a) => a.id == action.id);
-    if (stored.participants.map((e) => e.id).contains(user.id))
-      stored.participants.remove(user);
+  leaveAction(int id) {
+    var stored = termine.firstWhere((a) => a.id == id);
+    if (stored.participants.map((e) => e.id).contains(1))
+      stored.participants.remove(User(11, 'Ich', Colors.red));
   ***REMOVED***
 ***REMOVED***

@@ -27,10 +27,10 @@ void main() {
   test('serialises filled Login', () {
     expect(
         jsonEncode(
-            Login(User(1, 'Karl Marx', Colors.red), 'secret', 'firebaseKey')
+            Login(User(11, 'Karl Marx', Colors.red), 'secret', 'firebaseKey')
                 .toJson()),
         '{'
-        '"user":{"id":1,"name":"Karl Marx","color":4294198070***REMOVED***,'
+        '"user":{"id":11,"name":"Karl Marx","color":4294198070***REMOVED***,'
         '"secret":"secret",'
         '"firebaseKey":"firebaseKey"'
         '***REMOVED***');

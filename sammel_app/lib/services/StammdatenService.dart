@@ -7,16 +7,17 @@ import 'BackendService.dart';
 abstract class AbstractStammdatenService extends BackendService {
   Future<List<Ort>> ladeOrte();
 
-  AbstractStammdatenService([Backend backendMock]) : super(backendMock);
+  AbstractStammdatenService(userService, [Backend backendMock])
+      : super(userService, backendMock);
 ***REMOVED***
 
 class StammdatenService extends AbstractStammdatenService {
-  StammdatenService([Backend backendMock]) : super(backendMock);
+  StammdatenService(userService, [Backend backendMock])
+      : super(userService, backendMock);
 
   Future<List<Ort>> ladeOrte() async {
     try {
-      HttpClientResponseBody response =
-          await backend.get('/service/stammdaten/orte');
+      HttpClientResponseBody response = await get('/service/stammdaten/orte');
 
       final orte = (response.body as List)
           .map((jsonOrt) => Ort.fromJson(jsonOrt))
@@ -30,7 +31,7 @@ class StammdatenService extends AbstractStammdatenService {
 ***REMOVED***
 
 class DemoStammdatenService extends AbstractStammdatenService {
-  DemoStammdatenService() : super(DemoBackend());
+  DemoStammdatenService(userService, ) : super(userService, DemoBackend());
 
   static Ort nordkiez = Ort(1, 'Friedrichshain-Kreuzberg',
       'Friedrichshain Nordkiez', 52.51579, 13.45399);

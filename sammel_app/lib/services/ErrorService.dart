@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sammel_app/services/AuthFehler.dart';
+import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 
 class ErrorService {
@@ -25,11 +26,17 @@ class ErrorService {
 
     if (e is AuthFehler) {
       pushMessage(
-          'Der hinterlegte Benutzer konnte nicht authentifiziert werden',
+          'Fehler bei Nutzer-Authentifizierung',
           '${e.message***REMOVED***${additional***REMOVED***$EMAIL');
       return;
     ***REMOVED***
     if (e is RestFehler) {
+      pushMessage(
+          'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten',
+          '${e.message***REMOVED***${additional***REMOVED***$EMAIL');
+      return;
+    ***REMOVED***
+    if (e is WrongResponseFormatException) {
       pushMessage(
           'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten',
           '${e.message***REMOVED***${additional***REMOVED***$EMAIL');

@@ -3,14 +3,17 @@ import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
+import 'package:sammel_app/services/UserService.dart';
 
 import '../TestdataStorage.dart';
 import '../shared/Mocks.dart';
 
 void main() {
+  UserService userService = ConfiguredUserServiceMock();
+
   test('ListLocationService returns list locations', () async {
     var backend = BackendMock();
-    var service = ListLocationService(backend);
+    var service = ListLocationService(userService, backend);
 
     var cafeKottiJson = {
       'id': '2',
@@ -30,7 +33,7 @@ void main() {
     ***REMOVED***
     List<Map<String, dynamic>> listlocations = [cafeKottiJson, zukunftJson];
     var response = HttpClientResponseBodyMock(listlocations, 200);
-    when(backend.get('/service/listlocations/actives'))
+    when(backend.get('/service/listlocations/actives', any))
         .thenAnswer((_) async => response);
 
     List<ListLocation> ergebnis = await service.getActiveListLocations();
@@ -54,7 +57,7 @@ void main() {
   group('DemoListLocationService', () {
     var service;
     setUp(() {
-      service = DemoListLocationService();
+      service = DemoListLocationService(userService);
     ***REMOVED***);
 
     test('uses DemoBackend', () {

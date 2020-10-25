@@ -22,19 +22,22 @@ void main() {
 const Mode mode = Mode.LOCAL;
 
 class MyApp extends StatelessWidget {
-  static var pushNotificationManager = PushNotificationsManager();
-  static var termineService =
-      demoMode ? DemoTermineService() : TermineService();
-  static var stammdatenService =
-      demoMode ? DemoStammdatenService() : StammdatenService();
-  static var listLocationService =
-      demoMode ? DemoListLocationService() : ListLocationService();
   static var storageService = StorageService();
-  static var pushService = demoMode ? DemoPushService() : PushService();
-  static var chatMessageService = ChatMessageService();
-  final userService = demoMode
+  static var pushNotificationManager = PushNotificationsManager();
+  static final userService = demoMode
       ? DemoUserService()
       : UserService(storageService, pushNotificationManager);
+  var termineService =
+      demoMode ? DemoTermineService(userService) : TermineService(userService);
+  static var stammdatenService = demoMode
+      ? DemoStammdatenService(userService)
+      : StammdatenService(userService);
+  static var listLocationService = demoMode
+      ? DemoListLocationService(userService)
+      : ListLocationService(userService);
+  static var pushService =
+      demoMode ? DemoPushService(userService) : PushService(userService);
+  static var chatMessageService = ChatMessageService();
 
   MyApp() {
     pushNotificationManager.init();

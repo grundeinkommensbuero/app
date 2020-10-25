@@ -452,7 +452,7 @@ class TermineSeiteState extends State<TermineSeite>
   ***REMOVED***
 
   Future<void> leaveAction(Termin termin) async {
-    await termineService.leaveAction(termin, me);
+    await termineService.leaveAction(termin.id);
     setState(() {
       var actionFromList = termine.firstWhere((t) => t.id == termin.id);
       actionFromList.participants.removeWhere((user) => user.id == me.id);

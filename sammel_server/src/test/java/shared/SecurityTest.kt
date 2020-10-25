@@ -1,9 +1,13 @@
 package shared
 
+import org.apache.commons.codec.binary.Hex
 import org.junit.Test
 
 import org.junit.Assert.*
+import org.junit.Ignore
 import shared.Security.HashMitSalt
+import java.security.SecureRandom
+import java.util.*
 
 class SecurityTest {
 
@@ -43,8 +47,30 @@ class SecurityTest {
     @Test
     fun `verifiziereSecretMitHash unterscheidet bei abweichendem Salt`() {
         val hashUndSalt = security.hashSecret("secret")
-        val falschesHashUndSalt = HashMitSalt(hashUndSalt.hash, hashUndSalt.salt.substring(hashUndSalt.salt.length - 1) + "A")
+        val falschesSalt = ByteArray(16)
+        SecureRandom().nextBytes(falschesSalt)
+        val falschesHashUndSalt = HashMitSalt(hashUndSalt.hash, Hex.encodeHexString(falschesSalt))
 
         assertFalse(security.verifiziereSecretMitHash("secret", falschesHashUndSalt))
+    ***REMOVED***
+
+    @Ignore("Zum Erzeugen von Drittsystem-Secrets")
+    @Test
+    fun `erzeuge Hash und Salt`() {
+        val secret = UUID.randomUUID().toString()
+
+        val hashMitSalt = security.hashSecret(secret)
+
+        println("secret: $secret")
+        println("hash: ${hashMitSalt.hash***REMOVED***")
+        println("salt: ${hashMitSalt.salt***REMOVED***")
+    ***REMOVED***
+
+    @Ignore("Zum Erzeugen von BASE64-codierter Basic-Auth")
+    @Test
+    fun `erzeuge BASE64-encodiertes BasicAuth`() {
+        val base64 = Base64.getEncoder().encodeToString("1:mySecret".toByteArray())
+
+        println(base64)
     ***REMOVED***
 ***REMOVED***

@@ -1,0 +1,9 @@
+POST http://127.0.0.1:18080/service/termine/absage?id=1
+Accept: application/json
+Content-Type: application/json
+Authorization: Basic MTE6YWM0MzA5NjAtMDVlYi0xMWViLThhMjYtZmRjNzY4M2E4NGJj
+
+<> 2019-10-05T053122.200.json
+
+###
+
