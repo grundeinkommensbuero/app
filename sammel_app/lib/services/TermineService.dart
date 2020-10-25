@@ -15,7 +15,7 @@ import 'ErrorService.dart';
 import 'UserService.dart';
 
 abstract class AbstractTermineService extends BackendService {
-  AbstractTermineService(UserService userService, [Backend backendMock])
+  AbstractTermineService(AbstractUserService userService, [Backend backendMock])
       : super(userService, backendMock);
 
   Future<List<Termin>> loadActions(TermineFilter filter);
@@ -34,7 +34,7 @@ abstract class AbstractTermineService extends BackendService {
 ***REMOVED***
 
 class TermineService extends AbstractTermineService {
-  TermineService(UserService userService, [Backend backendMock])
+  TermineService(AbstractUserService userService, [Backend backendMock])
       : super(userService, backendMock);
 
   Future<List<Termin>> loadActions(TermineFilter filter) async {
@@ -89,7 +89,7 @@ class TermineService extends AbstractTermineService {
 ***REMOVED***
 
 class DemoTermineService extends AbstractTermineService {
-  DemoTermineService(UserService userService)
+  DemoTermineService(AbstractUserService userService)
       : super(userService, DemoBackend());
 
   static Ort nordkiez = Ort(1, 'Friedrichshain-Kreuzberg',
