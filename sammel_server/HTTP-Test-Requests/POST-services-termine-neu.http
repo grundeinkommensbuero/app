@@ -1,23 +1,41 @@
 POST http://127.0.0.1:18080/service/termine/neu
-Accept: */*
-Cache-Control: no-cache
+Accept: application/json
 Content-Type: application/json
+Authorization: Basic MTE6YWM0MzA5NjAtMDVlYi0xMWViLThhMjYtZmRjNzY4M2E4NGJj
 
 {
-  "beginn": "2020-02-05T09:00:00",
-  "ende": "2020-02-05T12:00:00",
-  "ort": {
-    "bezirk": "Friedrichshain-Kreuzberg",
-    "id": 1,
-    "ort": "F-Hain Nordkiez"
-  ***REMOVED***,
-  "typ": "Sammeln",
-  "teilnehmer": [
-    {
-      "id": 3,
-      "name": "Karl Marx"
+  "token": "token3",
+  "action": {
+    "typ": "Sammeln",
+    "beginn": "2020-02-05T09:00:00",
+    "ende": "2020-02-05T12:00:00",
+    "ort": {
+      "bezirk": "Friedrichshain-Kreuzberg",
+      "id": 1,
+      "lattitude": 52.51579,
+      "longitude": 13.45399,
+      "ort": "Friedrichshain Nordkiez"
+    ***REMOVED***,
+    "lattitude": 52.52116,
+    "longitude": 13.41331,
+    "participants": [
+      {
+        "id": 11,
+        "name": "Karl Marx",
+        "color": 1
+      ***REMOVED***,
+      {
+        "id": 12,
+        "name": "Rosa Luxemburg",
+        "color": 2
+      ***REMOVED***
+    ],
+    "details": {
+      "kommentar": "ein anderer kommentar",
+      "kontakt": "kalle@revo.de",
+      "treffpunkt": "Weltzeituhr"
     ***REMOVED***
-  ]
+  ***REMOVED***
 ***REMOVED***
 
 ###

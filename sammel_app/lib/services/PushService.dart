@@ -5,10 +5,11 @@ import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 
 abstract class AbstractPushService extends BackendService {
-  AbstractPushService([Backend backendMock]) : super(backendMock);
+  AbstractPushService(userService, [Backend backendMock])
+      : super(userService, backendMock);
 
-  pushToDevices(List<String> recipients, PushData data,
-      PushNotification notification);
+  pushToDevices(
+      List<String> recipients, PushData data, PushNotification notification);
 
   pushToTopic(String topic, PushData data, PushNotification notification);
   pushToAction(int actionId, PushData data, PushNotification notification);
@@ -17,7 +18,8 @@ abstract class AbstractPushService extends BackendService {
   ***REMOVED***
 
 class PushService extends AbstractPushService {
-  PushService([Backend backendMock]) : super(backendMock);
+  PushService(userService, [Backend backendMock])
+      : super(userService, backendMock);
 
   pushToDevices(List<String> recipients, PushData data,
       PushNotification notification) async {
@@ -66,7 +68,7 @@ class PushService extends AbstractPushService {
 ***REMOVED***
 
 class DemoPushService extends AbstractPushService {
-  DemoPushService() : super(DemoBackend());
+  DemoPushService(userService) : super(userService, DemoBackend());
 
   @override
   pushToDevices(List<String> recipients, PushData data,

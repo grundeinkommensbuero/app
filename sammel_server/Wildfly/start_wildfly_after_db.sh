@@ -27,4 +27,5 @@ printf "\n%s\n"  "Database responded, starting server..."
   -DDB_SCHEMA=$db_schema \
   -DDB_USER=$db_user \
   -DDB_PASSWORD=$db_password \
-  -DKEY_PASSWORD=$key_password
+  -DKEY_PASSWORD=$key_password \
+  --debug

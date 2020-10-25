@@ -8,7 +8,7 @@ import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../model/Termin_test.dart';
+import '../shared/TestdatenVorrat.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -215,16 +215,16 @@ void main() async {
       await service.saveUser(karl());
 
       expect(_prefs.getString('user'),
-          '{"id":1,"name":"Karl Marx","color":4294198070***REMOVED***');
+          '{"id":11,"name":"Karl Marx","color":4294198070***REMOVED***');
     ***REMOVED***);
 
     test('loadUser loads user from storage', () async {
       _prefs.setString(
-          'user', '{"id":1,"name":"Karl Marx","color":4294198070***REMOVED***');
+          'user', '{"id":11,"name":"Karl Marx","color":4294198070***REMOVED***');
 
       var user = await service.loadUser();
 
-      expect(user.id, 1);
+      expect(user.id, 11);
       expect(user.name, 'Karl Marx');
       expect(user.color.value, 4294198070);
     ***REMOVED***);
@@ -239,7 +239,7 @@ void main() async {
   ***REMOVED***);
 
   test('clearAllPreferences clears whole storage', () async {
-    _prefs.setString('user', '{"id":1,"name":"Karl Marx","color":4294198070***REMOVED***');
+    _prefs.setString('user', '{"id":11,"name":"Karl Marx","color":4294198070***REMOVED***');
     _prefs.setStringList('actionlist', ['1', '2', '3']);
     _prefs.setInt('anyInt', 1);
     _prefs.setBool('anyBool', true);

@@ -9,16 +9,20 @@ import database.termine.TermineDao
 import database.termine.Token
 import org.jboss.logging.Logger
 import rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithoutDetails
+import services.FirebaseService
 import java.time.LocalDateTime
 import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
 import javax.ejb.EJBException
-import javax.persistence.Basic
-import javax.resource.spi.AuthenticationMechanism
+import javax.ejb.Stateless
 import javax.ws.rs.*
+import javax.ws.rs.core.Context
 import javax.ws.rs.core.MediaType.APPLICATION_JSON
 import javax.ws.rs.core.Response
+import javax.ws.rs.core.SecurityContext
 
+
+@Stateless
 @Path("termine")
 open class TermineRestResource {
     private val LOG = Logger.getLogger(TermineRestResource::class.java)
@@ -33,7 +37,14 @@ open class TermineRestResource {
     @EJB
     private lateinit var benutzerDao: BenutzerDao
 
+    @EJB
+    private lateinit var firebase: FirebaseService
+
+    @Context
+    private lateinit var context: SecurityContext
+
     @POST
+    @RolesAllowed("user")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun getTermine(filter: TermineFilter?): Response {
@@ -46,6 +57,7 @@ open class TermineRestResource {
 
     @GET
     @Path("termin")
+    @RolesAllowed("user")
     @Produces(APPLICATION_JSON)
     open fun getTermin(@QueryParam("id") id: Long?): Response {
         if (id == null)
@@ -67,40 +79,43 @@ open class TermineRestResource {
     ***REMOVED***
 
     @POST
+    @Path("neu")
+    @RolesAllowed("named")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
-    @Path("neu")
     open fun legeNeuenTerminAn(actionAndToken: ActionWithTokenDto): Response {
-        if (actionAndToken.action != null) {
-            val updatedAction = dao.erstelleNeuenTermin(actionAndToken.action!!.convertToTermin())
-            val token = actionAndToken.token
-            if (!token.isNullOrEmpty()) dao.storeToken(updatedAction.id, token)
+        if (actionAndToken.action == null)
             return Response
-                    .ok()
-                    .entity(convertFromTerminWithoutDetails(updatedAction))
+                    .status(422)
+                    .entity(RestFehlermeldung("Keine Aktion angegeben"))
                     .build()
-        ***REMOVED*** else return Response.status(422).build()
+        val updatedAction = dao.erstelleNeuenTermin(actionAndToken.action!!.convertToTermin())
+        val token = actionAndToken.token
+        if (!token.isNullOrEmpty()) dao.storeToken(updatedAction.id, token)
+        return Response
+                .ok()
+                .entity(convertFromTerminWithoutDetails(updatedAction))
+                .build()
     ***REMOVED***
 
     @POST
+    @Path("termin")
+    @RolesAllowed("named")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
-    @Path("termin")
     open fun aktualisiereTermin(actionAndToken: ActionWithTokenDto): Response {
-        if (actionAndToken.action == null || actionAndToken.action!!.id == null) return noValidActionResponse
+        if (actionAndToken.action?.id == null) return noValidActionResponse
 
         val tokenFromDb = dao.loadToken(actionAndToken.action!!.id!!)?.token
-        if (tokenFromDb != null && !tokenFromDb.equals(actionAndToken.token)) return Response.status(403)
+        if (tokenFromDb != null && tokenFromDb != actionAndToken.token) return Response.status(403)
                 .entity(RestFehlermeldung("Bearbeiten dieser Aktion ist unautorisiert"))
                 .build()
 
         try {
             dao.aktualisiereTermin(actionAndToken.action!!.convertToTermin())
         ***REMOVED*** catch (e: EJBException) {
-            LOG.error("Fehler beim Mergen eines Termins. " +
-                    "Möglicherweise hat ein Client versucht einen Termin mit unbekannter ID zu aktualisieren\n" +
-                    "Termin: ${actionAndToken.action***REMOVED***\n", e)
-            return Response.status(422).build()
+            LOG.error("Fehler beim Mergen des Termins: Termin: ${actionAndToken.action***REMOVED***\n", e)
+            return Response.status(422).entity(e.message).build()
         ***REMOVED***
         return Response
                 .ok()
@@ -108,15 +123,16 @@ open class TermineRestResource {
     ***REMOVED***
 
     @DELETE
+    @Path("termin")
+    @RolesAllowed("named")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
-    @Path("termin")
     open fun deleteAction(actionAndToken: ActionWithTokenDto): Response {
         if (actionAndToken.action?.id == null)
             return noValidActionResponse
 
         val tokenFromDb = dao.loadToken(actionAndToken.action!!.id!!)?.token
-        if (tokenFromDb != null && !tokenFromDb.equals(actionAndToken.token))
+        if (tokenFromDb != null && tokenFromDb != actionAndToken.token)
             return Response.status(403)
                     .entity(RestFehlermeldung("Löschen dieser Aktion ist unautorisiert"))
                     .build()
@@ -132,70 +148,58 @@ open class TermineRestResource {
 
     @POST
     @Path("teilnahme")
-    open fun meldeTeilnahmeAn(participation: Participation): Response {
-        if (participation.action?.id == null)
-            return Response.status(422)
-                    .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
-                    .build()
-        val terminAusDb = dao.getTermin(participation.action!!.id!!)
-        if (terminAusDb == null)
+    @RolesAllowed("user")
+    @Consumes(APPLICATION_JSON)
+    @Produces(APPLICATION_JSON)
+    open fun meldeTeilnahmeAn(@QueryParam("id") id: Long?, mitbringsel: Mitbringsel?): Response {
+        if (id == null)
             return Response.status(422)
                     .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
                     .build()
 
-        if (participation.user?.id == null)
-            return Response
-                    .status(422)
-                    .entity(RestFehlermeldung("Der angegebene Benutzer ist ungültig"))
-                    .build()
-        val userAusDb = benutzerDao.getBenutzer(participation.user!!.id!!)
-        if (userAusDb == null)
-            return Response
-                    .status(422)
-                    .entity(RestFehlermeldung("Der angegebene Benutzer ist ungültig"))
+        val aktion = dao.getTermin(id)
+        if (aktion == null)
+            return Response.status(422)
+                    .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
                     .build()
 
-        if (terminAusDb.teilnehmer.map { it.id ***REMOVED***.contains(userAusDb.id))
+        val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
+
+        if (aktion.teilnehmer.map { it.id ***REMOVED***.contains(userAusDb!!.id))
             return Response.accepted().build()
 
-        terminAusDb.teilnehmer = terminAusDb.teilnehmer.plus(userAusDb)
-        dao.aktualisiereTermin(terminAusDb)
+        aktion.teilnehmer = aktion.teilnehmer.plus(userAusDb)
+        dao.aktualisiereTermin(aktion)
+        firebase.informiereUeberTeilnahme(userAusDb, aktion)
 
         return Response.accepted().build()
     ***REMOVED***
 
     @POST
     @Path("absage")
-    open fun sageTeilnahmeAb(participation: Participation): Response {
-        if (participation.action?.id == null)
+    @RolesAllowed("user")
+    @Produces(APPLICATION_JSON)
+    open fun sageTeilnahmeAb(@QueryParam("id") id: Long?): Response {
+        if (id == null)
             return Response.status(422)
                     .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
                     .build()
-        val terminAusDb = dao.getTermin(participation.action!!.id!!)
+
+        val terminAusDb = dao.getTermin(id)
         if (terminAusDb == null)
             return Response.status(422)
                     .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
                     .build()
 
-        if (participation.user?.id == null)
-            return Response
-                    .status(422)
-                    .entity(RestFehlermeldung("Der angegebene Benutzer ist ungültig"))
-                    .build()
-        val userAusDb = benutzerDao.getBenutzer(participation.user!!.id!!)
-        if (userAusDb == null)
-            return Response
-                    .status(422)
-                    .entity(RestFehlermeldung("Der angegebene Benutzer ist ungültig"))
-                    .build()
-
-        val userAusListe = terminAusDb.teilnehmer.find { it.id == userAusDb.id ***REMOVED***
+        val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
+        val userAusListe = terminAusDb.teilnehmer.find { it.id == userAusDb!!.id ***REMOVED***
 
         if (userAusListe == null)
             return Response.accepted().build()
 
         terminAusDb.teilnehmer -= userAusListe
         dao.aktualisiereTermin(terminAusDb)
+        firebase.informiereUeberAbsage(userAusDb!!, terminAusDb)
 
         return Response.accepted().build()
     ***REMOVED***
@@ -221,7 +225,7 @@ open class TermineRestResource {
                     lattitude = lattitude,
                     longitude = longitude,
                     teilnehmer = if (participants == null) emptyList() else participants!!.map { it.convertToBenutzer() ***REMOVED***,
-                    details = details?.convertToTerminDetails())
+                    details = details?.convertToTerminDetails(id))
         ***REMOVED***
 
         companion object {
@@ -248,14 +252,13 @@ open class TermineRestResource {
             var token: String? = null)
 
     data class TerminDetailsDto(
-            var id: Long? = null,
             var treffpunkt: String? = null,
             var kommentar: String? = null,
             var kontakt: String? = null) {
 
-        fun convertToTerminDetails(): TerminDetails {
+        fun convertToTerminDetails(id: Long?): TerminDetails {
             return TerminDetails(
-                    id = this.id ?: 0,
+                    termin_id = id,
                     treffpunkt = this.treffpunkt,
                     kommentar = this.kommentar,
                     kontakt = this.kontakt)
@@ -265,16 +268,11 @@ open class TermineRestResource {
             fun convertFromTerminDetails(details: TerminDetails?): TerminDetailsDto? {
                 if (details == null) return null
                 return TerminDetailsDto(
-                        id = details.id,
                         treffpunkt = details.treffpunkt,
                         kommentar = details.kommentar,
                         kontakt = details.kontakt)
             ***REMOVED***
         ***REMOVED***
     ***REMOVED***
-
-    data class Participation(
-            var user: BenutzerDto? = null,
-            var action: TerminDto? = null)
 ***REMOVED***
 

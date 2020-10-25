@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_test_ui/flutter_test_ui.dart';
 import 'package:sammel_app/services/AuthFehler.dart';
+import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 
@@ -52,13 +53,23 @@ void main() {
 
       expect(ErrorService.messageQueue.length, 1);
       expect(ErrorService.messageQueue[0][0],
-          'Der hinterlegte Benutzer konnte nicht authentifiziert werden');
+          'Fehler bei Nutzer-Authentifizierung');
       expect(ErrorService.messageQueue[0][1],
           'Nachricht\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com');
     ***REMOVED***);
 
     test('recognizes and handles RestFehler', () {
       ErrorService.handleError(RestFehler('Nachricht'));
+
+      expect(ErrorService.messageQueue.length, 1);
+      expect(ErrorService.messageQueue[0][0],
+          'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten');
+      expect(ErrorService.messageQueue[0][1],
+          'Nachricht\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com');
+    ***REMOVED***);
+
+    test('recognizes and handles WrongResponseFormatException', () {
+      ErrorService.handleError(WrongResponseFormatException('Nachricht'));
 
       expect(ErrorService.messageQueue.length, 1);
       expect(ErrorService.messageQueue[0][0],

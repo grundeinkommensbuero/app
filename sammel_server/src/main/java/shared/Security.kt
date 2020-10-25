@@ -1,24 +1,32 @@
 package shared
 
 import org.apache.commons.codec.DecoderException
-import org.apache.commons.codec.binary.Hex.*
+import org.apache.commons.codec.binary.Hex.decodeHex
+import org.apache.commons.codec.binary.Hex.encodeHexString
 import org.jboss.logging.Logger
+import org.wildfly.security.WildFlyElytronProvider
+import org.wildfly.security.password.PasswordFactory
+import org.wildfly.security.password.interfaces.BCryptPassword
+import org.wildfly.security.password.spec.EncryptablePasswordSpec
+import org.wildfly.security.password.spec.SaltedPasswordAlgorithmSpec
+import java.security.Provider
+import java.security.SecureRandom
 import java.time.Instant.now
 import java.time.temporal.ChronoUnit.MILLIS
 import java.util.*
-import javax.crypto.SecretKeyFactory
-import javax.crypto.spec.PBEKeySpec
 import javax.ejb.Singleton
-import kotlin.random.Random
+
 
 @Singleton
 open class Security {
     private val LOG = Logger.getLogger(Security::class.java)
-    private val KEYFACTORY = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512")
+    private val ELYTRON_PROVIDER: Provider = WildFlyElytronProvider()
+    private val BCRYPTFACTORY = PasswordFactory.getInstance(BCryptPassword.ALGORITHM_BCRYPT, ELYTRON_PROVIDER)
 
     open fun hashSecret(secret: String): HashMitSalt {
-        // Quelle: https://medium.com/@kasunpdh/how-to-store-passwords-securely-with-pbkdf2-204487f14e84
-        val salt = Random.Default.nextBytes(512)
+        // Quelle: Siehe "Using a Hashed Password Representation" in https://docs.wildfly.org/17/WildFly_Elytron_Security.html
+        val salt = ByteArray(16)
+        SecureRandom().nextBytes(salt)
         val hash = hasheSecretMitSalt(secret, salt)
 
         return HashMitSalt(encodeHexString(hash), encodeHexString(salt))
@@ -26,9 +34,10 @@ open class Security {
 
     private fun hasheSecretMitSalt(secret: String, salt: ByteArray): ByteArray {
         val startTime = now()
-        val hash = KEYFACTORY.generateSecret(PBEKeySpec(secret.toCharArray(), salt, 10_000, 256)).getEncoded()
+        val encryptableSpec = EncryptablePasswordSpec(secret.toCharArray(), SaltedPasswordAlgorithmSpec(salt))
+        val password = BCRYPTFACTORY.generatePassword(encryptableSpec) as BCryptPassword
         LOG.info("Secret in ${startTime.until(now(), MILLIS)***REMOVED*** Millisekunden gehasht mit Salt ${encodeHexString(salt)***REMOVED***")
-        return hash
+        return password.hash
     ***REMOVED***
 
     @Throws(DecoderException::class)
