@@ -64,8 +64,9 @@ class BackendService {
   }
 
   Future<HttpClientResponseBody> post(String url, String data,
-      {bool appAuth}) async {
-    var response = await backend.post(url, data, await authHeaders(appAuth));
+      {Map<String, String> parameters, bool appAuth}) async {
+    var response =
+        await backend.post(url, data, await authHeaders(appAuth), parameters);
 
     if (response.response.statusCode >= 200 &&
         response.response.statusCode < 300) return response;
@@ -149,9 +150,10 @@ class Backend {
   }
 
   Future<HttpClientResponseBody> post(
-      String url, String data, Map<String, String> headers) async {
+      String url, String data, Map<String, String> headers,
+      [Map<String, String> parameters]) async {
     return await client
-        .postUrl(Uri.https('$host:$port', url))
+        .postUrl(Uri.https('$host:$port', url, parameters))
         .then((HttpClientRequest request) {
           request.headers.contentType = ContentType.json;
           Backend.headers
@@ -224,7 +226,8 @@ class DemoBackend implements Backend {
 
   @override
   Future<HttpClientResponseBody> post(
-          String url, String data, Map<String, String> headers) =>
+          String url, String data, Map<String, String> headers,
+          [Map<String, String> parameters]) =>
       throw DemoBackendShouldNeverBeUsedError();
 }
 

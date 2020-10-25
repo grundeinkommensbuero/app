@@ -11,6 +11,7 @@ import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/BackendService.dart';
 
+import 'ErrorService.dart';
 import 'UserService.dart';
 
 abstract class AbstractTermineService extends BackendService {
@@ -69,14 +70,36 @@ class TermineService extends AbstractTermineService {
   }
 
   joinAction(int id) async {
-    await post(
-        'service/termine/teilnahme', jsonEncode(id));
+    try {
+      await post('service/termine/teilnahme', jsonEncode(Equipment()),
+          parameters: {"id": "1"});
+    } catch (e) {
+      ErrorService.handleError(e);
+    }
   }
 
   leaveAction(int id) async {
-    await post(
-        'service/termine/absage', jsonEncode(id));
+    try {
+      await post('service/termine/absage', jsonEncode(Equipment()),
+          parameters: {"id": "1"});
+    } catch (e) {
+      ErrorService.handleError(e);
+    }
   }
+}
+
+class Equipment {
+  int klemmbretter;
+  int westen;
+  int listen;
+  String sonstiges;
+
+  toJson() => {
+    'klemmbretter':klemmbretter,
+    'westen':westen,
+    'listen':listen,
+    'sonstiges':sonstiges,
+  };
 }
 
 class DemoTermineService extends AbstractTermineService {

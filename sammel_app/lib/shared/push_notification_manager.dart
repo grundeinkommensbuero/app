@@ -43,6 +43,7 @@ class PushNotificationsManager {
   }
 
   void onMessageCallback(Map<String, dynamic> message) async {
+    print('message received' + message.toString());
     Map<String, dynamic> data = message['data'];
     if (data.containsKey('type')) {
       String type = data['type'];
