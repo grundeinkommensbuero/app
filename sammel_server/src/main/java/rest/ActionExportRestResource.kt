@@ -5,8 +5,8 @@ import database.termine.TermineDao
 import org.jboss.logging.Logger
 import java.lang.Exception
 import java.time.LocalDate
-import java.time.LocalTime
 import java.time.format.DateTimeFormatter.ofPattern
+import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
 import javax.ws.rs.GET
 import javax.ws.rs.Path
@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
 @Path("action-export")
+@RolesAllowed("website")
 open class ActionExportRestResource {
     private val LOG = Logger.getLogger(TermineRestResource::class.java)
     open var next7days = (0L..7L).map { days -> LocalDate.now().plusDays(days) }

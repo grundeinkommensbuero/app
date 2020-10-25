@@ -4,8 +4,8 @@ import database.benutzer.BenutzerDao
 import database.benutzer.Credentials
 import org.jboss.logging.Logger
 import shared.Security
-import shared.Security.HashMitSalt
 import java.lang.Exception
+import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType.APPLICATION_JSON
@@ -13,7 +13,6 @@ import javax.ws.rs.core.Response
 
 @Path("benutzer")
 open class BenutzerRestResource {
-    private val LOG = Logger.getLogger(this::class.java)
 
     @EJB
     private lateinit var dao: BenutzerDao
@@ -21,8 +20,11 @@ open class BenutzerRestResource {
     @EJB
     private lateinit var security: Security
 
+    private val LOG = Logger.getLogger(this::class.java)
+
     @POST
     @Path("neu")
+    @RolesAllowed("app")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun legeNeuenBenutzerAn(login: Login): Response {
@@ -49,11 +51,17 @@ open class BenutzerRestResource {
                     .entity(RestFehlermeldung("Benutzername ist bereits vergeben"))
                     .build()
         }
+
         try {
             val benutzerAusDb = dao.legeNeuenBenutzerAn(benutzer.convertToBenutzer())
 
             val hashMitSalt = security.hashSecret(login.secret!!)
-            dao.legeNeueCredentialsAn(Credentials(benutzerAusDb.id, hashMitSalt.hash, hashMitSalt.salt, login.firebaseKey!!))
+            dao.legeNeueCredentialsAn(Credentials(
+                    benutzerAusDb.id,
+                    hashMitSalt.hash,
+                    hashMitSalt.salt,
+                    login.firebaseKey!!,
+                    listOf("app", "user")))
 
             return Response.ok().entity(benutzerAusDb).build()
         } catch (e: Exception) {
@@ -89,6 +97,7 @@ open class BenutzerRestResource {
 
     @POST
     @Path("authentifiziere")
+    @RolesAllowed("app")
     @Produces(APPLICATION_JSON)
     open fun authentifiziereBenutzer(login: Login): Response {
         val benutzer = login.user
@@ -120,9 +129,10 @@ open class BenutzerRestResource {
                     .entity(false)
                     .build()
         }
+        LOG.warn(credentials.roles)
         val verifiziert: Boolean?
         try {
-            verifiziert = security.verifiziereSecretMitHash(login.secret!!, HashMitSalt(credentials.secret, credentials.salt))
+            verifiziert = security.verifiziereSecretMitHash(login.secret!!, Security.HashMitSalt(credentials.secret, credentials.salt))
         } catch (e: Exception) {
             val meldung = "Technischer Fehler beim Verifizieren: ${e.localizedMessage}"
             LOG.info(meldung)

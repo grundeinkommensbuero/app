@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/model/User.dart';
 import 'package:test/test.dart';
 
+import '../shared/TestdatenVorrat.dart';
 import 'Ort_test.dart';
 import 'TerminDetails_test.dart';
 
@@ -81,7 +81,7 @@ void main() {
           '"typ":"Sammeln",'
           '"lattitude":52.52116,'
           '"longitude":13.41331,'
-          '"participants":[{"id":1,"name":"Karl Marx","color":4294198070}],'
+          '"participants":[{"id":11,"name":"Karl Marx","color":4294198070}],'
           '"details":{'
           '"id":null,'
           '"treffpunkt":"Weltzeituhr",'
@@ -136,7 +136,7 @@ void main() {
     test('deserialisiert Termin mit Teilnehmer und Details', () {
       var termin = Termin.fromJson(jsonDecode('{'
           '"beginn":"2020-02-05T09:00:00",'
-          '"participants":[{"id":1,"name":"Karl Marx", "color":4294198070}],'
+          '"participants":[{"id":11,"name":"Karl Marx", "color":4294198070}],'
           '"details":{'
           '"id":1,'
           '"kommentar":"wir stellen uns an die Ubhf-Eingänge. ihr erkennt mich an der DWE-Weste",'
@@ -150,7 +150,7 @@ void main() {
       expect(termin.details.kommentar,
           "wir stellen uns an die Ubhf-Eingänge. ihr erkennt mich an der DWE-Weste");
       expect(termin.details.kontakt, "kalle@revo.de");
-      expect(termin.participants.single.id, 1);
+      expect(termin.participants.single.id, 11);
       expect(termin.participants.single.name, 'Karl Marx');
       expect(termin.participants.single.color.value, Colors.red.value);
     });
@@ -278,7 +278,3 @@ class TerminTestDaten {
       [],
       TerminDetailsTestDaten.terminDetailsTestDaten());
 }
-
-User karl() => User(1, 'Karl Marx', Colors.red);
-
-User rosa() => User(2, 'Rosa Luxemburg', Colors.purple);

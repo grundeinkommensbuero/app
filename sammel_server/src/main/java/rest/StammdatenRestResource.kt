@@ -2,6 +2,7 @@ package rest
 
 import database.stammdaten.Ort
 import database.stammdaten.StammdatenDao
+import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
 import javax.ws.rs.*
 import javax.ws.rs.core.Response
@@ -14,6 +15,7 @@ open class StammdatenRestResource {
 
     @GET
     @Path("orte")
+    @RolesAllowed("app")
     @Produces("application/json")
     open fun getOrte(): Response {
         val ergebnis: List<Ort>?

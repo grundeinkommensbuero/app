@@ -25,7 +25,7 @@ final _terminService = TermineServiceMock();
 final _listLocationService = ListLocationServiceMock();
 final _storageService = StorageServiceMock();
 final _pushService = PushServiceMock();
-final _userService = UserServiceMock();
+final _userService = ConfiguredUserServiceMock();
 
 void main() {
   setUp(() {
@@ -34,7 +34,6 @@ void main() {
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
     when(_terminService.loadActions(any)).thenAnswer((_) async => []);
-    when(_userService.user).thenAnswer((_) async => karl());
     when(_stammdatenService.ladeOrte()).thenAnswer((_) async => []);
   });
 
@@ -653,7 +652,7 @@ void main() {
       Termin action = (await state.generateActions())[0];
 
       expect(action.participants.length, 1);
-      expect(action.participants[0].id, 1);
+      expect(action.participants[0].id, 11);
       expect(action.participants[0].name, 'Karl Marx');
       expect(action.participants[0].color.value, 4294198070);
     });

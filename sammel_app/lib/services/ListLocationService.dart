@@ -7,13 +7,15 @@ import 'BackendService.dart';
 abstract class AbstractListLocationService extends BackendService {
   Future<List<ListLocation>> getActiveListLocations();
 
-  AbstractListLocationService([Backend backendMock]) : super(backendMock);
+  AbstractListLocationService(userService, [Backend backendMock])
+      : super(userService, backendMock);
 }
 
 class ListLocationService extends AbstractListLocationService {
   List<ListLocation> cache;
 
-  ListLocationService([Backend backendMock]) : super(backendMock);
+  ListLocationService(userService, [Backend backendMock])
+      : super(userService, backendMock);
 
   @override
   Future<List<ListLocation>> getActiveListLocations() async {
@@ -34,7 +36,7 @@ class ListLocationService extends AbstractListLocationService {
 }
 
 class DemoListLocationService extends AbstractListLocationService {
-  DemoListLocationService() : super(DemoBackend());
+  DemoListLocationService(userService) : super(userService, DemoBackend());
   List<ListLocation> listLocations = [
     ListLocation('1', 'Curry 36', 'Mehringdamm', '36', 52.4935584, 13.3877282),
     ListLocation(

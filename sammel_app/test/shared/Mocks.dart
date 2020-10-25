@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
+import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/PushService.dart';
@@ -10,6 +11,8 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/push_notification_manager.dart';
+
+import 'TestdatenVorrat.dart';
 
 class StammdatenServiceMock extends Mock implements StammdatenService {}
 
@@ -27,7 +30,21 @@ class PushNotificationsManagerMock extends Mock
 
 class UserServiceMock extends Mock implements UserService {}
 
-class BackendMock extends Mock implements Backend {}
+class ConfiguredUserServiceMock extends Mock implements UserService {
+  ConfiguredUserServiceMock() {
+    when(this.user)
+        .thenAnswer((_) async => karl());
+    when(this.userAuthCreds)
+        .thenAnswer((_) async => 'userCreds');
+  }
+}
+
+class BackendMock extends Mock implements Backend {
+  BackendMock() {
+    when(this.post('service/benutzer/authentifiziere', any, any))
+        .thenAnswer((_) async => HttpClientResponseBodyMock(true, 200));
+  }
+}
 
 class HttpClientResponseMock extends Mock implements HttpClientResponse {
   HttpClientResponseMock(int status) {
