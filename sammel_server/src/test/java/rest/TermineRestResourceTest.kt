@@ -62,7 +62,7 @@ class TermineRestResourceTest {
         val ende = now()
         val terminDto = TerminDto(1L, beginn, ende, nordkiez(), "Sammeln", 0.0, 1.0,
                 listOf(BenutzerDto.convertFromBenutzer(karl())),
-                TerminDetailsDto("treffpunkt", "kommentar", "kontakt"))
+                TerminDetailsDto("treffpunkt", "beschreibung", "kontakt"))
 
         val termin = terminDto.convertToTermin()
 

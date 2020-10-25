@@ -61,7 +61,7 @@ class ActionData {
     'all': ValidationState.not_validated,
     'venue': ValidationState.not_validated,
     'kontakt': ValidationState.not_validated,
-    'kommentar': ValidationState.not_validated,
+    'beschreibung': ValidationState.not_validated,
     'finish_pressed': false
   ***REMOVED***
 ***REMOVED***
@@ -409,12 +409,12 @@ class ActionEditorState extends State<ActionEditor> {
 
   void descriptionSelection() async {
     var ergebnis = await showTextInputDialog(
-        this.action.terminDetails.kommentar,
+        this.action.terminDetails.beschreibung,
         'Beschreibung',
         'Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammlerinnen und Sammler mitbringen? Kann man auch später dazustoßen, usw',
         Key('description input dialog'));
     setState(() {
-      this.action.terminDetails.kommentar = ergebnis;
+      this.action.terminDetails.beschreibung = ergebnis;
       validateAllInput();
     ***REMOVED***);
   ***REMOVED***
@@ -472,13 +472,13 @@ class ActionEditorState extends State<ActionEditor> {
 
   Widget descriptionButtonCaption(ActionData termin) {
     Text text;
-    if (this.action.validated['kommentar'] == ValidationState.ok) {
-      text = Text('Beschreibung: ${termin.terminDetails.kommentar***REMOVED***');
+    if (this.action.validated['beschreibung'] == ValidationState.ok) {
+      text = Text('Beschreibung: ${termin.terminDetails.beschreibung***REMOVED***');
     ***REMOVED*** else {
       text = Text('Beschreibe die Aktion kurz',
           style: TextStyle(color: DweTheme.purple));
     ***REMOVED***
-    return build_text_row(text, this.action.validated['kommentar']);
+    return build_text_row(text, this.action.validated['beschreibung']);
   ***REMOVED***
 
   Widget typeButtonCaption() {
@@ -563,11 +563,11 @@ class ActionEditorState extends State<ActionEditor> {
   ***REMOVED***
 
   void validateDescription() {
-    if (this.action.terminDetails.kommentar == null) {
-      this.action.validated['kommentar'] = ValidationState.error;
+    if (this.action.terminDetails.beschreibung == null) {
+      this.action.validated['beschreibung'] = ValidationState.error;
     ***REMOVED*** else {
-      this.action.validated['kommentar'] =
-          this.action.terminDetails.kommentar == ''
+      this.action.validated['beschreibung'] =
+          this.action.terminDetails.beschreibung == ''
               ? ValidationState.error
               : ValidationState.ok;
     ***REMOVED***
