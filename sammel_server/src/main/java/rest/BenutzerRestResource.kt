@@ -7,6 +7,7 @@ import shared.Security
 import java.lang.Exception
 import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
+import javax.transaction.Transactional
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType.APPLICATION_JSON
 import javax.ws.rs.core.Response
@@ -27,6 +28,7 @@ open class BenutzerRestResource {
     @RolesAllowed("app")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
+    @Transactional
     open fun legeNeuenBenutzerAn(login: Login): Response {
         val benutzer = login.user
         if (login.secret.isNullOrEmpty()) {
@@ -65,6 +67,7 @@ open class BenutzerRestResource {
 
             return Response.ok().entity(benutzerAusDb).build()
         } catch (e: Exception) {
+            LOG.error("Fehler beim Anlegen eines Benutzers: $benutzer", e)
             return Response
                     .status(500)
                     .entity(RestFehlermeldung("Ein technisches Problem ist aufgetreten"))
