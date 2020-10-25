@@ -4,20 +4,42 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:http_server/http_server.dart';
 import 'package:sammel_app/main.dart';
+import 'package:sammel_app/services/UserService.dart';
 
 import 'AuthFehler.dart';
 import 'RestFehler.dart';
 
-class BackendService implements Backend {
+class BackendService {
   Backend backend;
+  AbstractUserService userService;
 
-  BackendService([Backend backendMock]) {
+  static Map<String, String> appHeaders = {
+    'Authorization': 'Basic ${AbstractUserService.appAuth}'
+  };
+  Future<Map<String, String>> userHeaders;
+
+  BackendService.userService() {}
+
+  BackendService(userService, [Backend backendMock]) {
     backend = backendMock ?? Backend();
+
+    // UserService ist sein eigener UserService
+    if (!(this is AbstractUserService)) {
+      if (userService == null) throw ArgumentError.notNull('userService');
+      this.userService = userService;
+
+      userHeaders = this
+          .userService
+          .userAuthCreds
+          .asStream()
+          .map((creds) => {"Authorization": "Basic $creds"})
+          .first;
+    }
   }
 
-  @override
-  Future<HttpClientResponseBody> delete(String url, String data) async {
-    var response = await backend.delete(url, data);
+  Future<HttpClientResponseBody> delete(String url, String data,
+      {bool appAuth}) async {
+    var response = await backend.delete(url, data, await authHeaders(appAuth));
 
     if (response.response.statusCode >= 200 &&
         response.response.statusCode < 300) return response;
@@ -29,24 +51,22 @@ class BackendService implements Backend {
     throw RestFehler(response.body.toString());
   }
 
-  @override
-  Future<HttpClientResponseBody> get(String url) async {
-    var response = await backend.get(url);
+  Future<HttpClientResponseBody> get(String url, {bool appAuth}) async {
+    var response = await backend.get(url, await authHeaders(appAuth));
 
     if (response.response.statusCode >= 200 &&
-        response.response.statusCode < 300)
-      return response;
+        response.response.statusCode < 300) return response;
 
-    if (response.response.statusCode == 403)
-      throw AuthFehler(response.body);
+    if (response.response.statusCode == 403) throw AuthFehler(response.body);
 
     // else
     throw RestFehler(response.body.toString());
   }
 
-  @override
-  Future<HttpClientResponseBody> post(String url, String data) async {
-    var response = await backend.post(url, data);
+  Future<HttpClientResponseBody> post(String url, String data,
+      {Map<String, String> parameters, bool appAuth}) async {
+    var response =
+        await backend.post(url, data, await authHeaders(appAuth), parameters);
 
     if (response.response.statusCode >= 200 &&
         response.response.statusCode < 300) return response;
@@ -56,8 +76,18 @@ class BackendService implements Backend {
 
     // else
     throw RestFehler(response.body.toString());
+  }
+
+  Future<Map<String, String>> authHeaders(bool appAuth) {
+    if (appAuth != null && appAuth)
+      return Future.value(appHeaders);
+    else
+      return userHeaders.timeout(Duration(seconds: 10),
+          onTimeout: () => throw NoUserAuthException);
   }
 }
+
+class NoUserAuthException implements Exception {}
 
 class Backend {
   static final host = testMode ? 'dwe.idash.org' : '10.0.2.2';
@@ -66,7 +96,7 @@ class Backend {
   static final clientContext = SecurityContext();
   static HttpClient client = HttpClient(context: clientContext);
 
-  static final Map<String, String> header = {
+  static final Map<String, String> headers = {
     HttpHeaders.contentTypeHeader: "application/json",
     HttpHeaders.acceptHeader: "*/*",
   };
@@ -94,14 +124,17 @@ class Backend {
       ? 'assets/security/sammel-server_dwe.idash.org.pem'
       : 'assets/security/sammel-server_10.0.2.2.pem';
 
-  Future<HttpClientResponseBody> get(String url) async {
+  Future<HttpClientResponseBody> get(
+      String url, Map<String, String> headers) async {
     var uri = Uri.parse(url);
     uri = Uri.https('$host:$port', uri.path, uri.queryParameters);
     return await client
         .getUrl(uri)
         .then((HttpClientRequest request) {
           request.headers.contentType = ContentType.json;
-          request.headers.add('Accept', 'application/json');
+          Backend.headers
+              .forEach((key, value) => request.headers.add(key, value));
+          headers.forEach((key, value) => request.headers.add(key, value));
           return request.close();
         })
         .then(HttpBodyHandler.processResponse)
@@ -116,12 +149,16 @@ class Backend {
         });
   }
 
-  Future<HttpClientResponseBody> post(String url, String data) async {
+  Future<HttpClientResponseBody> post(
+      String url, String data, Map<String, String> headers,
+      [Map<String, String> parameters]) async {
     return await client
-        .postUrl(Uri.https('$host:$port', url))
+        .postUrl(Uri.https('$host:$port', url, parameters))
         .then((HttpClientRequest request) {
           request.headers.contentType = ContentType.json;
-          request.headers.add('Accept', '*/*');
+          Backend.headers
+              .forEach((key, value) => request.headers.add(key, value));
+          headers.forEach((key, value) => request.headers.add(key, value));
           request.write(data);
           return request.close();
         })
@@ -139,12 +176,15 @@ class Backend {
         });
   }
 
-  Future<HttpClientResponseBody> delete(String url, String data) async {
+  Future<HttpClientResponseBody> delete(
+      String url, String data, Map<String, String> headers) async {
     return await client
         .deleteUrl(Uri.https('$host:$port', url))
         .then((HttpClientRequest request) {
           request.headers.contentType = ContentType.json;
-          request.headers.add('Accept', '*/*');
+          Backend.headers
+              .forEach((key, value) => request.headers.add(key, value));
+          headers.forEach((key, value) => request.headers.add(key, value));
           request.write(data);
           return request.close();
         })
@@ -168,7 +208,7 @@ class Backend {
   }
 }
 
-class WrongResponseFormatException {
+class WrongResponseFormatException implements Exception {
   final String message;
 
   WrongResponseFormatException(this.message);
@@ -176,15 +216,18 @@ class WrongResponseFormatException {
 
 class DemoBackend implements Backend {
   @override
-  Future<HttpClientResponseBody> delete(String url, String data) =>
+  Future<HttpClientResponseBody> delete(
+          String url, String data, Map<String, String> headers) =>
       throw DemoBackendShouldNeverBeUsedError();
 
   @override
-  Future<HttpClientResponseBody> get(String url) =>
+  Future<HttpClientResponseBody> get(String url, Map<String, String> headers) =>
       throw DemoBackendShouldNeverBeUsedError();
 
   @override
-  Future<HttpClientResponseBody> post(String url, String data) =>
+  Future<HttpClientResponseBody> post(
+          String url, String data, Map<String, String> headers,
+          [Map<String, String> parameters]) =>
       throw DemoBackendShouldNeverBeUsedError();
 }
 

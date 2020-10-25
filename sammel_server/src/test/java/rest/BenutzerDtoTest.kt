@@ -9,11 +9,11 @@ class BenutzerDtoTest {
 
     @Test
     fun convertToBenutzerMitAllem() {
-        val dto = BenutzerDto(1L, "Karl Marx", 4294198070)
+        val dto = BenutzerDto(11L, "Karl Marx", 4294198070)
 
         val benutzer = dto.convertToBenutzer()
 
-        assertEquals(benutzer.id, 1L)
+        assertEquals(benutzer.id, 11L)
         assertEquals(benutzer.name, "Karl Marx")
         assertEquals(benutzer.color, 4294198070)
     }
@@ -31,11 +31,11 @@ class BenutzerDtoTest {
 
     @Test
     fun convertFromBenutzer() {
-        val benutzer = Benutzer(1, "Karl Marx", 4294198070)
+        val benutzer = Benutzer(11, "Karl Marx", 4294198070)
 
         val dto = BenutzerDto.convertFromBenutzer(benutzer)
 
-        assertEquals(dto.id, 1L)
+        assertEquals(dto.id, 11L)
         assertEquals(dto.name, "Karl Marx")
         assertEquals(dto.color, 4294198070)
     }

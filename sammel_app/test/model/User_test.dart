@@ -60,12 +60,12 @@ void main() {
 
     test('filled user', () {
       User user = User.fromJSON(jsonDecode('{'
-          '"id":1,'
+          '"id":11,'
           '"name":"Karl Marx",'
           '"color":4294198070'
           '}'));
 
-      expect(user.id, 1);
+      expect(user.id, 11);
       expect(user.name, 'Karl Marx');
       expect(user.color.value, Colors.red.value);
     });

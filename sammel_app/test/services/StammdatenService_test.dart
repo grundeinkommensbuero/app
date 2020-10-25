@@ -2,6 +2,7 @@ import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
+import 'package:sammel_app/services/UserService.dart';
 import 'package:test/test.dart';
 
 import '../shared/Mocks.dart';
@@ -9,15 +10,16 @@ import '../shared/Mocks.dart';
 void main() {
   Backend mock;
   StammdatenService service;
+  UserService userService = ConfiguredUserServiceMock();
 
   setUp(() {
     mock = BackendMock();
-    service = StammdatenService(mock);
+    service = StammdatenService(userService, mock);
   });
 
   group('StammdatenServer', () {
     test('delivers locations with status code 200', () async {
-      when(mock.get(any)).thenAnswer((_) async =>
+      when(mock.get(any, any)).thenAnswer((_) async =>
           HttpClientResponseBodyMock([
             {
               'id': 1,
@@ -44,7 +46,7 @@ void main() {
 
       var result = await service.ladeOrte();
 
-      verify(mock.get('/service/stammdaten/orte')).called(1);
+      verify(mock.get('/service/stammdaten/orte', any)).called(1);
 
       expect(result.length, 3);
       expect(result[0].id, 1);
@@ -65,7 +67,7 @@ void main() {
     });
 
     test('can handle empty lists', () async {
-      when(mock.get(any)).thenAnswer((_) async =>
+      when(mock.get(any, any)).thenAnswer((_) async =>
           HttpClientResponseBodyMock([], 200));
 
       var result = await service.ladeOrte();
@@ -77,7 +79,7 @@ void main() {
   group('DemoStammdatenService', () {
     DemoStammdatenService service;
     setUp(() {
-      service = DemoStammdatenService();
+      service = DemoStammdatenService(userService);
     });
 
     test('uses DemoBackend', () {

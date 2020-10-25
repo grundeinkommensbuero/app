@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 import 'dart:ui';
@@ -12,9 +13,12 @@ import 'package:sammel_app/shared/push_notification_manager.dart';
 import 'package:uuid/uuid.dart';
 
 abstract class AbstractUserService extends BackendService {
+  static String appAuth =
+      'MTpiOTdjNzU5Ny1mNjY5LTRmZWItOWJhMi0zMjE0YzE4MjIzMzk=';
   Future<User> user;
+  Future<String> userAuthCreds;
 
-  AbstractUserService([Backend backend]) : super(backend);
+  AbstractUserService([Backend backendService]) : super(null, backendService);
 
   Future<void> updateUser(User user);
 }
@@ -26,6 +30,16 @@ class UserService extends AbstractUserService {
   UserService(this.storageService, this.firebase, [Backend backend])
       : super(backend) {
     user = getOrCreateUser();
+    userAuthCreds = generateAuth(user);
+
+    this.userService = this;
+
+    userHeaders = this
+        .userService
+        .userAuthCreds
+        .asStream()
+        .map((creds) => {"Authorization": "Basic $creds"})
+        .first;
   }
 
   Future<User> getOrCreateUser() async {
@@ -36,9 +50,8 @@ class UserService extends AbstractUserService {
             additional: 'Ein neuer Benutzer wird angelegt.');
         return createNewUser();
       }, test: (e) => e is InvalidUserException);
-    else {
+    else
       return await createNewUser();
-    }
   }
 
   Future<User> createNewUser() async {
@@ -50,7 +63,8 @@ class UserService extends AbstractUserService {
     Login login = Login(user, secret, firebaseKey);
     var response;
     try {
-      response = await post('service/benutzer/neu', jsonEncode(login.toJson()));
+      response = await post('service/benutzer/neu', jsonEncode(login.toJson()),
+          appAuth: true);
     } catch (e) {
       ErrorService.handleError(e);
       throw e;
@@ -70,7 +84,8 @@ class UserService extends AbstractUserService {
     var response;
     try {
       response = await post(
-          'service/benutzer/authentifiziere', jsonEncode(login.toJson()));
+          'service/benutzer/authentifiziere', jsonEncode(login.toJson()),
+          appAuth: true);
     } catch (e) {
       ErrorService.handleError(e);
       throw e;
@@ -86,6 +101,14 @@ class UserService extends AbstractUserService {
     String secret = Uuid().v1();
     await storageService.saveSecret(secret);
     return secret;
+  }
+
+  Future<String> generateAuth(Future<User> user) async {
+    var userId = (await user).id;
+    var secret = await storageService.loadSecret();
+    List<int> input = '$userId:$secret'.codeUnits;
+    var auth = Future.value(Base64Encoder().convert(input));
+    return auth;
   }
 
   Future<User> updateUser(User user) async {

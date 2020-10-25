@@ -239,6 +239,15 @@ class TermineDaoTest {
         verify(entityManager, atLeastOnce()).flush()
     }
 
+    @Test(expected = DatenkonsistenzException::class)
+    fun `aktualisiereTerminSchreibt ueberprueft ob Termin-ID und TerminDetails-ID uebereinstimmen`() {
+        val termin = Termin(2, beginn, ende, nordkiez(), sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
+
+        dao.aktualisiereTermin(termin)
+
+        verify(entityManager, never()).merge(termin)
+    }
+
     @Test
     fun erstelleNeuenTerminSchreibtTerminInDb() {
         val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())

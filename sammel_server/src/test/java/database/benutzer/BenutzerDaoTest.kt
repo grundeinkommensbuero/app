@@ -4,7 +4,6 @@ import TestdatenVorrat.Companion.karl
 import TestdatenVorrat.Companion.rosa
 import com.nhaarman.mockitokotlin2.*
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentMatchers.*
@@ -37,11 +36,11 @@ class BenutzerDaoTest {
 
     @Test
     fun `getBenutzer liefert Ergebnis aus DB`() {
-        val karl = Benutzer(1L, "Karl Marx",0)
-        whenever(entityManager.find(Benutzer::class.java, 1L))
+        val karl = Benutzer(11L, "Karl Marx",0)
+        whenever(entityManager.find(Benutzer::class.java, 11L))
                 .thenReturn(karl)
 
-        val ergebnis = dao.getBenutzer(1L)
+        val ergebnis = dao.getBenutzer(11L)
 
         assertSame(ergebnis, karl)
     }

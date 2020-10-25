@@ -22,7 +22,7 @@ final _termineService = TermineServiceMock();
 final _listLocationService = ListLocationServiceMock();
 final _storageService = StorageServiceMock();
 final _pushService = PushServiceMock();
-final _userService = UserServiceMock();
+final _userService = ConfiguredUserServiceMock();
 
 void main() {
   group('Navigation', () {
@@ -36,7 +36,6 @@ void main() {
       when(_storageService.loadFilter())
           .thenAnswer((_) async => TermineFilter.leererFilter());
       when(_termineService.loadActions(any)).thenAnswer((_) async => []);
-      when(_userService.user).thenAnswer((_) async => karl());
       when(_stammdatenService.ladeOrte()).thenAnswer((_) async => []);
 
       await tester.pumpWidget(MultiProvider(providers: [
