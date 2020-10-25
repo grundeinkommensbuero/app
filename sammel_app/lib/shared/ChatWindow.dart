@@ -262,7 +262,7 @@ class ChatWindowState extends State<ChatWindow>
       List<Widget> users = participants.where((user) => user.name != null && user.name != '').map((user) =>
           create_user_widget(user.name, user.color)).toList();
       int a_count = participants.where((user) => user.name == null || user.name == '').length;
-      users.insert(0, Padding(padding: EdgeInsets.only(left: 5, top: 5, bottom: 5), child: Text('${users.length+a_count} Teilnehmer im Chat', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))));
+      users.insert(0, Padding(padding: EdgeInsets.only(left: 15, top: 5, bottom: 5), child: Text('${users.length+a_count} Teilnehmer im Chat', style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal))));
       if(a_count > 0)
         {
           users.add(create_user_widget('+ $a_count weitere Teilnehmer', Colors.black));
@@ -271,7 +271,7 @@ class ChatWindowState extends State<ChatWindow>
     }
   }
 
-  Padding create_user_widget(String user_name, Color user_color) => Padding(padding: EdgeInsets.only(left: 5, top: 5, bottom: 5), child: Row(children: [Icon(Icons.person, color: user_color,),Text(user_name, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))]));
+  Padding create_user_widget(String user_name, Color user_color) => Padding(padding: EdgeInsets.only(left: 15, top: 5, bottom: 5), child: Row(children: [Icon(Icons.person, color: user_color,size: 55,),SizedBox(width: 10,),Text(user_name, style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal))]));
 
    onSendMessage(String text) async {
 
