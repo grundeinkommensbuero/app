@@ -182,7 +182,7 @@ void main() {
       expect(actions[0].participants[0].name, 'Karl Marx');
       expect(actions[0].participants[0].color.value, Colors.red.value);
       expect(
-          actions[0].details.kommentar, 'Bringe Westen und Klämmbretter mit');
+          actions[0].details.beschreibung, 'Bringe Westen und Klämmbretter mit');
       expect(actions[0].details.treffpunkt, 'Weltzeituhr');
       expect(actions[0].details.kontakt, 'Ruft an unter 012345678');
       expect(actions[1].id, 0);
@@ -198,7 +198,7 @@ void main() {
       expect(actions[1].longitude, 13.41331);
       expect(actions[1].participants.length, 0);
       expect(
-          actions[1].details.kommentar, 'Bringe Westen und Klämmbretter mit');
+          actions[1].details.beschreibung, 'Bringe Westen und Klämmbretter mit');
       expect(actions[1].details.treffpunkt, 'Weltzeituhr');
       expect(actions[1].details.kontakt, 'Ruft an unter 012345678');
     });
@@ -237,7 +237,7 @@ void main() {
               '{'
               '"id":null,'
               '"treffpunkt":"Weltzeituhr",'
-              '"kommentar":"Bringe Westen und Klämmbretter mit",'
+              '"beschreibung":"Bringe Westen und Klämmbretter mit",'
               '"kontakt":"Ruft an unter 012345678"}'
               '},'
               '"token":"Token"'
@@ -268,7 +268,7 @@ void main() {
       expect(action.participants[0].id, 11);
       expect(action.participants[0].name, 'Karl Marx');
       expect(action.participants[0].color.value, Colors.red.value);
-      expect(action.details.kommentar, 'Bringe Westen und Klämmbretter mit');
+      expect(action.details.beschreibung, 'Bringe Westen und Klämmbretter mit');
       expect(action.details.treffpunkt, 'Weltzeituhr');
       expect(action.details.kontakt, 'Ruft an unter 012345678');
     });
@@ -305,7 +305,7 @@ void main() {
       expect(action.participants[0].id, 11);
       expect(action.participants[0].name, 'Karl Marx');
       expect(action.participants[0].color.value, Colors.red.value);
-      expect(action.details.kommentar, 'Bringe Westen und Klämmbretter mit');
+      expect(action.details.beschreibung, 'Bringe Westen und Klämmbretter mit');
       expect(action.details.treffpunkt, 'Weltzeituhr');
       expect(action.details.kontakt, 'Ruft an unter 012345678');
     });
@@ -343,7 +343,7 @@ void main() {
               '{'
               '"id":null,'
               '"treffpunkt":"Weltzeituhr",'
-              '"kommentar":"Bringe Westen und Klämmbretter mit",'
+              '"beschreibung":"Bringe Westen und Klämmbretter mit",'
               '"kontakt":"Ruft an unter 012345678"}'
               '},'
               '"token":"Token"'
@@ -384,7 +384,7 @@ void main() {
               '{'
               '"id":null,'
               '"treffpunkt":"Weltzeituhr",'
-              '"kommentar":"Bringe Westen und Klämmbretter mit",'
+              '"beschreibung":"Bringe Westen und Klämmbretter mit",'
               '"kontakt":"Ruft an unter 012345678"}'
               '},'
               '"token":"Token"'

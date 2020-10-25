@@ -85,7 +85,7 @@ void main() {
           '"details":{'
           '"id":null,'
           '"treffpunkt":"Weltzeituhr",'
-          '"kommentar":"Bringe Westen und Klämmbretter mit",'
+          '"beschreibung":"Bringe Westen und Klämmbretter mit",'
           '"kontakt":"Ruft an unter 012345678"}'
           '}');
     });
@@ -139,7 +139,7 @@ void main() {
           '"participants":[{"id":11,"name":"Karl Marx", "color":4294198070}],'
           '"details":{'
           '"id":1,'
-          '"kommentar":"wir stellen uns an die Ubhf-Eingänge. ihr erkennt mich an der DWE-Weste",'
+          '"beschreibung":"wir stellen uns an die Ubhf-Eingänge. ihr erkennt mich an der DWE-Weste",'
           '"kontakt":"kalle@revo.de",'
           '"treffpunkt":"Weltzeituhr"},'
           '"ende":"2020-02-05T12:00:00",'
@@ -147,7 +147,7 @@ void main() {
           '"ort":{"bezirk":"Friedrichshain-Kreuzberg","id":1,"ort":"Friedrichshain Nordkiez"},'
           '"typ":"Sammeln"}'));
       expect(termin.details.treffpunkt, "Weltzeituhr");
-      expect(termin.details.kommentar,
+      expect(termin.details.beschreibung,
           "wir stellen uns an die Ubhf-Eingänge. ihr erkennt mich an der DWE-Weste");
       expect(termin.details.kontakt, "kalle@revo.de");
       expect(termin.participants.single.id, 11);

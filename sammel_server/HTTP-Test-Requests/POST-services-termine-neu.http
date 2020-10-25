@@ -31,7 +31,7 @@ Authorization: Basic MTE6YWM0MzA5NjAtMDVlYi0xMWViLThhMjYtZmRjNzY4M2E4NGJj
       }
     ],
     "details": {
-      "kommentar": "ein anderer kommentar",
+      "beschreibung": "eine andere beschreibung",
       "kontakt": "kalle@revo.de",
       "treffpunkt": "Weltzeituhr"
     }

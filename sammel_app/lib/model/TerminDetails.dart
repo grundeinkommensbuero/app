@@ -1,21 +1,21 @@
 class TerminDetails {
   int id;
   String treffpunkt;
-  String kommentar;
+  String beschreibung;
   String kontakt;
 
-  TerminDetails(this.treffpunkt, this.kommentar, this.kontakt);
+  TerminDetails(this.treffpunkt, this.beschreibung, this.kontakt);
 
   TerminDetails.fromJSON(Map<String, dynamic> json)
       : id = json['id'],
         treffpunkt = json['treffpunkt'],
-        kommentar = json['kommentar'],
+        beschreibung = json['beschreibung'],
         kontakt = json['kontakt'];
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'treffpunkt': treffpunkt,
-        'kommentar': kommentar,
+        'beschreibung': beschreibung,
         'kontakt': kontakt
       };
 }

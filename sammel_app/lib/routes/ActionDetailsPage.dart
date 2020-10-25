@@ -73,14 +73,14 @@ class _ActionDetailsPage extends State<ActionDetailsPage> {
               ),
               ExpandableConstrainedBox(
                 child: SelectableText(
-                  widget.action.details.kommentar,
+                  widget.action.details.beschreibung,
                   onTap: () => {},
                   // TODO: SelectableText stiehlt ExpandableContraintBox den onTap
                   style: TextStyle(fontWeight: FontWeight.normal),
                 ),
                 maxHeight: 105.0,
                 expandableCondition:
-                    widget.action.details.kommentar.length > 200,
+                    widget.action.details.beschreibung.length > 200,
               )
             ])
           ]),
