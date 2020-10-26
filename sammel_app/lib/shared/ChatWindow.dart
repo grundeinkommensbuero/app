@@ -56,8 +56,8 @@ class ChatWindowState extends State<ChatWindow>
       channel.register_widget(this);
     }
 
-    var widget_list = ListView(children: buildListMessage());
     var inputWidget = buildInput();
+    var widget_list = ListView(children: [inputWidget]..addAll(buildListMessage()));
     var header_widget = buildHeader(widget.termin);
     Scaffold page = Scaffold(
         appBar: header_widget,
@@ -69,7 +69,7 @@ class ChatWindowState extends State<ChatWindow>
       //  FocusScope.of(context).requestFocus(FocusNode());
       //   print('has functions 2 ' + myFocusNode.hasFocus.toString());
 
-      FocusScope.of(context).requestFocus(myFocusNode);
+      // FocusScope.of(context).requestFocus(myFocusNode);
       //  print('has functions 3 ' + myFocusNode.hasFocus.toString());
       //  myFocusNode.requestFocus();
     }
@@ -87,7 +87,7 @@ class ChatWindowState extends State<ChatWindow>
           Flexible(
             child: Container(
               child: TextField(
-                key: _formKey,
+                // key: _formKey,
                 style: TextStyle(color: DweTheme.purple, fontSize: 15.0),
                 controller: textEditingController,
                 focusNode: myFocusNode,
@@ -139,8 +139,8 @@ class ChatWindowState extends State<ChatWindow>
     if (message.sender_name == user.name) {
       card = Container(
           constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * 0.8,
-              maxHeight: MediaQuery.of(context).size.height * 0.8),
+              maxWidth: /*MediaQuery.of(context).size.width*/200 * 0.8,
+              maxHeight: /*MediaQuery.of(context).size.height*/200 * 0.8),
           child: Card(
               color: message.message_color,
               child: Padding(
@@ -172,8 +172,8 @@ class ChatWindowState extends State<ChatWindow>
     } else {
       card = Container(
           constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width * 0.8,
-              maxHeight: MediaQuery.of(context).size.height * 0.8),
+              maxWidth: /*MediaQuery.of(context).size.width*/200 * 0.8,
+              maxHeight: /*MediaQuery.of(context).size.height*/200 * 0.8),
           child: Card(
               color: message.message_color,
               child: Padding(
@@ -313,7 +313,7 @@ class ChatWindowState extends State<ChatWindow>
     MessagePushData mpd = MessagePushData(message, channel.id);
     pushService.pushToAction(widget.termin.id, mpd, PushNotification("New Chat Message", "Open App to view Message"));
     textEditingController.clear();
-    myFocusNode.unfocus();
+    // myFocusNode.unfocus();
     channel.channelCallback(message);
   }
 
