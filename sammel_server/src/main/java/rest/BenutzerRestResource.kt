@@ -35,12 +35,7 @@ open class BenutzerRestResource {
                     .entity(RestFehlermeldung("Secret darf nicht leer sein"))
                     .build()
         ***REMOVED***
-        if (login.firebaseKey.isNullOrEmpty()) {
-            return Response
-                    .status(412)
-                    .entity(RestFehlermeldung("Firebase Key darf nicht leer sein"))
-                    .build()
-        ***REMOVED***
+        if (login.firebaseKey.isNullOrEmpty()) login.firebaseKey = "no-key"
 
         // Zum Vermeiden optisch ähnlicher Namen
         login.user.name = login.user.name?.trim()
