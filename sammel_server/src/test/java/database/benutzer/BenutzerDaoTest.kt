@@ -120,6 +120,7 @@ class BenutzerDaoTest {
     @Test
     fun `aktualisiereUser speichert User in Datenbank`() {
         val user = karl()
+        whenever(entityManager.merge(user)).thenReturn(user)
 
         dao.aktualisiereUser(user)
 
