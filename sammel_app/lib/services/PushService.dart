@@ -4,6 +4,8 @@ import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 
+import 'UserService.dart';
+
 abstract class AbstractPushService extends BackendService {
   AbstractPushService(userService, [Backend backendMock])
       : super(userService, backendMock);
@@ -68,7 +70,8 @@ class PushService extends AbstractPushService {
 ***REMOVED***
 
 class DemoPushService extends AbstractPushService {
-  DemoPushService(userService) : super(userService, DemoBackend());
+  DemoPushService(AbstractUserService userService)
+      : super(userService, DemoBackend());
 
   @override
   pushToDevices(List<String> recipients, PushData data,

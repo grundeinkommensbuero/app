@@ -9,7 +9,7 @@ import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/StorageService.dart';
-import 'package:sammel_app/shared/push_notification_manager.dart';
+import 'package:sammel_app/shared/PushNotificationManager.dart';
 import 'package:uuid/uuid.dart';
 
 abstract class AbstractUserService extends BackendService {
@@ -25,7 +25,7 @@ abstract class AbstractUserService extends BackendService {
 
 class UserService extends AbstractUserService {
   StorageService storageService;
-  PushNotificationsManager firebase;
+  PushNotificationManager firebase;
 
   UserService(this.storageService, this.firebase, [Backend backend])
       : super(backend) {
@@ -138,6 +138,8 @@ class InvalidUserException implements Exception {***REMOVED***
 class DemoUserService extends AbstractUserService {
   DemoUserService() : super() {
     user = Future.value(User(1, 'Ich', Colors.red));
+    userAuthCreds = Future.value('userCreds');
+
   ***REMOVED***
 
   Future<void> updateUser(User user) {***REMOVED***

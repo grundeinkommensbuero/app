@@ -47,7 +47,7 @@ open class BenutzerDao {
     ***REMOVED***
 
     open fun benutzernameExistiert(name: String): Boolean {
-        LOG.debug("Ermittle ob Benutzer ${name***REMOVED*** existiert")
+        LOG.debug("Ermittle ob Benutzer $name existiert")
         return entityManager
                 .createQuery("select benutzer from Benutzer benutzer where benutzer.name = :name", Benutzer::class.java)
                 .setParameter("name", name)

@@ -151,7 +151,7 @@ open class TermineRestResource {
     @RolesAllowed("user")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
-    open fun meldeTeilnahmeAn(@QueryParam("id") id: Long?, mitbringsel: Mitbringsel?): Response {
+    open fun meldeTeilnahmeAn(@QueryParam("id") id: Long?): Response {
         if (id == null)
             return Response.status(422)
                     .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
@@ -253,14 +253,14 @@ open class TermineRestResource {
 
     data class TerminDetailsDto(
             var treffpunkt: String? = null,
-            var kommentar: String? = null,
+            var beschreibung: String? = null,
             var kontakt: String? = null) {
 
         fun convertToTerminDetails(id: Long?): TerminDetails {
             return TerminDetails(
                     termin_id = id,
                     treffpunkt = this.treffpunkt,
-                    kommentar = this.kommentar,
+                    beschreibung = this.beschreibung,
                     kontakt = this.kontakt)
         ***REMOVED***
 
@@ -269,7 +269,7 @@ open class TermineRestResource {
                 if (details == null) return null
                 return TerminDetailsDto(
                         treffpunkt = details.treffpunkt,
-                        kommentar = details.kommentar,
+                        beschreibung = details.beschreibung,
                         kontakt = details.kontakt)
             ***REMOVED***
         ***REMOVED***

@@ -66,7 +66,7 @@ open class ActionExportRestResource {
             ***REMOVED***
 
             fun generateJsonDescription(action: Termin): String =
-                    "${action.details?.kommentar ?: "Zu dieser Aktion gibt es keine Beschreibung"***REMOVED***\n" +
+                    "${action.details?.beschreibung ?: "Zu dieser Aktion gibt es keine Beschreibung"***REMOVED***\n" +
                             (if (action.beginn != null) "\nam ${LocalDate.from(action.beginn).format(ofPattern("dd.MM.yyyy"))***REMOVED***" +
                                     "\nab ${action.beginn!!.format(ofPattern("hh:mm"))***REMOVED*** Uhr" +
                                     if (action.ende != null)

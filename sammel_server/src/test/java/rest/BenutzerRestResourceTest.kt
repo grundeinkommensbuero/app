@@ -49,12 +49,15 @@ class BenutzerRestResourceTest {
     ***REMOVED***
 
     @Test
-    fun `legeNeuenBenutzerAn erwartet firebaseKey`() {
-        val response = resource.legeNeuenBenutzerAn(Login("11111111", "", BenutzerDto(11L, "Karl Marx", 4294198070)))
+    fun `legeNeuenBenutzerAn tauscht leeren firebaseKey durch 'no-key' aus`() {
+        whenever(dao.benutzernameExistiert("Karl Marx")).thenReturn(false)
+        whenever(dao.legeNeuenBenutzerAn(any())).thenReturn(Benutzer(11L, "Karl Marx", 4294198070))
 
-        assertEquals(response.status, 412)
-        assertEquals(response.entity is RestFehlermeldung, true)
-        assertEquals((response.entity as RestFehlermeldung).meldung, "Firebase Key darf nicht leer sein")
+        resource.legeNeuenBenutzerAn(Login("11111111", "", BenutzerDto(11L, "Karl Marx", 4294198070)))
+
+        val captor = argumentCaptor<Credentials>()
+        verify(dao, times(1)).legeNeueCredentialsAn(captor.capture())
+        assertEquals(captor.firstValue.firebaseKey, "no-key")
     ***REMOVED***
 
     @Test

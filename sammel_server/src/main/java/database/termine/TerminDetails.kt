@@ -20,17 +20,17 @@ class TerminDetails {
     var treffpunkt: String? = null
 
     @Column
-    var kommentar: String? = null
+    var beschreibung: String? = null
 
     @Column
     var kontakt: String? = null
 
     constructor()
 
-    constructor(termin_id: Long?, treffpunkt: String?, kommentar: String?, kontakt: String?) {
+    constructor(termin_id: Long?, treffpunkt: String?, beschreibung: String?, kontakt: String?) {
         this.termin_id = termin_id
         this.treffpunkt = treffpunkt
-        this.kommentar = kommentar
+        this.beschreibung = beschreibung
         this.kontakt = kontakt
     ***REMOVED***
 ***REMOVED***

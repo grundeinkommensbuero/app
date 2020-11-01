@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jiffy/jiffy.dart';
@@ -184,7 +182,7 @@ void main() {
       expect(actions[0].participants[0].name, 'Karl Marx');
       expect(actions[0].participants[0].color.value, Colors.red.value);
       expect(
-          actions[0].details.kommentar, 'Bringe Westen und Klämmbretter mit');
+          actions[0].details.beschreibung, 'Bringe Westen und Klämmbretter mit');
       expect(actions[0].details.treffpunkt, 'Weltzeituhr');
       expect(actions[0].details.kontakt, 'Ruft an unter 012345678');
       expect(actions[1].id, 0);
@@ -200,7 +198,7 @@ void main() {
       expect(actions[1].longitude, 13.41331);
       expect(actions[1].participants.length, 0);
       expect(
-          actions[1].details.kommentar, 'Bringe Westen und Klämmbretter mit');
+          actions[1].details.beschreibung, 'Bringe Westen und Klämmbretter mit');
       expect(actions[1].details.treffpunkt, 'Weltzeituhr');
       expect(actions[1].details.kontakt, 'Ruft an unter 012345678');
     ***REMOVED***);
@@ -239,7 +237,7 @@ void main() {
               '{'
               '"id":null,'
               '"treffpunkt":"Weltzeituhr",'
-              '"kommentar":"Bringe Westen und Klämmbretter mit",'
+              '"beschreibung":"Bringe Westen und Klämmbretter mit",'
               '"kontakt":"Ruft an unter 012345678"***REMOVED***'
               '***REMOVED***,'
               '"token":"Token"'
@@ -270,7 +268,7 @@ void main() {
       expect(action.participants[0].id, 11);
       expect(action.participants[0].name, 'Karl Marx');
       expect(action.participants[0].color.value, Colors.red.value);
-      expect(action.details.kommentar, 'Bringe Westen und Klämmbretter mit');
+      expect(action.details.beschreibung, 'Bringe Westen und Klämmbretter mit');
       expect(action.details.treffpunkt, 'Weltzeituhr');
       expect(action.details.kontakt, 'Ruft an unter 012345678');
     ***REMOVED***);
@@ -307,7 +305,7 @@ void main() {
       expect(action.participants[0].id, 11);
       expect(action.participants[0].name, 'Karl Marx');
       expect(action.participants[0].color.value, Colors.red.value);
-      expect(action.details.kommentar, 'Bringe Westen und Klämmbretter mit');
+      expect(action.details.beschreibung, 'Bringe Westen und Klämmbretter mit');
       expect(action.details.treffpunkt, 'Weltzeituhr');
       expect(action.details.kontakt, 'Ruft an unter 012345678');
     ***REMOVED***);
@@ -345,7 +343,7 @@ void main() {
               '{'
               '"id":null,'
               '"treffpunkt":"Weltzeituhr",'
-              '"kommentar":"Bringe Westen und Klämmbretter mit",'
+              '"beschreibung":"Bringe Westen und Klämmbretter mit",'
               '"kontakt":"Ruft an unter 012345678"***REMOVED***'
               '***REMOVED***,'
               '"token":"Token"'
@@ -386,7 +384,7 @@ void main() {
               '{'
               '"id":null,'
               '"treffpunkt":"Weltzeituhr",'
-              '"kommentar":"Bringe Westen und Klämmbretter mit",'
+              '"beschreibung":"Bringe Westen und Klämmbretter mit",'
               '"kontakt":"Ruft an unter 012345678"***REMOVED***'
               '***REMOVED***,'
               '"token":"Token"'
@@ -394,22 +392,32 @@ void main() {
           any));
     ***REMOVED***);
 
-    test('joinAction calls correct path', () async {
+    test('joinAction calls correct path with parameters', () async {
       when(backend.post(any, any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(null, 202));
 
       await service.joinAction(0);
 
-      verify(backend.post('service/termine/teilnahme', '0', any));
+      Map<String, String> parameters = verify(
+              backend.post('service/termine/teilnahme', any, any, captureAny))
+          .captured
+          .single;
+      expect(parameters.length, 1);
+      expect(parameters['id'], '0');
     ***REMOVED***);
 
-    test('leaveAction calls correct path', () async {
+    test('leaveAction calls correct path with parameters', () async {
       when(backend.post(any, any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(null, 202));
 
       await service.leaveAction(0);
 
-      verify(backend.post('service/termine/absage', '0', any));
+      Map<String, String> parameters = verify(
+          backend.post('service/termine/absage', any, any, captureAny))
+          .captured
+          .single;
+      expect(parameters.length, 1);
+      expect(parameters['id'], '0');
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***

@@ -15,10 +15,10 @@ open class HealthRestResource {
     open fun health(): Response {
         return Response
                 .ok()
-                .entity(Health(status = "lebendig", version = "Alpha-1.0"))
+                .entity(Health(status = "lebendig", version = "0.3.2", minClient = "0.3.0+13"))
                 .build()
 
     ***REMOVED***
 ***REMOVED***
 
-data class Health(val status: String, val version: String)
+data class Health(val status: String, val version: String, val minClient: String)

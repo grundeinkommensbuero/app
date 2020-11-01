@@ -3,16 +3,18 @@ import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 
 import 'BackendService.dart';
+import 'UserService.dart';
 
 abstract class AbstractStammdatenService extends BackendService {
   Future<List<Ort>> ladeOrte();
 
-  AbstractStammdatenService(userService, [Backend backendMock])
+  AbstractStammdatenService(AbstractUserService userService,
+      [Backend backendMock])
       : super(userService, backendMock);
 ***REMOVED***
 
 class StammdatenService extends AbstractStammdatenService {
-  StammdatenService(userService, [Backend backendMock])
+  StammdatenService(AbstractUserService userService, [Backend backendMock])
       : super(userService, backendMock);
 
   Future<List<Ort>> ladeOrte() async {
@@ -31,7 +33,9 @@ class StammdatenService extends AbstractStammdatenService {
 ***REMOVED***
 
 class DemoStammdatenService extends AbstractStammdatenService {
-  DemoStammdatenService(userService, ) : super(userService, DemoBackend());
+  DemoStammdatenService(
+    userService,
+  ) : super(userService, DemoBackend());
 
   static Ort nordkiez = Ort(1, 'Friedrichshain-Kreuzberg',
       'Friedrichshain Nordkiez', 52.51579, 13.45399);

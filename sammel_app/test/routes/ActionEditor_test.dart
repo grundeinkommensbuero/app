@@ -219,7 +219,7 @@ void main() {
           tester.state(find.byKey(Key('action creator')));
       // ignore: invalid_use_of_protected_member
       actionData.setState(() {
-        actionData.action.terminDetails.kommentar = 'test1';
+        actionData.action.terminDetails.beschreibung = 'test1';
         actionData.validateAllInput();
       ***REMOVED***);
       await tester.pump();
@@ -370,16 +370,16 @@ void main() {
     ***REMOVED***);
 
     test('description', () {
-      actionEditor.action.terminDetails.kommentar = null;
+      actionEditor.action.terminDetails.beschreibung = null;
       actionEditor.validateAllInput();
 
-      expect(actionEditor.action.validated['kommentar'], ValidationState.error);
+      expect(actionEditor.action.validated['beschreibung'], ValidationState.error);
       expect(actionEditor.action.validated['all'], ValidationState.error);
 
-      actionEditor.action.terminDetails.kommentar = '';
+      actionEditor.action.terminDetails.beschreibung = '';
       actionEditor.validateAllInput();
 
-      expect(actionEditor.action.validated['kommentar'], ValidationState.error);
+      expect(actionEditor.action.validated['beschreibung'], ValidationState.error);
       expect(actionEditor.action.validated['all'], ValidationState.error);
     ***REMOVED***);
 
@@ -412,7 +412,7 @@ void main() {
           nordkiez(),
           '',
           [DateTime.now()],
-          TerminDetails('treffpunkt', 'kommentar', 'kontakt'),
+          TerminDetails('treffpunkt', 'beschreibung', 'kontakt'),
           LatLng(52.48993, 13.46839));
 
       when(_terminService.createAction(any, any))
@@ -530,8 +530,8 @@ void main() {
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       Termin action = (await state.generateActions())[0];
 
-      expect(action.details.kommentar,
-          TerminTestDaten.einTerminMitTeilisUndDetails().details.kommentar);
+      expect(action.details.beschreibung,
+          TerminTestDaten.einTerminMitTeilisUndDetails().details.beschreibung);
     ***REMOVED***);
 
     testWidgets('with old venue description, w/o changes',
@@ -615,10 +615,10 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      state.action.terminDetails.kommentar = 'Neuer Kommentar';
+      state.action.terminDetails.beschreibung = 'Neue Beschreibung';
       Termin action = (await state.generateActions())[0];
 
-      expect(action.details.kommentar, 'Neuer Kommentar');
+      expect(action.details.beschreibung, 'Neue Beschreibung');
     ***REMOVED***);
 
     testWidgets('with new venue description, w/ changes',
@@ -694,7 +694,7 @@ void main() {
       expect(state.action.ort, isNotNull);
       expect(state.action.typ, isNotNull);
       expect(state.action.tage, isNotEmpty);
-      expect(state.action.terminDetails.kommentar, isNotEmpty);
+      expect(state.action.terminDetails.beschreibung, isNotEmpty);
       expect(state.action.terminDetails.kontakt, isNotEmpty);
       expect(state.action.terminDetails.treffpunkt, isNotEmpty);
       expect(state.action.coordinates, isNotNull);
@@ -707,7 +707,7 @@ void main() {
       expect(state.action.ort, isNull);
       expect(state.action.typ, isNull);
       expect(state.action.tage, isEmpty);
-      expect(state.action.terminDetails.kommentar, isEmpty);
+      expect(state.action.terminDetails.beschreibung, isEmpty);
       expect(state.action.terminDetails.kontakt, isEmpty);
       expect(state.action.terminDetails.treffpunkt, isEmpty);
       expect(state.action.coordinates, isNull);
@@ -721,7 +721,7 @@ void main() {
       expect(state.action.ort, isNotNull);
       expect(state.action.typ, isNotNull);
       expect(state.action.tage, isNotEmpty);
-      expect(state.action.terminDetails.kommentar, isNotEmpty);
+      expect(state.action.terminDetails.beschreibung, isNotEmpty);
       expect(state.action.terminDetails.kontakt, isNotEmpty);
       expect(state.action.terminDetails.treffpunkt, isNotEmpty);
       expect(state.action.coordinates, isNotNull);
@@ -734,7 +734,7 @@ void main() {
       expect(state.action.ort, isNull);
       expect(state.action.typ, isNull);
       expect(state.action.tage, isEmpty);
-      expect(state.action.terminDetails.kommentar, isEmpty);
+      expect(state.action.terminDetails.beschreibung, isEmpty);
       expect(state.action.terminDetails.kontakt, isEmpty);
       expect(state.action.terminDetails.treffpunkt, isEmpty);
       expect(state.action.coordinates, isNull);

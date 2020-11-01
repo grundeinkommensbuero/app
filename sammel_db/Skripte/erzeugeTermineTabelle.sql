@@ -14,10 +14,13 @@ create table Termine
 
 create table TerminDetails
 (
-    termin_id         int auto_increment        primary key,
-    treffpunkt text     null,
-    kommentar  longtext null,
-    kontakt    text     null
+    termin_id       int auto_increment        primary key,
+    treffpunkt      text     null,
+    beschreibung    longtext null,
+    kontakt         text     null,
+    constraint TerminDetails_Termine_fk
+        foreign key (termin_id) references Termine (id)
+            on update cascade on delete cascade
 )
     comment 'naehere Infos zu Terminen';
 
