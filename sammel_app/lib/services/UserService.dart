@@ -17,6 +17,8 @@ abstract class AbstractUserService extends BackendService {
       'MTpiOTdjNzU5Ny1mNjY5LTRmZWItOWJhMi0zMjE0YzE4MjIzMzk=';
   Future<User> user;
   Future<String> userAuthCreds;
+  User internal_user_object = User(0, null, _randomColor());
+  StreamController<User> user_stream = StreamController<User>.broadcast();
 
   AbstractUserService([Backend backendService]) : super(null, backendService);
 
@@ -57,10 +59,10 @@ class UserService extends AbstractUserService {
   Future<User> createNewUser() async {
     String secret = await generateSecret();
     String firebaseKey = await firebase.firebaseToken;
-    Color color = _randomColor();
-    User user = User(0, null, color);
+    //Color color = _randomColor();
+    //User user = User(0, null, color);
 
-    Login login = Login(user, secret, firebaseKey);
+    Login login = Login(this.internal_user_object, secret, firebaseKey);
     var response;
     try {
       response = await post('service/benutzer/neu', jsonEncode(login.toJson()),
@@ -71,9 +73,12 @@ class UserService extends AbstractUserService {
     }
     var userFromServer = User.fromJSON(response.body);
 
+    internal_user_object.setUserData(userFromServer);
+    this.user_stream.sink.add(internal_user_object);
+
     storageService.saveUser(userFromServer);
 
-    return userFromServer;
+    return internal_user_object;
   }
 
   Future<User> verifyUser(User user) async {
@@ -91,8 +96,11 @@ class UserService extends AbstractUserService {
       throw e;
     }
     bool authenticated = response.body;
-    if (authenticated)
+    if (authenticated) {
+      this.internal_user_object = user;
+      this.user_stream.sink.add(user);
       return user;
+    }
     else
       throw InvalidUserException();
   }
@@ -117,9 +125,11 @@ class UserService extends AbstractUserService {
           await post('service/benutzer/aktualisiere', jsonEncode(user));
 
       var userFromServer = User.fromJSON(response.body);
+      internal_user_object.setUserData(userFromServer);
       storageService.saveUser(userFromServer);
+      this.user_stream.sink.add(userFromServer);
 
-      return userFromServer;
+      return internal_user_object;
     } catch (e) {
       ErrorService.handleError(e);
       throw e;

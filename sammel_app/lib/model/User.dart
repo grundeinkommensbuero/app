@@ -7,6 +7,12 @@ class User {
 
   User(this.id, this.name, this.color);
 
+  setUserData(User user){
+    id = user.id;
+    name = user.name;
+    color = user.color;
+  }
+
   User.fromJSON(Map<dynamic, dynamic> json) {
     this.id = json['id'];
     this.name = json['name'];
