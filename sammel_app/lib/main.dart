@@ -22,7 +22,7 @@ const Mode mode = Mode.DEMO;
 
 class MyApp extends StatelessWidget {
   static var storageService = StorageService();
-  static var pushNotificationManager = PushNotificationManager();
+  static var pushNotificationManager = PushNotificationManager(storageService);
   static final userService = demoMode
       ? DemoUserService()
       : UserService(storageService, pushNotificationManager);
