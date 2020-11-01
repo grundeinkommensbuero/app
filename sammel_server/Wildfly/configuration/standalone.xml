@@ -424,6 +424,7 @@
                         <credential-reference clear-text="${KEY_PASSWORD}"/>
                         <implementation type="PKCS12"/>
                         <file path="sammel-app.local-keystore.p12" relative-to="jboss.server.config.dir"/>
+<!--                        <file path="sammel-app.test-keystore.p12" relative-to="jboss.server.config.dir"/>-->
                     </key-store>
                 </key-stores>
                 <key-managers>

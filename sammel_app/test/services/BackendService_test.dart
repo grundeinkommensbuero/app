@@ -39,7 +39,7 @@ main() {
         var storageServiceMock = StorageServiceMock();
         when(storageServiceMock.loadUser()).thenAnswer((_) async => karl());
         var service = UserService(
-            storageServiceMock, PushNotificationsManagerMock(), BackendMock());
+            storageServiceMock, PushNotificationManagerMock(), BackendMock());
         expect(service, isNotNull);
       });
 

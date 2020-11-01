@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
-import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/PushService.dart';
@@ -10,7 +9,7 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
-import 'package:sammel_app/shared/push_notification_manager.dart';
+import 'package:sammel_app/shared/PushNotificationManager.dart';
 
 import 'TestdatenVorrat.dart';
 
@@ -25,8 +24,8 @@ class StorageServiceMock extends Mock implements StorageService {}
 
 class PushServiceMock extends Mock implements PushService {}
 
-class PushNotificationsManagerMock extends Mock
-    implements PushNotificationsManager {}
+class PushNotificationManagerMock extends Mock
+    implements PushNotificationManager {}
 
 class UserServiceMock extends Mock implements UserService {}
 

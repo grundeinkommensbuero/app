@@ -114,7 +114,7 @@ class ActionExportRestResourceTest {
     @Test
     fun `generateJsonDescription uses placeholder if description is missing`() {
         val action = terminOhneTeilnehmerMitDetails()
-        action.details!!.kommentar = null
+        action.details!!.beschreibung = null
         val description = GeoJsonAction.generateJsonDescription(action)
         assertEquals(description, "Zu dieser Aktion gibt es keine Beschreibung\n" +
                 "\n" +
