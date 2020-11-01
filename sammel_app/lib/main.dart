@@ -11,8 +11,7 @@ import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChatMessageService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/user_data.dart';
-
-import 'shared/push_notification_manager.dart';
+import 'package:sammel_app/shared/PushNotificationManager.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +22,7 @@ const Mode mode = Mode.DEMO;
 
 class MyApp extends StatelessWidget {
   static var storageService = StorageService();
-  static var pushNotificationManager = PushNotificationsManager();
+  static var pushNotificationManager = PushNotificationManager();
   static final userService = demoMode
       ? DemoUserService()
       : UserService(storageService, pushNotificationManager);
@@ -58,7 +57,7 @@ class MyApp extends StatelessWidget {
               value: listLocationService),
           Provider<StorageService>.value(value: storageService),
           Provider<AbstractPushService>.value(value: pushService),
-          Provider<PushNotificationsManager>.value(
+          Provider<PushNotificationManager>.value(
               value: pushNotificationManager),
           Provider<ChatMessageService>.value(value: chatMessageService),
           Provider<AbstractUserService>.value(value: userService),

@@ -4,13 +4,13 @@ class PushNotificationListener {
   void receive_message(Map<dynamic, dynamic> data) {}
 }
 
-class PushNotificationsManager {
-  PushNotificationsManager._();
+class PushNotificationManager {
+  PushNotificationManager._();
 
-  factory PushNotificationsManager() => _instance;
+  factory PushNotificationManager() => _instance;
 
-  static final PushNotificationsManager _instance =
-      PushNotificationsManager._();
+  static final PushNotificationManager _instance =
+      PushNotificationManager._();
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 

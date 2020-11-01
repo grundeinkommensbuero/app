@@ -7,21 +7,21 @@ import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
-import 'package:sammel_app/shared/push_notification_manager.dart';
+import 'package:sammel_app/shared/PushNotificationManager.dart';
 
 import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';
 
 void main() {
   StorageService storageService;
-  PushNotificationsManager firebase;
+  PushNotificationManager firebase;
   Backend backendMock;
 
   group('initialially', () {
     setUp(() {
       storageService = StorageServiceMock();
       backendMock = BackendMock();
-      firebase = PushNotificationsManagerMock();
+      firebase = PushNotificationManagerMock();
 
       //defaults
       when(storageService.loadUser())
@@ -153,7 +153,7 @@ void main() {
     setUp(() {
       storageService = StorageServiceMock();
       backendMock = BackendMock();
-      firebase = PushNotificationsManagerMock();
+      firebase = PushNotificationManagerMock();
 
       //defaults
       when(storageService.loadSecret()).thenAnswer((_) async => "mySecret");
