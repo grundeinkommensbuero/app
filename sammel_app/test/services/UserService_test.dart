@@ -27,7 +27,7 @@ void main() {
       when(storageService.loadUser())
           .thenAnswer((_) async => User(11, 'Karl Marx', Colors.red));
       when(storageService.loadSecret()).thenAnswer((_) async => 'secret');
-      when(firebase.firebaseToken).thenAnswer((_) async => 'firebaseToken');
+      when(firebase.pushToken).thenAnswer((_) async => 'firebaseToken');
       when(backendMock.post('service/benutzer/authentifiziere', any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(true, 200));
       when(backendMock.post('service/benutzer/neu', any, any)).thenAnswer(
@@ -157,7 +157,7 @@ void main() {
 
       //defaults
       when(storageService.loadSecret()).thenAnswer((_) async => "mySecret");
-      when(firebase.firebaseToken).thenAnswer((_) async => 'firebaseToken');
+      when(firebase.pushToken).thenAnswer((_) async => 'firebaseToken');
       when(backendMock.post('service/benutzer/authentifiziere', any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(true, 200));
       when(backendMock.post('service/benutzer/neu', any, any)).thenAnswer(
