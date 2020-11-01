@@ -14,6 +14,8 @@ import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/user_data.dart';
 
+import 'ChatInput.dart';
+import 'ChatListWidget.dart';
 import 'ChronoHelfer.dart';
 import 'DweTheme.dart';
 
@@ -31,8 +33,7 @@ abstract class ChannelChangeListener {
   void channelChanged(Channel channel);
 ***REMOVED***
 
-class ChatWindowState extends State<ChatWindow>
-    implements ChannelChangeListener {
+class ChatWindowState extends State<ChatWindow> {
   FocusNode myFocusNode;
 
   bool textFieldHasFocus = false;
@@ -43,164 +44,26 @@ class ChatWindowState extends State<ChatWindow>
   Termin termin = null;
   User user = null;
   AbstractPushService pushService = null;
-  TextEditingController textEditingController = TextEditingController();
-  GlobalKey _formKey = new GlobalKey(debugLabel: 'TextField');
+  ChatListWidget widget_list;
+  ScrollController scroll_controller;
 
   @override
   Widget build(BuildContext context) {
     if (user == null) {
-      Provider.of<AbstractUserService>(context)
-          .user
-          .then((user) => setState(() => this.user = user));
+      Provider.of<AbstractUserService>(context).user_stream.stream.listen((user) => setState(() => this.user = user));
       pushService = Provider.of<AbstractPushService>(context);
-      channel.register_widget(this);
+      this.user = Provider.of<AbstractUserService>(context).internal_user_object;
+
     ***REMOVED***
 
-    var inputWidget = buildInput();
-    var widget_list = ListView(children: [inputWidget]..addAll(buildListMessage()));
+    var inputWidget = ChatInputWidget(onSendMessage);
+    this.widget_list = ChatListWidget(this.user, this.channel);
     var header_widget = buildHeader(widget.termin);
     Scaffold page = Scaffold(
         appBar: header_widget,
-        body: Padding(child: widget_list, padding: EdgeInsets.only(bottom: 40)),
-        bottomSheet: SizedBox(child: inputWidget, height: 40));
-    if (textFieldHasFocus) {
-      //  myFocusNode.unfocus();
-      //  print('has functions 1 ' + myFocusNode.hasFocus.toString());
-      //  FocusScope.of(context).requestFocus(FocusNode());
-      //   print('has functions 2 ' + myFocusNode.hasFocus.toString());
-
-      // FocusScope.of(context).requestFocus(myFocusNode);
-      //  print('has functions 3 ' + myFocusNode.hasFocus.toString());
-      //  myFocusNode.requestFocus();
-    ***REMOVED***
-    print(textFieldHasFocus.toString());
-    print('has functions' + myFocusNode.hasFocus.toString());
+        body: Padding(child: this.widget_list, padding: EdgeInsets.only(bottom: 40)),
+        bottomSheet: inputWidget);
     return page;
-  ***REMOVED***
-
-  Widget buildInput() {
-    return Container(
-      key: Key('InputWidgetContainer'),
-      child: Row(
-        children: <Widget>[
-          // Edit text
-          Flexible(
-            child: Container(
-              child: TextField(
-                // key: _formKey,
-                style: TextStyle(color: DweTheme.purple, fontSize: 15.0),
-                controller: textEditingController,
-                focusNode: myFocusNode,
-                decoration: InputDecoration.collapsed(
-                  hintText: 'Nachricht eingeben...',
-                  hintStyle: TextStyle(color: Colors.grey),
-                ),
-              ),
-            ),
-          ),
-
-          // Button send message
-          Material(
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 8.0),
-              child: IconButton(
-                icon: Icon(Icons.send),
-                onPressed: () => onSendMessage(textEditingController.text),
-                color: DweTheme.purple,
-              ),
-            ),
-            color: Colors.white,
-          ),
-        ],
-      ),
-      width: double.infinity,
-      height: 50.0,
-      decoration: BoxDecoration(
-          border: Border(top: BorderSide(color: Colors.blueGrey, width: 0.5)),
-          color: Colors.white),
-    );
-  ***REMOVED***
-
-  List<Widget> buildListMessage() {
-    List<Message> message_list = channel.getAllMessages();
-    if (message_list == null) {
-      return <Widget>[Text('Send the first Message to this Channel')];
-    ***REMOVED***
-    List<Widget> message_list_widgets = List();
-    for (Message message in message_list) {
-      message_list_widgets.add(create_widget_for_message(message));
-    ***REMOVED***
-    return message_list_widgets;
-  ***REMOVED***
-
-  Widget create_widget_for_message(Message message) {
-    Align alignment = null;
-    Container card = null;
-    if (message.sender_name == user.name) {
-      card = Container(
-          constraints: BoxConstraints(
-              maxWidth: /*MediaQuery.of(context).size.width*/200 * 0.8,
-              maxHeight: /*MediaQuery.of(context).size.height*/200 * 0.8),
-          child: Card(
-              color: message.message_color,
-              child: Padding(
-                  padding: EdgeInsets.only(
-                      left: 10.0, top: 8.0, right: 10.0, bottom: 8.0),
-                  child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          message.sender_name,
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Padding(
-                            padding: EdgeInsets.only(top: 3.0, bottom: 5.0),
-                            child: Text(
-                              message.text,
-                              textScaleFactor: 1.2,
-                            )),
-                       Row( mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [Text(
-                          formatDateTime(message.sending_time),
-                          textScaleFactor: 0.8,
-                        ), SizedBox(height: 0, width: 3,),
-                              message.obtained_from_server ? Icon(Icons.check_circle, size: 12,) : Icon(Icons.check_circle_outline, size: 12)])
-                      ]))));
-      alignment = Align(child: card, alignment: Alignment.topRight);
-    ***REMOVED*** else {
-      card = Container(
-          constraints: BoxConstraints(
-              maxWidth: /*MediaQuery.of(context).size.width*/200 * 0.8,
-              maxHeight: /*MediaQuery.of(context).size.height*/200 * 0.8),
-          child: Card(
-              color: message.message_color,
-              child: Padding(
-                  padding: EdgeInsets.only(
-                      left: 10.0, top: 8.0, right: 10.0, bottom: 8.0),
-                  child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          message.sender_name,
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Padding(
-                            padding: EdgeInsets.only(top: 3.0, bottom: 5.0),
-                            child: Text(
-                              message.text,
-                              textScaleFactor: 1.2,
-                            )),
-                        Row(children: [Text(
-                          formatDateTime(message.sending_time),
-                          textScaleFactor: 0.8,
-                        ), message.obtained_from_server ? Icon(Icons.check_circle_outline) : Icon(Icons.check_circle)])
-                      ]))));
-      alignment = Align(child: card, alignment: Alignment.topLeft);
-    ***REMOVED***
-    return alignment;
   ***REMOVED***
 
   buildHeader(Termin termin) {
@@ -312,17 +175,12 @@ class ChatWindowState extends State<ChatWindow>
         sender_name: user.name);
     MessagePushData mpd = MessagePushData(message, channel.id);
     pushService.pushToAction(widget.termin.id, mpd, PushNotification("New Chat Message", "Open App to view Message"));
-    textEditingController.clear();
+    //textEditingController.clear();
     // myFocusNode.unfocus();
     channel.channelCallback(message);
   ***REMOVED***
 
-  @override
-  void channelChanged(Channel channel) {
-    setState(() {
-      this.channel = channel;
-    ***REMOVED***);
-  ***REMOVED***
+
 
   @override
   void initState() {
@@ -344,23 +202,6 @@ class ChatWindowState extends State<ChatWindow>
     if (myFocusNode.hasFocus) {
       textFieldHasFocus = true;
     ***REMOVED***
-  ***REMOVED***
-
-  String formatDateTime(DateTime date) {
-    Duration message_sent = DateTime.now().difference(date);
-    if (message_sent < Duration(minutes: 1)) {
-      return 'gerade eben';
-    ***REMOVED*** else if (message_sent < Duration(hours: 1)) {
-      return '${message_sent.inMinutes***REMOVED*** Minuten';
-    ***REMOVED*** else if (message_sent < Duration(hours: 12)) {
-      return '${message_sent.inHours***REMOVED*** Stunden';
-    ***REMOVED*** else if (DateTime.now().difference(date) < Duration(days: 1)) {
-      return ChronoHelfer.dateTimeToStringHHmm(date);
-    ***REMOVED*** else if (DateTime.now().difference(date) < Duration(days: 7)) {
-      return DateFormat('EEE, hh:mm').format(date);
-    ***REMOVED***
-
-    return DateFormat('MMM d, hh:mm').format(date);
   ***REMOVED***
 
   void backArrowPressed(BuildContext context) {
