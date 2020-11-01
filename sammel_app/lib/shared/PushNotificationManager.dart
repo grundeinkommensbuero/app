@@ -39,7 +39,6 @@ class PushNotificationManager {
 
       // For testing purposes print the Firebase Messaging token
       String token = await pushToken;
-      token = null;
       if (token == null || token.isEmpty) {
         pushToken = await getCostumToken();
         print("Costum token: $pushToken");
