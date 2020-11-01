@@ -2,6 +2,7 @@ package rest
 
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 import kotlin.test.expect
 
 class HealthRestResourceTest {
@@ -13,6 +14,7 @@ class HealthRestResourceTest {
         assertEquals(response.status ,200)
         val health = response.entity as Health
         assertEquals(health.status,"lebendig")
-        assertEquals(health.version,"Alpha-1.0")
+        assertTrue(health.version.isNotEmpty())
+        assertEquals(health.minClient,"0.3.0+13")
     }
 }
