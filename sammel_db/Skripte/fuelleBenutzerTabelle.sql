@@ -1,7 +1,7 @@
-INSERT INTO Benutzer (id, name, color) VALUES (1, 'app', 0);
-INSERT INTO Benutzer (id, name, color) VALUES (2, 'website', 0);
-INSERT INTO Benutzer (id, name, color) VALUES (11, 'Karl Marx', 1);
-INSERT INTO Benutzer (id, name, color) VALUES (12, 'Rosa Luxemburg', 2);
+INSERT INTO Benutzer (id, name, color) VALUES (1, 'app', 1);
+INSERT INTO Benutzer (id, name, color) VALUES (2, 'website', 2);
+INSERT INTO Benutzer (id, name, color) VALUES (11, 'Karl Marx', 4294198070);
+INSERT INTO Benutzer (id, name, color) VALUES (12, 'Rosa Luxemburg', 4288423856);
 
 # Secret b97c7597-f669-4feb-9ba2-3214c1822339
 # BASE64-encodiertes BASIC-AUTH MTpiOTdjNzU5Ny1mNjY5LTRmZWItOWJhMi0zMjE0YzE4MjIzMzk=
