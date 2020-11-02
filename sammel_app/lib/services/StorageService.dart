@@ -15,6 +15,7 @@ class StorageService {
   static const String _FILTER = 'filter';
   static const String _USER = 'user';
   static const String _SECRET = 'secret';
+  static const String _PUSHTOKEN = 'pushToken';
 
   StorageService() {
     _prefs = SharedPreferences.getInstance();
@@ -82,4 +83,10 @@ class StorageService {
   clearAllPreferences() => _prefs.then((prefs) async {
     prefs.clear();
   });
+
+  loadCostumPushToken() =>
+      prefs.then((prefs) => prefs.getString(_PUSHTOKEN));
+
+  Future<void> saveCostumPushToken(String token) =>
+      prefs.then((prefs) => prefs.setString(_PUSHTOKEN, token));
 }

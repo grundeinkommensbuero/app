@@ -58,7 +58,7 @@ class UserService extends AbstractUserService {
 
   Future<User> createNewUser() async {
     String secret = await generateSecret();
-    String firebaseKey = await firebase.firebaseToken;
+    String firebaseKey = await firebase.pushToken;
     //Color color = _randomColor();
     //User user = User(0, null, color);
 
@@ -83,7 +83,7 @@ class UserService extends AbstractUserService {
 
   Future<User> verifyUser(User user) async {
     String secret = await storageService.loadSecret();
-    String firebaseKey = await firebase.firebaseToken;
+    String firebaseKey = await firebase.pushToken;
 
     Login login = Login(user, secret, firebaseKey);
     var response;

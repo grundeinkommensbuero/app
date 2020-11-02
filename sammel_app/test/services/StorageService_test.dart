@@ -210,6 +210,23 @@ void main() async {
     });
   });
 
+  group('costum push token', () {
+    test('is stored correctly', () async {
+      await service.saveCostumPushToken("123789456");
+
+      expect(_prefs.containsKey('pushtoken'), true);
+      expect(_prefs.getString("pushToken"), "123789456");
+    });
+
+    test('is read correctly', () async {
+      await _prefs.setString('pushToken', '123789456');
+
+      var token = await service.loadCostumPushToken();
+
+      expect(token, '123789456');
+    });
+  });
+
   group('user', () {
     test('saveUser saves user to storage', () async {
       await service.saveUser(karl());
