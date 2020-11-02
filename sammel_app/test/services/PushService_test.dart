@@ -38,7 +38,7 @@ main() {
 
       verify(backendMock.post(
           'service/push/devices',
-          '{"recipients":["Empfänger"],"topic":null,"data":{"type":null***REMOVED***,"notification":{"title":"Titel","body":"Inhalt"***REMOVED******REMOVED***',
+          '{"recipients":["Empfänger"],"data":{"type":null***REMOVED***,"notification":{"title":"Titel","body":"Inhalt"***REMOVED******REMOVED***',
           any));
     ***REMOVED***);
 
@@ -61,8 +61,8 @@ main() {
           'Thema', PushData(), PushNotification('Titel', 'Inhalt'));
 
       verify(backendMock.post(
-          'service/push/topic',
-          '{"recipients":null,"topic":"Thema","data":{"type":null***REMOVED***,"notification":{"title":"Titel","body":"Inhalt"***REMOVED******REMOVED***',
+          'service/push/topic/Thema',
+          '{"recipients":null,"data":{"type":null***REMOVED***,"notification":{"title":"Titel","body":"Inhalt"***REMOVED******REMOVED***',
           any));
     ***REMOVED***);
   ***REMOVED***);

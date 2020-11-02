@@ -9,6 +9,7 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
+import 'package:sammel_app/shared/ChatMessageService.dart';
 import 'package:sammel_app/shared/PushNotificationManager.dart';
 
 import 'TestdatenVorrat.dart';
@@ -37,6 +38,8 @@ class ConfiguredUserServiceMock extends Mock implements UserService {
         .thenAnswer((_) async => 'userCreds');
   ***REMOVED***
 ***REMOVED***
+
+class ChatMessageServiceMock extends Mock implements ChatMessageService {***REMOVED***
 
 class BackendMock extends Mock implements Backend {
   BackendMock() {
