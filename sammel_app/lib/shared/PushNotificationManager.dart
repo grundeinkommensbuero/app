@@ -41,9 +41,9 @@ class PushNotificationManager {
       String token = await pushToken;
       if (token == null || token.isEmpty) {
         pushToken = await getCostumToken();
-        print("Costum token: $pushToken");
+        print("Costum token: ${await pushToken}");
       } else {
-        print("Firebase token: $pushToken");
+        print("Firebase token: $token");
       }
 
       _initialized = true;
