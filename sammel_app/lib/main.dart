@@ -18,7 +18,7 @@ void main() {
   runApp(MyApp());
 }
 
-const Mode mode = Mode.LOCAL;
+const Mode mode = Mode.DEMO;
 
 class MyApp extends StatelessWidget {
   static var storageService = StorageService();
