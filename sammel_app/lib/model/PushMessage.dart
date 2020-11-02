@@ -3,16 +3,14 @@ import 'Message.dart';
 
 class PushMessage {
   List<String> recipients;
-  String topic;
   PushData data;
   PushNotification notification;
 
-  PushMessage(this.data, this.notification, {this.recipients, this.topic});
+  PushMessage(this.data, this.notification, {this.recipients});
 
   toJson() =>
       {
         'recipients': recipients,
-        'topic': topic,
         'data': data,
         'notification': notification,
       };
