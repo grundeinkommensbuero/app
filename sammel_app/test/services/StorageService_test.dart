@@ -214,7 +214,7 @@ void main() async {
     test('is stored correctly', () async {
       await service.saveCostumPushToken("123789456");
 
-      expect(_prefs.containsKey('pushtoken'), true);
+      expect(_prefs.containsKey('pushToken'), true);
       expect(_prefs.getString("pushToken"), "123789456");
     });
 
