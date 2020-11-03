@@ -1,9 +1,9 @@
-import database.stammdaten.Ort
-import database.benutzer.Benutzer
-import database.listlocations.ListLocation
-import database.termine.Termin
-import database.termine.TerminDetails
-import rest.TermineRestResource
+import de.kybernetik.database.stammdaten.Ort
+import de.kybernetik.database.benutzer.Benutzer
+import de.kybernetik.database.listlocations.ListLocation
+import de.kybernetik.database.termine.Termin
+import de.kybernetik.database.termine.TerminDetails
+import de.kybernetik.rest.TermineRestResource
 import java.time.LocalDateTime
 
 class TestdatenVorrat {

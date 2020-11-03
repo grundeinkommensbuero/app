@@ -1,12 +1,9 @@
-POST http://127.0.0.1:18080/service/push/devices
+POST http://127.0.0.1:18080/service/push/action/1
 Accept: application/json
 Content-Type: application/json
 Authorization: Basic MTE6YWM0MzA5NjAtMDVlYi0xMWViLThhMjYtZmRjNzY4M2E4NGJj
 
 {
-    "recipients":[
-        "<CLIENT-TOKEN>"
-    ],
     "data":{
         "type":"Typ"
     ***REMOVED***,
