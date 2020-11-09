@@ -1,6 +1,7 @@
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
-import 'package:sammel_app/services/PushNotificationManager.dart';
+import 'package:sammel_app/services/StorageService.dart';
+import 'package:sammel_app/shared/PushNotificationManager.dart';
 import 'package:sammel_app/shared/user_data.dart';
 
 class ChatMessageService implements PushNotificationListener {
@@ -8,22 +9,37 @@ class ChatMessageService implements PushNotificationListener {
     manager.register_message_callback(PushDataTypes.SimpleChatMessage, this);
   }
 
-  Map<String, Channel> channels = Map<String, Channel>();
+
+  Map<String, SimpleMessageChannel> channels = Map<String, SimpleMessageChannel>();
+  StorageService storage_service;
+  ChatMessageService(this.storage_service)
+  {
+    if(this.storage_service == null) {
+      throw AssertionError('Storage Serive is null');
+    }
+  }
+
+
 
   @override
   void receive_message(Map<dynamic, dynamic> data) {
     // TODO: implement receive_message
     MessagePushData mpd = MessagePushData.fromJson(data);
-    Channel receiver = channels[mpd.channel_name];
+    SimpleMessageChannel receiver = channels[mpd.channel_name];
     Message message = mpd.message;
     if (receiver != null) {
       receiver.channelCallback(message);
+      this.storage_service.saveMessageChannel(receiver);
     }
   }
 
   Channel get_simple_message_channel(String id) {
     if (!channels.containsKey(id)) {
       channels[id] = SimpleMessageChannel(id);
+        Future<SimpleMessageChannel> stored_data = this.storage_service.loadMessageChannel(id);
+        if(stored_data != null) {
+          stored_data.then((channel) { return channels[id].restore_channel(channel); });
+        }
     }
     return channels[id];
   }
