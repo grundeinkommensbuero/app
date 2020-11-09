@@ -1,7 +1,7 @@
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
+import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/StorageService.dart';
-import 'package:sammel_app/shared/PushNotificationManager.dart';
 import 'package:sammel_app/shared/user_data.dart';
 
 class ChatMessageService implements PushNotificationListener {
