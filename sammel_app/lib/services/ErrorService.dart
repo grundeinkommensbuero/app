@@ -27,19 +27,19 @@ class ErrorService {
     if (e is AuthFehler) {
       pushMessage(
           'Fehler bei Nutzer-Authentifizierung',
-          '${e.message***REMOVED***${additional***REMOVED***$EMAIL');
+          '${e.message***REMOVED***$additional$EMAIL');
       return;
     ***REMOVED***
     if (e is RestFehler) {
       pushMessage(
           'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten',
-          '${e.message***REMOVED***${additional***REMOVED***$EMAIL');
+          '${e.message***REMOVED***$additional$EMAIL');
       return;
     ***REMOVED***
     if (e is WrongResponseFormatException) {
       pushMessage(
           'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten',
-          '${e.message***REMOVED***${additional***REMOVED***$EMAIL');
+          '${e.message***REMOVED***$additional$EMAIL');
       return;
     ***REMOVED***
     pushMessage('Ein Fehler ist aufgetreten', '$additional$EMAIL');

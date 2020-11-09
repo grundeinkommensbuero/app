@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
@@ -9,7 +8,6 @@ import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/routes/CreateUserDialog.dart';
 import 'package:sammel_app/services/PushService.dart';
-import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/user_data.dart';
@@ -17,13 +15,12 @@ import 'package:sammel_app/shared/user_data.dart';
 import 'ChatInput.dart';
 import 'ChatListWidget.dart';
 import 'ChronoHelfer.dart';
-import 'DweTheme.dart';
 
 class ChatWindow extends StatefulWidget {
   Channel channel;
   Termin termin;
 
-  ChatWindow(this.channel, this.termin, {Key key***REMOVED***) : super(key: key) {***REMOVED***
+  ChatWindow(this.channel, this.termin, {Key key***REMOVED***) : super(key: key);
 
   @override
   ChatWindowState createState() => ChatWindowState(channel, termin);
@@ -38,12 +35,13 @@ class ChatWindowState extends State<ChatWindow> {
 
   bool textFieldHasFocus = false;
 
-  ChatWindowState(this.channel, this.termin) {***REMOVED***
+  ChatWindowState(this.channel, this.termin);
 
-  SimpleMessageChannel channel = null;
-  Termin termin = null;
-  User user = null;
-  AbstractPushService pushService = null;
+  SimpleMessageChannel channel;
+  Termin termin;
+  User user;
+  AbstractPushService pushService;
+  // ignore: non_constant_identifier_names
   ChatListWidget widget_list;
   ScrollController scroll_controller;
 

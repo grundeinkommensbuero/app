@@ -7,7 +7,7 @@ import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
-import 'package:sammel_app/shared/PushNotificationManager.dart';
+import 'package:sammel_app/services/PushNotificationManager.dart';
 
 import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';

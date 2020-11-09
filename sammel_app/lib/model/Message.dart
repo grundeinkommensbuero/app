@@ -2,10 +2,10 @@ import 'dart:ui';
 
 class Message
 {
-  String text = null;
-  String sender_name = null;
-  DateTime sending_time = null;
-  Color message_color = null;
+  String text;
+  String sender_name;
+  DateTime sending_time;
+  Color message_color;
   bool obtained_from_server = false;
 
   Message({this.text, this.sender_name, this.sending_time, this.message_color, this.obtained_from_server=false***REMOVED***);
