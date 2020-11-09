@@ -223,7 +223,8 @@ class ChatWindowState extends State<ChatWindow> {
         text: text,
         sending_time: DateTime.now(),
         message_color: user.color,
-        sender_name: user.name);
+        sender_name: user.name,
+        user_id: user.id);
     MessagePushData mpd = MessagePushData(message, channel.id);
     pushService.pushToAction(widget.termin.id, mpd,
         PushNotification("New Chat Message", "Open App to view Message"));
