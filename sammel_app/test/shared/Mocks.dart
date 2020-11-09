@@ -10,7 +10,7 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChatMessageService.dart';
-import 'package:sammel_app/shared/PushNotificationManager.dart';
+import 'package:sammel_app/services/PushNotificationManager.dart';
 
 import 'TestdatenVorrat.dart';
 

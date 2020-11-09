@@ -9,7 +9,7 @@ import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/StorageService.dart';
-import 'package:sammel_app/shared/PushNotificationManager.dart';
+import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:uuid/uuid.dart';
 
 abstract class AbstractUserService extends BackendService {
@@ -152,5 +152,7 @@ class DemoUserService extends AbstractUserService {
 
   }
 
-  Future<void> updateUser(User user) {}
+  Future<void> updateUser(User user) {
+    //TODO
+  }
 }

@@ -3,6 +3,6 @@ class ChatData
 {
   ChatData()
   {
-
+    //TODO
   }
 }

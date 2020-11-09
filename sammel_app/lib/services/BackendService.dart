@@ -18,7 +18,7 @@ class BackendService {
   };
   Future<Map<String, String>> userHeaders;
 
-  BackendService.userService() {}
+  BackendService.userService();
 
   BackendService(userService, [Backend backendMock]) {
     backend = backendMock ?? Backend();

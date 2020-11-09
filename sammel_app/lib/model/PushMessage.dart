@@ -40,15 +40,15 @@ class PushData {
 
   PushData();
 
-  PushData.fromJson(Map<dynamic, dynamic> json) {}
+  PushData.fromJson(Map<dynamic, dynamic> json);
 
   toJson() => {'type': type};
 }
 
 class MessagePushData extends PushData {
 
-  Message message = null;
-  String channel_name = null;
+  Message message;
+  String channel_name;
   final String type = PushDataTypes.SimpleChatMessage;
 
   MessagePushData(this.message, this.channel_name);

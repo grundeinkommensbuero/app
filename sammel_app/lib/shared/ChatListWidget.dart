@@ -16,8 +16,7 @@ class ChatListWidget extends StatefulWidget {
   var channel;
   ScrollController scroll_controller = ScrollController();
 
-  ChatListWidget(this.user, this.channel, {Key key}) : super(key: key) {
-  }
+  ChatListWidget(this.user, this.channel, {Key key}) : super(key: key);
 
   @override
   ChatListState createState() => ChatListState(this.channel);
@@ -70,8 +69,8 @@ class ChatListState extends State<ChatListWidget>   implements ChannelChangeList
   }
 
   Widget create_widget_for_message(Message message) {
-    Align alignment = null;
-    Container card = null;
+    Align alignment;
+    Container card;
     if (message.sender_name == widget.user.name) {
       card = Container(
         /* constraints: BoxConstraints(

@@ -4,9 +4,9 @@ import 'package:sammel_app/shared/ChatWindow.dart';
 
 abstract class Channel
 {
-  String id = null;
-  List<Message> channel_messages = null;
-  List<String> member_names = null;
+  String id;
+  List<Message> channel_messages;
+  List<String> member_names;
 
   Channel(this.id, {this.channel_messages, this.member_names});
 
@@ -24,8 +24,8 @@ abstract class Channel
 class SimpleMessageChannel extends Channel
 {
 
-  List<Message> channel_messages = null;
-  ChannelChangeListener ccl = null;
+  List<Message> channel_messages;
+  ChannelChangeListener ccl;
 
   SimpleMessageChannel(String id) : super(id){
     this.channel_messages = List<Message>();

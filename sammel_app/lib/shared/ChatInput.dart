@@ -8,8 +8,7 @@ class ChatInputWidget extends StatefulWidget {
   var onSendMessage;
   TextEditingController textEditingController = TextEditingController();
 
-  ChatInputWidget(this.onSendMessage, {Key key}) : super(key: key) {
-  }
+  ChatInputWidget(this.onSendMessage, {Key key}) : super(key: key);
 
   @override
   ChatInputState createState() => ChatInputState();

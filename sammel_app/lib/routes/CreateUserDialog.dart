@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong/latlong.dart';
 import 'package:sammel_app/model/User.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
 
 Future showCreateUserDialog(
         {BuildContext context,
@@ -14,7 +11,7 @@ Future showCreateUserDialog(
 
 class CreateUserDialog extends StatefulWidget {
 
-  User user = null;
+  User user;
 
   CreateUserDialog(user)
   {
@@ -29,7 +26,7 @@ class CreateUserDialog extends StatefulWidget {
 
 class CreateUserState extends State<CreateUserDialog> {
 
-  User user = null;
+  User user;
 
   CreateUserState(User user) {
     this.user = user;
