@@ -20,7 +20,7 @@ class BackendService {
 
   BackendService.userService();
 
-  BackendService(userService, [Backend backendMock]) {
+  BackendService(AbstractUserService userService, [Backend backendMock]) {
     backend = backendMock ?? Backend();
 
     // UserService ist sein eigener UserService

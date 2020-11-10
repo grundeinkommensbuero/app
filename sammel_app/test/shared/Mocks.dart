@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/BackendService.dart';
-import 'package:sammel_app/services/PushService.dart';
+import 'package:sammel_app/services/PushReceiveService.dart';
+import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
@@ -23,7 +25,7 @@ class ListLocationServiceMock extends Mock
 
 class StorageServiceMock extends Mock implements StorageService {}
 
-class PushServiceMock extends Mock implements PushService {}
+class PushSendServiceMock extends Mock implements PushSendService {}
 
 class PushNotificationManagerMock extends Mock
     implements PushNotificationManager {}
@@ -32,10 +34,8 @@ class UserServiceMock extends Mock implements UserService {}
 
 class ConfiguredUserServiceMock extends Mock implements UserService {
   ConfiguredUserServiceMock() {
-    when(this.user)
-        .thenAnswer((_) async => karl());
-    when(this.userAuthCreds)
-        .thenAnswer((_) async => 'userCreds');
+    when(this.user).thenAnswer((_) async => karl());
+    when(this.userAuthCreds).thenAnswer((_) async => 'userCreds');
   }
 }
 
@@ -62,3 +62,8 @@ class HttpClientResponseBodyMock extends Mock
     when(this.response).thenAnswer((_) => response);
   }
 }
+
+class FirebaseMessagingMock extends Mock implements FirebaseMessaging {}
+
+class FirebaseReceiveServiceMock extends Mock
+    implements FirebaseReceiveService {}

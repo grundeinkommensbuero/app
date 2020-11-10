@@ -9,7 +9,7 @@ import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';
 
 main() {
-  var userService = ConfiguredUserServiceMock();
+  AbstractUserService userService = ConfiguredUserServiceMock();
 
   group('BackendService', () {
     BackendMock backend;
@@ -39,7 +39,7 @@ main() {
         var storageServiceMock = StorageServiceMock();
         when(storageServiceMock.loadUser()).thenAnswer((_) async => karl());
         var service = UserService(
-            storageServiceMock, PushNotificationManagerMock(), BackendMock());
+            storageServiceMock, FirebaseReceiveServiceMock(), BackendMock());
         expect(service, isNotNull);
       });
 

@@ -6,8 +6,9 @@ import 'package:sammel_app/services/ErrorService.dart';
 
 import 'UserService.dart';
 
-abstract class AbstractPushService extends BackendService {
-  AbstractPushService(userService, [Backend backendMock])
+abstract class AbstractPushSendService extends BackendService {
+
+  AbstractPushSendService(userService, [Backend backendMock])
       : super(userService, backendMock);
 
   pushToDevices(
@@ -15,12 +16,10 @@ abstract class AbstractPushService extends BackendService {
 
   pushToTopic(String topic, PushData data, PushNotification notification);
   pushToAction(int actionId, PushData data, PushNotification notification);
+}
 
-
-  }
-
-class PushService extends AbstractPushService {
-  PushService(userService, [Backend backendMock])
+class PushSendService extends AbstractPushSendService {
+  PushSendService(AbstractUserService userService, [Backend backendMock])
       : super(userService, backendMock);
 
   pushToDevices(List<String> recipients, PushData data,
@@ -69,8 +68,8 @@ class PushService extends AbstractPushService {
   }
 }
 
-class DemoPushService extends AbstractPushService {
-  DemoPushService(AbstractUserService userService)
+class DemoPushSendService extends AbstractPushSendService {
+  DemoPushSendService(AbstractUserService userService)
       : super(userService, DemoBackend());
 
   @override

@@ -14,7 +14,7 @@ import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/AuthFehler.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
-import 'package:sammel_app/services/PushService.dart';
+import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
@@ -31,7 +31,7 @@ final _stammdatenService = StammdatenServiceMock();
 final _terminService = TermineServiceMock();
 final _listLocationService = ListLocationServiceMock();
 final _storageService = StorageServiceMock();
-final _pushService = PushServiceMock();
+final _pushService = PushSendServiceMock();
 final _userService = ConfiguredUserServiceMock();
 final _chatMessageService = ChatMessageServiceMock();
 
@@ -1325,9 +1325,9 @@ _pumpNavigation(WidgetTester tester) async {
         Provider<AbstractListLocationService>(
             create: (context) => _listLocationService),
         Provider<AbstractStammdatenService>.value(value: _stammdatenService),
-        Provider<PushService>.value(value: _pushService),
+        Provider<PushSendService>.value(value: _pushService),
         Provider<AbstractUserService>.value(value: _userService),
-        Provider<AbstractPushService>.value(value: _pushService),
+        Provider<AbstractPushSendService>.value(value: _pushService),
       ],
       child: MaterialApp(
         home: Navigation(),
