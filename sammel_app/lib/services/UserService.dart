@@ -8,8 +8,8 @@ import 'package:sammel_app/model/Login.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
+import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/StorageService.dart';
-import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:uuid/uuid.dart';
 
 abstract class AbstractUserService extends BackendService {
@@ -27,7 +27,7 @@ abstract class AbstractUserService extends BackendService {
 
 class UserService extends AbstractUserService {
   StorageService storageService;
-  PushNotificationManager firebase;
+  FirebaseReceiveService firebase;
 
   UserService(this.storageService, this.firebase, [Backend backend])
       : super(backend) {
@@ -36,9 +36,7 @@ class UserService extends AbstractUserService {
 
     this.userService = this;
 
-    userHeaders = this
-        .userService
-        .userAuthCreds
+    userHeaders = userAuthCreds
         .asStream()
         .map((creds) => {"Authorization": "Basic $creds"***REMOVED***)
         .first;
@@ -58,7 +56,7 @@ class UserService extends AbstractUserService {
 
   Future<User> createNewUser() async {
     String secret = await generateSecret();
-    String firebaseKey = await firebase.pushToken;
+    String firebaseKey = await firebase.token;
     //Color color = _randomColor();
     //User user = User(0, null, color);
 
@@ -83,7 +81,7 @@ class UserService extends AbstractUserService {
 
   Future<User> verifyUser(User user) async {
     String secret = await storageService.loadSecret();
-    String firebaseKey = await firebase.pushToken;
+    String firebaseKey = await firebase.token;
 
     Login login = Login(user, secret, firebaseKey);
     var response;

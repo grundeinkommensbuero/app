@@ -7,7 +7,7 @@ import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/routes/CreateUserDialog.dart';
-import 'package:sammel_app/services/PushService.dart';
+import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/user_data.dart';
@@ -40,7 +40,7 @@ class ChatWindowState extends State<ChatWindow> {
   SimpleMessageChannel channel;
   Termin termin;
   User user;
-  AbstractPushService pushService;
+  AbstractPushSendService pushService;
   // ignore: non_constant_identifier_names
   ChatListWidget widget_list;
   ScrollController scroll_controller;
@@ -49,7 +49,7 @@ class ChatWindowState extends State<ChatWindow> {
   Widget build(BuildContext context) {
     if (user == null) {
       Provider.of<AbstractUserService>(context).user_stream.stream.listen((user) => setState(() => this.user = user));
-      pushService = Provider.of<AbstractPushService>(context);
+      pushService = Provider.of<AbstractPushSendService>(context);
       this.user = Provider.of<AbstractUserService>(context).internal_user_object;
 
     ***REMOVED***

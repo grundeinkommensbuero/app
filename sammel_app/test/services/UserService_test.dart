@@ -5,29 +5,29 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/BackendService.dart';
+import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
-import 'package:sammel_app/services/PushNotificationManager.dart';
 
 import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';
 
 void main() {
   StorageService storageService;
-  PushNotificationManager firebase;
+  FirebaseReceiveService firebase;
   Backend backendMock;
 
   group('initialially', () {
     setUp(() {
       storageService = StorageServiceMock();
       backendMock = BackendMock();
-      firebase = PushNotificationManagerMock();
+      firebase = FirebaseReceiveServiceMock();
 
       //defaults
       when(storageService.loadUser())
           .thenAnswer((_) async => User(11, 'Karl Marx', Colors.red));
       when(storageService.loadSecret()).thenAnswer((_) async => 'secret');
-      when(firebase.pushToken).thenAnswer((_) async => 'firebaseToken');
+      when(firebase.token).thenAnswer((_) async => 'firebaseToken');
       when(backendMock.post('service/benutzer/authentifiziere', any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(true, 200));
       when(backendMock.post('service/benutzer/neu', any, any)).thenAnswer(
@@ -153,11 +153,11 @@ void main() {
     setUp(() {
       storageService = StorageServiceMock();
       backendMock = BackendMock();
-      firebase = PushNotificationManagerMock();
+      firebase = FirebaseReceiveServiceMock();
 
       //defaults
       when(storageService.loadSecret()).thenAnswer((_) async => "mySecret");
-      when(firebase.pushToken).thenAnswer((_) async => 'firebaseToken');
+      when(firebase.token).thenAnswer((_) async => 'firebaseToken');
       when(backendMock.post('service/benutzer/authentifiziere', any, any))
           .thenAnswer((_) async => HttpClientResponseBodyMock(true, 200));
       when(backendMock.post('service/benutzer/neu', any, any)).thenAnswer(

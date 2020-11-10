@@ -8,7 +8,7 @@ import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
-import 'package:sammel_app/services/PushService.dart';
+import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
@@ -21,7 +21,7 @@ final _stammdatenService = StammdatenServiceMock();
 final _termineService = TermineServiceMock();
 final _listLocationService = ListLocationServiceMock();
 final _storageService = StorageServiceMock();
-final _pushService = PushServiceMock();
+final _pushService = PushSendServiceMock();
 final _userService = ConfiguredUserServiceMock();
 
 void main() {
@@ -42,7 +42,7 @@ void main() {
         Provider<AbstractTermineService>.value(value: _termineService),
         Provider<AbstractListLocationService>.value(value: _listLocationService),
         Provider<StorageService>.value(value: _storageService),
-        Provider<AbstractPushService>.value(value: _pushService),
+        Provider<AbstractPushSendService>.value(value: _pushService),
         Provider<AbstractUserService>.value(value: _userService),
         Provider<AbstractStammdatenService>.value(value: _stammdatenService),
       ], child: MaterialApp(home: navigation)));

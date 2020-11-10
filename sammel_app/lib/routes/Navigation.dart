@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/services/ErrorService.dart';
-import 'package:sammel_app/services/PushService.dart';
+import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
 import 'FAQ.dart';
@@ -27,7 +27,7 @@ class NavigationState extends State<Navigation>
   bool swipeUp = false;
   FAQ faq;
 
-  AbstractPushService pushService;
+  AbstractPushSendService pushService;
 
   @override
   void initState() {
@@ -48,7 +48,7 @@ class NavigationState extends State<Navigation>
   @override
   Widget build(BuildContext context) {
     ErrorService.setContext(context);
-    pushService = Provider.of<AbstractPushService>(context);
+    pushService = Provider.of<AbstractPushSendService>(context);
 
     var pages = [
       TermineSeite(key: actionPage),

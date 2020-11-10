@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
-import 'package:sammel_app/services/PushService.dart';
+import 'package:sammel_app/services/PushReceiveService.dart';
+import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
@@ -19,13 +19,16 @@ void main() {
 ***REMOVED***
 
 const Mode mode = Mode.DEMO;
+***REMOVED***
 
 class MyApp extends StatelessWidget {
+  static var firebaseService = FirebaseReceiveService();
   static var storageService = StorageService();
-  static var pushNotificationManager = PushNotificationManager(storageService);
   static final userService = demoMode
       ? DemoUserService()
-      : UserService(storageService, pushNotificationManager);
+      : UserService(storageService, firebaseService);
+  static var pushNotificationManager =
+      PushNotificationManager(storageService, userService, firebaseService);
   var termineService =
       demoMode ? DemoTermineService(userService) : TermineService(userService);
   static var stammdatenService = demoMode
@@ -34,15 +37,12 @@ class MyApp extends StatelessWidget {
   static var listLocationService = demoMode
       ? DemoListLocationService(userService)
       : ListLocationService(userService);
-  static var pushService =
-      demoMode ? DemoPushService(userService) : PushService(userService);
-  static var chatMessageService = ChatMessageService();
+  static var pushService = demoMode
+      ? DemoPushSendService(userService)
+      : PushSendService(userService);
+  static var chatMessageService = ChatMessageService(pushNotificationManager);
 
-  MyApp() {
-    pushNotificationManager.init();
-    pushNotificationManager.register_message_callback(
-        PushDataTypes.SimpleChatMessage, chatMessageService);
-  ***REMOVED***
+  MyApp() {***REMOVED***
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
           Provider<AbstractListLocationService>.value(
               value: listLocationService),
           Provider<StorageService>.value(value: storageService),
-          Provider<AbstractPushService>.value(value: pushService),
+          Provider<AbstractPushSendService>.value(value: pushService),
           Provider<PushNotificationManager>.value(
               value: pushNotificationManager),
           Provider<ChatMessageService>.value(value: chatMessageService),
