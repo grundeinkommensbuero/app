@@ -67,3 +67,5 @@ class FirebaseMessagingMock extends Mock implements FirebaseMessaging {}
 
 class FirebaseReceiveServiceMock extends Mock
     implements FirebaseReceiveService {}
+
+class DemoPushSendServiceMock extends Mock implements DemoPushSendService {}

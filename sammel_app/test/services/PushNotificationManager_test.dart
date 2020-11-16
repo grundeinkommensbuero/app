@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
+import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
@@ -38,4 +42,60 @@ main() {
       expect(true, manager.listener is PullReceiveService);
     });
   });
+
+  group('DemoPushNotificationManager', () {
+    DemoPushSendService pushSendService = DemoPushSendServiceMock();
+    DemoPushNotificationManager service =
+        DemoPushNotificationManager(pushSendService);
+    StreamController<PushData> controller;
+
+    setUp(() {
+      reset(pushSendService);
+      controller = StreamController<PushData>.broadcast(sync: true);
+      when(pushSendService.stream).thenAnswer((_) => controller.stream);
+    });
+
+    test('serves push messages to correct listener', () async {
+      var listener1 = TestListener();
+      var listener2 = TestListener();
+      service.register_message_callback('type1', listener1);
+      service.register_message_callback('type2', listener2);
+
+      var data1 = TestPushData('type1');
+      var data2 = TestPushData('type1');
+      var data3 = TestPushData('type2');
+      controller.add(data1);
+      controller.add(data2);
+      controller.add(data3);
+
+      expect(listener1.nachrichten.length, 2);
+      expect(listener1.nachrichten[0]['type'], 'type1');
+      expect(listener1.nachrichten[1]['type'], 'type1');
+      expect(listener2.nachrichten.length, 1);
+      expect(listener2.nachrichten[0]['type'], 'type2');
+    });
+
+    test('works without listeners', () async {
+      controller.add(TestPushData('type1'));
+    });
+
+    tearDown(() {
+      controller.close();
+    });
+  });
+}
+
+class TestListener implements PushNotificationListener {
+  List<Map<String, dynamic>> nachrichten = [];
+
+  @override
+  void receive_message(Map<dynamic, dynamic> data) {
+    nachrichten.add(data);
+  }
+}
+
+class TestPushData extends PushData {
+  String type;
+
+  TestPushData(this.type);
 }

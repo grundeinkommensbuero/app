@@ -29,7 +29,7 @@ class FirebaseReceiveService implements PushReceiveService {
 
   Future<void> initializeFirebase() async {
     // DEBUG
-    if(pullMode) return;
+    if (pullMode) return;
 
     // For iOS request permission first.
     await firebaseMessaging.requestNotificationPermissions();
@@ -66,7 +66,7 @@ class PullReceiveService extends BackendService implements PushReceiveService {
     try {
       HttpClientResponseBody reponse = await get('service/push/pull');
       List content = reponse.body;
-      if (content as List != null && content.isNotEmpty)
+      if (content != null && content.isNotEmpty)
         content.forEach((message) => onMessage(message));
     } catch (e) {
       ErrorService.handleError(e,
