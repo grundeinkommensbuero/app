@@ -15,7 +15,7 @@ class Message
     text = json_message_data['text'];
     sender_name = json_message_data['sender_name'];
     sending_time = DateTime.parse(json_message_data['sending_time']);
-    message_color = Color(int.parse(json_message_data['color']));
+    message_color = Color(int.parse(json_message_data['color'].toString()));
   ***REMOVED***
 
   Map<String, dynamic> toJson() => {

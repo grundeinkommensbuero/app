@@ -31,8 +31,8 @@ class MyApp extends StatelessWidget {
       ? DemoPushSendService(userService)
       : PushSendService(userService);
   static var pushNotificationManager = demoMode
-      ? PushNotificationManager(storageService, userService, firebaseService)
-      : DemoPushNotificationManager(pushService);
+      ? DemoPushNotificationManager(pushService)
+      : PushNotificationManager(storageService, userService, firebaseService);
   var termineService =
       demoMode ? DemoTermineService(userService) : TermineService(userService);
   static var stammdatenService = demoMode
@@ -42,8 +42,6 @@ class MyApp extends StatelessWidget {
       ? DemoListLocationService(userService)
       : ListLocationService(userService);
   static var chatMessageService = ChatMessageService(pushNotificationManager);
-
-  MyApp() {***REMOVED***
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +56,7 @@ class MyApp extends StatelessWidget {
               value: listLocationService),
           Provider<StorageService>.value(value: storageService),
           Provider<AbstractPushSendService>.value(value: pushService),
-          Provider<PushNotificationManager>.value(
+          Provider<AbstractPushNotificationManager>.value(
               value: pushNotificationManager),
           Provider<ChatMessageService>.value(value: chatMessageService),
           Provider<AbstractUserService>.value(value: userService),

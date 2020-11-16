@@ -4,7 +4,7 @@ import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/shared/user_data.dart';
 
 class ChatMessageService implements PushNotificationListener {
-  ChatMessageService(PushNotificationManager manager) {
+  ChatMessageService(AbstractPushNotificationManager manager) {
     manager.register_message_callback(PushDataTypes.SimpleChatMessage, this);
   ***REMOVED***
 
