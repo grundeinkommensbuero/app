@@ -80,7 +80,7 @@ open class TermineRestResource {
 
     @POST
     @Path("neu")
-    @RolesAllowed("named")
+    @RolesAllowed("user")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun legeNeuenTerminAn(actionAndToken: ActionWithTokenDto): Response {
@@ -100,7 +100,7 @@ open class TermineRestResource {
 
     @POST
     @Path("termin")
-    @RolesAllowed("named")
+    @RolesAllowed("user")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun aktualisiereTermin(actionAndToken: ActionWithTokenDto): Response {
