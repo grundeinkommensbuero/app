@@ -87,6 +87,22 @@ main() {
           throwsA((e) => e is MissingTargetError));
     ***REMOVED***);
 
+    test('pushToDevices legt Nachricht in Stream', () async {
+      List<PushData> gesendeteNachrichten = [];
+      service.stream.listen((data) => gesendeteNachrichten.add(data));
+
+      var pushData1 = PushData();
+      var pushData2 = PushData();
+      await service.pushToDevices(
+          ['Empfänger'], pushData1, PushNotification('Titel', "Inhalt"));
+      await service.pushToDevices(
+          ['Empfänger'], pushData2, PushNotification('Titel', "Inhalt"));
+
+      expect(gesendeteNachrichten.length, 2);
+      expect(true, gesendeteNachrichten.contains(pushData1));
+      expect(true, gesendeteNachrichten.contains(pushData2));
+    ***REMOVED***);
+
     test('pushToTopic erwartet Thema', () {
       expect(
           () => service.pushToTopic(
@@ -97,6 +113,38 @@ main() {
           () => service.pushToTopic(
               '', PushData(), PushNotification('Titel', "Inhalt")),
           throwsA((e) => e is MissingTargetError));
+    ***REMOVED***);
+
+    test('pushToTopic legt Nachricht in Stream', () async {
+      List<PushData> gesendeteNachrichten = [];
+      service.stream.listen((data) => gesendeteNachrichten.add(data));
+
+      var pushData1 = PushData();
+      var pushData2 = PushData();
+      await service.pushToTopic(
+          'Thema', pushData1, PushNotification('Titel', "Inhalt"));
+      await service.pushToTopic(
+          'Thema', pushData2, PushNotification('Titel', "Inhalt"));
+
+      expect(gesendeteNachrichten.length, 2);
+      expect(true, gesendeteNachrichten.contains(pushData1));
+      expect(true, gesendeteNachrichten.contains(pushData2));
+    ***REMOVED***);
+
+    test('pushToAction legt Nachricht in Stream', () async {
+      List<PushData> gesendeteNachrichten = [];
+      service.stream.listen((data) => gesendeteNachrichten.add(data));
+
+      var pushData1 = PushData();
+      var pushData2 = PushData();
+      await service.pushToAction(
+          1, pushData1, PushNotification('Titel', "Inhalt"));
+      await service.pushToAction(
+          1, pushData2, PushNotification('Titel', "Inhalt"));
+
+      expect(gesendeteNachrichten.length, 2);
+      expect(true, gesendeteNachrichten.contains(pushData1));
+      expect(true, gesendeteNachrichten.contains(pushData2));
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***

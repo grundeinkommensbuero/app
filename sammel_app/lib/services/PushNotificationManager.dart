@@ -1,17 +1,22 @@
 import 'dart:async';
 
 import 'package:sammel_app/services/PushReceiveService.dart';
+import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
 import 'BackendService.dart';
 import 'ErrorService.dart';
 
-class PushNotificationListener {
+abstract class AbstractPushNotificationManager {
+  void register_message_callback(String id, PushNotificationListener callback);
+***REMOVED***
+
+abstract class PushNotificationListener {
   void receive_message(Map<dynamic, dynamic> data) {***REMOVED***
 ***REMOVED***
 
-class PushNotificationManager {
+class PushNotificationManager implements AbstractPushNotificationManager {
   PushReceiveService listener;
   StorageService storageService;
   AbstractUserService userService;
@@ -30,8 +35,7 @@ class PushNotificationManager {
           'Problem beim Einrichten von Push-Nachrichten',
           'Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. '
               'Das kann der Fall sein, wenn etwa ein Google-freies Betriebssystem genutzt wird. '
-              'Der Chat und Benachrichtungen funktionieren ohne Google-Services leider nicht. '
-              'Dies sind Einschränkungen, die auf Googles restriktive Android-Architektur zurückgehen.');
+              'Darum kann die App nur Benachrichtigungen empfangen während sie geöffnet ist.');
       listener = PullReceiveService(userService, backend);
     ***REMOVED*** else {
       listener = firebaseService;
@@ -64,18 +68,19 @@ class PushNotificationManager {
     ***REMOVED***
    */
 
-    Future<dynamic> onMessageCallback(Map<String, dynamic> message) async {
-      print('message received' + message.toString());
-      Map<dynamic, dynamic> data = message['data'];
-      if (data.containsKey('type')) {
-        String type = data['type'];
-        if (callback_map.containsKey(type)) {
-          data.remove('type');
-          callback_map[type].receive_message(data);
-        ***REMOVED***
+  Future<dynamic> onMessageCallback(Map<String, dynamic> message) async {
+    print('message received' + message.toString());
+    Map<dynamic, dynamic> data = message['data'];
+    if (data.containsKey('type')) {
+      String type = data['type'];
+      if (callback_map.containsKey(type)) {
+        data.remove('type');
+        callback_map[type].receive_message(data);
       ***REMOVED***
     ***REMOVED***
+  ***REMOVED***
 
+  @override
   void register_message_callback(String id, PushNotificationListener callback) {
     this.callback_map[id] = callback;
   ***REMOVED***
@@ -87,4 +92,18 @@ class PushNotificationManager {
 void unsubscribeFromChannel(String topic) async {
   listener.unsubscribeFromTopic(topic);
 ***REMOVED****/
+***REMOVED***
+
+class DemoPushNotificationManager implements AbstractPushNotificationManager {
+  DemoPushSendService pushService;
+  PushNotificationListener callback;
+
+  DemoPushNotificationManager(this.pushService);
+
+  @override
+  void register_message_callback(String id, PushNotificationListener callback) {
+    pushService.stream
+        .where((data) => data.type == id)
+        .listen((data) => callback.receive_message(data.toJson()));
+  ***REMOVED***
 ***REMOVED***

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:sammel_app/model/PushMessage.dart';
@@ -7,7 +8,6 @@ import 'package:sammel_app/services/ErrorService.dart';
 import 'UserService.dart';
 
 abstract class AbstractPushSendService extends BackendService {
-
   AbstractPushSendService(userService, [Backend backendMock])
       : super(userService, backendMock);
 
@@ -15,6 +15,7 @@ abstract class AbstractPushSendService extends BackendService {
       List<String> recipients, PushData data, PushNotification notification);
 
   pushToTopic(String topic, PushData data, PushNotification notification);
+
   pushToAction(int actionId, PushData data, PushNotification notification);
 ***REMOVED***
 
@@ -72,6 +73,10 @@ class DemoPushSendService extends AbstractPushSendService {
   DemoPushSendService(AbstractUserService userService)
       : super(userService, DemoBackend());
 
+  var controller = StreamController<PushData>();
+
+  get stream => controller.stream;
+
   @override
   pushToDevices(List<String> recipients, PushData data,
       PushNotification notification) async {
@@ -79,6 +84,7 @@ class DemoPushSendService extends AbstractPushSendService {
       throw MissingTargetError(
           "Für Push-Nachrichten an Geräte muss mindestens ein Empfänger angegeben werden.");
     ***REMOVED***
+    controller.add(data);
   ***REMOVED***
 
   @override
@@ -87,10 +93,11 @@ class DemoPushSendService extends AbstractPushSendService {
       throw MissingTargetError(
           "Für Push-Nachrichten an Topics muss ein Topic angegeben werden.");
     ***REMOVED***
+    controller.add(data);
   ***REMOVED***
 
   pushToAction(int actionId, PushData data, PushNotification notification) {
-    //TODO
+    controller.add(data);
   ***REMOVED***
 ***REMOVED***
 
