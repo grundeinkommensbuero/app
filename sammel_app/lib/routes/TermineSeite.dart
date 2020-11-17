@@ -223,29 +223,34 @@ class TermineSeiteState extends State<TermineSeite>
                     contentPadding: EdgeInsets.all(10.0),
                     children: <Widget>[
                       ActionDetailsPage(terminMitDetails),
-                      participant(terminMitDetails) ?
+                      participant(terminMitDetails)
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                RaisedButton(
+                                    key: Key('open chat window'),
+                                    child: Text('Zum Chat'),
+                                    onPressed: () =>
+                                        openChatWindow(terminMitDetails)),
+                              ],
+                            )
+                          : null,
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          RaisedButton(
-                              key: Key('open chat window'),
-                              child: Text('Zum Chat'),
-                              onPressed: () =>
-                                  openChatWindow(terminMitDetails)),
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          isMyAction(termin.id)
+                              ? editAndDeleteButtons(termin, context)
+                              : joinOrLeaveButton(
+                                  terminMitDetails, setDialogState),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: []..add(RaisedButton(
+                                  key: Key('action details close button'),
+                                  child: Text('Schließen'),
+                                  onPressed: () => Navigator.pop(
+                                      context, TerminDetailsCommand.CLOSE),
+                                )))
                         ],
-                      ) : null,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children:
-                            addEditDeleteButtonsIfMyAction(termin, context)
-                              ..addAll(addJoinLeaveButtonIfNotMyAction(
-                                  terminMitDetails, setDialogState))
-                              ..add(RaisedButton(
-                                key: Key('action details close button'),
-                                child: Text('Schließen'),
-                                onPressed: () => Navigator.pop(
-                                    context, TerminDetailsCommand.CLOSE),
-                              )),
                       ),
                     ].where((element) => element != null).toList(),
                   )));
@@ -279,58 +284,55 @@ class TermineSeiteState extends State<TermineSeite>
     return DweTheme.actionColor(action.ende, owner, participant);
   ***REMOVED***
 
-  List<Widget> addEditDeleteButtonsIfMyAction(
-      Termin termin, BuildContext context) {
-    if (isMyAction(termin.id))
-      return [
-        RaisedButton(
-            key: Key('action delete button'),
-            color: DweTheme.red,
-            child: Icon(Icons.delete),
-            onPressed: () {
-              showDialog<bool>(
-                      context: context,
-                      builder: (context) => confirmDeleteDialog(context))
-                  .then((confirmed) {
-                if (confirmed)
-                  Navigator.pop(context, TerminDetailsCommand.DELETE);
-              ***REMOVED***);
-            ***REMOVED***),
-        RaisedButton(
-          key: Key('action edit button'),
-          child: Icon(Icons.edit),
-          onPressed: () => Navigator.pop(context, TerminDetailsCommand.EDIT),
-        )
-      ];
-    else
-      return [];
+  Widget editAndDeleteButtons(Termin termin, BuildContext context) {
+    return Row(children: [
+      SizedBox(
+          width: 50.0,
+          child: RaisedButton(
+              key: Key('action delete button'),
+              padding: EdgeInsets.all(5.0),
+              color: DweTheme.red,
+              child: Icon(Icons.delete),
+              onPressed: () {
+                showDialog<bool>(
+                        context: context,
+                        builder: (context) => confirmDeleteDialog(context))
+                    .then((confirmed) {
+                  if (confirmed)
+                    Navigator.pop(context, TerminDetailsCommand.DELETE);
+                ***REMOVED***);
+              ***REMOVED***)),
+      SizedBox(width: 5.0),
+      SizedBox(
+          width: 50.0,
+          child: RaisedButton(
+            key: Key('action edit button'),
+            padding: EdgeInsets.all(5.0),
+            child: Icon(Icons.edit),
+            onPressed: () => Navigator.pop(context, TerminDetailsCommand.EDIT),
+          ))
+    ]);
   ***REMOVED***
 
-  List<Widget> addJoinLeaveButtonIfNotMyAction(
-      Termin terminMitDetails, Function setDialogState) {
-    if (isMyAction(terminMitDetails.id)) return [];
+  Widget joinOrLeaveButton(Termin terminMitDetails, Function setDialogState) {
     if (!participant(terminMitDetails))
-      return [
-        RaisedButton(
-            key: Key('join action button'),
-            child: Text('Mitmachen'),
-            onPressed: () {
-              joinAction(terminMitDetails);
-              setDialogState(() => terminMitDetails.participants.add(me));
-            ***REMOVED***)
-      ];
+      return RaisedButton(
+          key: Key('join action button'),
+          child: Text('Mitmachen'),
+          onPressed: () {
+            joinAction(terminMitDetails);
+            setDialogState(() => terminMitDetails.participants.add(me));
+          ***REMOVED***);
     else
-      return [
-        RaisedButton(
-            key: Key('leave action button'),
-            child: Text('Absagen'),
-            onPressed: () {
-              leaveAction(terminMitDetails);
-              setDialogState(() => terminMitDetails.participants.remove(
-                  terminMitDetails.participants
-                      .firstWhere((u) => u.id == me.id)));
-            ***REMOVED***)
-      ];
+      return RaisedButton(
+          key: Key('leave action button'),
+          child: Text('Absagen'),
+          onPressed: () {
+            leaveAction(terminMitDetails);
+            setDialogState(() => terminMitDetails.participants.remove(
+                terminMitDetails.participants
+                    .firstWhere((u) => u.id == me.id)));
+          ***REMOVED***);
   ***REMOVED***
 
   bool isMyAction(int id) {
