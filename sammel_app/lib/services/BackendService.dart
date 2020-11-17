@@ -116,13 +116,16 @@ class Backend {
   // there gotta be a better way to do this...
   static ladeZertifikat() async {
     // https://stackoverflow.com/questions/54104685/flutter-add-self-signed-certificate-from-asset-folder
-    ByteData data = await rootBundle.load(serverCertificate);
+    ByteData data = await rootBundle.load(rootCertificate);
     clientContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
+    if(testMode) {
+      ByteData data = await rootBundle.load(localCertificate);
+      clientContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
+    }
   }
 
-  static String get serverCertificate => testMode
-      ? 'assets/security/sammel-server_dwe.idash.org.pem'
-      : 'assets/security/sammel-server_10.0.2.2.pem';
+  static String rootCertificate = 'assets/security/root-cert.pem';
+  static String localCertificate = 'assets/security/sammel-server_10.0.2.2.pem';
 
   Future<HttpClientResponseBody> get(
       String url, Map<String, String> headers) async {
