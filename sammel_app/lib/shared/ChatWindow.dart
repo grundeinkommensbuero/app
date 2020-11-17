@@ -10,6 +10,7 @@ import 'package:sammel_app/routes/CreateUserDialog.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
+import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/user_data.dart';
 
 import 'ChatInput.dart';
@@ -41,6 +42,7 @@ class ChatWindowState extends State<ChatWindow> {
   Termin termin;
   User user;
   AbstractPushSendService pushService;
+
   // ignore: non_constant_identifier_names
   ChatListWidget widget_list;
   ScrollController scroll_controller;
@@ -48,10 +50,13 @@ class ChatWindowState extends State<ChatWindow> {
   @override
   Widget build(BuildContext context) {
     if (user == null) {
-      Provider.of<AbstractUserService>(context).user_stream.stream.listen((user) => setState(() => this.user = user));
+      Provider.of<AbstractUserService>(context)
+          .user_stream
+          .stream
+          .listen((user) => setState(() => this.user = user));
       pushService = Provider.of<AbstractPushSendService>(context);
-      this.user = Provider.of<AbstractUserService>(context).internal_user_object;
-
+      this.user =
+          Provider.of<AbstractUserService>(context).internal_user_object;
     }
 
     var inputWidget = ChatInputWidget(onSendMessage);
@@ -59,31 +64,59 @@ class ChatWindowState extends State<ChatWindow> {
     var header_widget = buildHeader(widget.termin);
     Scaffold page = Scaffold(
         appBar: header_widget,
-        body: Padding(child: this.widget_list, padding: EdgeInsets.only(bottom: 40)),
+        body: Padding(
+            child: this.widget_list, padding: EdgeInsets.only(bottom: 40)),
         bottomSheet: inputWidget);
     return page;
   }
 
   buildHeader(Termin termin) {
     return AppBar(
-        title: Column(
+        title: Column(children: [
+          RichText(
+              text: TextSpan(children: [
+                TextSpan(
+                    text: termin.typ,
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                TextSpan(
+                    text: ' in ',
+                    style: TextStyle(
+                        fontSize: 13.0, fontWeight: FontWeight.normal)),
+                TextSpan(
+                    text: termin.ort.ort,
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+              ], style: TextStyle(color: DweTheme.purple, fontSize: 13.0)),
+              softWrap: false,
+              overflow: TextOverflow.fade),
+          Text(
+              'am ${ChronoHelfer.formatDateOfDateTime(termin.beginn)}, um ${ChronoHelfer.dateTimeToStringHHmm(termin.beginn)} Uhr',
+              style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.normal),
+              overflow: TextOverflow.fade)
+        ]),
+        /*Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Row(
               children: <Widget>[
-                Text(termin.typ, style: TextStyle(fontSize: 13.0)),
+                Text(
+                  termin.typ,
+                  style: TextStyle(fontSize: 13.0),
+                  overflow: TextOverflow.fade,
+                ),
                 Text(' in ',
                     style: TextStyle(
-                        fontSize: 13.0, fontWeight: FontWeight.normal)),
-                Text(termin.ort.ort, style: TextStyle(fontSize: 13.0)),
+                        fontSize: 13.0, fontWeight: FontWeight.normal),
+                    overflow: TextOverflow.fade),
+                Text(termin.ort.ort,
+                    style: TextStyle(fontSize: 13.0),
+                    overflow: TextOverflow.fade),
               ],
             ),
             Text(
                 'am ${ChronoHelfer.formatDateOfDateTime(termin.beginn)}, um ${ChronoHelfer.dateTimeToStringHHmm(termin.beginn)} Uhr',
                 style:
                     TextStyle(fontSize: 13.0, fontWeight: FontWeight.normal)),
-          ],
-        ),
+          ]),*/
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.people),
@@ -116,55 +149,75 @@ class ChatWindowState extends State<ChatWindow> {
   }
 
   Widget create_member_list_widget(List<User> participants) {
-
     if (participants.length == 0) {
       return Text('Keine Teilnehmer');
     } else {
-      List<Widget> users = participants.where((user) => user.name != null && user.name != '').map((user) =>
-          create_user_widget(user.name, user.color)).toList();
-      int a_count = participants.where((user) => user.name == null || user.name == '').length;
-      users.insert(0, Padding(padding: EdgeInsets.only(left: 15, top: 5, bottom: 5), child: Text('${users.length+a_count} Teilnehmer im Chat', style: TextStyle(fontSize: 15, fontWeight: FontWeight.normal))));
-      if(a_count > 0)
-        {
-          users.add(create_user_widget('+ $a_count weitere Teilnehmer', Colors.black));
-        }
+      List<Widget> users = participants
+          .where((user) => user.name != null && user.name != '')
+          .map((user) => create_user_widget(user.name, user.color))
+          .toList();
+      int a_count = participants
+          .where((user) => user.name == null || user.name == '')
+          .length;
+      users.insert(
+          0,
+          Padding(
+              padding: EdgeInsets.only(left: 15, top: 5, bottom: 5),
+              child: Text('${users.length + a_count} Teilnehmer im Chat',
+                  style:
+                      TextStyle(fontSize: 15, fontWeight: FontWeight.normal))));
+      if (a_count > 0) {
+        users.add(
+            create_user_widget('+ $a_count weitere Teilnehmer', Colors.black));
+      }
       return Column(children: users);
     }
   }
 
-  Padding create_user_widget(String user_name, Color user_color) => Padding(padding: EdgeInsets.only(left: 15, top: 5, bottom: 5), child: Row(children: [Icon(Icons.person, color: user_color,size: 55,),SizedBox(width: 10,),Text(user_name, style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal))]));
+  Padding create_user_widget(String user_name, Color user_color) => Padding(
+      padding: EdgeInsets.only(left: 15, top: 5, bottom: 5),
+      child: Row(children: [
+        Icon(
+          Icons.person,
+          color: user_color,
+          size: 55,
+        ),
+        SizedBox(
+          width: 10,
+        ),
+        Text(user_name,
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal))
+      ]));
 
-   onSendMessage(String text) async {
+  onSendMessage(String text) async {
+    if (text == "") {
+      return;
+    }
 
-    if(text == "")
-      {
-        return;
-      }
-
-    if(user.name == "" || user.name == null)
-    {
+    if (user.name == "" || user.name == null) {
       user = await showCreateUserDialog(context: context, user: user);
-      if(user.name == "" || user.name == null)
-      {
-        showDialog<void>(context: context,
+      if (user.name == "" || user.name == null) {
+        showDialog<void>(
+            context: context,
             barrierDismissible: false, // user must tap button!
             builder: (BuildContext context) {
-              return AlertDialog( title: Text('Error'),
+              return AlertDialog(
+                title: Text('Error'),
                 content: Text('Please enter valid user name to chat.'),
-                actions: <Widget>[FlatButton(
-                  child: Text('Ok'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },),],
+                actions: <Widget>[
+                  FlatButton(
+                    child: Text('Ok'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
               );
             });
         return;
+      } else {
+        Provider.of<AbstractUserService>(context).updateUser(user);
       }
-      else
-        {
-          Provider.of<AbstractUserService>(context).updateUser(user);
-        }
-
     }
     Message message = Message(
         text: text,
@@ -172,13 +225,12 @@ class ChatWindowState extends State<ChatWindow> {
         message_color: user.color,
         sender_name: user.name);
     MessagePushData mpd = MessagePushData(message, channel.id);
-    pushService.pushToAction(widget.termin.id, mpd, PushNotification("New Chat Message", "Open App to view Message"));
+    pushService.pushToAction(widget.termin.id, mpd,
+        PushNotification("New Chat Message", "Open App to view Message"));
     //textEditingController.clear();
     // myFocusNode.unfocus();
     channel.channelCallback(message);
   }
-
-
 
   @override
   void initState() {
