@@ -118,7 +118,7 @@ class Backend {
     // https://stackoverflow.com/questions/54104685/flutter-add-self-signed-certificate-from-asset-folder
     ByteData data = await rootBundle.load(rootCertificate);
     clientContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
-    if(testMode) {
+    if(demoMode) {
       ByteData data = await rootBundle.load(localCertificate);
       clientContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
     ***REMOVED***
