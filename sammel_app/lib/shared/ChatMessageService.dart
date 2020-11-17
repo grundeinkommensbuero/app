@@ -5,19 +5,15 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/user_data.dart';
 
 class ChatMessageService implements PushNotificationListener {
-  ChatMessageService(AbstractPushNotificationManager manager) {
+
+  ChatMessageService(StorageService storageService, AbstractPushNotificationManager manager) {
     manager.register_message_callback(PushDataTypes.SimpleChatMessage, this);
+    this.storage_service = storageService;
   }
 
 
   Map<String, SimpleMessageChannel> channels = Map<String, SimpleMessageChannel>();
   StorageService storage_service;
-  ChatMessageService(this.storage_service)
-  {
-    if(this.storage_service == null) {
-      throw AssertionError('Storage Serive is null');
-    }
-  }
 
 
 
