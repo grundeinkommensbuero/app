@@ -45,7 +45,7 @@ class _ActionDetailsPage extends State<ActionDetailsPage> {
             SizedBox(
               width: 10.0,
             ),
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(
                 'Wann?',
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -54,7 +54,7 @@ class _ActionDetailsPage extends State<ActionDetailsPage> {
                   ChronoHelfer.formatDateOfDateTimeMitWochentag(widget.action.beginn)),
               SelectableText(ChronoHelfer.formatFromToTimeOfDateTimes(
                   widget.action.beginn, widget.action.ende))
-            ])
+            ]))
           ]),
           SizedBox(
             height: 10.0,
@@ -66,7 +66,7 @@ class _ActionDetailsPage extends State<ActionDetailsPage> {
             SizedBox(
               width: 10.0,
             ),
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(
                 'Was?',
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -74,7 +74,7 @@ class _ActionDetailsPage extends State<ActionDetailsPage> {
               ExpandableConstrainedBox(
                 child: SelectableText(
                   widget.action.details.beschreibung,
-                  onTap: () => {***REMOVED***,
+                  // onTap: () => {***REMOVED***,
                   // TODO: SelectableText stiehlt ExpandableContraintBox den onTap
                   style: TextStyle(fontWeight: FontWeight.normal),
                 ),
@@ -82,7 +82,7 @@ class _ActionDetailsPage extends State<ActionDetailsPage> {
                 expandableCondition:
                     widget.action.details.beschreibung.length > 200,
               )
-            ])
+            ]))
           ]),
           SizedBox(
             height: 10.0,
@@ -94,7 +94,7 @@ class _ActionDetailsPage extends State<ActionDetailsPage> {
             SizedBox(
               width: 10.0,
             ),
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(
                 'Wer?',
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -107,7 +107,7 @@ class _ActionDetailsPage extends State<ActionDetailsPage> {
                 maxHeight: 105.0,
                 expandableCondition: widget.action.details.kontakt.length > 200,
               )
-            ])
+            ]))
           ]),
 
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -115,7 +115,7 @@ class _ActionDetailsPage extends State<ActionDetailsPage> {
             SizedBox(
               width: 10.0,
             ),
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text(
                 'Wo? ',
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -137,7 +137,7 @@ class _ActionDetailsPage extends State<ActionDetailsPage> {
                 expandableCondition:
                     widget.action.details.treffpunkt.length > 70,
               ),
-            ])
+            ]))
           ]),
           SizedBox(
             height: 10.0,
