@@ -30,7 +30,7 @@ class _ExpandableConstraintBox extends State<ExpandableConstrainedBox>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    AnimatedSize(
+                    Expanded(child: AnimatedSize(
                         curve: Curves.decelerate,
                         vsync: this,
                         alignment: Alignment.topCenter,
@@ -43,7 +43,7 @@ class _ExpandableConstraintBox extends State<ExpandableConstrainedBox>
                                     : widget.maxHeight,
                                 maxWidth: 220.0,
                                 minWidth: 220.0),
-                            child: widget.child)),
+                            child: widget.child))),
                     Icon(
                       expanded
                           ? Icons.keyboard_arrow_up
@@ -56,8 +56,7 @@ class _ExpandableConstraintBox extends State<ExpandableConstrainedBox>
           )
         : ConstrainedBox(
             constraints: BoxConstraints(
-                maxHeight: expanded ? double.infinity : widget.maxHeight,
-                maxWidth: 250.0),
+                maxHeight: expanded ? double.infinity : widget.maxHeight),
             child: widget.child);
   }
 }
