@@ -122,9 +122,10 @@ class ActionEditorState extends State<ActionEditor> {
                   SizedBox(
                     width: 10.0,
                   ),
-                  Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                  Expanded(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
                         Text(
                           'Wo? ',
                           style: TextStyle(fontWeight: FontWeight.bold),
@@ -136,16 +137,17 @@ class ActionEditorState extends State<ActionEditor> {
                         InputButton(
                             onTap: venueSelection,
                             child: venueButtonCaption(this.action)),
-                      ])
+                      ]))
                 ]),
                 Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Icon(Icons.access_time, size: 40.0),
                   SizedBox(
                     width: 10.0,
                   ),
-                  Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                  Expanded(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
                         Text(
                           'Wann?',
                           style: TextStyle(fontWeight: FontWeight.bold),
@@ -156,16 +158,17 @@ class ActionEditorState extends State<ActionEditor> {
                             onTap: timeSelection,
                             child: timeButtonCaption(this.action),
                             key: Key('open time span dialog')),
-                      ])
+                      ]))
                 ]),
                 Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Icon(Icons.info_outline, size: 40.0),
                   SizedBox(
                     width: 10.0,
                   ),
-                  Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                  Expanded(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
                         Text(
                           'Was?',
                           style: TextStyle(fontWeight: FontWeight.bold),
@@ -178,16 +181,17 @@ class ActionEditorState extends State<ActionEditor> {
                         InputButton(
                             onTap: descriptionSelection,
                             child: descriptionButtonCaption(this.action)),
-                      ])
+                      ]))
                 ]),
                 Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Icon(Icons.face, size: 40.0),
                   SizedBox(
                     width: 10.0,
                   ),
-                  Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                  Expanded(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
                         Text(
                           'Wer?',
                           style: TextStyle(fontWeight: FontWeight.bold),
@@ -195,7 +199,7 @@ class ActionEditorState extends State<ActionEditor> {
                         InputButton(
                             onTap: contactSelection,
                             child: contactButtonCaption(this.action)),
-                      ])
+                      ]))
                 ]),
               ]),
         ),
@@ -674,7 +678,7 @@ class InputButton extends StatelessWidget {
             child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Icon(Icons.keyboard_arrow_right, size: 15),
               SizedBox(width: 5),
-              SizedBox(width: 200.0, child: child),
+              Expanded(child: child),
             ])),
         onTap: onTap);
   }
