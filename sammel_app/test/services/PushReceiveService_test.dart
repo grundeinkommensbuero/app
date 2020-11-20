@@ -16,13 +16,23 @@ main() {
     when(firebaseMock.getToken()).thenAnswer((_) async => "firebase-token");
   ***REMOVED***);
 
-  group('FirebaseListener', () {
+  group('FirebaseReceiveService', () {
     test('takes Mock if given', () {
       when(firebaseMock.getToken()).thenAnswer((_) => null);
       var firebaseListener = FirebaseReceiveService(firebaseMock);
 
       expect(firebaseListener.firebaseMessaging, firebaseMock);
       expect(firebaseListener.firebaseMessaging is FirebaseMessagingMock, true);
+    ***REMOVED***);
+
+    test('registers onMessage listener', () {
+      when(firebaseMock.getToken()).thenAnswer((_) => null);
+      var firebaseListener = FirebaseReceiveService(firebaseMock);
+      var onMessage = (_) async => null;
+
+      firebaseListener.subscribe(onMessage: onMessage);
+
+      verify(firebaseMock.configure(onMessage: onMessage)).called(1);
     ***REMOVED***);
   ***REMOVED***);
 
