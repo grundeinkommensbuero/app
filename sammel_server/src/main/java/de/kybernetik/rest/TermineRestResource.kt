@@ -124,7 +124,7 @@ open class TermineRestResource {
 
     @DELETE
     @Path("termin")
-    @RolesAllowed("named")
+    @RolesAllowed("user")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun deleteAction(actionAndToken: ActionWithTokenDto): Response {
