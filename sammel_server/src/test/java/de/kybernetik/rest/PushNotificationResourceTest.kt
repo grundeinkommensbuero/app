@@ -318,6 +318,20 @@ class PushNotificationResourceTest {
     ***REMOVED***
 
     @Test
+    fun `pullNotifications loescht Nachrichten in DB`() {
+        val pushMessages = listOf(
+                PushMessage(karl(), emptyMap(), PushNotificationDto(title = "1")),
+                PushMessage(karl(), emptyMap(), PushNotificationDto(title = "2")),
+                PushMessage(karl(), emptyMap(), PushNotificationDto(title = "3")))
+        whenever(pushMessageDao.ladeAllePushMessagesFuerBenutzer(11))
+                .thenReturn(pushMessages)
+
+        val response = resource.pullNotifications()
+
+        verify(pushMessageDao, times(1)).loeschePushMessages(pushMessages)
+    ***REMOVED***
+
+    @Test
     fun `pullNotifications liefert keine Empfaenger aus`() {
         whenever(pushMessageDao.ladeAllePushMessagesFuerBenutzer(11))
                 .thenReturn(singletonList(PushMessage(karl(), emptyMap(), PushNotificationDto(title = "1"))))
