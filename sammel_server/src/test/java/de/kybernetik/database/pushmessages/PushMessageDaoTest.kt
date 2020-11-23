@@ -15,6 +15,7 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import de.kybernetik.rest.PushNotificationDto
+import org.mockito.ArgumentMatchers.anyDouble
 import javax.persistence.EntityManager
 import javax.persistence.TypedQuery
 
@@ -82,7 +83,8 @@ class PushMessageDaoTest {
 
         dao.loeschePushMessages(pushMessages)
 
-        verify(entity, times(3)).remove(any())
+        verify(entity, times(3)).find(PushMessage::class.java, 0L)
+        verify(entity, times(3)).remove(null)
     }
 
     @Test
