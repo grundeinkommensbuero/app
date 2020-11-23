@@ -36,7 +36,7 @@ main() {
     ***REMOVED***);
   ***REMOVED***);
 
-  group('PullReceiveService', () {
+  group('PullService', () {
     Backend backend = BackendMock();
     PullService service;
 
