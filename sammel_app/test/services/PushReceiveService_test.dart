@@ -36,7 +36,7 @@ main() {
     });
   });
 
-  group('PullReceiveService', () {
+  group('PullService', () {
     Backend backend = BackendMock();
     PullService service;
 
