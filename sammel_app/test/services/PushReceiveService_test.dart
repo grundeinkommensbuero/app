@@ -38,11 +38,11 @@ main() {
 
   group('PullReceiveService', () {
     Backend backend = BackendMock();
-    PullReceiveService service;
+    PullService service;
 
     setUp(() {
       reset(backend);
-      service = PullReceiveService(userService, backend);
+      service = PullService(userService, backend);
     });
 
     group('initially', () {

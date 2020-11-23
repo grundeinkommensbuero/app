@@ -39,7 +39,7 @@ main() {
       when(firebaseMock.token).thenAnswer((_) async => null);
       await manager.createPushListener(firebaseMock, backend);
 
-      expect(true, manager.listener is PullReceiveService);
+      expect(true, manager.listener is PullService);
     });
   });
 

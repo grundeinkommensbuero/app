@@ -47,11 +47,11 @@ class FirebaseReceiveService implements PushReceiveService {
           onBackgroundMessage: onBackgroundMessage);
 }
 
-class PullReceiveService extends BackendService implements PushReceiveService {
+class PullService extends BackendService implements PushReceiveService {
   Timer timer;
   MessageHandler onMessage = (_) async => Map();
 
-  PullReceiveService(AbstractUserService userService, [Backend backendMock])
+  PullService(AbstractUserService userService, [Backend backendMock])
       : super(userService, backendMock) {
     timer = Timer.periodic(Duration(seconds: 10), (_) => pull());
   }
