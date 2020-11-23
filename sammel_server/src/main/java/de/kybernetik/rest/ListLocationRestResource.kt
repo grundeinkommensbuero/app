@@ -22,7 +22,10 @@ open class ListLocationRestResource {
     open fun getActiveListLocations(): Response {
         val listLocations: List<ListLocation>? = dao.getActiveListLocations()
         val listLocationDtos =
-                listLocations?.map(ListLocationDto.Companion::convertFromListLocation) ?: emptyList()
+                listLocations
+                        ?.filter { it.breitengrad != null && it.laengengrad != null ***REMOVED***
+                        ?.map(ListLocationDto.Companion::convertFromListLocation)
+                        ?: emptyList()
         return Response.ok().entity(listLocationDtos).build()
     ***REMOVED***
 
