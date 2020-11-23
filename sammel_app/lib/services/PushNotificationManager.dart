@@ -36,7 +36,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
           'Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. '
               'Das kann der Fall sein, wenn etwa ein Google-freies Betriebssystem genutzt wird. '
               'Darum kann die App nur Benachrichtigungen empfangen während sie geöffnet ist.');
-      listener = PullReceiveService(userService, backend);
+      listener = PullService(userService, backend);
     ***REMOVED*** else {
       listener = firebaseService;
       // For testing purposes print the Firebase Messaging token
