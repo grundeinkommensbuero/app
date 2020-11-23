@@ -16,6 +16,7 @@ class StorageService {
   static const String _USER = 'user';
   static const String _SECRET = 'secret';
   static const String _PUSHTOKEN = 'pushToken';
+  static const String _PULL_MODE = 'pullMode';
 
   StorageService() {
     _prefs = SharedPreferences.getInstance();
@@ -84,9 +85,17 @@ class StorageService {
     prefs.clear();
   ***REMOVED***);
 
+  Future<void> saveCostumPushToken(String token) =>
+      prefs.then((prefs) => prefs.setString(_PUSHTOKEN, token));
+
+  Future<void> markPullMode() =>
+      prefs.then((prefs) => prefs.setBool(_PULL_MODE, true));
+
+  Future<bool> isPullMode() =>
+      prefs.then((prefs) => prefs.getBool(_PULL_MODE) ?? false);
+  
+  // for Debugging only
   loadCostumPushToken() =>
       prefs.then((prefs) => prefs.getString(_PUSHTOKEN));
 
-  Future<void> saveCostumPushToken(String token) =>
-      prefs.then((prefs) => prefs.setString(_PUSHTOKEN, token));
-***REMOVED***
+  ***REMOVED***

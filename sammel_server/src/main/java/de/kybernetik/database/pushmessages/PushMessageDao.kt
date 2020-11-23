@@ -17,11 +17,9 @@ open class PushMessageDao {
     private lateinit var entityManager: EntityManager
 
     open fun ladeAllePushMessagesFuerBenutzer(id: Long?): List<PushMessage> {
-        LOG.debug("Lade Push-Messages für Benutzer $id")
         val resultList = entityManager
                 .createQuery("select m from PushMessages m where m.empfaenger = $id", PushMessage::class.java)
                 .resultList
-        LOG.debug("Folgende PushMessages geladen: ${resultList.map { it.id ***REMOVED******REMOVED***")
         return resultList
     ***REMOVED***
 

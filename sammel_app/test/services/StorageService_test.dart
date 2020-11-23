@@ -255,6 +255,29 @@ void main() async {
     ***REMOVED***);
   ***REMOVED***);
 
+  group('pullMode', () {
+    test('markPullMode sets pullMode to true', () async {
+      await service.markPullMode();
+
+      expect(_prefs.getBool('pullMode'), true);
+    ***REMOVED***);
+
+    test('isPullMode returns false, if not set', () async {
+      var result = await service.isPullMode();
+
+      expect(result, false);
+    ***REMOVED***);
+
+    test('isPullMode returns false, if not set', () async {
+      _prefs.setBool('pullMode', true);
+
+      var result = await service.isPullMode();
+
+      expect(result, true);
+    ***REMOVED***);
+  ***REMOVED***);
+
+
   test('clearAllPreferences clears whole storage', () async {
     _prefs.setString('user', '{"id":11,"name":"Karl Marx","color":4294198070***REMOVED***');
     _prefs.setStringList('actionlist', ['1', '2', '3']);
@@ -270,6 +293,7 @@ void main() async {
     expect(_prefs.getBool('anyBool'), null);
     expect(_prefs.getDouble('anyDouble'), null);
   ***REMOVED***);
+
 
   tearDown(() async {
     await service.clearAllPreferences();
