@@ -89,7 +89,7 @@ open class PushNotificationResource {
 
         val pushMessages =
                 pushMessageDao.ladeAllePushMessagesFuerBenutzer(userId)
-        LOG.debug("${pushMessages.size} PushMessages für Benutzer $userId geladen")
+        LOG.debug("${pushMessages.size} PushMessages für Benutzer $userId geladen: ${pushMessages.map { it.id }}")
 
         pushMessageDao.loeschePushMessages(pushMessages)
 

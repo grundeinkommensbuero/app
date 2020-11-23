@@ -255,6 +255,29 @@ void main() async {
     });
   });
 
+  group('pullMode', () {
+    test('markPullMode sets pullMode to true', () async {
+      await service.markPullMode();
+
+      expect(_prefs.getBool('pullMode'), true);
+    });
+
+    test('isPullMode returns false, if not set', () async {
+      var result = await service.isPullMode();
+
+      expect(result, false);
+    });
+
+    test('isPullMode returns false, if not set', () async {
+      _prefs.setBool('pullMode', true);
+
+      var result = await service.isPullMode();
+
+      expect(result, true);
+    });
+  });
+
+
   test('clearAllPreferences clears whole storage', () async {
     _prefs.setString('user', '{"id":11,"name":"Karl Marx","color":4294198070}');
     _prefs.setStringList('actionlist', ['1', '2', '3']);
@@ -270,6 +293,7 @@ void main() async {
     expect(_prefs.getBool('anyBool'), null);
     expect(_prefs.getDouble('anyDouble'), null);
   });
+
 
   tearDown(() async {
     await service.clearAllPreferences();

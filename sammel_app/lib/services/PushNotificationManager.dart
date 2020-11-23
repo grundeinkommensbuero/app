@@ -29,18 +29,24 @@ class PushNotificationManager implements AbstractPushNotificationManager {
 
   createPushListener(
       FirebaseReceiveService firebaseService, Backend backend) async {
-    var token = await firebaseService.token;
-    if (token == null || token.isEmpty) {
-      ErrorService.pushMessage(
-          'Problem beim Einrichten von Push-Nachrichten',
-          'Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. '
-              'Das kann der Fall sein, wenn etwa ein Google-freies Betriebssystem genutzt wird. '
-              'Darum kann die App nur Benachrichtigungen empfangen während sie geöffnet ist.');
+    if (await storageService.isPullMode())
       listener = PullService(userService, backend);
-    } else {
-      listener = firebaseService;
-      // For testing purposes print the Firebase Messaging token
-      print("Firebase token: $token");
+    else {
+      var token = await firebaseService.token;
+      if (token == null || token.isEmpty) {
+        ErrorService.pushMessage(
+            'Problem beim Einrichten von Push-Nachrichten',
+            'Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. '
+                'Das kann der Fall sein, wenn etwa ein Google-freies Betriebssystem genutzt wird. '
+                'Darum kann die App nur Benachrichtigungen empfangen während sie geöffnet ist.');
+
+        storageService.markPullMode();
+        listener = PullService(userService, backend);
+      } else {
+        listener = firebaseService;
+        // For testing purposes print the Firebase Messaging token
+        print("Firebase token: $token");
+      }
     }
 
     listener.subscribe(

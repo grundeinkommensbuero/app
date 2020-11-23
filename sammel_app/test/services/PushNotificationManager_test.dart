@@ -24,11 +24,21 @@ main() {
     reset(storageService);
     reset(firebaseMock);
     when(firebaseMock.token).thenAnswer((_) async => "firebase-token");
+    when(storageService.isPullMode()).thenAnswer((_) async => false);
     manager = PushNotificationManager(
         storageService, userService, firebaseMock, backend);
   });
 
   group('createPushListener', () {
+    test('erzeugt PullService, wenn bereits im Pull-Modus',
+        () async {
+      when(storageService.isPullMode()).thenAnswer((_) async => true);
+
+      await manager.createPushListener(firebaseMock, backend);
+
+      expect(true, manager.listener is PullService);
+    });
+
     test('hinterlegt Firebase-Service, wenn Token nicht null ist', () async {
       await manager.createPushListener(firebaseMock, backend);
 
@@ -40,6 +50,13 @@ main() {
       await manager.createPushListener(firebaseMock, backend);
 
       expect(true, manager.listener is PullService);
+    });
+
+    test('speichert als Pull-Modus, wenn Token null ist', () async {
+      when(firebaseMock.token).thenAnswer((_) async => null);
+      await manager.createPushListener(firebaseMock, backend);
+
+      verify(storageService.markPullMode()).called(1);
     });
   });
 
