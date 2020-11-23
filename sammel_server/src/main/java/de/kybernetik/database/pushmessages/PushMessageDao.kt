@@ -32,4 +32,12 @@ open class PushMessageDao {
         }
         entityManager.flush()
     }
+
+    open fun loeschePushMessages(nachrichten: List<PushMessage>) {
+        nachrichten.forEach {
+            val nachricht = entityManager.find(PushMessage::class.java, it.id)
+            entityManager.remove(nachricht)
+        }
+        entityManager.flush()
+    }
 }

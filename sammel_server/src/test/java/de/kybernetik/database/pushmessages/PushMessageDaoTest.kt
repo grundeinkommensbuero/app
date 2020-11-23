@@ -70,6 +70,23 @@ class PushMessageDaoTest {
 
         dao.speicherePushMessageFuerEmpfaenger(pushMessage, emptyList())
 
-        verify(entity, never()).persist(any())
+        verify(entity, never()).persist(any())                                                   
+    }
+
+    @Test
+    fun `loeschePushMessages loescht Nachrichten in DB`() {
+        val pushMessages = listOf(
+                PushMessage(karl(), mapOf("key" to "value"), PushNotificationDto()),
+                PushMessage(karl(), mapOf("key" to "value"), PushNotificationDto()),
+                PushMessage(karl(), mapOf("key" to "value"), PushNotificationDto()))
+
+        dao.loeschePushMessages(pushMessages)
+
+        verify(entity, times(3)).remove(any())
+    }
+
+    @Test
+    fun `loeschePushMessages kommt mit leerer Liste klar`() {
+        dao.loeschePushMessages(emptyList())
     }
 }
