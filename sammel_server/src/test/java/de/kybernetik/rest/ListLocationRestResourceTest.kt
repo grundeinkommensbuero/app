@@ -88,6 +88,34 @@ class ListLocationRestResourceTest {
     }
 
     @Test
+    @Suppress("UNCHECKED_CAST") // Datentyp für Entity
+    fun `getActiveListLocations filters entries without coordinates `() {
+        val lostPlace = cafeKotti()
+        lostPlace.breitengrad = null
+        lostPlace.laengengrad = null
+        whenever(dao.getActiveListLocations()).thenReturn(listOf(curry36(), lostPlace, zukunft()))
+
+        val result = resource.getActiveListLocations()
+        val list: List<ListLocationDto> = result.entity as List<ListLocationDto>
+
+        assertEquals(list.size,2)
+
+        assertEquals(list[0].id, curry36().id)
+        assertEquals(list[0].name, curry36().name)
+        assertEquals(list[0].street, curry36().strasse)
+        assertEquals(list[0].number, curry36().nr)
+        assertEquals(list[0].latitude, curry36().laengengrad)
+        assertEquals(list[0].longitude, curry36().breitengrad)
+
+        assertEquals(list[1].id, zukunft().id)
+        assertEquals(list[1].name, zukunft().name)
+        assertEquals(list[1].street, zukunft().strasse)
+        assertEquals(list[1].number, zukunft().nr)
+        assertEquals(list[1].latitude, zukunft().laengengrad)
+        assertEquals(list[1].longitude, zukunft().breitengrad)
+    }
+
+    @Test
     @Suppress("UNCHECKED_CAST")
     fun `getActiveListLocations returns empty list with empty list from database`() {
         whenever(dao.getActiveListLocations()).thenReturn(emptyList())
