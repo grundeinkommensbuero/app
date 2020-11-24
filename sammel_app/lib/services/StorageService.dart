@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
+import 'package:sammel_app/shared/user_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageService {
@@ -17,6 +18,7 @@ class StorageService {
   static const String _SECRET = 'secret';
   static const String _PUSHTOKEN = 'pushToken';
   static const String _PULL_MODE = 'pullMode';
+  static const String _CHANNEL = 'channel';
 
   StorageService() {
     _prefs = SharedPreferences.getInstance();
@@ -34,6 +36,21 @@ class StorageService {
 
   Future<String> loadActionToken(int id) =>
       prefs.then((prefs) => prefs.getString('$_ACTION:${id.toString()***REMOVED***'));
+
+  Future<bool> saveMessageChannel(SimpleMessageChannel channel) => prefs
+      .then((prefs) => prefs.setString('$_CHANNEL:${channel.id***REMOVED***', jsonEncode(channel.toJson())));
+
+  Future<SimpleMessageChannel> loadMessageChannel(String id) async
+  {
+    String s = (await prefs).getString('$_CHANNEL:${id***REMOVED***');
+    Future<SimpleMessageChannel> smc = null;
+    if(s != null)
+      {
+        smc = prefs.then((prefs) => SimpleMessageChannel.fromJSON(jsonDecode(prefs.getString('$_CHANNEL:${id***REMOVED***'))));
+      ***REMOVED***
+    return smc;
+  ***REMOVED***
+
 
   markActionIdAsStored(int id) => prefs.then((prefs) => _getActionList().then(
       (list) => prefs.setStringList(_ACTIONLIST, list..add(id.toString()))));
@@ -93,7 +110,7 @@ class StorageService {
 
   Future<bool> isPullMode() =>
       prefs.then((prefs) => prefs.getBool(_PULL_MODE) ?? false);
-  
+
   // for Debugging only
   loadCostumPushToken() =>
       prefs.then((prefs) => prefs.getString(_PUSHTOKEN));

@@ -71,7 +71,7 @@ class ChatListState extends State<ChatListWidget>   implements ChannelChangeList
   Widget create_widget_for_message(Message message) {
     Align alignment;
     Container card;
-    if (message.sender_name == widget.user.name) {
+    if (message.user_id == widget.user.id) {
       card = Container(
         /* constraints: BoxConstraints(
               maxWidth: MediaQuery.of(context).size.width*0.8), //00 * 0.8,
@@ -131,7 +131,7 @@ class ChatListState extends State<ChatListWidget>   implements ChannelChangeList
                         Row(children: [Text(
                           formatDateTime(message.sending_time),
                           textScaleFactor: 0.8,
-                        ), message.obtained_from_server ? Icon(Icons.check_circle_outline) : Icon(Icons.check_circle)])
+                        ), message.obtained_from_server ? Icon(Icons.check_circle_outline, size: 12) : Icon(Icons.check_circle, size: 12)])
                       ]))));
       alignment = Align(child: card, alignment: Alignment.topLeft);
     ***REMOVED***
