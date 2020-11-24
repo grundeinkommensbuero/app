@@ -212,25 +212,25 @@ class BenutzerRestResourceTest {
     ***REMOVED***
 
     @Test
-    fun `aktualisiereBenutzer weist Benutzer ohne Namen zurueck`() {
-        var response = resource.aktualisiereBenutzerName(null)
+    fun `aktualisiereBenutzername weist leeren Namen zurueck`() {
+        var response = resource.aktualisiereBenutzername(null)
         assertEquals(response.status, 412)
         assertEquals((response.entity as RestFehlermeldung).meldung, "Benutzername darf nicht leer sein")
 
-        response = resource.aktualisiereBenutzerName("")
+        response = resource.aktualisiereBenutzername("")
         assertEquals(response.status, 412)
 
-        response = resource.aktualisiereBenutzerName("   ")
+        response = resource.aktualisiereBenutzername("   ")
         assertEquals(response.status, 412)
     ***REMOVED***
 
     @Test
-    fun `aktualisiereBenutzer reicht Benutzer zum speichern in DB weiter`() {
+    fun `aktualisiereBenutzername reicht Benutzer zum speichern in DB weiter`() {
         val name = "ein neuer Name"
         val karl = Benutzer(1, "ein neuer Name", color = 12345678)
         whenever(dao.aktualisiereBenutzername(1L, name)).thenReturn(karl)
 
-        val response = resource.aktualisiereBenutzerName(name)
+        val response = resource.aktualisiereBenutzername(name)
 
         verify(dao, times(1)).aktualisiereBenutzername(1L, name)
         assertEquals(name, (response.entity as BenutzerDto).name)

@@ -161,7 +161,7 @@ class PushNotificationResourceTest {
         var response = resource.pushToParticipants(PushMessageDto(notification, data), actionId = 1L)
 
         assertEquals(response!!.status, 403)
-        assertEquals((response.entity as RestFehlermeldung).meldung, "Du bist nicht Teilnehmer dieser Aktion")
+        assertEquals("Du bist nicht Teilnehmer*in dieser Aktion", (response.entity as RestFehlermeldung).meldung)
         verify(firebase, never()).sendePushNachrichtAnEmpfaenger(any(), anyMap(), anyList())
 
         // ohne Teilnehmer
@@ -175,7 +175,7 @@ class PushNotificationResourceTest {
         response = resource.pushToParticipants(PushMessageDto(notification, data), actionId = 1L)
 
         assertEquals(response!!.status, 403)
-        assertEquals((response.entity as RestFehlermeldung).meldung, "Du bist nicht Teilnehmer dieser Aktion")
+        assertEquals("Du bist nicht Teilnehmer*in dieser Aktion", (response.entity as RestFehlermeldung).meldung)
         verify(firebase, never()).sendePushNachrichtAnEmpfaenger(any(), anyMap(), anyList())
     ***REMOVED***
 
@@ -248,6 +248,6 @@ class PushNotificationResourceTest {
         val response = resource.pullNotifications()
 
         @Suppress("UNCHECKED_CAST")
-        (assertNull ((response!!.entity as List<PushMessageDto>)[0].recipients))
+        (assertNull((response!!.entity as List<PushMessageDto>)[0].recipients))
     ***REMOVED***
 ***REMOVED***
