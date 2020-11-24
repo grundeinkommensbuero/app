@@ -175,6 +175,18 @@ void main() {
       expect(auth, 'MTpteVNlY3JldA==');
     });
   });
+
+  group('DemoUserService', () {
+    var service = DemoUserService();
+
+    test('updateName updates name', () async {
+      expect((await service.user).name, 'Ich');
+
+      service.updateUsername('neuer Name');
+
+      expect((await service.user).name, 'neuer Name');
+    });
+  });
 }
 
 bool equals(User user1, User user2) =>

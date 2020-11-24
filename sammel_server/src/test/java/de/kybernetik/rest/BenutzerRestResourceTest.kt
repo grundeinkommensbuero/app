@@ -14,7 +14,9 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import de.kybernetik.shared.Security
+import org.apache.http.auth.BasicUserPrincipal
 import java.lang.IllegalArgumentException
+import javax.ws.rs.core.SecurityContext
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
@@ -30,6 +32,9 @@ class BenutzerRestResourceTest {
     @Mock
     private lateinit var security: Security
 
+    @Mock
+    private lateinit var context: SecurityContext
+
     @InjectMocks
     private lateinit var resource: BenutzerRestResource
 
@@ -37,6 +42,7 @@ class BenutzerRestResourceTest {
     fun setUp() {
         whenever(security.hashSecret(any())).thenReturn(Security.HashMitSalt("hash", "salt"))
         whenever(security.verifiziereSecretMitHash(anyString(), any())).thenReturn(true)
+        whenever(context.userPrincipal).thenReturn(BasicUserPrincipal("1"))
     }
 
     @Test
@@ -207,42 +213,27 @@ class BenutzerRestResourceTest {
 
     @Test
     fun `aktualisiereBenutzer weist Benutzer ohne Namen zurueck`() {
-        var response = resource.aktualisiereBenutzer(BenutzerDto(1, null, color = 12345678))
+        var response = resource.aktualisiereBenutzerName(null)
         assertEquals(response.status, 412)
         assertEquals((response.entity as RestFehlermeldung).meldung, "Benutzername darf nicht leer sein")
 
-        response = resource.aktualisiereBenutzer(BenutzerDto(1, "", color = 12345678))
+        response = resource.aktualisiereBenutzerName("")
         assertEquals(response.status, 412)
 
-        response = resource.aktualisiereBenutzer(BenutzerDto(1, "   ", color = 12345678))
-        assertEquals(response.status, 412)
-    }
-
-    @Test
-    fun `aktualisiereBenutzer weist Benutzer ohne ID zurueck`() {
-        var response = resource.aktualisiereBenutzer(BenutzerDto(0, "ein Name", color = 12345678))
-        assertEquals(response.status, 412)
-        assertEquals((response.entity as RestFehlermeldung).meldung, "Der Benutzer ist noch nicht angelegt")
-
-        response = resource.aktualisiereBenutzer(BenutzerDto(null, "ein Name", color = 12345678))
+        response = resource.aktualisiereBenutzerName("   ")
         assertEquals(response.status, 412)
     }
 
     @Test
     fun `aktualisiereBenutzer reicht Benutzer zum speichern in DB weiter`() {
-        whenever(dao.aktualisiereUser(any())).thenReturn(Benutzer(1, "ein neuer Name", color = 12345678))
+        val name = "ein neuer Name"
+        val karl = Benutzer(1, "ein neuer Name", color = 12345678)
+        whenever(dao.aktualisiereBenutzername(1L, name)).thenReturn(karl)
 
-        val response = resource.aktualisiereBenutzer(BenutzerDto(1, "ein neuer Name", color = 12345678))
+        val response = resource.aktualisiereBenutzerName(name)
 
-        val benutzerCaptor = argumentCaptor<Benutzer>()
-        verify(dao, times(1)).aktualisiereUser(benutzerCaptor.capture())
-        assertEquals(benutzerCaptor.firstValue.id, 1)
-        assertEquals(benutzerCaptor.firstValue.name, "ein neuer Name")
-        assertEquals(benutzerCaptor.firstValue.color, 12345678)
-
-        assertEquals(response.status, 200)
-        assertEquals((response.entity as BenutzerDto).id, 1)
-        assertEquals((response.entity as BenutzerDto).name, "ein neuer Name")
-        assertEquals((response.entity as BenutzerDto).color, 12345678)
+        verify(dao, times(1)).aktualisiereBenutzername(1L, name)
+        assertEquals(name, (response.entity as BenutzerDto).name)
+        assertEquals(1L, (response.entity as BenutzerDto).id)
     }
 }

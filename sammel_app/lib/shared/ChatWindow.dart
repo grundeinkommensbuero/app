@@ -216,7 +216,7 @@ class ChatWindowState extends State<ChatWindow> {
             });
         return;
       } else {
-        Provider.of<AbstractUserService>(context).updateUser(user);
+        Provider.of<AbstractUserService>(context).updateUsername(user.name);
       }
     }
     Message message = Message(

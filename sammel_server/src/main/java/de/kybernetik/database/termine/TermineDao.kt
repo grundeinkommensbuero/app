@@ -55,7 +55,7 @@ open class TermineDao {
     }
 
     open fun aktualisiereTermin(termin: Termin): Termin {
-        LOG.debug("Aktualisiere Aktion ${termin}")
+        LOG.debug("Aktualisiere Aktion ${termin.id}")
         if (termin.id != termin.details?.termin_id) {
             throw DatenkonsistenzException("Termin und TerminDetails stimmen nicht überein")
         }

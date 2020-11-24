@@ -94,46 +94,6 @@ class FirebaseServiceTest {
     }
 
     @Test
-    fun `informiereUeberTeilnahme informiert Ersteller*in`() {
-
-        val firebaseMock = mock<FirebaseMessaging>()
-        whenever(firebase.instance()).thenReturn(firebaseMock)
-        val reponseMock = mock<BatchResponse>()
-        whenever(firebaseMock.sendMulticast(any())).thenReturn(reponseMock)
-        whenever(reponseMock.successCount).thenReturn(50)
-        whenever(benutzerDao.getFirebaseKeys(any())).thenReturn(listOf("firebaseKarl", "firebaseBini"))
-
-        service.informiereUeberTeilnahme(Benutzer(13, "Bini Adamczak", 3), terminMitTeilnehmerOhneDetails())
-
-        val message = argumentCaptor<MulticastMessage>()
-        verify(firebaseMock, times(2)).sendMulticast(message.capture())
-
-        assertEquals("Verstärkung für deine Aktion", getMulticastTitle(message.firstValue))
-        assertEquals("Bini Adamczak ist deiner Aktion vom 22.10. beigetreten", getMulticastBody(message.firstValue))
-        assertEquals((getMulticastData(message.firstValue).size), 1)
-        assertEquals(getMulticastData(message.firstValue)["action"], "2")
-        assertTrue(getMulticastTokens(message.firstValue).containsAll(listOf("firebaseKarl")))
-    }
-
-    @Test
-    fun `informiereUeberTeilnahme ersetzt fehlenden Namen mit Jemand`() {
-
-        val firebaseMock = mock<FirebaseMessaging>()
-        whenever(firebase.instance()).thenReturn(firebaseMock)
-        val reponseMock = mock<BatchResponse>()
-        whenever(firebaseMock.sendMulticast(any())).thenReturn(reponseMock)
-        whenever(reponseMock.successCount).thenReturn(50)
-        whenever(benutzerDao.getFirebaseKeys(any())).thenReturn(listOf("firebaseKarl", "firebaseBini"))
-
-        service.informiereUeberTeilnahme(Benutzer(13, null, 3), terminMitTeilnehmerOhneDetails())
-
-        val message = argumentCaptor<MulticastMessage>()
-        verify(firebaseMock, times(2)).sendMulticast(message.capture())
-        assertEquals("Jemand ist deiner Aktion vom 22.10. beigetreten", getMulticastBody(message.firstValue))
-        assertEquals("Jemand ist der Aktion vom 22.10. beigetreten, an der du teilnimmst", getMulticastBody(message.lastValue))
-    }
-
-    @Test
     fun `informiereUeberAbsage ersetzt leeren Namen mit Jemand`() {
 
         val firebaseMock = mock<FirebaseMessaging>()

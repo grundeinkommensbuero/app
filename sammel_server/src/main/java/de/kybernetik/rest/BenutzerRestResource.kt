@@ -9,11 +9,16 @@ import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
 import javax.transaction.Transactional
 import javax.ws.rs.*
+import javax.ws.rs.core.Context
 import javax.ws.rs.core.MediaType.APPLICATION_JSON
 import javax.ws.rs.core.Response
+import javax.ws.rs.core.SecurityContext
 
 @Path("benutzer")
 open class BenutzerRestResource {
+
+    @Context
+    private lateinit var context: SecurityContext
 
     @EJB
     private lateinit var dao: BenutzerDao
@@ -78,22 +83,20 @@ open class BenutzerRestResource {
     }
 
     @POST
-    @Path("aktualisiere")
+    @Path("aktualisiereName")
+    @RolesAllowed("user")
     @Produces(APPLICATION_JSON)
-    open fun aktualisiereBenutzer(benutzerDto: BenutzerDto): Response {
-        if(benutzerDto.id == null || benutzerDto.id == 0L) {
-            return Response
-                    .status(412)
-                    .entity(RestFehlermeldung("Der Benutzer ist noch nicht angelegt"))
-                    .build()
-        }
-        if(benutzerDto.name.isNullOrBlank()) {
+    open fun aktualisiereBenutzerName(name: String?): Response {
+        val id = context.userPrincipal.name
+        LOG.debug("Aktualisiere Benutzernamen von $id mit $name")
+        if(name.isNullOrBlank()) {
+            LOG.debug("Fehlender Benutzer-Name")
             return Response
                     .status(412)
                     .entity(RestFehlermeldung("Benutzername darf nicht leer sein"))
                     .build()
         }
-        val aktualisierterBenutzer = dao.aktualisiereUser(benutzerDto.convertToBenutzer())
+        val aktualisierterBenutzer = dao.aktualisiereBenutzername(id.toLong(), name)
         return Response
                 .status(200)
                 .entity(BenutzerDto.convertFromBenutzer(aktualisierterBenutzer))
