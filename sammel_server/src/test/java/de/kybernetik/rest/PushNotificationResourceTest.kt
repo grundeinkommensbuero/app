@@ -1,7 +1,6 @@
 package de.kybernetik.rest
 
 import TestdatenVorrat.Companion.karl
-import TestdatenVorrat.Companion.rosa
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.atLeastOnce
 import com.nhaarman.mockitokotlin2.whenever
@@ -22,6 +21,7 @@ import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import de.kybernetik.services.FirebaseService
 import de.kybernetik.services.FirebaseService.MissingMessageTarget
+import de.kybernetik.services.PushService
 import java.util.Collections.singletonList
 import javax.ws.rs.core.SecurityContext
 import kotlin.test.assertEquals
@@ -32,6 +32,9 @@ class PushNotificationResourceTest {
     @Rule
     @JvmField
     var mockitoRule: MockitoRule = MockitoJUnit.rule()
+
+    @Mock
+    lateinit var pushService: PushService
 
     @Mock
     lateinit var firebase: FirebaseService
@@ -143,24 +146,6 @@ class PushNotificationResourceTest {
     ***REMOVED***
 
     @Test
-    fun `pushToParticipants sendet Nachricht an Firebase weiter an korrekten Teilnehmer`() {
-        val karl = karl()
-        whenever(termineDao.getTermin(1L))
-                .thenReturn(Termin(1, null, null, null, null,
-                        singletonList(karl),
-                        52.48612, 13.47192, null))
-        whenever(benutzerDao.getFirebaseKeys(anyList())).thenReturn(singletonList("firebase-key 1"))
-
-        val notification = PushNotificationDto()
-        val data = emptyMap<String, String>()
-
-        resource.pushToParticipants(PushMessageDto(notification, data), actionId = 1L)
-
-        verify(firebase, atLeastOnce())
-                .sendePushNachrichtAnEmpfaenger(notification, data, singletonList("firebase-key 1"))
-    ***REMOVED***
-
-    @Test
     fun `pushToParticipants liefert 403, wenn User nicht Teilnehmer ist`() {
         val karl = karl()
         whenever(termineDao.getTermin(1L))
@@ -195,97 +180,21 @@ class PushNotificationResourceTest {
     ***REMOVED***
 
     @Test
-    fun `pushToParticipants sendet Nachricht an Firebase weiter an mehrere Teilnehmer`() {
-        val karl = karl()
+    fun `pushToParticipants sendet Nachricht an PushService`() {
+        val teilnehmer = singletonList(karl())
         whenever(termineDao.getTermin(1L))
                 .thenReturn(Termin(1, null, null, null, null,
-                        singletonList(karl),
+                        teilnehmer,
                         52.48612, 13.47192, null))
-        whenever(benutzerDao.getFirebaseKeys(singletonList(karl)))
-                .thenReturn(listOf("firebase-key 1", "firebase-key 2", "firebase-key 3"))
 
         val notification = PushNotificationDto()
         val data = emptyMap<String, String>()
 
         resource.pushToParticipants(PushMessageDto(notification, data), actionId = 1L)
 
-        verify(firebase, atLeastOnce()).sendePushNachrichtAnEmpfaenger(notification, data,
-                listOf("firebase-key 1", "firebase-key 2", "firebase-key 3"))
+        verify(pushService, atLeastOnce()).sendePushNachrichtAnEmpfaenger(notification, data, teilnehmer)
     ***REMOVED***
 
-    @Test
-    fun `pushToParticipants sendet Nachricht an Firebase weiter an keine Firebase-Keys`() {
-        val karl = karl()
-        whenever(termineDao.getTermin(1L))
-                .thenReturn(Termin(1, null, null, null, null,
-                        singletonList(karl),
-                        52.48612, 13.47192, null))
-        whenever(benutzerDao.getFirebaseKeys(singletonList(karl))).thenReturn(emptyList())
-
-        val notification = PushNotificationDto()
-        val data = emptyMap<String, String>()
-
-        resource.pushToParticipants(PushMessageDto(notification, data), actionId = 1L)
-
-        verify(firebase, never()).sendePushNachrichtAnEmpfaenger(any(), any(), anyList())
-    ***REMOVED***
-
-    @Test
-    fun `pushToParticipants speichert Nachricht fuer Benutzer ohne Firebase`() {
-        val karl = karl()
-        whenever(termineDao.getTermin(1L))
-                .thenReturn(Termin(1, null, null, null, null,
-                        singletonList(karl),
-                        52.48612, 13.47192, null))
-        whenever(benutzerDao.getFirebaseKeys(listOf(karl))).thenReturn(emptyList())
-        whenever(benutzerDao.getBenutzerOhneFirebase(listOf(karl))).thenReturn(listOf(karl))
-
-        val nachricht = PushMessageDto(PushNotificationDto(), emptyMap())
-        resource.pushToParticipants(nachricht, actionId = 1L)
-
-        verify(pushMessageDao, times(1)).speicherePushMessageFuerEmpfaenger(nachricht, singletonList(karl))
-    ***REMOVED***
-
-    @Test
-    fun `pushToParticipants speichert keine Nachricht wenn alle Benutzer Firebase nutzen`() {
-        val karl = karl()
-        whenever(termineDao.getTermin(1L))
-                .thenReturn(Termin(1, null, null, null, null,
-                        singletonList(karl),
-                        52.48612, 13.47192, null))
-        whenever(benutzerDao.getFirebaseKeys(listOf(karl))).thenReturn(listOf("AAAAAAAAA"))
-        whenever(benutzerDao.getBenutzerOhneFirebase(listOf(karl))).thenReturn(emptyList())
-
-        val nachricht = PushMessageDto(PushNotificationDto(), emptyMap())
-        resource.pushToParticipants(nachricht, actionId = 1L)
-
-        verify(pushMessageDao, never()).speicherePushMessageFuerEmpfaenger(com.nhaarman.mockitokotlin2.any(), anyList())
-    ***REMOVED***
-
-    @Test
-    fun `pushToParticipants bedient Benutzer mit und ohne Firebase gleichzeitig`() {
-        val karl = karl()
-        val rosa = rosa()
-        whenever(termineDao.getTermin(1L))
-                .thenReturn(Termin(1, null, null, null, null,
-                        listOf(karl, rosa),
-                        52.48612, 13.47192, null))
-        val firebaseListe = singletonList("AAAAAAAAAA")
-        whenever(benutzerDao.getFirebaseKeys(listOf(karl, rosa))).thenReturn(firebaseListe)
-        val ohenFirebaseListe = singletonList(rosa)
-        whenever(benutzerDao.getBenutzerOhneFirebase(listOf(karl, rosa))).thenReturn(ohenFirebaseListe)
-
-        val notification = PushNotificationDto()
-        val data = emptyMap<String, String>()
-        val nachricht = PushMessageDto(notification, data)
-
-        resource.pushToParticipants(nachricht, actionId = 1L)
-
-        verify(firebase, times(1)).sendePushNachrichtAnEmpfaenger(notification, data, firebaseListe)
-        verify(pushMessageDao, times(1)).speicherePushMessageFuerEmpfaenger(nachricht, ohenFirebaseListe)
-    ***REMOVED***
-
-    @Test
     fun `pullNotifications liest Benutzer-ID aus Credentials`() {
         val pushMessages = listOf(
                 PushMessage(karl(), emptyMap(), PushNotificationDto()),

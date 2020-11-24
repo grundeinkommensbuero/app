@@ -24,7 +24,7 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import de.kybernetik.rest.TermineRestResource.*
-import de.kybernetik.services.FirebaseService
+import de.kybernetik.services.PushService
 import java.time.LocalDateTime.now
 import javax.ejb.EJBException
 import javax.ws.rs.core.Response
@@ -43,7 +43,7 @@ class TermineRestResourceTest {
     private lateinit var benutzerDao: BenutzerDao
 
     @Mock
-    private lateinit var firebase: FirebaseService
+    private lateinit var pushService: PushService
 
     @Mock
     private lateinit var context: SecurityContext
@@ -357,37 +357,39 @@ class TermineRestResourceTest {
     ***REMOVED***
 
     @Test
-    fun `meldeTeilnahmeAn informiert Ersteller*in`() {
-        val termin = terminMitTeilnehmerMitDetails()
-        termin.teilnehmer = listOf(karl())
-        whenever(dao.getTermin(2L)).thenReturn(termin)
-
-        whenever(context.userPrincipal).thenReturn(BasicUserPrincipal("13"))
+    fun `informiereUeberTeilnahme informiert Ersteller`() {
+        val aktion = terminMitTeilnehmerMitDetails()
+        val karl = karl()
+        aktion.teilnehmer = listOf(karl)
         val bini = Benutzer(13, "Bini Adamczak", 3L)
-        whenever(benutzerDao.getBenutzer(13L)).thenReturn(bini)
 
-        resource.meldeTeilnahmeAn(2)
+        resource.informiereUeberTeilnahme(bini, aktion)
 
-        verify(firebase, times(1)).informiereUeberTeilnahme(bini, termin)
+        val empfaengerCaptor = argumentCaptor<List<Benutzer>>()
+        val notificationCaptor = argumentCaptor<PushNotificationDto>()
+        verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(notificationCaptor.capture(), any(), empfaengerCaptor.capture())
+        assertTrue(empfaengerCaptor.firstValue.containsAll(listOf(karl)))
+        assertEquals("Verstärkung für deine Aktion", notificationCaptor.firstValue.title)
     ***REMOVED***
 
     @Test
-    fun `sageTeilnahmeAb informiert Ersteller*in`() {
-        val termin = terminMitTeilnehmerMitDetails()
-        termin.teilnehmer = listOf(karl(), rosa())
-        whenever(dao.getTermin(2L)).thenReturn(termin)
+    fun `informiereUeberTeilnahme informiert restliche Teilnehmer`() {
+        val aktion = terminMitTeilnehmerMitDetails()
+        val rosa = rosa()
+        aktion.teilnehmer = listOf(karl(), rosa)
+        val bini = Benutzer(13, "Bini Adamczak", 3L)
 
-        whenever(context.userPrincipal).thenReturn(BasicUserPrincipal("11"))
-        val user = karl()
-        whenever(benutzerDao.getBenutzer(11L)).thenReturn(user)
+        resource.informiereUeberTeilnahme(bini, aktion)
 
-        resource.sageTeilnahmeAb(2)
-
-        verify(firebase, times(1)).informiereUeberAbsage(user, termin)
+        val empfaengerCaptor = argumentCaptor<List<Benutzer>>()
+        val notificationCaptor = argumentCaptor<PushNotificationDto>()
+        verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(notificationCaptor.capture(), any(), empfaengerCaptor.capture())
+        assertTrue(empfaengerCaptor.secondValue.containsAll(listOf(rosa)))
+        assertEquals("Verstärkung für eure Aktion", notificationCaptor.secondValue.title)
     ***REMOVED***
 
     @Test
-    fun sageTeilnahmeAbLiefert422BeiFehlenderAktionsId() {
+    fun `sageTeilnahmeAb liefert 422 bei fehlender Aktions-Id`() {
         val response = resource.sageTeilnahmeAb(null)
 
         assertEquals(response.status, 422)
@@ -407,15 +409,16 @@ class TermineRestResourceTest {
     @Test
     fun `sageTeilnahmeAb entfernt Benutzer als TerminTeilnehmer`() {
         val terminOhneTeilnehmerMitDetails = terminOhneTeilnehmerMitDetails()
-        terminOhneTeilnehmerMitDetails.teilnehmer = listOf(karl())
+        terminOhneTeilnehmerMitDetails.teilnehmer = listOf(karl(), rosa())
         whenever(dao.getTermin(1L)).thenReturn(terminOhneTeilnehmerMitDetails)
-        whenever(benutzerDao.getBenutzer(11L)).thenReturn(karl())
+        whenever(context.userPrincipal).thenReturn(BasicUserPrincipal("12"))
+        whenever(benutzerDao.getBenutzer(12L)).thenReturn(rosa())
 
         val response = resource.sageTeilnahmeAb(1)
 
         val captor = argumentCaptor<Termin>()
         verify(dao, times(1)).aktualisiereTermin(captor.capture())
-        assertEquals(captor.firstValue.teilnehmer.size, 0)
+        assertEquals(captor.firstValue.teilnehmer.size, 1)
         assertEquals(response.status, 202)
     ***REMOVED***
 
@@ -428,5 +431,37 @@ class TermineRestResourceTest {
 
         verify(dao, never()).aktualisiereTermin(any())
         assertEquals(response.status, 202)
+    ***REMOVED***
+
+    @Test
+    fun `informiereUeberAbsage informiert Ersteller`() {
+        val aktion = terminMitTeilnehmerMitDetails()
+        val karl = karl()
+        aktion.teilnehmer = listOf(karl)
+        val bini = Benutzer(13, "Bini Adamczak", 3L)
+
+        resource.informiereUeberAbsage(bini, aktion)
+
+        val empfaengerCaptor = argumentCaptor<List<Benutzer>>()
+        val notificationCaptor = argumentCaptor<PushNotificationDto>()
+        verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(notificationCaptor.capture(), any(), empfaengerCaptor.capture())
+        assertTrue(empfaengerCaptor.firstValue.containsAll(listOf(karl)))
+        assertEquals("Absage bei deiner Aktion", notificationCaptor.firstValue.title)
+    ***REMOVED***
+
+    @Test
+    fun `informiereUeberAbsage informiert restliche Teilnehmer`() {
+        val aktion = terminMitTeilnehmerMitDetails()
+        val rosa = rosa()
+        aktion.teilnehmer = listOf(karl(), rosa)
+        val bini = Benutzer(13, "Bini Adamczak", 3L)
+
+        resource.informiereUeberAbsage(bini, aktion)
+
+        val empfaengerCaptor = argumentCaptor<List<Benutzer>>()
+        val notificationCaptor = argumentCaptor<PushNotificationDto>()
+        verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(notificationCaptor.capture(), any(), empfaengerCaptor.capture())
+        assertTrue(empfaengerCaptor.secondValue.containsAll(listOf(rosa)))
+        assertEquals("Absage bei eurer Aktion", notificationCaptor.secondValue.title)
     ***REMOVED***
 ***REMOVED***

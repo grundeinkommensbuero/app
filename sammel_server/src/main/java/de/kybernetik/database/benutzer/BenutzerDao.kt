@@ -38,8 +38,11 @@ open class BenutzerDao {
         ***REMOVED***
     ***REMOVED***
 
-    open fun aktualisiereUser(benutzer: Benutzer): Benutzer {
-        return entityManager.merge(benutzer)
+    open fun aktualisiereBenutzername(id: Long, name: String): Benutzer {
+        val benutzerAusDb = entityManager.find(Benutzer::class.java, id)
+        benutzerAusDb.name = name
+        LOG.debug("Benutzername aktualisiert für ${benutzerAusDb.id***REMOVED*** mit ${benutzerAusDb.name***REMOVED***")
+        return benutzerAusDb
     ***REMOVED***
 
     open fun legeNeueCredentialsAn(credentials: Credentials) {

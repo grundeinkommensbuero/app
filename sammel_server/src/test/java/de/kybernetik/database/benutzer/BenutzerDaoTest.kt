@@ -3,6 +3,7 @@ package de.kybernetik.database.benutzer
 import TestdatenVorrat.Companion.karl
 import TestdatenVorrat.Companion.rosa
 import com.nhaarman.mockitokotlin2.*
+import org.apache.http.auth.BasicUserPrincipal
 import org.junit.Assert.assertFalse
 import org.junit.Rule
 import org.junit.Test
@@ -14,6 +15,8 @@ import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import javax.persistence.EntityManager
 import javax.persistence.TypedQuery
+import javax.ws.rs.core.SecurityContext
+import kotlin.test.assertEquals
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
 import de.kybernetik.database.benutzer.BenutzerDao as BenutzerDao
@@ -30,6 +33,9 @@ class BenutzerDaoTest {
     private lateinit var typedBenutzerQuery: TypedQuery<Benutzer>
     @Mock
     private lateinit var typedStringQuery: TypedQuery<String>
+
+    @Mock
+    private lateinit var context: SecurityContext
 
     @InjectMocks
     private lateinit var dao: BenutzerDao
@@ -155,12 +161,13 @@ class BenutzerDaoTest {
     ***REMOVED***
 
     @Test
-    fun `aktualisiereUser speichert User in Datenbank`() {
-        val user = karl()
-        whenever(entityManager.merge(user)).thenReturn(user)
+    fun `aktualisiereBenutzerName aktualisiert Benutzer-Entity und gibt sie zurueck`() {
+        whenever(context.userPrincipal).thenReturn(BasicUserPrincipal("1"))
+        val karl = karl()
+        whenever(entityManager.find(Benutzer::class.java, 1L)).thenReturn(karl)
 
-        dao.aktualisiereUser(user)
+        dao.aktualisiereBenutzername(1L, "neuer Name")
 
-        verify(entityManager, times(1)).merge(user)
+        assertEquals("neuer Name", karl.name)
     ***REMOVED***
 ***REMOVED***

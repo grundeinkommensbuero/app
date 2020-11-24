@@ -1,7 +1,9 @@
 package de.kybernetik.rest
 
 import de.kybernetik.database.DatabaseException
+import de.kybernetik.database.benutzer.Benutzer
 import de.kybernetik.database.benutzer.BenutzerDao
+import de.kybernetik.database.pushmessages.PushMessageDao
 import de.kybernetik.database.stammdaten.Ort
 import de.kybernetik.database.termine.Termin
 import de.kybernetik.database.termine.TerminDetails
@@ -9,8 +11,9 @@ import de.kybernetik.database.termine.TermineDao
 import de.kybernetik.database.termine.Token
 import org.jboss.logging.Logger
 import de.kybernetik.rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithoutDetails
-import de.kybernetik.services.FirebaseService
+import de.kybernetik.services.PushService
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
 import javax.ejb.EJBException
@@ -38,7 +41,7 @@ open class TermineRestResource {
     private lateinit var benutzerDao: BenutzerDao
 
     @EJB
-    private lateinit var firebase: FirebaseService
+    private lateinit var pushService: PushService
 
     @Context
     private lateinit var context: SecurityContext
@@ -152,25 +155,34 @@ open class TermineRestResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun meldeTeilnahmeAn(@QueryParam("id") id: Long?): Response {
-        if (id == null)
+        LOG.debug("Empfange Teilnahme an Aktion $id")
+
+        val ungueltigeAktion = "Die angegebene Aktion ist ungültig"
+        if (id == null) {
+            LOG.debug("$ungueltigeAktion: Fehlende Id")
             return Response.status(422)
-                    .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
+                    .entity(RestFehlermeldung(ungueltigeAktion))
                     .build()
+        ***REMOVED***
 
         val aktion = dao.getTermin(id)
-        if (aktion == null)
+        if (aktion == null) {
+            LOG.debug("$ungueltigeAktion: Unbekannte Id")
             return Response.status(422)
-                    .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
+                    .entity(RestFehlermeldung(ungueltigeAktion))
                     .build()
+        ***REMOVED***
 
         val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
 
-        if (aktion.teilnehmer.map { it.id ***REMOVED***.contains(userAusDb!!.id))
+        if (aktion.teilnehmer.map { it.id ***REMOVED***.contains(userAusDb!!.id)) {
+            LOG.debug("Benutzer $id ist bereits Teilnehmer der Aktion")
             return Response.accepted().build()
+        ***REMOVED***
 
         aktion.teilnehmer = aktion.teilnehmer.plus(userAusDb)
         dao.aktualisiereTermin(aktion)
-        firebase.informiereUeberTeilnahme(userAusDb, aktion)
+        informiereUeberTeilnahme(userAusDb, aktion)
 
         return Response.accepted().build()
     ***REMOVED***
@@ -185,21 +197,21 @@ open class TermineRestResource {
                     .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
                     .build()
 
-        val terminAusDb = dao.getTermin(id)
-        if (terminAusDb == null)
+        val AktionAusDb = dao.getTermin(id)
+        if (AktionAusDb == null)
             return Response.status(422)
                     .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
                     .build()
 
         val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
-        val userAusListe = terminAusDb.teilnehmer.find { it.id == userAusDb!!.id ***REMOVED***
+        val userAusListe = AktionAusDb.teilnehmer.find { it.id == userAusDb!!.id ***REMOVED***
 
         if (userAusListe == null)
             return Response.accepted().build()
 
-        terminAusDb.teilnehmer -= userAusListe
-        dao.aktualisiereTermin(terminAusDb)
-        firebase.informiereUeberAbsage(userAusDb!!, terminAusDb)
+        AktionAusDb.teilnehmer -= userAusListe
+        dao.aktualisiereTermin(AktionAusDb)
+        informiereUeberAbsage(userAusDb!!, AktionAusDb)
 
         return Response.accepted().build()
     ***REMOVED***
@@ -273,6 +285,43 @@ open class TermineRestResource {
                         kontakt = details.kontakt)
             ***REMOVED***
         ***REMOVED***
+    ***REMOVED***
+
+    open fun informiereUeberTeilnahme(benutzer: Benutzer, aktion: Termin) {
+        val name = if (benutzer.name.isNullOrBlank()) "Jemand" else benutzer.name
+
+        val titleErsteller = "Verstärkung für deine Aktion"
+        val bodyErsteller = "$name ist deiner Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))***REMOVED*** beigetreten"
+        val titleTeilnehmer = "Verstärkung für eure Aktion"
+        val bodyTeilnehmer = "$name ist der Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))***REMOVED*** beigetreten, an der du teilnimmst"
+
+        informiere(aktion, titleErsteller, bodyErsteller, titleTeilnehmer, bodyTeilnehmer)
+    ***REMOVED***
+
+    open fun informiereUeberAbsage(benutzer: Benutzer, aktion: Termin) {
+        val name = if (benutzer.name.isNullOrBlank()) "Jemand" else benutzer.name
+
+        val titleErsteller = "Absage bei deiner Aktion"
+        val bodyErsteller = "$name nimmt nicht mehr Teil an deiner Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))***REMOVED***"
+        val titleTeilnehmer = "Absage bei eurer Aktion"
+        val bodyTeilnehmer = "$name hat die Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))***REMOVED*** verlassen, an der du teilnimmst"
+
+        informiere(aktion, titleErsteller, bodyErsteller, titleTeilnehmer, bodyTeilnehmer)
+    ***REMOVED***
+
+    private fun informiere(aktion: Termin, titleErsteller: String, bodyErsteller: String, titleTeilnehmer: String, bodyTeilnehmer: String) {
+        // Informiere Ersteller
+        val ersteller = aktion.teilnehmer[0]
+        LOG.debug("Informiere Ersteller ${ersteller.id***REMOVED*** von Aktion ${aktion.id***REMOVED***")
+        val data = mapOf(Pair("action", aktion.id.toString()))
+        pushService.sendePushNachrichtAnEmpfaenger(
+                PushNotificationDto(titleErsteller, bodyErsteller), data, listOf(ersteller))
+
+        //Informiere Teilnehmer
+        val restlicheTeilnehmer = aktion.teilnehmer.minus(ersteller)
+        LOG.debug("Informiere restliche Teilnehmer ${restlicheTeilnehmer.map { it.id ***REMOVED******REMOVED*** von Aktion ${aktion.id***REMOVED***")
+        pushService.sendePushNachrichtAnEmpfaenger(
+                PushNotificationDto(titleTeilnehmer, bodyTeilnehmer), data, restlicheTeilnehmer)
     ***REMOVED***
 ***REMOVED***
 

@@ -15,7 +15,6 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import de.kybernetik.rest.PushNotificationDto
-import org.mockito.ArgumentMatchers.anyDouble
 import javax.persistence.EntityManager
 import javax.persistence.TypedQuery
 

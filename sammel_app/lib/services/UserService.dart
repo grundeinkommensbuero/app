@@ -22,7 +22,7 @@ abstract class AbstractUserService extends BackendService {
 
   AbstractUserService([Backend backendService]) : super(null, backendService);
 
-  Future<void> updateUser(User user);
+  Future<User> updateUsername(String name);
 ***REMOVED***
 
 class UserService extends AbstractUserService {
@@ -117,10 +117,10 @@ class UserService extends AbstractUserService {
     return auth;
   ***REMOVED***
 
-  Future<User> updateUser(User user) async {
+  Future<User> updateUsername(String name) async {
     try {
       var response =
-          await post('service/benutzer/aktualisiere', jsonEncode(user));
+          await post('service/benutzer/aktualisiereName', name);
 
       var userFromServer = User.fromJSON(response.body);
       internal_user_object.setUserData(userFromServer);
@@ -150,7 +150,8 @@ class DemoUserService extends AbstractUserService {
 
   ***REMOVED***
 
-  Future<void> updateUser(User user) {
-    //TODO
+  Future<User> updateUsername(String name) {
+    user = Future.value(User(1, name, Colors.red));
+    return user;
   ***REMOVED***
 ***REMOVED***

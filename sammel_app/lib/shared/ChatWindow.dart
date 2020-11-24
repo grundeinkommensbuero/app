@@ -216,7 +216,7 @@ class ChatWindowState extends State<ChatWindow> {
             ***REMOVED***);
         return;
       ***REMOVED*** else {
-        Provider.of<AbstractUserService>(context).updateUser(user);
+        Provider.of<AbstractUserService>(context).updateUsername(user.name);
       ***REMOVED***
     ***REMOVED***
     Message message = Message(
