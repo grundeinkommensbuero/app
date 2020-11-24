@@ -28,7 +28,7 @@ import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';
 
 final _stammdatenService = StammdatenServiceMock();
-final _terminService = TermineServiceMock();
+final _termineService = TermineServiceMock();
 final _listLocationService = ListLocationServiceMock();
 final _storageService = StorageServiceMock();
 final _pushService = PushSendServiceMock();
@@ -43,12 +43,12 @@ void main() {
     when(_storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
-    when(_terminService.loadActions(any)).thenAnswer((_) async => []);
+    when(_termineService.loadActions(any)).thenAnswer((_) async => []);
     when(_stammdatenService.ladeOrte()).thenAnswer((_) async => []);
 
     termineSeiteWidget = MultiProvider(
         providers: [
-          Provider<AbstractTermineService>.value(value: _terminService),
+          Provider<AbstractTermineService>.value(value: _termineService),
           Provider<AbstractListLocationService>.value(
               value: _listLocationService),
           Provider<StorageService>.value(value: _storageService),
@@ -73,7 +73,7 @@ void main() {
       when(userService.user).thenAnswer((realInvocation) async => me);
       var termineSeiteWidget = MultiProvider(
           providers: [
-            Provider<AbstractTermineService>.value(value: _terminService),
+            Provider<AbstractTermineService>.value(value: _termineService),
             Provider<AbstractListLocationService>.value(
                 value: _listLocationService),
             Provider<StorageService>.value(value: _storageService),
@@ -86,7 +86,7 @@ void main() {
             return TermineSeite();
           ***REMOVED***)));
 
-      when(_terminService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.anActionFrom(today)..ort = goerli(),
             TerminTestDaten.anActionFrom(tomorrow)..ort = nordkiez(),
             TerminTestDaten.anActionFrom(yesterday)..ort = treptowerPark(),
@@ -119,12 +119,12 @@ void main() {
     testWidgets(
         'shows edit and delete button in Detail Dialog only at own actions',
         (WidgetTester tester) async {
-      when(_terminService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin()..id = 1,
             TerminTestDaten.einTermin()..id = 2,
             TerminTestDaten.einTermin()..id = 3,
           ]);
-      when(_terminService.getActionWithDetails(any)).thenAnswer(
+      when(_termineService.getActionWithDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       when(_storageService.loadAllStoredActionIds())
@@ -166,7 +166,7 @@ void main() {
 
   group('Filter', () {
     testWidgets('is displayed', (WidgetTester tester) async {
-      when(_terminService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
@@ -178,7 +178,7 @@ void main() {
     ***REMOVED***);
 
     testWidgets('opens on tap', (WidgetTester tester) async {
-      when(_terminService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
@@ -203,15 +203,14 @@ void main() {
 
       termineSeiteWidget = MultiProvider(
           providers: [
-            Provider<AbstractTermineService>.value(value: _terminService),
+            Provider<AbstractTermineService>.value(value: _termineService),
             Provider<AbstractListLocationService>.value(
                 value: _listLocationService),
             Provider<StorageService>.value(value: _storageService),
             Provider<AbstractUserService>.value(value: userService),
             Provider<AbstractStammdatenService>.value(
                 value: _stammdatenService),
-            Provider<ChatMessageService>.value(
-                value: _chatMessageService),
+            Provider<ChatMessageService>.value(value: _chatMessageService),
           ],
           child: MaterialApp(home: Builder(builder: (BuildContext context) {
             ErrorService.setContext(context);
@@ -220,12 +219,12 @@ void main() {
     ***REMOVED***);
 
     testWidgets('opens with tap on TermineCard', (WidgetTester tester) async {
-      when(_terminService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getActionWithDetails(any)).thenAnswer(
+      when(_termineService.getActionWithDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       await tester.pumpWidget(termineSeiteWidget);
@@ -243,12 +242,12 @@ void main() {
 
     testWidgets('loads Termin with details with tap on TermineCard',
         (WidgetTester tester) async {
-      when(_terminService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getActionWithDetails(any)).thenAnswer(
+      when(_termineService.getActionWithDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       await tester.pumpWidget(termineSeiteWidget);
@@ -259,17 +258,17 @@ void main() {
       await tester.tap(find.byKey(Key('action card')).first);
       await tester.pump();
 
-      verify(_terminService.getActionWithDetails(0));
+      verify(_termineService.getActionWithDetails(0));
     ***REMOVED***);
 
     testWidgets('closes TerminDetails dialog with tap on Schliessen button',
         (WidgetTester tester) async {
-      when(_terminService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getActionWithDetails(any)).thenAnswer(
+      when(_termineService.getActionWithDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       await tester.pumpWidget(termineSeiteWidget);
@@ -288,10 +287,10 @@ void main() {
 
     testWidgets('closes TerminDetails dialog on tap at map',
         (WidgetTester tester) async {
-      when(_terminService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getActionWithDetails(any)).thenAnswer(
+      when(_termineService.getActionWithDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       await tester.pumpWidget(termineSeiteWidget);
@@ -310,10 +309,10 @@ void main() {
 
     testWidgets('switches to map view and centers at action on tap at map',
         (WidgetTester tester) async {
-      when(_terminService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getActionWithDetails(any)).thenAnswer(
+      when(_termineService.getActionWithDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       await tester.pumpWidget(termineSeiteWidget);
@@ -342,13 +341,13 @@ void main() {
     testWidgets(
         'triggers server call and highlihgts action with tap on join button',
         (WidgetTester tester) async {
-      when(_terminService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
           ]);
       var action = TerminTestDaten.einTerminOhneTeilisMitDetails();
-      when(_terminService.getActionWithDetails(any))
+      when(_termineService.getActionWithDetails(any))
           .thenAnswer((_) async => action);
 
       await tester.pumpWidget(termineSeiteWidget);
@@ -365,7 +364,7 @@ void main() {
       await tester.tap(find.byKey(Key('join action button')));
       await tester.pump();
 
-      verify(_terminService.joinAction(action.id)).called(1);
+      verify(_termineService.joinAction(action.id)).called(1);
       expect(state.termine[0].participants, containsAll([me]));
       expect(find.byKey(Key('join action button')), findsNothing);
       expect(find.byKey(Key('leave action button')), findsOneWidget);
@@ -374,13 +373,13 @@ void main() {
     testWidgets(
         'triggers server call and highlihgts action with tap on leave button',
         (WidgetTester tester) async {
-      when(_terminService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin()..participants = [me],
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
           ]);
       var action = TerminTestDaten.einTerminMitTeilisUndDetails();
-      when(_terminService.getActionWithDetails(any))
+      when(_termineService.getActionWithDetails(any))
           .thenAnswer((_) async => action);
 
       await tester.pumpWidget(termineSeiteWidget);
@@ -397,7 +396,7 @@ void main() {
       await tester.tap(find.byKey(Key('leave action button')));
       await tester.pump();
 
-      verify(_terminService.leaveAction(action.id)).called(1);
+      verify(_termineService.leaveAction(action.id)).called(1);
       expect(state.termine[0].participants, isEmpty);
       expect(find.byKey(Key('leave action button')), findsNothing);
       expect(find.byKey(Key('join action button')), findsOneWidget);
@@ -412,7 +411,7 @@ void main() {
       var tomorrow = today.add(Duration(days: 1));
       var dayAfterTomorrow = today.add(Duration(days: 2));
 
-      when(_terminService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.anActionFrom(yesterday),
             TerminTestDaten.anActionFrom(tomorrow),
             TerminTestDaten.anActionFrom(dayAfterTomorrow),
@@ -441,7 +440,7 @@ void main() {
           TerminDetails('test1', 'test2', 'test3'),
           LatLng(52.49653, 13.43762));
 
-      when(_terminService.createAction(any, any)).thenAnswer((_) async =>
+      when(_termineService.createAction(any, any)).thenAnswer((_) async =>
           Termin(
               1337,
               today,
@@ -474,7 +473,7 @@ void main() {
       var tomorrow = today.add(Duration(days: 1));
       var dayAfterTomorrow = today.add(Duration(days: 2));
 
-      when(_terminService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.anActionFrom(yesterday),
             TerminTestDaten.anActionFrom(tomorrow),
             TerminTestDaten.anActionFrom(dayAfterTomorrow),
@@ -503,7 +502,7 @@ void main() {
           TerminDetails('test1', 'test2', 'test3'),
           LatLng(52.49653, 13.43762));
 
-      when(_terminService.createAction(any, any)).thenAnswer(
+      when(_termineService.createAction(any, any)).thenAnswer(
         (_) async => Termin(
             1337,
             today,
@@ -527,17 +526,17 @@ void main() {
     ***REMOVED***);
 
     testWidgets('new actions are saved to server', (WidgetTester tester) async {
-      reset(_terminService);
+      reset(_termineService);
 
       var today = DateTime.now();
       var yesterday = today.subtract(Duration(days: 1));
       var tomorrow = today.subtract(Duration(days: 1));
       var dayAfterTomorrow = today.add(Duration(days: 2));
 
-      when(_terminService.createAction(any, any)).thenAnswer(
+      when(_termineService.createAction(any, any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
-      when(_terminService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.anActionFrom(yesterday),
             TerminTestDaten.anActionFrom(tomorrow),
             TerminTestDaten.anActionFrom(dayAfterTomorrow),
@@ -566,7 +565,7 @@ void main() {
           TerminDetails('test1', 'test2', 'test3'),
           LatLng(52.49653, 13.43762));
 
-      when(_terminService.createAction(any, any)).thenAnswer((_) async =>
+      when(_termineService.createAction(any, any)).thenAnswer((_) async =>
           Termin(
               1337,
               today,
@@ -581,7 +580,7 @@ void main() {
       await tester.tap(find.byKey(Key('action editor finish button')));
       await tester.pumpAndSettle();
 
-      verify(_terminService.createAction(any, any)).called(1);
+      verify(_termineService.createAction(any, any)).called(1);
     ***REMOVED***);
 
     testWidgets('shows alert popup on RestFehler from create request',
@@ -590,10 +589,10 @@ void main() {
       var yesterday = today.subtract(Duration(days: 1));
       var tomorrow = today.add(Duration(days: 1));
 
-      when(_terminService.createAction(any, any)).thenAnswer(
+      when(_termineService.createAction(any, any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
-      when(_terminService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.anActionFrom(yesterday),
             TerminTestDaten.anActionFrom(today),
             TerminTestDaten.anActionFrom(tomorrow)
@@ -601,7 +600,7 @@ void main() {
               ..typ = 'Infoveranstaltung',
           ]);
 
-      when(_terminService.getActionWithDetails(any)).thenAnswer(
+      when(_termineService.getActionWithDetails(any)).thenAnswer(
         (_) async => TerminTestDaten.einTerminMitTeilisUndDetails()
           ..id = 1337
           ..typ = 'Infoveranstaltung',
@@ -628,7 +627,7 @@ void main() {
           TerminDetails('test1', 'test2', 'test3'),
           LatLng(52.49653, 13.43762));
 
-      when(_terminService.createAction(any, any))
+      when(_termineService.createAction(any, any))
           .thenThrow(RestFehler('message'));
 
       await tester.tap(find.byKey(Key('action editor finish button')));
@@ -648,7 +647,7 @@ void main() {
         ..id = 3
         ..beginn = DateTime.now().add(Duration(days: 1));
 
-      when(_terminService.loadActions(any)).thenAnswer((_) async {
+      when(_termineService.loadActions(any)).thenAnswer((_) async {
         return [
           TerminTestDaten.einTermin()
             ..id = 1
@@ -659,7 +658,7 @@ void main() {
           myAction
         ];
       ***REMOVED***);
-      when(_terminService.getActionWithDetails(any)).thenAnswer(
+      when(_termineService.getActionWithDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
       when(_storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [1]);
@@ -707,7 +706,7 @@ void main() {
       TermineSeiteState termineSeite =
           tester.state(find.byKey(Key('action page')));
 
-      when(_terminService.saveAction(any, any))
+      when(_termineService.saveAction(any, any))
           .thenThrow(AuthFehler('message'));
 
       termineSeite
@@ -723,7 +722,7 @@ void main() {
       TermineSeiteState termineSeite =
           tester.state(find.byKey(Key('action page')));
 
-      when(_terminService.saveAction(any, any))
+      when(_termineService.saveAction(any, any))
           .thenThrow(RestFehler('message'));
 
       termineSeite
@@ -742,7 +741,7 @@ void main() {
       DateTime yesterday = today.subtract(Duration(days: 1));
       DateTime tomorrow = today.add(Duration(days: 1));
 
-      when(_terminService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.anActionFrom(yesterday),
             TerminTestDaten.anActionFrom(tomorrow),
             TerminTestDaten.anActionFrom(twoDaysAgo),
@@ -779,7 +778,7 @@ void main() {
       DateTime nextDay = today.add(Duration(days: 1));
       DateTime nextWeek = today.add(Duration(days: 7));
 
-      when(_terminService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.anActionFrom(nextDay),
             TerminTestDaten.anActionFrom(nextHour),
             TerminTestDaten.anActionFrom(nextWeek),
@@ -802,7 +801,7 @@ void main() {
       DateTime lastDay = today.subtract(Duration(days: 1));
       DateTime lastWeek = today.subtract(Duration(days: 7));
 
-      when(_terminService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.anActionFrom(lastDay),
             TerminTestDaten.anActionFrom(threeHoursAgo),
             TerminTestDaten.anActionFrom(lastWeek),
@@ -833,7 +832,7 @@ void main() {
     ***REMOVED***);
 
     testWidgets('hides if no actions are present', (WidgetTester tester) async {
-      when(_terminService.loadActions(any)).thenAnswer((_) async => []);
+      when(_termineService.loadActions(any)).thenAnswer((_) async => []);
 
       await tester.pumpWidget(termineSeiteWidget);
 
@@ -851,7 +850,7 @@ void main() {
       DateTime twentyMinutesAgo = today.subtract(Duration(minutes: 20));
       DateTime inTwentyMinutes = today.add(Duration(minutes: 20));
 
-      when(_terminService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.anActionFrom(inTwentyMinutes),
             TerminTestDaten.anActionFrom(twentyMinutesAgo),
             TerminTestDaten.anActionFrom(oneMinuteAgo),
@@ -884,10 +883,10 @@ void main() {
 
   group('delete button', () {
     testWidgets('opens confirmation dialog', (WidgetTester tester) async {
-      when(_terminService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getActionWithDetails(any)).thenAnswer(
+      when(_termineService.getActionWithDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       when(_storageService.loadAllStoredActionIds())
@@ -909,10 +908,10 @@ void main() {
 
     testWidgets('closes confirmation dialog on tap at No button',
         (WidgetTester tester) async {
-      when(_terminService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getActionWithDetails(any)).thenAnswer(
+      when(_termineService.getActionWithDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
       when(_storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [0]);
@@ -936,10 +935,10 @@ void main() {
 
     testWidgets('does not trigger deletion on tap at No button',
         (WidgetTester tester) async {
-      when(_terminService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
-      when(_terminService.getActionWithDetails(any)).thenAnswer(
+      when(_termineService.getActionWithDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       when(_storageService.loadAllStoredActionIds())
@@ -966,7 +965,7 @@ void main() {
       await tester.pump();
 
       expect(find.byKey(Key('action details page')), findsOneWidget);
-      verifyNever(_terminService.deleteAction(any, any));
+      verifyNever(_termineService.deleteAction(any, any));
       expect(find.byKey(Key('action card')), findsOneWidget);
     ***REMOVED***);
 
@@ -978,7 +977,7 @@ void main() {
         DateTime yesterday = today.subtract(Duration(days: 1));
         DateTime tomorrow = today.add(Duration(days: 1));
 
-        when(_terminService.loadActions(any)).thenAnswer((_) async => [
+        when(_termineService.loadActions(any)).thenAnswer((_) async => [
               TerminTestDaten.einTermin()
                 ..id = 1
                 ..beginn = yesterday,
@@ -993,7 +992,7 @@ void main() {
 
         // mittlere Aktion um sicherzustellen, dass nicht einfach immer die erste oder letzte Aktion gelöscht wird
         myAction = TerminTestDaten.einTerminMitTeilisUndDetails()..id = 2;
-        when(_terminService.getActionWithDetails(any))
+        when(_termineService.getActionWithDetails(any))
             .thenAnswer((_) async => myAction);
 
         clearInteractions(_storageService);
@@ -1018,7 +1017,7 @@ void main() {
         await tester.tap(find.byKey(Key('delete confirmation yes button')));
         await tester.pump();
 
-        verify(_terminService.deleteAction(myAction, any)).called(1);
+        verify(_termineService.deleteAction(myAction, any)).called(1);
       ***REMOVED***);
 
       testWidgets('deletes action in action list', (WidgetTester tester) async {
@@ -1101,7 +1100,7 @@ void main() {
         await tester.tap(find.byKey(Key('action delete button')));
         await tester.pump();
 
-        when(_terminService.deleteAction(any, any))
+        when(_termineService.deleteAction(any, any))
             .thenThrow(RestFehler('message'));
 
         await tester.tap(find.byKey(Key('delete confirmation yes button')));
@@ -1126,7 +1125,7 @@ void main() {
         await tester.tap(find.byKey(Key('action delete button')));
         await tester.pump();
 
-        when(_terminService.deleteAction(any, any))
+        when(_termineService.deleteAction(any, any))
             .thenThrow(AuthFehler('message'));
 
         await tester.tap(find.byKey(Key('delete confirmation yes button')));
@@ -1144,18 +1143,18 @@ void main() {
     setUp(() {
       actionPageState = TermineSeiteState();
       TermineSeiteState.storageService = _storageService;
-      TermineSeiteState.termineService = _terminService;
+      TermineSeiteState.termineService = _termineService;
     ***REMOVED***);
 
     test('is uniquely generated at action creation and sent to server', () {
-      when(_terminService.createAction(any, any)).thenAnswer(
+      when(_termineService.createAction(any, any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
 
       actionPageState.createNewAction(TerminTestDaten.einTermin());
       actionPageState.createNewAction(TerminTestDaten.einTermin());
 
       List<dynamic> uuids =
-          verify(_terminService.createAction(any, captureAny)).captured;
+          verify(_termineService.createAction(any, captureAny)).captured;
 
       expect(uuids[0], isNotEmpty);
       expect(uuids[1], isNotEmpty);
@@ -1166,7 +1165,7 @@ void main() {
         (WidgetTester tester) async {
       Termin action1 = TerminTestDaten.einTermin()..id = 1;
       Termin action2 = TerminTestDaten.einTermin()..id = 2;
-      when(_terminService.loadActions(any))
+      when(_termineService.loadActions(any))
           .thenAnswer((_) async => [action1, action2]);
 
       await tester.pumpWidget(termineSeiteWidget);
@@ -1176,20 +1175,20 @@ void main() {
           .thenAnswer((_) async => 'storedToken1');
       when(_storageService.loadActionToken(2))
           .thenAnswer((_) async => 'storedToken2');
-      when(_terminService.saveAction(any, any)).thenAnswer((_) => null);
+      when(_termineService.saveAction(any, any)).thenAnswer((_) => null);
 
       await actionPageState.saveAction(action1);
       await actionPageState.saveAction(action2);
 
-      verify(_terminService.saveAction(action1, 'storedToken1')).called(1);
-      verify(_terminService.saveAction(action2, 'storedToken2')).called(1);
+      verify(_termineService.saveAction(action1, 'storedToken1')).called(1);
+      verify(_termineService.saveAction(action2, 'storedToken2')).called(1);
     ***REMOVED***);
 
     testWidgets('is passed to server when action is deleted',
         (WidgetTester tester) async {
       Termin action1 = TerminTestDaten.einTermin()..id = 1;
       Termin action2 = TerminTestDaten.einTermin()..id = 2;
-      when(_terminService.loadActions(any))
+      when(_termineService.loadActions(any))
           .thenAnswer((_) async => [action1, action2]);
 
       await tester.pumpWidget(termineSeiteWidget);
@@ -1203,8 +1202,8 @@ void main() {
       await actionPageState.deleteAction(action1);
       await actionPageState.deleteAction(action2);
 
-      verify(_terminService.deleteAction(action1, 'storedToken1')).called(1);
-      verify(_terminService.deleteAction(action2, 'storedToken2')).called(1);
+      verify(_termineService.deleteAction(action1, 'storedToken1')).called(1);
+      verify(_termineService.deleteAction(action2, 'storedToken2')).called(1);
     ***REMOVED***);
   ***REMOVED***);
 
@@ -1265,34 +1264,65 @@ void main() {
     ***REMOVED***);
   ***REMOVED***);
 
-  group('addAction', () {
-    var actionStatePage = TermineSeiteState();
-    setUp(() {
-      actionStatePage.termine = [
+  group('createAndAddAction', () {
+    TermineSeiteState state;
+    setUpUI((tester) async {
+      await tester.pumpWidget(termineSeiteWidget);
+
+      state = tester.state(find.byType(TermineSeite));
+      state.termine = [
         TerminTestDaten.einTermin()..id = 1,
         TerminTestDaten.einTermin()..id = 2,
         TerminTestDaten.einTermin()..id = 3,
       ];
     ***REMOVED***);
 
-    test('adds new action to list', () {
-      actionStatePage.addAction(TerminTestDaten.einTermin()..id = 4);
-      expect(actionStatePage.termine.map((action) => action.id),
+    testUI('adds new action to list', (tester) async {
+      var initialAction = TerminTestDaten.einTermin();
+      var savedAction = TerminTestDaten.einTermin()..id = 4;
+      when(_termineService.createAction(initialAction, any))
+          .thenAnswer((_) async => savedAction);
+
+      state.createAndAddAction(initialAction);
+      await tester.pumpAndSettle();
+
+      expect(state.termine.map((action) => action.id),
           containsAll([1, 2, 3, 4]));
     ***REMOVED***);
 
-    test('sorts list', () {
-      actionStatePage.addAction(TerminTestDaten.einTermin()
+    testUI('sorts list', (tester) async {
+      var initialAction = TerminTestDaten.einTermin()
+        ..beginn = DateTime.now().subtract(Duration(days: 1));
+      var savedAction = TerminTestDaten.einTermin()
         ..id = 4
-        ..beginn = DateTime.now().subtract(Duration(days: 1)));
-      expect(actionStatePage.termine.map((action) => action.id),
+        ..beginn = DateTime.now().subtract(Duration(days: 1));
+      when(_termineService.createAction(initialAction, any))
+          .thenAnswer((_) async => savedAction);
+
+      state.createAndAddAction(initialAction);
+      await tester.pumpAndSettle();
+
+      expect(state.termine.map((action) => action.id),
           containsAll([4, 1, 2, 3]));
     ***REMOVED***);
+
+    testUI('marks action as own', (tester) async {
+      var initialAction = TerminTestDaten.einTermin();
+      var savedAction = TerminTestDaten.einTermin()..id = 4;
+      when(_termineService.createAction(initialAction, any))
+          .thenAnswer((_) async => savedAction);
+
+      state.createAndAddAction(initialAction);
+      await tester.pumpAndSettle();
+
+      expect(state.myActions, containsAll([4]));
+    ***REMOVED***);
   ***REMOVED***);
+
   group('navgation button', () {
     testWidgets('for list view is active on start',
         (WidgetTester tester) async {
-      when(_terminService.loadActions(any))
+      when(_termineService.loadActions(any))
           .thenAnswer((_) async => [(TerminTestDaten.einTermin())]);
 
       await tester.pumpWidget(termineSeiteWidget);
@@ -1303,7 +1333,7 @@ void main() {
 
     testWidgets('for map view switches to map view',
         (WidgetTester tester) async {
-      when(_terminService.loadActions(any))
+      when(_termineService.loadActions(any))
           .thenAnswer((_) async => [(TerminTestDaten.einTermin())]);
 
       await tester.pumpWidget(termineSeiteWidget);
@@ -1320,7 +1350,7 @@ void main() {
 _pumpNavigation(WidgetTester tester) async {
   await tester.pumpWidget(MultiProvider(
       providers: [
-        Provider<AbstractTermineService>.value(value: _terminService),
+        Provider<AbstractTermineService>.value(value: _termineService),
         Provider<StorageService>.value(value: _storageService),
         Provider<AbstractListLocationService>(
             create: (context) => _listLocationService),

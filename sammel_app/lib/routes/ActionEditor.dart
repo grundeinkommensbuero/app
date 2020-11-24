@@ -80,7 +80,7 @@ class ActionEditor extends StatefulWidget {
 ***REMOVED***
 
 class ActionEditorState extends State<ActionEditor> {
-  ActionData action = ActionData();
+  ActionData action = ActionData.testDaten();
 
   ActionEditorState(Termin initAction) : super() {
     if (initAction != null) assign_initial_termin(initAction);

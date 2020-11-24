@@ -417,7 +417,12 @@ class TermineSeiteState extends State<TermineSeite>
   createAndAddAction(Termin action) async {
     try {
       Termin actionWithId = await createNewAction(action);
-      addAction(actionWithId);
+      myActions.add(actionWithId.id);
+      setState(() {
+        termine
+          ..add(actionWithId)
+          ..sort(Termin.compareByStart);
+      ***REMOVED***);
     ***REMOVED*** catch (error) {
       ErrorService.handleError(error);
     ***REMOVED***
@@ -428,13 +433,6 @@ class TermineSeiteState extends State<TermineSeite>
     Termin actionWithId = await termineService.createAction(action, uuid);
     storageService.saveActionToken(actionWithId.id, uuid);
     return actionWithId;
-  ***REMOVED***
-
-  addAction(Termin newAction) {
-    myActions.add(newAction.id);
-    termine
-      ..add(newAction)
-      ..sort(Termin.compareByStart);
   ***REMOVED***
 
   void showActionOnMap(Termin action) {
