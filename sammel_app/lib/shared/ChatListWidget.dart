@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -28,7 +30,7 @@ class ChatListState extends State<ChatListWidget>   implements ChannelChangeList
 {
 
   SimpleMessageChannel channel;
-
+  bool force_scrolling = false;
   ChatListState(SimpleMessageChannel channel)
   {
     this.channel = channel;
@@ -43,14 +45,16 @@ class ChatListState extends State<ChatListWidget>   implements ChannelChangeList
     this.channel.register_widget(this);
     var message_list = buildListMessage();
     var list_view = ListView(controller: widget.scroll_controller, children: message_list);
-    if (widget.scroll_controller.hasClients)
-      widget.scroll_controller.jumpTo(widget.scroll_controller.position.maxScrollExtent);
+    //we need this hack to enable scrolling to the end of the list on message received
+    Timer(Duration(milliseconds: 500),
+            () => widget.scroll_controller.jumpTo(widget.scroll_controller.position.maxScrollExtent));
 
     return list_view;
   ***REMOVED***
 
   @override
   void channelChanged(Channel channel) {
+    force_scrolling = true;
     setState(() {
       widget.channel = channel;
     ***REMOVED***);
@@ -131,7 +135,7 @@ class ChatListState extends State<ChatListWidget>   implements ChannelChangeList
                         Row(children: [Text(
                           formatDateTime(message.sending_time),
                           textScaleFactor: 0.8,
-                        ), message.obtained_from_server ? Icon(Icons.check_circle_outline, size: 12) : Icon(Icons.check_circle, size: 12)])
+                        )])
                       ]))));
       alignment = Align(child: card, alignment: Alignment.topLeft);
     ***REMOVED***
@@ -168,6 +172,16 @@ class ChatListState extends State<ChatListWidget>   implements ChannelChangeList
     return DateFormat('MMM d, hh:mm').format(date);
   ***REMOVED***
 
+  scrollList(BuildContext context) {
+    if(force_scrolling) {
+      print("scroll list called");
+      if (widget.scroll_controller.hasClients) {
+        widget.scroll_controller.jumpTo(
+            widget.scroll_controller.position.maxScrollExtent);
+      ***REMOVED***
+      force_scrolling = false;
+    ***REMOVED***
+  ***REMOVED***
 
 ***REMOVED***
 

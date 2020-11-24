@@ -23,6 +23,7 @@ class ChatMessageService implements PushNotificationListener {
     MessagePushData mpd = MessagePushData.fromJson(data);
     SimpleMessageChannel receiver = channels[mpd.channel_name];
     Message message = mpd.message;
+    message.obtained_from_server = true;
     if (receiver != null) {
       receiver.channelCallback(message);
       this.storage_service.saveMessageChannel(receiver);
