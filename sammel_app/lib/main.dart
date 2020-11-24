@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
   static var listLocationService = demoMode
       ? DemoListLocationService(userService)
       : ListLocationService(userService);
-  static var chatMessageService = ChatMessageService(pushNotificationManager);
+  static var chatMessageService = ChatMessageService(storageService, pushNotificationManager);
 
   @override
   Widget build(BuildContext context) {
