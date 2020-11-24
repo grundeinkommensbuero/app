@@ -30,8 +30,6 @@ dependencies:
   http_server: ^0.9.8+3
   provider: ^3.1.0
   intl: ^0.16.0
-  flutter_datetime_picker: ^1.2.8
-  f_datetimerangepicker: ^0.1.1
   calendarro: ^1.1.2
   jiffy: ^2.1.2
   shared_preferences: ^0.5.6
