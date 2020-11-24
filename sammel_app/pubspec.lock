@@ -183,13 +183,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.9"
-  f_datetimerangepicker:
-    dependency: "direct main"
-    description:
-      name: f_datetimerangepicker
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.4"
   fake_async:
     dependency: transitive
     description:
@@ -279,13 +272,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.2"
-  flutter_datetime_picker:
-    dependency: "direct main"
-    description:
-      name: flutter_datetime_picker
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.4.0"
   flutter_image:
     dependency: transitive
     description:
