@@ -144,7 +144,7 @@ Color _randomColor() {
 class InvalidUserException implements Exception {}
 
 class DemoUserService extends AbstractUserService {
-  DemoUserService() : super() {
+  DemoUserService() : super(DemoBackend()) {
     user = Future.value(User(1, 'Ich', Colors.red));
     userAuthCreds = Future.value('userCreds');
 

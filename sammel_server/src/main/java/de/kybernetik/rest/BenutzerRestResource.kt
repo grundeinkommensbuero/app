@@ -86,7 +86,7 @@ open class BenutzerRestResource {
     @Path("aktualisiereName")
     @RolesAllowed("user")
     @Produces(APPLICATION_JSON)
-    open fun aktualisiereBenutzerName(name: String?): Response {
+    open fun aktualisiereBenutzername(name: String?): Response {
         val id = context.userPrincipal.name
         LOG.debug("Aktualisiere Benutzernamen von $id mit $name")
         if(name.isNullOrBlank()) {
