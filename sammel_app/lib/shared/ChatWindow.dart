@@ -2,15 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
+import 'package:quiver/strings.dart';
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/User.dart';
-import 'package:sammel_app/routes/CreateUserDialog.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/showUsernameDialog.dart';
 import 'package:sammel_app/shared/user_data.dart';
 
 import 'ChatInput.dart';
@@ -190,35 +191,9 @@ class ChatWindowState extends State<ChatWindow> {
       ]));
 
   onSendMessage(String text) async {
-    if (text == "") {
-      return;
-    }
-
-    if (user.name == "" || user.name == null) {
-      user = await showCreateUserDialog(context: context, user: user);
-      if (user.name == "" || user.name == null) {
-        showDialog<void>(
-            context: context,
-            barrierDismissible: false, // user must tap button!
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text('Error'),
-                content: Text('Please enter valid user name to chat.'),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text('Ok'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            });
-        return;
-      } else {
-        Provider.of<AbstractUserService>(context).updateUsername(user.name);
-      }
-    }
+    if (text == "") return;
+    if (isBlank(user.name))
+      await showUsernameDialog(context: context, user: user);
     Message message = Message(
         text: text,
         sending_time: DateTime.now(),
