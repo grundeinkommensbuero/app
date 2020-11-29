@@ -19,7 +19,10 @@ void main() {
 ***REMOVED***
 
 const Mode mode = Mode.DEMO;
+
 ***REMOVED***
+***REMOVED***
+const bool clearAllPreferences = false;
 
 class MyApp extends StatelessWidget {
   static var firebaseService = FirebaseReceiveService();
@@ -41,7 +44,8 @@ class MyApp extends StatelessWidget {
   static var listLocationService = demoMode
       ? DemoListLocationService(userService)
       : ListLocationService(userService);
-  static var chatMessageService = ChatMessageService(storageService, pushNotificationManager);
+  static var chatMessageService =
+      ChatMessageService(storageService, pushNotificationManager);
 
   @override
   Widget build(BuildContext context) {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
+import 'package:sammel_app/main.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
@@ -146,7 +147,8 @@ class TermineSeiteState extends State<TermineSeite>
   // und auch nicht im initState(), weil da InheritedWidgets nicht angefasst werden können
   // und didChangeDependencies() wird mehrfach aufgerufen
   void intialize(BuildContext context) {
-//    Provider.of<StorageService>(context).clearAllPreferences();
+    if (clearAllPreferences)
+      Provider.of<StorageService>(context).clearAllPreferences();
 
     termineService = Provider.of<AbstractTermineService>(context);
     storageService = Provider.of<StorageService>(context);
