@@ -1,3 +1,4 @@
+import 'package:sammel_app/shared/Crypter.dart';
 
 import 'Message.dart';
 
@@ -8,10 +9,9 @@ class PushMessage {
 
   PushMessage(this.data, this.notification, {this.recipients***REMOVED***);
 
-  toJson() =>
-      {
+  toJson() => {
         'recipients': recipients,
-        'data': data,
+        'data': encrypt(data),
         'notification': notification,
       ***REMOVED***
 ***REMOVED***
@@ -22,15 +22,13 @@ class PushNotification {
 
   PushNotification(this.title, this.body);
 
-  toJson() =>
-      {
+  toJson() => {
         'title': title,
         'body': body,
       ***REMOVED***
 ***REMOVED***
 
-class PushDataTypes
-{
+class PushDataTypes {
   static final SimpleChatMessage = 'SimpleChatMessage';
 ***REMOVED***
 
@@ -46,16 +44,13 @@ class PushData {
 ***REMOVED***
 
 class MessagePushData extends PushData {
-
   Message message;
   String channel_name;
   final String type = PushDataTypes.SimpleChatMessage;
 
   MessagePushData(this.message, this.channel_name);
 
-
-  toJson()
-  {
+  toJson() {
     var json_message = message.toJson();
     json_message['type'] = type;
     json_message['channel_name'] = this.channel_name;
@@ -64,7 +59,7 @@ class MessagePushData extends PushData {
 
   MessagePushData.fromJson(Map <dynamic, dynamic> json)
   {
-    this.message = Message.fromJSON(json);// Message(text: json['text'], sender_name: json['sender_name'], message_color: Color(json['color']));
+    this.message = Message.fromJSON(json);
     this.channel_name = json['channel_name'];
   ***REMOVED***
 ***REMOVED***
@@ -73,16 +68,14 @@ class ExampleData extends PushData {
   String type = "Example";
   String payload;
 
-  ExampleData.fromJson(Map<dynamic, dynamic> json)
-      : payload = json['payload'] {
+  ExampleData.fromJson(Map<dynamic, dynamic> json) : payload = json['payload'] {
     if (type != json['type'])
       throw WrongDataTypeKeyError(expected: type, found: json['type']);
   ***REMOVED***
 
   ExampleData(this.payload);
 
-  toJson() =>
-      {
+  toJson() => {
         'type': type,
         'payload': payload,
       ***REMOVED***

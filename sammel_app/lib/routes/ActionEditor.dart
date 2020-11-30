@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
+import 'package:quiver/strings.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
@@ -14,6 +15,7 @@ import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/LocationPicker.dart';
 import 'package:sammel_app/shared/showMultipleDatePicker.dart';
 import 'package:sammel_app/shared/showTimeRangePicker.dart';
+import 'package:sammel_app/shared/showUsernameDialog.dart';
 
 import 'VenueDialog.dart';
 
@@ -639,6 +641,11 @@ class ActionEditorState extends State<ActionEditor> {
       validateAllInput();
     ***REMOVED***);
     if (action.validated['all'] == ValidationState.ok) {
+      var name = Provider.of<AbstractUserService>(context).latestUser.name;
+      if(isBlank(name)) {
+        var name = await showUsernameDialog(context: context);
+        if(name == null) return;
+      ***REMOVED***
       List<Termin> termine = await generateActions();
       if (termine != null) {
         widget.onFinish(termine);

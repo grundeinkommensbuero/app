@@ -10,31 +10,29 @@ import 'Mocks.dart';
 import 'TestdatenVorrat.dart';
 
 void main() {
-  var user = karl();
-  user.name = null;
-
-  bool result;
-  var userService = UserServiceMock();
+  String result;
+  var _userService = UserServiceMock();
 
   setUpUI((tester) async {
     result = null;
+    reset(_userService);
+    when(_userService.user)
+        .thenAnswer((_) => Stream.value(karl()..name = null));
+    when(_userService.updateUsername(any)).thenAnswer((_) async => karl());
 
     await tester.pumpWidget(Provider<AbstractUserService>(
-        create: (_) => userService,
+        create: (_) => _userService,
         child: MaterialApp(home: Material(
           child: Builder(
             builder: (BuildContext context) {
               return Center(
                   child: RaisedButton(
                       child: const Text('X'),
-                      onPressed: () async => result = await showUsernameDialog(
-                          context: context, user: user)));
+                      onPressed: () async =>
+                          result = await showUsernameDialog(context: context)));
             ***REMOVED***,
           ),
         ))));
-
-    reset(userService);
-    when(userService.updateUsername(any)).thenAnswer((_) async => user);
   ***REMOVED***);
 
   testUI('opens Username Dialog and shows Title, Hint and Input Field',
@@ -58,12 +56,12 @@ void main() {
     await tester.tap(find.byKey(Key('username dialog finish button')));
     await tester.pump();
 
-    verify(userService.updateUsername('Mein neuer Name')).called(1);
-    expect(result, isTrue);
+    verify(_userService.updateUsername('Mein neuer Name')).called(1);
+    expect(result, isNotNull);
   ***REMOVED***);
 
   testUI('Fertig returns false on UserService error', (tester) async {
-    when(userService.updateUsername(any)).thenThrow(Error());
+    when(_userService.updateUsername(any)).thenThrow(Error());
     await openDialog(tester);
 
     await tester.enterText(
@@ -72,7 +70,7 @@ void main() {
     await tester.tap(find.byKey(Key('username dialog finish button')));
     await tester.pump();
 
-    expect(result, isFalse);
+    expect(result, isNull);
   ***REMOVED***);
 
   testUI('Abbrechen returns does not call UserService and returns false',
@@ -85,8 +83,8 @@ void main() {
     await tester.tap(find.byKey(Key('username dialog cancel button')));
     await tester.pump();
 
-    verifyNever(userService.updateUsername(any));
-    expect(result, isFalse);
+    verifyNever(_userService.updateUsername(any));
+    expect(result, isNull);
   ***REMOVED***);
 
   testUI('Fertig button validates against empty/blank', (tester) async {

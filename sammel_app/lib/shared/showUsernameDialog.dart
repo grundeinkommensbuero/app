@@ -1,28 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quiver/strings.dart';
-import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/UserService.dart';
 
-Future<bool> showUsernameDialog({BuildContext context, User user***REMOVED***) =>
-    showDialog(
+Future<String> showUsernameDialog({BuildContext context***REMOVED***) => showDialog(
       context: context,
-      child: UsernameDialog(user),
+      child: UsernameDialog(),
     );
 
 class UsernameDialog extends StatefulWidget {
-  final User user;
-
-  UsernameDialog(this.user);
+  UsernameDialog() : super(key: Key('username dialog'));
 
   @override
-  State<StatefulWidget> createState() => UsernameDialogState(user.name);
+  State<StatefulWidget> createState() => UsernameDialogState();
 ***REMOVED***
 
 class UsernameDialogState extends State<UsernameDialog> {
-  String name;
+  String username;
 
-  UsernameDialogState(this.name);
+  UsernameDialogState();
 
   @override
   Widget build(BuildContext context) {
@@ -37,14 +33,14 @@ class UsernameDialogState extends State<UsernameDialog> {
           key: Key('user name input'),
           autofocus: true,
           maxLength: 40,
-          onChanged: (input) => setState(() => name = input),
+          onChanged: (input) => setState(() => username = input),
         ),
       ])),
       actions: [
         FlatButton(
           key: Key('username dialog cancel button'),
           child: Text("Abbrechen"),
-          onPressed: () => Navigator.pop(context, false),
+          onPressed: () => Navigator.pop(context, null),
         ),
         FlatButton(
           key: Key('username dialog finish button'),
@@ -57,12 +53,12 @@ class UsernameDialogState extends State<UsernameDialog> {
 
   Future<void> changeUserNameAndClose() async {
     try {
-      await Provider.of<AbstractUserService>(context).updateUsername(name);
+      await Provider.of<AbstractUserService>(context).updateUsername(username);
+      Navigator.pop(context, username);
     ***REMOVED*** catch (e) {
-      Navigator.pop(context, false);
+      Navigator.pop(context, null);
     ***REMOVED***
-    Navigator.pop(context, true);
   ***REMOVED***
 
-  isValid() => isNotBlank(name);
+  isValid() => isNotBlank(username);
 ***REMOVED***

@@ -3,7 +3,6 @@ package de.kybernetik.rest
 import de.kybernetik.database.DatabaseException
 import de.kybernetik.database.benutzer.Benutzer
 import de.kybernetik.database.benutzer.BenutzerDao
-import de.kybernetik.database.pushmessages.PushMessageDao
 import de.kybernetik.database.stammdaten.Ort
 import de.kybernetik.database.termine.Termin
 import de.kybernetik.database.termine.TerminDetails
@@ -83,7 +82,7 @@ open class TermineRestResource {
 
     @POST
     @Path("neu")
-    @RolesAllowed("user")
+    @RolesAllowed("named")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun legeNeuenTerminAn(actionAndToken: ActionWithTokenDto): Response {
@@ -103,7 +102,7 @@ open class TermineRestResource {
 
     @POST
     @Path("termin")
-    @RolesAllowed("user")
+    @RolesAllowed("named")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun aktualisiereTermin(actionAndToken: ActionWithTokenDto): Response {
@@ -127,7 +126,7 @@ open class TermineRestResource {
 
     @DELETE
     @Path("termin")
-    @RolesAllowed("user")
+    @RolesAllowed("named")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun deleteAction(actionAndToken: ActionWithTokenDto): Response {
