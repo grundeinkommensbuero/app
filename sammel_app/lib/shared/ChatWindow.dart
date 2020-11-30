@@ -191,21 +191,20 @@ class ChatWindowState extends State<ChatWindow> {
 
   onSendMessage(TextEditingController controller) async {
     if (controller.text == "") return;
-    if (isBlank(user.name)) {
-      var nameVergeben = await showUsernameDialog(context: context, user: user);
-      if (!nameVergeben) return;
+    var name = user.name;
+    if (isBlank(name)) {
+      name = await showUsernameDialog(context: context);
+      if (name == null) return;
     }
     Message message = Message(
         text: controller.text,
         sending_time: DateTime.now(),
         message_color: user.color,
-        sender_name: user.name,
+        sender_name: name,
         user_id: user.id);
     MessagePushData mpd = MessagePushData(message, channel.id);
     pushService.pushToAction(widget.termin.id, mpd,
         PushNotification("New Chat Message", "Open App to view Message"));
-    //textEditingController.clear();
-    // myFocusNode.unfocus();
     channel.channelCallback(message);
     controller.clear();
   }

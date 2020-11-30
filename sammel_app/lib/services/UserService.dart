@@ -95,7 +95,7 @@ class UserService extends AbstractUserService {
           appAuth: true);
     } catch (e) {
       ErrorService.handleError(e,
-          additional: 'Benutzer*indaten konnte nicht übrprüft werden.');
+          additional: 'Benutzer*indaten konnte nicht überprüft werden.');
       throw e;
     }
     bool authenticated = response.body;
@@ -117,7 +117,6 @@ class UserService extends AbstractUserService {
         .then((futures) {
       final id = (futures[0] as User).id;
       final secret = futures[1];
-      print('Secret geladen: $secret');
       final creds = '$id:$secret';
       final creds64 = Base64Encoder().convert(creds.codeUnits);
       return {"Authorization": "Basic $creds64"};

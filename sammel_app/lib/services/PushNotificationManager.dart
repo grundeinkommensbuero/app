@@ -4,6 +4,7 @@ import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
+import 'package:sammel_app/shared/Crypter.dart';
 
 import 'BackendService.dart';
 import 'ErrorService.dart';
@@ -74,9 +75,10 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     }
    */
 
-  Future<dynamic> onMessageCallback(Map<String, dynamic> message) async {
-    print('message received' + message.toString());
-    Map<dynamic, dynamic> data = message['data'];
+  Future<dynamic> onMessageCallback(Map<String, dynamic> cryptoMessage) async {
+    final message = decrypt(cryptoMessage['data']);
+    print('message decrypted: ${message.toString()}');
+    Map<dynamic, dynamic> data = message;
     if (data.containsKey('type')) {
       String type = data['type'];
       if (callback_map.containsKey(type)) {

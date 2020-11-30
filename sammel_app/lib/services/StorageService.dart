@@ -94,11 +94,9 @@ class StorageService {
     var prefs = await this.prefs;
     await Future.doWhile(() async {
       await Future.delayed(Duration(milliseconds: 500));
-      print('Versuche Secret zu laden');
       return prefs.getString(_SECRET) == null;
     });
     var secret = prefs.getString(_SECRET);
-    print('loadSecret: Secret geladen: $secret');
     return secret;
   }
 
