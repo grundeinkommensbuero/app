@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ void main() {
   FirebaseReceiveService firebase;
   Backend backendMock;
 
-  group('initialially', () {
+  group('UserService', () {
     setUp(() {
       storageService = StorageServiceMock();
       backendMock = BackendMock();
@@ -32,112 +33,203 @@ void main() {
           .thenAnswer((_) async => HttpClientResponseBodyMock(true, 200));
       when(backendMock.post('service/benutzer/neu', any, any)).thenAnswer(
           (_) async => HttpClientResponseBodyMock(
-              User(1, '', Colors.red).toJson(), 200));
+              User(11, '', Colors.red).toJson(), 200));
     });
 
-    test('assigns itself as userService and determines userHeader', () async {
-      when(storageService.loadSecret()).thenAnswer((_) async => 'secret');
-      when(storageService.loadUser()).thenAnswer((_) async => karl());
+    group('user streams', () {
+      test('stream is initialized', () {
+        var service = UserService(storageService, firebase, backendMock);
 
-      var service = UserService(storageService, firebase, BackendMock());
-      var userHeaders = await service.userHeaders;
+        expect(service.streamController.stream, isNotNull);
+      });
 
-      expect(service.userService, service);
-      expect(userHeaders['Authorization'], 'Basic MTE6c2VjcmV0');
+      test('individual stream emits first user, even if subscribed later',
+          () async {
+        final user = karl();
+        when(storageService.loadUser()).thenAnswer((_) async => user);
+        var service = UserService(storageService, firebase, backendMock);
+
+        // other listeners to broadcast
+        service.streamController.stream.listen((_) => {});
+        service.streamController.stream.listen((_) => {});
+
+        await service.streamController.stream.first;
+
+        var subscription = service.user;
+        expect(await subscription.first, user);
+      });
+
+      test('individual streams emit following users', () async {
+        when(storageService.loadUser()).thenAnswer((_) async => karl());
+        var service = UserService(storageService, firebase, backendMock);
+
+        var users = service.user.toList();
+
+        await service.streamController.stream.first;
+
+        service.streamController.add(rosa());
+        service.streamController.add(User(13, 'Bini Adamczak', Colors.green));
+        service.streamController.add(User(14, 'Walther Benjamin', Colors.blue));
+        service.streamController.close();
+
+        expect((await users).map((user) => user.id), [11, 12, 13, 14]);
+      });
+
+      test('stores latest user', () async {
+        final user = karl();
+        when(storageService.loadUser()).thenAnswer((_) async => user);
+        var service = UserService(storageService, firebase, backendMock);
+
+        await service.streamController.stream.first;
+
+        expect(service.latestUser, user);
+      });
+
+      test('updates latest user', () async {
+        when(storageService.loadUser()).thenAnswer((_) async => karl());
+        var service = UserService(storageService, firebase, backendMock);
+
+        var nextUser = rosa();
+        var userPassed =
+            service.streamController.stream.firstWhere((u) => u == nextUser);
+
+        service.streamController.add(nextUser);
+
+        await userPassed;
+
+        expect(service.latestUser, nextUser);
+
+        nextUser = User(12, 'Bini Adamczak', Colors.green);
+        userPassed =
+            service.streamController.stream.firstWhere((u) => u == nextUser);
+
+        service.streamController.add(nextUser);
+
+        await userPassed;
+
+        expect(service.latestUser, nextUser);
+      });
+
+      test('closes individual streams', () async {
+        when(storageService.loadUser()).thenAnswer((_) async => karl());
+        var service = UserService(storageService, firebase, backendMock);
+
+        var individualStream = service.user;
+
+        await Future.delayed(Duration(milliseconds: 1));
+
+        service.streamController.close();
+
+        await individualStream.length.timeout(Duration(seconds: 1));
+      });
     });
 
-    test('loads user from storage', () async {
-      UserService(storageService, firebase, backendMock);
+    group('initially', () {
+      test('assigns itself as userService and determines userHeader', () async {
+        when(storageService.loadSecret()).thenAnswer((_) async => 'secret');
+        when(storageService.loadUser()).thenAnswer((_) async => karl());
 
-      verify(storageService.loadUser()).called(1);
-    });
+        var service = UserService(storageService, firebase, backendMock);
+        var userHeaders = await service.userHeaders;
 
-    test('registers new user to server, if none stored', () async {
-      when(storageService.loadUser()).thenAnswer((_) async => null);
+        print(await userHeaders);
 
-      UserService(storageService, firebase, backendMock);
+        expect(service.userService, service);
+        expect(userHeaders['Authorization'], 'Basic MTE6c2VjcmV0');
+      });
 
-      await Future.delayed(Duration(milliseconds: 10));
+      test('loads user from storage', () async {
+        UserService(storageService, firebase, backendMock);
 
-      var login = jsonDecode(
-          verify(backendMock.post('service/benutzer/neu', captureAny, any))
-              .captured
-              .single);
+        verify(storageService.loadUser()).called(1);
+      });
 
-      expect(login['user']['id'], 0);
-      expect(login['user']['name'], isNull);
-      expect(login['user']['color'], isNotNull);
-      expect(login['secret'], isNotEmpty);
-      expect(login['firebaseKey'], 'firebaseToken');
-    });
+      test('registers new user to server, if none stored', () async {
+        when(storageService.loadUser()).thenAnswer((_) async => null);
 
-    test('saves new user to storage', () async {
-      var user = User(1, '', Colors.red);
-      when(storageService.loadUser()).thenAnswer((_) async => null);
+        UserService(storageService, firebase, backendMock);
 
-      UserService(storageService, firebase, backendMock);
+        await Future.delayed(Duration(milliseconds: 10));
 
-      await Future.delayed(Duration(milliseconds: 100));
+        var login = jsonDecode(
+            verify(backendMock.post('service/benutzer/neu', captureAny, any))
+                .captured
+                .single);
 
-      var argument =
-          verify(storageService.saveUser(captureAny)).captured.single as User;
-      expect(equals(argument, user), true);
-    });
+        expect(login['user']['id'], 0);
+        expect(login['user']['name'], isNull);
+        expect(login['user']['color'], isNotNull);
+        expect(login['secret'], isNotEmpty);
+        expect(login['firebaseKey'], 'firebaseToken');
+      });
 
-    test('verifies stored user', () async {
-      var user = User(11, 'Karl Marx', Colors.red);
+      test('saves new user to storage', () async {
+        var user = User(11, '', Colors.red);
+        when(storageService.loadUser()).thenAnswer((_) async => null);
 
-      UserService(storageService, firebase, backendMock);
+        UserService(storageService, firebase, backendMock);
 
-      await Future.delayed(Duration(milliseconds: 100));
+        await Future.delayed(Duration(milliseconds: 100));
 
-      var argument = verify(backendMock.post(
-              'service/benutzer/authentifiziere', captureAny, any))
-          .captured
-          .single;
-      expect(equals(User.fromJSON(jsonDecode(argument)['user']), user), true);
-      expect(jsonDecode(argument)['secret'], 'secret');
-      expect(jsonDecode(argument)['firebaseKey'], 'firebaseToken');
-    });
+        var argument =
+            verify(storageService.saveUser(captureAny)).captured.single as User;
+        expect(equals(argument, user), true);
+      });
 
-    test('serves created user', () async {
-      when(storageService.loadUser()).thenAnswer((_) async => null);
+      test('verifies stored user', () async {
+        var user = User(11, 'Karl Marx', Colors.red);
 
-      var userService = UserService(storageService, firebase, backendMock);
+        UserService(storageService, firebase, backendMock);
 
-      userService.user.then(
-          (user) => expect(equals(user, User(1, '', Colors.red)), isTrue));
-    });
+        await Future.delayed(Duration(milliseconds: 100));
 
-    test('serves verified user', () async {
-      var userService = UserService(storageService, firebase, backendMock);
+        var argument = verify(backendMock.post(
+                'service/benutzer/authentifiziere', captureAny, any))
+            .captured
+            .single;
+        expect(equals(User.fromJSON(jsonDecode(argument)['user']), user), true);
+        expect(jsonDecode(argument)['secret'], 'secret');
+        expect(jsonDecode(argument)['firebaseKey'], 'firebaseToken');
+      });
 
-      userService.user.then((user) =>
-          expect(equals(user, User(11, 'Karl Marx', Colors.red)), isTrue));
-    });
+      test('serves created user', () async {
+        when(storageService.loadUser()).thenAnswer((_) async => null);
 
-    test('registers new user if authentication to server fails', () async {
-      when(backendMock.post('service/benutzer/authentifiziere', any, any))
-          .thenAnswer((_) async => HttpClientResponseBodyMock(false, 200));
+        var userService = UserService(storageService, firebase, backendMock);
 
-      UserService(storageService, firebase, backendMock);
+        var user = await userService.user.first;
+        expect(equals(user, User(11, '', Colors.red)), isTrue);
+      });
 
-      await Future.delayed(Duration(milliseconds: 10));
+      test('serves verified user', () async {
+        var userService = UserService(storageService, firebase, backendMock);
 
-      var login = jsonDecode(
-          verify(backendMock.post('service/benutzer/neu', captureAny, any))
-              .captured
-              .single);
+        var user = await userService.user.first;
+        expect(equals(user, User(11, 'Karl Marx', Colors.red)), isTrue);
+      });
 
-      expect(login['user']['id'], 0);
-      expect(login['user']['name'], isNull);
-      expect(login['user']['color'], isNotNull);
-      expect(login['secret'], isNotEmpty);
-      expect(login['firebaseKey'], 'firebaseToken');
-    });
+      test('registers new user if authentication to server fails', () async {
+        when(backendMock.post('service/benutzer/authentifiziere', any, any))
+            .thenAnswer((_) async => HttpClientResponseBodyMock(false, 200));
 
-    // FIXME Funktioniert leider nicht, keine Ahnung was das Problem ist
-    /*test('throws exception with non-authentication fail', () async {
+        UserService(storageService, firebase, backendMock);
+
+        await Future.delayed(Duration(milliseconds: 10));
+
+        var login = jsonDecode(
+            verify(backendMock.post('service/benutzer/neu', captureAny, any))
+                .captured
+                .single);
+
+        expect(login['user']['id'], 0);
+        expect(login['user']['name'], isNull);
+        expect(login['user']['color'], isNotNull);
+        expect(login['secret'], isNotEmpty);
+        expect(login['firebaseKey'], 'firebaseToken');
+      });
+
+      // FIXME Funktioniert leider nicht, keine Ahnung was das Problem ist
+      /*test('throws exception with non-authentication fail', () async {
       when(backendMock.post('service/benutzer/authentifiziere', any))
           .thenThrow((_) async => Exception());
 
@@ -147,32 +239,6 @@ void main() {
         return userService.user;
       }, throwsException);
     });*/
-  });
-
-  group('generateAuth', () {
-    setUp(() {
-      storageService = StorageServiceMock();
-      backendMock = BackendMock();
-      firebase = FirebaseReceiveServiceMock();
-
-      //defaults
-      when(storageService.loadSecret()).thenAnswer((_) async => "mySecret");
-      when(firebase.token).thenAnswer((_) async => 'firebaseToken');
-      when(backendMock.post('service/benutzer/authentifiziere', any, any))
-          .thenAnswer((_) async => HttpClientResponseBodyMock(true, 200));
-      when(backendMock.post('service/benutzer/neu', any, any)).thenAnswer(
-          (_) async => HttpClientResponseBodyMock(
-              User(1, '', Colors.red).toJson(), 200));
-    });
-
-    test('erzeugt korrektes Basic Auth', () async {
-      var userService = UserService(storageService, firebase, backendMock);
-      Future<User> user = Future.delayed(
-          Duration(milliseconds: 200), () => User(1, '', Colors.red));
-
-      var auth = await userService.generateAuth(user);
-
-      expect(auth, 'MTpteVNlY3JldA==');
     });
   });
 
@@ -180,12 +246,64 @@ void main() {
     var service = DemoUserService();
 
     test('updateName updates name', () async {
-      expect((await service.user).name, 'Ich');
+      var user = service.user;
 
       service.updateUsername('neuer Name');
+      service.updateUsername('neuerer Name');
+      service.streamController.close();
 
-      expect((await service.user).name, 'neuer Name');
+      var users = await user.toList();
+      expect(users.map((user) => user.name),
+          containsAll([null, 'neuer Name', 'neuerer Name']));
+      expect(service.latestUser.name, 'neuerer Name');
     });
+  });
+
+  test('fun with streams', () async {
+    var latestValue;
+
+    var mainController = StreamController.broadcast();
+
+    mainController.stream.listen((event) {
+      latestValue = event;
+      print('Setze latestValue auf $latestValue');
+    });
+
+    Stream getIndividualStream() {
+      StreamController controller = StreamController();
+      if (latestValue != null) controller.add(latestValue);
+      controller.addStream(mainController.stream);
+      mainController.done.then((_) => controller.close());
+      return controller.stream;
+    }
+
+    mainController.stream.listen((event) => print('Stream feuert $event'));
+
+    getIndividualStream().listen((event) => print('Listener 1 feuert $event'));
+
+    var listener2 = getIndividualStream();
+
+    mainController.add(1);
+
+    listener2.listen((event) => print('Listener 2 feuert $event'));
+    getIndividualStream().listen((event) => print('Listener 3 feuert $event'),
+        onDone: () => print('Listener 3 geschlossen'),
+        onError: (_) => print('Fehler in Listener 3'));
+
+    mainController.add(2);
+
+    getIndividualStream().listen((event) => print('Listener 4 feuert $event'));
+
+    mainController.add(3);
+    // mainController.addError(Error());
+
+    getIndividualStream().listen((event) => print('Listener 5 feuert $event'));
+
+    var listener6 = getIndividualStream();
+
+    mainController.close();
+
+    await listener6.length;
   });
 }
 

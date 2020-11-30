@@ -22,11 +22,10 @@ class ErrorService {
     if (additional == null)
       additional = '';
     else
-      additional = '. $additional';
+      additional = '$additional';
 
     if (e is AuthFehler) {
-      pushMessage(
-          'Fehler bei Nutzer-Authentifizierung',
+      pushMessage('Fehler bei Nutzer-Authentifizierung',
           '${e.message}$additional$EMAIL');
       return;
     }
@@ -38,7 +37,7 @@ class ErrorService {
     }
     if (e is WrongResponseFormatException) {
       pushMessage(
-          'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten',
+          'Bei der Kommunikation mit dem Server ist ein technischer Fehler aufgetreten',
           '${e.message}$additional$EMAIL');
       return;
     }

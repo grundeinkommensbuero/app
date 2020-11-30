@@ -34,6 +34,7 @@ abstract class ChannelChangeListener {
 
 class ChatWindowState extends State<ChatWindow> {
   FocusNode myFocusNode;
+  bool initialized = false;
 
   bool textFieldHasFocus = false;
 
@@ -50,18 +51,16 @@ class ChatWindowState extends State<ChatWindow> {
 
   @override
   Widget build(BuildContext context) {
-    if (user == null) {
+    if (initialized == false) {
       Provider.of<AbstractUserService>(context)
-          .user_stream
-          .stream
+          .user
           .listen((user) => setState(() => this.user = user));
       pushService = Provider.of<AbstractPushSendService>(context);
-      this.user =
-          Provider.of<AbstractUserService>(context).internal_user_object;
+      initialized = true;
     }
 
     var inputWidget = ChatInputWidget(onSendMessage);
-    this.widget_list = ChatListWidget(this.user, this.channel);
+    this.widget_list = ChatListWidget(this.channel);
     var header_widget = buildHeader(widget.termin);
     Scaffold page = Scaffold(
         appBar: header_widget,
@@ -190,12 +189,14 @@ class ChatWindowState extends State<ChatWindow> {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal))
       ]));
 
-  onSendMessage(String text) async {
-    if (text == "") return;
-    if (isBlank(user.name))
-      await showUsernameDialog(context: context, user: user);
+  onSendMessage(TextEditingController controller) async {
+    if (controller.text == "") return;
+    if (isBlank(user.name)) {
+      var nameVergeben = await showUsernameDialog(context: context, user: user);
+      if (!nameVergeben) return;
+    }
     Message message = Message(
-        text: text,
+        text: controller.text,
         sending_time: DateTime.now(),
         message_color: user.color,
         sender_name: user.name,
@@ -206,6 +207,7 @@ class ChatWindowState extends State<ChatWindow> {
     //textEditingController.clear();
     // myFocusNode.unfocus();
     channel.channelCallback(message);
+    controller.clear();
   }
 
   @override

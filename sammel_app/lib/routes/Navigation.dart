@@ -4,13 +4,16 @@ import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
+import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
 import 'FAQ.dart';
 import 'TermineSeite.dart';
 
 class Navigation extends StatefulWidget {
-  Navigation() : super(key: Key('navigation'));
+  var clearButton = false;
+
+  Navigation([this.clearButton]) : super(key: Key('navigation'));
 
   @override
   State<StatefulWidget> createState() => NavigationState();
@@ -72,26 +75,33 @@ class NavigationState extends State<Navigation>
     return WillPopScope(
       onWillPop: () => navigateBack(),
       child: Scaffold(
-        drawerScrimColor: Colors.black26,
-        drawer: buildDrawer(),
-        appBar: AppBar(
-            title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text(titles[navigation]),
-            Image.asset('assets/images/logo.png', width: 50.0)
-          ],
-        )),
-        body: Container(
-          color: DweTheme.yellowLight,
-          child: FadeTransition(
-            opacity: _fade,
-            child: SlideTransition(
-                position: _slide,
-                child: IndexedStack(children: pages, index: navigation)),
+          drawerScrimColor: Colors.black26,
+          drawer: buildDrawer(),
+          appBar: AppBar(
+              title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(titles[navigation]),
+              Image.asset('assets/images/logo.png', width: 50.0)
+            ],
+          )),
+          body: Container(
+            color: DweTheme.yellowLight,
+            child: FadeTransition(
+              opacity: _fade,
+              child: SlideTransition(
+                  position: _slide,
+                  child: IndexedStack(children: pages, index: navigation)),
+            ),
           ),
-        ),
-      ),
+          floatingActionButton: widget.clearButton == true
+              ? FloatingActionButton(
+                  onPressed: () => Provider.of<StorageService>(context)
+                      .clearAllPreferences(),
+                  child: Icon(Icons.delete_forever),
+                  foregroundColor: Colors.red,
+                )
+              : null),
     );
   }
 

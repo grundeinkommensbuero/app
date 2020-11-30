@@ -34,8 +34,9 @@ class UserServiceMock extends Mock implements UserService {}
 
 class ConfiguredUserServiceMock extends Mock implements UserService {
   ConfiguredUserServiceMock() {
-    when(this.user).thenAnswer((_) async => karl());
-    when(this.userAuthCreds).thenAnswer((_) async => 'userCreds');
+    when(this.user).thenAnswer((_) => Stream.value(karl()));
+    when(this.userHeaders)
+        .thenAnswer((_) async => {'Authorization': 'userCreds'});
   }
 }
 

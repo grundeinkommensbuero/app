@@ -26,9 +26,9 @@ void main() {
 
     test('filled User', () {
       expect(
-          jsonEncode(User(1, 'secret', Colors.red).toJson()),
+          jsonEncode(User(11, 'secret', Colors.red).toJson()),
           '{'
-          '"id":1,'
+          '"id":11,'
           '"name":"secret",'
           '"color":4294198070'
           '}');

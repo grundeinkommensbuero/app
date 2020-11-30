@@ -26,7 +26,8 @@ class ListLocationService extends AbstractListLocationService {
     try {
       response = await get('/service/listlocations/actives');
     } catch (e) {
-      ErrorService.handleError(e);
+      ErrorService.handleError(e,
+          additional: 'Listen-Orte konnten nicht geladen werden.');
       return [];
     }
     final listLocations = (response.body as List)

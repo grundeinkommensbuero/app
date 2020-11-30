@@ -16,13 +16,13 @@ class UsernameDialog extends StatefulWidget {
   UsernameDialog(this.user);
 
   @override
-  State<StatefulWidget> createState() => UsernameDialogState(user);
+  State<StatefulWidget> createState() => UsernameDialogState(user.name);
 }
 
 class UsernameDialogState extends State<UsernameDialog> {
-  User user;
+  String name;
 
-  UsernameDialogState(this.user);
+  UsernameDialogState(this.name);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class UsernameDialogState extends State<UsernameDialog> {
           key: Key('user name input'),
           autofocus: true,
           maxLength: 40,
-          onChanged: (input) => setState(() => user.name = input),
+          onChanged: (input) => setState(() => name = input),
         ),
       ])),
       actions: [
@@ -57,12 +57,12 @@ class UsernameDialogState extends State<UsernameDialog> {
 
   Future<void> changeUserNameAndClose() async {
     try {
-      await Provider.of<AbstractUserService>(context).updateUsername(user.name);
+      await Provider.of<AbstractUserService>(context).updateUsername(name);
     } catch (e) {
       Navigator.pop(context, false);
     }
     Navigator.pop(context, true);
   }
 
-  isValid() => isNotBlank(user.name);
+  isValid() => isNotBlank(name);
 }

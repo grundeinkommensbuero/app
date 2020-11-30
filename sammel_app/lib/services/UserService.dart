@@ -15,14 +15,26 @@ import 'package:uuid/uuid.dart';
 abstract class AbstractUserService extends BackendService {
   static String appAuth =
       'MTpiOTdjNzU5Ny1mNjY5LTRmZWItOWJhMi0zMjE0YzE4MjIzMzk=';
-  Future<User> user;
-  Future<String> userAuthCreds;
-  User internal_user_object = User(0, null, _randomColor());
-  StreamController<User> user_stream = StreamController<User>.broadcast();
+  final streamController = StreamController<User>.broadcast();
+  Stream<User> _userStream;
+  User latestUser;
+  Future<Map<String, String>> userHeaders;
 
-  AbstractUserService([Backend backendService]) : super(null, backendService);
+  AbstractUserService([Backend backendService]) : super(null, backendService) {
+    this._userStream = streamController.stream;
+    _userStream.listen((user) => latestUser = user);
+  }
 
-  Future<User> updateUsername(String name);
+  updateUsername(String name);
+
+  Stream<User> get user {
+    var streamController = StreamController<User>();
+    if (latestUser != null) streamController.add(latestUser);
+    streamController
+        .addStream(_userStream)
+        .then((_) => streamController.close());
+    return streamController.stream;
+  }
 }
 
 class UserService extends AbstractUserService {
@@ -31,52 +43,44 @@ class UserService extends AbstractUserService {
 
   UserService(this.storageService, this.firebase, [Backend backend])
       : super(backend) {
-    user = getOrCreateUser();
-    userAuthCreds = generateAuth(user);
+    getOrCreateUser();
+    generateUserHeaders();
 
     this.userService = this;
-
-    userHeaders = userAuthCreds
-        .asStream()
-        .map((creds) => {"Authorization": "Basic $creds"})
-        .first;
   }
 
-  Future<User> getOrCreateUser() async {
-    var foundUser = await storageService.loadUser();
-    if (foundUser != null)
-      return verifyUser(foundUser).catchError((e) {
+  getOrCreateUser() async {
+    var user = await storageService.loadUser();
+    if (user != null)
+      await verifyUser(user).catchError((e) async {
         ErrorService.handleError(e,
             additional: 'Ein neuer Benutzer wird angelegt.');
-        return createNewUser();
+        user = await createNewUser();
       }, test: (e) => e is InvalidUserException);
     else
-      return await createNewUser();
+      user = await createNewUser();
+    streamController.add(user);
   }
 
   Future<User> createNewUser() async {
     String secret = await generateSecret();
     String firebaseKey = await firebase.token;
-    //Color color = _randomColor();
-    //User user = User(0, null, color);
+    final user = User(0, null, _randomColor());
 
-    Login login = Login(this.internal_user_object, secret, firebaseKey);
+    Login login = Login(user, secret, firebaseKey);
     var response;
     try {
       response = await post('service/benutzer/neu', jsonEncode(login.toJson()),
           appAuth: true);
     } catch (e) {
-      ErrorService.handleError(e);
+      ErrorService.handleError(e,
+          additional: 'Anlegen eine*r neuen Benutzer*in ist gescheitert.');
       throw e;
     }
     var userFromServer = User.fromJSON(response.body);
 
-    internal_user_object.setUserData(userFromServer);
-    this.user_stream.sink.add(internal_user_object);
-
-    storageService.saveUser(userFromServer);
-
-    return internal_user_object;
+    await storageService.saveUser(userFromServer);
+    return userFromServer;
   }
 
   Future<User> verifyUser(User user) async {
@@ -90,15 +94,13 @@ class UserService extends AbstractUserService {
           'service/benutzer/authentifiziere', jsonEncode(login.toJson()),
           appAuth: true);
     } catch (e) {
-      ErrorService.handleError(e);
+      ErrorService.handleError(e,
+          additional: 'Benutzer*indaten konnte nicht übrprüft werden.');
       throw e;
     }
     bool authenticated = response.body;
-    if (authenticated) {
-      this.internal_user_object = user;
-      this.user_stream.sink.add(user);
+    if (authenticated)
       return user;
-    }
     else
       throw InvalidUserException();
   }
@@ -106,30 +108,32 @@ class UserService extends AbstractUserService {
   Future<String> generateSecret() async {
     String secret = Uuid().v1();
     await storageService.saveSecret(secret);
+    print('Secret gespeichert: $secret');
     return secret;
   }
 
-  Future<String> generateAuth(Future<User> user) async {
-    var userId = (await user).id;
-    var secret = await storageService.loadSecret();
-    List<int> input = '$userId:$secret'.codeUnits;
-    var auth = Future.value(Base64Encoder().convert(input));
-    return auth;
+  generateUserHeaders() async {
+    userHeaders = Future.wait([_userStream.first, storageService.loadSecret()])
+        .then((futures) {
+      final id = (futures[0] as User).id;
+      final secret = futures[1];
+      print('Secret geladen: $secret');
+      final creds = '$id:$secret';
+      final creds64 = Base64Encoder().convert(creds.codeUnits);
+      return {"Authorization": "Basic $creds64"};
+    });
   }
 
-  Future<User> updateUsername(String name) async {
+  updateUsername(String name) async {
     try {
-      var response =
-          await post('service/benutzer/aktualisiereName', name);
+      var response = await post('service/benutzer/aktualisiereName', name);
 
       var userFromServer = User.fromJSON(response.body);
-      internal_user_object.setUserData(userFromServer);
-      storageService.saveUser(userFromServer);
-      this.user_stream.sink.add(userFromServer);
-
-      return internal_user_object;
+      await storageService.saveUser(userFromServer);
+      this.streamController.add(userFromServer);
     } catch (e) {
-      ErrorService.handleError(e);
+      ErrorService.handleError(e,
+          additional: 'Benutzer*in-Name konnte nicht geändert werden.');
       throw e;
     }
   }
@@ -145,13 +149,12 @@ class InvalidUserException implements Exception {}
 
 class DemoUserService extends AbstractUserService {
   DemoUserService() : super(DemoBackend()) {
-    user = Future.value(User(1, 'Ich', Colors.red));
-    userAuthCreds = Future.value('userCreds');
-
+    _userStream = streamController.stream;
+    streamController.add(User(13, null, Colors.red));
+    userHeaders = Future.value({'Authorization': 'userCreds'});
   }
 
-  Future<User> updateUsername(String name) {
-    user = Future.value(User(1, name, Colors.red));
-    return user;
+  updateUsername(String name) {
+    streamController.add(User(13, name, Colors.red));
   }
 }
