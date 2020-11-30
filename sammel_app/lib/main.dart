@@ -18,11 +18,11 @@ void main() {
   runApp(MyApp());
 }
 
-const Mode mode = Mode.LOCAL;
+const Mode mode = Mode.DEMO;
 
 // Debug
 const bool pullMode = false;
-const bool clearButton = true;
+const bool clearButton = false;
 
 class MyApp extends StatelessWidget {
   static var firebaseService = FirebaseReceiveService();
