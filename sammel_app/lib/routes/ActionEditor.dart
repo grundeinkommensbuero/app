@@ -615,7 +615,7 @@ class ActionEditorState extends State<ActionEditor> {
         if (ChronoHelfer.isTimeOfDayBefore(this.action.bis, this.action.von)) {
           end = end.add(Duration(days: 1));
         ***REMOVED***
-        User me = await Provider.of<AbstractUserService>(context).user;
+        User me = await Provider.of<AbstractUserService>(context).user.first;
         termine.add(Termin(
             widget.initAction?.id,
             begin,

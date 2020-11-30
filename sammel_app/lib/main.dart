@@ -18,11 +18,11 @@ void main() {
   runApp(MyApp());
 ***REMOVED***
 
-const Mode mode = Mode.DEMO;
+const Mode mode = Mode.LOCAL;
 
 ***REMOVED***
 ***REMOVED***
-const bool clearAllPreferences = false;
+const bool clearButton = true;
 
 class MyApp extends StatelessWidget {
   static var firebaseService = FirebaseReceiveService();
@@ -68,7 +68,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
             title: 'DW & Co. Enteignen',
             theme: DweTheme.themeData,
-            home: Navigation()));
+            home: Navigation(clearButton)));
   ***REMOVED***
 ***REMOVED***
 

@@ -147,9 +147,6 @@ class TermineSeiteState extends State<TermineSeite>
   // und auch nicht im initState(), weil da InheritedWidgets nicht angefasst werden können
   // und didChangeDependencies() wird mehrfach aufgerufen
   void intialize(BuildContext context) {
-    if (clearAllPreferences)
-      Provider.of<StorageService>(context).clearAllPreferences();
-
     termineService = Provider.of<AbstractTermineService>(context);
     storageService = Provider.of<StorageService>(context);
     filterWidget = FilterWidget(ladeTermine, key: filterKey);
@@ -167,7 +164,7 @@ class TermineSeiteState extends State<TermineSeite>
 
     Provider.of<AbstractUserService>(context)
         .user
-        .then((user) => setState(() => me = user));
+        .listen((user) => setState(() => me = user));
 
     _initialized = true;
   ***REMOVED***
@@ -177,7 +174,8 @@ class TermineSeiteState extends State<TermineSeite>
       setState(() {
         this.termine = termine..sort(Termin.compareByStart);
       ***REMOVED***);
-    ***REMOVED***).catchError((e) => ErrorService.handleError(e));
+    ***REMOVED***).catchError((e) => ErrorService.handleError(e,
+        additional: "Aktionen konnten nicht geladen werden."));
   ***REMOVED***
 
   void showRestError(RestFehler e) {
@@ -266,7 +264,8 @@ class TermineSeiteState extends State<TermineSeite>
       if (command == TerminDetailsCommand.FOCUS)
         showActionOnMap(terminMitDetails);
     ***REMOVED*** catch (e) {
-      ErrorService.handleError(e);
+      ErrorService.handleError(e,
+          additional: 'Aktionen konnten nicht geladen werden.');
     ***REMOVED***
   ***REMOVED***
 
@@ -385,7 +384,8 @@ class TermineSeiteState extends State<TermineSeite>
       await termineService.saveAction(editedAction, token);
       setState(() => updateAction(editedAction, false));
     ***REMOVED*** catch (error) {
-      ErrorService.handleError(error);
+      ErrorService.handleError(error,
+          additional: 'Aktion konnte nicht gespeichert werden.');
     ***REMOVED***
   ***REMOVED***
 
@@ -426,7 +426,8 @@ class TermineSeiteState extends State<TermineSeite>
           ..sort(Termin.compareByStart);
       ***REMOVED***);
     ***REMOVED*** catch (error) {
-      ErrorService.handleError(error);
+      ErrorService.handleError(error,
+          additional: 'Aktion konnte nicht erzeugt werden. ');
     ***REMOVED***
   ***REMOVED***
 

@@ -26,7 +26,8 @@ class StammdatenService extends AbstractStammdatenService {
           .toList();
       return orte;
     ***REMOVED*** catch (e) {
-      ErrorService.handleError(e);
+      ErrorService.handleError(e,
+          additional: 'Orte konnten nicht geladen werden.');
       return [];
     ***REMOVED***
   ***REMOVED***

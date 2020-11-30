@@ -16,7 +16,6 @@ class BackendService {
   static Map<String, String> appHeaders = {
     'Authorization': 'Basic ${AbstractUserService.appAuth***REMOVED***'
   ***REMOVED***
-  Future<Map<String, String>> userHeaders;
 
   BackendService.userService();
 
@@ -27,13 +26,6 @@ class BackendService {
     if (!(this is AbstractUserService)) {
       if (userService == null) throw ArgumentError.notNull('userService');
       this.userService = userService;
-
-      userHeaders = this
-          .userService
-          .userAuthCreds
-          .asStream()
-          .map((creds) => {"Authorization": "Basic $creds"***REMOVED***)
-          .first;
     ***REMOVED***
   ***REMOVED***
 
@@ -82,7 +74,7 @@ class BackendService {
     if (appAuth != null && appAuth)
       return Future.value(appHeaders);
     else
-      return userHeaders.timeout(Duration(seconds: 10),
+      return userService.userHeaders.timeout(Duration(seconds: 10),
           onTimeout: () => throw NoUserAuthException);
   ***REMOVED***
 ***REMOVED***
@@ -118,7 +110,7 @@ class Backend {
     // https://stackoverflow.com/questions/54104685/flutter-add-self-signed-certificate-from-asset-folder
     ByteData data = await rootBundle.load(rootCertificate);
     clientContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
-    if(!testMode) {
+    if (!testMode) {
       ByteData data = await rootBundle.load(localCertificate);
       clientContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
     ***REMOVED***
