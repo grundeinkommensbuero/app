@@ -89,7 +89,7 @@ class Backend {
   static HttpClient client = HttpClient(context: clientContext);
 
   static final Map<String, String> headers = {
-    HttpHeaders.contentTypeHeader: "application/json",
+    HttpHeaders.contentTypeHeader: "application/json; charset=utf-8",
     HttpHeaders.acceptHeader: "*/*",
   };
 
@@ -126,7 +126,6 @@ class Backend {
     return await client
         .getUrl(uri)
         .then((HttpClientRequest request) {
-          request.headers.contentType = ContentType.json;
           Backend.headers
               .forEach((key, value) => request.headers.add(key, value));
           headers.forEach((key, value) => request.headers.add(key, value));
@@ -150,7 +149,6 @@ class Backend {
     return await client
         .postUrl(Uri.https('$host:$port', url, parameters))
         .then((HttpClientRequest request) {
-          request.headers.contentType = ContentType.json;
           Backend.headers
               .forEach((key, value) => request.headers.add(key, value));
           headers.forEach((key, value) => request.headers.add(key, value));
@@ -176,7 +174,6 @@ class Backend {
     return await client
         .deleteUrl(Uri.https('$host:$port', url))
         .then((HttpClientRequest request) {
-          request.headers.contentType = ContentType.json;
           Backend.headers
               .forEach((key, value) => request.headers.add(key, value));
           headers.forEach((key, value) => request.headers.add(key, value));
