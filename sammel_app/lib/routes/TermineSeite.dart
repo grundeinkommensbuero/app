@@ -174,8 +174,11 @@ class TermineSeiteState extends State<TermineSeite>
       setState(() {
         this.termine = termine..sort(Termin.compareByStart);
       ***REMOVED***);
-    ***REMOVED***).catchError((e) => ErrorService.handleError(e,
-        additional: "Aktionen konnten nicht geladen werden."));
+    ***REMOVED***).catchError((e) {
+      ErrorService.handleError(e,
+        additional: "Aktionen konnten nicht geladen werden.");
+      throw e;
+    ***REMOVED***);
   ***REMOVED***
 
   void showRestError(RestFehler e) {
@@ -266,6 +269,7 @@ class TermineSeiteState extends State<TermineSeite>
     ***REMOVED*** catch (e) {
       ErrorService.handleError(e,
           additional: 'Aktionen konnten nicht geladen werden.');
+      rethrow;
     ***REMOVED***
   ***REMOVED***
 
@@ -386,6 +390,7 @@ class TermineSeiteState extends State<TermineSeite>
     ***REMOVED*** catch (error) {
       ErrorService.handleError(error,
           additional: 'Aktion konnte nicht gespeichert werden.');
+      rethrow;
     ***REMOVED***
   ***REMOVED***
 
@@ -428,6 +433,7 @@ class TermineSeiteState extends State<TermineSeite>
     ***REMOVED*** catch (error) {
       ErrorService.handleError(error,
           additional: 'Aktion konnte nicht erzeugt werden. ');
+      rethrow;
     ***REMOVED***
   ***REMOVED***
 

@@ -81,6 +81,15 @@ open class BenutzerDao {
                 .resultList
     ***REMOVED***
 
+    open fun gibNutzerNamedRolle(benutzer: Benutzer) {
+        entityManager
+            .createNativeQuery("insert into Roles (id, role) values (:id, :rolle)")
+            .setParameter("id", benutzer.id)
+            .setParameter("rolle", "named")
+            .executeUpdate()
+        LOG.debug("Benutzer ${benutzer.id***REMOVED*** um Rolle 'named' erweitert")
+    ***REMOVED***
+
     class NeuerBenutzerHatBereitsIdException : Exception()
     class BenutzerAnlegenGescheitertException(message: String) : java.lang.Exception(message)
 ***REMOVED***
