@@ -47,10 +47,8 @@ class ErrorService {
   static void pushMessage(String titel, String message) {
     if (_context == null)
       messageQueue.add([titel, message]);
-    else {
-      print('Ein Fehler ist aufgetreten: $titel - $message');
+    else
       showErrorDialog(titel, message, key: Key('error dialog'));
-    }
   }
 
   static Future showErrorDialog(String title, String message, {key: Key}) =>

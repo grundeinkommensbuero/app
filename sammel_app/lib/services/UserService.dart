@@ -96,7 +96,7 @@ class UserService extends AbstractUserService {
     } catch (e) {
       ErrorService.handleError(e,
           additional: 'Benutzer*indaten konnte nicht überprüft werden.');
-      throw e;
+      rethrow;
     }
     bool authenticated = response.body;
     if (authenticated)
