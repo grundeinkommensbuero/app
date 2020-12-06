@@ -756,8 +756,8 @@ void main() {
 
     testWidgets('opens name dialog if no username', (tester) async {
       var userService = UserServiceMock();
-      when(userService.latestUser)
-          .thenAnswer((_) => User(13, null, Colors.red));
+      when(userService.user)
+          .thenAnswer((_) => Stream.value(User(13, null, Colors.red)));
       await pumpActionEditorUnconfigured(tester, userService);
 
       await tester.tap(find.byKey(Key('action editor finish button')));
@@ -777,10 +777,8 @@ void main() {
 
     testWidgets('creates action with new username', (tester) async {
       var userService = UserServiceMock();
-      when(userService.latestUser)
-          .thenAnswer((_) => User(13, null, Colors.red));
       when(userService.user)
-          .thenAnswer((_) => Stream.value(User(13, 'Karl Marx', Colors.red)));
+          .thenAnswer((_) => Stream.value(User(13, null, Colors.red)));
       var fired = false;
       await pumpActionEditorUnconfigured(tester, userService,
           onFinish: (_) => fired = true);
@@ -806,8 +804,8 @@ void main() {
         'cancel username does not close action creator and keeps inputs',
         (tester) async {
       var userService = UserServiceMock();
-      when(userService.latestUser)
-          .thenAnswer((_) => User(13, null, Colors.red));
+      when(userService.user)
+          .thenAnswer((_) => Stream.value(User(13, null, Colors.red)));
       bool fired = false;
       await pumpActionEditorUnconfigured(tester, userService,
           onFinish: (_) => fired = true);

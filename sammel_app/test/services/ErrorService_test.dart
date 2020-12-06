@@ -49,7 +49,7 @@ void main() {
 
   group('handleError', () {
     test('recognizes and handles AuthFehler', () {
-      ErrorService.handleError(AuthFehler('Nachricht'));
+      ErrorService.handleError(AuthFehler('Nachricht'), StackTrace.empty);
 
       expect(ErrorService.messageQueue.length, 1);
       expect(ErrorService.messageQueue[0][0],
@@ -59,7 +59,7 @@ void main() {
     });
 
     test('recognizes and handles RestFehler', () {
-      ErrorService.handleError(RestFehler('Nachricht'));
+      ErrorService.handleError(RestFehler('Nachricht'), StackTrace.empty);
 
       expect(ErrorService.messageQueue.length, 1);
       expect(ErrorService.messageQueue[0][0],
@@ -69,7 +69,8 @@ void main() {
     });
 
     test('recognizes and handles WrongResponseFormatException', () {
-      ErrorService.handleError(WrongResponseFormatException('Nachricht'));
+      ErrorService.handleError(
+          WrongResponseFormatException('Nachricht'), StackTrace.empty);
 
       expect(ErrorService.messageQueue.length, 1);
       expect(ErrorService.messageQueue[0][0],
@@ -79,11 +80,12 @@ void main() {
     });
 
     test('adds optional message to Error text', () {
-      ErrorService.handleError(RestFehler('Nachricht. '),
+      ErrorService.handleError(RestFehler('Nachricht. '), StackTrace.empty,
           additional: 'Zusätzliche Info');
 
       expect(ErrorService.messageQueue.length, 1);
-      expect(ErrorService.messageQueue[0][1],
+      expect(
+          ErrorService.messageQueue[0][1],
           'Nachricht. Zusätzliche Info\n'
           'Wenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com');
     });

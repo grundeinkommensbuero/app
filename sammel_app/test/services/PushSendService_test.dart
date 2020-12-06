@@ -38,7 +38,7 @@ main() {
 
       verify(backendMock.post(
           'service/push/devices',
-          '{"recipients":["Empfänger"],"data":{"payload":"eyJ0eXBlIjpudWxsfQ=="},"notification":{"title":"Titel","body":"Inhalt"}}',
+          '{"recipients":["Empfänger"],"data":{"encrypted":"Base64","payload":"eyJ0eXBlIjpudWxsfQ=="},"notification":{"title":"Titel","body":"Inhalt"}}',
           any));
     });
 
@@ -62,7 +62,7 @@ main() {
 
       verify(backendMock.post(
           'service/push/topic/Thema',
-          '{"recipients":null,"data":{"payload":"eyJ0eXBlIjpudWxsfQ=="},"notification":{"title":"Titel","body":"Inhalt"}}',
+          '{"recipients":null,"data":{"encrypted":"Base64","payload":"eyJ0eXBlIjpudWxsfQ=="},"notification":{"title":"Titel","body":"Inhalt"}}',
           any));
     });
   });

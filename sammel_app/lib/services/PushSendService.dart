@@ -35,8 +35,8 @@ class PushSendService extends AbstractPushSendService {
           'service/push/devices',
           jsonEncode(PushMessage(data, notification, recipients: recipients)
               .toJson()));
-    } catch (e) {
-      ErrorService.handleError(e,
+    } catch (e, s) {
+      ErrorService.handleError(e, s,
           additional: 'Push-Nachricht an Geräte konnte nicht versandt werden');
     }
   }
@@ -50,8 +50,8 @@ class PushSendService extends AbstractPushSendService {
     try {
       post('service/push/topic/$topic',
           jsonEncode(PushMessage(data, notification).toJson()));
-    } catch (e) {
-      ErrorService.handleError(e,
+    } catch (e, s) {
+      ErrorService.handleError(e, s,
           additional: 'Push-Nachricht an Thema konnte nicht versandt werden');
     }
   }
@@ -67,8 +67,8 @@ class PushSendService extends AbstractPushSendService {
     try {
       post('service/push/action/$actionId',
           jsonEncode(PushMessage(data, notification).toJson()));
-    } catch (e) {
-      ErrorService.handleError(e,
+    } catch (e, s) {
+      ErrorService.handleError(e, s,
           additional: 'Push-Nachricht an Aktion konnte nicht versandt werden.');
     }
   }

@@ -173,11 +173,8 @@ class TermineSeiteState extends State<TermineSeite>
       setState(() {
         this.termine = termine..sort(Termin.compareByStart);
       });
-    }).catchError((e) {
-      ErrorService.handleError(e,
-        additional: "Aktionen konnten nicht geladen werden.");
-      throw e;
-    });
+    }).catchError((e, s) => ErrorService.handleError(e, s,
+        additional: "Aktionen konnten nicht geladen werden."));
   }
 
   void showRestError(RestFehler e) {
@@ -265,10 +262,9 @@ class TermineSeiteState extends State<TermineSeite>
 
       if (command == TerminDetailsCommand.FOCUS)
         showActionOnMap(terminMitDetails);
-    } catch (e) {
-      ErrorService.handleError(e,
+    } catch (e, s) {
+      ErrorService.handleError(e, s,
           additional: 'Aktionen konnten nicht geladen werden.');
-      rethrow;
     }
   }
 
@@ -386,10 +382,9 @@ class TermineSeiteState extends State<TermineSeite>
       String token = await storageService.loadActionToken(editedAction.id);
       await termineService.saveAction(editedAction, token);
       setState(() => updateAction(editedAction, false));
-    } catch (error) {
-      ErrorService.handleError(error,
+    } catch (e, s) {
+      ErrorService.handleError(e, s,
           additional: 'Aktion konnte nicht gespeichert werden.');
-      rethrow;
     }
   }
 
@@ -429,10 +424,9 @@ class TermineSeiteState extends State<TermineSeite>
           ..add(actionWithId)
           ..sort(Termin.compareByStart);
       });
-    } catch (error) {
-      ErrorService.handleError(error,
+    } catch (e, s) {
+      ErrorService.handleError(e, s,
           additional: 'Aktion konnte nicht erzeugt werden. ');
-      rethrow;
     }
   }
 

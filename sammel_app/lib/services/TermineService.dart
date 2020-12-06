@@ -73,8 +73,9 @@ class TermineService extends AbstractTermineService {
     try {
       await post('service/termine/teilnahme', jsonEncode(null),
           parameters: {'id': '$id'});
-    } catch (e) {
-      ErrorService.handleError(e, additional: 'Teilnahme ist fehlgeschlagen.');
+    } catch (e, s) {
+      ErrorService.handleError(e, s,
+          additional: 'Teilnahme ist fehlgeschlagen.');
     }
   }
 
@@ -82,8 +83,8 @@ class TermineService extends AbstractTermineService {
     try {
       await post('service/termine/absage', jsonEncode(null),
           parameters: {'id': '$id'});
-    } catch (e) {
-      ErrorService.handleError(e, additional: 'Absage ist fehlgeschlagen.');
+    } catch (e, s) {
+      ErrorService.handleError(e, s, additional: 'Absage ist fehlgeschlagen.');
     }
   }
 }
