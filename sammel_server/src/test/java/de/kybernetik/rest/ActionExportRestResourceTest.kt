@@ -107,7 +107,7 @@ class ActionExportRestResourceTest {
         assertEquals(description, "Kommt zahlreich\n" +
                 "\n" +
                 "am 22.10.2019\n" +
-                "ab 12:00 Uhr bis 03:00 Uhr\n" +
+                "ab 12:00 Uhr bis 15:00 Uhr\n" +
                 "Treffpunkt: Weltzeituhr")
     ***REMOVED***
 
@@ -119,7 +119,7 @@ class ActionExportRestResourceTest {
         assertEquals(description, "Zu dieser Aktion gibt es keine Beschreibung\n" +
                 "\n" +
                 "am 22.10.2019\n" +
-                "ab 12:00 Uhr bis 03:00 Uhr\n" +
+                "ab 12:00 Uhr bis 15:00 Uhr\n" +
                 "Treffpunkt: Weltzeituhr")
     ***REMOVED***
 

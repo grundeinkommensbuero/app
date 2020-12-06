@@ -79,11 +79,11 @@ class UserService extends AbstractUserService {
     ***REMOVED***
     var userFromServer = User.fromJSON(response.body);
 
-    await storageService.saveUser(userFromServer);
+    storageService.saveUser(userFromServer);
     return userFromServer;
   ***REMOVED***
 
-  Future<User> verifyUser(User user) async {
+  verifyUser(User user) async {
     String secret = await storageService.loadSecret();
     String firebaseKey = await firebase.token;
 
@@ -100,7 +100,7 @@ class UserService extends AbstractUserService {
     ***REMOVED***
     bool authenticated = response.body;
     if (authenticated)
-      return user;
+      return;
     else
       throw InvalidUserException();
   ***REMOVED***
