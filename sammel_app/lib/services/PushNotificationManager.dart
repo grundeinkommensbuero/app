@@ -75,16 +75,21 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     ***REMOVED***
    */
 
-  Future<dynamic> onMessageCallback(Map<String, dynamic> cryptoMessage) async {
-    final message = decrypt(cryptoMessage['data']);
-    print('message decrypted: ${message.toString()***REMOVED***');
-    Map<dynamic, dynamic> data = message;
-    if (data.containsKey('type')) {
-      String type = data['type'];
-      if (callback_map.containsKey(type)) {
-        data.remove('type');
-        callback_map[type].receive_message(data);
+  Future<dynamic> onMessageCallback(Map<dynamic, dynamic> message) async {
+    print('Push-Nachricht empfangen: $message');
+    try {
+      Map<dynamic, dynamic> data;
+      data = decrypt(message['data']);
+      print('Push-Nachricht entschlüsselt: ${data.toString()***REMOVED***');
+      if (data.containsKey('type')) {
+        String type = data['type'];
+        if (callback_map.containsKey(type)) {
+          data.remove('type');
+          callback_map[type].receive_message(data);
+        ***REMOVED***
       ***REMOVED***
+    ***REMOVED*** catch (e) {
+      print('Fehler beim Verarbeiten von Push-Nachricht: $e');
     ***REMOVED***
   ***REMOVED***
 
