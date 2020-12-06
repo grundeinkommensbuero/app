@@ -113,11 +113,9 @@ class UserService extends AbstractUserService {
   }
 
   generateUserHeaders() async {
-    userHeaders = Future.wait([_userStream.first, storageService.loadSecret()])
-        .then((futures) {
-      final id = (futures[0] as User).id;
-      final secret = futures[1];
-      final creds = '$id:$secret';
+    userHeaders = _userStream.first.then((user) async {
+      final secret = await storageService.loadSecret();
+      final creds = '${user.id}:$secret';
       final creds64 = Base64Encoder().convert(creds.codeUnits);
       return {"Authorization": "Basic $creds64"};
     });
@@ -138,7 +136,7 @@ class UserService extends AbstractUserService {
   }
 }
 
-Color _randomColor() {
+Color _randomColor() {k
   var rng = new Random();
   var values = new List.generate(3, (_) => rng.nextInt(256));
   return Color.fromRGBO(values[0], values[1], values[2], 0.5);
