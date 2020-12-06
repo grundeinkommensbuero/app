@@ -68,8 +68,8 @@ class PullService extends BackendService implements PushReceiveService {
       List content = reponse.body;
       if (content != null && content.isNotEmpty)
         content.forEach((message) => onMessage(message));
-    ***REMOVED*** catch (e) {
-      ErrorService.handleError(e,
+    ***REMOVED*** catch (e, s) {
+      ErrorService.handleError(e, s,
           additional:
               'Beim Abrufen von Nachrichten ist ein Fehler aufgetreten. Das regelmäßige Abrufen von Nachrichten wird deshalb deaktiviert');
       timer.cancel();

@@ -18,27 +18,28 @@ class ErrorService {
         showErrorDialog(error[0], error[1], key: Key('error dialog')));
   ***REMOVED***
 
-  static handleError(e, {String additional***REMOVED***) {
+  static handleError(error, StackTrace stacktrace, {String additional***REMOVED***) {
+    print('### Fehler aufgetreten: $error\n$stacktrace');
     if (additional == null)
       additional = '';
     else
       additional = '$additional';
 
-    if (e is AuthFehler) {
+    if (error is AuthFehler) {
       pushMessage('Fehler bei Nutzer-Authentifizierung',
-          '${e.message***REMOVED***$additional$EMAIL');
+          '${error.message***REMOVED***$additional$EMAIL');
       return;
     ***REMOVED***
-    if (e is RestFehler) {
+    if (error is RestFehler) {
       pushMessage(
           'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten',
-          '${e.message***REMOVED***$additional$EMAIL');
+          '${error.message***REMOVED***$additional$EMAIL');
       return;
     ***REMOVED***
-    if (e is WrongResponseFormatException) {
+    if (error is WrongResponseFormatException) {
       pushMessage(
           'Bei der Kommunikation mit dem Server ist ein technischer Fehler aufgetreten',
-          '${e.message***REMOVED***$additional$EMAIL');
+          '${error.message***REMOVED***$additional$EMAIL');
       return;
     ***REMOVED***
     pushMessage('Ein Fehler ist aufgetreten', '$additional$EMAIL');

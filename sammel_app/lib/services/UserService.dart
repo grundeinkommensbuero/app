@@ -52,8 +52,8 @@ class UserService extends AbstractUserService {
   getOrCreateUser() async {
     var user = await storageService.loadUser();
     if (user != null)
-      await verifyUser(user).catchError((e) async {
-        ErrorService.handleError(e,
+      await verifyUser(user).catchError((e, s) async {
+        ErrorService.handleError(e, s,
             additional: 'Ein neuer Benutzer wird angelegt.');
         user = await createNewUser();
       ***REMOVED***, test: (e) => e is InvalidUserException);
@@ -72,8 +72,8 @@ class UserService extends AbstractUserService {
     try {
       response = await post('service/benutzer/neu', jsonEncode(login.toJson()),
           appAuth: true);
-    ***REMOVED*** catch (e) {
-      ErrorService.handleError(e,
+    ***REMOVED*** catch (e, s) {
+      ErrorService.handleError(e, s,
           additional: 'Anlegen eine*r neuen Benutzer*in ist gescheitert.');
       throw e;
     ***REMOVED***
@@ -93,8 +93,8 @@ class UserService extends AbstractUserService {
       response = await post(
           'service/benutzer/authentifiziere', jsonEncode(login.toJson()),
           appAuth: true);
-    ***REMOVED*** catch (e) {
-      ErrorService.handleError(e,
+    ***REMOVED*** catch (e, s) {
+      ErrorService.handleError(e, s,
           additional: 'Benutzer*indaten konnte nicht überprüft werden.');
       rethrow;
     ***REMOVED***
@@ -128,8 +128,8 @@ class UserService extends AbstractUserService {
       var userFromServer = User.fromJSON(response.body);
       await storageService.saveUser(userFromServer);
       this.streamController.add(userFromServer);
-    ***REMOVED*** catch (e) {
-      ErrorService.handleError(e,
+    ***REMOVED*** catch (e, s) {
+      ErrorService.handleError(e, s,
           additional: 'Benutzer*in-Name konnte nicht geändert werden.');
       throw e;
     ***REMOVED***
