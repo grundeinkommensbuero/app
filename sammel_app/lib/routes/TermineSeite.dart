@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
-import 'package:sammel_app/main.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
@@ -123,10 +122,10 @@ class TermineSeiteState extends State<TermineSeite>
           BottomNavigationBarItem(
               icon: Icon(Icons.view_list,
                   key: Key('list view navigation button')),
-              title: Text('Liste')),
+              label: 'Liste'),
           BottomNavigationBarItem(
               icon: Icon(Icons.map, key: Key('map view navigation button')),
-              title: Text('Karte'))
+              label: 'Karte')
         ],
       ),
     );
