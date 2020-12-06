@@ -17,19 +17,19 @@ abstract class AbstractUserService extends BackendService {
       'MTpiOTdjNzU5Ny1mNjY5LTRmZWItOWJhMi0zMjE0YzE4MjIzMzk=';
   final streamController = StreamController<User>.broadcast();
   Stream<User> _userStream;
-  User _latestUser;
+  User latestUser;
   Future<Map<String, String>> userHeaders;
 
   AbstractUserService([Backend backendService]) : super(null, backendService) {
     this._userStream = streamController.stream;
-    _userStream.listen((user) => _latestUser = user);
+    _userStream.listen((user) => latestUser = user);
   ***REMOVED***
 
   updateUsername(String name);
 
   Stream<User> get user {
     var streamController = StreamController<User>();
-    if (_latestUser != null) streamController.add(_latestUser);
+    if (latestUser != null) streamController.add(latestUser);
     streamController
         .addStream(_userStream)
         .then((_) => streamController.close());
