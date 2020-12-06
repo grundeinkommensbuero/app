@@ -97,6 +97,7 @@ open class BenutzerRestResource {
                     .build()
         }
         val aktualisierterBenutzer = dao.aktualisiereBenutzername(id.toLong(), name)
+        dao.gibNutzerNamedRolle(aktualisierterBenutzer)
         return Response
                 .status(200)
                 .entity(BenutzerDto.convertFromBenutzer(aktualisierterBenutzer))
