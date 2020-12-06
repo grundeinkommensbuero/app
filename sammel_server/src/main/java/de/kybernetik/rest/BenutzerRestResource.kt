@@ -26,7 +26,7 @@ open class BenutzerRestResource {
     @EJB
     private lateinit var security: Security
 
-    private val LOG = Logger.getLogger(this::class.java)
+    private val _log = Logger.getLogger(this::class.java)
 
     @POST
     @Path("neu")
@@ -74,7 +74,7 @@ open class BenutzerRestResource {
 
             return Response.ok().entity(benutzerAusDb).build()
         ***REMOVED*** catch (e: Exception) {
-            LOG.error("Fehler beim Anlegen eines Benutzers: $benutzer", e)
+            _log.error("Fehler beim Anlegen eines Benutzers: $benutzer", e)
             return Response
                     .status(500)
                     .entity(RestFehlermeldung("Ein technisches Problem ist aufgetreten"))
@@ -88,9 +88,9 @@ open class BenutzerRestResource {
     @Produces(APPLICATION_JSON)
     open fun aktualisiereBenutzername(name: String?): Response {
         val id = context.userPrincipal.name
-        LOG.debug("Aktualisiere Benutzernamen von $id mit $name")
+        _log.debug("Aktualisiere Benutzernamen von $id mit $name")
         if(name.isNullOrBlank()) {
-            LOG.debug("Fehlender Benutzer-Name")
+            _log.debug("Fehlender Benutzer-Name")
             return Response
                     .status(412)
                     .entity(RestFehlermeldung("Benutzername darf nicht leer sein"))
@@ -132,24 +132,24 @@ open class BenutzerRestResource {
                     .build()
         ***REMOVED***
         if (credentials == null) {
-            LOG.info("Login mit unbekanntem Benutzer ${login.user.id***REMOVED***")
+            _log.info("Login mit unbekanntem Benutzer ${login.user.id***REMOVED***")
             return Response
                     .ok()
                     .entity(false)
                     .build()
         ***REMOVED***
-        LOG.warn(credentials.roles)
+        _log.warn(credentials.roles)
         val verifiziert: Boolean?
         try {
             verifiziert = security.verifiziereSecretMitHash(login.secret!!, Security.HashMitSalt(credentials.secret, credentials.salt))
         ***REMOVED*** catch (e: Exception) {
             val meldung = "Technischer Fehler beim Verifizieren: ${e.localizedMessage***REMOVED***"
-            LOG.info(meldung)
+            _log.info(meldung)
             return Response.status(500).entity(RestFehlermeldung(meldung)).build()
         ***REMOVED***
 
         if (!verifiziert) {
-            LOG.info("Falscher Login mit Benutzer ${login.user.id***REMOVED***")
+            _log.info("Falscher Login mit Benutzer ${login.user.id***REMOVED***")
             return Response
                     .ok()
                     .entity(false)
@@ -162,6 +162,6 @@ open class BenutzerRestResource {
     ***REMOVED***
 
     companion object {
-        val NO_FIREBASE = "none"
+        const val NO_FIREBASE = "none"
     ***REMOVED***
 ***REMOVED***
