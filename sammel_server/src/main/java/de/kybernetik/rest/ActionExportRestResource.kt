@@ -18,7 +18,7 @@ import javax.ws.rs.core.Response
 @RolesAllowed("website")
 open class ActionExportRestResource {
     private val LOG = Logger.getLogger(TermineRestResource::class.java)
-    open var next7days = (0L..7L).map { days -> LocalDate.now().plusDays(days) }
+    open val next7days = (0L..7L).map { days -> LocalDate.now().plusDays(days) }
 
     @EJB
     private lateinit var dao: TermineDao
@@ -26,7 +26,7 @@ open class ActionExportRestResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     open fun getActionsAsGeoJson(): Response {
-        LOG.info("Bearbeite Anfrage nach Aktionen als GeoJson")
+        LOG.debug("Bearbeite Anfrage nach Aktionen als GeoJson")
         val filter = TermineFilter(emptyList(), next7days, null, null, emptyList())
         val actions = dao.getTermine(filter)
         LOG.info("Aktionen ${actions.map { action -> action.id }} gefunden")
@@ -34,7 +34,7 @@ open class ActionExportRestResource {
                 .filter { action -> action.longitude != null && action.lattitude != null }
                 .map { action -> GeoJsonAction.convertFromAction(action) }
         val geoJsoncollection = GeoJsonCollection(geoJsonActions)
-        LOG.info("${geoJsonActions.size} Aktionen ausgegeben")
+        LOG.debug("${geoJsonActions.size} Aktionen ausgegeben")
         return Response.ok().entity(geoJsoncollection).build()
     }
 
@@ -68,9 +68,9 @@ open class ActionExportRestResource {
             fun generateJsonDescription(action: Termin): String =
                     "${action.details?.beschreibung ?: "Zu dieser Aktion gibt es keine Beschreibung"}\n" +
                             (if (action.beginn != null) "\nam ${LocalDate.from(action.beginn).format(ofPattern("dd.MM.yyyy"))}" +
-                                    "\nab ${action.beginn!!.format(ofPattern("hh:mm"))} Uhr" +
+                                    "\nab ${action.beginn!!.format(ofPattern("HH:mm"))} Uhr" +
                                     if (action.ende != null)
-                                        " bis ${action.ende!!.format(ofPattern("hh:mm"))} Uhr"
+                                        " bis ${action.ende!!.format(ofPattern("HH:mm"))} Uhr"
                                     else ""
                             else "") +
                             if (action.details?.treffpunkt != null) "\nTreffpunkt: ${action.details!!.treffpunkt!!}"
