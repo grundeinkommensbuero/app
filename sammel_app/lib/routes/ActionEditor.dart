@@ -641,10 +641,11 @@ class ActionEditorState extends State<ActionEditor> {
       validateAllInput();
     });
     if (action.validated['all'] == ValidationState.ok) {
-      var name = Provider.of<AbstractUserService>(context).latestUser.name;
-      if(isBlank(name)) {
+      var name =
+          (await Provider.of<AbstractUserService>(context).user.first).name;
+      if (isBlank(name)) {
         var name = await showUsernameDialog(context: context);
-        if(name == null) return;
+        if (name == null) return;
       }
       List<Termin> termine = await generateActions();
       if (termine != null) {
