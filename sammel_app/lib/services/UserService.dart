@@ -136,7 +136,7 @@ class UserService extends AbstractUserService {
   ***REMOVED***
 ***REMOVED***
 
-Color _randomColor() {k
+Color _randomColor() {
   var rng = new Random();
   var values = new List.generate(3, (_) => rng.nextInt(256));
   return Color.fromRGBO(values[0], values[1], values[2], 0.5);
