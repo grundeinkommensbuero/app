@@ -16,6 +16,7 @@ import org.mockito.junit.MockitoRule
 import de.kybernetik.shared.Security
 import org.apache.http.auth.BasicUserPrincipal
 import java.lang.IllegalArgumentException
+import java.sql.SQLException
 import javax.ws.rs.core.SecurityContext
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -235,5 +236,29 @@ class BenutzerRestResourceTest {
         verify(dao, times(1)).aktualisiereBenutzername(1L, name)
         assertEquals(name, (response.entity as BenutzerDto).name)
         assertEquals(1L, (response.entity as BenutzerDto).id)
+    ***REMOVED***
+
+    @Test
+    fun `aktualisiereBenutzername vergibt Rolle wenn alles klappt`() {
+        val name = "ein neuer Name"
+        val karl = Benutzer(1, "ein neuer Name", color = 12345678)
+        whenever(dao.aktualisiereBenutzername(1L, name)).thenReturn(karl)
+
+        resource.aktualisiereBenutzername(name)
+
+        verify(dao, times(1)).gibNutzerNamedRolle(karl)
+    ***REMOVED***
+
+    @Test
+    fun `aktualisiereBenutzername vergibt Rolle _nicht_ bei Fehler`() {
+        val name = "ein neuer Name"
+        val karl = Benutzer(1, "ein neuer Name", color = 12345678)
+        whenever(dao.aktualisiereBenutzername(1L, name)).then { throw SQLException() ***REMOVED***
+
+        try {
+            resource.aktualisiereBenutzername(name)
+        ***REMOVED*** catch(e: SQLException) {***REMOVED***
+
+        verify(dao, never()).gibNutzerNamedRolle(karl)
     ***REMOVED***
 ***REMOVED***
