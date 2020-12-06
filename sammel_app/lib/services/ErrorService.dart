@@ -19,7 +19,7 @@ class ErrorService {
   ***REMOVED***
 
   static handleError(error, StackTrace stacktrace, {String additional***REMOVED***) {
-    print('### Fehler aufgetreten: $error\n$stacktrace');
+    print('Fehler aufgetreten: $error\n$stacktrace');
     if (additional == null)
       additional = '';
     else
