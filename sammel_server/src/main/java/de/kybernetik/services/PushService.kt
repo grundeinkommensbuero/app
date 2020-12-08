@@ -1,13 +1,10 @@
 package de.kybernetik.services
 
-import com.google.firebase.database.util.JsonMapper
 import de.kybernetik.database.benutzer.Benutzer
 import de.kybernetik.database.benutzer.BenutzerDao
 import de.kybernetik.database.pushmessages.PushMessageDao
-import de.kybernetik.rest.PushMessageDto
 import de.kybernetik.rest.PushNotificationDto
 import org.jboss.logging.Logger
-import java.util.*
 import javax.ejb.EJB
 import javax.ejb.Singleton
 import javax.ejb.Startup
@@ -38,6 +35,6 @@ open class PushService {
         if (firebaseKeys.size > 0)
             firebase.sendePushNachrichtAnEmpfaenger(notification, data, firebaseKeys)
         if (benutzerOhneFirebase.size > 0)
-            pushDao.speicherePushMessageFuerEmpfaenger(PushMessageDto(notification, data), benutzerOhneFirebase)
+            pushDao.speicherePushMessageFuerEmpfaenger(notification, data, benutzerOhneFirebase)
     ***REMOVED***
 ***REMOVED***
