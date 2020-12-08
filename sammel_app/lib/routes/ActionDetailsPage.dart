@@ -7,7 +7,7 @@ import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/ExpandableConstrainedBox.dart';
 
-enum TerminDetailsCommand { EDIT, DELETE, CLOSE, FOCUS }
+enum TerminDetailsCommand { EDIT, DELETE, EVALUATE, CLOSE, FOCUS }
 
 // ignore: must_be_immutable
 class ActionDetailsPage extends StatefulWidget {
