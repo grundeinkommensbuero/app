@@ -7,7 +7,9 @@ import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
+import 'package:sammel_app/routes/EvaluationEditor.dart';
 import 'package:sammel_app/model/Termin.dart';
+import 'package:sammel_app/model/Evaluation.dart';
 import 'package:sammel_app/routes/ActionMap.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
@@ -87,13 +89,14 @@ class TermineSeiteState extends State<TermineSeite>
     ));
 
     var actionListView = ActionList(
-        termine, isMyAction, iAmParticipant, openTerminDetails,
+        termine, isMyAction, isPastAction, iAmParticipant, openTerminDetails,
         key: Key('action list'));
     var actionMapView = ActionMap(
       key: Key('action map'),
       termine: termine,
       listLocations: listLocations,
       isMyAction: isMyAction,
+      isPastAction: isPastAction,
       iAmParticipant: iAmParticipant,
       openActionDetails: openTerminDetails,
       mapController: mapController,
@@ -238,7 +241,9 @@ class TermineSeiteState extends State<TermineSeite>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           isMyAction(termin.id)
-                              ? editAndDeleteButtons(termin, context)
+                              ? isPastAction(termin)
+                                  ? evaluateButton(termin, context)
+                                  : editAndDeleteButtons(termin, context)
                               : joinOrLeaveButton(
                                   terminMitDetails, setDialogState),
                           Row(
@@ -259,6 +264,9 @@ class TermineSeiteState extends State<TermineSeite>
 
       if (command == TerminDetailsCommand.EDIT)
         editAction(context, terminMitDetails);
+
+      if (command == TerminDetailsCommand.EVALUATE)
+        evaluateAction(context, terminMitDetails);
 
       if (command == TerminDetailsCommand.FOCUS)
         showActionOnMap(terminMitDetails);
@@ -281,7 +289,23 @@ class TermineSeiteState extends State<TermineSeite>
   Color determineColor(Termin action) {
     bool participant = action.participants.map((e) => e.id).contains(me?.id);
     bool owner = isMyAction(action.id);
+    // maybe change color for past actions here too
     return DweTheme.actionColor(action.ende, owner, participant);
+  ***REMOVED***
+
+  Widget evaluateButton(Termin termin, BuildContext context) {
+    final isEvaluated = false;
+    return SizedBox(
+        width: 100.0,
+        child: isEvaluated
+            ? Text('Thank you!')
+            : RaisedButton(
+                key: Key('action evaluate button'),
+                padding: EdgeInsets.all(5.0),
+                color: DweTheme.purple,
+                child: Text('Evaluate!'),
+                onPressed: () =>
+                    Navigator.pop(context, TerminDetailsCommand.EVALUATE)));
   ***REMOVED***
 
   Widget editAndDeleteButtons(Termin termin, BuildContext context) {
@@ -291,7 +315,6 @@ class TermineSeiteState extends State<TermineSeite>
           child: RaisedButton(
               key: Key('action delete button'),
               padding: EdgeInsets.all(5.0),
-              color: DweTheme.red,
               child: Icon(Icons.delete),
               onPressed: () {
                 showDialog<bool>(
@@ -336,7 +359,14 @@ class TermineSeiteState extends State<TermineSeite>
   ***REMOVED***
 
   bool isMyAction(int id) {
-    return myActions?.contains(id);
+    // TODO
+    // reset
+    return true;
+    // return myActions?.contains(id);
+  ***REMOVED***
+
+  bool isPastAction(Termin action) {
+    return action.ende.isBefore(DateTime.now());
   ***REMOVED***
 
   bool iAmParticipant(List<User> participants) =>
@@ -387,6 +417,58 @@ class TermineSeiteState extends State<TermineSeite>
           additional: 'Aktion konnte nicht gespeichert werden.');
     ***REMOVED***
   ***REMOVED***
+
+  Future evaluateAction(BuildContext context, Termin termin) async {
+    await showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return SimpleDialog(
+              titlePadding: EdgeInsets.zero,
+              title: AppBar(
+                leading: null,
+                automaticallyImplyLeading: false,
+                title: Text('Deine Aktion evaluieren',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22.0,
+                        color: Color.fromARGB(255, 129, 28, 98))),
+              ),
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.height * 0.8,
+                  child: EvaluationEditor(
+                      onFinish: afterActionEvaluation,
+                      key: Key('evaluation editor')),
+                )
+              ]);
+        ***REMOVED***);
+  ***REMOVED***
+
+  afterActionEvaluation(Evaluation evaluation) async {
+    await saveEvaluation(evaluation);
+    // TODO
+    // maybe navigate somewhere interesting here
+    // otherwise replace this with saveEvaluation directly
+  ***REMOVED***
+
+  Future<void> saveEvaluation(Evaluation evaluation) async {
+    // TODO
+    /*
+    try {
+      String token = await storageService.loadActionToken(editedAction.id);
+      await termineService.saveAction(editedAction, token);
+      setState(() => updateAction(editedAction, false));
+    ***REMOVED*** catch (e, s) {
+      ErrorService.handleError(e, s,
+          additional: 'Aktion konnte nicht gespeichert werden.');
+    ***REMOVED***
+     */
+    return;
+  ***REMOVED***
+
 
   Future<void> deleteAction(Termin action) async {
     String token = await storageService.loadActionToken(action.id);
