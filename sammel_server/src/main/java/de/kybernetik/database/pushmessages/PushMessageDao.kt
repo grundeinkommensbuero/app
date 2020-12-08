@@ -26,7 +26,7 @@ open class PushMessageDao {
     open fun speicherePushMessageFuerEmpfaenger(nachricht: PushMessageDto, teilnehmer: List<Benutzer>) {
         LOG.debug("Speichere Nachricht für Empfänger ohne Firebase ${teilnehmer.map { it.id ***REMOVED******REMOVED***")
         for (teili in teilnehmer) {
-            entityManager.persist(PushMessage(teili, nachricht.data, nachricht.notification))
+            entityManager.persist(PushMessage(teili, nachricht.verschluesselt(), nachricht.notification))
         ***REMOVED***
         entityManager.flush()
     ***REMOVED***
