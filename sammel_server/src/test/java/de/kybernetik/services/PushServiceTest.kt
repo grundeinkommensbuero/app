@@ -6,7 +6,6 @@ import com.nhaarman.mockitokotlin2.*
 import de.kybernetik.database.benutzer.Benutzer
 import de.kybernetik.database.benutzer.BenutzerDao
 import de.kybernetik.database.pushmessages.PushMessageDao
-import de.kybernetik.rest.PushMessageDto
 import de.kybernetik.rest.PushNotificationDto
 import org.junit.Before
 import org.junit.Test
@@ -46,7 +45,7 @@ class PushServiceTest {
         service.sendePushNachrichtAnEmpfaenger(PushNotificationDto(), emptyMap(), emptyList())
 
         verify(firebaseService, never()).sendePushNachrichtAnEmpfaenger(any(), any(), any())
-        verify(pushDao, never()).speicherePushMessageFuerEmpfaenger(any(), any())
+        verify(pushDao, never()).speicherePushMessageFuerEmpfaenger(any(), any(), any())
     }
 
 
@@ -83,12 +82,13 @@ class PushServiceTest {
         val data = emptyMap<String, String>()
         service.sendePushNachrichtAnEmpfaenger(notification, data, teilnehmerInnen)
 
-        val messageCaptor = argumentCaptor<PushMessageDto>()
+        val notificationCaptor = argumentCaptor<PushNotificationDto>()
         val teilnehmerCaptor = argumentCaptor<List<Benutzer>>()
+        val dataCaptor = argumentCaptor<Map<String, String>>()
         verify(pushDao, times(1))
-                .speicherePushMessageFuerEmpfaenger(messageCaptor.capture(), teilnehmerCaptor.capture())
-        assertEquals(notification, messageCaptor.firstValue.notification)
-        assertEquals(data, messageCaptor.firstValue.data)
+                .speicherePushMessageFuerEmpfaenger(notificationCaptor.capture(), dataCaptor.capture(), teilnehmerCaptor.capture())
+        assertEquals(notification, notificationCaptor.firstValue)
+        assertEquals(data, dataCaptor.firstValue)
         assertEquals(teilnehmerInnen, teilnehmerCaptor.firstValue)
     }
 
@@ -99,6 +99,6 @@ class PushServiceTest {
 
         service.sendePushNachrichtAnEmpfaenger(PushNotificationDto(), emptyMap(), teilnehmer)
 
-        verify(pushDao, never()).speicherePushMessageFuerEmpfaenger(any(), any())
+        verify(pushDao, never()).speicherePushMessageFuerEmpfaenger(any(), any(), any())
     }
 }

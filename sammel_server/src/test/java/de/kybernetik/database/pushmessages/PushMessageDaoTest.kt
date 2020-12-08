@@ -3,7 +3,6 @@ package de.kybernetik.database.pushmessages
 import TestdatenVorrat.Companion.karl
 import TestdatenVorrat.Companion.rosa
 import com.nhaarman.mockitokotlin2.*
-import de.kybernetik.rest.PushMessageDto
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -53,9 +52,7 @@ class PushMessageDaoTest {
 
     @Test
     fun `speicherePushMessage legt PushMessage fuer jeden Empfaenger ab`() {
-        val pushMessage = PushMessageDto(PushNotificationDto(), mapOf("key" to "value"))
-
-        dao.speicherePushMessageFuerEmpfaenger(pushMessage, listOf(karl(), rosa()))
+        dao.speicherePushMessageFuerEmpfaenger(PushNotificationDto(), mapOf("key" to "value"), listOf(karl(), rosa()))
 
         val captor = argumentCaptor<PushMessage>()
         verify(entity, times(2)).persist(captor.capture())
@@ -66,9 +63,7 @@ class PushMessageDaoTest {
 
     @Test
     fun `speicherePushMessage kommt mit leerer Empfaengerliste klar`() {
-        val pushMessage = PushMessageDto(PushNotificationDto(), mapOf("key" to "value"))
-
-        dao.speicherePushMessageFuerEmpfaenger(pushMessage, emptyList())
+        dao.speicherePushMessageFuerEmpfaenger(PushNotificationDto(), mapOf("key" to "value"), emptyList())
 
         verify(entity, never()).persist(any())                                                   
     }

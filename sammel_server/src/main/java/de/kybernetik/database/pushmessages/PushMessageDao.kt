@@ -3,6 +3,7 @@ package de.kybernetik.database.pushmessages
 import de.kybernetik.database.benutzer.Benutzer
 import org.jboss.logging.Logger
 import de.kybernetik.rest.PushMessageDto
+import de.kybernetik.rest.PushNotificationDto
 import javax.ejb.Stateless
 import javax.inject.Inject
 import javax.persistence.EntityManager
@@ -23,11 +24,13 @@ open class PushMessageDao {
         return resultList
     }
 
-    open fun speicherePushMessageFuerEmpfaenger(nachricht: PushMessageDto, teilnehmer: List<Benutzer>) {
+    open fun speicherePushMessageFuerEmpfaenger(
+        notification: PushNotificationDto?,
+        data: Map<String, String>?,
+        teilnehmer: List<Benutzer>
+    ) {
         LOG.debug("Speichere Nachricht für Empfänger ohne Firebase ${teilnehmer.map { it.id }}")
-        for (teili in teilnehmer) {
-            entityManager.persist(PushMessage(teili, nachricht.verschluesselt(), nachricht.notification))
-        }
+        for (teili in teilnehmer) entityManager.persist(PushMessage(teili, data, notification))
         entityManager.flush()
     }
 
