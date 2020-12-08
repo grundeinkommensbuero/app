@@ -42,7 +42,7 @@ open class PushNotificationResource {
     open fun pushToDevices(nachricht: PushMessageDto) {
         if (nachricht.recipients == null)
             throw MissingMessageTarget("Die Nachricht enthält keine Empfänger")
-        firebase.sendePushNachrichtAnEmpfaenger(nachricht.notification, nachricht.data, nachricht.recipients!!)
+        firebase.sendePushNachrichtAnEmpfaenger(nachricht.notification, nachricht.verschluesselt(), nachricht.recipients!!)
     }
 
     @Path("action/{actionId}")
@@ -60,7 +60,7 @@ open class PushNotificationResource {
                     .build()
         }
 
-        pushService.sendePushNachrichtAnEmpfaenger(nachricht.notification, nachricht.data, teilnehmer)
+        pushService.sendePushNachrichtAnEmpfaenger(nachricht.notification, nachricht.verschluesselt(), teilnehmer)
 
         return Response.accepted().build()
     }
@@ -69,7 +69,7 @@ open class PushNotificationResource {
     @RolesAllowed("named")
     @POST
     open fun pushToTopic(nachricht: PushMessageDto, @PathParam("topic") topic: String) {
-        firebase.sendePushNachrichtAnTopic(nachricht.notification, nachricht.data, topic)
+        firebase.sendePushNachrichtAnTopic(nachricht.notification, nachricht.verschluesselt(), topic)
     }
 
     @Path("pull")

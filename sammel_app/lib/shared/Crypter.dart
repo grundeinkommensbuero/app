@@ -2,15 +2,16 @@ import 'dart:convert';
 
 import 'package:sammel_app/model/PushMessage.dart';
 
-Map<String, String> encrypt(PushData data) => {
-      'encrypted': 'Base64',
-      'payload': base64Encode(utf8.encode(jsonEncode(data.toJson())))
-    };
-
 Map<dynamic, dynamic> decrypt(dynamic data) {
-  if (data['encrypted'] == 'Base64')
-    return jsonDecode(utf8.decode(base64Decode(data['payload'])));
-  if (data['encrypted'] == 'Plain')
+  if (data['encrypted'] == 'Base64') {
+    var decodiert = jsonDecode(utf8.decode(base64Decode(data['payload'])));
+    print('Push-Nachricht entschlüsselt: ${decodiert}');
+    return decodiert;
+  }
+  if (data['encrypted'] == 'Plain') {
+    print('Push-Nachricht unverschlüsselt: ${data['payload']}');
     return jsonDecode(data['payload']);
+  }
+  print('Push-Nachricht nicht entschlüsselt: ${data}');
   return data;
 }

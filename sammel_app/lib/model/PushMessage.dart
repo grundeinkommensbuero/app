@@ -11,7 +11,7 @@ class PushMessage {
 
   toJson() => {
         'recipients': recipients,
-        'data': encrypt(data),
+        'data': data,
         'notification': notification,
       };
 }

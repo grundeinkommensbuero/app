@@ -80,7 +80,6 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     try {
       Map<dynamic, dynamic> data;
       data = decrypt(message['data']);
-      print('Push-Nachricht entschlüsselt: ${data.toString()}');
       if (data.containsKey('type')) {
         String type = data['type'];
         if (callback_map.containsKey(type)) {
