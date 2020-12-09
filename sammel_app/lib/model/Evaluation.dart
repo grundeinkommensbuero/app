@@ -6,14 +6,11 @@ import 'TerminDetails.dart';
 class Evaluation {
   // TODO
   // maybe this needs an id here for connection with a specific action?
-  int signatures;
+  int unterschriften;
+  int teilnehmende;
+  double stunden;
+  String kommentar;
+  String erkenntnisse;
 
-  Evaluation(this.signatures);
-
-  Evaluation.fromJson(Map<String, dynamic> json)
-  : signatures = json['signatures'];
-
-  Map<String, dynamic> toJson() => {
-        'signatures' : signatures
-      };
+  Evaluation(this.unterschriften, this.teilnehmende, this.stunden, this.kommentar, this.erkenntnisse);
 }
