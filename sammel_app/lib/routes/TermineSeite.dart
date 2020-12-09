@@ -303,7 +303,7 @@ class TermineSeiteState extends State<TermineSeite>
                 key: Key('action evaluate button'),
                 padding: EdgeInsets.all(5.0),
                 color: DweTheme.purple,
-                child: Text('Evaluate!'),
+                child: Text('Evaluieren'),
                 onPressed: () =>
                     Navigator.pop(context, TerminDetailsCommand.EVALUATE)));
   ***REMOVED***

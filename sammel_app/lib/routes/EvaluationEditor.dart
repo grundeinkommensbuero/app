@@ -25,11 +25,19 @@ enum ValidationState { not_validated, error, ok ***REMOVED***
 class EvaluationData {
   //  TODO
   // expand
-  int signatures;
+  int unterschriften = 0;
+  int teilnehmende = 0;
+  double stunden = 0.0;
+  String kommentar = '';
+  String erkenntnisse = '';
 
   EvaluationData();
   var validated = {
     'unterschriften': ValidationState.not_validated,
+    'teilnehmende': ValidationState.not_validated,
+    'stunden': ValidationState.not_validated,
+    'kommentar': ValidationState.not_validated,
+    'erkenntnisse': ValidationState.not_validated,
     'finish_pressed': false
   ***REMOVED***
 ***REMOVED***
@@ -73,13 +81,85 @@ class EvaluationEditorState extends State<EvaluationEditor> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                         Text(
-                          'Wie viele Unterschriften?',
+                          'Ergebnis',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         InputButton(
-                            onTap: signaturesSelection,
-                            child: signaturesButtonCaption(this.evaluation)),
+                            onTap: unterschriftenSelection,
+                            child: unterschriftenButtonCaption(this.evaluation)),
                       ]))
+                ]),
+                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Icon(Icons.info_outline, size: 40.0),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Expanded(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Teilnehmer:innen',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            InputButton(
+                                onTap: teilnehmendeSelection,
+                                child: teilnehmendeButtonCaption(this.evaluation)),
+                          ]))
+                ]),
+                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Icon(Icons.info_outline, size: 40.0),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Expanded(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Dauer',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            InputButton(
+                                onTap: stundenSelection,
+                                child: stundenButtonCaption(this.evaluation)),
+                          ]))
+                ]),
+                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Icon(Icons.info_outline, size: 40.0),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Expanded(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Anmerkung',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            InputButton(
+                                onTap: kommentarSelection,
+                                child: kommentarButtonCaption(this.evaluation)),
+                          ]))
+                ]),
+                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Icon(Icons.info_outline, size: 40.0),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Expanded(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Erkenntnisse',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            InputButton(
+                                onTap: erkenntnisseSelection,
+                                child: erkenntnisseButtonCaption(this.evaluation)),
+                          ]))
                 ]),
               ]),
         ),
@@ -107,12 +187,11 @@ class EvaluationEditorState extends State<EvaluationEditor> {
 
   static Widget motivationText = Column(key: Key('motivation text'), children: [
     Text(
-      'Das Volksbegehren lebt von deiner Beteiligung! \n',
+      'Erzähl uns, was ihr erreicht habt! \n',
       style: TextStyle(fontWeight: FontWeight.bold),
     ),
     Text(
-      'Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. '
-      'Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.',
+      'Deine Evaluierung hilft Deinem Kiez-Team, die effektivsten Sammelaktionen zu erkennen. Außerdem können andere Teams von euren Erfahrungen lernen.',
       textScaleFactor: 1.0,
     )
   ]);
@@ -178,22 +257,81 @@ class EvaluationEditorState extends State<EvaluationEditor> {
     );
   ***REMOVED***
 
-  void signaturesSelection() async {
-    var ergebnis = await showTextInputDialog( // should be number input
-        this.evaluation.signatures.toString(),
+  Future<String> showNumberInputDialog(
+      String current_value, String title, String description, Key key) {
+    String current_input = current_value;
+    TextFormField input_field = TextFormField(
+      initialValue: current_value ?? '',
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+      ),
+      onChanged: (current_input_) {
+        current_input = current_input_;
+      ***REMOVED***,
+    );
+
+    Widget input_widget;
+
+    if (description != null) {
+      input_widget = SingleChildScrollView(
+          child: ListBody(children: [
+            Text(description),
+            SizedBox(height: 10),
+            input_field
+          ]));
+    ***REMOVED*** else {
+      input_widget = input_field;
+    ***REMOVED***
+
+    Widget cancelButton = FlatButton(
+      child: Text("Abbrechen"),
+      onPressed: () {
+        Navigator.pop(context, current_value);
+      ***REMOVED***,
+    );
+    Widget continueButton = FlatButton(
+      child: Text("Fertig"),
+      onPressed: () {
+        Navigator.pop(context, current_input);
+      ***REMOVED***,
+    );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      key: key,
+      title: Text(title),
+      content: input_widget,
+      actions: [
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      ***REMOVED***,
+    );
+  ***REMOVED***
+
+  void unterschriftenSelection() async {
+    var ergebnis = await showNumberInputDialog( // should be number input
+        this.evaluation.unterschriften.toString(),
         'Anzahl Unterschriften',
         'Wie viele Unterschriften habt ihr gesammelt?',
-        Key('signatures input dialog'));
+        Key('unterschriften input dialog'));
     setState(() {
-      this.evaluation.signatures = int.tryParse(ergebnis) ?? 15;
+      this.evaluation.unterschriften = int.tryParse(ergebnis) ?? this.evaluation.unterschriften;
       validateAllInput();
     ***REMOVED***);
   ***REMOVED***
 
-  Widget signaturesButtonCaption(EvaluationData evaluation) {
+  Widget unterschriftenButtonCaption(EvaluationData evaluation) {
     Text text;
     if (this.evaluation.validated['unterschriften'] == ValidationState.ok) {
-      text = Text('Unterschriften: ${evaluation.signatures***REMOVED***');
+      text = Text('${evaluation.unterschriften***REMOVED*** Unterschriften');
     ***REMOVED*** else {
       text = Text('Wie viel habt ihr gesammelt?',
           style: TextStyle(color: DweTheme.purple));
@@ -201,8 +339,102 @@ class EvaluationEditorState extends State<EvaluationEditor> {
     return build_text_row(text, this.evaluation.validated['unterschriften']);
   ***REMOVED***
 
+  void teilnehmendeSelection() async {
+    var ergebnis = await showNumberInputDialog( // should be number input
+        this.evaluation.teilnehmende.toString(),
+        'Anzahl Teilnehmende',
+        'Wie viele Leute haben mitgemacht?',
+        Key('teilnehmende input dialog'));
+    setState(() {
+      this.evaluation.teilnehmende = int.tryParse(ergebnis) ?? this.evaluation.unterschriften;
+      validateAllInput();
+    ***REMOVED***);
+  ***REMOVED***
+
+  Widget teilnehmendeButtonCaption(EvaluationData evaluation) {
+    Text text;
+    if (this.evaluation.validated['unterschriften'] == ValidationState.ok) {
+      text = Text('${evaluation.teilnehmende***REMOVED*** Teilnehmer:innen');
+    ***REMOVED*** else {
+      text = Text('Wie viele haben mitgemacht?',
+          style: TextStyle(color: DweTheme.purple));
+    ***REMOVED***
+    return build_text_row(text, this.evaluation.validated['teilnehmende']);
+  ***REMOVED***
+
+  void stundenSelection() async {
+    var ergebnis = await showNumberInputDialog( // should be number input
+        this.evaluation.stunden.toString(),
+        'Wie viele Stunden wart ihr sammeln?',
+        'Auf die nächste halbe Stunde gerundet',
+        Key('stunden input dialog'));
+    setState(() {
+      this.evaluation.stunden = double.tryParse(ergebnis) ?? this.evaluation.stunden;
+      validateAllInput();
+    ***REMOVED***);
+  ***REMOVED***
+
+  Widget stundenButtonCaption(EvaluationData evaluation) {
+    Text text;
+    if (this.evaluation.validated['stunden'] == ValidationState.ok) {
+      text = Text('${evaluation.stunden***REMOVED*** Stunden');
+    ***REMOVED*** else {
+      text = Text('Wie viele Stunden habt ihr gesammelt?',
+          style: TextStyle(color: DweTheme.purple));
+    ***REMOVED***
+    return build_text_row(text, this.evaluation.validated['stunden']);
+  ***REMOVED***
+
+  void kommentarSelection() async {
+    var ergebnis = await showTextInputDialog( // should be number input
+        this.evaluation.kommentar,
+        'Kommentar',
+        'Optional: Anmerkung zu den Daten?',
+        Key('kommentar input dialog'));
+    setState(() {
+      this.evaluation.kommentar = ergebnis;
+      validateAllInput();
+    ***REMOVED***);
+  ***REMOVED***
+
+  Widget kommentarButtonCaption(EvaluationData evaluation) {
+    Text text;
+    if (this.evaluation.validated['kommentar'] == ValidationState.ok) {
+      text = Text('Anmerkung: ${evaluation.kommentar***REMOVED***');
+    ***REMOVED*** else {
+      text = Text('Optional: Muss man noch etwas zu den obigen Daten wissen?',
+          style: TextStyle(color: DweTheme.purple));
+    ***REMOVED***
+    return build_text_row(text, this.evaluation.validated['kommentar']);
+  ***REMOVED***
+
+  void erkenntnisseSelection() async {
+    var ergebnis = await showTextInputDialog( // should be number input
+        this.evaluation.erkenntnisse.toString(),
+        'erkenntnisse',
+        'Was habt ihr gelernt? Was hat gut, was hat nicht so gut funktioniert? Was würdet ihr gerne mit anderen Sammel-Teams teilen?',
+        Key('erkenntnisse input dialog'));
+    setState(() {
+      this.evaluation.erkenntnisse = ergebnis;
+      validateAllInput();
+    ***REMOVED***);
+  ***REMOVED***
+
+  Widget erkenntnisseButtonCaption(EvaluationData evaluation) {
+    Text text;
+    if (this.evaluation.validated['erkenntnisse'] == ValidationState.ok) {
+      text = Text('Erkenntnisse: ${evaluation.erkenntnisse***REMOVED***');
+    ***REMOVED*** else {
+      text = Text('Optional: Was habt ihr gelernt?',
+          style: TextStyle(color: DweTheme.purple));
+    ***REMOVED***
+    return build_text_row(text, this.evaluation.validated['erkenntnisse']);
+  ***REMOVED***
+
   void validateAllInput() {
-    validateAgainstNull(evaluation.signatures, 'unterschriften');
+    validateInt(evaluation.unterschriften, 'unterschriften');
+    validateInt(evaluation.teilnehmende, 'teilnehmende');
+    validateInt(evaluation.stunden, 'stunden');
 
     evaluation.validated['all'] = ValidationState.ok;
     for (var value in evaluation.validated.values) {
@@ -214,12 +446,18 @@ class EvaluationEditorState extends State<EvaluationEditor> {
     ***REMOVED***
   ***REMOVED***
 
-  void validateAgainstNull(field, name) {
-    if (field != null) {
-      this.evaluation.validated[name] = ValidationState.ok;
-    ***REMOVED*** else {
-      this.evaluation.validated[name] = ValidationState.error;
-    ***REMOVED***
+  void validateDouble(field, name) {
+    this.evaluation.validated[name] =
+        (field != null && field is double && field > 0)
+            ? ValidationState.ok
+            : ValidationState.error;
+  ***REMOVED***
+
+  void validateInt(field, name) {
+    this.evaluation.validated[name] =
+    (field != null && field is int && field > 0)
+        ? ValidationState.ok
+        : ValidationState.error;
   ***REMOVED***
 
   finishPressed() async {
