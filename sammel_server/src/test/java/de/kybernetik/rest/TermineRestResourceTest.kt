@@ -507,8 +507,8 @@ class TermineRestResourceTest {
 
         val dataCaptor = argumentCaptor<Map<String, String>>()
         verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(any(), dataCaptor.capture(), any())
-        val data1 = entschluessele(dataCaptor.firstValue)["data"] as  Map<*, *>
-        val data2 = entschluessele(dataCaptor.secondValue)["data"] as  Map<*, *>
+        val data1 = entschluessele(dataCaptor.firstValue)
+        val data2 = entschluessele(dataCaptor.secondValue)
         assertEquals(data1["channel"], "action:2")
         assertNotNull(data1["timestamp"])
         assertEquals(data1["action"], 2.0)
