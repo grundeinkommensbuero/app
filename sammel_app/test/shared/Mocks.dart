@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
+import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
@@ -33,9 +34,9 @@ class PushNotificationManagerMock extends Mock
 class UserServiceMock extends Mock implements UserService {}
 
 class ConfiguredUserServiceMock extends Mock implements UserService {
+  final me = karl();
   ConfiguredUserServiceMock() {
-    when(this.user).thenAnswer((_) => Stream.value(karl()));
-    when(this.latestUser).thenAnswer((_) => karl());
+    when(this.user).thenAnswer((_) => Stream.value(me));
     when(this.userHeaders)
         .thenAnswer((_) async => {'Authorization': 'userCreds'});
   }
