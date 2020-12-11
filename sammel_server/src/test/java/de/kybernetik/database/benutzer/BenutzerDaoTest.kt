@@ -83,6 +83,21 @@ class BenutzerDaoTest {
     }
 
     @Test
+    fun `getFirebaseKeys gibt leere Liste fuer keine Benutzer zurueck`() {
+        whenever(entityManager.createQuery(anyString(), any<Class<String>>()))
+            .thenReturn(typedStringQuery)
+        whenever(typedStringQuery.setParameter(anyString(), anyList<String>()))
+            .thenReturn(typedStringQuery)
+        whenever(typedStringQuery.resultList)
+            .thenReturn(listOf("key1", "key2"))
+
+        val ergebnis: List<String> = dao.getFirebaseKeys(emptyList())
+
+        verify(typedStringQuery, never()).setParameter(anyString(), any())
+        assertTrue(ergebnis.isEmpty())
+    }
+
+    @Test
     fun `getFirebaseKeys reicht Liste von Keys weiter`() {
         val benutzer = listOf(karl(), rosa())
         whenever(entityManager.createQuery(anyString(), any<Class<String>>()))
@@ -103,7 +118,7 @@ class BenutzerDaoTest {
 
     @Test
     fun `getFirebaseKeys akzeptiert leeres Suchergebnis`() {
-        val benutzer = emptyList<Benutzer>()
+        val benutzer = listOf(karl())
         whenever(entityManager.createQuery(anyString(), any<Class<String>>()))
             .thenReturn(typedStringQuery)
         whenever(typedStringQuery.setParameter(anyString(), anyList<String>()))
@@ -114,6 +129,23 @@ class BenutzerDaoTest {
         val ergebnis: List<String> = dao.getFirebaseKeys(benutzer)
 
         verify(typedStringQuery, times(1)).setParameter(anyString(), anyList<Long>())
+        assertTrue(ergebnis.isEmpty())
+    }
+
+    @Test
+    fun `getBenutzerOhneFirebase gibt leere Liste fuer keine Benutzer zurueck`() {
+        whenever(entityManager.createQuery(anyString(), any<Class<Benutzer>>()))
+            .thenReturn(typedBenutzerQuery)
+        whenever(typedBenutzerQuery.setParameter(anyString(), anyList<String>()))
+            .thenReturn(typedBenutzerQuery)
+        val karl = karl()
+        val rosa = rosa()
+        whenever(typedBenutzerQuery.resultList)
+            .thenReturn(listOf(karl, rosa))
+
+        val ergebnis: List<Benutzer> = dao.getBenutzerOhneFirebase(emptyList())
+
+        verify(typedStringQuery, never()).setParameter(anyString(), any())
         assertTrue(ergebnis.isEmpty())
     }
 
@@ -140,7 +172,7 @@ class BenutzerDaoTest {
 
     @Test
     fun `getBenutzerOhneFirebase akzeptiert leeres Suchergebnis`() {
-        val benutzer = emptyList<Benutzer>()
+        val benutzer = listOf(karl())
         whenever(entityManager.createQuery(anyString(), any<Class<String>>()))
             .thenReturn(typedStringQuery)
         whenever(typedStringQuery.setParameter(anyString(), anyList<String>()))

@@ -36,6 +36,7 @@ class TermineSeiteState extends State<TermineSeite>
   static var filterKey = GlobalKey();
   static AbstractTermineService termineService;
   static StorageService storageService;
+  static ChatMessageService chatMessageService;
   static final TextStyle style = TextStyle(
     color: Color.fromARGB(255, 129, 28, 98),
     fontSize: 15.0,
@@ -148,6 +149,7 @@ class TermineSeiteState extends State<TermineSeite>
   void intialize(BuildContext context) {
     termineService = Provider.of<AbstractTermineService>(context);
     storageService = Provider.of<StorageService>(context);
+    chatMessageService = Provider.of<ChatMessageService>(context);
     filterWidget = FilterWidget(ladeTermine, key: filterKey);
 
     storageService
@@ -268,10 +270,9 @@ class TermineSeiteState extends State<TermineSeite>
     }
   }
 
-  void openChatWindow(Termin termin) {
-    String channel_id = '${termin.id}';
-    Channel message_channel = Provider.of<ChatMessageService>(context)
-        .get_simple_message_channel(channel_id);
+  Future<void> openChatWindow(Termin termin) async {
+    Channel message_channel =
+        await chatMessageService.getActionChannel(termin.id);
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -445,8 +446,7 @@ class TermineSeiteState extends State<TermineSeite>
   }
 
   Future<void> joinAction(Termin termin) async {
-    Provider.of<ChatMessageService>(context)
-        .get_simple_message_channel("channel:${termin.id}");
+    chatMessageService.createActionChannel(termin.id);
     await termineService.joinAction(termin.id);
     setState(() {
       termine.firstWhere((t) => t.id == termin.id).participants.add(me);

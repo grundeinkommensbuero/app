@@ -30,8 +30,7 @@ main() {
   });
 
   group('createPushListener', () {
-    test('erzeugt PullService, wenn bereits im Pull-Modus',
-        () async {
+    test('erzeugt PullService, wenn bereits im Pull-Modus', () async {
       when(storageService.isPullMode()).thenAnswer((_) async => true);
 
       await manager.createPushListener(firebaseMock, backend);
@@ -100,13 +99,17 @@ main() {
       controller.close();
     });
   });
+
+  test('test', () {
+    print(DateTime.now().toString());
+  });
 }
 
 class TestListener implements PushNotificationListener {
   List<Map<String, dynamic>> nachrichten = [];
 
   @override
-  void receive_message(Map<dynamic, dynamic> data) {
+  void receive_message(String type, Map<dynamic, dynamic> data) {
     nachrichten.add(data);
   }
 }

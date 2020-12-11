@@ -10,10 +10,10 @@ import java.util.*
 private val LOG = Logger.getLogger(PushMessageDto::class.java)
 private val GSON = GsonBuilder().serializeNulls().create()
 
-data class PushMessageDto (
-        var notification: PushNotificationDto? = null,
-        var data: Map<String, Any?>? = null,
-        var recipients: List<String>? = null
+data class PushMessageDto(
+    var notification: PushNotificationDto? = null,
+    var data: Map<String, Any?>? = null,
+    var recipients: List<String>? = null
 ) {
     fun verschluesselt(): Map<String, String>? {
         try {
@@ -31,12 +31,12 @@ data class PushMessageDto (
 
     companion object {
         fun convertFromPushMessage(pushMessage: PushMessage): PushMessageDto =
-                PushMessageDto(pushMessage.getBenachrichtigung(), pushMessage.getDaten(), null)
+            PushMessageDto(pushMessage.getBenachrichtigung(), pushMessage.getDaten(), null)
     }
 }
 
 data class PushNotificationDto(
-        var title: String? = null,
-        var body: String? = null
-): Serializable
+    var title: String? = null,
+    var body: String? = null
+) : Serializable
 
