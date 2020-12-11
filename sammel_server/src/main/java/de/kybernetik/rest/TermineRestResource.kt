@@ -12,7 +12,9 @@ import org.jboss.logging.Logger
 import de.kybernetik.rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithoutDetails
 import de.kybernetik.services.PushService
 import java.time.LocalDateTime
+import java.time.ZonedDateTime.now
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME
 import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
 import javax.ejb.EJBException
@@ -293,52 +295,81 @@ open class TermineRestResource {
     ***REMOVED***
 
     open fun informiereUeberTeilnahme(benutzer: Benutzer, aktion: Termin) {
-        val name = if (benutzer.name.isNullOrBlank()) "Jemand" else benutzer.name
-        val data = mapOf(Pair("type", "participation"), Pair("action", aktion.id.toString()))
-
-        val ersteller = aktion.teilnehmer[0]
-        LOG.debug("Informiere Ersteller ${ersteller.id***REMOVED*** von Aktion ${aktion.id***REMOVED***")
-        pushService.sendePushNachrichtAnEmpfaenger(
+        val name = if (benutzer.name.isNullOrBlank()) "Jemand" else benutzer.name!!
+        val pushMessage = PushMessageDto(
             PushNotificationDto(
                 "Verstärkung für deine Aktion",
                 "$name ist deiner Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))***REMOVED*** beigetreten"
             ),
-            data,
+            mapOf(
+                "type" to "ParticipationMessage",
+                "channel" to "action:${aktion.id***REMOVED***",
+                "timestamp" to now().format(ISO_OFFSET_DATE_TIME),
+                "action" to aktion.id,
+                "username" to name,
+                "joins" to true
+            )
+        )
+        val ersteller = aktion.teilnehmer[0]
+
+        LOG.debug("Informiere Ersteller ${ersteller.id***REMOVED*** von Aktion ${aktion.id***REMOVED***")
+        pushService.sendePushNachrichtAnEmpfaenger(
+            pushMessage.notification,
+            pushMessage.verschluesselt(),
             listOf(ersteller)
         )
 
         val teilnehmer = aktion.teilnehmer.minus(ersteller)
         LOG.debug("Informiere restliche Teilnehmer ${teilnehmer.map { it.id ***REMOVED******REMOVED*** von Aktion ${aktion.id***REMOVED***")
-        val restlicheTeilnehmer = aktion.teilnehmer.minus(ersteller)
-        pushService.sendePushNachrichtAnEmpfaenger(
+        pushMessage.notification =
             PushNotificationDto(
                 "Verstärkung für eure Aktion",
                 "$name ist der Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))***REMOVED*** beigetreten, an der du teilnimmst"
-            ), data, restlicheTeilnehmer
+            )
+        val restlicheTeilnehmer = aktion.teilnehmer.minus(ersteller)
+
+        pushService.sendePushNachrichtAnEmpfaenger(
+            pushMessage.notification,
+            pushMessage.verschluesselt(),
+            restlicheTeilnehmer
         )
     ***REMOVED***
 
     open fun informiereUeberAbsage(benutzer: Benutzer, aktion: Termin) {
-        val name = if (benutzer.name.isNullOrBlank()) "Jemand" else benutzer.name
-        val data = mapOf(Pair("type", "participation"), Pair("action", aktion.id.toString()))
-
-        val ersteller = aktion.teilnehmer[0]
-        LOG.debug("Informiere Ersteller ${ersteller.id***REMOVED*** von Aktion ${aktion.id***REMOVED***")
-        pushService.sendePushNachrichtAnEmpfaenger(
+        val name = if (benutzer.name.isNullOrBlank()) "Jemand" else benutzer.name!!
+        val pushMessage = PushMessageDto(
             PushNotificationDto(
                 "Absage bei deiner Aktion",
                 "$name nimmt nicht mehr Teil an deiner Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))***REMOVED***"
-            ), data,
+            ), mapOf(
+                "type" to "ParticipationMessage",
+                "channel" to "action:${aktion.id***REMOVED***",
+                "timestamp" to now().format(ISO_OFFSET_DATE_TIME),
+                "action" to aktion.id,
+                "username" to name,
+                "joins" to false
+            )
+        )
+        val ersteller = aktion.teilnehmer[0]
+
+        LOG.debug("Informiere Ersteller ${ersteller.id***REMOVED*** von Aktion ${aktion.id***REMOVED***")
+        pushService.sendePushNachrichtAnEmpfaenger(
+            pushMessage.notification,
+            pushMessage.verschluesselt(),
             listOf(ersteller)
         )
 
+        pushMessage.notification = PushNotificationDto(
+            "Absage bei eurer Aktion",
+            "$name hat die Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))***REMOVED*** verlassen, an der du teilnimmst"
+        )
         val teilnehmer = aktion.teilnehmer.minus(ersteller)
+
         LOG.debug("Informiere restliche Teilnehmer ${teilnehmer.map { it.id ***REMOVED******REMOVED*** von Aktion ${aktion.id***REMOVED***")
         pushService.sendePushNachrichtAnEmpfaenger(
-            PushNotificationDto(
-                "Absage bei eurer Aktion",
-                "$name hat die Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))***REMOVED*** verlassen, an der du teilnimmst"
-            ), data, teilnehmer
+            pushMessage.notification,
+            pushMessage.verschluesselt(),
+            teilnehmer
         )
     ***REMOVED***
 ***REMOVED***

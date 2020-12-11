@@ -6,7 +6,6 @@ import de.kybernetik.database.pushmessages.PushMessage
 import org.junit.Test
 import java.util.*
 import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
 import kotlin.test.assertNull
 
 @ExperimentalStdlibApi
@@ -44,8 +43,9 @@ class PushMessageDtoTest {
         assertEquals(payload, "eyJrZXkxIjoidmFsdWUxIiwia2V5MiI6InZhbHVlMiJ9")
         val bytes: ByteArray = Base64.getDecoder().decode(payload)!!
         val json: String = bytes.decodeToString()
+
         @Suppress("UNCHECKED_CAST")
-        val data: Map<String, Any?> = GsonBuilder().serializeNulls().create().fromJson(json, Map::class.java) as Map<String, Any?>
+        val data = GsonBuilder().serializeNulls().create().fromJson(json, Map::class.java)
         assertEquals(data["key1"], "value1")
         assertEquals(data["key2"], "value2")
     ***REMOVED***

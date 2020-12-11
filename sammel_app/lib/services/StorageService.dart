@@ -35,18 +35,12 @@ class StorageService {
   Future<String> loadActionToken(int id) =>
       prefs.then((prefs) => prefs.getString('$_ACTION:${id.toString()***REMOVED***'));
 
-  Future<bool> saveMessageChannel(SimpleMessageChannel channel) =>
-      prefs.then((prefs) => prefs.setString(
-          '$_CHANNEL:${channel.id***REMOVED***', jsonEncode(channel.toJson())));
+  Future<bool> saveActionChannel(ActionChannel channel) => prefs.then((prefs) =>
+      prefs.setString('$_CHANNEL:${channel.id***REMOVED***', jsonEncode(channel.toJson())));
 
-  Future<SimpleMessageChannel> loadMessageChannel(String id) async {
-    String s = (await prefs).getString('$_CHANNEL:${id***REMOVED***');
-    Future<SimpleMessageChannel> smc = null;
-    if (s != null) {
-      smc = prefs.then((prefs) => SimpleMessageChannel.fromJSON(
-          jsonDecode(prefs.getString('$_CHANNEL:${id***REMOVED***'))));
-    ***REMOVED***
-    return smc;
+  Future<Channel> loadActionChannel(String id) async {
+    return prefs.then((prefs) =>
+        ActionChannel.fromJSON(jsonDecode(prefs.getString('$_CHANNEL:${id***REMOVED***'))));
   ***REMOVED***
 
   markActionIdAsStored(int id) => prefs.then((prefs) => _getActionList().then(

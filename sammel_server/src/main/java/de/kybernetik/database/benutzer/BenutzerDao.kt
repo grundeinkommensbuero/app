@@ -61,6 +61,8 @@ open class BenutzerDao {
     ***REMOVED***
 
     open fun getFirebaseKeys(benutzerListe: List<Benutzer>): List<String> {
+        if(benutzerListe.isEmpty())
+            return emptyList()
         _log.debug("Sammle Firebase-Keys für Nutzer ${benutzerListe.map { it.id ***REMOVED******REMOVED***")
         return entityManager
             .createQuery(
@@ -73,6 +75,8 @@ open class BenutzerDao {
     ***REMOVED***
 
     open fun getBenutzerOhneFirebase(benutzerListe: List<Benutzer>): List<Benutzer> {
+        if(benutzerListe.isEmpty())
+            return emptyList()
         _log.debug("Sammle Benutzer ohne Firebase-Keys aus ${benutzerListe.map { it.id ***REMOVED******REMOVED***")
         return entityManager
             .createQuery(

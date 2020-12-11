@@ -39,7 +39,7 @@ open class FirebaseService {
                         if (notification == null) null
                         else Notification.builder().setTitle(notification.title).setBody(notification.body).build())
                 .putAllData(data ?: emptyMap())
-                .addAllTokens(empfaenger)
+                .addAllTokens(empfaenger.distinct())
                 .build()
         val response = firebase.sendMulticast(message)
         LOG.debug("${response?.successCount***REMOVED***  Nachrichten wurden erfolgreich an Firebase versendet")

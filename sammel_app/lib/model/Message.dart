@@ -1,45 +1,98 @@
 import 'dart:ui';
 
-class Message {
+import 'package:sammel_app/model/PushMessage.dart';
+
+abstract class Message {
+  String type;
+  bool obtained_from_server = false;
+  DateTime timestamp;
+
+  Message.fromJson() {***REMOVED***
+
+  static String determineType(Map<String, dynamic> data) => data['type'];
+
+  Map<String, dynamic> toJson() {***REMOVED***
+***REMOVED***
+
+class ChatMessage implements Message {
+  @override
+  String type = PushDataTypes.SimpleChatMessage;
+  @override
+  bool obtained_from_server;
+  @override
+  DateTime timestamp;
   String text;
   String sender_name;
-  DateTime sending_time;
   Color message_color;
-  bool obtained_from_server = false;
   int user_id = -1;
 
-  Message(
+  ChatMessage(
       {this.text,
       this.sender_name,
-      this.sending_time,
+      this.timestamp,
       this.message_color,
       this.obtained_from_server = false,
       this.user_id***REMOVED***);
 
-  Message.fromJSON(Map<dynamic, dynamic> json_message_data) {
+  @override
+  ChatMessage.fromJson(Map<dynamic, dynamic> json_message_data) {
     text = json_message_data['text'];
     sender_name = json_message_data['sender_name'];
-    sending_time = DateTime.parse(json_message_data['sending_time']);
+    timestamp = DateTime.parse(json_message_data['timestamp']);
     message_color = Color(int.parse(json_message_data['color'].toString()));
     obtained_from_server = json_message_data['from_server'];
     user_id = int.parse(json_message_data['user_id'].toString());
   ***REMOVED***
 
+  @override
   Map<String, dynamic> toJson() => {
+        'type': type,
         'text': text,
         'sender_name': sender_name,
         'user_id': user_id,
-        'sending_time': sending_time.toString(),
+        'timestamp': timestamp.toString(),
         'color': message_color.value,
         'from_server': obtained_from_server
       ***REMOVED***
 
+  @override
   bool isMessageEqual(Message msg) {
-    return msg.text == text &&
+    return msg is ChatMessage &&
+        msg.text == text &&
         msg.sender_name == msg.sender_name &&
-        sending_time.isAtSameMomentAs(msg.sending_time) &&
+        timestamp.isAtSameMomentAs(msg.timestamp) &&
         message_color.value == msg.message_color.value &&
         user_id == msg.user_id &&
         obtained_from_server == msg.obtained_from_server;
   ***REMOVED***
+***REMOVED***
+
+class ParticipationMessage implements Message {
+  @override
+  String type = PushDataTypes.ParticipationMessage;
+  @override
+  bool obtained_from_server;
+  @override
+  DateTime timestamp;
+  String username;
+  bool joins;
+
+  ParticipationMessage(this.obtained_from_server, this.timestamp,
+      this.username, this.joins);
+
+  ParticipationMessage.fromJson(Map<dynamic, dynamic> json) {
+    obtained_from_server = json['obtained_from_server'];
+    timestamp = DateTime.parse(json['timestamp']);
+    username = json['username'];
+    joins = json['joins'];
+  ***REMOVED***
+
+  @override
+  Map<String, dynamic> toJson() => {
+        'type': type,
+        'obtained_from_server': obtained_from_server,
+        'timestamp': timestamp.toString(),
+        'username': username,
+        'joins': joins
+      ***REMOVED***
 ***REMOVED***
