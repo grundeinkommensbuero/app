@@ -19,7 +19,6 @@ class ChatMessageService implements PushNotificationListener {
   void receive_message(String type, Map<dynamic, dynamic> data) {
     ChatPushData mpd = ChatPushData.fromJson(data);
     ActionChannel channel = channels[mpd.channel];
-    message.obtained_from_server = true;
     if (channel != null) {
       if (type == PushDataTypes.SimpleChatMessage)
         channel.pushChatMessage(ChatMessage.fromJson(data));

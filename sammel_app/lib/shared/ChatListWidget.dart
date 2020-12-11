@@ -28,9 +28,8 @@ class ChatListState extends State<ChatListWidget>
     implements ChannelChangeListener {
   ActionChannel channel;
   User user;
-
-  ActionChannel channel;
   bool force_scrolling = false;
+
   ChatListState(ActionChannel channel)
   {
     this.channel = channel;

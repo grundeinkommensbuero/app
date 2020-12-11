@@ -10,7 +10,6 @@ import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChatMessageService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
-import 'package:sammel_app/shared/user_data.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 
 void main() {
