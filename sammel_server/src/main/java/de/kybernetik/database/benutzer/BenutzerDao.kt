@@ -8,19 +8,19 @@ import javax.persistence.PersistenceContext
 
 @Stateless
 open class BenutzerDao {
-    private val LOG = Logger.getLogger(BenutzerDao::class.java)
+    private val _log = Logger.getLogger(BenutzerDao::class.java)
 
     @Inject
     @PersistenceContext(unitName = "mariaDB")
     private lateinit var entityManager: EntityManager
 
     open fun getBenutzer(id: Long): Benutzer? {
-        LOG.debug("Lade Benutzer für Nutzer-ID $id")
+        _log.debug("Lade Benutzer für Nutzer-ID $id")
         return entityManager.find(Benutzer::class.java, id)
     ***REMOVED***
 
     open fun getCredentials(id: Long): Credentials? {
-        LOG.debug("Lade Credentials für Nutzer-ID $id")
+        _log.debug("Lade Credentials für Nutzer-ID $id")
         return entityManager.find(Credentials::class.java, id)
     ***REMOVED***
 
@@ -28,8 +28,10 @@ open class BenutzerDao {
         if (benutzer.id != 0L) {
             throw NeuerBenutzerHatBereitsIdException()
         ***REMOVED***
-        LOG.debug("Neuen Benutzer anlegen " +
-                if (benutzer.name.isNullOrBlank()) "ohne Namen" else "mit Name ${benutzer.name***REMOVED***")
+        _log.debug(
+            "Neuen Benutzer anlegen " +
+                    if (benutzer.name.isNullOrBlank()) "ohne Namen" else "mit Name ${benutzer.name***REMOVED***"
+        )
         try {
             entityManager.persist(benutzer)
             return benutzer
@@ -41,7 +43,7 @@ open class BenutzerDao {
     open fun aktualisiereBenutzername(id: Long, name: String): Benutzer {
         val benutzerAusDb = entityManager.find(Benutzer::class.java, id)
         benutzerAusDb.name = name
-        LOG.debug("Benutzername aktualisiert für ${benutzerAusDb.id***REMOVED*** mit ${benutzerAusDb.name***REMOVED***")
+        _log.debug("Benutzername aktualisiert für ${benutzerAusDb.id***REMOVED*** mit ${benutzerAusDb.name***REMOVED***")
         return benutzerAusDb
     ***REMOVED***
 
@@ -50,35 +52,50 @@ open class BenutzerDao {
     ***REMOVED***
 
     open fun benutzernameExistiert(name: String): Boolean {
-        LOG.debug("Ermittle ob Benutzer $name existiert")
+        _log.debug("Ermittle ob Benutzer $name existiert")
         return entityManager
-                .createQuery("select benutzer from Benutzer benutzer where benutzer.name = :name", Benutzer::class.java)
-                .setParameter("name", name)
-                .resultList
-                .isNotEmpty()
+            .createQuery("select benutzer from Benutzer benutzer where benutzer.name = :name", Benutzer::class.java)
+            .setParameter("name", name)
+            .resultList
+            .isNotEmpty()
     ***REMOVED***
 
     open fun getFirebaseKeys(benutzerListe: List<Benutzer>): List<String> {
-        LOG.debug("Sammle Firebase-Keys für Nutzer ${benutzerListe.map { it.id ***REMOVED******REMOVED***")
+        if(benutzerListe.isEmpty())
+            return emptyList()
+        _log.debug("Sammle Firebase-Keys für Nutzer ${benutzerListe.map { it.id ***REMOVED******REMOVED***")
         return entityManager
-                .createQuery("" +
-                        "select creds.firebaseKey from Credentials creds " +
+            .createQuery(
+                "select creds.firebaseKey from Credentials creds " +
                         "where creds.id in (:ids) " +
-                        "and creds.isFirebase = true", String::class.java)
-                .setParameter("ids", benutzerListe.map { it.id ***REMOVED***)
-                .resultList
+                        "and creds.isFirebase = true", String::class.java
+            )
+            .setParameter("ids", benutzerListe.map { it.id ***REMOVED***)
+            .resultList
     ***REMOVED***
 
     open fun getBenutzerOhneFirebase(benutzerListe: List<Benutzer>): List<Benutzer> {
-        LOG.debug("Sammle Benutzer ohne Firebase-Keys aus ${benutzerListe.map { it.id ***REMOVED******REMOVED***")
+        if(benutzerListe.isEmpty())
+            return emptyList()
+        _log.debug("Sammle Benutzer ohne Firebase-Keys aus ${benutzerListe.map { it.id ***REMOVED******REMOVED***")
         return entityManager
-                .createQuery("" +
-                        "select benutzer from Benutzer benutzer, Credentials creds " +
+            .createQuery(
+                "select benutzer from Benutzer benutzer, Credentials creds " +
                         "where benutzer.id in (:ids) " +
                         "and creds.id = benutzer.id " +
-                        "and creds.isFirebase = false", Benutzer::class.java)
-                .setParameter("ids", benutzerListe.map { it.id ***REMOVED***)
-                .resultList
+                        "and creds.isFirebase = false", Benutzer::class.java
+            )
+            .setParameter("ids", benutzerListe.map { it.id ***REMOVED***)
+            .resultList
+    ***REMOVED***
+
+    open fun gibNutzerNamedRolle(benutzer: Benutzer) {
+        entityManager
+            .createNativeQuery("insert into Roles (id, role) values (:id, :rolle)")
+            .setParameter("id", benutzer.id)
+            .setParameter("rolle", "named")
+            .executeUpdate()
+        _log.debug("Benutzer ${benutzer.id***REMOVED*** um Rolle 'named' erweitert")
     ***REMOVED***
 
     class NeuerBenutzerHatBereitsIdException : Exception()

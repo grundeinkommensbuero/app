@@ -1,4 +1,3 @@
-
 import 'Message.dart';
 
 class PushMessage {
@@ -8,8 +7,7 @@ class PushMessage {
 
   PushMessage(this.data, this.notification, {this.recipients***REMOVED***);
 
-  toJson() =>
-      {
+  toJson() => {
         'recipients': recipients,
         'data': data,
         'notification': notification,
@@ -22,16 +20,15 @@ class PushNotification {
 
   PushNotification(this.title, this.body);
 
-  toJson() =>
-      {
+  toJson() => {
         'title': title,
         'body': body,
       ***REMOVED***
 ***REMOVED***
 
-class PushDataTypes
-{
+class PushDataTypes {
   static final SimpleChatMessage = 'SimpleChatMessage';
+  static String ParticipationMessage = 'ParticipationMessage';
 ***REMOVED***
 
 // Alle Data-Objekte müssen in eine flache Map<String, String> serialisiert werden können
@@ -45,27 +42,50 @@ class PushData {
   toJson() => {'type': type***REMOVED***
 ***REMOVED***
 
-class MessagePushData extends PushData {
+class ChatPushData extends PushData {
+  String channel;
 
-  Message message;
-  String channel_name;
+  ChatPushData(this.channel);
+
+  static ChatPushData fromJson(Map<String, dynamic> data) =>
+      ChatPushData(data['channel']);
+***REMOVED***
+
+class ChatMessagePushData extends ChatPushData {
+  ChatMessage message;
   final String type = PushDataTypes.SimpleChatMessage;
 
-  MessagePushData(this.message, this.channel_name);
+  ChatMessagePushData(this.message, channel) : super(channel);
 
-
-  toJson()
-  {
+  toJson() {
     var json_message = message.toJson();
     json_message['type'] = type;
-    json_message['channel_name'] = this.channel_name;
+    json_message['channel'] = this.channel;
     return json_message;
   ***REMOVED***
 
-  MessagePushData.fromJson(Map <dynamic, dynamic> json)
-  {
-    this.message = Message.fromJSON(json);// Message(text: json['text'], sender_name: json['sender_name'], message_color: Color(json['color']));
-    this.channel_name = json['channel_name'];
+  ChatMessagePushData.fromJson(Map<String, dynamic> json)
+      : super(json['channel']) {
+    this.message = ChatMessage.fromJson(json);
+  ***REMOVED***
+***REMOVED***
+
+class ParticipationPushData extends ChatPushData {
+  ParticipationMessage message;
+  final String type = PushDataTypes.SimpleChatMessage;
+
+  ParticipationPushData(this.message, channel) : super(channel);
+
+  toJson() {
+    var json_message = message.toJson();
+    json_message['type'] = type;
+    json_message['channel'] = this.channel;
+    return json_message;
+  ***REMOVED***
+
+  ParticipationPushData.fromJson(Map<String, dynamic> json)
+      : super(json['channel']) {
+    this.message = ParticipationMessage.fromJson(json);
   ***REMOVED***
 ***REMOVED***
 
@@ -73,16 +93,14 @@ class ExampleData extends PushData {
   String type = "Example";
   String payload;
 
-  ExampleData.fromJson(Map<dynamic, dynamic> json)
-      : payload = json['payload'] {
+  ExampleData.fromJson(Map<dynamic, dynamic> json) : payload = json['payload'] {
     if (type != json['type'])
       throw WrongDataTypeKeyError(expected: type, found: json['type']);
   ***REMOVED***
 
   ExampleData(this.payload);
 
-  toJson() =>
-      {
+  toJson() => {
         'type': type,
         'payload': payload,
       ***REMOVED***

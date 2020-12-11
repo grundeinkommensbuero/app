@@ -24,8 +24,6 @@ class StorageService {
     _prefs = SharedPreferences.getInstance();
   ***REMOVED***
 
-  // Action Properties
-
   Future<bool> saveActionToken(int id, String token) => prefs
       .then((prefs) => prefs.setString('$_ACTION:$id', token))
       .whenComplete(() => markActionIdAsStored(id));
@@ -37,20 +35,13 @@ class StorageService {
   Future<String> loadActionToken(int id) =>
       prefs.then((prefs) => prefs.getString('$_ACTION:${id.toString()***REMOVED***'));
 
-  Future<bool> saveMessageChannel(SimpleMessageChannel channel) => prefs
-      .then((prefs) => prefs.setString('$_CHANNEL:${channel.id***REMOVED***', jsonEncode(channel.toJson())));
+  Future<bool> saveActionChannel(ActionChannel channel) => prefs.then((prefs) =>
+      prefs.setString('$_CHANNEL:${channel.id***REMOVED***', jsonEncode(channel.toJson())));
 
-  Future<SimpleMessageChannel> loadMessageChannel(String id) async
-  {
-    String s = (await prefs).getString('$_CHANNEL:${id***REMOVED***');
-    Future<SimpleMessageChannel> smc = null;
-    if(s != null)
-      {
-        smc = prefs.then((prefs) => SimpleMessageChannel.fromJSON(jsonDecode(prefs.getString('$_CHANNEL:${id***REMOVED***'))));
-      ***REMOVED***
-    return smc;
+  Future<Channel> loadActionChannel(String id) async {
+    return prefs.then((prefs) =>
+        ActionChannel.fromJSON(jsonDecode(prefs.getString('$_CHANNEL:${id***REMOVED***'))));
   ***REMOVED***
-
 
   markActionIdAsStored(int id) => prefs.then((prefs) => _getActionList().then(
       (list) => prefs.setStringList(_ACTIONLIST, list..add(id.toString()))));
@@ -92,15 +83,23 @@ class StorageService {
         return User.fromJSON(jsonDecode(user));
       ***REMOVED***);
 
-  Future<String> loadSecret() =>
-      prefs.then((prefs) => prefs.getString(_SECRET));
+  // Gibt kein null zurück, sondern wartet bis ein Secret hinterlegt wurde
+  Future<String> loadSecret() async {
+    var prefs = await this.prefs;
+    await Future.doWhile(() async {
+      await Future.delayed(Duration(milliseconds: 500));
+      return prefs.getString(_SECRET) == null;
+    ***REMOVED***);
+    var secret = prefs.getString(_SECRET);
+    return secret;
+  ***REMOVED***
 
   Future<void> saveSecret(String secret) =>
       prefs.then((prefs) => prefs.setString(_SECRET, secret));
 
   clearAllPreferences() => _prefs.then((prefs) async {
-    prefs.clear();
-  ***REMOVED***);
+        prefs.clear();
+      ***REMOVED***);
 
   Future<void> saveCostumPushToken(String token) =>
       prefs.then((prefs) => prefs.setString(_PUSHTOKEN, token));
@@ -112,7 +111,5 @@ class StorageService {
       prefs.then((prefs) => prefs.getBool(_PULL_MODE) ?? false);
 
   // for Debugging only
-  loadCostumPushToken() =>
-      prefs.then((prefs) => prefs.getString(_PUSHTOKEN));
-
-  ***REMOVED***
+  loadCostumPushToken() => prefs.then((prefs) => prefs.getString(_PUSHTOKEN));
+***REMOVED***

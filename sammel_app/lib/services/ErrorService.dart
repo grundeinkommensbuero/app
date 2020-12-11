@@ -18,28 +18,28 @@ class ErrorService {
         showErrorDialog(error[0], error[1], key: Key('error dialog')));
   ***REMOVED***
 
-  static handleError(e, {String additional***REMOVED***) {
+  static handleError(error, StackTrace stacktrace, {String additional***REMOVED***) {
+    print('Fehler aufgetreten: $error\n$stacktrace');
     if (additional == null)
       additional = '';
     else
-      additional = '. $additional';
+      additional = '$additional';
 
-    if (e is AuthFehler) {
-      pushMessage(
-          'Fehler bei Nutzer-Authentifizierung',
-          '${e.message***REMOVED***$additional$EMAIL');
+    if (error is AuthFehler) {
+      pushMessage('Fehler bei Nutzer-Authentifizierung',
+          '${error.message***REMOVED***$additional$EMAIL');
       return;
     ***REMOVED***
-    if (e is RestFehler) {
+    if (error is RestFehler) {
       pushMessage(
           'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten',
-          '${e.message***REMOVED***$additional$EMAIL');
+          '${error.message***REMOVED***$additional$EMAIL');
       return;
     ***REMOVED***
-    if (e is WrongResponseFormatException) {
+    if (error is WrongResponseFormatException) {
       pushMessage(
-          'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten',
-          '${e.message***REMOVED***$additional$EMAIL');
+          'Bei der Kommunikation mit dem Server ist ein technischer Fehler aufgetreten',
+          '${error.message***REMOVED***$additional$EMAIL');
       return;
     ***REMOVED***
     pushMessage('Ein Fehler ist aufgetreten', '$additional$EMAIL');
@@ -48,10 +48,8 @@ class ErrorService {
   static void pushMessage(String titel, String message) {
     if (_context == null)
       messageQueue.add([titel, message]);
-    else {
-      print('Ein Fehler ist aufgetreten: $titel - $message');
+    else
       showErrorDialog(titel, message, key: Key('error dialog'));
-    ***REMOVED***
   ***REMOVED***
 
   static Future showErrorDialog(String title, String message, {key: Key***REMOVED***) =>

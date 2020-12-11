@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
+import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
@@ -373,13 +374,15 @@ void main() {
       actionEditor.action.terminDetails.beschreibung = null;
       actionEditor.validateAllInput();
 
-      expect(actionEditor.action.validated['beschreibung'], ValidationState.error);
+      expect(
+          actionEditor.action.validated['beschreibung'], ValidationState.error);
       expect(actionEditor.action.validated['all'], ValidationState.error);
 
       actionEditor.action.terminDetails.beschreibung = '';
       actionEditor.validateAllInput();
 
-      expect(actionEditor.action.validated['beschreibung'], ValidationState.error);
+      expect(
+          actionEditor.action.validated['beschreibung'], ValidationState.error);
       expect(actionEditor.action.validated['all'], ValidationState.error);
     ***REMOVED***);
 
@@ -658,14 +661,15 @@ void main() {
     ***REMOVED***);
   ***REMOVED***);
   group('finish button', () {
-    Future<ActionEditorState> pumActionEditor(WidgetTester tester,
+    Future<ActionEditorState> pumpActionEditor(
+        WidgetTester tester, UserService userServiceMock,
         {Function onFinish***REMOVED***) async {
       onFinish = onFinish ?? (_) {***REMOVED***
 
       var actionEditor = ActionEditor(onFinish: onFinish);
       await tester.pumpWidget(MultiProvider(providers: [
         Provider<AbstractStammdatenService>.value(value: _stammdatenService),
-        Provider<AbstractUserService>.value(value: _userService),
+        Provider<AbstractUserService>.value(value: userServiceMock),
       ], child: MaterialApp(home: actionEditor)));
 
       ActionEditorState state = tester.state(find.byWidget(actionEditor));
@@ -674,9 +678,19 @@ void main() {
       return state;
     ***REMOVED***
 
+    Future<ActionEditorState> pumpActionEditorConfigured(WidgetTester tester,
+            {Function onFinish***REMOVED***) async =>
+        pumpActionEditor(tester, ConfiguredUserServiceMock(),
+            onFinish: onFinish);
+
+    Future<ActionEditorState> pumpActionEditorUnconfigured(
+            WidgetTester tester, UserServiceMock userServiceMock,
+            {Function onFinish***REMOVED***) async =>
+        pumpActionEditor(tester, userServiceMock, onFinish: onFinish);
+
     testWidgets('fires onFinish', (WidgetTester tester) async {
       bool fired = false;
-      await pumActionEditor(tester, onFinish: (_) => fired = true);
+      await pumpActionEditorConfigured(tester, onFinish: (_) => fired = true);
 
       expect(fired, isFalse);
 
@@ -687,7 +701,7 @@ void main() {
     ***REMOVED***);
 
     testWidgets('clears data', (WidgetTester tester) async {
-      var state = await pumActionEditor(tester);
+      var state = await pumpActionEditorConfigured(tester);
 
       expect(state.action.von, isNotNull);
       expect(state.action.bis, isNotNull);
@@ -714,7 +728,7 @@ void main() {
     ***REMOVED***);
 
     testWidgets('cancel clears data', (WidgetTester tester) async {
-      var state = await pumActionEditor(tester);
+      var state = await pumpActionEditorConfigured(tester);
 
       expect(state.action.von, isNotNull);
       expect(state.action.bis, isNotNull);
@@ -738,6 +752,78 @@ void main() {
       expect(state.action.terminDetails.kontakt, isEmpty);
       expect(state.action.terminDetails.treffpunkt, isEmpty);
       expect(state.action.coordinates, isNull);
+    ***REMOVED***);
+
+    testWidgets('opens name dialog if no username', (tester) async {
+      var userService = UserServiceMock();
+      when(userService.user)
+          .thenAnswer((_) => Stream.value(User(13, null, Colors.red)));
+      await pumpActionEditorUnconfigured(tester, userService);
+
+      await tester.tap(find.byKey(Key('action editor finish button')));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(Key('username dialog')), findsOneWidget);
+    ***REMOVED***);
+
+    testWidgets('opens name dialog not if username exists', (tester) async {
+      await pumpActionEditorConfigured(tester);
+
+      await tester.tap(find.byKey(Key('action editor finish button')));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(Key('username dialog')), findsNothing);
+    ***REMOVED***);
+
+    testWidgets('creates action with new username', (tester) async {
+      var userService = UserServiceMock();
+      when(userService.user)
+          .thenAnswer((_) => Stream.value(User(13, null, Colors.red)));
+      var fired = false;
+      await pumpActionEditorUnconfigured(tester, userService,
+          onFinish: (_) => fired = true);
+
+      await tester.tap(find.byKey(Key('action editor finish button')));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(Key('username dialog')), findsOneWidget);
+
+      await tester.enterText(find.byKey(Key('user name input')), 'Karl Marx');
+      await tester.pump();
+      await tester.tap(find.byKey(Key('username dialog finish button')));
+
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(Key('username dialog')), findsNothing);
+
+      verify(userService.updateUsername('Karl Marx')).called(1);
+      expect(fired, isTrue);
+    ***REMOVED***);
+
+    testWidgets(
+        'cancel username does not close action creator and keeps inputs',
+        (tester) async {
+      var userService = UserServiceMock();
+      when(userService.user)
+          .thenAnswer((_) => Stream.value(User(13, null, Colors.red)));
+      bool fired = false;
+      await pumpActionEditorUnconfigured(tester, userService,
+          onFinish: (_) => fired = true);
+
+      await tester.tap(find.byKey(Key('action editor finish button')));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(Key('username dialog')), findsOneWidget);
+
+      await tester.tap(find.byKey(Key('username dialog cancel button')));
+      await tester.pumpAndSettle();
+
+      verifyNever(userService.updateUsername('Karl Marx'));
+      expect(fired, isFalse);
+      expect(find.byKey(Key('username dialog')), findsNothing);
+      expect(find.byKey(Key('action creator')), findsNothing);
+      expect(find.text(ActionData.testDaten().terminDetails.kontakt),
+          findsOneWidget);
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***

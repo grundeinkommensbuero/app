@@ -1,9 +1,11 @@
 package de.kybernetik.rest
 
 import TestdatenVorrat.Companion.karl
+import com.google.gson.GsonBuilder
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.atLeastOnce
 import com.nhaarman.mockitokotlin2.whenever
+import de.kybernetik.database.benutzer.Benutzer
 import de.kybernetik.database.benutzer.BenutzerDao
 import de.kybernetik.database.pushmessages.PushMessage
 import de.kybernetik.database.pushmessages.PushMessageDao
@@ -22,12 +24,14 @@ import org.mockito.junit.MockitoRule
 import de.kybernetik.services.FirebaseService
 import de.kybernetik.services.FirebaseService.MissingMessageTarget
 import de.kybernetik.services.PushService
+import java.util.*
 import java.util.Collections.singletonList
 import javax.ws.rs.core.SecurityContext
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
+@ExperimentalStdlibApi
 class PushNotificationResourceTest {
     @Rule
     @JvmField
@@ -71,7 +75,13 @@ class PushNotificationResourceTest {
 
         resource.pushToDevices(PushMessageDto(notification, data, recipients = empfaenger))
 
-        verify(firebase, atLeastOnce()).sendePushNachrichtAnEmpfaenger(notification, data, empfaenger)
+        val notificationCaptor = argumentCaptor<PushNotificationDto>()
+        val dataCaptor = argumentCaptor<Map<String, String>>()
+        val empfaengerCaptor = argumentCaptor<List<String>>()
+        verify(firebase, atLeastOnce()).sendePushNachrichtAnEmpfaenger(notificationCaptor.capture(), dataCaptor.capture(), empfaengerCaptor.capture())
+        assertTrue { entschluessele(dataCaptor.firstValue).isEmpty() ***REMOVED***
+        assertEquals(notificationCaptor.firstValue, notification)
+        assertEquals(empfaengerCaptor.firstValue, empfaenger)
     ***REMOVED***
 
     @Test
@@ -98,9 +108,10 @@ class PushNotificationResourceTest {
                 .sendePushNachrichtAnEmpfaenger(notificationArgument.capture(), dataArgument.capture(), empfaengerArgument.capture())
         assertEquals(notificationArgument.firstValue.title, "Titel")
         assertEquals(notificationArgument.firstValue.body, "Inhalt")
-        assertEquals(dataArgument.firstValue.size, 2)
-        assertEquals(dataArgument.firstValue["schlüssel1"], "inhalt1")
-        assertEquals(dataArgument.firstValue["schlüssel2"], "inhalt2")
+        val entschluesselt = entschluessele(dataArgument.firstValue)
+        assertEquals(entschluesselt.size, 2)
+        assertEquals(entschluesselt["schlüssel1"], "inhalt1")
+        assertEquals(entschluesselt["schlüssel2"], "inhalt2")
         assertEquals(empfaengerArgument.firstValue.size, 1)
         assertEquals(empfaengerArgument.firstValue[0], "Empfänger")
     ***REMOVED***
@@ -113,7 +124,13 @@ class PushNotificationResourceTest {
 
         resource.pushToTopic(PushMessageDto(notification, data), topic = kanal)
 
-        verify(firebase, atLeastOnce()).sendePushNachrichtAnTopic(notification, data, kanal)
+        val notificationCaptor = argumentCaptor<PushNotificationDto>()
+        val dataCaptor = argumentCaptor<Map<String, String>>()
+        val empfaengerCaptor = argumentCaptor<String>()
+        verify(firebase, atLeastOnce()).sendePushNachrichtAnTopic(notificationCaptor.capture(), dataCaptor.capture(), empfaengerCaptor.capture())
+        assertTrue { entschluessele(dataCaptor.firstValue).isEmpty() ***REMOVED***
+        assertEquals(notificationCaptor.firstValue, notification)
+        assertEquals(empfaengerCaptor.firstValue, kanal)
     ***REMOVED***
 
     @Test
@@ -139,9 +156,10 @@ class PushNotificationResourceTest {
                 .sendePushNachrichtAnTopic(notificationArgument.capture(), dataArgument.capture(), topicArgument.capture())
         assertEquals(notificationArgument.firstValue.title, "Titel")
         assertEquals(notificationArgument.firstValue.body, "Inhalt")
-        assertEquals(dataArgument.firstValue.size, 2)
-        assertEquals(dataArgument.firstValue["schlüssel1"], "inhalt1")
-        assertEquals(dataArgument.firstValue["schlüssel2"], "inhalt2")
+        val entschluesselt = entschluessele(dataArgument.firstValue)
+        assertEquals(entschluesselt.size, 2)
+        assertEquals(entschluesselt["schlüssel1"], "inhalt1")
+        assertEquals(entschluesselt["schlüssel2"], "inhalt2")
         assertEquals(topicArgument.firstValue, "Kanal")
     ***REMOVED***
 
@@ -192,9 +210,16 @@ class PushNotificationResourceTest {
 
         resource.pushToParticipants(PushMessageDto(notification, data), actionId = 1L)
 
-        verify(pushService, atLeastOnce()).sendePushNachrichtAnEmpfaenger(notification, data, teilnehmer)
+        val notificationCaptor = argumentCaptor<PushNotificationDto>()
+        val dataCaptor = argumentCaptor<Map<String, String>>()
+        val teilnehmerCaptor = argumentCaptor<List<Benutzer>>()
+        verify(pushService, atLeastOnce()).sendePushNachrichtAnEmpfaenger(notificationCaptor.capture(), dataCaptor.capture(), teilnehmerCaptor.capture())
+        assertTrue { entschluessele(dataCaptor.firstValue).isEmpty() ***REMOVED***
+        assertEquals(notificationCaptor.firstValue, notification)
+        assertEquals(teilnehmerCaptor.firstValue, teilnehmer)
     ***REMOVED***
 
+    @Test
     fun `pullNotifications liest Benutzer-ID aus Credentials`() {
         val pushMessages = listOf(
                 PushMessage(karl(), emptyMap(), PushNotificationDto()),
@@ -235,7 +260,7 @@ class PushNotificationResourceTest {
         whenever(pushMessageDao.ladeAllePushMessagesFuerBenutzer(11))
                 .thenReturn(pushMessages)
 
-        val response = resource.pullNotifications()
+        resource.pullNotifications()
 
         verify(pushMessageDao, times(1)).loeschePushMessages(pushMessages)
     ***REMOVED***
@@ -249,5 +274,13 @@ class PushNotificationResourceTest {
 
         @Suppress("UNCHECKED_CAST")
         (assertNull((response!!.entity as List<PushMessageDto>)[0].recipients))
+    ***REMOVED***
+
+    fun entschluessele(data: Map<String, String>?): Map<String, Any?> {
+        val payload = data!!["payload"]
+        val bytes: ByteArray = Base64.getDecoder().decode(payload)!!
+        val json: String = bytes.decodeToString()
+        @Suppress("UNCHECKED_CAST")
+        return GsonBuilder().serializeNulls().create().fromJson(json, Map::class.java) as Map<String, Any?>
     ***REMOVED***
 ***REMOVED***

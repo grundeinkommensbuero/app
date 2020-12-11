@@ -211,7 +211,7 @@ void main() {
       await tester.tap(find.byKey(Key('time button')));
       await tester.pump();
 
-      expect(find.text('von'), findsOneWidget);
+      expect(find.text('Startzeit'), findsOneWidget);
       expect(find.byKey(Key('from time picker')), findsOneWidget);
     ***REMOVED***);
 
@@ -223,10 +223,10 @@ void main() {
       await tester.tap(find.byKey(Key('time button')));
       await tester.pump();
 
-      await tester.tap(find.text('OK'));
+      await tester.tap(find.text('Weiter'));
       await tester.pump();
 
-      expect(find.text('bis'), findsOneWidget);
+      expect(find.text('Endzeit'), findsOneWidget);
       expect(find.byKey(Key('to time picker')), findsOneWidget);
     ***REMOVED***);
 
@@ -246,7 +246,7 @@ void main() {
       expect(find.text('19'), findsOneWidget);
       expect(find.text('15'), findsOneWidget);
 
-      await tester.tap(find.text('OK'));
+      await tester.tap(find.text('Weiter'));
       await tester.pump();
 
       expect(find.text('20'), findsOneWidget);
@@ -264,7 +264,7 @@ void main() {
       expect(find.text('12'), findsOneWidget);
       expect(find.text('00'), findsOneWidget);
 
-      await tester.tap(find.text('OK'));
+      await tester.tap(find.text('Weiter'));
       await tester.pump();
 
       expect(find.text('12'), findsOneWidget);
@@ -282,12 +282,12 @@ void main() {
 
       expect(find.byKey(Key('from time picker')), findsOneWidget);
 
-      await tester.tap(find.text('OK'));
+      await tester.tap(find.text('Weiter'));
       await tester.pump();
 
       expect(find.byKey(Key('to time picker')), findsOneWidget);
 
-      await tester.tap(find.text('OK'));
+      await tester.tap(find.text('Fertig'));
       await tester.pump();
 
       expect(ChronoHelfer.timeToStringHHmm(filterState.filter.von), '12:00');

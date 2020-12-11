@@ -7,6 +7,7 @@ import TestdatenVorrat.Companion.terminDto
 import TestdatenVorrat.Companion.terminMitTeilnehmerMitDetails
 import TestdatenVorrat.Companion.terminOhneTeilnehmerMitDetails
 import TestdatenVorrat.Companion.terminOhneTeilnehmerOhneDetails
+import com.google.gson.GsonBuilder
 import com.nhaarman.mockitokotlin2.*
 import de.kybernetik.database.DatabaseException
 import de.kybernetik.database.benutzer.Benutzer
@@ -26,11 +27,15 @@ import org.mockito.junit.MockitoRule
 import de.kybernetik.rest.TermineRestResource.*
 import de.kybernetik.services.PushService
 import java.time.LocalDateTime.now
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter.*
+import java.util.*
 import javax.ejb.EJBException
 import javax.ws.rs.core.Response
 import javax.ws.rs.core.SecurityContext
 import kotlin.test.*
 
+@ExperimentalStdlibApi
 class TermineRestResourceTest {
     @Rule
     @JvmField
@@ -54,6 +59,7 @@ class TermineRestResourceTest {
     @Before
     fun setUp() {
         whenever(context.userPrincipal).thenReturn(BasicUserPrincipal("11"))
+        reset(pushService)
     ***REMOVED***
 
     @Test
@@ -389,6 +395,31 @@ class TermineRestResourceTest {
     ***REMOVED***
 
     @Test
+    fun `informiereUeberTeilnahme sendet Aktion, Benutzername und Typ`() {
+        val aktion = terminMitTeilnehmerMitDetails()
+        val rosa = rosa()
+        aktion.teilnehmer = listOf(karl(), rosa)
+        val bini = Benutzer(13, "Bini Adamczak", 3L)
+
+        resource.informiereUeberTeilnahme(bini, aktion)
+
+        val dataCaptor = argumentCaptor<Map<String, String>>()
+        verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(any(), dataCaptor.capture(), any())
+        val data1 = entschluessele(dataCaptor.firstValue)
+        val data2 = entschluessele(dataCaptor.secondValue)
+        assertEquals(data1["channel"], "action:2")
+        assertNotNull(data1["timestamp"])
+        assertEquals(data1["action"], 2.0)
+        assertEquals(data1["username"], "Bini Adamczak")
+        assertEquals(data1["joins"], true)
+        assertEquals(data2["channel"], "action:2")
+        assertNotNull(data2["timestamp"])
+        assertEquals(data2["action"], 2.0)
+        assertEquals(data2["username"], "Bini Adamczak")
+        assertEquals(data2["joins"], true)
+    ***REMOVED***
+
+    @Test
     fun `sageTeilnahmeAb liefert 422 bei fehlender Aktions-Id`() {
         val response = resource.sageTeilnahmeAb(null)
 
@@ -463,5 +494,45 @@ class TermineRestResourceTest {
         verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(notificationCaptor.capture(), any(), empfaengerCaptor.capture())
         assertTrue(empfaengerCaptor.secondValue.containsAll(listOf(rosa)))
         assertEquals("Absage bei eurer Aktion", notificationCaptor.secondValue.title)
+    ***REMOVED***
+
+    @Test
+    fun `informiereUeberAbsage sendet Inhalt`() {
+        val aktion = terminMitTeilnehmerMitDetails()
+        val rosa = rosa()
+        aktion.teilnehmer = listOf(karl(), rosa)
+        val bini = Benutzer(13, "Bini Adamczak", 3L)
+
+        resource.informiereUeberAbsage(bini, aktion)
+
+        val dataCaptor = argumentCaptor<Map<String, String>>()
+        verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(any(), dataCaptor.capture(), any())
+        val data1 = entschluessele(dataCaptor.firstValue)["data"] as  Map<*, *>
+        val data2 = entschluessele(dataCaptor.secondValue)["data"] as  Map<*, *>
+        assertEquals(data1["channel"], "action:2")
+        assertNotNull(data1["timestamp"])
+        assertEquals(data1["action"], 2.0)
+        assertEquals(data1["username"], "Bini Adamczak")
+        assertEquals(data1["joins"], false)
+        assertEquals(data2["channel"], "action:2")
+        assertNotNull(data2["timestamp"])
+        assertEquals(data2["action"], 2.0)
+        assertEquals(data2["username"], "Bini Adamczak")
+        assertEquals(data2["joins"], false)
+    ***REMOVED***
+
+    fun entschluessele(data: Map<String, String>?): Map<String, Any?> {
+        val payload = data!!["payload"]
+        val bytes: ByteArray = Base64.getDecoder().decode(payload)!!
+        val json: String = bytes.decodeToString()
+        @Suppress("UNCHECKED_CAST")
+        return GsonBuilder().serializeNulls().create().fromJson(json, Map::class.java) as Map<String, Any?>
+    ***REMOVED***
+
+    @Test
+    fun test() {
+        println(ZonedDateTime.now().format(ISO_OFFSET_DATE_TIME))
+        println(ZonedDateTime.now().format(ISO_ZONED_DATE_TIME))
+        println(ZonedDateTime.now().format(ISO_INSTANT))
     ***REMOVED***
 ***REMOVED***

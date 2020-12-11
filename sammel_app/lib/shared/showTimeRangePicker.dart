@@ -3,42 +3,46 @@ import 'package:sammel_app/shared/DweTheme.dart';
 
 Future<TimeRange> showTimeRangePicker(
     BuildContext context, TimeOfDay initialFrom, TimeOfDay initialTo) async {
-  var from = await showSingleTimePicker(
-      context, initialFrom ?? TimeOfDay(hour: 12, minute: 00), 'von',
+  var from = await showSingleTimePicker(context,
+      initialFrom ?? TimeOfDay(hour: 12, minute: 00), 'Startzeit', 'Weiter',
       key: Key('from time picker'));
-  var to = await showSingleTimePicker(
-      context, initialTo ?? TimeOfDay(hour: 12, minute: 00), 'bis',
+  var to = await showSingleTimePicker(context,
+      initialTo ?? TimeOfDay(hour: 12, minute: 00), 'Endzeit', 'Fertig',
       key: Key('to time picker'));
   return TimeRange(from, to);
 ***REMOVED***
 
 Future<TimeOfDay> showSingleTimePicker(
-    BuildContext context, TimeOfDay initialTime, String title,
+    BuildContext context, TimeOfDay initialTime, String title, String next,
     {Key key***REMOVED***) async {
   TransitionBuilder builder = (BuildContext context, Widget timePicker) {
     return MediaQuery(
-      key: key,
-      data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          // hack, um über dem Dialog einen Titel darzustellen
-          // ignore: missing_required_param
-          FloatingActionButton(
-              backgroundColor: DweTheme.yellow,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50.0)),
-              child: Text(
-                title,
-                style: TextStyle(fontSize: 25.0, color: Colors.black),
-              )),
-          timePicker
-        ],
-      ),
-    );
+        key: key,
+        data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+        // aus unerklärlichen Gründen bezieht der TimePicker sein Styling seit
+        // irgendeinem Flutter-Upgrade nicht mehr aus dem Theme, sondern muss
+        // explizit gestylt werden
+        child: TimePickerTheme(
+            data: TimePickerTheme.of(context).copyWith(
+                backgroundColor: DweTheme.yellowLight,
+                dialBackgroundColor: DweTheme.yellowBright,
+                dialHandColor: DweTheme.purple,
+                hourMinuteTextColor: DweTheme.purple,
+                helpTextStyle: TextStyle(
+                    color: DweTheme.purple,
+                    fontSize: 30.0,
+                    fontWeight: FontWeight.bold)),
+            child: Theme(
+                data: Theme.of(context).copyWith(textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(primary: DweTheme.purple))),
+                child: timePicker)));
   ***REMOVED***
   return await showTimePicker(
-      context: context, initialTime: initialTime, builder: builder);
+      context: context,
+      initialTime: initialTime,
+      helpText: title,
+      cancelText: 'Keine Auswahl',
+      confirmText: next,
+      builder: builder);
 ***REMOVED***
 
 class TimeRange {

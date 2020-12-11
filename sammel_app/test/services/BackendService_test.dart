@@ -38,21 +38,10 @@ main() {
       test('needs no UserService if it is UserService', () {
         var storageServiceMock = StorageServiceMock();
         when(storageServiceMock.loadUser()).thenAnswer((_) async => karl());
+        when(storageServiceMock.loadSecret()).thenAnswer((_) async => "secret");
         var service = UserService(
             storageServiceMock, FirebaseReceiveServiceMock(), BackendMock());
         expect(service, isNotNull);
-      ***REMOVED***);
-
-      test('determines UserHeaders from UserAuth of UserService', () async {
-        when(userService.userAuthCreds)
-            .thenAnswer((_) async => 'Base64kodierte User Credentials');
-
-        var service = BackendService(userService, BackendMock());
-
-        var userHeaders = await service.userHeaders;
-
-        expect(userHeaders['Authorization'],
-            'Basic Base64kodierte User Credentials');
       ***REMOVED***);
 
       group('uses app credentials if appAuth flag is set', () {
@@ -96,21 +85,21 @@ main() {
 
         test('with get requests', () async {
           await service.get('anyUrl');
-          var userHeaders = await service.userHeaders;
+          var userHeaders = {'Authorization': 'userCreds'***REMOVED***
 
           verify(backend.get('anyUrl', userHeaders));
         ***REMOVED***);
 
         test('with post requests', () async {
           await service.post('anyUrl', null);
-          var userHeaders = await service.userHeaders;
+          var userHeaders = {'Authorization': 'userCreds'***REMOVED***
 
           verify(backend.post('anyUrl', null, userHeaders));
         ***REMOVED***);
 
         test('with delete requests', () async {
           await service.delete('anyUrl', null, appAuth: false);
-          var userHeaders = await service.userHeaders;
+          var userHeaders = {'Authorization': 'userCreds'***REMOVED***
 
           verify(backend.delete('anyUrl', null, userHeaders));
         ***REMOVED***);
@@ -119,8 +108,12 @@ main() {
       test(
           'authHeaders throws Error if appAuth flag is not set but no user credentials can be determined in 10 seconds',
           () async {
-        service.userHeaders = Future.delayed(
-            Duration(seconds: 11), () => {'Authorization': 'my creds'***REMOVED***);
+        final userService = UserServiceMock();
+        when(userService.user).thenAnswer((_) => Stream.value(karl()));
+        when(userService.userHeaders).thenAnswer((_) => Future.delayed(
+            Duration(seconds: 11), () => {'Authorization': 'my creds'***REMOVED***));
+
+        final service = BackendService(userService, BackendMock());
 
         expect(service.authHeaders(false), throwsA(NoUserAuthException));
       ***REMOVED***);

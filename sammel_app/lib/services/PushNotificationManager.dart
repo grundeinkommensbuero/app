@@ -4,6 +4,7 @@ import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
+import 'package:sammel_app/shared/Crypter.dart';
 
 import 'BackendService.dart';
 import 'ErrorService.dart';
@@ -13,7 +14,7 @@ abstract class AbstractPushNotificationManager {
 ***REMOVED***
 
 abstract class PushNotificationListener {
-  void receive_message(Map<dynamic, dynamic> data) {***REMOVED***
+  void receive_message(String type, Map<dynamic, dynamic> data) {***REMOVED***
 ***REMOVED***
 
 class PushNotificationManager implements AbstractPushNotificationManager {
@@ -57,7 +58,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     // _firebaseMessaging.configure(onMessage: ()=>this.onMessage);
   ***REMOVED***
 
-  Map callback_map = Map();
+  Map<String, PushNotificationListener> callback_map = Map();
 
   Future<String> pushToken;
 
@@ -74,15 +75,20 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     ***REMOVED***
    */
 
-  Future<dynamic> onMessageCallback(Map<String, dynamic> message) async {
-    print('message received' + message.toString());
-    Map<dynamic, dynamic> data = message['data'];
-    if (data.containsKey('type')) {
-      String type = data['type'];
-      if (callback_map.containsKey(type)) {
-        data.remove('type');
-        callback_map[type].receive_message(data);
+  Future<dynamic> onMessageCallback(Map<dynamic, dynamic> message) async {
+    print('Push-Nachricht empfangen: $message');
+    try {
+      var data = decrypt(message['data']);
+      if (data.containsKey('type')) {
+        String type = data['type'];
+        print('Type: $type');
+        if (callback_map.containsKey(type)) {
+          data.remove('type');
+          callback_map[type].receive_message(type, data);
+        ***REMOVED***
       ***REMOVED***
+    ***REMOVED*** catch (e, s) {
+      ErrorService.handleError(e, s);
     ***REMOVED***
   ***REMOVED***
 
@@ -110,6 +116,6 @@ class DemoPushNotificationManager implements AbstractPushNotificationManager {
   void register_message_callback(String id, PushNotificationListener callback) {
     pushService.stream
         .where((data) => data.type == id)
-        .listen((data) => callback.receive_message(data.toJson()));
+        .listen((data) => callback.receive_message(id, data.toJson()));
   ***REMOVED***
 ***REMOVED***

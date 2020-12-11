@@ -15,14 +15,26 @@ import 'package:uuid/uuid.dart';
 abstract class AbstractUserService extends BackendService {
   static String appAuth =
       'MTpiOTdjNzU5Ny1mNjY5LTRmZWItOWJhMi0zMjE0YzE4MjIzMzk=';
-  Future<User> user;
-  Future<String> userAuthCreds;
-  User internal_user_object = User(0, null, _randomColor());
-  StreamController<User> user_stream = StreamController<User>.broadcast();
+  final streamController = StreamController<User>.broadcast();
+  Stream<User> _userStream;
+  User latestUser;
+  Future<Map<String, String>> userHeaders;
 
-  AbstractUserService([Backend backendService]) : super(null, backendService);
+  AbstractUserService([Backend backendService]) : super(null, backendService) {
+    this._userStream = streamController.stream;
+    _userStream.listen((user) => latestUser = user);
+  ***REMOVED***
 
-  Future<User> updateUsername(String name);
+  updateUsername(String name);
+
+  Stream<User> get user {
+    var streamController = StreamController<User>();
+    if (latestUser != null) streamController.add(latestUser);
+    streamController
+        .addStream(_userStream)
+        .then((_) => streamController.close());
+    return streamController.stream;
+  ***REMOVED***
 ***REMOVED***
 
 class UserService extends AbstractUserService {
@@ -31,55 +43,47 @@ class UserService extends AbstractUserService {
 
   UserService(this.storageService, this.firebase, [Backend backend])
       : super(backend) {
-    user = getOrCreateUser();
-    userAuthCreds = generateAuth(user);
+    getOrCreateUser();
+    generateUserHeaders();
 
     this.userService = this;
-
-    userHeaders = userAuthCreds
-        .asStream()
-        .map((creds) => {"Authorization": "Basic $creds"***REMOVED***)
-        .first;
   ***REMOVED***
 
-  Future<User> getOrCreateUser() async {
-    var foundUser = await storageService.loadUser();
-    if (foundUser != null)
-      return verifyUser(foundUser).catchError((e) {
-        ErrorService.handleError(e,
+  getOrCreateUser() async {
+    var user = await storageService.loadUser();
+    if (user != null)
+      await verifyUser(user).catchError((e, s) async {
+        ErrorService.handleError(e, s,
             additional: 'Ein neuer Benutzer wird angelegt.');
-        return createNewUser();
+        user = await createNewUser();
       ***REMOVED***, test: (e) => e is InvalidUserException);
     else
-      return await createNewUser();
+      user = await createNewUser();
+    streamController.add(user);
   ***REMOVED***
 
   Future<User> createNewUser() async {
     String secret = await generateSecret();
     String firebaseKey = await firebase.token;
-    //Color color = _randomColor();
-    //User user = User(0, null, color);
+    final user = User(0, null, _randomColor());
 
-    Login login = Login(this.internal_user_object, secret, firebaseKey);
+    Login login = Login(user, secret, firebaseKey);
     var response;
     try {
       response = await post('service/benutzer/neu', jsonEncode(login.toJson()),
           appAuth: true);
-    ***REMOVED*** catch (e) {
-      ErrorService.handleError(e);
+    ***REMOVED*** catch (e, s) {
+      ErrorService.handleError(e, s,
+          additional: 'Anlegen eine*r neuen Benutzer*in ist gescheitert.');
       throw e;
     ***REMOVED***
     var userFromServer = User.fromJSON(response.body);
 
-    internal_user_object.setUserData(userFromServer);
-    this.user_stream.sink.add(internal_user_object);
-
     storageService.saveUser(userFromServer);
-
-    return internal_user_object;
+    return userFromServer;
   ***REMOVED***
 
-  Future<User> verifyUser(User user) async {
+  verifyUser(User user) async {
     String secret = await storageService.loadSecret();
     String firebaseKey = await firebase.token;
 
@@ -89,16 +93,14 @@ class UserService extends AbstractUserService {
       response = await post(
           'service/benutzer/authentifiziere', jsonEncode(login.toJson()),
           appAuth: true);
-    ***REMOVED*** catch (e) {
-      ErrorService.handleError(e);
-      throw e;
+    ***REMOVED*** catch (e, s) {
+      ErrorService.handleError(e, s,
+          additional: 'Benutzer*indaten konnte nicht überprüft werden.');
+      rethrow;
     ***REMOVED***
     bool authenticated = response.body;
-    if (authenticated) {
-      this.internal_user_object = user;
-      this.user_stream.sink.add(user);
-      return user;
-    ***REMOVED***
+    if (authenticated)
+      return;
     else
       throw InvalidUserException();
   ***REMOVED***
@@ -106,30 +108,29 @@ class UserService extends AbstractUserService {
   Future<String> generateSecret() async {
     String secret = Uuid().v1();
     await storageService.saveSecret(secret);
+    print('Secret gespeichert: $secret');
     return secret;
   ***REMOVED***
 
-  Future<String> generateAuth(Future<User> user) async {
-    var userId = (await user).id;
-    var secret = await storageService.loadSecret();
-    List<int> input = '$userId:$secret'.codeUnits;
-    var auth = Future.value(Base64Encoder().convert(input));
-    return auth;
+  generateUserHeaders() async {
+    userHeaders = _userStream.first.then((user) async {
+      final secret = await storageService.loadSecret();
+      final creds = '${user.id***REMOVED***:$secret';
+      final creds64 = Base64Encoder().convert(creds.codeUnits);
+      return {"Authorization": "Basic $creds64"***REMOVED***
+    ***REMOVED***);
   ***REMOVED***
 
-  Future<User> updateUsername(String name) async {
+  updateUsername(String name) async {
     try {
-      var response =
-          await post('service/benutzer/aktualisiereName', name);
+      var response = await post('service/benutzer/aktualisiereName', name);
 
       var userFromServer = User.fromJSON(response.body);
-      internal_user_object.setUserData(userFromServer);
-      storageService.saveUser(userFromServer);
-      this.user_stream.sink.add(userFromServer);
-
-      return internal_user_object;
-    ***REMOVED*** catch (e) {
-      ErrorService.handleError(e);
+      await storageService.saveUser(userFromServer);
+      this.streamController.add(userFromServer);
+    ***REMOVED*** catch (e, s) {
+      ErrorService.handleError(e, s,
+          additional: 'Benutzer*in-Name konnte nicht geändert werden.');
       throw e;
     ***REMOVED***
   ***REMOVED***
@@ -145,13 +146,12 @@ class InvalidUserException implements Exception {***REMOVED***
 
 class DemoUserService extends AbstractUserService {
   DemoUserService() : super(DemoBackend()) {
-    user = Future.value(User(1, 'Ich', Colors.red));
-    userAuthCreds = Future.value('userCreds');
-
+    _userStream = streamController.stream;
+    streamController.add(User(13, null, Colors.red));
+    userHeaders = Future.value({'Authorization': 'userCreds'***REMOVED***);
   ***REMOVED***
 
-  Future<User> updateUsername(String name) {
-    user = Future.value(User(1, name, Colors.red));
-    return user;
+  updateUsername(String name) {
+    streamController.add(User(13, name, Colors.red));
   ***REMOVED***
 ***REMOVED***

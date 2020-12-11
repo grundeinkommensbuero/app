@@ -208,6 +208,15 @@ void main() async {
 
       expect(secret, '123789456');
     ***REMOVED***);
+
+    test('waits until stored', () async {
+      Future.delayed(Duration(seconds: 1))
+          .then((value) => _prefs.setString('secret', '123789456'));
+
+      var secret = await service.loadSecret();
+
+      expect(secret, '123789456');
+    ***REMOVED***);
   ***REMOVED***);
 
   group('costum push token', () {
@@ -277,7 +286,6 @@ void main() async {
     ***REMOVED***);
   ***REMOVED***);
 
-
   test('clearAllPreferences clears whole storage', () async {
     _prefs.setString('user', '{"id":11,"name":"Karl Marx","color":4294198070***REMOVED***');
     _prefs.setStringList('actionlist', ['1', '2', '3']);
@@ -293,7 +301,6 @@ void main() async {
     expect(_prefs.getBool('anyBool'), null);
     expect(_prefs.getDouble('anyDouble'), null);
   ***REMOVED***);
-
 
   tearDown(() async {
     await service.clearAllPreferences();

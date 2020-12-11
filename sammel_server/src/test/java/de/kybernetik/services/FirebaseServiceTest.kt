@@ -4,7 +4,7 @@ import TestdatenVorrat.Companion.karl
 import TestdatenVorrat.Companion.rosa
 import TestdatenVorrat.Companion.terminMitTeilnehmerOhneDetails
 import com.google.firebase.messaging.BatchResponse
-import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.Message
 import com.google.firebase.messaging.MulticastMessage
 import com.google.firebase.messaging.Notification
 import com.nhaarman.mockitokotlin2.*
@@ -19,6 +19,7 @@ import org.mockito.junit.MockitoRule
 import de.kybernetik.rest.PushNotificationDto
 import de.kybernetik.services.FirebaseService.MissingMessageTarget
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class FirebaseServiceTest {
@@ -45,28 +46,24 @@ class FirebaseServiceTest {
 
     @Test
     fun `sendePushNachrichtAnEmpfaenger schickt eine Nachricht an jeden Empfaeger`() {
-        val firebaseMock = mock<FirebaseMessaging>()
-        whenever(firebase.instance()).thenReturn(firebaseMock)
         val reponseMock = mock<BatchResponse>()
-        whenever(firebaseMock.sendMulticast(any())).thenReturn(reponseMock)
+        whenever(firebase.sendMulticast(any())).thenReturn(reponseMock)
         whenever(reponseMock.successCount).thenReturn(50)
 
         service.sendePushNachrichtAnEmpfaenger(PushNotificationDto(), emptyMap(), (1..50).map { Int.toString() ***REMOVED***)
 
-        verify(firebaseMock, times(1)).sendMulticast(any())
+        verify(firebase, times(1)).sendMulticast(any())
     ***REMOVED***
 
     @Test
     fun `sendePushNachrichtAnEmpfaenger akzeptiert leere Daten`() {
-        val firebaseMock = mock<FirebaseMessaging>()
-        whenever(firebase.instance()).thenReturn(firebaseMock)
         val reponseMock = mock<BatchResponse>()
-        whenever(firebaseMock.sendMulticast(any())).thenReturn(reponseMock)
+        whenever(firebase.sendMulticast(any())).thenReturn(reponseMock)
         whenever(reponseMock.successCount).thenReturn(50)
 
         service.sendePushNachrichtAnEmpfaenger(PushNotificationDto(), null, (1..50).map { Int.toString() ***REMOVED***)
 
-        verify(firebaseMock, times(1)).sendMulticast(any())
+        verify(firebase, times(1)).sendMulticast(any())
     ***REMOVED***
 
     @Test(expected = MissingMessageTarget::class)
@@ -75,49 +72,38 @@ class FirebaseServiceTest {
 
     @Test
     fun `sendePushNachrichtAnTopic schickt eine Nachricht ab`() {
-        val firebaseMock = mock<FirebaseMessaging>()
-        whenever(firebase.instance()).thenReturn(firebaseMock)
-
         service.sendePushNachrichtAnTopic(PushNotificationDto(), emptyMap(), "topic")
 
-        verify(firebaseMock, times(1)).send(any())
+        verify(firebase, times(1)).send(any())
     ***REMOVED***
 
     @Test
     fun `sendeNachrichtAnAlle schickt eine Nachricht ab`() {
-        val firebaseMock = mock<FirebaseMessaging>()
-        whenever(firebase.instance()).thenReturn(firebaseMock)
-
         service.sendeNachrichtAnAlle(PushNotificationDto(), emptyMap())
 
-        verify(firebaseMock, times(1)).send(any())
+        verify(firebase, times(1)).send(any())
     ***REMOVED***
 
     @Test
     fun `informiereUeberAbsage ersetzt leeren Namen mit Jemand`() {
 
-        val firebaseMock = mock<FirebaseMessaging>()
-        whenever(firebase.instance()).thenReturn(firebaseMock)
         val reponseMock = mock<BatchResponse>()
-        whenever(firebaseMock.sendMulticast(any())).thenReturn(reponseMock)
+        whenever(firebase.sendMulticast(any())).thenReturn(reponseMock)
         whenever(reponseMock.successCount).thenReturn(50)
         whenever(benutzerDao.getFirebaseKeys(any())).thenReturn(listOf("firebaseKarl", "firebaseBini"))
 
         service.informiereUeberAbsage(Benutzer(13, "", 3), terminMitTeilnehmerOhneDetails())
 
         val message = argumentCaptor<MulticastMessage>()
-        verify(firebaseMock, times(2)).sendMulticast(message.capture())
+        verify(firebase, times(2)).sendMulticast(message.capture())
         assertEquals("Jemand nimmt nicht mehr Teil an deiner Aktion vom 22.10.", getMulticastBody(message.firstValue))
         assertEquals("Jemand hat die Aktion vom 22.10. verlassen, an der du teilnimmst", getMulticastBody(message.lastValue))
     ***REMOVED***
 
     @Test
     fun `informiereUeberTeilnahme informiert alte und neue Teilnehmer*innen extra`() {
-
-        val firebaseMock = mock<FirebaseMessaging>()
-        whenever(firebase.instance()).thenReturn(firebaseMock)
         val reponseMock = mock<BatchResponse>()
-        whenever(firebaseMock.sendMulticast(any())).thenReturn(reponseMock)
+        whenever(firebase.sendMulticast(any())).thenReturn(reponseMock)
         whenever(reponseMock.successCount).thenReturn(50)
         whenever(benutzerDao.getFirebaseKeys(any())).thenReturn(listOf("firebaseKarl", "firebaseRosa", "firebaseBini"))
 
@@ -126,7 +112,7 @@ class FirebaseServiceTest {
         service.informiereUeberTeilnahme(Benutzer(13, "Bini Adamczak", 3), aktion)
 
         val message = argumentCaptor<MulticastMessage>()
-        verify(firebaseMock, times(2)).sendMulticast(message.capture())
+        verify(firebase, times(2)).sendMulticast(message.capture())
 
         assertEquals("Verstärkung für eure Aktion", getMulticastTitle(message.lastValue))
         assertEquals("Bini Adamczak ist der Aktion vom 22.10. beigetreten, an der du teilnimmst", getMulticastBody(message.lastValue))
@@ -137,11 +123,8 @@ class FirebaseServiceTest {
 
     @Test
     fun `informiereUeberAbsage informiert Ersteller*in extra`() {
-
-        val firebaseMock = mock<FirebaseMessaging>()
-        whenever(firebase.instance()).thenReturn(firebaseMock)
         val reponseMock = mock<BatchResponse>()
-        whenever(firebaseMock.sendMulticast(any())).thenReturn(reponseMock)
+        whenever(firebase.sendMulticast(any())).thenReturn(reponseMock)
         whenever(reponseMock.successCount).thenReturn(50)
         whenever(benutzerDao.getFirebaseKeys(any())).thenReturn(listOf("firebaseKarl", "firebaseBini"))
 
@@ -152,7 +135,7 @@ class FirebaseServiceTest {
         service.informiereUeberAbsage(bini, aktion)
 
         val message = argumentCaptor<MulticastMessage>()
-        verify(firebaseMock, times(2)).sendMulticast(message.capture())
+        verify(firebase, times(2)).sendMulticast(message.capture())
 
         assertEquals("Absage bei deiner Aktion", getMulticastTitle(message.firstValue))
         assertEquals("Bini Adamczak nimmt nicht mehr Teil an deiner Aktion vom 22.10.", getMulticastBody(message.firstValue))
@@ -163,11 +146,8 @@ class FirebaseServiceTest {
 
     @Test
     fun `informiereUeberAbsage informiert verbleibende Teilnehmer*innen extra`() {
-
-        val firebaseMock = mock<FirebaseMessaging>()
-        whenever(firebase.instance()).thenReturn(firebaseMock)
         val reponseMock = mock<BatchResponse>()
-        whenever(firebaseMock.sendMulticast(any())).thenReturn(reponseMock)
+        whenever(firebase.sendMulticast(any())).thenReturn(reponseMock)
         whenever(reponseMock.successCount).thenReturn(50)
         whenever(benutzerDao.getFirebaseKeys(any())).thenReturn(listOf("firebaseKarl", "firebaseRosa"))
 
@@ -178,13 +158,23 @@ class FirebaseServiceTest {
         service.informiereUeberAbsage(bini, aktion)
 
         val message = argumentCaptor<MulticastMessage>()
-        verify(firebaseMock, times(2)).sendMulticast(message.capture())
+        verify(firebase, times(2)).sendMulticast(message.capture())
 
         assertEquals("Absage bei eurer Aktion", getMulticastTitle(message.lastValue))
         assertEquals("Bini Adamczak hat die Aktion vom 22.10. verlassen, an der du teilnimmst", getMulticastBody(message.lastValue))
         assertEquals((getMulticastData(message.lastValue).size), 1)
         assertEquals(getMulticastData(message.lastValue)["action"], "2")
         assertTrue(getMulticastTokens(message.lastValue).containsAll(listOf("firebaseRosa")))
+    ***REMOVED***
+
+    @Test
+    fun `Firebase stubbed FirebaseMessaging wenn keine Konfigurationsdatei existiert`() {
+        val firebase4real = Firebase()
+
+        val message = mock<Message>()
+        assertEquals(firebase4real.send(message), "")
+
+        assertNull(firebase4real.sendMulticast(null))
     ***REMOVED***
 
     fun getMulticastTitle(multicast: MulticastMessage): String {

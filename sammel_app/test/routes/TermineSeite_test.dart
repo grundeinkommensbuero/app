@@ -70,7 +70,7 @@ void main() {
       var me = karl();
 
       var userService = UserServiceMock();
-      when(userService.user).thenAnswer((realInvocation) async => me);
+      when(userService.user).thenAnswer((_) => Stream.value(me));
       var termineSeiteWidget = MultiProvider(
           providers: [
             Provider<AbstractTermineService>.value(value: _termineService),
@@ -199,7 +199,7 @@ void main() {
 
     setUp(() {
       var userService = UserServiceMock();
-      when(userService.user).thenAnswer((realInvocation) async => me);
+      when(userService.user).thenAnswer((_) => Stream.value(me));
 
       termineSeiteWidget = MultiProvider(
           providers: [
@@ -628,7 +628,7 @@ void main() {
           LatLng(52.49653, 13.43762));
 
       when(_termineService.createAction(any, any))
-          .thenThrow(RestFehler('message'));
+          .thenThrow(RestFehler('Fehlerbeschreibung. '));
 
       await tester.tap(find.byKey(Key('action editor finish button')));
       await tester.pumpAndSettle();
@@ -636,7 +636,7 @@ void main() {
       expect(find.byKey(Key('error dialog')), findsOneWidget);
       expect(
           find.text(
-              'message\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com'),
+              'Fehlerbeschreibung. Aktion konnte nicht erzeugt werden. \nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com'),
           findsOneWidget);
     ***REMOVED***);
   ***REMOVED***);
@@ -1286,8 +1286,8 @@ void main() {
       state.createAndAddAction(initialAction);
       await tester.pumpAndSettle();
 
-      expect(state.termine.map((action) => action.id),
-          containsAll([1, 2, 3, 4]));
+      expect(
+          state.termine.map((action) => action.id), containsAll([1, 2, 3, 4]));
     ***REMOVED***);
 
     testUI('sorts list', (tester) async {
@@ -1302,8 +1302,8 @@ void main() {
       state.createAndAddAction(initialAction);
       await tester.pumpAndSettle();
 
-      expect(state.termine.map((action) => action.id),
-          containsAll([4, 1, 2, 3]));
+      expect(
+          state.termine.map((action) => action.id), containsAll([4, 1, 2, 3]));
     ***REMOVED***);
 
     testUI('marks action as own', (tester) async {

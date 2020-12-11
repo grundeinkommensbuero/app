@@ -20,7 +20,7 @@ open class ListLocationDao {
         val listlocations = entityManager
                 .createQuery(query, ListLocation::class.java)
                 .resultList
-        LOG.debug("Listenorte gefunden: ${listlocations***REMOVED***")
+        LOG.debug("Listenorte gefunden: ${listlocations.map { it.name ***REMOVED******REMOVED***")
         return listlocations
     ***REMOVED***
 ***REMOVED***
