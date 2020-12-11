@@ -14,6 +14,7 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import javax.persistence.EntityManager
+import javax.persistence.Query
 import javax.persistence.TypedQuery
 import javax.ws.rs.core.SecurityContext
 import kotlin.test.assertEquals
@@ -29,8 +30,10 @@ class BenutzerDaoTest {
 
     @Mock
     private lateinit var entityManager: EntityManager
+
     @Mock
     private lateinit var typedBenutzerQuery: TypedQuery<Benutzer>
+
     @Mock
     private lateinit var typedStringQuery: TypedQuery<String>
 
@@ -42,9 +45,9 @@ class BenutzerDaoTest {
 
     @Test
     fun `getBenutzer liefert Ergebnis aus DB`() {
-        val karl = Benutzer(11L, "Karl Marx",0)
+        val karl = Benutzer(11L, "Karl Marx", 0)
         whenever(entityManager.find(Benutzer::class.java, 11L))
-                .thenReturn(karl)
+            .thenReturn(karl)
 
         val ergebnis = dao.getBenutzer(11L)
 
@@ -54,11 +57,11 @@ class BenutzerDaoTest {
     @Test
     fun `benutzernameExistiert gibt true zurueck, wenn mindestens ein Benutzer mit dem Namen existiert`() {
         whenever(entityManager.createQuery(anyString(), any<Class<Benutzer>>()))
-                .thenReturn(typedBenutzerQuery)
+            .thenReturn(typedBenutzerQuery)
         whenever(typedBenutzerQuery.setParameter("name", "name"))
-                .thenReturn(typedBenutzerQuery)
+            .thenReturn(typedBenutzerQuery)
         whenever(typedBenutzerQuery.resultList)
-                .thenReturn(listOf(Benutzer()))
+            .thenReturn(listOf(Benutzer()))
 
         val ergebnis = dao.benutzernameExistiert("name")
 
@@ -68,11 +71,11 @@ class BenutzerDaoTest {
     @Test
     fun `benutzernameExistiert gibt false zurueck, wenn kein Benutzer mit dem Namen existiert`() {
         whenever(entityManager.createQuery(anyString(), any<Class<Benutzer>>()))
-                .thenReturn(typedBenutzerQuery)
+            .thenReturn(typedBenutzerQuery)
         whenever(typedBenutzerQuery.setParameter(anyString(), anyOrNull()))
-                .thenReturn(typedBenutzerQuery)
+            .thenReturn(typedBenutzerQuery)
         whenever(typedBenutzerQuery.resultList)
-                .thenReturn(emptyList())
+            .thenReturn(emptyList())
 
         val ergebnis = dao.benutzernameExistiert("name")
 
@@ -80,14 +83,29 @@ class BenutzerDaoTest {
     }
 
     @Test
+    fun `getFirebaseKeys gibt leere Liste fuer keine Benutzer zurueck`() {
+        whenever(entityManager.createQuery(anyString(), any<Class<String>>()))
+            .thenReturn(typedStringQuery)
+        whenever(typedStringQuery.setParameter(anyString(), anyList<String>()))
+            .thenReturn(typedStringQuery)
+        whenever(typedStringQuery.resultList)
+            .thenReturn(listOf("key1", "key2"))
+
+        val ergebnis: List<String> = dao.getFirebaseKeys(emptyList())
+
+        verify(typedStringQuery, never()).setParameter(anyString(), any())
+        assertTrue(ergebnis.isEmpty())
+    }
+
+    @Test
     fun `getFirebaseKeys reicht Liste von Keys weiter`() {
         val benutzer = listOf(karl(), rosa())
         whenever(entityManager.createQuery(anyString(), any<Class<String>>()))
-                .thenReturn(typedStringQuery)
+            .thenReturn(typedStringQuery)
         whenever(typedStringQuery.setParameter(anyString(), anyList<String>()))
-                .thenReturn(typedStringQuery)
+            .thenReturn(typedStringQuery)
         whenever(typedStringQuery.resultList)
-                .thenReturn(listOf("key1", "key2"))
+            .thenReturn(listOf("key1", "key2"))
 
         val ergebnis: List<String> = dao.getFirebaseKeys(benutzer)
 
@@ -100,13 +118,13 @@ class BenutzerDaoTest {
 
     @Test
     fun `getFirebaseKeys akzeptiert leeres Suchergebnis`() {
-        val benutzer = emptyList<Benutzer>()
+        val benutzer = listOf(karl())
         whenever(entityManager.createQuery(anyString(), any<Class<String>>()))
-                .thenReturn(typedStringQuery)
+            .thenReturn(typedStringQuery)
         whenever(typedStringQuery.setParameter(anyString(), anyList<String>()))
-                .thenReturn(typedStringQuery)
+            .thenReturn(typedStringQuery)
         whenever(typedStringQuery.resultList)
-                .thenReturn(emptyList())
+            .thenReturn(emptyList())
 
         val ergebnis: List<String> = dao.getFirebaseKeys(benutzer)
 
@@ -115,16 +133,33 @@ class BenutzerDaoTest {
     }
 
     @Test
-    fun `getBenutzerOhneFirebase reicht Liste von Benutzern weiter`() {
-        val benutzer = listOf(karl(), rosa())
+    fun `getBenutzerOhneFirebase gibt leere Liste fuer keine Benutzer zurueck`() {
         whenever(entityManager.createQuery(anyString(), any<Class<Benutzer>>()))
-                .thenReturn(typedBenutzerQuery)
+            .thenReturn(typedBenutzerQuery)
         whenever(typedBenutzerQuery.setParameter(anyString(), anyList<String>()))
-                .thenReturn(typedBenutzerQuery)
+            .thenReturn(typedBenutzerQuery)
         val karl = karl()
         val rosa = rosa()
         whenever(typedBenutzerQuery.resultList)
-                .thenReturn(listOf(karl, rosa))
+            .thenReturn(listOf(karl, rosa))
+
+        val ergebnis: List<Benutzer> = dao.getBenutzerOhneFirebase(emptyList())
+
+        verify(typedStringQuery, never()).setParameter(anyString(), any())
+        assertTrue(ergebnis.isEmpty())
+    }
+
+    @Test
+    fun `getBenutzerOhneFirebase reicht Liste von Benutzern weiter`() {
+        val benutzer = listOf(karl(), rosa())
+        whenever(entityManager.createQuery(anyString(), any<Class<Benutzer>>()))
+            .thenReturn(typedBenutzerQuery)
+        whenever(typedBenutzerQuery.setParameter(anyString(), anyList<String>()))
+            .thenReturn(typedBenutzerQuery)
+        val karl = karl()
+        val rosa = rosa()
+        whenever(typedBenutzerQuery.resultList)
+            .thenReturn(listOf(karl, rosa))
 
         val ergebnis: List<Benutzer> = dao.getBenutzerOhneFirebase(benutzer)
 
@@ -137,13 +172,13 @@ class BenutzerDaoTest {
 
     @Test
     fun `getBenutzerOhneFirebase akzeptiert leeres Suchergebnis`() {
-        val benutzer = emptyList<Benutzer>()
+        val benutzer = listOf(karl())
         whenever(entityManager.createQuery(anyString(), any<Class<String>>()))
-                .thenReturn(typedStringQuery)
+            .thenReturn(typedStringQuery)
         whenever(typedStringQuery.setParameter(anyString(), anyList<String>()))
-                .thenReturn(typedStringQuery)
+            .thenReturn(typedStringQuery)
         whenever(typedStringQuery.resultList)
-                .thenReturn(emptyList())
+            .thenReturn(emptyList())
 
         val ergebnis: List<Benutzer> = dao.getBenutzerOhneFirebase(benutzer)
 
@@ -169,5 +204,19 @@ class BenutzerDaoTest {
         dao.aktualisiereBenutzername(1L, "neuer Name")
 
         assertEquals("neuer Name", karl.name)
+    }
+
+    @Test
+    fun `gibNutzerNamedRolle vergibt Rolle 'named' an Benutzer`() {
+        whenever(entityManager.createNativeQuery(anyString())).thenReturn(typedStringQuery)
+        whenever(typedStringQuery.setParameter(anyString(), any())).thenReturn(typedStringQuery)
+
+        dao.gibNutzerNamedRolle(karl())
+
+        verify(entityManager, times(1))
+            .createNativeQuery("insert into Roles (id, role) values (:id, :rolle)")
+        verify(typedStringQuery, times(1)).setParameter("id", 11L)
+        verify(typedStringQuery, times(1)).setParameter("rolle", "named")
+        verify(typedStringQuery, times(1)).executeUpdate()
     }
 }

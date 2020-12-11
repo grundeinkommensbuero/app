@@ -25,8 +25,9 @@ class StammdatenService extends AbstractStammdatenService {
           .map((jsonOrt) => Ort.fromJson(jsonOrt))
           .toList();
       return orte;
-    } catch (e) {
-      ErrorService.handleError(e);
+    } catch (e, s) {
+      ErrorService.handleError(e, s,
+          additional: 'Orte konnten nicht geladen werden.');
       return [];
     }
   }

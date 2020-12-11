@@ -106,8 +106,7 @@ class ActionExportRestResourceTest {
         val description = GeoJsonAction.generateJsonDescription(terminOhneTeilnehmerMitDetails())
         assertEquals(description, "Kommt zahlreich\n" +
                 "\n" +
-                "am 22.10.2019\n" +
-                "ab 12:00 Uhr bis 03:00 Uhr\n" +
+                "am 22.10.2019 ab 12:00 Uhr bis 15:00 Uhr\n" +
                 "Treffpunkt: Weltzeituhr")
     }
 
@@ -118,8 +117,7 @@ class ActionExportRestResourceTest {
         val description = GeoJsonAction.generateJsonDescription(action)
         assertEquals(description, "Zu dieser Aktion gibt es keine Beschreibung\n" +
                 "\n" +
-                "am 22.10.2019\n" +
-                "ab 12:00 Uhr bis 03:00 Uhr\n" +
+                "am 22.10.2019 ab 12:00 Uhr bis 15:00 Uhr\n" +
                 "Treffpunkt: Weltzeituhr")
     }
 
@@ -140,8 +138,7 @@ class ActionExportRestResourceTest {
         val description = GeoJsonAction.generateJsonDescription(action)
         assertEquals(description, "Kommt zahlreich\n" +
                 "\n" +
-                "am 22.10.2019\n" +
-                "ab 12:00 Uhr\n" +
+                "am 22.10.2019 ab 12:00 Uhr\n" +
                 "Treffpunkt: Weltzeituhr")
     }
 }

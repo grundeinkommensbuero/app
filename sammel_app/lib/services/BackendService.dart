@@ -16,7 +16,6 @@ class BackendService {
   static Map<String, String> appHeaders = {
     'Authorization': 'Basic ${AbstractUserService.appAuth}'
   };
-  Future<Map<String, String>> userHeaders;
 
   BackendService.userService();
 
@@ -27,13 +26,6 @@ class BackendService {
     if (!(this is AbstractUserService)) {
       if (userService == null) throw ArgumentError.notNull('userService');
       this.userService = userService;
-
-      userHeaders = this
-          .userService
-          .userAuthCreds
-          .asStream()
-          .map((creds) => {"Authorization": "Basic $creds"})
-          .first;
     }
   }
 
@@ -82,7 +74,7 @@ class BackendService {
     if (appAuth != null && appAuth)
       return Future.value(appHeaders);
     else
-      return userHeaders.timeout(Duration(seconds: 10),
+      return userService.userHeaders.timeout(Duration(seconds: 10),
           onTimeout: () => throw NoUserAuthException);
   }
 }
@@ -97,7 +89,7 @@ class Backend {
   static HttpClient client = HttpClient(context: clientContext);
 
   static final Map<String, String> headers = {
-    HttpHeaders.contentTypeHeader: "application/json",
+    HttpHeaders.contentTypeHeader: "application/json; charset=utf-8",
     HttpHeaders.acceptHeader: "*/*",
   };
 
@@ -118,7 +110,7 @@ class Backend {
     // https://stackoverflow.com/questions/54104685/flutter-add-self-signed-certificate-from-asset-folder
     ByteData data = await rootBundle.load(rootCertificate);
     clientContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
-    if(!testMode) {
+    if (!testMode) {
       ByteData data = await rootBundle.load(localCertificate);
       clientContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
     }
@@ -134,7 +126,6 @@ class Backend {
     return await client
         .getUrl(uri)
         .then((HttpClientRequest request) {
-          request.headers.contentType = ContentType.json;
           Backend.headers
               .forEach((key, value) => request.headers.add(key, value));
           headers.forEach((key, value) => request.headers.add(key, value));
@@ -158,7 +149,6 @@ class Backend {
     return await client
         .postUrl(Uri.https('$host:$port', url, parameters))
         .then((HttpClientRequest request) {
-          request.headers.contentType = ContentType.json;
           Backend.headers
               .forEach((key, value) => request.headers.add(key, value));
           headers.forEach((key, value) => request.headers.add(key, value));
@@ -184,7 +174,6 @@ class Backend {
     return await client
         .deleteUrl(Uri.https('$host:$port', url))
         .then((HttpClientRequest request) {
-          request.headers.contentType = ContentType.json;
           Backend.headers
               .forEach((key, value) => request.headers.add(key, value));
           headers.forEach((key, value) => request.headers.add(key, value));

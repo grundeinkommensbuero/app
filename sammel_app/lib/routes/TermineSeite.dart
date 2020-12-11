@@ -36,6 +36,7 @@ class TermineSeiteState extends State<TermineSeite>
   static var filterKey = GlobalKey();
   static AbstractTermineService termineService;
   static StorageService storageService;
+  static ChatMessageService chatMessageService;
   static final TextStyle style = TextStyle(
     color: Color.fromARGB(255, 129, 28, 98),
     fontSize: 15.0,
@@ -122,10 +123,10 @@ class TermineSeiteState extends State<TermineSeite>
           BottomNavigationBarItem(
               icon: Icon(Icons.view_list,
                   key: Key('list view navigation button')),
-              title: Text('Liste')),
+              label: 'Liste'),
           BottomNavigationBarItem(
               icon: Icon(Icons.map, key: Key('map view navigation button')),
-              title: Text('Karte'))
+              label: 'Karte')
         ],
       ),
     );
@@ -146,10 +147,9 @@ class TermineSeiteState extends State<TermineSeite>
   // und auch nicht im initState(), weil da InheritedWidgets nicht angefasst werden können
   // und didChangeDependencies() wird mehrfach aufgerufen
   void intialize(BuildContext context) {
-//    Provider.of<StorageService>(context).clearAllPreferences();
-
     termineService = Provider.of<AbstractTermineService>(context);
     storageService = Provider.of<StorageService>(context);
+    chatMessageService = Provider.of<ChatMessageService>(context);
     filterWidget = FilterWidget(ladeTermine, key: filterKey);
 
     storageService
@@ -165,7 +165,7 @@ class TermineSeiteState extends State<TermineSeite>
 
     Provider.of<AbstractUserService>(context)
         .user
-        .then((user) => setState(() => me = user));
+        .listen((user) => setState(() => me = user));
 
     _initialized = true;
   }
@@ -175,7 +175,8 @@ class TermineSeiteState extends State<TermineSeite>
       setState(() {
         this.termine = termine..sort(Termin.compareByStart);
       });
-    }).catchError((e) => ErrorService.handleError(e));
+    }).catchError((e, s) => ErrorService.handleError(e, s,
+        additional: "Aktionen konnten nicht geladen werden."));
   }
 
   void showRestError(RestFehler e) {
@@ -263,15 +264,15 @@ class TermineSeiteState extends State<TermineSeite>
 
       if (command == TerminDetailsCommand.FOCUS)
         showActionOnMap(terminMitDetails);
-    } catch (e) {
-      ErrorService.handleError(e);
+    } catch (e, s) {
+      ErrorService.handleError(e, s,
+          additional: 'Aktionen konnten nicht geladen werden.');
     }
   }
 
-  void openChatWindow(Termin termin) {
-    String channel_id = '${termin.id}';
-    Channel message_channel = Provider.of<ChatMessageService>(context)
-        .get_simple_message_channel(channel_id);
+  Future<void> openChatWindow(Termin termin) async {
+    Channel message_channel =
+        await chatMessageService.getActionChannel(termin.id);
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -382,8 +383,9 @@ class TermineSeiteState extends State<TermineSeite>
       String token = await storageService.loadActionToken(editedAction.id);
       await termineService.saveAction(editedAction, token);
       setState(() => updateAction(editedAction, false));
-    } catch (error) {
-      ErrorService.handleError(error);
+    } catch (e, s) {
+      ErrorService.handleError(e, s,
+          additional: 'Aktion konnte nicht gespeichert werden.');
     }
   }
 
@@ -423,8 +425,9 @@ class TermineSeiteState extends State<TermineSeite>
           ..add(actionWithId)
           ..sort(Termin.compareByStart);
       });
-    } catch (error) {
-      ErrorService.handleError(error);
+    } catch (e, s) {
+      ErrorService.handleError(e, s,
+          additional: 'Aktion konnte nicht erzeugt werden. ');
     }
   }
 
@@ -443,8 +446,7 @@ class TermineSeiteState extends State<TermineSeite>
   }
 
   Future<void> joinAction(Termin termin) async {
-    Provider.of<ChatMessageService>(context)
-        .get_simple_message_channel("channel:${termin.id}");
+    chatMessageService.createActionChannel(termin.id);
     await termineService.joinAction(termin.id);
     setState(() {
       termine.firstWhere((t) => t.id == termin.id).participants.add(me);

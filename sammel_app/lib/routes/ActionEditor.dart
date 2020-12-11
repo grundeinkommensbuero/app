@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
+import 'package:quiver/strings.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
@@ -14,6 +15,7 @@ import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/LocationPicker.dart';
 import 'package:sammel_app/shared/showMultipleDatePicker.dart';
 import 'package:sammel_app/shared/showTimeRangePicker.dart';
+import 'package:sammel_app/shared/showUsernameDialog.dart';
 
 import 'VenueDialog.dart';
 
@@ -80,7 +82,7 @@ class ActionEditor extends StatefulWidget {
 }
 
 class ActionEditorState extends State<ActionEditor> {
-  ActionData action = ActionData.testDaten();
+  ActionData action = ActionData();
 
   ActionEditorState(Termin initAction) : super() {
     if (initAction != null) assign_initial_termin(initAction);
@@ -615,7 +617,7 @@ class ActionEditorState extends State<ActionEditor> {
         if (ChronoHelfer.isTimeOfDayBefore(this.action.bis, this.action.von)) {
           end = end.add(Duration(days: 1));
         }
-        User me = await Provider.of<AbstractUserService>(context).user;
+        User me = await Provider.of<AbstractUserService>(context).user.first;
         termine.add(Termin(
             widget.initAction?.id,
             begin,
@@ -639,6 +641,12 @@ class ActionEditorState extends State<ActionEditor> {
       validateAllInput();
     });
     if (action.validated['all'] == ValidationState.ok) {
+      var name =
+          (await Provider.of<AbstractUserService>(context).user.first).name;
+      if (isBlank(name)) {
+        var name = await showUsernameDialog(context: context);
+        if (name == null) return;
+      }
       List<Termin> termine = await generateActions();
       if (termine != null) {
         widget.onFinish(termine);

@@ -22,6 +22,9 @@ open class FirebaseService {
     @EJB
     private lateinit var benutzerDao: BenutzerDao
 
+    @EJB
+    private lateinit var firebase: Firebase
+
     open fun sendePushNachrichtAnEmpfaenger(notification: PushNotificationDto?, data: Map<String, String>?, empfaenger: List<String>) {
         LOG.debug("Sende Nachricht $notification/$data an Empfänger $empfaenger")
 
@@ -36,14 +39,11 @@ open class FirebaseService {
                         if (notification == null) null
                         else Notification.builder().setTitle(notification.title).setBody(notification.body).build())
                 .putAllData(data ?: emptyMap())
-                .addAllTokens(empfaenger)
+                .addAllTokens(empfaenger.distinct())
                 .build()
-        val response = firebase.instance().sendMulticast(message)
-        LOG.debug("${response.successCount}  Nachrichten wurden erfolgreich an Firebase versendet")
+        val response = firebase.sendMulticast(message)
+        LOG.debug("${response?.successCount}  Nachrichten wurden erfolgreich an Firebase versendet")
     }
-
-    @EJB
-    private lateinit var firebase: Firebase
 
     open fun sendePushNachrichtAnTopic(notification: PushNotificationDto?, data: Map<String, String>?, topic: String) {
         LOG.debug("Sende Nachricht $notification/$data an Thema $topic")
@@ -60,7 +60,7 @@ open class FirebaseService {
                 .setTopic(topic)
                 .build()
 
-        val response = firebase.instance().send(message)
+        val response = firebase.send(message)
         LOG.debug("Erfolgreich Nachricht an Topic $topic gesendet: $response")
     }
 

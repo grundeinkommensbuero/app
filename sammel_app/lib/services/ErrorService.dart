@@ -18,28 +18,28 @@ class ErrorService {
         showErrorDialog(error[0], error[1], key: Key('error dialog')));
   }
 
-  static handleError(e, {String additional}) {
+  static handleError(error, StackTrace stacktrace, {String additional}) {
+    print('Fehler aufgetreten: $error\n$stacktrace');
     if (additional == null)
       additional = '';
     else
-      additional = '. $additional';
+      additional = '$additional';
 
-    if (e is AuthFehler) {
-      pushMessage(
-          'Fehler bei Nutzer-Authentifizierung',
-          '${e.message}$additional$EMAIL');
+    if (error is AuthFehler) {
+      pushMessage('Fehler bei Nutzer-Authentifizierung',
+          '${error.message}$additional$EMAIL');
       return;
     }
-    if (e is RestFehler) {
+    if (error is RestFehler) {
       pushMessage(
           'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten',
-          '${e.message}$additional$EMAIL');
+          '${error.message}$additional$EMAIL');
       return;
     }
-    if (e is WrongResponseFormatException) {
+    if (error is WrongResponseFormatException) {
       pushMessage(
-          'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten',
-          '${e.message}$additional$EMAIL');
+          'Bei der Kommunikation mit dem Server ist ein technischer Fehler aufgetreten',
+          '${error.message}$additional$EMAIL');
       return;
     }
     pushMessage('Ein Fehler ist aufgetreten', '$additional$EMAIL');
@@ -48,10 +48,8 @@ class ErrorService {
   static void pushMessage(String titel, String message) {
     if (_context == null)
       messageQueue.add([titel, message]);
-    else {
-      print('Ein Fehler ist aufgetreten: $titel - $message');
+    else
       showErrorDialog(titel, message, key: Key('error dialog'));
-    }
   }
 
   static Future showErrorDialog(String title, String message, {key: Key}) =>

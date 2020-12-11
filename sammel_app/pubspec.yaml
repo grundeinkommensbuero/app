@@ -15,6 +15,7 @@ version: 0.3.4+14
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
+  flutter: "^1.22.4"
 
 dependencies:
   flutter:
@@ -30,8 +31,6 @@ dependencies:
   http_server: ^0.9.8+3
   provider: ^3.1.0
   intl: ^0.16.0
-  flutter_datetime_picker: ^1.2.8
-  f_datetimerangepicker: ^0.1.1
   calendarro: ^1.1.2
   jiffy: ^2.1.2
   shared_preferences: ^0.5.6

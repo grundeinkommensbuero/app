@@ -19,7 +19,10 @@ void main() {
 }
 
 const Mode mode = Mode.DEMO;
+
+// Debug
 const bool pullMode = false;
+const bool clearButton = false;
 
 class MyApp extends StatelessWidget {
   static var firebaseService = FirebaseReceiveService();
@@ -41,12 +44,15 @@ class MyApp extends StatelessWidget {
   static var listLocationService = demoMode
       ? DemoListLocationService(userService)
       : ListLocationService(userService);
-  static var chatMessageService = ChatMessageService(storageService, pushNotificationManager);
+  static var chatMessageService =
+      ChatMessageService(storageService, pushNotificationManager);
 
   @override
   Widget build(BuildContext context) {
-    SimpleMessageChannel smc = SimpleMessageChannel('SimpleMessageChannel');
-    chatMessageService.register_channel(smc);
+    //FIXME kann das weg? >
+    // ActionChannel smc = ActionChannel('SimpleMessageChannel');
+    // chatMessageService.register_channel(smc);
+    // <
 
     return MultiProvider(
         providers: [
@@ -64,7 +70,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
             title: 'DW & Co. Enteignen',
             theme: DweTheme.themeData,
-            home: Navigation()));
+            home: Navigation(clearButton)));
   }
 }
 

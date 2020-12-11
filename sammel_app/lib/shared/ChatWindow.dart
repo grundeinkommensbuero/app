@@ -2,15 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
+import 'package:quiver/strings.dart';
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/User.dart';
-import 'package:sammel_app/routes/CreateUserDialog.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/showUsernameDialog.dart';
 import 'package:sammel_app/shared/user_data.dart';
 
 import 'ChatInput.dart';
@@ -33,12 +34,13 @@ abstract class ChannelChangeListener {
 
 class ChatWindowState extends State<ChatWindow> {
   FocusNode myFocusNode;
+  bool initialized = false;
 
   bool textFieldHasFocus = false;
 
   ChatWindowState(this.channel, this.termin);
 
-  SimpleMessageChannel channel;
+  ActionChannel channel;
   Termin termin;
   User user;
   AbstractPushSendService pushService;
@@ -49,18 +51,16 @@ class ChatWindowState extends State<ChatWindow> {
 
   @override
   Widget build(BuildContext context) {
-    if (user == null) {
+    if (initialized == false) {
       Provider.of<AbstractUserService>(context)
-          .user_stream
-          .stream
+          .user
           .listen((user) => setState(() => this.user = user));
       pushService = Provider.of<AbstractPushSendService>(context);
-      this.user =
-          Provider.of<AbstractUserService>(context).internal_user_object;
+      initialized = true;
     }
 
     var inputWidget = ChatInputWidget(onSendMessage);
-    this.widget_list = ChatListWidget(this.user, this.channel);
+    this.widget_list = ChatListWidget(this.channel);
     var header_widget = buildHeader(widget.termin);
     Scaffold page = Scaffold(
         appBar: header_widget,
@@ -189,48 +189,24 @@ class ChatWindowState extends State<ChatWindow> {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal))
       ]));
 
-  onSendMessage(String text) async {
-    if (text == "") {
-      return;
+  onSendMessage(TextEditingController controller) async {
+    if (controller.text == "") return;
+    var name = user.name;
+    if (isBlank(name)) {
+      name = await showUsernameDialog(context: context);
+      if (name == null) return;
     }
-
-    if (user.name == "" || user.name == null) {
-      user = await showCreateUserDialog(context: context, user: user);
-      if (user.name == "" || user.name == null) {
-        showDialog<void>(
-            context: context,
-            barrierDismissible: false, // user must tap button!
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text('Error'),
-                content: Text('Please enter valid user name to chat.'),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text('Ok'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              );
-            });
-        return;
-      } else {
-        Provider.of<AbstractUserService>(context).updateUsername(user.name);
-      }
-    }
-    Message message = Message(
-        text: text,
-        sending_time: DateTime.now(),
+    ChatMessage message = ChatMessage(
+        text: controller.text,
+        timestamp: DateTime.now(),
         message_color: user.color,
-        sender_name: user.name,
+        sender_name: name,
         user_id: user.id);
-    MessagePushData mpd = MessagePushData(message, channel.id);
+    ChatPushData mpd = ChatMessagePushData(message, channel.id);
     pushService.pushToAction(widget.termin.id, mpd,
         PushNotification("New Chat Message", "Open App to view Message"));
-    //textEditingController.clear();
-    // myFocusNode.unfocus();
-    channel.channelCallback(message);
+    channel.pushChatMessage(message);
+    controller.clear();
   }
 
   @override
