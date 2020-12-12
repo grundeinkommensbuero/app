@@ -1,3 +1,6 @@
+
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -25,8 +28,10 @@ class ChatListState extends State<ChatListWidget>
     implements ChannelChangeListener {
   ActionChannel channel;
   User user;
+  bool force_scrolling = false;
 
-  ChatListState(ActionChannel channel) {
+  ChatListState(ActionChannel channel)
+  {
     this.channel = channel;
   }
 
@@ -40,19 +45,17 @@ class ChatListState extends State<ChatListWidget>
 
     this.channel.register_widget(this);
     var message_list = buildListMessage();
-    var list_view = ListView(
-        padding: EdgeInsets.all(8),
-        controller: widget.scroll_controller,
-        children: message_list);
-    if (widget.scroll_controller.hasClients)
-      widget.scroll_controller
-          .jumpTo(widget.scroll_controller.position.maxScrollExtent);
+    var list_view = ListView(controller: widget.scroll_controller, children: message_list);
+    //we need this hack to enable scrolling to the end of the list on message received
+    Timer(Duration(milliseconds: 500),
+            () => widget.scroll_controller.jumpTo(widget.scroll_controller.position.maxScrollExtent));
 
     return list_view;
   }
 
   @override
   void channelChanged(Channel channel) {
+    force_scrolling = true;
     setState(() {
       widget.channel = channel;
     });
@@ -175,4 +178,16 @@ class ChatListState extends State<ChatListWidget>
 
     return DateFormat('MMM d, hh:mm').format(date);
   }
+
+  scrollList(BuildContext context) {
+    if(force_scrolling) {
+      print("scroll list called");
+      if (widget.scroll_controller.hasClients) {
+        widget.scroll_controller.jumpTo(
+            widget.scroll_controller.position.maxScrollExtent);
+      }
+      force_scrolling = false;
+    }
+  }
+
 }
