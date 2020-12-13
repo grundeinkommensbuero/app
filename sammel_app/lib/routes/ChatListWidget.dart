@@ -6,12 +6,12 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/User.dart';
+import 'package:sammel_app/model/user_data.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
-import 'package:sammel_app/shared/user_data.dart';
+import 'package:sammel_app/shared/ChronoHelfer.dart';
 
 import 'ChatWindow.dart';
-import 'ChronoHelfer.dart';
 
 class ChatListWidget extends StatefulWidget {
   Channel channel;

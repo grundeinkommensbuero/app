@@ -7,16 +7,15 @@ import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/User.dart';
+import 'package:sammel_app/model/user_data.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/showUsernameDialog.dart';
-import 'package:sammel_app/shared/user_data.dart';
 
-import 'ChatInput.dart';
 import 'ChatListWidget.dart';
-import 'ChronoHelfer.dart';
+import 'ChatInput.dart';
 
 class ChatWindow extends StatefulWidget {
   Channel channel;

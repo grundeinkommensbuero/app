@@ -1,7 +1,7 @@
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/services/ErrorService.dart';
-import 'package:sammel_app/shared/ChatWindow.dart';
+import 'package:sammel_app/routes/ChatWindow.dart';
 
 abstract class Channel {
   String id;

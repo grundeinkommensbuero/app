@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
-import 'package:sammel_app/shared/user_data.dart';
+import 'package:sammel_app/model/user_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageService {

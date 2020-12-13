@@ -13,7 +13,7 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
-import 'package:sammel_app/shared/ChatMessageService.dart';
+import 'package:sammel_app/services/ChatMessageService.dart';
 
 import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'DweTheme.dart';
+import 'package:sammel_app/shared/DweTheme.dart';
 
 class ChatInputWidget extends StatefulWidget {
   Function(TextEditingController) onSendMessage;
