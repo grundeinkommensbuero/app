@@ -14,7 +14,7 @@ abstract class AbstractPushNotificationManager {
 }
 
 abstract class PushNotificationListener {
-  void receive_message(String type, Map<dynamic, dynamic> data) {}
+  void receive_message(Map<dynamic, dynamic> data) {}
 }
 
 class PushNotificationManager implements AbstractPushNotificationManager {
@@ -83,8 +83,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
         String type = data['type'];
         print('Type: $type');
         if (callback_map.containsKey(type)) {
-          data.remove('type');
-          callback_map[type].receive_message(type, data);
+          callback_map[type].receive_message(data);
         }
       }
     } catch (e, s) {
@@ -113,9 +112,9 @@ class DemoPushNotificationManager implements AbstractPushNotificationManager {
   DemoPushNotificationManager(this.pushService);
 
   @override
-  void register_message_callback(String id, PushNotificationListener callback) {
+  void register_message_callback(String type, PushNotificationListener callback) {
     pushService.stream
-        .where((data) => data.type == id)
-        .listen((data) => callback.receive_message(id, data.toJson()));
+        .where((data) => data.type == type)
+        .listen((data) => callback.receive_message(data.toJson()));
   }
 }

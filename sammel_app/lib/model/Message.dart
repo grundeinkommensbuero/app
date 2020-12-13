@@ -9,7 +9,8 @@ abstract class Message {
 
   Message.fromJson() {}
 
-  static String determineType(Map<String, dynamic> data) => data['type'];
+  static String determineType(Map<String, dynamic> data) =>
+      data['type'] ?? null;
 
   Map<String, dynamic> toJson() {}
 }
@@ -55,7 +56,6 @@ class ChatMessage implements Message {
         'from_server': obtained_from_server
       };
 
-  @override
   bool isMessageEqual(Message msg) {
     return msg is ChatMessage &&
         msg.text == text &&
@@ -77,21 +77,25 @@ class ParticipationMessage implements Message {
   String username;
   bool joins;
 
-  ParticipationMessage(this.obtained_from_server, this.timestamp,
-      this.username, this.joins);
+  ParticipationMessage(
+      this.obtained_from_server, this.timestamp, this.username, this.joins);
 
   ParticipationMessage.fromJson(Map<dynamic, dynamic> json) {
     obtained_from_server = json['obtained_from_server'];
-    timestamp = DateTime.parse(json['timestamp']);
+    timestamp =
+        json['timestamp'] != null ? DateTime.parse(json['timestamp']) : null;
     username = json['username'];
     joins = json['joins'];
+
+    assert(timestamp != null, 'Zeistempel fehlt');
+    assert(joins != null, 'joins fehlt');
   }
 
   @override
   Map<String, dynamic> toJson() => {
         'type': type,
         'obtained_from_server': obtained_from_server,
-        'timestamp': timestamp.toString(),
+        'timestamp': timestamp != null ? timestamp.toString() : null,
         'username': username,
         'joins': joins
       };

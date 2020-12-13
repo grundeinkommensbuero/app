@@ -1,3 +1,5 @@
+import 'package:sammel_app/shared/ServerException.dart';
+
 import 'Message.dart';
 
 class PushMessage {
@@ -66,13 +68,18 @@ class ChatMessagePushData extends ChatPushData {
 
   ChatMessagePushData.fromJson(Map<String, dynamic> json)
       : super(json['channel']) {
-    this.message = ChatMessage.fromJson(json);
+    try {
+      this.message = ChatMessage.fromJson(json);
+    } on AssertionError catch (e) {
+      throw UnreadablePushMessage(
+          'Unlesbare Teilnahme-Push-Nachricht (Teilnahme) empfangen: ${e.message}');
+    }
   }
 }
 
 class ParticipationPushData extends ChatPushData {
   ParticipationMessage message;
-  final String type = PushDataTypes.SimpleChatMessage;
+  final String type = PushDataTypes.ParticipationMessage;
 
   ParticipationPushData(this.message, channel) : super(channel);
 
@@ -85,7 +92,12 @@ class ParticipationPushData extends ChatPushData {
 
   ParticipationPushData.fromJson(Map<String, dynamic> json)
       : super(json['channel']) {
-    this.message = ParticipationMessage.fromJson(json);
+    try {
+      this.message = ParticipationMessage.fromJson(json);
+    } on AssertionError catch (e) {
+      throw UnreadablePushMessage(
+          'Unlesbare Push-Nachricht (Teilnahme) empfangen: ${e.message}');
+    }
   }
 }
 
@@ -114,4 +126,10 @@ class WrongDataTypeKeyError {
 
   String getMessage() =>
       'Der Typ "$found" entspricht nicht dem erwarteten Typ "$expected"';
+}
+
+class UnreadablePushMessage implements ServerException {
+  String message;
+
+  UnreadablePushMessage([this.message = 'Unlesbare Push-Nachricht empfangen']);
 }

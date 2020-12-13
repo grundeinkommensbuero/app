@@ -13,8 +13,6 @@ import javax.ejb.Startup
 @Startup
 @Singleton
 open class PushService {
-    private val LOG = Logger.getLogger(PushService::class.java)
-
     @EJB
     private lateinit var firebase: FirebaseService
 
