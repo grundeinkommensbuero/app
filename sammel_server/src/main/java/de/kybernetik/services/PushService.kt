@@ -4,14 +4,13 @@ import de.kybernetik.database.benutzer.Benutzer
 import de.kybernetik.database.benutzer.BenutzerDao
 import de.kybernetik.database.pushmessages.PushMessageDao
 import de.kybernetik.rest.PushNotificationDto
-import org.jboss.logging.Logger
 import javax.ejb.EJB
-import javax.ejb.Singleton
 import javax.ejb.Startup
+import javax.ejb.Stateless
 
 
 @Startup
-@Singleton
+@Stateless
 open class PushService {
     @EJB
     private lateinit var firebase: FirebaseService
