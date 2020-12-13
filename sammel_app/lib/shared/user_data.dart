@@ -50,7 +50,7 @@ class ActionChannel extends Channel {
       ownMessage.obtained_from_server = true;
   ***REMOVED***
 
-  //FIXME wozu brauchen wir das?
+  //FIXME wozu brauchten wir das?
   void restore_channel(ActionChannel channel) {
     if (channel == null) {
       return;
@@ -96,9 +96,7 @@ class ActionChannel extends Channel {
                   StackTrace.current);
             ***REMOVED***).toList(),
             member_names: json['member_names'].cast<String>().toList()) {
-    this
-        .channel_messages
-        ?.sort((a, b) => a.timestamp.isBefore(b.timestamp) ? -1 : 1);
+    this.channel_messages?.sort((a, b) => a.timestamp.compareTo(b.timestamp));
   ***REMOVED***
 ***REMOVED***
 

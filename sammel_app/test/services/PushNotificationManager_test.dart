@@ -99,17 +99,13 @@ main() {
       controller.close();
     ***REMOVED***);
   ***REMOVED***);
-
-  test('test', () {
-    print(DateTime.now().toString());
-  ***REMOVED***);
 ***REMOVED***
 
 class TestListener implements PushNotificationListener {
   List<Map<String, dynamic>> nachrichten = [];
 
   @override
-  void receive_message(String type, Map<dynamic, dynamic> data) {
+  void receive_message(Map<dynamic, dynamic> data) {
     nachrichten.add(data);
   ***REMOVED***
 ***REMOVED***

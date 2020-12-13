@@ -270,7 +270,7 @@ class TermineSeiteState extends State<TermineSeite>
     ***REMOVED***
   ***REMOVED***
 
-  Future<void> openChatWindow(Termin termin) async {
+  openChatWindow(Termin termin) async {
     Channel message_channel =
         await chatMessageService.getActionChannel(termin.id);
     Navigator.push(

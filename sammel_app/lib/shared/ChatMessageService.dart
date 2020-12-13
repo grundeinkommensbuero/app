@@ -1,5 +1,6 @@
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
+import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/user_data.dart';
@@ -16,15 +17,19 @@ class ChatMessageService implements PushNotificationListener {
   StorageService storage_service;
 
   @override
-  void receive_message(String type, Map<dynamic, dynamic> data) {
-    ChatPushData mpd = ChatPushData.fromJson(data);
-    ActionChannel channel = channels[mpd.channel];
-    if (channel != null) {
-      if (type == PushDataTypes.SimpleChatMessage)
-        channel.pushChatMessage(ChatMessage.fromJson(data));
-      if (type == PushDataTypes.ParticipationMessage)
-        channel.pushParticipationMessage(ParticipationMessage.fromJson(data));
-      this.storage_service.saveActionChannel(channel);
+  void receive_message(Map<dynamic, dynamic> data) {
+    try {
+      ChatPushData mpd = ChatPushData.fromJson(data);
+      ActionChannel channel = channels[mpd.channel];
+      if (channel != null) {
+        if (data['type'] == PushDataTypes.SimpleChatMessage)
+          channel.pushChatMessage(ChatMessage.fromJson(data));
+        if (data['type'] == PushDataTypes.ParticipationMessage)
+          channel.pushParticipationMessage(ParticipationMessage.fromJson(data));
+        this.storage_service.saveActionChannel(channel);
+      ***REMOVED***
+    ***REMOVED*** on UnreadablePushMessage catch(e, s) {
+      ErrorService.handleError(e, s);
     ***REMOVED***
   ***REMOVED***
 

@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
@@ -30,8 +29,7 @@ class ChatListState extends State<ChatListWidget>
   User user;
   bool force_scrolling = false;
 
-  ChatListState(ActionChannel channel)
-  {
+  ChatListState(ActionChannel channel) {
     this.channel = channel;
   ***REMOVED***
 
@@ -44,11 +42,14 @@ class ChatListState extends State<ChatListWidget>
     ***REMOVED***
 
     this.channel.register_widget(this);
-    var message_list = buildListMessage();
-    var list_view = ListView(controller: widget.scroll_controller, children: message_list);
+    var list_view = ListView(
+        padding: EdgeInsets.all(8.0),
+        controller: widget.scroll_controller, children: buildListMessage());
     //we need this hack to enable scrolling to the end of the list on message received
-    Timer(Duration(milliseconds: 500),
-            () => widget.scroll_controller.jumpTo(widget.scroll_controller.position.maxScrollExtent));
+    Timer(
+        Duration(milliseconds: 500),
+        () => widget.scroll_controller
+            .jumpTo(widget.scroll_controller.position.maxScrollExtent));
 
     return list_view;
   ***REMOVED***
@@ -143,7 +144,7 @@ class ChatListState extends State<ChatListWidget>
     return RichText(
         textAlign: TextAlign.center,
         text: TextSpan(
-            text: message.username,
+            text: message.username ?? 'Jemand',
             style: TextStyle(color: DweTheme.purple),
             children: [
               TextSpan(text: title, style: TextStyle(color: Colors.black)),
@@ -180,14 +181,13 @@ class ChatListState extends State<ChatListWidget>
   ***REMOVED***
 
   scrollList(BuildContext context) {
-    if(force_scrolling) {
+    if (force_scrolling) {
       print("scroll list called");
       if (widget.scroll_controller.hasClients) {
-        widget.scroll_controller.jumpTo(
-            widget.scroll_controller.position.maxScrollExtent);
+        widget.scroll_controller
+            .jumpTo(widget.scroll_controller.position.maxScrollExtent);
       ***REMOVED***
       force_scrolling = false;
     ***REMOVED***
   ***REMOVED***
-
 ***REMOVED***
