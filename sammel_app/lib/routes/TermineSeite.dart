@@ -2,27 +2,29 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+import 'package:uuid/uuid.dart';
 import 'package:provider/provider.dart';
+
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
-import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/routes/ActionMap.dart';
+import 'package:sammel_app/model/user_data.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
-import 'package:sammel_app/shared/ChatMessageService.dart';
-import 'package:sammel_app/shared/ChatWindow.dart';
+import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
-import 'package:sammel_app/shared/user_data.dart';
-import 'package:uuid/uuid.dart';
+
+import 'ActionEditor.dart';
+import 'ActionMap.dart';
 import 'ActionList.dart';
 import 'FilterWidget.dart';
 import 'ActionDetailsPage.dart';
+import 'ChatWindow.dart';
 
 class TermineSeite extends StatefulWidget {
   TermineSeite({Key key***REMOVED***) : super(key: key ?? Key('action page'));
