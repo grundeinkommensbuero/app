@@ -54,6 +54,7 @@ void main() {
           Provider<StorageService>.value(value: _storageService),
           Provider<AbstractUserService>.value(value: _userService),
           Provider<AbstractStammdatenService>.value(value: _stammdatenService),
+          Provider<ChatMessageService>.value(value: _chatMessageService),
         ],
         child: MaterialApp(home: Builder(builder: (BuildContext context) {
           ErrorService.setContext(context);
@@ -71,20 +72,6 @@ void main() {
 
       var userService = UserServiceMock();
       when(userService.user).thenAnswer((_) => Stream.value(me));
-      var termineSeiteWidget = MultiProvider(
-          providers: [
-            Provider<AbstractTermineService>.value(value: _termineService),
-            Provider<AbstractListLocationService>.value(
-                value: _listLocationService),
-            Provider<StorageService>.value(value: _storageService),
-            Provider<AbstractUserService>.value(value: userService),
-            Provider<AbstractStammdatenService>.value(
-                value: _stammdatenService),
-          ],
-          child: MaterialApp(home: Builder(builder: (BuildContext context) {
-            ErrorService.setContext(context);
-            return TermineSeite();
-          })));
 
       when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.anActionFrom(today)..ort = goerli(),
@@ -195,29 +182,6 @@ void main() {
   });
 
   group('ActionDetailsDialog', () {
-    var me = karl();
-
-    setUp(() {
-      var userService = UserServiceMock();
-      when(userService.user).thenAnswer((_) => Stream.value(me));
-
-      termineSeiteWidget = MultiProvider(
-          providers: [
-            Provider<AbstractTermineService>.value(value: _termineService),
-            Provider<AbstractListLocationService>.value(
-                value: _listLocationService),
-            Provider<StorageService>.value(value: _storageService),
-            Provider<AbstractUserService>.value(value: userService),
-            Provider<AbstractStammdatenService>.value(
-                value: _stammdatenService),
-            Provider<ChatMessageService>.value(value: _chatMessageService),
-          ],
-          child: MaterialApp(home: Builder(builder: (BuildContext context) {
-            ErrorService.setContext(context);
-            return TermineSeite();
-          })));
-    });
-
     testWidgets('opens with tap on TermineCard', (WidgetTester tester) async {
       when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
@@ -365,7 +329,7 @@ void main() {
       await tester.pump();
 
       verify(_termineService.joinAction(action.id)).called(1);
-      expect(state.termine[0].participants, containsAll([me]));
+      expect(state.termine[0].participants, containsAll([_userService.me]));
       expect(find.byKey(Key('join action button')), findsNothing);
       expect(find.byKey(Key('leave action button')), findsOneWidget);
     });
@@ -373,6 +337,7 @@ void main() {
     testWidgets(
         'triggers server call and highlihgts action with tap on leave button',
         (WidgetTester tester) async {
+      var me = karl();
       when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin()..participants = [me],
             TerminTestDaten.einTermin(),
@@ -1358,6 +1323,7 @@ _pumpNavigation(WidgetTester tester) async {
         Provider<PushSendService>.value(value: _pushService),
         Provider<AbstractUserService>.value(value: _userService),
         Provider<AbstractPushSendService>.value(value: _pushService),
+        Provider<ChatMessageService>.value(value: _chatMessageService),
       ],
       child: MaterialApp(
         home: Navigation(),

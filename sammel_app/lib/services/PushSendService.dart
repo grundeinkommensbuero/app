@@ -78,7 +78,7 @@ class DemoPushSendService extends AbstractPushSendService {
   DemoPushSendService(AbstractUserService userService)
       : super(userService, DemoBackend());
 
-  var controller = StreamController<PushData>();
+  var controller = StreamController<PushData>.broadcast();
 
   get stream => controller.stream;
 

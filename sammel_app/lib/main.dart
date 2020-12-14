@@ -10,7 +10,6 @@ import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChatMessageService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
-import 'package:sammel_app/shared/user_data.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 
 void main() {
@@ -49,8 +48,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SimpleMessageChannel smc = SimpleMessageChannel('SimpleMessageChannel');
-    chatMessageService.register_channel(smc);
+    //FIXME kann das weg? >
+    // ActionChannel smc = ActionChannel('SimpleMessageChannel');
+    // chatMessageService.register_channel(smc);
+    // <
 
     return MultiProvider(
         providers: [

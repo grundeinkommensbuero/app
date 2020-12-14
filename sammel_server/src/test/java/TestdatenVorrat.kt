@@ -37,7 +37,7 @@ class TestdatenVorrat {
         }
 
         fun terminOhneTeilnehmerOhneDetails(): Termin {
-            return Termin(1,
+            return Termin(1L,
                     LocalDateTime.of(2019, 10, 22, 16, 30, 0),
                     LocalDateTime.of(2019, 10, 22, 18, 0, 0),
                     nordkiez(),
@@ -49,7 +49,7 @@ class TestdatenVorrat {
         }
 
         fun terminMitTeilnehmerOhneDetails(): Termin {
-            return Termin(2,
+            return Termin(2L,
                     LocalDateTime.of(2019, 10, 22, 12, 0, 0),
                     LocalDateTime.of(2019, 10, 22, 15, 0, 0),
                     goerli(),
@@ -61,7 +61,7 @@ class TestdatenVorrat {
         }
 
         fun terminMitTeilnehmerMitDetails(): Termin {
-            return Termin(2,
+            return Termin(2L,
                     LocalDateTime.of(2019, 10, 22, 12, 0, 0),
                     LocalDateTime.of(2019, 10, 22, 15, 0, 0),
                     goerli(),
@@ -73,7 +73,7 @@ class TestdatenVorrat {
         }
 
         fun terminOhneTeilnehmerMitDetails(): Termin {
-            return Termin(2,
+            return Termin(2L,
                     LocalDateTime.of(2019, 10, 22, 12, 0, 0),
                     LocalDateTime.of(2019, 10, 22, 15, 0, 0),
                     goerli(),

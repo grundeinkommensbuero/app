@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:http_server/http_server.dart';
 import 'package:sammel_app/main.dart';
 import 'package:sammel_app/services/UserService.dart';
+import 'package:sammel_app/shared/ServerException.dart';
 
 import 'AuthFehler.dart';
 import 'RestFehler.dart';
@@ -200,10 +201,10 @@ class Backend {
   }
 }
 
-class WrongResponseFormatException implements Exception {
+class WrongResponseFormatException implements ServerException {
   final String message;
 
-  WrongResponseFormatException(this.message);
+  WrongResponseFormatException([this.message = 'Falsches Format']);
 }
 
 class DemoBackend implements Backend {

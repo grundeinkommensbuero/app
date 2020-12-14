@@ -18,6 +18,8 @@ import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import de.kybernetik.rest.PushNotificationDto
 import de.kybernetik.services.FirebaseService.MissingMessageTarget
+import org.junit.Before
+import java.lang.reflect.Field
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
@@ -36,23 +38,56 @@ class FirebaseServiceTest {
     @InjectMocks
     lateinit var service: FirebaseService
 
+    // Advanced Reflections Voodoo
+    val tokenField: Field = MulticastMessage::class.java.getDeclaredField("tokens")
+
+    @Before
+    fun setUp() {
+        tokenField.isAccessible = true
+    }
+
     @Test(expected = MissingMessageTarget::class)
     fun `sendePushNachrichtAnEmpfaenger erwartet nichtleere Liste von Empfaenger`() =
-            service.sendePushNachrichtAnEmpfaenger(notification = PushNotificationDto(), data = emptyMap(), empfaenger = emptyList())
+        service.sendePushNachrichtAnEmpfaenger(
+            notification = PushNotificationDto(),
+            data = emptyMap(),
+            empfaenger = emptyList()
+        )
 
     @Test(expected = FirebaseService.TooManyRecipientsError::class)
     fun `sendePushNachrichtAnEmpfaenger erwartet nimmt nicht mehr als 500 Empfaenger an`() =
-            service.sendePushNachrichtAnEmpfaenger(notification = PushNotificationDto(), data = emptyMap(), empfaenger = (1..501).map(Int::toString))
+        service.sendePushNachrichtAnEmpfaenger(
+            notification = PushNotificationDto(),
+            data = emptyMap(),
+            empfaenger = (1..501).map(Int::toString)
+        )
 
     @Test
-    fun `sendePushNachrichtAnEmpfaenger schickt eine Nachricht an jeden Empfaeger`() {
+    fun `sendePushNachrichtAnEmpfaenger schickt die Nachricht an jeden Empfaeger`() {
         val reponseMock = mock<BatchResponse>()
         whenever(firebase.sendMulticast(any())).thenReturn(reponseMock)
         whenever(reponseMock.successCount).thenReturn(50)
 
         service.sendePushNachrichtAnEmpfaenger(PushNotificationDto(), emptyMap(), (1..50).map { Int.toString() })
 
-        verify(firebase, times(1)).sendMulticast(any())
+        val captor = argumentCaptor<MulticastMessage>()
+        verify(firebase, times(1)).sendMulticast(captor.capture())
+        @Suppress("UNCHECKED_CAST") val tokens = tokenField.get(captor.firstValue) as List<String>
+        assertTrue(tokens.containsAll((1..50).map { Int.toString() }))
+    }
+
+    @Test
+    fun `sendePushNachrichtAnEmpfaenger schickt keine Nachricht zweimal an denselben Empfaeger`() {
+        val reponseMock = mock<BatchResponse>()
+        whenever(firebase.sendMulticast(any())).thenReturn(reponseMock)
+        whenever(reponseMock.successCount).thenReturn(50)
+
+        service.sendePushNachrichtAnEmpfaenger(PushNotificationDto(), emptyMap(), listOf("1", "1", "1", "2", "2", "3"))
+
+        val captor = argumentCaptor<MulticastMessage>()
+        verify(firebase, times(1)).sendMulticast(captor.capture())
+        @Suppress("UNCHECKED_CAST") val tokens = tokenField.get(captor.firstValue) as List<String>
+        assertTrue(tokens.containsAll(listOf("1", "2", "3")))
     }
 
     @Test
@@ -68,7 +103,7 @@ class FirebaseServiceTest {
 
     @Test(expected = MissingMessageTarget::class)
     fun `sendePushNachrichtAnTopic erwartet  nichtleeres Topic`() =
-            service.sendePushNachrichtAnTopic(notification = PushNotificationDto(), data = emptyMap(), topic = "")
+        service.sendePushNachrichtAnTopic(notification = PushNotificationDto(), data = emptyMap(), topic = "")
 
     @Test
     fun `sendePushNachrichtAnTopic schickt eine Nachricht ab`() {
@@ -97,7 +132,10 @@ class FirebaseServiceTest {
         val message = argumentCaptor<MulticastMessage>()
         verify(firebase, times(2)).sendMulticast(message.capture())
         assertEquals("Jemand nimmt nicht mehr Teil an deiner Aktion vom 22.10.", getMulticastBody(message.firstValue))
-        assertEquals("Jemand hat die Aktion vom 22.10. verlassen, an der du teilnimmst", getMulticastBody(message.lastValue))
+        assertEquals(
+            "Jemand hat die Aktion vom 22.10. verlassen, an der du teilnimmst",
+            getMulticastBody(message.lastValue)
+        )
     }
 
     @Test
@@ -115,7 +153,10 @@ class FirebaseServiceTest {
         verify(firebase, times(2)).sendMulticast(message.capture())
 
         assertEquals("Verstärkung für eure Aktion", getMulticastTitle(message.lastValue))
-        assertEquals("Bini Adamczak ist der Aktion vom 22.10. beigetreten, an der du teilnimmst", getMulticastBody(message.lastValue))
+        assertEquals(
+            "Bini Adamczak ist der Aktion vom 22.10. beigetreten, an der du teilnimmst",
+            getMulticastBody(message.lastValue)
+        )
         assertEquals((getMulticastData(message.lastValue).size), 1)
         assertEquals(getMulticastData(message.lastValue)["action"], "2")
         assertTrue(getMulticastTokens(message.lastValue).containsAll(listOf("firebaseRosa", "firebaseBini")))
@@ -138,7 +179,10 @@ class FirebaseServiceTest {
         verify(firebase, times(2)).sendMulticast(message.capture())
 
         assertEquals("Absage bei deiner Aktion", getMulticastTitle(message.firstValue))
-        assertEquals("Bini Adamczak nimmt nicht mehr Teil an deiner Aktion vom 22.10.", getMulticastBody(message.firstValue))
+        assertEquals(
+            "Bini Adamczak nimmt nicht mehr Teil an deiner Aktion vom 22.10.",
+            getMulticastBody(message.firstValue)
+        )
         assertEquals((getMulticastData(message.firstValue).size), 1)
         assertEquals(getMulticastData(message.firstValue)["action"], "2")
         assertTrue(getMulticastTokens(message.firstValue).containsAll(listOf("firebaseKarl")))
@@ -161,7 +205,10 @@ class FirebaseServiceTest {
         verify(firebase, times(2)).sendMulticast(message.capture())
 
         assertEquals("Absage bei eurer Aktion", getMulticastTitle(message.lastValue))
-        assertEquals("Bini Adamczak hat die Aktion vom 22.10. verlassen, an der du teilnimmst", getMulticastBody(message.lastValue))
+        assertEquals(
+            "Bini Adamczak hat die Aktion vom 22.10. verlassen, an der du teilnimmst",
+            getMulticastBody(message.lastValue)
+        )
         assertEquals((getMulticastData(message.lastValue).size), 1)
         assertEquals(getMulticastData(message.lastValue)["action"], "2")
         assertTrue(getMulticastTokens(message.lastValue).containsAll(listOf("firebaseRosa")))

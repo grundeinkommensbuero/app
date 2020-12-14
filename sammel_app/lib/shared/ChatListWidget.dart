@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -5,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/UserService.dart';
+import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/user_data.dart';
 
 import 'ChatWindow.dart';
@@ -22,10 +25,11 @@ class ChatListWidget extends StatefulWidget {
 
 class ChatListState extends State<ChatListWidget>
     implements ChannelChangeListener {
-  SimpleMessageChannel channel;
+  ActionChannel channel;
   User user;
+  bool force_scrolling = false;
 
-  ChatListState(SimpleMessageChannel channel) {
+  ChatListState(ActionChannel channel) {
     this.channel = channel;
   }
 
@@ -38,18 +42,21 @@ class ChatListState extends State<ChatListWidget>
     }
 
     this.channel.register_widget(this);
-    var message_list = buildListMessage();
-    var list_view =
-        ListView(controller: widget.scroll_controller, children: message_list);
-    if (widget.scroll_controller.hasClients)
-      widget.scroll_controller
-          .jumpTo(widget.scroll_controller.position.maxScrollExtent);
+    var list_view = ListView(
+        padding: EdgeInsets.all(8.0),
+        controller: widget.scroll_controller, children: buildListMessage());
+    //we need this hack to enable scrolling to the end of the list on message received
+    Timer(
+        Duration(milliseconds: 500),
+        () => widget.scroll_controller
+            .jumpTo(widget.scroll_controller.position.maxScrollExtent));
 
     return list_view;
   }
 
   @override
   void channelChanged(Channel channel) {
+    force_scrolling = true;
     setState(() {
       widget.channel = channel;
     });
@@ -62,96 +69,90 @@ class ChatListState extends State<ChatListWidget>
     }
     List<Widget> message_list_widgets = List();
     for (Message message in message_list) {
-      message_list_widgets.add(create_widget_for_message(message));
+      if (message is ChatMessage)
+        message_list_widgets.add(createChatMessageWidget(message));
+      if (message is ParticipationMessage)
+        message_list_widgets.add(createParticipationMessageWidget(message));
     }
     return message_list_widgets;
   }
 
-  Widget create_widget_for_message(Message message) {
-    Align alignment;
-    Container card;
-    if (message.user_id == user.id) {
-      card = Container(
-          /* constraints: BoxConstraints(
-              maxWidth: MediaQuery.of(context).size.width*0.8), //00 * 0.8,
-              //maxHeight: /*MediaQuery.of(context).size.height*/200 * 0.8),*/
-          child: Card(
-              color: message.message_color,
-              child: Padding(
-                  padding: EdgeInsets.only(
-                      left: 10.0, top: 8.0, right: 10.0, bottom: 8.0),
-                  child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          message.sender_name,
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Padding(
-                            padding: EdgeInsets.only(top: 3.0, bottom: 5.0),
-                            child: Text(
-                              message.text,
-                              textScaleFactor: 1.2,
-                            )),
-                        Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                formatDateTime(message.sending_time),
-                                textScaleFactor: 0.8,
-                              ),
-                              SizedBox(
-                                height: 0,
-                                width: 3,
-                              ),
-                              message.obtained_from_server
-                                  ? Icon(
-                                      Icons.check_circle,
-                                      size: 12,
-                                    )
-                                  : Icon(Icons.check_circle_outline, size: 12)
-                            ])
-                      ]))));
-      alignment = Align(child: card, alignment: Alignment.topRight);
-    } else {
-      card = Container(
-          constraints: BoxConstraints(
-              maxWidth: /*MediaQuery.of(context).size.width*/ 200 * 0.8,
-              maxHeight: /*MediaQuery.of(context).size.height*/ 200 * 0.8),
-          child: Card(
-              color: message.message_color,
-              child: Padding(
-                  padding: EdgeInsets.only(
-                      left: 10.0, top: 8.0, right: 10.0, bottom: 8.0),
-                  child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          message.sender_name,
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Padding(
-                            padding: EdgeInsets.only(top: 3.0, bottom: 5.0),
-                            child: Text(
-                              message.text,
-                              textScaleFactor: 1.2,
-                            )),
-                        Row(children: [
-                          Text(
-                            formatDateTime(message.sending_time),
-                            textScaleFactor: 0.8,
-                          ),
-                          message.obtained_from_server
-                              ? Icon(Icons.check_circle_outline, size: 12)
-                              : Icon(Icons.check_circle, size: 12)
-                        ])
-                      ]))));
-      alignment = Align(child: card, alignment: Alignment.topLeft);
-    }
-    return alignment;
+  Widget createChatMessageWidget(ChatMessage message) {
+    final own = message.user_id == user.id;
+    return Align(
+        alignment: own ? Alignment.topRight : Alignment.topLeft,
+        child: Container(
+            child: Card(
+                margin: own
+                    ? EdgeInsets.fromLTRB(80, 5, 8, 5)
+                    : EdgeInsets.fromLTRB(5, 5, 80, 5),
+                color: message.message_color,
+                child: Padding(
+                    padding: EdgeInsets.only(
+                        left: 10.0, top: 8.0, right: 10.0, bottom: 8.0),
+                    child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: own
+                            ? CrossAxisAlignment.end
+                            : CrossAxisAlignment.start,
+                        children: [
+                          own
+                              ? SizedBox()
+                              : Text(
+                                  message.sender_name,
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                          Padding(
+                              padding: EdgeInsets.only(top: 3.0, bottom: 5.0),
+                              child: Text(
+                                message.text,
+                                textScaleFactor: 1.2,
+                              )),
+                          Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  formatDateTime(message.timestamp),
+                                  textScaleFactor: 0.8,
+                                ),
+                                SizedBox(
+                                  height: 0,
+                                  width: 3,
+                                )
+                              ]..addAll(own
+                                  ? [
+                                      message.obtained_from_server
+                                          ? Icon(
+                                              Icons.check_circle,
+                                              size: 12,
+                                            )
+                                          : Icon(Icons.check_circle_outline,
+                                              size: 12)
+                                    ]
+                                  : []))
+                        ])))));
+  }
+
+  Widget createParticipationMessageWidget(ParticipationMessage message) {
+    var title = message.joins
+        ? ' ist der Aktion beigetreten'
+        : ' hat die Aktion verlassen';
+    var subtitle = message.joins
+        ? '\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen'
+        : '';
+    return RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+            text: message.username ?? 'Jemand',
+            style: TextStyle(color: DweTheme.purple),
+            children: [
+              TextSpan(text: title, style: TextStyle(color: Colors.black)),
+              TextSpan(
+                  text: subtitle,
+                  style: TextStyle(
+                      color: Colors.grey, fontStyle: FontStyle.italic))
+            ]));
   }
 
   String formatDateTime(DateTime date) {
@@ -177,5 +178,16 @@ class ChatListState extends State<ChatListWidget>
     }
 
     return DateFormat('MMM d, hh:mm').format(date);
+  }
+
+  scrollList(BuildContext context) {
+    if (force_scrolling) {
+      print("scroll list called");
+      if (widget.scroll_controller.hasClients) {
+        widget.scroll_controller
+            .jumpTo(widget.scroll_controller.position.maxScrollExtent);
+      }
+      force_scrolling = false;
+    }
   }
 }

@@ -12,7 +12,9 @@ import org.jboss.logging.Logger
 import de.kybernetik.rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithoutDetails
 import de.kybernetik.services.PushService
 import java.time.LocalDateTime
+import java.time.ZonedDateTime.now
 import java.time.format.DateTimeFormatter
+import java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME
 import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
 import javax.ejb.EJBException
@@ -30,8 +32,8 @@ open class TermineRestResource {
     private val LOG = Logger.getLogger(TermineRestResource::class.java)
 
     private val noValidActionResponse = Response.status(422)
-            .entity(RestFehlermeldung("Keine gültige Aktion an den Server gesendet"))
-            .build()
+        .entity(RestFehlermeldung("Keine gültige Aktion an den Server gesendet"))
+        .build()
 
     @EJB
     private lateinit var dao: TermineDao
@@ -52,9 +54,9 @@ open class TermineRestResource {
     open fun getTermine(filter: TermineFilter?): Response {
         val termine = dao.getTermine(filter ?: TermineFilter())
         return Response
-                .ok()
-                .entity(termine.map { termin -> convertFromTerminWithoutDetails(termin) })
-                .build()
+            .ok()
+            .entity(termine.map { termin -> convertFromTerminWithoutDetails(termin) })
+            .build()
     }
 
     @GET
@@ -64,20 +66,20 @@ open class TermineRestResource {
     open fun getTermin(@QueryParam("id") id: Long?): Response {
         if (id == null)
             return Response
-                    .status(422)
-                    .entity("Keine Aktions-ID angegeben")
-                    .build()
+                .status(422)
+                .entity("Keine Aktions-ID angegeben")
+                .build()
         val termin = dao.getTermin(id)
         if (termin == null)
             return Response
-                    .status(433)
-                    .entity("Unbekannte Aktion abgefragt")
-                    .build()
+                .status(433)
+                .entity("Unbekannte Aktion abgefragt")
+                .build()
         termin.details
         return Response
-                .ok()
-                .entity(TerminDto.convertFromTerminWithDetails(termin))
-                .build()
+            .ok()
+            .entity(TerminDto.convertFromTerminWithDetails(termin))
+            .build()
     }
 
     @POST
@@ -88,16 +90,16 @@ open class TermineRestResource {
     open fun legeNeuenTerminAn(actionAndToken: ActionWithTokenDto): Response {
         if (actionAndToken.action == null)
             return Response
-                    .status(422)
-                    .entity(RestFehlermeldung("Keine Aktion angegeben"))
-                    .build()
+                .status(422)
+                .entity(RestFehlermeldung("Keine Aktion angegeben"))
+                .build()
         val updatedAction = dao.erstelleNeuenTermin(actionAndToken.action!!.convertToTermin())
         val token = actionAndToken.token
         if (!token.isNullOrEmpty()) dao.storeToken(updatedAction.id, token)
         return Response
-                .ok()
-                .entity(convertFromTerminWithoutDetails(updatedAction))
-                .build()
+            .ok()
+            .entity(convertFromTerminWithoutDetails(updatedAction))
+            .build()
     }
 
     @POST
@@ -110,8 +112,8 @@ open class TermineRestResource {
 
         val tokenFromDb = dao.loadToken(actionAndToken.action!!.id!!)?.token
         if (tokenFromDb != null && tokenFromDb != actionAndToken.token) return Response.status(403)
-                .entity(RestFehlermeldung("Bearbeiten dieser Aktion ist unautorisiert"))
-                .build()
+            .entity(RestFehlermeldung("Bearbeiten dieser Aktion ist unautorisiert"))
+            .build()
 
         try {
             dao.aktualisiereTermin(actionAndToken.action!!.convertToTermin())
@@ -120,8 +122,8 @@ open class TermineRestResource {
             return Response.status(422).entity(e.message).build()
         }
         return Response
-                .ok()
-                .build()
+            .ok()
+            .build()
     }
 
     @DELETE
@@ -136,8 +138,8 @@ open class TermineRestResource {
         val tokenFromDb = dao.loadToken(actionAndToken.action!!.id!!)?.token
         if (tokenFromDb != null && tokenFromDb != actionAndToken.token)
             return Response.status(403)
-                    .entity(RestFehlermeldung("Löschen dieser Aktion ist unautorisiert"))
-                    .build()
+                .entity(RestFehlermeldung("Löschen dieser Aktion ist unautorisiert"))
+                .build()
 
         try {
             dao.deleteAction(actionAndToken.action!!.convertToTermin())
@@ -160,16 +162,16 @@ open class TermineRestResource {
         if (id == null) {
             LOG.debug("$ungueltigeAktion: Fehlende Id")
             return Response.status(422)
-                    .entity(RestFehlermeldung(ungueltigeAktion))
-                    .build()
+                .entity(RestFehlermeldung(ungueltigeAktion))
+                .build()
         }
 
         val aktion = dao.getTermin(id)
         if (aktion == null) {
             LOG.debug("$ungueltigeAktion: Unbekannte Id")
             return Response.status(422)
-                    .entity(RestFehlermeldung(ungueltigeAktion))
-                    .build()
+                .entity(RestFehlermeldung(ungueltigeAktion))
+                .build()
         }
 
         val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
@@ -193,14 +195,14 @@ open class TermineRestResource {
     open fun sageTeilnahmeAb(@QueryParam("id") id: Long?): Response {
         if (id == null)
             return Response.status(422)
-                    .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
-                    .build()
+                .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
+                .build()
 
         val AktionAusDb = dao.getTermin(id)
         if (AktionAusDb == null)
             return Response.status(422)
-                    .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
-                    .build()
+                .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
+                .build()
 
         val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
         val userAusListe = AktionAusDb.teilnehmer.find { it.id == userAusDb!!.id }
@@ -216,27 +218,29 @@ open class TermineRestResource {
     }
 
     data class TerminDto(
-            var id: Long? = null,
-            var beginn: LocalDateTime? = null,
-            var ende: LocalDateTime? = null,
-            var ort: Ort? = null,
-            var typ: String? = null,
-            var lattitude: Double? = null,
-            var longitude: Double? = null,
-            var participants: List<BenutzerDto>? = emptyList(),
-            var details: TerminDetailsDto? = TerminDetailsDto()) {
+        var id: Long? = null,
+        var beginn: LocalDateTime? = null,
+        var ende: LocalDateTime? = null,
+        var ort: Ort? = null,
+        var typ: String? = null,
+        var lattitude: Double? = null,
+        var longitude: Double? = null,
+        var participants: List<BenutzerDto>? = emptyList(),
+        var details: TerminDetailsDto? = TerminDetailsDto()
+    ) {
 
         fun convertToTermin(): Termin {
             return Termin(
-                    id = id ?: 0,
-                    beginn = beginn,
-                    ende = ende,
-                    ort = ort,
-                    typ = typ,
-                    lattitude = lattitude,
-                    longitude = longitude,
-                    teilnehmer = if (participants == null) emptyList() else participants!!.map { it.convertToBenutzer() },
-                    details = details?.convertToTerminDetails(id))
+                id = id ?: 0,
+                beginn = beginn,
+                ende = ende,
+                ort = ort,
+                typ = typ,
+                lattitude = lattitude,
+                longitude = longitude,
+                teilnehmer = if (participants == null) emptyList() else participants!!.map { it.convertToBenutzer() },
+                details = details?.convertToTerminDetails(id)
+            )
         }
 
         companion object {
@@ -247,80 +251,126 @@ open class TermineRestResource {
             }
 
             fun convertFromTerminWithoutDetails(termin: Termin): TerminDto = TerminDto(
-                    termin.id,
-                    termin.beginn,
-                    termin.ende,
-                    termin.ort,
-                    termin.typ,
-                    termin.lattitude,
-                    termin.longitude,
-                    termin.teilnehmer.map { BenutzerDto.convertFromBenutzer(it) })
+                termin.id,
+                termin.beginn,
+                termin.ende,
+                termin.ort,
+                termin.typ,
+                termin.lattitude,
+                termin.longitude,
+                termin.teilnehmer.map { BenutzerDto.convertFromBenutzer(it) })
         }
     }
 
     data class ActionWithTokenDto(
-            var action: TerminDto? = null,
-            var token: String? = null)
+        var action: TerminDto? = null,
+        var token: String? = null
+    )
 
     data class TerminDetailsDto(
-            var treffpunkt: String? = null,
-            var beschreibung: String? = null,
-            var kontakt: String? = null) {
+        var treffpunkt: String? = null,
+        var beschreibung: String? = null,
+        var kontakt: String? = null
+    ) {
 
         fun convertToTerminDetails(id: Long?): TerminDetails {
             return TerminDetails(
-                    termin_id = id,
-                    treffpunkt = this.treffpunkt,
-                    beschreibung = this.beschreibung,
-                    kontakt = this.kontakt)
+                termin_id = id,
+                treffpunkt = this.treffpunkt,
+                beschreibung = this.beschreibung,
+                kontakt = this.kontakt
+            )
         }
 
         companion object {
             fun convertFromTerminDetails(details: TerminDetails?): TerminDetailsDto? {
                 if (details == null) return null
                 return TerminDetailsDto(
-                        treffpunkt = details.treffpunkt,
-                        beschreibung = details.beschreibung,
-                        kontakt = details.kontakt)
+                    treffpunkt = details.treffpunkt,
+                    beschreibung = details.beschreibung,
+                    kontakt = details.kontakt
+                )
             }
         }
     }
 
     open fun informiereUeberTeilnahme(benutzer: Benutzer, aktion: Termin) {
-        val name = if (benutzer.name.isNullOrBlank()) "Jemand" else benutzer.name
+        val name = if (benutzer.name.isNullOrBlank()) "Jemand" else benutzer.name!!
+        val pushMessage = PushMessageDto(
+            PushNotificationDto(
+                "Verstärkung für deine Aktion",
+                "$name ist deiner Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))} beigetreten"
+            ),
+            mapOf(
+                "type" to "ParticipationMessage",
+                "channel" to "action:${aktion.id}",
+                "timestamp" to now().format(ISO_OFFSET_DATE_TIME),
+                "action" to aktion.id,
+                "username" to name,
+                "joins" to true
+            )
+        )
+        val ersteller = aktion.teilnehmer[0]
 
-        val titleErsteller = "Verstärkung für deine Aktion"
-        val bodyErsteller = "$name ist deiner Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))} beigetreten"
-        val titleTeilnehmer = "Verstärkung für eure Aktion"
-        val bodyTeilnehmer = "$name ist der Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))} beigetreten, an der du teilnimmst"
+        LOG.debug("Informiere Ersteller ${ersteller.id} von Aktion ${aktion.id}")
+        pushService.sendePushNachrichtAnEmpfaenger(
+            pushMessage.notification,
+            pushMessage.verschluesselt(),
+            listOf(ersteller)
+        )
 
-        informiere(aktion, titleErsteller, bodyErsteller, titleTeilnehmer, bodyTeilnehmer)
+        val teilnehmer = aktion.teilnehmer.minus(ersteller)
+        LOG.debug("Informiere restliche Teilnehmer ${teilnehmer.map { it.id }} von Aktion ${aktion.id}")
+        pushMessage.notification =
+            PushNotificationDto(
+                "Verstärkung für eure Aktion",
+                "$name ist der Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))} beigetreten, an der du teilnimmst"
+            )
+        val restlicheTeilnehmer = aktion.teilnehmer.minus(ersteller)
+
+        pushService.sendePushNachrichtAnEmpfaenger(
+            pushMessage.notification,
+            pushMessage.verschluesselt(),
+            restlicheTeilnehmer
+        )
     }
 
     open fun informiereUeberAbsage(benutzer: Benutzer, aktion: Termin) {
-        val name = if (benutzer.name.isNullOrBlank()) "Jemand" else benutzer.name
-
-        val titleErsteller = "Absage bei deiner Aktion"
-        val bodyErsteller = "$name nimmt nicht mehr Teil an deiner Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))}"
-        val titleTeilnehmer = "Absage bei eurer Aktion"
-        val bodyTeilnehmer = "$name hat die Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))} verlassen, an der du teilnimmst"
-
-        informiere(aktion, titleErsteller, bodyErsteller, titleTeilnehmer, bodyTeilnehmer)
-    }
-
-    private fun informiere(aktion: Termin, titleErsteller: String, bodyErsteller: String, titleTeilnehmer: String, bodyTeilnehmer: String) {
-        // Informiere Ersteller
+        val name = if (benutzer.name.isNullOrBlank()) "Jemand" else benutzer.name!!
+        val pushMessage = PushMessageDto(
+            PushNotificationDto(
+                "Absage bei deiner Aktion",
+                "$name nimmt nicht mehr Teil an deiner Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))}"
+            ), mapOf(
+                "type" to "ParticipationMessage",
+                "channel" to "action:${aktion.id}",
+                "timestamp" to now().format(ISO_OFFSET_DATE_TIME),
+                "action" to aktion.id,
+                "username" to name,
+                "joins" to false
+            )
+        )
         val ersteller = aktion.teilnehmer[0]
-        LOG.debug("Informiere Ersteller ${ersteller.id} von Aktion ${aktion.id}")
-        val data = mapOf(Pair("action", aktion.id.toString()))
-        pushService.sendePushNachrichtAnEmpfaenger(
-                PushNotificationDto(titleErsteller, bodyErsteller), data, listOf(ersteller))
 
-        //Informiere Teilnehmer
-        val restlicheTeilnehmer = aktion.teilnehmer.minus(ersteller)
-        LOG.debug("Informiere restliche Teilnehmer ${restlicheTeilnehmer.map { it.id }} von Aktion ${aktion.id}")
+        LOG.debug("Informiere Ersteller ${ersteller.id} von Aktion ${aktion.id}")
         pushService.sendePushNachrichtAnEmpfaenger(
-                PushNotificationDto(titleTeilnehmer, bodyTeilnehmer), data, restlicheTeilnehmer)
+            pushMessage.notification,
+            pushMessage.verschluesselt(),
+            listOf(ersteller)
+        )
+
+        pushMessage.notification = PushNotificationDto(
+            "Absage bei eurer Aktion",
+            "$name hat die Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))} verlassen, an der du teilnimmst"
+        )
+        val teilnehmer = aktion.teilnehmer.minus(ersteller)
+
+        LOG.debug("Informiere restliche Teilnehmer ${teilnehmer.map { it.id }} von Aktion ${aktion.id}")
+        pushService.sendePushNachrichtAnEmpfaenger(
+            pushMessage.notification,
+            pushMessage.verschluesselt(),
+            teilnehmer
+        )
     }
 }
 

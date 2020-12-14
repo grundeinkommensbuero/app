@@ -1,4 +1,4 @@
-import 'package:sammel_app/shared/Crypter.dart';
+import 'package:sammel_app/shared/ServerException.dart';
 
 import 'Message.dart';
 
@@ -11,7 +11,7 @@ class PushMessage {
 
   toJson() => {
         'recipients': recipients,
-        'data': encrypt(data),
+        'data': data,
         'notification': notification,
       };
 }
@@ -30,6 +30,7 @@ class PushNotification {
 
 class PushDataTypes {
   static final SimpleChatMessage = 'SimpleChatMessage';
+  static String ParticipationMessage = 'ParticipationMessage';
 }
 
 // Alle Data-Objekte müssen in eine flache Map<String, String> serialisiert werden können
@@ -43,24 +44,60 @@ class PushData {
   toJson() => {'type': type};
 }
 
-class MessagePushData extends PushData {
-  Message message;
-  String channel_name;
+class ChatPushData extends PushData {
+  String channel;
+
+  ChatPushData(this.channel);
+
+  static ChatPushData fromJson(Map<String, dynamic> data) =>
+      ChatPushData(data['channel']);
+}
+
+class ChatMessagePushData extends ChatPushData {
+  ChatMessage message;
   final String type = PushDataTypes.SimpleChatMessage;
 
-  MessagePushData(this.message, this.channel_name);
+  ChatMessagePushData(this.message, channel) : super(channel);
 
   toJson() {
     var json_message = message.toJson();
     json_message['type'] = type;
-    json_message['channel_name'] = this.channel_name;
+    json_message['channel'] = this.channel;
     return json_message;
   }
 
-  MessagePushData.fromJson(Map <dynamic, dynamic> json)
-  {
-    this.message = Message.fromJSON(json);
-    this.channel_name = json['channel_name'];
+  ChatMessagePushData.fromJson(Map<String, dynamic> json)
+      : super(json['channel']) {
+    try {
+      this.message = ChatMessage.fromJson(json);
+    } on AssertionError catch (e) {
+      throw UnreadablePushMessage(
+          'Unlesbare Teilnahme-Push-Nachricht (Teilnahme) empfangen: ${e.message}');
+    }
+  }
+}
+
+class ParticipationPushData extends ChatPushData {
+  ParticipationMessage message;
+  final String type = PushDataTypes.ParticipationMessage;
+
+  ParticipationPushData(this.message, channel) : super(channel);
+
+  toJson() {
+    var json_message = message.toJson();
+    json_message['type'] = type;
+    json_message['channel'] = this.channel;
+    return json_message;
+  }
+
+  ParticipationPushData.fromJson(Map<String, dynamic> json)
+      : super(json['channel']) {
+    try {
+      this.message = ParticipationMessage.fromJson(json);
+    } on AssertionError catch (e) {
+      throw UnreadablePushMessage(
+          'Unlesbare Push-Nachricht (Teilnahme) empfangen: ${e.message}');
+    }
   }
 }
 
@@ -89,4 +126,10 @@ class WrongDataTypeKeyError {
 
   String getMessage() =>
       'Der Typ "$found" entspricht nicht dem erwarteten Typ "$expected"';
+}
+
+class UnreadablePushMessage implements ServerException {
+  String message;
+
+  UnreadablePushMessage([this.message = 'Unlesbare Push-Nachricht empfangen']);
 }
