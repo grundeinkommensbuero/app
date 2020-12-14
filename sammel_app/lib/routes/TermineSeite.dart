@@ -295,7 +295,7 @@ class TermineSeiteState extends State<TermineSeite>
   }
 
   Widget evaluateButton(Termin termin, BuildContext context) {
-    final isEvaluated = false;
+    final isEvaluated = false; // TODO
     return SizedBox(
         width: 100.0,
         child: isEvaluated
@@ -438,12 +438,12 @@ class TermineSeiteState extends State<TermineSeite>
               ),
               children: <Widget>[
                 Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  height: MediaQuery.of(context).size.height * 0.8,
-                  child: EvaluationEditor(
-                      onFinish: afterActionEvaluation,
-                      key: Key('evaluation editor')),
-                )
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    height: MediaQuery.of(context).size.height * 0.8,
+                    child: EvaluationEditor(
+                        onFinish: afterActionEvaluation,
+                        key: Key('evaluation editor'),
+                        terminId: termin.id))
               ]);
         });
   }
@@ -451,25 +451,21 @@ class TermineSeiteState extends State<TermineSeite>
   afterActionEvaluation(Evaluation evaluation) async {
     await saveEvaluation(evaluation);
     // TODO
-    // maybe navigate somewhere interesting here
+    // maybe navigate somewhere interesting here or show a thank-you popup
     // otherwise replace this with saveEvaluation directly
   }
 
   Future<void> saveEvaluation(Evaluation evaluation) async {
-    // TODO
-    /*
     try {
-      String token = await storageService.loadActionToken(editedAction.id);
-      await termineService.saveAction(editedAction, token);
-      setState(() => updateAction(editedAction, false));
+      // String token = await storageService.loadActionToken(editedAction.id);
+      await termineService.saveEvaluation(evaluation, /*token*/);
+      // setState(() => updateAction(editedAction, false)); // TODO update that evaluation exists
     } catch (e, s) {
       ErrorService.handleError(e, s,
-          additional: 'Aktion konnte nicht gespeichert werden.');
+          additional: 'Evaluation konnte nicht gespeichert werden.');
     }
-     */
     return;
   }
-
 
   Future<void> deleteAction(Termin action) async {
     String token = await storageService.loadActionToken(action.id);
