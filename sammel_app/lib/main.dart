@@ -20,7 +20,7 @@ void main() {
 const Mode mode = Mode.LOCAL;
 
 // Debug
-const bool pullMode = false;
+const bool pullMode = true;
 const bool clearButton = false;
 
 class MyApp extends StatelessWidget {
