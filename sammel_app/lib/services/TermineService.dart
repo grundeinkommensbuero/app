@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http_server/http_server.dart';
+import 'package:sammel_app/model/Evaluation.dart';
 import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
@@ -31,6 +32,8 @@ abstract class AbstractTermineService extends BackendService {
   joinAction(int id);
 
   leaveAction(int id);
+
+  Future<void> saveEvaluation(Evaluation evaluation);
 ***REMOVED***
 
 class TermineService extends AbstractTermineService {
@@ -86,6 +89,12 @@ class TermineService extends AbstractTermineService {
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s, additional: 'Absage ist fehlgeschlagen.');
     ***REMOVED***
+  ***REMOVED***
+
+  saveEvaluation(Evaluation evaluation) async {
+    // TODO
+    print('saving evaluation');
+    print(evaluation);
   ***REMOVED***
 ***REMOVED***
 
@@ -212,5 +221,11 @@ class DemoTermineService extends AbstractTermineService {
     var stored = termine.firstWhere((a) => a.id == id);
     if (stored.participants.map((e) => e.id).contains(1))
       stored.participants.remove(User(11, 'Ich', Colors.red));
+  ***REMOVED***
+
+  @override
+  Future<void> saveEvaluation(Evaluation evaluation, /*String token*/) async {
+    // TODO
+    return;
   ***REMOVED***
 ***REMOVED***

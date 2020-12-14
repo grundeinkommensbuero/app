@@ -83,7 +83,7 @@ class BackendService {
 class NoUserAuthException implements Exception {***REMOVED***
 
 class Backend {
-  static final host = testMode ? 'dwe.idash.org' : '10.0.2.2';
+  static final host = testMode ? 'dwe.idash.org' : '127.0.0.1';
   static final port = testMode ? 443 : 18443;
 
   static final clientContext = SecurityContext();

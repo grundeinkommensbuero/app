@@ -1,3 +1,4 @@
+import 'package:sammel_app/model/Evaluation.dart';
 import 'package:sammel_app/model/User.dart';
 
 import 'Ort.dart';

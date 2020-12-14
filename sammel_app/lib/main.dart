@@ -17,7 +17,7 @@ void main() {
   runApp(MyApp());
 ***REMOVED***
 
-const Mode mode = Mode.DEMO;
+const Mode mode = Mode.LOCAL;
 
 ***REMOVED***
 ***REMOVED***

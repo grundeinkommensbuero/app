@@ -23,8 +23,6 @@ import 'VenueDialog.dart';
 enum ValidationState { not_validated, error, ok ***REMOVED***
 
 class EvaluationData {
-  //  TODO
-  // expand
   int unterschriften = 0;
   int teilnehmende = 0;
   double stunden = 0.0;
@@ -45,19 +43,21 @@ class EvaluationData {
 // ignore: must_be_immutable
 class EvaluationEditor extends StatefulWidget {
   Function onFinish;
+  int terminId;
 
-  EvaluationEditor({this.onFinish, Key key***REMOVED***) : super(key: key) {
-    if (onFinish == null) onFinish = (Evaluation _) {***REMOVED*** // TODO unclear if this is necessary or what it does
+  EvaluationEditor({this.onFinish, Key key, this.terminId***REMOVED***) : super(key: key) {
+    if (onFinish == null) onFinish = (Evaluation _) {***REMOVED*** // TODO unclear if this is necessary or what it does, presumably it passes a default function that does nothing
   ***REMOVED***
 
   @override
-  EvaluationEditorState createState() => EvaluationEditorState();
+  EvaluationEditorState createState() => EvaluationEditorState(this.terminId);
 ***REMOVED***
 
 class EvaluationEditorState extends State<EvaluationEditor> {
+  int terminId;
   EvaluationData evaluation = EvaluationData();
 
-  EvaluationEditorState() : super();
+  EvaluationEditorState(this.terminId) : super();
 
   @override
   Widget build(BuildContext context) {
@@ -474,7 +474,7 @@ class EvaluationEditorState extends State<EvaluationEditor> {
       ***REMOVED***
       validateAllInput();
       if (evaluation.validated['all'] == ValidationState.ok) {
-        widget.onFinish(evaluation);
+        widget.onFinish(Evaluation(this.terminId, evaluation.unterschriften, evaluation.teilnehmende, evaluation.stunden, evaluation.kommentar, evaluation.erkenntnisse)); // maybe the Evaluation/EvaluationData two-tap is superfluous here
         setState(() => evaluation = EvaluationData()); // reset Form for next use
       ***REMOVED***
     ***REMOVED***
