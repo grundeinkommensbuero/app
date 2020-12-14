@@ -118,7 +118,7 @@ class Backend {
   ***REMOVED***
 
   static String rootCertificate = 'assets/security/root-cert.pem';
-  static String localCertificate = 'assets/security/sammel-server_10.0.2.2.pem';
+  static String localCertificate = 'assets/security/sammel-server_local.pem';
 
   Future<HttpClientResponseBody> get(
       String url, Map<String, String> headers) async {
