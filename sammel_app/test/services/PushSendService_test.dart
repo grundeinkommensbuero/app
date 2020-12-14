@@ -38,7 +38,8 @@ main() {
 
       verify(backendMock.post(
           'service/push/devices',
-          '{"recipients":["Empfänger"],"data":{"encrypted":"Base64","payload":"eyJ0eXBlIjpudWxsfQ=="***REMOVED***,"notification":{"title":"Titel","body":"Inhalt"***REMOVED******REMOVED***',
+          '{"recipients":["Empfänger"],"data":{"type":null***REMOVED***,"notification":{"title":"Titel","body":"Inhalt"***REMOVED******REMOVED***',
+          any,
           any));
     ***REMOVED***);
 
@@ -62,7 +63,8 @@ main() {
 
       verify(backendMock.post(
           'service/push/topic/Thema',
-          '{"recipients":null,"data":{"encrypted":"Base64","payload":"eyJ0eXBlIjpudWxsfQ=="***REMOVED***,"notification":{"title":"Titel","body":"Inhalt"***REMOVED******REMOVED***',
+          '{"recipients":null,"data":{"type":null***REMOVED***,"notification":{"title":"Titel","body":"Inhalt"***REMOVED******REMOVED***',
+          any,
           any));
     ***REMOVED***);
   ***REMOVED***);

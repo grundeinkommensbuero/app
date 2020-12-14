@@ -16,6 +16,7 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
+import 'package:sammel_app/shared/ChatMessageService.dart';
 
 import '../model/Ort_test.dart';
 import '../model/Termin_test.dart';
@@ -27,6 +28,7 @@ final _listLocationService = ListLocationServiceMock();
 final _storageService = StorageServiceMock();
 final _pushService = PushSendServiceMock();
 final _userService = ConfiguredUserServiceMock();
+final _chatService = ChatMessageServiceMock();
 
 void main() {
   setUp(() {
@@ -838,6 +840,7 @@ _pumpNavigation(WidgetTester tester) async {
         Provider<AbstractStammdatenService>.value(value: _stammdatenService),
         Provider<AbstractPushSendService>.value(value: _pushService),
         Provider<AbstractUserService>.value(value: _userService),
+        Provider<ChatMessageService>.value(value: _chatService),
       ],
       child: MaterialApp(
         home: Navigation(),
@@ -855,6 +858,7 @@ _pumpActionPage(WidgetTester tester) async {
         Provider<AbstractStammdatenService>.value(value: _stammdatenService),
         Provider<AbstractUserService>.value(value: _userService),
         Provider<PushSendService>.value(value: _pushService),
+        Provider<ChatMessageService>.value(value: _chatService),
       ],
       child: MaterialApp(
         home: TermineSeite(),

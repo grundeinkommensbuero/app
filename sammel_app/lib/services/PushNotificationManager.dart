@@ -58,7 +58,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     // _firebaseMessaging.configure(onMessage: ()=>this.onMessage);
   ***REMOVED***
 
-  Map callback_map = Map();
+  Map<String, PushNotificationListener> callback_map = Map();
 
   Future<String> pushToken;
 
@@ -78,18 +78,16 @@ class PushNotificationManager implements AbstractPushNotificationManager {
   Future<dynamic> onMessageCallback(Map<dynamic, dynamic> message) async {
     print('Push-Nachricht empfangen: $message');
     try {
-      Map<dynamic, dynamic> data;
-      data = decrypt(message['data']);
-      print('Push-Nachricht entschlüsselt: ${data.toString()***REMOVED***');
+      var data = decrypt(message['data']);
       if (data.containsKey('type')) {
         String type = data['type'];
+        print('Type: $type');
         if (callback_map.containsKey(type)) {
-          data.remove('type');
           callback_map[type].receive_message(data);
         ***REMOVED***
       ***REMOVED***
-    ***REMOVED*** catch (e) {
-      print('Fehler beim Verarbeiten von Push-Nachricht: $e');
+    ***REMOVED*** catch (e, s) {
+      ErrorService.handleError(e, s);
     ***REMOVED***
   ***REMOVED***
 
@@ -114,9 +112,9 @@ class DemoPushNotificationManager implements AbstractPushNotificationManager {
   DemoPushNotificationManager(this.pushService);
 
   @override
-  void register_message_callback(String id, PushNotificationListener callback) {
+  void register_message_callback(String type, PushNotificationListener callback) {
     pushService.stream
-        .where((data) => data.type == id)
+        .where((data) => data.type == type)
         .listen((data) => callback.receive_message(data.toJson()));
   ***REMOVED***
 ***REMOVED***

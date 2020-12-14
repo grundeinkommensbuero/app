@@ -40,7 +40,7 @@ class ChatWindowState extends State<ChatWindow> {
 
   ChatWindowState(this.channel, this.termin);
 
-  SimpleMessageChannel channel;
+  ActionChannel channel;
   Termin termin;
   User user;
   AbstractPushSendService pushService;
@@ -196,16 +196,16 @@ class ChatWindowState extends State<ChatWindow> {
       name = await showUsernameDialog(context: context);
       if (name == null) return;
     ***REMOVED***
-    Message message = Message(
+    ChatMessage message = ChatMessage(
         text: controller.text,
-        sending_time: DateTime.now(),
+        timestamp: DateTime.now(),
         message_color: user.color,
         sender_name: name,
         user_id: user.id);
-    MessagePushData mpd = MessagePushData(message, channel.id);
+    ChatPushData mpd = ChatMessagePushData(message, channel.id);
     pushService.pushToAction(widget.termin.id, mpd,
         PushNotification("New Chat Message", "Open App to view Message"));
-    channel.channelCallback(message);
+    channel.pushChatMessage(message);
     controller.clear();
   ***REMOVED***
 

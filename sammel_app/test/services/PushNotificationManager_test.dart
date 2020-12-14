@@ -30,8 +30,7 @@ main() {
   ***REMOVED***);
 
   group('createPushListener', () {
-    test('erzeugt PullService, wenn bereits im Pull-Modus',
-        () async {
+    test('erzeugt PullService, wenn bereits im Pull-Modus', () async {
       when(storageService.isPullMode()).thenAnswer((_) async => true);
 
       await manager.createPushListener(firebaseMock, backend);

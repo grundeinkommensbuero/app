@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sammel_app/services/AuthFehler.dart';
-import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
+import 'package:sammel_app/shared/ServerException.dart';
 
 class ErrorService {
   static BuildContext _context;
@@ -36,7 +36,7 @@ class ErrorService {
           '${error.message***REMOVED***$additional$EMAIL');
       return;
     ***REMOVED***
-    if (error is WrongResponseFormatException) {
+    if (error is ServerException) {
       pushMessage(
           'Bei der Kommunikation mit dem Server ist ein technischer Fehler aufgetreten',
           '${error.message***REMOVED***$additional$EMAIL');

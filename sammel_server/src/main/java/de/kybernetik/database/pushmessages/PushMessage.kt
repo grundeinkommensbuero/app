@@ -11,7 +11,7 @@ class PushMessage {
     @Suppress("unused") // für JPA
     constructor()
 
-    constructor(empfaenger: Benutzer, daten: Map<String, String>?, benachrichtigung: PushNotificationDto?) {
+    constructor(empfaenger: Benutzer, daten: Map<String, Any?>?, benachrichtigung: PushNotificationDto?) {
         this.empfaenger = empfaenger
         if (daten != null) this.daten = SerializationUtils.serialize(HashMap(daten))
         if (benachrichtigung != null) this.benachrichtigung = SerializationUtils.serialize(benachrichtigung)
