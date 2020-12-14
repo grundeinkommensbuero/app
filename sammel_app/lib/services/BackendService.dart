@@ -108,17 +108,19 @@ class Backend {
   // Darum kann das Zertifikat nicht bei der Initialisierung geladen werden
   // there gotta be a better way to do this...
   static ladeZertifikat() async {
+    print('ladeZertifikat');
     // https://stackoverflow.com/questions/54104685/flutter-add-self-signed-certificate-from-asset-folder
     ByteData data = await rootBundle.load(rootCertificate);
     clientContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
     if (!testMode) {
       ByteData data = await rootBundle.load(localCertificate);
       clientContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
+      print('irgendwas geladen');
     ***REMOVED***
   ***REMOVED***
 
-  static String rootCertificate = 'assets/security/root-cert.pem';
-  static String localCertificate = 'assets/security/sammel-server_10.0.2.2.pem';
+  static String rootCertificate = 'assets/security/root-certXX.pem';
+  static String localCertificate = 'assets/security/sammel-server_10.0.2.2XX.pem';
 
   Future<HttpClientResponseBody> get(
       String url, Map<String, String> headers) async {

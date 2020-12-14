@@ -20,7 +20,7 @@ void main() {
 const Mode mode = Mode.LOCAL;
 
 ***REMOVED***
-***REMOVED***
+const bool pullMode = true;
 ***REMOVED***
 
 class MyApp extends StatelessWidget {
