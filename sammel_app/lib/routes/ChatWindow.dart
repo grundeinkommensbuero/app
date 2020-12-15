@@ -18,7 +18,7 @@ import 'ChatListWidget.dart';
 import 'ChatInput.dart';
 
 class ChatWindow extends StatefulWidget {
-  Channel channel;
+  ChatChannel channel;
   Termin termin;
 
   ChatWindow(this.channel, this.termin, {Key key***REMOVED***) : super(key: key);
@@ -28,7 +28,7 @@ class ChatWindow extends StatefulWidget {
 ***REMOVED***
 
 abstract class ChannelChangeListener {
-  void channelChanged(Channel channel);
+  void channelChanged(ChatChannel channel);
 ***REMOVED***
 
 class ChatWindowState extends State<ChatWindow> {
@@ -39,7 +39,7 @@ class ChatWindowState extends State<ChatWindow> {
 
   ChatWindowState(this.channel, this.termin);
 
-  ActionChannel channel;
+  ChatChannel channel;
   Termin termin;
   User user;
   AbstractPushSendService pushService;
