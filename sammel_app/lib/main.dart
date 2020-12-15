@@ -17,7 +17,7 @@ void main() {
   runApp(MyApp());
 }
 
-const Mode mode = Mode.LOCAL;
+const Mode mode = Mode.TEST;
 
 // Debug
 const bool pullMode = true;
