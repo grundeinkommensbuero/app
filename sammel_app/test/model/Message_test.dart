@@ -40,56 +40,57 @@ void main() {
         expect(json['username'], null);
         expect(json['joins'], isTrue);
       ***REMOVED***);
+    ***REMOVED***);
 
-      group('fromJson', () {
-        test('deserializes correctly', () {
-          var json = {
-            'type': 'ParticipationMessage',
-            'obtained_from_server': false,
-            'timestamp': '2020-12-12 23:58:00.000',
-            'username': 'Karl Marx',
-            'joins': true
-          ***REMOVED***
+    group('fromJson', () {
+      test('deserializes correctly', () {
+        var json = {
+          'type': 'ParticipationMessage',
+          'obtained_from_server': false,
+          'timestamp': '2020-12-12 23:58:00.000',
+          'username': 'Karl Marx',
+          'joins': true
+        ***REMOVED***
 
-          var message = ParticipationMessage.fromJson(json);
-          expect(message.type, 'ParticipationMessage');
-          expect(message.obtained_from_server, isFalse);
-          expect(message.timestamp.toString(), '2020-12-12 23:58:00.000');
-          expect(message.username, 'Karl Marx');
-          expect(message.joins, isTrue);
-        ***REMOVED***);
+        var message = ParticipationMessage.fromJson(json);
+        expect(message.type, 'ParticipationMessage');
+        expect(message.obtained_from_server, isFalse);
+        expect(message.timestamp.toString(), '2020-12-12 23:58:00.000');
+        expect(message.username, 'Karl Marx');
+        expect(message.joins, isTrue);
+      ***REMOVED***);
 
-        test('deserializes null-values', () {
-          var json = {'type': 'ParticipationMessage'***REMOVED***
+      test('deserializes null-values', () {
+        var json = {
+          'type': 'ParticipationMessage',
+          'obtained_from_server': true,
+          'timestamp': '2020-12-12 23:58:00.000',
+          'joins': true
+        ***REMOVED***
 
-          var message = ParticipationMessage.fromJson(json);
-          expect(message.type, 'ParticipationMessage');
-          expect(message.obtained_from_server, isNull);
-          expect(message.timestamp, isNull);
-          expect(message.joins, isNull);
-        ***REMOVED***);
+        var message = ParticipationMessage.fromJson(json);
+        expect(message.type, 'ParticipationMessage');
+        expect(message.username, isNull);
+      ***REMOVED***);
 
-        test('fromJson expects timestamp', () async {
-          var json = {
-            'type': 'ParticipationMessage',
-            'obtained_from_server': false,
-            'username': 'Karl Marx',
-            'joins': true
-          ***REMOVED***
-          expect(
-              () => ParticipationMessage.fromJson(json), throwsAssertionError);
-        ***REMOVED***);
+      test('fromJson expects timestamp', () async {
+        var json = {
+          'type': 'ParticipationMessage',
+          'obtained_from_server': false,
+          'username': 'Karl Marx',
+          'joins': true
+        ***REMOVED***
+        expect(() => ParticipationMessage.fromJson(json), throwsAssertionError);
+      ***REMOVED***);
 
-        test('fromJson expects joins', () async {
-          var json = {
-            'type': 'ParticipationMessage',
-            'obtained_from_server': false,
-            'timestamp': '2020-12-12 23:58:00.000',
-            'username': 'Karl Marx',
-          ***REMOVED***
-          expect(
-              () => ParticipationMessage.fromJson(json), throwsAssertionError);
-        ***REMOVED***);
+      test('fromJson expects joins', () async {
+        var json = {
+          'type': 'ParticipationMessage',
+          'obtained_from_server': false,
+          'timestamp': '2020-12-12 23:58:00.000',
+          'username': 'Karl Marx',
+        ***REMOVED***
+        expect(() => ParticipationMessage.fromJson(json), throwsAssertionError);
       ***REMOVED***);
     ***REMOVED***);
   ***REMOVED***);
