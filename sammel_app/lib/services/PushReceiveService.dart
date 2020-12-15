@@ -27,15 +27,16 @@ class FirebaseReceiveService implements PushReceiveService {
     initializeFirebase();
   ***REMOVED***
 
-  Future<void> initializeFirebase() async {
+  initializeFirebase() async {
     // DEBUG
     if (pullMode) return;
 
     // For iOS request permission first.
     await firebaseMessaging.requestNotificationPermissions();
 
-    token = firebaseMessaging.getToken();
-    await token;
+    token = firebaseMessaging
+        .getToken()
+        .timeout(Duration(seconds: 5), onTimeout: () => null);
   ***REMOVED***
 
   @override
