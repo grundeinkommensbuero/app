@@ -34,8 +34,8 @@ class EvaluationData {
     'unterschriften': ValidationState.not_validated,
     'teilnehmende': ValidationState.not_validated,
     'stunden': ValidationState.not_validated,
-    'kommentar': ValidationState.not_validated,
-    'erkenntnisse': ValidationState.not_validated,
+    'kommentar': ValidationState.ok,
+    'erkenntnisse': ValidationState.ok,
     'finish_pressed': false
   ***REMOVED***
 ***REMOVED***
@@ -434,7 +434,7 @@ class EvaluationEditorState extends State<EvaluationEditor> {
   void validateAllInput() {
     validateInt(evaluation.unterschriften, 'unterschriften');
     validateInt(evaluation.teilnehmende, 'teilnehmende');
-    validateInt(evaluation.stunden, 'stunden');
+    validateDouble(evaluation.stunden, 'stunden');
 
     evaluation.validated['all'] = ValidationState.ok;
     for (var value in evaluation.validated.values) {
@@ -466,14 +466,18 @@ class EvaluationEditorState extends State<EvaluationEditor> {
       validateAllInput();
     ***REMOVED***);
     if (evaluation.validated['all'] == ValidationState.ok) {
+      // TODO re-enable this
+      /*
       var name =
           (await Provider.of<AbstractUserService>(context).user.first).name;
       if (isBlank(name)) {
         var name = await showUsernameDialog(context: context);
         if (name == null) return;
       ***REMOVED***
+      */
       validateAllInput();
-      if (evaluation.validated['all'] == ValidationState.ok) {
+      // TODO delete the or true here
+      if (evaluation.validated['all'] == ValidationState.ok || true) {
         widget.onFinish(Evaluation(this.terminId, evaluation.unterschriften, evaluation.teilnehmende, evaluation.stunden, evaluation.kommentar, evaluation.erkenntnisse)); // maybe the Evaluation/EvaluationData two-tap is superfluous here
         setState(() => evaluation = EvaluationData()); // reset Form for next use
       ***REMOVED***
