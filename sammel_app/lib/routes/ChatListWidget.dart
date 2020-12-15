@@ -14,7 +14,7 @@ import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'ChatWindow.dart';
 
 class ChatListWidget extends StatefulWidget {
-  Channel channel;
+  ChatChannel channel;
   ScrollController scroll_controller = ScrollController();
 
   ChatListWidget(this.channel, {Key key}) : super(key: key);
@@ -25,11 +25,11 @@ class ChatListWidget extends StatefulWidget {
 
 class ChatListState extends State<ChatListWidget>
     implements ChannelChangeListener {
-  ActionChannel channel;
+  ChatChannel channel;
   User user;
   bool force_scrolling = false;
 
-  ChatListState(ActionChannel channel) {
+  ChatListState(ChatChannel channel) {
     this.channel = channel;
   }
 
@@ -44,22 +44,23 @@ class ChatListState extends State<ChatListWidget>
     this.channel.register_widget(this);
     var list_view = ListView(
         padding: EdgeInsets.all(8.0),
-        controller: widget.scroll_controller, children: buildListMessage());
-    //we need this hack to enable scrolling to the end of the list on message received
-    Timer(
-        Duration(milliseconds: 500),
-        () => widget.scroll_controller
-            .jumpTo(widget.scroll_controller.position.maxScrollExtent));
+        controller: widget.scroll_controller,
+        children: buildListMessage());
 
     return list_view;
   }
 
   @override
-  void channelChanged(Channel channel) {
+  void channelChanged(ChatChannel channel) {
     force_scrolling = true;
     setState(() {
       widget.channel = channel;
     });
+    //we need this hack to enable scrolling to the end of the list on message received
+    Timer(
+        Duration(milliseconds: 500),
+        () => widget.scroll_controller
+            .jumpTo(widget.scroll_controller.position.maxScrollExtent));
   }
 
   List<Widget> buildListMessage() {
@@ -78,7 +79,7 @@ class ChatListState extends State<ChatListWidget>
   }
 
   Widget createChatMessageWidget(ChatMessage message) {
-    final own = message.user_id == user.id;
+    final own = message.user_id == user?.id;
     return Align(
         alignment: own ? Alignment.topRight : Alignment.topLeft,
         child: Container(
@@ -142,6 +143,7 @@ class ChatListState extends State<ChatListWidget>
         ? '\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen'
         : '';
     return RichText(
+        key: Key('Participation Message ${message.username}'),
         textAlign: TextAlign.center,
         text: TextSpan(
             text: message.username ?? 'Jemand',
@@ -178,16 +180,5 @@ class ChatListState extends State<ChatListWidget>
     }
 
     return DateFormat('MMM d, hh:mm').format(date);
-  }
-
-  scrollList(BuildContext context) {
-    if (force_scrolling) {
-      print("scroll list called");
-      if (widget.scroll_controller.hasClients) {
-        widget.scroll_controller
-            .jumpTo(widget.scroll_controller.position.maxScrollExtent);
-      }
-      force_scrolling = false;
-    }
   }
 }

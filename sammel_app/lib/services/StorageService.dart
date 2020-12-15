@@ -35,12 +35,15 @@ class StorageService {
   Future<String> loadActionToken(int id) =>
       prefs.then((prefs) => prefs.getString('$_ACTION:${id.toString()}'));
 
-  Future<bool> saveActionChannel(ActionChannel channel) => prefs.then((prefs) =>
+  Future<bool> saveActionChannel(ChatChannel channel) => prefs.then((prefs) =>
       prefs.setString('$_CHANNEL:${channel.id}', jsonEncode(channel.toJson())));
 
-  Future<Channel> loadActionChannel(String id) async {
-    return prefs.then((prefs) =>
-        ActionChannel.fromJSON(jsonDecode(prefs.getString('$_CHANNEL:${id}'))));
+  Future<ChatChannel> loadActionChannel(String id) async {
+    return prefs.then((prefs) {
+      var json = prefs.getString('$_CHANNEL:${id}');
+      if(json == null) return null;
+      return ChatChannel.fromJSON(jsonDecode(json));
+    });
   }
 
   markActionIdAsStored(int id) => prefs.then((prefs) => _getActionList().then(

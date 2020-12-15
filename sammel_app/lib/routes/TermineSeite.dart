@@ -273,7 +273,7 @@ class TermineSeiteState extends State<TermineSeite>
   }
 
   openChatWindow(Termin termin) async {
-    Channel message_channel =
+    ChatChannel message_channel =
         await chatMessageService.getActionChannel(termin.id);
     Navigator.push(
         context,
@@ -448,7 +448,6 @@ class TermineSeiteState extends State<TermineSeite>
   }
 
   Future<void> joinAction(Termin termin) async {
-    chatMessageService.createActionChannel(termin.id);
     await termineService.joinAction(termin.id);
     setState(() {
       termine.firstWhere((t) => t.id == termin.id).participants.add(me);

@@ -13,14 +13,14 @@ class ChatMessageService implements PushNotificationListener {
     this.storage_service = storageService;
   }
 
-  Map<String, ActionChannel> channels = Map<String, ActionChannel>();
+  Map<String, ChatChannel> channels = Map<String, ChatChannel>();
   StorageService storage_service;
 
   @override
-  void receive_message(Map<dynamic, dynamic> data) {
+  Future<void> receive_message(Map<dynamic, dynamic> data) async {
     try {
       ChatPushData mpd = ChatPushData.fromJson(data);
-      ActionChannel channel = channels[mpd.channel];
+      ChatChannel channel = await getChannel(mpd.channel);
       if (channel != null) {
         if (data['type'] == PushDataTypes.SimpleChatMessage)
           channel.pushChatMessage(ChatMessage.fromJson(data));
@@ -28,32 +28,35 @@ class ChatMessageService implements PushNotificationListener {
           channel.pushParticipationMessage(ParticipationMessage.fromJson(data));
         this.storage_service.saveActionChannel(channel);
       }
-    } on UnreadablePushMessage catch(e, s) {
+    } on UnreadablePushMessage catch (e, s) {
       ErrorService.handleError(e, s);
     }
   }
 
-  Future<Channel> getActionChannel(int idNr) async {
-    String id = 'action:$idNr';
-    if (!channels.containsKey(idNr)) {
-      ActionChannel storedChannel =
+  Future<ChatChannel> getActionChannel(int idNr) async =>
+      await getChannel('action:$idNr');
+
+  Future<ChatChannel> getChannel(String id) async {
+    if (!channels.containsKey(id)) {
+      ChatChannel storedChannel =
           await this.storage_service.loadActionChannel(id);
       if (storedChannel != null)
         channels[id] = storedChannel;
       else {
-        createActionChannel(idNr);
+        this.storage_service.saveActionChannel(ChatChannel(id));
+        channels[ChatChannel(id).id] = ChatChannel(id);
       }
     }
     return channels[id];
   }
 
-  void createActionChannel(int id) {
-    var newChannel = ActionChannel(id);
+  void createChannel(String id) {
+    var newChannel = ChatChannel(id);
     this.storage_service.saveActionChannel(newChannel);
     channels[newChannel.id] = newChannel;
   }
 
-  void register_channel(Channel channel) {
+  void register_channel(ChatChannel channel) {
     channels[channel.id] = channel;
   }
 }
