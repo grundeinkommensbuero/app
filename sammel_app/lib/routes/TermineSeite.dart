@@ -449,6 +449,21 @@ class TermineSeiteState extends State<TermineSeite>
   ***REMOVED***
 
   afterActionEvaluation(Evaluation evaluation) async {
+    Navigator.pop(context, false);
+
+    showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text('Danke!'),
+          content: SelectableText(
+              'Vielen Dank, dass Du Eure Erfahrungen geteilt hast'),
+          actions: <Widget>[
+            RaisedButton(
+              child: Text('Schließen'),
+              onPressed: () => Navigator.pop(context),
+            )
+          ],
+        ));
     await saveEvaluation(evaluation);
     // TODO
     // maybe navigate somewhere interesting here or show a thank-you popup
@@ -456,9 +471,12 @@ class TermineSeiteState extends State<TermineSeite>
   ***REMOVED***
 
   Future<void> saveEvaluation(Evaluation evaluation) async {
+    print('saveEvaluation');
     try {
       // String token = await storageService.loadActionToken(editedAction.id);
-      await termineService.saveEvaluation(evaluation, /*token*/);
+      await termineService.saveEvaluation(
+        evaluation, /*token*/
+      );
       // setState(() => updateAction(editedAction, false)); // TODO update that evaluation exists
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
