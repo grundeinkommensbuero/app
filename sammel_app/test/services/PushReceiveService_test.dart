@@ -8,17 +8,18 @@ import 'package:test/test.dart';
 import '../shared/Mocks.dart';
 
 main() {
-  FirebaseMessaging firebaseMock;
+  FirebaseMessaging firebaseMock = FirebaseMessagingMock();
   UserService userService = ConfiguredUserServiceMock();
 
   setUp(() {
-    firebaseMock = FirebaseMessagingMock();
+    reset(firebaseMock);
     when(firebaseMock.getToken()).thenAnswer((_) async => "firebase-token");
   ***REMOVED***);
 
   group('FirebaseReceiveService', () {
+    when(firebaseMock.getToken()).thenAnswer((_) async => '123');
+
     test('takes Mock if given', () {
-      when(firebaseMock.getToken()).thenAnswer((_) => null);
       var firebaseListener = FirebaseReceiveService(firebaseMock);
 
       expect(firebaseListener.firebaseMessaging, firebaseMock);
@@ -26,7 +27,6 @@ main() {
     ***REMOVED***);
 
     test('registers onMessage listener', () {
-      when(firebaseMock.getToken()).thenAnswer((_) => null);
       var firebaseListener = FirebaseReceiveService(firebaseMock);
       var onMessage = (_) async => null;
 
