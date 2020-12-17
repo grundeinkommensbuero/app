@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_test_ui/flutter_test_ui.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Message.dart';
-import 'package:sammel_app/model/user_data.dart';
+import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/routes/ChatListWidget.dart';
 import 'package:sammel_app/services/UserService.dart';
 
@@ -25,14 +25,69 @@ void main() {
   group('ParticipationMessages', () {
     testUI('shows join message', (tester) async {
       await tester.pumpWidget(widget, Duration(minutes: 5));
-      expect(find.byKey(Key('Participation Message Karl Marx')), findsNothing);
+      expect(find.byType(RichText), findsNothing);
 
       channel.pushParticipationMessage(ParticipationMessage(
           true, DateTime(2020, 12, 13, 11, 22), 'Karl Marx', true));
       await tester.pump(Duration(minutes: 5));
 
+      expect(find.byKey(Key('Participation Message')), findsOneWidget);
       expect(
-          find.byKey(Key('Participation Message Karl Marx')), findsOneWidget);
+          find.byWidgetPredicate((widget) =>
+              widget is RichText &&
+              widget.text.toPlainText() ==
+                  'Karl Marx ist der Aktion beigetreten\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen'),
+          findsOneWidget);
+    ***REMOVED***);
+
+    testUI('shows join message with unknown username', (tester) async {
+      await tester.pumpWidget(widget, Duration(minutes: 5));
+      expect(find.byType(RichText), findsNothing);
+
+      channel.pushParticipationMessage(ParticipationMessage(
+          true, DateTime(2020, 12, 13, 11, 22), null, true));
+      await tester.pump(Duration(minutes: 5));
+
+      expect(find.byKey(Key('Participation Message')), findsOneWidget);
+      expect(
+          find.byWidgetPredicate((widget) =>
+              widget is RichText &&
+              widget.text.toPlainText() ==
+                  'Jemand ist der Aktion beigetreten\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen'),
+          findsOneWidget);
+    ***REMOVED***);
+
+    testUI('shows leave message', (tester) async {
+      await tester.pumpWidget(widget, Duration(minutes: 5));
+      expect(find.byType(RichText), findsNothing);
+
+      channel.pushParticipationMessage(ParticipationMessage(
+          true, DateTime(2020, 12, 13, 11, 22), 'Karl Marx', false));
+      await tester.pump(Duration(minutes: 5));
+
+      expect(find.byKey(Key('Participation Message')), findsOneWidget);
+      expect(
+          find.byWidgetPredicate((widget) =>
+              widget is RichText &&
+              widget.text.toPlainText() ==
+                  'Karl Marx hat die Aktion verlassen'),
+          findsOneWidget);
+    ***REMOVED***);
+
+    testUI('shows leave message with unknown username', (tester) async {
+      await tester.pumpWidget(widget, Duration(minutes: 5));
+      expect(find.byType(RichText), findsNothing);
+
+      channel.pushParticipationMessage(ParticipationMessage(
+          true, DateTime(2020, 12, 13, 11, 22), null, false));
+      await tester.pump(Duration(minutes: 5));
+
+      expect(find.byKey(Key('Participation Message')), findsOneWidget);
+      expect(
+          find.byWidgetPredicate((widget) =>
+              widget is RichText &&
+              widget.text.toPlainText() == 'Jemand hat die Aktion verlassen'),
+          findsOneWidget);
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***

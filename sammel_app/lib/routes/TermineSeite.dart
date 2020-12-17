@@ -9,7 +9,7 @@ import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/model/user_data.dart';
+import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
@@ -274,7 +274,7 @@ class TermineSeiteState extends State<TermineSeite>
 
   openChatWindow(Termin termin) async {
     ChatChannel message_channel =
-        await chatMessageService.getActionChannel(termin.id);
+        await chatMessageService.getChatChannel(termin.id);
     Navigator.push(
         context,
         MaterialPageRoute(

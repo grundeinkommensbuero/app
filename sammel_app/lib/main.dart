@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //FIXME kann das weg? >
-    // ActionChannel smc = ActionChannel('SimpleMessageChannel');
+    // ChatChannel smc = ChatChannel('SimpleMessageChannel');
     // chatMessageService.register_channel(smc);
     // <
 

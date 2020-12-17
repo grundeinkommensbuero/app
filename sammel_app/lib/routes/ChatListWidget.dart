@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/User.dart';
-import 'package:sammel_app/model/user_data.dart';
+import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
@@ -143,7 +143,7 @@ class ChatListState extends State<ChatListWidget>
         ? '\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen'
         : '';
     return RichText(
-        key: Key('Participation Message ${message.username***REMOVED***'),
+        key: Key('Participation Message'),
         textAlign: TextAlign.center,
         text: TextSpan(
             text: message.username ?? 'Jemand',

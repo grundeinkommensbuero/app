@@ -62,4 +62,10 @@ class PushMessageDtoTest {
 
         assertEquals(dto.verschluesselt()!!["encrypted"], "Base64")
     ***REMOVED***
+
+    @Test
+    fun verschluessele() {
+        println(PushMessageDto(null, mapOf("content" to "Hello World"), emptyList())
+            .verschluesselt()!!["payload"])
+    ***REMOVED***
 ***REMOVED***
