@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
-import 'package:sammel_app/model/user_data.dart';
+import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageService {
@@ -35,10 +35,10 @@ class StorageService {
   Future<String> loadActionToken(int id) =>
       prefs.then((prefs) => prefs.getString('$_ACTION:${id.toString()}'));
 
-  Future<bool> saveActionChannel(ChatChannel channel) => prefs.then((prefs) =>
+  Future<bool> saveChatChannel(ChatChannel channel) => prefs.then((prefs) =>
       prefs.setString('$_CHANNEL:${channel.id}', jsonEncode(channel.toJson())));
 
-  Future<ChatChannel> loadActionChannel(String id) async {
+  Future<ChatChannel> loadChatChannel(String id) async {
     return prefs.then((prefs) {
       var json = prefs.getString('$_CHANNEL:${id}');
       if(json == null) return null;

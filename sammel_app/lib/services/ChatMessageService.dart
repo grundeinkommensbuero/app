@@ -1,6 +1,6 @@
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
-import 'package:sammel_app/model/user_data.dart';
+import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/StorageService.dart';
@@ -26,25 +26,26 @@ class ChatMessageService implements PushNotificationListener {
           channel.pushChatMessage(ChatMessage.fromJson(data));
         if (data['type'] == PushDataTypes.ParticipationMessage)
           channel.pushParticipationMessage(ParticipationMessage.fromJson(data));
-        this.storage_service.saveActionChannel(channel);
+        this.storage_service.saveChatChannel(channel);
       }
     } on UnreadablePushMessage catch (e, s) {
       ErrorService.handleError(e, s);
     }
   }
 
-  Future<ChatChannel> getActionChannel(int idNr) async =>
+  Future<ChatChannel> getChatChannel(int idNr) async =>
       await getChannel('action:$idNr');
 
   Future<ChatChannel> getChannel(String id) async {
     if (!channels.containsKey(id)) {
       ChatChannel storedChannel =
-          await this.storage_service.loadActionChannel(id);
+          await this.storage_service.loadChatChannel(id);
       if (storedChannel != null)
         channels[id] = storedChannel;
       else {
-        this.storage_service.saveActionChannel(ChatChannel(id));
-        channels[ChatChannel(id).id] = ChatChannel(id);
+        final newChannel = ChatChannel(id);
+        await this.storage_service.saveChatChannel(newChannel);
+        channels[newChannel.id] = newChannel;
       }
     }
     return channels[id];
@@ -52,7 +53,7 @@ class ChatMessageService implements PushNotificationListener {
 
   void createChannel(String id) {
     var newChannel = ChatChannel(id);
-    this.storage_service.saveActionChannel(newChannel);
+    this.storage_service.saveChatChannel(newChannel);
     channels[newChannel.id] = newChannel;
   }
 
