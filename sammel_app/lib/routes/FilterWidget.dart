@@ -104,7 +104,7 @@ class FilterWidgetState extends State<FilterWidget>
           widget.onApply(filter); //lade initial Termine
         }));
     Provider.of<AbstractStammdatenService>(context)
-        .ladeOrte()
+        .kieze
         .then((locations) => setState(() => allLocations = locations));
     _initialized = true;
   }
@@ -140,7 +140,7 @@ class FilterWidgetState extends State<FilterWidget>
 
   String ortButtonBeschriftung(TermineFilter filter) {
     if (filter?.orte == null || filter.orte.isEmpty) return "überall";
-    return "in " + filter.orte.map((ort) => ort.ort).toList().join(", ");
+    return "in " + filter.orte.map((ort) => ort.plz).toList().join(", ");
   }
 
   void onApply() {

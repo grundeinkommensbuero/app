@@ -24,7 +24,7 @@ enum ValidationState { not_validated, error, ok }
 class ActionData {
   TimeOfDay von;
   TimeOfDay bis;
-  Ort ort;
+  Kiez ort;
   String typ;
   List<DateTime> tage;
   TerminDetails terminDetails;
@@ -33,7 +33,7 @@ class ActionData {
   ActionData.testDaten() {
     this.von = TimeOfDay.fromDateTime(DateTime.now());
     this.bis = TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 1)));
-    this.ort = Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
+    this.ort = Kiez(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
         52.51579, 13.45399);
     this.coordinates = LatLng(52.51579, 13.45399);
     this.typ = 'Sammeln';
@@ -398,12 +398,12 @@ class ActionEditorState extends State<ActionEditor> {
 
   locationSelection() async {
     var allLocations =
-        await Provider.of<AbstractStammdatenService>(context).ladeOrte();
+        await Provider.of<AbstractStammdatenService>(context).kieze;
     var selectedLocations = await LocationPicker(
             key: Key('Location Picker'),
             locations: allLocations,
             multiMode: false)
-        .showLocationPicker(context, List<Ort>());
+        .showLocationPicker(context, List<Kiez>());
 
     setState(() {
       if (selectedLocations.isNotEmpty) {
@@ -525,7 +525,7 @@ class ActionEditorState extends State<ActionEditor> {
         termin.validated['ort'] == ValidationState.error)
       text = Text("Wähle einen Ort", style: TextStyle(color: DweTheme.purple));
     else {
-      text = Text("in " + termin.ort.ort);
+      text = Text("in " + termin.ort.plz);
     }
     return build_text_row(text, termin.validated['ort']);
   }

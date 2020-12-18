@@ -37,7 +37,7 @@ void main() {
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
     when(_terminService.loadActions(any)).thenAnswer((_) async => []);
-    when(_stammdatenService.ladeOrte()).thenAnswer((_) async => []);
+    when(_stammdatenService.kieze).thenAnswer((_) async => []);
   });
 
   testWidgets('TermineSeite opens CreateTerminDialog on click at menu button',
@@ -149,7 +149,7 @@ void main() {
 
     testWidgets('Location dialog opens correctly', (WidgetTester tester) async {
       await _openActionCreator(tester);
-      when(_stammdatenService.ladeOrte()).thenAnswer((_) async => [goerli()]);
+      when(_stammdatenService.kieze).thenAnswer((_) async => [goerli()]);
       expect(find.byKey(Key('Location Picker')), findsNothing);
       await tester.tap(find.byKey(Key('Open location dialog')));
       await tester.pump();
@@ -162,7 +162,7 @@ void main() {
       ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
       expect(find.text("in Görlitzer Park und Umgebung"), findsNothing);
-      when(_stammdatenService.ladeOrte()).thenAnswer((_) async => [goerli()]);
+      when(_stammdatenService.kieze).thenAnswer((_) async => [goerli()]);
       // ignore: invalid_use_of_protected_member
       actionData.setState(() {
         actionData.action.ort = goerli();
@@ -330,7 +330,7 @@ void main() {
     });
 
     test('ort', () {
-      actionEditor.action.ort = null;
+      actionEditor.action.plz = null;
       actionEditor.validateAllInput();
 
       expect(actionEditor.action.validated['ort'], ValidationState.error);
@@ -432,7 +432,7 @@ void main() {
       var actionData = ActionData(
           null,
           null,
-          Ort(0, 'Bezirk', 'Ort', 52.1, 43.1),
+          Kiez(0, 'Bezirk', 'Ort', 52.1, 43.1),
           null,
           null,
           null,
@@ -444,7 +444,7 @@ void main() {
 
     test('returns location, if given and no coordinates', () {
       var actionData = ActionData(null, null,
-          Ort(0, 'Bezirk', 'Ort', 52.1, 43.1), null, null, null, null);
+          Kiez(0, 'Bezirk', 'Ort', 52.1, 43.1), null, null, null, null);
 
       expect(
           ActionEditorState.determineMapCenter(actionData), LatLng(52.1, 43.1));
@@ -455,7 +455,7 @@ void main() {
 
       expect(ActionEditorState.determineMapCenter(actionData), null);
 
-      actionData = ActionData(null, null, Ort(0, 'Bezirk', 'Ort', null, null),
+      actionData = ActionData(null, null, Kiez(0, 'Bezirk', 'Ort', null, null),
           null, null, null, null);
 
       expect(ActionEditorState.determineMapCenter(actionData), null);

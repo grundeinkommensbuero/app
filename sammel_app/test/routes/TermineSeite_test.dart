@@ -44,7 +44,7 @@ void main() {
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
     when(_termineService.loadActions(any)).thenAnswer((_) async => []);
-    when(_stammdatenService.ladeOrte()).thenAnswer((_) async => []);
+    when(_stammdatenService.kieze).thenAnswer((_) async => []);
 
     termineSeiteWidget = MultiProvider(
         providers: [
@@ -1208,8 +1208,8 @@ void main() {
               .where((action) => action.id == 2)
               .toList()[0]
               .ort
-              .id,
-          goerli().id);
+              .plz,
+          goerli().plz);
     });
 
     test('sorts new list by date', () {

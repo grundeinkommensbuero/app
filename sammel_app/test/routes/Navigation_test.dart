@@ -38,7 +38,7 @@ void main() {
       when(_storageService.loadFilter())
           .thenAnswer((_) async => TermineFilter.leererFilter());
       when(_termineService.loadActions(any)).thenAnswer((_) async => []);
-      when(_stammdatenService.ladeOrte()).thenAnswer((_) async => []);
+      when(_stammdatenService.kieze).thenAnswer((_) async => []);
 
       await tester.pumpWidget(MultiProvider(providers: [
         Provider<AbstractTermineService>.value(value: _termineService),

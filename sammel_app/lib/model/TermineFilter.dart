@@ -9,7 +9,7 @@ class TermineFilter {
   List<DateTime> tage;
   TimeOfDay von;
   TimeOfDay bis;
-  List<Ort> orte;
+  List<Kiez> orte;
 
   TermineFilter(this.typen, this.tage, this.von, this.bis, this.orte);
 
@@ -27,7 +27,7 @@ class TermineFilter {
           // Dirty Hack für Bug https://github.com/dart-lang/intl/issues/244
             DateFormat("yyyy HH:mm:ss").parse('2019 ' + json['bis'])),
         orte =
-        (json['orte'] as List).map((json) => Ort.fromJson(json)).toList();
+        (json['orte'] as List).map((json) => Kiez.fromJson(json)).toList();
 
   Map<String, dynamic> toJson() => {
         'typen': typen,

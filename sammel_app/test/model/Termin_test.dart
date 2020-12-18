@@ -17,7 +17,7 @@ void main() {
               1,
               DateTime(2020, 1, 2, 15, 0, 0),
               DateTime(2020, 1, 2, 18, 0, 0),
-              Ort(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez', 52.49653,
+              Kiez(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez', 52.49653,
                   13.43762),
               'Sammeln',
               52.52116,
@@ -41,7 +41,7 @@ void main() {
               1,
               DateTime(2020, 1, 2, 15, 0, 0),
               DateTime(2020, 1, 2, 18, 0, 0),
-              Ort(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez', 52.49653,
+              Kiez(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez', 52.49653,
                   13.43762),
               'Sammeln',
               52.52116,
@@ -66,7 +66,7 @@ void main() {
               1,
               DateTime(2020, 1, 2, 15, 0, 0),
               DateTime(2020, 1, 2, 18, 0, 0),
-              Ort(15, "Friedrichshain-Kreuzberg", "Fhain - Nordkiez", 52.49653,
+              Kiez(15, "Friedrichshain-Kreuzberg", "Fhain - Nordkiez", 52.49653,
                   13.43762),
               'Sammeln',
               52.52116,
@@ -126,7 +126,7 @@ void main() {
       expect(termin.longitude, 13.41331);
       expect(
           termin.ort.toString(),
-          Ort(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez', 52.49653,
+          Kiez(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez', 52.49653,
                   13.43762)
               .toString());
       expect(termin.participants, isNull);

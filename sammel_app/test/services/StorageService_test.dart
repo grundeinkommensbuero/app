@@ -86,9 +86,9 @@ void main() async {
           TimeOfDay(hour: 12, minute: 30),
           TimeOfDay(hour: 15, minute: 0),
           [
-            Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
+            Kiez(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
                 52.51579, 13.45399),
-            Ort(2, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung',
+            Kiez(2, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung',
                 52.49653, 13.43762)
           ]);
 
@@ -132,9 +132,9 @@ void main() async {
           TimeOfDay(hour: 12, minute: 30),
           TimeOfDay(hour: 15, minute: 0),
           [
-            Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
+            Kiez(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
                 52.51579, 13.45399),
-            Ort(2, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung',
+            Kiez(2, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung',
                 52.49653, 13.43762)
           ]);
       _prefs.setString('filter', jsonEncode(filter.toJson()));
@@ -175,9 +175,9 @@ void main() async {
           TimeOfDay(hour: 12, minute: 30),
           TimeOfDay(hour: 15, minute: 0),
           [
-            Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
+            Kiez(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
                 52.51579, 13.45399),
-            Ort(2, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung',
+            Kiez(2, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung',
                 52.49653, 13.43762)
           ]);
       _prefs.clear();

@@ -7,7 +7,7 @@ class Termin {
   int id;
   DateTime beginn;
   DateTime ende;
-  Ort ort;
+  Kiez ort;
   String typ;
   double latitude;
   double longitude;
@@ -21,7 +21,8 @@ class Termin {
       : id = json['id'],
         beginn = DateTime.parse(json['beginn']),
         ende = DateTime.parse(json['ende']),
-        ort = Ort.fromJson(json['ort']),
+        ort = Kiez(1, 'Ortsteil', 'PLZ', 13.398831300000001, 52.527806),
+        //Kiez.fromJson(json['ort']), TODO
         typ = json['typ'] ?? 'Termin',
         latitude = json['lattitude'] ?? null,
         longitude = json['longitude'] ?? null,
@@ -36,7 +37,7 @@ class Termin {
         'id': id,
         'beginn': beginn.toIso8601String(),
         'ende': ende.toIso8601String(),
-        'ort':  ort == null ? null : ort.toJson(),
+        'ort': ort == null ? null : ort.toJson(),
         'typ': typ,
         'lattitude': latitude,
         'longitude': longitude,
