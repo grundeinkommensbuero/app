@@ -79,9 +79,8 @@ void main() {
       expect([termineFilter.bis.hour, termineFilter.bis.minute], [1, 2]);
       expect(termineFilter.orte.length, 1);
       expect([
-        termineFilter.orte[0].id,
         termineFilter.orte[0].bezirk,
-        termineFilter.orte[0].ort
+        termineFilter.orte[0].plz
       ], [
         0,
         "Friedrichshain-Kreuzberg",

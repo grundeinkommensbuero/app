@@ -93,11 +93,11 @@ class DemoTermineService extends AbstractTermineService {
   DemoTermineService(AbstractUserService userService)
       : super(userService, DemoBackend());
 
-  static Ort nordkiez = Ort(1, 'Friedrichshain-Kreuzberg',
+  static Kiez nordkiez = Kiez(1, 'Friedrichshain-Kreuzberg',
       'Friedrichshain Nordkiez', 52.51579, 13.45399);
-  static Ort treptowerPark =
-      Ort(2, 'Treptow-Köpenick', 'Treptower Park', 52.48993, 13.46839);
-  static Ort goerli = Ort(3, 'Friedrichshain-Kreuzberg',
+  static Kiez treptowerPark =
+      Kiez(2, 'Treptow-Köpenick', 'Treptower Park', 52.48993, 13.46839);
+  static Kiez goerli = Kiez(3, 'Friedrichshain-Kreuzberg',
       'Görlitzer Park und Umgebung', 52.49653, 13.43762);
   static var heute = DateTime.now();
   List<Termin> termine = [
@@ -171,7 +171,7 @@ class DemoTermineService extends AbstractTermineService {
               : filter.tage.contains(datum)) &&
           (filter.orte == null || filter.orte.isEmpty
               ? true
-              : filter.orte.map((o) => o.ort).contains(termin.ort.ort)) &&
+              : filter.orte.map((o) => o.plz).contains(termin.ort.plz)) &&
           (filter.typen == null || filter.typen.isEmpty
               ? true
               : filter.typen.contains(termin.typ));

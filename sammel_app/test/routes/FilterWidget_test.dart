@@ -28,9 +28,9 @@ void main() {
   group('ui', () {
     setUpUI((WidgetTester tester) async {
       when(_storageService.loadFilter()).thenAnswer((_) async => null);
-      when(_stammdatenService.ladeOrte()).thenAnswer((_) async => [
-            Ort(0, 'district1', 'place1', 52.49653, 13.43762),
-            Ort(1, 'district2', 'place2', 52.49653, 13.43762)
+      when(_stammdatenService.kieze).thenAnswer((_) async => [
+            Kiez(0, 'district1', 'place1', 52.49653, 13.43762),
+            Kiez(1, 'district2', 'place2', 52.49653, 13.43762)
           ]);
       await pumpFilterWidget(tester);
     ***REMOVED***);
@@ -178,7 +178,7 @@ void main() {
 
     testUI('Filter opens Locations selection with click at locations button',
         (WidgetTester tester) async {
-      when(_stammdatenService.ladeOrte()).thenAnswer((_) async => []);
+      when(_stammdatenService.kieze).thenAnswer((_) async => []);
 
       await pumpFilterWidget(tester);
 
@@ -305,7 +305,7 @@ void main() {
           [DateTime(2019, 12, 16)],
           TimeOfDay(hour: 19, minute: 15),
           TimeOfDay(hour: 20, minute: 21),
-          [Ort(1, 'district', 'place', 52.49653, 13.43762)]);
+          [Kiez(1, 'district', 'place', 52.49653, 13.43762)]);
 
       numberOfTimesCalled = 0;
       iWasCalledResult = null;
@@ -319,15 +319,15 @@ void main() {
       expect(ChronoHelfer.timeToStringHHmm(iWasCalledResult.bis), '20:21');
       expect(iWasCalledResult.tage.map((t) => DateFormat.yMd().format(t)),
           containsAll(['12/16/2019']));
-      expect(iWasCalledResult.orte.map((o) => o.id), containsAll([1]));
+      expect(iWasCalledResult.orte.map((o) => o.plz), containsAll([1]));
     ***REMOVED***);
   ***REMOVED***);
 
   group('storage function', () {
     setUpUI((WidgetTester tester) async {
-      when(_stammdatenService.ladeOrte()).thenAnswer((_) async => [
-            Ort(0, 'district1', 'place1', 52.49653, 13.43762),
-            Ort(1, 'district2', 'place2', 52.49653, 13.43762)
+      when(_stammdatenService.kieze).thenAnswer((_) async => [
+            Kiez(0, 'district1', 'place1', 52.49653, 13.43762),
+            Kiez(1, 'district2', 'place2', 52.49653, 13.43762)
           ]);
     ***REMOVED***);
 
@@ -354,9 +354,9 @@ void main() {
           TimeOfDay(hour: 12, minute: 30),
           TimeOfDay(hour: 15, minute: 0),
           [
-            Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
+            Kiez(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
                 52.49653, 13.43762),
-            Ort(2, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung',
+            Kiez(2, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung',
                 52.49653, 13.43762)
           ]));
 

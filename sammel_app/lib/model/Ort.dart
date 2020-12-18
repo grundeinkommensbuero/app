@@ -1,37 +1,33 @@
-class Ort {
-  int id;
+class Kiez {
   String bezirk;
-  String ort;
+  String plz;
   double latitude;
   double longitude;
+  List<List<double>> area;
 
-  Ort(id, bezirk, ort, lattitude, longitude) {
-    this.id = id;
-    this.ort = ort;
+  Kiez(id, bezirk, ort, lattitude, longitude) {
+    this.plz = ort;
     this.bezirk = bezirk;
     this.latitude = lattitude;
     this.longitude = longitude;
   ***REMOVED***
 
-  Ort.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        bezirk = json['bezirk'] ?? '',
-        ort = json['ort'] ?? '',
-        latitude = json['lattitude'] ?? null,
-        longitude = json['longitude'] ?? null;
+  Kiez.fromJson(Map<String, dynamic> json)
+      : bezirk = json['properties']['ortsteil'],
+        plz = json['properties']['plz'],
+        latitude = json['geometry']['coordinates'][0],
+        longitude = json['geometry']['coordinates'][1];
 
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'bezirk': bezirk,
-        'ort': ort,
-        'lattitude': latitude,
-        'longitude': longitude,
-      ***REMOVED***
+  Map<String, dynamic> toJson() => {'id': plz***REMOVED***
 
-  bool equals(Ort that) =>
-      this.id == that.id &&
+  void addArea(Map<String, dynamic> json) =>
+      area = (json['geometry']['coordinates'] as List)
+          .map((e) => [e[0] as double, e[1] as double])
+          .toList();
+
+  bool equals(Kiez that) =>
       this.bezirk == that.bezirk &&
-      this.ort == that.ort &&
+      this.plz == that.plz &&
       this.latitude == that.latitude &&
       this.longitude == that.longitude;
 ***REMOVED***

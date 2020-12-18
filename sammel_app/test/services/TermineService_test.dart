@@ -41,7 +41,7 @@ void main() {
               null,
               DateTime.now(),
               Jiffy(DateTime.now()).add(days: 1),
-              Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
+              Kiez(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
                   52.51579, 13.45399),
               'Sammeln',
               52.52116,
@@ -73,7 +73,7 @@ void main() {
 
     test('stores new action', () async {
       expect(service.termine[0].typ, 'Sammeln');
-      expect(service.termine[0].ort.id, 1);
+      expect(service.termine[0].ort.plz, '1');
       expect(service.termine[0].details.kontakt, 'Ruft mich an unter 01234567');
 
       await service.saveAction(
@@ -85,7 +85,7 @@ void main() {
           '');
 
       expect(service.termine[0].typ, 'Infoveranstaltung');
-      expect(service.termine[0].ort.id, 2);
+      expect(service.termine[0].ort.plz, '2');
       expect(service.termine[0].details.kontakt, 'Test123');
     ***REMOVED***);
 
@@ -169,9 +169,8 @@ void main() {
       expect(actions[0].id, 0);
       expect(actions[0].beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(actions[0].ende, DateTime(2019, 11, 4, 18, 9, 0));
-      expect(actions[0].ort.id, 1);
       expect(actions[0].ort.bezirk, 'Friedrichshain-Kreuzberg');
-      expect(actions[0].ort.ort, 'Friedrichshain Nordkiez');
+      expect(actions[0].ort.plz, 'Friedrichshain Nordkiez');
       expect(actions[0].ort.latitude, 52.51579);
       expect(actions[0].ort.longitude, 13.45399);
       expect(actions[0].typ, 'Sammeln');
@@ -188,9 +187,8 @@ void main() {
       expect(actions[1].id, 0);
       expect(actions[1].beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(actions[1].ende, DateTime(2019, 11, 4, 18, 9, 0));
-      expect(actions[1].ort.id, 1);
       expect(actions[1].ort.bezirk, 'Friedrichshain-Kreuzberg');
-      expect(actions[1].ort.ort, 'Friedrichshain Nordkiez');
+      expect(actions[1].ort.plz, 'Friedrichshain Nordkiez');
       expect(actions[1].ort.latitude, 52.51579);
       expect(actions[1].ort.longitude, 13.45399);
       expect(actions[1].typ, 'Sammeln');
@@ -256,9 +254,8 @@ void main() {
       expect(action.id, 0);
       expect(action.beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(action.ende, DateTime(2019, 11, 4, 18, 9, 0));
-      expect(action.ort.id, 1);
       expect(action.ort.bezirk, 'Friedrichshain-Kreuzberg');
-      expect(action.ort.ort, 'Friedrichshain Nordkiez');
+      expect(action.ort.plz, 'Friedrichshain Nordkiez');
       expect(action.ort.latitude, 52.51579);
       expect(action.ort.longitude, 13.45399);
       expect(action.typ, 'Sammeln');
@@ -293,9 +290,8 @@ void main() {
       expect(action.id, 0);
       expect(action.beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(action.ende, DateTime(2019, 11, 4, 18, 9, 0));
-      expect(action.ort.id, 1);
       expect(action.ort.bezirk, 'Friedrichshain-Kreuzberg');
-      expect(action.ort.ort, 'Friedrichshain Nordkiez');
+      expect(action.ort.plz, 'Friedrichshain Nordkiez');
       expect(action.ort.latitude, 52.51579);
       expect(action.ort.longitude, 13.45399);
       expect(action.typ, 'Sammeln');

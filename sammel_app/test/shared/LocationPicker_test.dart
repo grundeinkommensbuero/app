@@ -5,7 +5,7 @@ import 'package:sammel_app/shared/LocationPicker.dart';
 
 void main() {
   MaterialApp createWidgetWithLocationPicker(LocationPicker locationPicker,
-      WidgetTester tester, List<Ort> previousSelection, Function result) {
+      WidgetTester tester, List<Kiez> previousSelection, Function result) {
     return MaterialApp(
       home: Material(
         child: Builder(builder: (BuildContext context) {
@@ -27,8 +27,8 @@ void main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
-          Ort(0, 'district1ExpandButton', 'area1', 52.51579, 13.45399),
-          Ort(1, 'district2ExpandButton', 'area2', 52.51579, 13.45399)
+          Kiez(0, 'district1ExpandButton', 'area1', 52.51579, 13.45399),
+          Kiez(1, 'district2ExpandButton', 'area2', 52.51579, 13.45399)
         ], multiMode: false),
         tester,
         [],
@@ -54,9 +54,9 @@ void main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
-          Ort(0, 'district1ExpandButton', 'area1', 52.51579, 13.45399),
-          Ort(1, 'district1ExpandButton', 'area2', 52.51579, 13.45399),
-          Ort(2, 'district2ExpandButton', 'area3', 52.51579, 13.45399)
+          Kiez(0, 'district1ExpandButton', 'area1', 52.51579, 13.45399),
+          Kiez(1, 'district1ExpandButton', 'area2', 52.51579, 13.45399),
+          Kiez(2, 'district2ExpandButton', 'area3', 52.51579, 13.45399)
         ], multiMode: false),
         tester,
         [],
@@ -95,9 +95,9 @@ void main() {
       'LocationPicker opens/closes locations tiles on click of parent district',
       (WidgetTester tester) async {
     var locationPicker = LocationPicker(locations: [
-      Ort(0, 'district1ExpandButton', 'area1', 52.51579, 13.45399),
-      Ort(0, 'district1ExpandButton', 'area2', 52.51579, 13.45399),
-      Ort(0, 'district2ExpandButton', 'area3', 52.51579, 13.45399)
+      Kiez(0, 'district1ExpandButton', 'area1', 52.51579, 13.45399),
+      Kiez(0, 'district1ExpandButton', 'area2', 52.51579, 13.45399),
+      Kiez(0, 'district2ExpandButton', 'area3', 52.51579, 13.45399)
     ], multiMode: false);
     var widgetWithLocationPicker =
         createWidgetWithLocationPicker(locationPicker, tester, [], (_) {***REMOVED***);
@@ -161,9 +161,9 @@ void main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
-          Ort(0, 'district1ExpandButton', 'area1', 52.51579, 13.45399),
-          Ort(1, 'district1ExpandButton', 'area2', 52.51579, 13.45399),
-          Ort(2, 'district2ExpandButton', 'area3', 52.51579, 13.45399)
+          Kiez(0, 'district1ExpandButton', 'area1', 52.51579, 13.45399),
+          Kiez(1, 'district1ExpandButton', 'area2', 52.51579, 13.45399),
+          Kiez(2, 'district2ExpandButton', 'area3', 52.51579, 13.45399)
         ], multiMode: true),
         tester,
         [],
@@ -190,9 +190,9 @@ void main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
-          Ort(0, 'district1ExpandButton', 'area1', 52.51579, 13.45399),
-          Ort(1, 'district1ExpandButton', 'area2', 52.51579, 13.45399),
-          Ort(2, 'district2ExpandButton', 'area3', 52.51579, 13.45399)
+          Kiez(0, 'district1ExpandButton', 'area1', 52.51579, 13.45399),
+          Kiez(1, 'district1ExpandButton', 'area2', 52.51579, 13.45399),
+          Kiez(2, 'district2ExpandButton', 'area3', 52.51579, 13.45399)
         ], multiMode: true),
         tester,
         [],
@@ -227,12 +227,12 @@ void main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
-          Ort(0, 'district1ExpandButton', 'area1', 52.51579, 13.45399),
-          Ort(1, 'district1ExpandButton', 'area2', 52.51579, 13.45399),
-          Ort(2, 'district2ExpandButton', 'area3', 52.51579, 13.45399)
+          Kiez(0, 'district1ExpandButton', 'area1', 52.51579, 13.45399),
+          Kiez(1, 'district1ExpandButton', 'area2', 52.51579, 13.45399),
+          Kiez(2, 'district2ExpandButton', 'area3', 52.51579, 13.45399)
         ], multiMode: true),
         tester,
-        [Ort(2, 'district2ExpandButton', 'area3', 52.51579, 13.45399)],
+        [Kiez(2, 'district2ExpandButton', 'area3', 52.51579, 13.45399)],
         (_) {***REMOVED***));
 
     await tester.tap(find.text('X'));
@@ -256,9 +256,9 @@ void main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
-          Ort(0, 'district1', 'area1', 52.51579, 13.45399),
-          Ort(1, 'district1', 'area2', 52.51579, 13.45399),
-          Ort(2, 'district2', 'area3', 52.51579, 13.45399)
+          Kiez(0, 'district1', 'area1', 52.51579, 13.45399),
+          Kiez(1, 'district1', 'area2', 52.51579, 13.45399),
+          Kiez(2, 'district2', 'area3', 52.51579, 13.45399)
         ], multiMode: true),
         tester,
         [],
@@ -285,9 +285,9 @@ void main() {
   testWidgets('LocationPicker uses multi mode', (WidgetTester tester) async {
     await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
-          Ort(0, 'district1', 'area1', 52.51579, 13.45399),
-          Ort(1, 'district1', 'area2', 52.51579, 13.45399),
-          Ort(2, 'district2', 'area3', 52.51579, 13.45399)
+          Kiez(0, 'district1', 'area1', 52.51579, 13.45399),
+          Kiez(1, 'district1', 'area2', 52.51579, 13.45399),
+          Kiez(2, 'district2', 'area3', 52.51579, 13.45399)
         ], multiMode: true),
         tester,
         [],
@@ -308,9 +308,9 @@ void main() {
 
     await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
-          Ort(0, 'district1', 'area1', 52.51579, 13.45399),
-          Ort(1, 'district1', 'area2', 52.51579, 13.45399),
-          Ort(2, 'district2', 'area3', 52.51579, 13.45399)
+          Kiez(0, 'district1', 'area1', 52.51579, 13.45399),
+          Kiez(1, 'district1', 'area2', 52.51579, 13.45399),
+          Kiez(2, 'district2', 'area3', 52.51579, 13.45399)
         ], multiMode: false),
         tester,
         [],
@@ -334,12 +334,12 @@ void main() {
 
   testWidgets('LocationPicker returns selected locations',
       (WidgetTester tester) async {
-    var result = List<Ort>();
+    var result = List<Kiez>();
     await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
-          Ort(0, 'district1', 'area1', 52.51579, 13.45399),
-          Ort(1, 'district1', 'area2', 52.51579, 13.45399),
-          Ort(2, 'district2', 'area3', 52.51579, 13.45399)
+          Kiez(0, 'district1', 'area1', 52.51579, 13.45399),
+          Kiez(1, 'district1', 'area2', 52.51579, 13.45399),
+          Kiez(2, 'district2', 'area3', 52.51579, 13.45399)
         ], multiMode: true),
         tester,
         [],
@@ -353,6 +353,6 @@ void main() {
     await tester.tap(find.text('Fertig'));
     await tester.pump();
 
-    expect(result.map((ort) => ort.ort), containsAll(['area1', 'area2']));
+    expect(result.map((ort) => ort.plz), containsAll(['area1', 'area2']));
   ***REMOVED***);
 ***REMOVED***
