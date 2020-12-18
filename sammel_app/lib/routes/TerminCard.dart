@@ -63,7 +63,7 @@ class TerminCard extends StatelessWidget {
   }
 
   static String erzeugeOrtText(Kiez ort) {
-    return '${ort.bezirk}, ${ort.plz}';
+    return '${ort.bezirk}, ${ort.id}';
   }
 
   static String erzeugeDatumText(DateTime beginn, DateTime ende) {

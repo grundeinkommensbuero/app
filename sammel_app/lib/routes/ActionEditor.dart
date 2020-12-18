@@ -525,7 +525,7 @@ class ActionEditorState extends State<ActionEditor> {
         termin.validated['ort'] == ValidationState.error)
       text = Text("Wähle einen Ort", style: TextStyle(color: DweTheme.purple));
     else {
-      text = Text("in " + termin.ort.plz);
+      text = Text("in " + termin.ort.id);
     }
     return build_text_row(text, termin.validated['ort']);
   }

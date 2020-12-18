@@ -50,15 +50,15 @@ void main() {
 
       expect(result.length, 3);
       expect(result[0].bezirk, 'Friedrichshain-Kreuzberg');
-      expect(result[0].plz, 'Friedrichshain Nordkiez');
+      expect(result[0].id, 'Friedrichshain Nordkiez');
       expect(result[0].latitude, 52.51579);
       expect(result[0].longitude, 13.45399);
       expect(result[1].bezirk, 'Friedrichshain-Kreuzberg');
-      expect(result[1].plz, 'Görlitzer Park und Umgebung');
+      expect(result[1].id, 'Görlitzer Park und Umgebung');
       expect(result[1].latitude, 52.48993);
       expect(result[1].longitude, 13.46839);
       expect(result[2].bezirk, 'Treptow-Köpenick');
-      expect(result[2].plz, 'Treptower Park');
+      expect(result[2].id, 'Treptower Park');
       expect(result[2].latitude, 52.49653);
       expect(result[2].longitude, 13.43762);
     });
@@ -86,11 +86,11 @@ void main() {
     test('liefert Orte Aus', () async {
       List<Kiez> ergebnis = await service.kieze;
       expect(ergebnis.length, 3);
-      expect(ergebnis[0].bezirk + ergebnis[0].plz,
+      expect(ergebnis[0].bezirk + ergebnis[0].id,
           'Friedrichshain-KreuzbergFriedrichshain Nordkiez');
-      expect(ergebnis[1].bezirk + ergebnis[1].plz,
+      expect(ergebnis[1].bezirk + ergebnis[1].id,
           'Treptow-KöpenickTreptower Park');
-      expect(ergebnis[2].bezirk + ergebnis[2].plz,
+      expect(ergebnis[2].bezirk + ergebnis[2].id,
           'Friedrichshain-KreuzbergGörlitzer Park und Umgebung');
     });
   });

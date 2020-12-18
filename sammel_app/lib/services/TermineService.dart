@@ -171,7 +171,7 @@ class DemoTermineService extends AbstractTermineService {
               : filter.tage.contains(datum)) &&
           (filter.orte == null || filter.orte.isEmpty
               ? true
-              : filter.orte.map((o) => o.plz).contains(termin.ort.plz)) &&
+              : filter.orte.map((o) => o.id).contains(termin.ort.id)) &&
           (filter.typen == null || filter.typen.isEmpty
               ? true
               : filter.typen.contains(termin.typ));

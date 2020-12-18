@@ -76,8 +76,10 @@ flutter:
    - assets/images/Infoveranstaltung.png
    - assets/security/sammel-server_local.pem
    - assets/security/root-cert.pem
-   - assets/geography/plz-berlin-centers.json
-   - assets/geography/plz-berlin-vectors.json
+   - assets/geodata/plz-berlin-centroids.json
+   - assets/geodata/plz-berlin-polygons.json
+   - assets/geodata/lor_berlin_centroids.json
+   - assets/geodata/lor_berlin_polygons.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

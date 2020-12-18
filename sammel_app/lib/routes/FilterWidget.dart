@@ -140,7 +140,7 @@ class FilterWidgetState extends State<FilterWidget>
 
   String ortButtonBeschriftung(TermineFilter filter) {
     if (filter?.orte == null || filter.orte.isEmpty) return "überall";
-    return "in " + filter.orte.map((ort) => ort.plz).toList().join(", ");
+    return "in " + filter.orte.map((ort) => ort.id).toList().join(", ");
   }
 
   void onApply() {
