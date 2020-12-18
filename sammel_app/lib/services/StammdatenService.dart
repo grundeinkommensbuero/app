@@ -15,22 +15,27 @@ abstract class AbstractStammdatenService extends BackendService {
 ***REMOVED***
 
 class StammdatenService extends AbstractStammdatenService {
+  // static final centroids = 'assets/geodata/plz-berlin-centroids.json';
+  // static final polygons = 'assets/geodata/plz-berlin-polygons.json';
+  static final centroids =
+      'assets/geodata/lor_berlin_centroids.json';
+  static final polygons =
+      'assets/geodata/lor_berlin_polygons.json';
+
   StammdatenService(AbstractUserService userService, [Backend backendMock])
       : super(userService, backendMock);
   final Future<List<Kiez>> kieze = StammdatenService.ladeKieze();
 
   static Future<List<Kiez>> ladeKieze() async {
-    var centerJsons =
-        await rootBundle.loadString('assets/geography/plz-berlin-centers.json');
-    var vectorJsons =
-        await rootBundle.loadString('assets/geography/plz-berlin-vectors.json');
+    var centroidsJsons = await rootBundle.loadString(centroids);
+    var polygonsJsons = await rootBundle.loadString(polygons);
 
-    List centerMaps = jsonDecode(centerJsons);
-    List vectorMaps = jsonDecode(vectorJsons);
+    List centroidMaps = jsonDecode(centroidsJsons);
+    List polygonMaps = jsonDecode(polygonsJsons);
 
-    List<Kiez> kieze = centerMaps.map((json) => Kiez.fromJson(json)).toList();
+    List<Kiez> kieze = centroidMaps.map((json) => Kiez.fromJson(json)).toList();
     kieze.forEach((kiez) => kiez.addArea(
-        vectorMaps.firstWhere((map) => map['properties']['plz'] == kiez.plz)));
+        polygonMaps.firstWhere((map) => map['properties']['id'] == kiez.id)));
 
     return kieze;
   ***REMOVED***

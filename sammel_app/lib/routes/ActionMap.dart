@@ -4,8 +4,10 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Termin.dart';
+import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:user_location/user_location.dart';
@@ -36,6 +38,10 @@ class ActionMap extends StatefulWidget {
 ***REMOVED***
 
 class ActionMapState extends State<ActionMap> {
+  List<Polygon> kieze = [];
+  List<TextMarker> kiezLabels = [];
+  List<String> selected = ['10317'];
+
   ActionMapState();
 
   var locationPermissionGranted = false;
@@ -49,21 +55,30 @@ class ActionMapState extends State<ActionMap> {
 
   @override
   Widget build(BuildContext context) {
+    if (kieze.isEmpty) {
+      Provider.of<AbstractStammdatenService>(context)
+          .kieze
+          .then((kieze) => setState(() {
+                this.kieze = kieze
+                    .map((kiez) => Polygon(
+                        color: generateColor(kiez.bezirk),
+                        borderStrokeWidth: 2.0,
+                        borderColor: Color.fromARGB(250, DweTheme.purple.red,
+                            DweTheme.purple.green, DweTheme.purple.blue),
+                        points: kiez.area
+                            .map((point) => LatLng(point[1], point[0]))
+                            .toList()))
+                    .toList();
+              ***REMOVED***));
+      generateKiezLabels();
+    ***REMOVED***
     var markers = generateMarkers();
     var plugins = List<UserLocationPlugin>();
     var layers = [
       TileLayerOptions(
           urlTemplate: "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
           subdomains: ['a', 'b', 'c']),
-//        PolygonLayerOptions(polygons: [
-//          Polygon(
-//              color: Color.fromARGB(40, DweTheme.purple.red, DweTheme.purple.green, DweTheme.purple.blue),
-//              borderStrokeWidth: 2.0,
-//              borderColor: Color.fromARGB(150, DweTheme.purple.red, DweTheme.purple.green, DweTheme.purple.blue),
-//              points: widget.termine
-//                  .map((action) => LatLng(action.lattitude, action.longitude))
-//                  .toList())
-//        ]),
+      PolygonLayerOptions(polygons: kieze),
       MarkerLayerOptions(markers: markers),
     ];
 
@@ -102,7 +117,8 @@ class ActionMapState extends State<ActionMap> {
 
   List<Marker> generateMarkers() => <Marker>[]
     ..addAll(generateListLocationMarkers())
-    ..addAll(generateActionMarkers());
+    ..addAll(generateActionMarkers())
+    ..addAll(kiezLabels);
 
   void addUserLocationSettings(List<Marker> markers,
       List<UserLocationPlugin> plugins, List<LayerOptions> layers) {
@@ -115,6 +131,27 @@ class ActionMapState extends State<ActionMap> {
       showMoveToCurrentLocationFloatingActionButton: false,
     ));
   ***REMOVED***
+
+  Color generateColor(String bezirk) {
+    return Color.fromARGB(150, bezirk.hashCode * 10, bezirk.hashCode * 100,
+        bezirk.hashCode * 1000);
+  ***REMOVED***
+
+  generateKiezLabels() {
+    Provider.of<AbstractStammdatenService>(context).kieze.then(((kieze) =>
+        kiezLabels = kieze
+            .map((kiez) => TextMarker('${kiez.id***REMOVED***\n${kiez.bezirk***REMOVED***', kiez.longitude, kiez.latitude))
+            .toList()));
+  ***REMOVED***
+***REMOVED***
+
+class TextMarker extends Marker {
+  TextMarker(String text, latitude, longitude)
+      : super(
+            width: 100.0,
+            height: 50.0,
+            point: LatLng(latitude, longitude),
+            builder: (context) => Text(text, textAlign: TextAlign.center,));
 ***REMOVED***
 
 class ActionMarker extends Marker {

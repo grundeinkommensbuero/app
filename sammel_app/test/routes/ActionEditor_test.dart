@@ -330,7 +330,7 @@ void main() {
     ***REMOVED***);
 
     test('ort', () {
-      actionEditor.action.plz = null;
+      actionEditor.action.id = null;
       actionEditor.validateAllInput();
 
       expect(actionEditor.action.validated['ort'], ValidationState.error);

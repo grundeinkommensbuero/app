@@ -353,6 +353,6 @@ void main() {
     await tester.tap(find.text('Fertig'));
     await tester.pump();
 
-    expect(result.map((ort) => ort.plz), containsAll(['area1', 'area2']));
+    expect(result.map((ort) => ort.id), containsAll(['area1', 'area2']));
   ***REMOVED***);
 ***REMOVED***

@@ -319,7 +319,7 @@ void main() {
       expect(ChronoHelfer.timeToStringHHmm(iWasCalledResult.bis), '20:21');
       expect(iWasCalledResult.tage.map((t) => DateFormat.yMd().format(t)),
           containsAll(['12/16/2019']));
-      expect(iWasCalledResult.orte.map((o) => o.plz), containsAll([1]));
+      expect(iWasCalledResult.orte.map((o) => o.id), containsAll([1]));
     ***REMOVED***);
   ***REMOVED***);
 

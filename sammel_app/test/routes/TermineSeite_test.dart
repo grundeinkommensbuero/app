@@ -1208,8 +1208,8 @@ void main() {
               .where((action) => action.id == 2)
               .toList()[0]
               .ort
-              .plz,
-          goerli().plz);
+              .id,
+          goerli().id);
     ***REMOVED***);
 
     test('sorts new list by date', () {

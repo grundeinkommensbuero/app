@@ -80,7 +80,7 @@ void main() {
       expect(termineFilter.orte.length, 1);
       expect([
         termineFilter.orte[0].bezirk,
-        termineFilter.orte[0].plz
+        termineFilter.orte[0].id
       ], [
         0,
         "Friedrichshain-Kreuzberg",
