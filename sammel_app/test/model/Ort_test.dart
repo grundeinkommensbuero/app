@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:sammel_app/model/Ort.dart';
+import 'package:sammel_app/model/Kiez.dart';
 import 'package:test/test.dart';
 
 void main() {
