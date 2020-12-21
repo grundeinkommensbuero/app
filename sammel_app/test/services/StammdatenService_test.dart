@@ -10,11 +10,10 @@ import '../shared/Mocks.dart';
 void main() {
   Backend mock;
   StammdatenService service;
-  UserService userService = ConfiguredUserServiceMock();
 
   setUp(() {
     mock = BackendMock();
-    service = StammdatenService(userService, mock);
+    service = StammdatenService();
   });
 
   group('StammdatenServer', () {
@@ -70,28 +69,6 @@ void main() {
       var result = await service.kieze;
 
       expect(result, isEmpty);
-    });
-  });
-
-  group('DemoStammdatenService', () {
-    DemoStammdatenService service;
-    setUp(() {
-      service = DemoStammdatenService(userService);
-    });
-
-    test('uses DemoBackend', () {
-      expect(service.backend is DemoBackend, true);
-    });
-
-    test('liefert Orte Aus', () async {
-      List<Kiez> ergebnis = await service.kieze;
-      expect(ergebnis.length, 3);
-      expect(ergebnis[0].bezirk + ergebnis[0].id,
-          'Friedrichshain-KreuzbergFriedrichshain Nordkiez');
-      expect(ergebnis[1].bezirk + ergebnis[1].id,
-          'Treptow-KöpenickTreptower Park');
-      expect(ergebnis[2].bezirk + ergebnis[2].id,
-          'Friedrichshain-KreuzbergGörlitzer Park und Umgebung');
     });
   });
 }

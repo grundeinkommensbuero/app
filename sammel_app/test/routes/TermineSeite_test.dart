@@ -53,7 +53,7 @@ void main() {
               value: _listLocationService),
           Provider<StorageService>.value(value: _storageService),
           Provider<AbstractUserService>.value(value: _userService),
-          Provider<AbstractStammdatenService>.value(value: _stammdatenService),
+          Provider<StammdatenService>.value(value: _stammdatenService),
           Provider<ChatMessageService>.value(value: _chatMessageService),
         ],
         child: MaterialApp(home: Builder(builder: (BuildContext context) {
@@ -1319,7 +1319,7 @@ _pumpNavigation(WidgetTester tester) async {
         Provider<StorageService>.value(value: _storageService),
         Provider<AbstractListLocationService>(
             create: (context) => _listLocationService),
-        Provider<AbstractStammdatenService>.value(value: _stammdatenService),
+        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<PushSendService>.value(value: _pushService),
         Provider<AbstractUserService>.value(value: _userService),
         Provider<AbstractPushSendService>.value(value: _pushService),
