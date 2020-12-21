@@ -1,22 +1,17 @@
 import 'dart:convert';
 
-import 'package:flutter/services.dart';
-import 'package:sammel_app/model/Ort.dart';
+import 'package:sammel_app/model/Kiez.dart';
+import 'package:sammel_app/shared/FileReader.dart';
 
 class StammdatenService {
-  // static final centroids = 'assets/geodata/plz-berlin-centroids.json';
-  // static final polygons = 'assets/geodata/plz-berlin-polygons.json';
-  static final centroids =
-      'assets/geodata/lor_berlin_centroids.json';
-  static final polygons =
-      'assets/geodata/lor_berlin_polygons.json';
-
   StammdatenService();
+  static var fileReader = FileReader();
+
   final Future<List<Kiez>> kieze = StammdatenService.ladeKieze();
 
   static Future<List<Kiez>> ladeKieze() async {
-    var centroidsJsons = await rootBundle.loadString(centroids);
-    var polygonsJsons = await rootBundle.loadString(polygons);
+    var centroidsJsons = await fileReader.loadLorCentroids();
+    var polygonsJsons = await fileReader.loadLorPolygons();
 
     List centroidMaps = jsonDecode(centroidsJsons);
     List polygonMaps = jsonDecode(polygonsJsons);

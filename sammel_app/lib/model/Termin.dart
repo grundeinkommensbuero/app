@@ -1,6 +1,6 @@
 import 'package:sammel_app/model/User.dart';
 
-import 'Ort.dart';
+import 'Kiez.dart';
 import 'TerminDetails.dart';
 
 class Termin {
