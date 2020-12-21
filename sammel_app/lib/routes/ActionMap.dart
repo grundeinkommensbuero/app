@@ -140,17 +140,17 @@ class ActionMapState extends State<ActionMap> {
   generateKiezLabels() {
     Provider.of<StammdatenService>(context).kieze.then(((kieze) =>
         kiezLabels = kieze
-            .map((kiez) => TextMarker('${kiez.kiez***REMOVED***\n${kiez.bezirk***REMOVED***', kiez.longitude, kiez.latitude))
+            .map((kiez) => TextMarker('${kiez.kiez***REMOVED***\n${kiez.bezirk***REMOVED***', kiez.center))
             .toList()));
   ***REMOVED***
 ***REMOVED***
 
 class TextMarker extends Marker {
-  TextMarker(String text, latitude, longitude)
+  TextMarker(String text, center)
       : super(
             width: 100.0,
             height: 50.0,
-            point: LatLng(latitude, longitude),
+            point: center,
             builder: (context) => Text(text, textAlign: TextAlign.center,));
 ***REMOVED***
 

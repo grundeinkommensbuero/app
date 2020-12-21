@@ -168,8 +168,8 @@ void main() {
       expect(actions[0].ende, DateTime(2019, 11, 4, 18, 9, 0));
       expect(actions[0].ort.bezirk, 'Friedrichshain-Kreuzberg');
       expect(actions[0].ort.kiez, 'Friedrichshain Nordkiez');
-      expect(actions[0].ort.latitude, 52.51579);
-      expect(actions[0].ort.longitude, 13.45399);
+      expect(actions[0].ort.center.latitude, 52.51579);
+      expect(actions[0].ort.center.longitude, 13.45399);
       expect(actions[0].typ, 'Sammeln');
       expect(actions[0].latitude, 52.52116);
       expect(actions[0].longitude, 13.41331);
@@ -186,8 +186,8 @@ void main() {
       expect(actions[1].ende, DateTime(2019, 11, 4, 18, 9, 0));
       expect(actions[1].ort.bezirk, 'Friedrichshain-Kreuzberg');
       expect(actions[1].ort.kiez, 'Friedrichshain Nordkiez');
-      expect(actions[1].ort.latitude, 52.51579);
-      expect(actions[1].ort.longitude, 13.45399);
+      expect(actions[1].ort.center.latitude, 52.51579);
+      expect(actions[1].ort.center.longitude, 13.45399);
       expect(actions[1].typ, 'Sammeln');
       expect(actions[1].latitude, 52.52116);
       expect(actions[1].longitude, 13.41331);
@@ -253,8 +253,8 @@ void main() {
       expect(action.ende, DateTime(2019, 11, 4, 18, 9, 0));
       expect(action.ort.bezirk, 'Friedrichshain-Kreuzberg');
       expect(action.ort.kiez, 'Friedrichshain Nordkiez');
-      expect(action.ort.latitude, 52.51579);
-      expect(action.ort.longitude, 13.45399);
+      expect(action.ort.center.latitude, 52.51579);
+      expect(action.ort.center.longitude, 13.45399);
       expect(action.typ, 'Sammeln');
       expect(action.latitude, 52.52116);
       expect(action.longitude, 13.41331);
@@ -289,8 +289,8 @@ void main() {
       expect(action.ende, DateTime(2019, 11, 4, 18, 9, 0));
       expect(action.ort.bezirk, 'Friedrichshain-Kreuzberg');
       expect(action.ort.kiez, 'Friedrichshain Nordkiez');
-      expect(action.ort.latitude, 52.51579);
-      expect(action.ort.longitude, 13.45399);
+      expect(action.ort.center.latitude, 52.51579);
+      expect(action.ort.center.longitude, 13.45399);
       expect(action.typ, 'Sammeln');
       expect(action.latitude, 52.52116);
       expect(action.longitude, 13.41331);

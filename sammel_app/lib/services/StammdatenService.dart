@@ -15,18 +15,5 @@ class StammdatenService {
     List centroidMaps = jsonDecode(json);
 
     return centroidMaps.map((json) => Kiez.fromJson(json)).toList();
-
-    // Map<String, Kiez> kieze = centroidMaps.asMap().map(
-    //     (_, json) => MapEntry(json['properties']['id'], Kiez.fromJson(json)));
-    // print(kieze);
-    //
-    // kieze.keys.forEach((id) {
-    //   var centroid =
-    //       centroidMaps.firstWhere((c) => c['properties']['id'] == id);
-    //   kieze[id].latitude = centroid['geometry']['coordinates'][0];
-    //   kieze[id].longitude = centroid['geometry']['coordinates'][1];
-    // ***REMOVED***);
-
-    // return kieze.values.toList();
   ***REMOVED***
 ***REMOVED***
