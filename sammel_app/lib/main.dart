@@ -37,9 +37,7 @@ class MyApp extends StatelessWidget {
       : PushNotificationManager(storageService, userService, firebaseService);
   var termineService =
       demoMode ? DemoTermineService(userService) : TermineService(userService);
-  static var stammdatenService = demoMode
-      ? DemoStammdatenService(userService)
-      : StammdatenService(userService);
+  static var stammdatenService = StammdatenService();
   static var listLocationService = demoMode
       ? DemoListLocationService(userService)
       : ListLocationService(userService);
@@ -56,7 +54,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           Provider<AbstractTermineService>.value(value: termineService),
-          Provider<AbstractStammdatenService>.value(value: stammdatenService),
+          Provider<StammdatenService>.value(value: stammdatenService),
           Provider<AbstractListLocationService>.value(
               value: listLocationService),
           Provider<StorageService>.value(value: storageService),

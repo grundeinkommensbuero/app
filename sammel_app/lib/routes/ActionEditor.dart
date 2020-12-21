@@ -398,7 +398,7 @@ class ActionEditorState extends State<ActionEditor> {
 
   locationSelection() async {
     var allLocations =
-        await Provider.of<AbstractStammdatenService>(context).kieze;
+        await Provider.of<StammdatenService>(context).kieze;
     var selectedLocations = await LocationPicker(
             key: Key('Location Picker'),
             locations: allLocations,

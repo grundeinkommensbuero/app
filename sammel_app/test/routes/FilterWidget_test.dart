@@ -397,7 +397,7 @@ Future pumpFilterWidget(WidgetTester tester) async {
   FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key('filter'));
 
   await tester.pumpWidget(MultiProvider(providers: [
-    Provider<AbstractStammdatenService>.value(value: _stammdatenService),
+    Provider<StammdatenService>.value(value: _stammdatenService),
     Provider<StorageService>.value(value: _storageService)
   ], child: MaterialApp(home: filterWidget)));
 ***REMOVED***

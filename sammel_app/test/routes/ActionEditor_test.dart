@@ -670,7 +670,7 @@ void main() {
 
       var actionEditor = ActionEditor(onFinish: onFinish);
       await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractStammdatenService>.value(value: _stammdatenService),
+        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<AbstractUserService>.value(value: userServiceMock),
       ], child: MaterialApp(home: actionEditor)));
 
@@ -837,7 +837,7 @@ _pumpNavigation(WidgetTester tester) async {
         Provider<StorageService>.value(value: _storageService),
         Provider<AbstractListLocationService>(
             create: (context) => _listLocationService),
-        Provider<AbstractStammdatenService>.value(value: _stammdatenService),
+        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<AbstractPushSendService>.value(value: _pushService),
         Provider<AbstractUserService>.value(value: _userService),
         Provider<ChatMessageService>.value(value: _chatService),
@@ -855,7 +855,7 @@ _pumpActionPage(WidgetTester tester) async {
         Provider<StorageService>.value(value: _storageService),
         Provider<AbstractListLocationService>(
             create: (context) => _listLocationService),
-        Provider<AbstractStammdatenService>.value(value: _stammdatenService),
+        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<AbstractUserService>.value(value: _userService),
         Provider<PushSendService>.value(value: _pushService),
         Provider<ChatMessageService>.value(value: _chatService),

@@ -103,7 +103,7 @@ class FilterWidgetState extends State<FilterWidget>
           this.filter = filter != null ? filter : TermineFilter.leererFilter();
           widget.onApply(filter); //lade initial Termine
         ***REMOVED***));
-    Provider.of<AbstractStammdatenService>(context)
+    Provider.of<StammdatenService>(context)
         .kieze
         .then((locations) => setState(() => allLocations = locations));
     _initialized = true;

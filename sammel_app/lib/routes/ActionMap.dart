@@ -56,7 +56,7 @@ class ActionMapState extends State<ActionMap> {
   @override
   Widget build(BuildContext context) {
     if (kieze.isEmpty) {
-      Provider.of<AbstractStammdatenService>(context)
+      Provider.of<StammdatenService>(context)
           .kieze
           .then((kieze) => setState(() {
                 this.kieze = kieze
@@ -138,7 +138,7 @@ class ActionMapState extends State<ActionMap> {
   ***REMOVED***
 
   generateKiezLabels() {
-    Provider.of<AbstractStammdatenService>(context).kieze.then(((kieze) =>
+    Provider.of<StammdatenService>(context).kieze.then(((kieze) =>
         kiezLabels = kieze
             .map((kiez) => TextMarker('${kiez.id***REMOVED***\n${kiez.bezirk***REMOVED***', kiez.longitude, kiez.latitude))
             .toList()));

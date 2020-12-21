@@ -46,7 +46,7 @@ void main() {
         Provider<StorageService>.value(value: _storageService),
         Provider<AbstractPushSendService>.value(value: _pushService),
         Provider<AbstractUserService>.value(value: _userService),
-        Provider<AbstractStammdatenService>.value(value: _stammdatenService),
+        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<ChatMessageService>.value(value: _chatService),
       ], child: MaterialApp(home: navigation)));
     ***REMOVED***);
