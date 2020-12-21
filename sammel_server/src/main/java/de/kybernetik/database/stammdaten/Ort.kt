@@ -16,18 +16,18 @@ class Ort {
     var ort: String = ""
 
     @Column
-    var lattitude: Double? = null
+    var latitude: Double? = null
 
     @Column
     var longitude: Double? = null
 
     constructor()
 
-    constructor(id: Int, bezirk: String, ort: String, lattitude: Double?, longitude: Double?) {
+    constructor(id: Int, bezirk: String, ort: String, latitude: Double?, longitude: Double?) {
         this.id = id
         this.bezirk = bezirk
         this.ort = ort
-        this.lattitude = lattitude
+        this.latitude = latitude
         this.longitude = longitude
     ***REMOVED***
 ***REMOVED***

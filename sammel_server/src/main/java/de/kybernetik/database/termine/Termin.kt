@@ -30,7 +30,7 @@ class Termin {
     var typ: String? = null
 
     @Column
-    var lattitude: Double? = null
+    var latitude: Double? = null
 
     @Column
     var longitude: Double? = null
@@ -53,7 +53,7 @@ class Termin {
                 ende: LocalDateTime?,
                 ort: Ort?,
                 typ: String?, teilnehmer: List<Benutzer>,
-                lattitude: Double?,
+                latitude: Double?,
                 longitude: Double?,
                 details: TerminDetails?) {
         this.id = id
@@ -61,7 +61,7 @@ class Termin {
         this.ende = ende
         this.ort = ort
         this.typ = typ
-        this.lattitude = lattitude
+        this.latitude = latitude
         this.longitude = longitude
         this.details = details
         this.teilnehmer = teilnehmer

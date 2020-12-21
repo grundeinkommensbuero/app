@@ -223,7 +223,7 @@ open class TermineRestResource {
         var ende: LocalDateTime? = null,
         var ort: Ort? = null,
         var typ: String? = null,
-        var lattitude: Double? = null,
+        var latitude: Double? = null,
         var longitude: Double? = null,
         var participants: List<BenutzerDto>? = emptyList(),
         var details: TerminDetailsDto? = TerminDetailsDto()
@@ -236,7 +236,7 @@ open class TermineRestResource {
                 ende = ende,
                 ort = ort,
                 typ = typ,
-                lattitude = lattitude,
+                latitude = latitude,
                 longitude = longitude,
                 teilnehmer = if (participants == null) emptyList() else participants!!.map { it.convertToBenutzer() ***REMOVED***,
                 details = details?.convertToTerminDetails(id)
@@ -256,7 +256,7 @@ open class TermineRestResource {
                 termin.ende,
                 termin.ort,
                 termin.typ,
-                termin.lattitude,
+                termin.latitude,
                 termin.longitude,
                 termin.teilnehmer.map { BenutzerDto.convertFromBenutzer(it) ***REMOVED***)
         ***REMOVED***

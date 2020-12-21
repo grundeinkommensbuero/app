@@ -5,7 +5,7 @@ create table Termine
     ende    datetime    null,
     ort     int         null,
     typ     varchar(40) null,
-    lattitude  double   null,
+    latitude  double   null,
     longitude  double   null,
     constraint Termine_Ort_fk
         foreign key (Ort) references Stamm_Orte (id)

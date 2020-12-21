@@ -76,7 +76,7 @@ class ActionExportRestResourceTest {
     @Test(expected = GeoJsonParseException::class)
     fun `GeoJson parses not without latitude`() {
         val action = terminOhneTeilnehmerMitDetails()
-        action.lattitude = null
+        action.latitude = null
 
         GeoJsonAction.convertFromAction(action)
     ***REMOVED***
@@ -98,7 +98,7 @@ class ActionExportRestResourceTest {
         assertEquals(geoJson.properties.description, GeoJsonAction.generateJsonDescription(terminOhneTeilnehmerMitDetails()))
         assertEquals(geoJson.geometry.type, "Point")
         assertEquals(geoJson.geometry.coordinates[0], terminOhneTeilnehmerMitDetails().longitude)
-        assertEquals(geoJson.geometry.coordinates[1], terminOhneTeilnehmerMitDetails().lattitude)
+        assertEquals(geoJson.geometry.coordinates[1], terminOhneTeilnehmerMitDetails().latitude)
     ***REMOVED***
 
     @Test
