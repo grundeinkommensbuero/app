@@ -21,7 +21,7 @@ class Termin {
       : id = json['id'],
         beginn = DateTime.parse(json['beginn']),
         ende = DateTime.parse(json['ende']),
-        ort = Kiez(1, 'Ortsteil', 'PLZ', 13.398831300000001, 52.527806),
+        ort = Kiez('Ortsteil', 'Kiez', 13.398831300000001, 52.527806),
         //Kiez.fromJson(json['ort']), TODO
         typ = json['typ'] ?? 'Termin',
         latitude = json['lattitude'] ?? null,

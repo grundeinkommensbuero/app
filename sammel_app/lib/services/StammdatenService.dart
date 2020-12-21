@@ -18,7 +18,7 @@ class StammdatenService {
 
     List<Kiez> kieze = centroidMaps.map((json) => Kiez.fromJson(json)).toList();
     kieze.forEach((kiez) => kiez.addArea(
-        polygonMaps.firstWhere((map) => map['properties']['id'] == kiez.id)));
+        polygonMaps.firstWhere((map) => map['properties']['id'] == kiez.kiez)));
 
     return kieze;
   }

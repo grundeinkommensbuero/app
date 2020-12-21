@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 
-import 'Kiez_test.dart';
+import '../shared/TestdatenVorrat.dart';
 
 void main() {
   group('serialisere', () {
@@ -20,13 +20,13 @@ void main() {
               [DateTime(2019, 11, 22, 0, 0, 0), DateTime(2019, 1, 30, 0, 0, 0)],
               TimeOfDay(hour: 4, minute: 10),
               TimeOfDay(hour: 23, minute: 0),
-              [nordkiez()])),
+              [ffAlleeNord()])),
           '{'
           '"typen":["Sammeln","Infoveranstaltung"],'
           '"tage":["2019-11-22","2019-01-30"],'
           '"von":"04:10:00",'
           '"bis":"23:00:00",'
-          '"orte":[{"id":1,"bezirk":"Friedrichshain-Kreuzberg","ort":"Friedrichshain Nordkiez","lattitude":52.51579,"longitude":13.45399}]'
+          '"orte":[{"bezirk":"Friedrichshain-Kreuzberg","kiez":"Frankfurter Allee Nord","lattitude":52.51579,"longitude":13.45399}]'
           '}');
     });
   });
@@ -80,7 +80,7 @@ void main() {
       expect(termineFilter.orte.length, 1);
       expect([
         termineFilter.orte[0].bezirk,
-        termineFilter.orte[0].id
+        termineFilter.orte[0].kiez
       ], [
         0,
         "Friedrichshain-Kreuzberg",

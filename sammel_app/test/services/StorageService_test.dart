@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -85,12 +84,7 @@ void main() async {
           [DateTime(2020, 1, 14), DateTime(2020, 1, 16)],
           TimeOfDay(hour: 12, minute: 30),
           TimeOfDay(hour: 15, minute: 0),
-          [
-            Kiez(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
-                52.51579, 13.45399),
-            Kiez(2, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung',
-                52.49653, 13.43762)
-          ]);
+          [ffAlleeNord(), tempVorstadt()]);
 
       var result = await service.saveFilter(filter);
 
@@ -109,16 +103,14 @@ void main() async {
           filterFromStorage.orte.map((ort) => ort.toJson()),
           containsAll([
             {
-              'id': 1,
               'bezirk': 'Friedrichshain-Kreuzberg',
-              'ort': 'Friedrichshain Nordkiez',
+              'kiez': 'Frankfurter Allee Nord',
               'lattitude': 52.51579,
               'longitude': 13.45399
             },
             {
-              'id': 2,
               'bezirk': 'Friedrichshain-Kreuzberg',
-              'ort': 'Görlitzer Park und Umgebung',
+              'kiez': 'Tempelhofer Vorstadt',
               'lattitude': 52.49653,
               'longitude': 13.43762
             }
@@ -131,12 +123,7 @@ void main() async {
           [DateTime(2020, 1, 14), DateTime(2020, 1, 16)],
           TimeOfDay(hour: 12, minute: 30),
           TimeOfDay(hour: 15, minute: 0),
-          [
-            Kiez(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
-                52.51579, 13.45399),
-            Kiez(2, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung',
-                52.49653, 13.43762)
-          ]);
+          [ffAlleeNord(), tempVorstadt()]);
       _prefs.setString('filter', jsonEncode(filter.toJson()));
 
       TermineFilter readFilter = await service.loadFilter();
@@ -152,16 +139,14 @@ void main() async {
           readFilter.orte.map((ort) => ort.toJson()),
           containsAll([
             {
-              'id': 1,
               'bezirk': 'Friedrichshain-Kreuzberg',
-              'ort': 'Friedrichshain Nordkiez',
+              'kiez': 'Frankfurter Allee Nord',
               'lattitude': 52.51579,
               'longitude': 13.45399
             },
             {
-              'id': 2,
               'bezirk': 'Friedrichshain-Kreuzberg',
-              'ort': 'Görlitzer Park und Umgebung',
+              'kiez': 'Tempelhofer Vorstadt',
               'lattitude': 52.49653,
               'longitude': 13.43762
             }
@@ -174,12 +159,7 @@ void main() async {
           [DateTime(2020, 1, 14), DateTime(2020, 1, 16)],
           TimeOfDay(hour: 12, minute: 30),
           TimeOfDay(hour: 15, minute: 0),
-          [
-            Kiez(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
-                52.51579, 13.45399),
-            Kiez(2, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung',
-                52.49653, 13.43762)
-          ]);
+          [ffAlleeNord(), tempVorstadt()]);
       _prefs.clear();
 
       TermineFilter readFilter = await service.loadFilter();

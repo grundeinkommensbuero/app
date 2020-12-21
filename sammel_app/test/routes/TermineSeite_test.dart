@@ -74,9 +74,9 @@ void main() {
       when(userService.user).thenAnswer((_) => Stream.value(me));
 
       when(_termineService.loadActions(any)).thenAnswer((_) async => [
-            TerminTestDaten.anActionFrom(today)..ort = goerli(),
-            TerminTestDaten.anActionFrom(tomorrow)..ort = nordkiez(),
-            TerminTestDaten.anActionFrom(yesterday)..ort = treptowerPark(),
+            TerminTestDaten.anActionFrom(today)..ort = tempVorstadt(),
+            TerminTestDaten.anActionFrom(tomorrow)..ort = ffAlleeNord(),
+            TerminTestDaten.anActionFrom(yesterday)..ort = plaenterwald(),
           ]);
 
       await tester.pumpWidget(termineSeiteWidget);
@@ -87,19 +87,19 @@ void main() {
       expect(
           find.descendant(
               of: find.byType(TerminCard).first,
-              matching: find.text(TerminCard.erzeugeOrtText(treptowerPark()))),
+              matching: find.text(TerminCard.erzeugeOrtText(plaenterwald()))),
           findsOneWidget);
 
       expect(
           find.descendant(
               of: find.byType(TerminCard).at(1),
-              matching: find.text(TerminCard.erzeugeOrtText(goerli()))),
+              matching: find.text(TerminCard.erzeugeOrtText(tempVorstadt()))),
           findsOneWidget);
 
       expect(
           find.descendant(
               of: find.byType(TerminCard).last,
-              matching: find.text(TerminCard.erzeugeOrtText(nordkiez()))),
+              matching: find.text(TerminCard.erzeugeOrtText(ffAlleeNord()))),
           findsOneWidget);
     });
 
@@ -399,7 +399,7 @@ void main() {
       editorState.action = ActionData(
           TimeOfDay.fromDateTime(today),
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
-          goerli(),
+          tempVorstadt(),
           'Infoveranstaltung',
           [today],
           TerminDetails('test1', 'test2', 'test3'),
@@ -410,7 +410,7 @@ void main() {
               1337,
               today,
               today.add(Duration(hours: 2)),
-              goerli(),
+              tempVorstadt(),
               'Infoveranstaltung',
               52.52116,
               13.41331,
@@ -461,7 +461,7 @@ void main() {
       editorState.action = ActionData(
           TimeOfDay.fromDateTime(today),
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
-          goerli(),
+          tempVorstadt(),
           'Sammeln',
           [today],
           TerminDetails('test1', 'test2', 'test3'),
@@ -472,7 +472,7 @@ void main() {
             1337,
             today,
             today.add(Duration(hours: 2)),
-            goerli(),
+            tempVorstadt(),
             'Infoveranstaltung',
             52.52116,
             13.41331,
@@ -524,7 +524,7 @@ void main() {
       editorState.action = ActionData(
           TimeOfDay.fromDateTime(today),
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
-          goerli(),
+          tempVorstadt(),
           'Infoveranstaltung',
           [today],
           TerminDetails('test1', 'test2', 'test3'),
@@ -535,7 +535,7 @@ void main() {
               1337,
               today,
               today.add(Duration(hours: 2)),
-              goerli(),
+              tempVorstadt(),
               'Infoveranstaltung',
               52.52116,
               13.41331,
@@ -586,7 +586,7 @@ void main() {
       editorState.action = ActionData(
           TimeOfDay.fromDateTime(today),
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
-          goerli(),
+          tempVorstadt(),
           'Infoveranstaltung',
           [today],
           TerminDetails('test1', 'test2', 'test3'),
@@ -1197,7 +1197,7 @@ void main() {
     test('only updates action w/o remove flag', () {
       var newAction = TerminTestDaten.einTermin()
         ..id = 2
-        ..ort = goerli();
+        ..ort = tempVorstadt();
 
       actionPageState.updateAction(newAction, false);
 
@@ -1208,8 +1208,8 @@ void main() {
               .where((action) => action.id == 2)
               .toList()[0]
               .ort
-              .id,
-          goerli().id);
+              .kiez,
+          tempVorstadt().kiez);
     });
 
     test('sorts new list by date', () {

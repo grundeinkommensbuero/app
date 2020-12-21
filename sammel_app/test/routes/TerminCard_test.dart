@@ -2,7 +2,7 @@ import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:test/test.dart';
 
-import '../model/Kiez_test.dart';
+import '../shared/TestdatenVorrat.dart';
 
 void main() {
   group('erzeugeDatumZeile berechnet Dauer', () {
@@ -60,9 +60,9 @@ void main() {
   });
   group('erzeugeOrtText', () {
     test('konkateniert Bezirk und Ort', () {
-      var text = TerminCard.erzeugeOrtText(nordkiez());
+      var text = TerminCard.erzeugeOrtText(ffAlleeNord());
 
-      expect(text, 'Friedrichshain-Kreuzberg, Friedrichshain Nordkiez');
+      expect(text, 'Friedrichshain-Kreuzberg, Frankfurter Allee Nord');
     });
   });
 }

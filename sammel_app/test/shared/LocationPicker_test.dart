@@ -27,8 +27,8 @@ void main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
-          Kiez(0, 'district1ExpandButton', 'area1', 52.51579, 13.45399),
-          Kiez(1, 'district2ExpandButton', 'area2', 52.51579, 13.45399)
+          Kiez('district1ExpandButton', 'kiez1', 52.51579, 13.45399),
+          Kiez('district2ExpandButton', 'kiez2', 52.51579, 13.45399)
         ], multiMode: false),
         tester,
         [],
@@ -46,17 +46,17 @@ void main() {
     await tester.tap(district2);
     await tester.pump();
 
-    expect(find.text('      area1'), findsOneWidget);
-    expect(find.text('      area2'), findsOneWidget);
+    expect(find.text('      kiez1'), findsOneWidget);
+    expect(find.text('      kiez2'), findsOneWidget);
   });
 
   testWidgets('LocationPicker shows correct locations with correct districts',
       (WidgetTester tester) async {
     await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
-          Kiez(0, 'district1ExpandButton', 'area1', 52.51579, 13.45399),
-          Kiez(1, 'district1ExpandButton', 'area2', 52.51579, 13.45399),
-          Kiez(2, 'district2ExpandButton', 'area3', 52.51579, 13.45399)
+          Kiez('district1ExpandButton', 'kiez1', 52.51579, 13.45399),
+          Kiez('district1ExpandButton', 'kiez2', 52.51579, 13.45399),
+          Kiez('district2ExpandButton', 'kiez3', 52.51579, 13.45399)
         ], multiMode: false),
         tester,
         [],
@@ -84,10 +84,10 @@ void main() {
         captions,
         containsAllInOrder([
           'district1ExpandButton',
-          '      area1',
-          '      area2',
+          '      kiez1',
+          '      kiez2',
           'district2ExpandButton',
-          '      area3'
+          '      kiez3'
         ]));
   });
 
@@ -95,9 +95,9 @@ void main() {
       'LocationPicker opens/closes locations tiles on click of parent district',
       (WidgetTester tester) async {
     var locationPicker = LocationPicker(locations: [
-      Kiez(0, 'district1ExpandButton', 'area1', 52.51579, 13.45399),
-      Kiez(0, 'district1ExpandButton', 'area2', 52.51579, 13.45399),
-      Kiez(0, 'district2ExpandButton', 'area3', 52.51579, 13.45399)
+      Kiez('district1ExpandButton', 'kiez1', 52.51579, 13.45399),
+      Kiez('district1ExpandButton', 'kiez2', 52.51579, 13.45399),
+      Kiez('district2ExpandButton', 'kiez3', 52.51579, 13.45399)
     ], multiMode: false);
     var widgetWithLocationPicker =
         createWidgetWithLocationPicker(locationPicker, tester, [], (_) {});
@@ -109,45 +109,45 @@ void main() {
     // initially only district tile are visible
     expect(find.text('district1ExpandButton'), findsOneWidget);
     expect(find.text('district2ExpandButton'), findsOneWidget);
-    expect(find.text('      area1'), findsNothing);
-    expect(find.text('      area2'), findsNothing);
-    expect(find.text('      area3'), findsNothing);
+    expect(find.text('      kiez1'), findsNothing);
+    expect(find.text('      kiez2'), findsNothing);
+    expect(find.text('      kiez3'), findsNothing);
 
     // expand first district tile
     await tester.tap(find.text('district1ExpandButton'));
     await tester.pump();
 
-    // only area tiles of district1ExpandButton are visible
-    expect(find.text('      area1'), findsOneWidget);
-    expect(find.text('      area2'), findsOneWidget);
-    expect(find.text('      area3'), findsNothing);
+    // only kiez tiles of district1ExpandButton are visible
+    expect(find.text('      kiez1'), findsOneWidget);
+    expect(find.text('      kiez2'), findsOneWidget);
+    expect(find.text('      kiez3'), findsNothing);
 
     //close first district tile again
     await tester.tap(find.text('district1ExpandButton'));
     await tester.pump();
 
-    // all area tiles are invisible again
-    expect(find.text('      area1'), findsNothing);
-    expect(find.text('      area2'), findsNothing);
-    expect(find.text('      area3'), findsNothing);
+    // all kiez tiles are invisible again
+    expect(find.text('      kiez1'), findsNothing);
+    expect(find.text('      kiez2'), findsNothing);
+    expect(find.text('      kiez3'), findsNothing);
 
     // expand second district tile
     await tester.tap(find.text('district2ExpandButton'));
     await tester.pump();
 
-    // only area tiles of district2ExpandButton are visible
-    expect(find.text('      area1'), findsNothing);
-    expect(find.text('      area2'), findsNothing);
-    expect(find.text('      area3'), findsOneWidget);
+    // only kiez tiles of district2ExpandButton are visible
+    expect(find.text('      kiez1'), findsNothing);
+    expect(find.text('      kiez2'), findsNothing);
+    expect(find.text('      kiez3'), findsOneWidget);
 
     // expand first district tile too
     await tester.tap(find.text('district1ExpandButton'));
     await tester.pump();
 
-    // all area tiles are visible
-    expect(find.text('      area1'), findsOneWidget);
-    expect(find.text('      area2'), findsOneWidget);
-    expect(find.text('      area3'), findsOneWidget);
+    // all kiez tiles are visible
+    expect(find.text('      kiez1'), findsOneWidget);
+    expect(find.text('      kiez2'), findsOneWidget);
+    expect(find.text('      kiez3'), findsOneWidget);
   });
 
   CheckboxListTile findCheckboxTileWithName(WidgetTester tester, String name) {
@@ -161,9 +161,9 @@ void main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
-          Kiez(0, 'district1ExpandButton', 'area1', 52.51579, 13.45399),
-          Kiez(1, 'district1ExpandButton', 'area2', 52.51579, 13.45399),
-          Kiez(2, 'district2ExpandButton', 'area3', 52.51579, 13.45399)
+          Kiez('district1ExpandButton', 'kiez1', 52.51579, 13.45399),
+          Kiez('district1ExpandButton', 'kiez2', 52.51579, 13.45399),
+          Kiez('district2ExpandButton', 'kiez3', 52.51579, 13.45399)
         ], multiMode: true),
         tester,
         [],
@@ -190,9 +190,9 @@ void main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
-          Kiez(0, 'district1ExpandButton', 'area1', 52.51579, 13.45399),
-          Kiez(1, 'district1ExpandButton', 'area2', 52.51579, 13.45399),
-          Kiez(2, 'district2ExpandButton', 'area3', 52.51579, 13.45399)
+          Kiez('district1ExpandButton', 'kiez1', 52.51579, 13.45399),
+          Kiez('district1ExpandButton', 'kiez2', 52.51579, 13.45399),
+          Kiez('district2ExpandButton', 'kiez3', 52.51579, 13.45399)
         ], multiMode: true),
         tester,
         [],
@@ -211,28 +211,28 @@ void main() {
 
     expect(find.byType(CheckboxListTile), findsNWidgets(5));
 
-    expect(findCheckboxTileWithName(tester, '      area1').value, isFalse);
-    expect(findCheckboxTileWithName(tester, '      area2').value, isFalse);
-    expect(findCheckboxTileWithName(tester, '      area3').value, isFalse);
+    expect(findCheckboxTileWithName(tester, '      kiez1').value, isFalse);
+    expect(findCheckboxTileWithName(tester, '      kiez2').value, isFalse);
+    expect(findCheckboxTileWithName(tester, '      kiez3').value, isFalse);
 
     await tester.tap(find.text('district1ExpandButton'));
     await tester.pump();
 
-    expect(findCheckboxTileWithName(tester, '      area1').value, isTrue);
-    expect(findCheckboxTileWithName(tester, '      area2').value, isTrue);
-    expect(findCheckboxTileWithName(tester, '      area3').value, isFalse);
+    expect(findCheckboxTileWithName(tester, '      kiez1').value, isTrue);
+    expect(findCheckboxTileWithName(tester, '      kiez2').value, isTrue);
+    expect(findCheckboxTileWithName(tester, '      kiez3').value, isFalse);
   });
 
   testWidgets('LocationPicker selects initially selected locations on startup',
       (WidgetTester tester) async {
     await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
-          Kiez(0, 'district1ExpandButton', 'area1', 52.51579, 13.45399),
-          Kiez(1, 'district1ExpandButton', 'area2', 52.51579, 13.45399),
-          Kiez(2, 'district2ExpandButton', 'area3', 52.51579, 13.45399)
+          Kiez('district1ExpandButton', 'kiez1', 52.51579, 13.45399),
+          Kiez('district1ExpandButton', 'kiez2', 52.51579, 13.45399),
+          Kiez('district2ExpandButton', 'kiez3', 52.51579, 13.45399)
         ], multiMode: true),
         tester,
-        [Kiez(2, 'district2ExpandButton', 'area3', 52.51579, 13.45399)],
+        [Kiez('district2ExpandButton', 'kiez3', 52.51579, 13.45399)],
         (_) {}));
 
     await tester.tap(find.text('X'));
@@ -246,9 +246,9 @@ void main() {
     await tester.tap(districtExpandButtons.last);
     await tester.pump();
 
-    expect(findCheckboxTileWithName(tester, '      area1').value, isFalse);
-    expect(findCheckboxTileWithName(tester, '      area2').value, isFalse);
-    expect(findCheckboxTileWithName(tester, '      area3').value, isTrue);
+    expect(findCheckboxTileWithName(tester, '      kiez1').value, isFalse);
+    expect(findCheckboxTileWithName(tester, '      kiez2').value, isFalse);
+    expect(findCheckboxTileWithName(tester, '      kiez3').value, isTrue);
   });
 
   testWidgets(
@@ -256,9 +256,9 @@ void main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
-          Kiez(0, 'district1', 'area1', 52.51579, 13.45399),
-          Kiez(1, 'district1', 'area2', 52.51579, 13.45399),
-          Kiez(2, 'district2', 'area3', 52.51579, 13.45399)
+          Kiez('district1', 'kiez1', 52.51579, 13.45399),
+          Kiez('district1', 'kiez2', 52.51579, 13.45399),
+          Kiez('district2', 'kiez3', 52.51579, 13.45399)
         ], multiMode: true),
         tester,
         [],
@@ -276,18 +276,18 @@ void main() {
     await tester.pump();
 
     expect(findCheckboxTileWithName(tester, 'district1').value, isFalse);
-    expect(findCheckboxTileWithName(tester, '      area1').value, isFalse);
-    expect(findCheckboxTileWithName(tester, '      area2').value, isFalse);
+    expect(findCheckboxTileWithName(tester, '      kiez1').value, isFalse);
+    expect(findCheckboxTileWithName(tester, '      kiez2').value, isFalse);
     expect(findCheckboxTileWithName(tester, 'district2').value, isFalse);
-    expect(findCheckboxTileWithName(tester, '      area3').value, isFalse);
+    expect(findCheckboxTileWithName(tester, '      kiez3').value, isFalse);
   });
 
   testWidgets('LocationPicker uses multi mode', (WidgetTester tester) async {
     await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
-          Kiez(0, 'district1', 'area1', 52.51579, 13.45399),
-          Kiez(1, 'district1', 'area2', 52.51579, 13.45399),
-          Kiez(2, 'district2', 'area3', 52.51579, 13.45399)
+          Kiez('district1', 'kiez1', 52.51579, 13.45399),
+          Kiez('district1', 'kiez2', 52.51579, 13.45399),
+          Kiez('district2', 'kiez3', 52.51579, 13.45399)
         ], multiMode: true),
         tester,
         [],
@@ -308,9 +308,9 @@ void main() {
 
     await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
-          Kiez(0, 'district1', 'area1', 52.51579, 13.45399),
-          Kiez(1, 'district1', 'area2', 52.51579, 13.45399),
-          Kiez(2, 'district2', 'area3', 52.51579, 13.45399)
+          Kiez('district1', 'kiez1', 52.51579, 13.45399),
+          Kiez('district1', 'kiez2', 52.51579, 13.45399),
+          Kiez('district2', 'kiez3', 52.51579, 13.45399)
         ], multiMode: false),
         tester,
         [],
@@ -337,9 +337,9 @@ void main() {
     var result = List<Kiez>();
     await tester.pumpWidget(createWidgetWithLocationPicker(
         LocationPicker(locations: [
-          Kiez(0, 'district1', 'area1', 52.51579, 13.45399),
-          Kiez(1, 'district1', 'area2', 52.51579, 13.45399),
-          Kiez(2, 'district2', 'area3', 52.51579, 13.45399)
+          Kiez('district1', 'kiez1', 52.51579, 13.45399),
+          Kiez('district1', 'kiez2', 52.51579, 13.45399),
+          Kiez('district2', 'kiez3', 52.51579, 13.45399)
         ], multiMode: true),
         tester,
         [],
@@ -353,6 +353,6 @@ void main() {
     await tester.tap(find.text('Fertig'));
     await tester.pump();
 
-    expect(result.map((ort) => ort.id), containsAll(['area1', 'area2']));
+    expect(result.map((ort) => ort.kiez), containsAll(['kiez1', 'kiez2']));
   });
 }

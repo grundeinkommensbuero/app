@@ -140,7 +140,7 @@ class ActionMapState extends State<ActionMap> {
   generateKiezLabels() {
     Provider.of<StammdatenService>(context).kieze.then(((kieze) =>
         kiezLabels = kieze
-            .map((kiez) => TextMarker('${kiez.id}\n${kiez.bezirk}', kiez.longitude, kiez.latitude))
+            .map((kiez) => TextMarker('${kiez.kiez}\n${kiez.bezirk}', kiez.longitude, kiez.latitude))
             .toList()));
   }
 }

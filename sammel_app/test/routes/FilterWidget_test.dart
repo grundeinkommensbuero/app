@@ -12,6 +12,7 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 
 import '../shared/Mocks.dart';
+import '../shared/TestdatenVorrat.dart';
 
 int numberOfTimesCalled = 0;
 TermineFilter iWasCalledResult;
@@ -29,8 +30,8 @@ void main() {
     setUpUI((WidgetTester tester) async {
       when(_storageService.loadFilter()).thenAnswer((_) async => null);
       when(_stammdatenService.kieze).thenAnswer((_) async => [
-            Kiez(0, 'district1', 'place1', 52.49653, 13.43762),
-            Kiez(1, 'district2', 'place2', 52.49653, 13.43762)
+            Kiez('district1', 'kiez1', 52.49653, 13.43762),
+            Kiez('district2', 'kiez2', 52.49653, 13.43762)
           ]);
       await pumpFilterWidget(tester);
     });
@@ -305,7 +306,7 @@ void main() {
           [DateTime(2019, 12, 16)],
           TimeOfDay(hour: 19, minute: 15),
           TimeOfDay(hour: 20, minute: 21),
-          [Kiez(1, 'district', 'place', 52.49653, 13.43762)]);
+          [Kiez('district', 'kiez', 52.49653, 13.43762)]);
 
       numberOfTimesCalled = 0;
       iWasCalledResult = null;
@@ -319,15 +320,15 @@ void main() {
       expect(ChronoHelfer.timeToStringHHmm(iWasCalledResult.bis), '20:21');
       expect(iWasCalledResult.tage.map((t) => DateFormat.yMd().format(t)),
           containsAll(['12/16/2019']));
-      expect(iWasCalledResult.orte.map((o) => o.id), containsAll([1]));
+      expect(iWasCalledResult.orte.map((o) => o.kiez), containsAll([1]));
     });
   });
 
   group('storage function', () {
     setUpUI((WidgetTester tester) async {
       when(_stammdatenService.kieze).thenAnswer((_) async => [
-            Kiez(0, 'district1', 'place1', 52.49653, 13.43762),
-            Kiez(1, 'district2', 'place2', 52.49653, 13.43762)
+            Kiez('district1', 'kiez1', 52.49653, 13.43762),
+            Kiez('district2', 'kiez2', 52.49653, 13.43762)
           ]);
     });
 
@@ -353,12 +354,7 @@ void main() {
           [DateTime(2020, 1, 14), DateTime(2020, 1, 16)],
           TimeOfDay(hour: 12, minute: 30),
           TimeOfDay(hour: 15, minute: 0),
-          [
-            Kiez(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
-                52.49653, 13.43762),
-            Kiez(2, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung',
-                52.49653, 13.43762)
-          ]));
+          [ffAlleeNord(), tempVorstadt()]));
 
       await pumpFilterWidget(tester);
 
@@ -377,14 +373,14 @@ void main() {
             {
               'id': 1,
               'bezirk': 'Friedrichshain-Kreuzberg',
-              'ort': 'Friedrichshain Nordkiez',
+              'ort': 'Frankfurter Allee Nord',
               'lattitude': 52.49653,
               'longitude': 13.43762
             },
             {
               'id': 2,
               'bezirk': 'Friedrichshain-Kreuzberg',
-              'ort': 'Görlitzer Park und Umgebung',
+              'ort': 'Tempelhofer Vorstadt',
               'lattitude': 52.49653,
               'longitude': 13.43762
             }
