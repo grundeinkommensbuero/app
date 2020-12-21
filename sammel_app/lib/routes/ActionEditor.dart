@@ -33,7 +33,7 @@ class ActionData {
   ActionData.testDaten() {
     this.von = TimeOfDay.fromDateTime(DateTime.now());
     this.bis = TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 1)));
-    this.ort = Kiez(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
+    this.ort = Kiez('Friedrichshain-Kreuzberg', 'Kiez',
         52.51579, 13.45399);
     this.coordinates = LatLng(52.51579, 13.45399);
     this.typ = 'Sammeln';
@@ -525,7 +525,7 @@ class ActionEditorState extends State<ActionEditor> {
         termin.validated['ort'] == ValidationState.error)
       text = Text("Wähle einen Ort", style: TextStyle(color: DweTheme.purple));
     else {
-      text = Text("in " + termin.ort.id);
+      text = Text("in " + termin.ort.kiez);
     ***REMOVED***
     return build_text_row(text, termin.validated['ort']);
   ***REMOVED***

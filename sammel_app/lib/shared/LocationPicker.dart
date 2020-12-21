@@ -24,7 +24,7 @@ class LocationPicker {
         builder: (context) =>
             StatefulBuilder(builder: (context, setDialogState) {
               List<String> selectedLocations =
-                  previousSelection?.map((ort) => ort.id)?.toList();
+                  previousSelection?.map((ort) => ort.kiez)?.toList();
               if (selectedLocations == null)
                 selectedLocations = []; // Null-Sicherheit
 
@@ -70,7 +70,7 @@ class LocationPicker {
                   (ort) => MapEntry(
                       ort,
                       selectedLocations
-                          .any((filterOrt) => filterOrt.id == ort.id)))),
+                          .any((filterOrt) => filterOrt.kiez == ort.kiez)))),
             false))
         .toList();
   ***REMOVED***
@@ -142,7 +142,7 @@ class LocationPicker {
     return CheckboxListTile(
       checkColor: DweTheme.yellow,
       value: bezirk.locationSelection[ort],
-      title: Text('      ' + ort.id),
+      title: Text('      ' + ort.kiez),
       onChanged: (bool wurdeAusgewaehlt) {
         setDialogState(() => bezirk.locationSelection[ort] = wurdeAusgewaehlt);
       ***REMOVED***,
@@ -154,7 +154,7 @@ class LocationPicker {
     return ListTile(
       title: FlatButton(
           padding: EdgeInsets.zero,
-          child: Text('      ' + location.id),
+          child: Text('      ' + location.kiez),
           textTheme: district.locationSelection[location]
               ? ButtonTextTheme.accent
               : ButtonTextTheme.normal,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:mockito/mockito.dart';
-import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
@@ -10,7 +9,6 @@ import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
-import '../model/Kiez_test.dart';
 import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';
@@ -41,8 +39,7 @@ void main() {
               null,
               DateTime.now(),
               Jiffy(DateTime.now()).add(days: 1),
-              Kiez(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
-                  52.51579, 13.45399),
+              ffAlleeNord(),
               'Sammeln',
               52.52116,
               13.41331,
@@ -73,19 +70,19 @@ void main() {
 
     test('stores new action', () async {
       expect(service.termine[0].typ, 'Sammeln');
-      expect(service.termine[0].ort.id, '1');
+      expect(service.termine[0].ort.kiez, '1');
       expect(service.termine[0].details.kontakt, 'Ruft mich an unter 01234567');
 
       await service.saveAction(
           TerminTestDaten.einTermin()
             ..id = 1
             ..typ = 'Infoveranstaltung'
-            ..ort = treptowerPark()
+            ..ort = plaenterwald()
             ..details = TerminDetails('bla', 'blub', 'Test123'),
           '');
 
       expect(service.termine[0].typ, 'Infoveranstaltung');
-      expect(service.termine[0].ort.id, '2');
+      expect(service.termine[0].ort.kiez, '2');
       expect(service.termine[0].details.kontakt, 'Test123');
     ***REMOVED***);
 
@@ -170,7 +167,7 @@ void main() {
       expect(actions[0].beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(actions[0].ende, DateTime(2019, 11, 4, 18, 9, 0));
       expect(actions[0].ort.bezirk, 'Friedrichshain-Kreuzberg');
-      expect(actions[0].ort.id, 'Friedrichshain Nordkiez');
+      expect(actions[0].ort.kiez, 'Friedrichshain Nordkiez');
       expect(actions[0].ort.latitude, 52.51579);
       expect(actions[0].ort.longitude, 13.45399);
       expect(actions[0].typ, 'Sammeln');
@@ -188,7 +185,7 @@ void main() {
       expect(actions[1].beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(actions[1].ende, DateTime(2019, 11, 4, 18, 9, 0));
       expect(actions[1].ort.bezirk, 'Friedrichshain-Kreuzberg');
-      expect(actions[1].ort.id, 'Friedrichshain Nordkiez');
+      expect(actions[1].ort.kiez, 'Friedrichshain Nordkiez');
       expect(actions[1].ort.latitude, 52.51579);
       expect(actions[1].ort.longitude, 13.45399);
       expect(actions[1].typ, 'Sammeln');
@@ -255,7 +252,7 @@ void main() {
       expect(action.beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(action.ende, DateTime(2019, 11, 4, 18, 9, 0));
       expect(action.ort.bezirk, 'Friedrichshain-Kreuzberg');
-      expect(action.ort.id, 'Friedrichshain Nordkiez');
+      expect(action.ort.kiez, 'Friedrichshain Nordkiez');
       expect(action.ort.latitude, 52.51579);
       expect(action.ort.longitude, 13.45399);
       expect(action.typ, 'Sammeln');
@@ -291,7 +288,7 @@ void main() {
       expect(action.beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(action.ende, DateTime(2019, 11, 4, 18, 9, 0));
       expect(action.ort.bezirk, 'Friedrichshain-Kreuzberg');
-      expect(action.ort.id, 'Friedrichshain Nordkiez');
+      expect(action.ort.kiez, 'Friedrichshain Nordkiez');
       expect(action.ort.latitude, 52.51579);
       expect(action.ort.longitude, 13.45399);
       expect(action.typ, 'Sammeln');
@@ -423,6 +420,6 @@ TermineFilter einFilter() {
   var start = DateTime.parse('2020-08-20 15:00:00');
   var end = DateTime.parse('2020-08-20 18:30:00');
   var einFilter = TermineFilter(["Sammeln"], [datum],
-      TimeOfDay.fromDateTime(start), TimeOfDay.fromDateTime(end), [nordkiez()]);
+      TimeOfDay.fromDateTime(start), TimeOfDay.fromDateTime(end), [ffAlleeNord()]);
   return einFilter;
 ***REMOVED***

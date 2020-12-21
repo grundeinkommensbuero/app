@@ -18,9 +18,9 @@ import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 
-import '../model/Kiez_test.dart';
 import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';
+import '../shared/TestdatenVorrat.dart';
 
 final _stammdatenService = StammdatenServiceMock();
 final _terminService = TermineServiceMock();
@@ -149,7 +149,7 @@ void main() {
 
     testWidgets('Location dialog opens correctly', (WidgetTester tester) async {
       await _openActionCreator(tester);
-      when(_stammdatenService.kieze).thenAnswer((_) async => [goerli()]);
+      when(_stammdatenService.kieze).thenAnswer((_) async => [tempVorstadt()]);
       expect(find.byKey(Key('Location Picker')), findsNothing);
       await tester.tap(find.byKey(Key('Open location dialog')));
       await tester.pump();
@@ -162,10 +162,10 @@ void main() {
       ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
       expect(find.text("in Görlitzer Park und Umgebung"), findsNothing);
-      when(_stammdatenService.kieze).thenAnswer((_) async => [goerli()]);
+      when(_stammdatenService.kieze).thenAnswer((_) async => [tempVorstadt()]);
       // ignore: invalid_use_of_protected_member
       actionData.setState(() {
-        actionData.action.ort = goerli();
+        actionData.action.ort = tempVorstadt();
         actionData.validateAllInput();
       ***REMOVED***);
       await tester.pumpAndSettle();
@@ -330,7 +330,7 @@ void main() {
     ***REMOVED***);
 
     test('ort', () {
-      actionEditor.action.id = null;
+      actionEditor.action.kiez = null;
       actionEditor.validateAllInput();
 
       expect(actionEditor.action.validated['ort'], ValidationState.error);
@@ -414,7 +414,7 @@ void main() {
       state.action = ActionData(
           TimeOfDay.now(),
           TimeOfDay.now(),
-          nordkiez(),
+          ffAlleeNord(),
           '',
           [DateTime.now()],
           TerminDetails('treffpunkt', 'beschreibung', 'kontakt'),
@@ -432,7 +432,7 @@ void main() {
       var actionData = ActionData(
           null,
           null,
-          Kiez(0, 'Bezirk', 'Ort', 52.1, 43.1),
+          Kiez('Bezirk', 'Kiez', 52.1, 43.1),
           null,
           null,
           null,
@@ -444,7 +444,7 @@ void main() {
 
     test('returns location, if given and no coordinates', () {
       var actionData = ActionData(null, null,
-          Kiez(0, 'Bezirk', 'Ort', 52.1, 43.1), null, null, null, null);
+          Kiez('Bezirk', 'Ort', 52.1, 43.1), null, null, null, null);
 
       expect(
           ActionEditorState.determineMapCenter(actionData), LatLng(52.1, 43.1));
@@ -455,7 +455,7 @@ void main() {
 
       expect(ActionEditorState.determineMapCenter(actionData), null);
 
-      actionData = ActionData(null, null, Kiez(0, 'Bezirk', 'Ort', null, null),
+      actionData = ActionData(null, null, Kiez('Bezirk', 'Kiez', null, null),
           null, null, null, null);
 
       expect(ActionEditorState.determineMapCenter(actionData), null);
@@ -589,10 +589,10 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      state.action.ort = nordkiez();
+      state.action.ort = ffAlleeNord();
       Termin action = (await state.generateActions())[0];
 
-      expect(action.ort.equals(nordkiez()), true);
+      expect(action.ort.equals(ffAlleeNord()), true);
     ***REMOVED***);
 
     testWidgets('with new type, w/ changes', (WidgetTester tester) async {
