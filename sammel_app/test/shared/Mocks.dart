@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
-import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
@@ -14,6 +13,7 @@ import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
+import 'package:sammel_app/shared/FileReader.dart';
 
 import 'TestdatenVorrat.dart';
 
@@ -72,3 +72,5 @@ class FirebaseReceiveServiceMock extends Mock
     implements FirebaseReceiveService {}
 
 class DemoPushSendServiceMock extends Mock implements DemoPushSendService {}
+
+class FileReaderMock extends Mock implements FileReader {}

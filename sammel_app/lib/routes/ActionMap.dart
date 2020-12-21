@@ -65,7 +65,7 @@ class ActionMapState extends State<ActionMap> {
                         borderStrokeWidth: 2.0,
                         borderColor: Color.fromARGB(250, DweTheme.purple.red,
                             DweTheme.purple.green, DweTheme.purple.blue),
-                        points: kiez.area
+                        points: kiez.polygon
                             .map((point) => LatLng(point[1], point[0]))
                             .toList()))
                     .toList();
