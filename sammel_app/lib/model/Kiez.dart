@@ -5,7 +5,6 @@ class Kiez {
   double longitude;
   List<List<double>> area;
 
-  // TODO id ausbauen
   Kiez(bezirk, kiez, lattitude, longitude) {
     this.kiez = kiez;
     this.bezirk = bezirk;
@@ -15,11 +14,11 @@ class Kiez {
 
   Kiez.fromJson(Map<String, dynamic> json)
       : bezirk = json['properties']['ortsteil'],
-        kiez = json['properties']['id'],
+        kiez = json['properties']['kiez'],
         latitude = json['geometry']['coordinates'][0],
         longitude = json['geometry']['coordinates'][1];
 
-  Map<String, dynamic> toJson() => {'id': kiez***REMOVED***
+  String toJson() => kiez;
 
   void addArea(Map<String, dynamic> json) =>
       area = (json['geometry']['coordinates'] as List)

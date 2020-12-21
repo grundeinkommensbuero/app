@@ -7,9 +7,8 @@ import '../shared/TestdatenVorrat.dart';
 
 void main() {
   group('serialisere', () {
-    test('serialisiert Ort mit id, Bezirk und Ort', () {
-      expect(jsonEncode(Kiez('bezirk1', 'kiez1', 52.49653, 13.43762)),
-          '{"id":1,"bezirk":"bezirk1","kiez":"kiez1","lattitude":52.49653,"longitude":13.43762***REMOVED***');
+    test('serialisiert nur Kiez', () {
+      expect(jsonEncode(Kiez('bezirk1', 'kiez1', 52.49653, 13.43762)), '"kiez1"');
     ***REMOVED***);
   ***REMOVED***);
   group('equals', () {
@@ -21,25 +20,6 @@ void main() {
     test('returns true for null locations', () {
       expect(Kiez(null, null, null, null).equals(Kiez(null, null, null, null)),
           true);
-    ***REMOVED***);
-
-    test('returns false for different id', () {
-      expect(
-          Kiez('Bezirk', 'Kiez', 52.48993, 13.46839)
-              .equals(Kiez('Bezirk', 'Kiez', 52.48993, 13.46839)),
-          false);
-    ***REMOVED***);
-    test('returns false for null id', () {
-      expect(
-          Kiez('Bezirk', 'Kiez', 52.48993, 13.46839)
-              .equals(Kiez('Bezirk', 'Kiez', 52.48993, 13.46839)),
-          false);
-    ***REMOVED***);
-    test('returns false for id and null', () {
-      expect(
-          Kiez('Bezirk', 'Kiez', 52.48993, 13.46839)
-              .equals(Kiez('Bezirk', 'Kiez', 52.48993, 13.46839)),
-          false);
     ***REMOVED***);
 
     test('returns false for different location', () {
