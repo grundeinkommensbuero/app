@@ -20,13 +20,13 @@ void main() {
               [DateTime(2019, 11, 22, 0, 0, 0), DateTime(2019, 1, 30, 0, 0, 0)],
               TimeOfDay(hour: 4, minute: 10),
               TimeOfDay(hour: 23, minute: 0),
-              [ffAlleeNord()])),
+              [ffAlleeNord().kiez])),
           '{'
           '"typen":["Sammeln","Infoveranstaltung"],'
           '"tage":["2019-11-22","2019-01-30"],'
           '"von":"04:10:00",'
           '"bis":"23:00:00",'
-          '"orte":[{"bezirk":"Friedrichshain-Kreuzberg","kiez":"Frankfurter Allee Nord","lattitude":52.51579,"longitude":13.45399***REMOVED***]'
+          '"orte":["Frankfurter Allee Nord"]'
           '***REMOVED***');
     ***REMOVED***);
   ***REMOVED***);
@@ -51,7 +51,7 @@ void main() {
           '"tage":["2019-11-22","2019-01-02"],'
           '"von":"23:59:00",'
           '"bis":"01:02:00",'
-          '"orte":[{"id":0,"bezirk":"Friedrichshain-Kreuzberg","ort":"Friedrichshain Nordkiez"***REMOVED***]'
+          '"orte":["Frankfurter Allee Nord"]'
           '***REMOVED***'));
       expect(termineFilter.typen.length, 2);
       expect(termineFilter.typen[0], "Sammeln");
@@ -78,14 +78,7 @@ void main() {
       expect([termineFilter.von.hour, termineFilter.von.minute], [23, 59]);
       expect([termineFilter.bis.hour, termineFilter.bis.minute], [1, 2]);
       expect(termineFilter.orte.length, 1);
-      expect([
-        termineFilter.orte[0].bezirk,
-        termineFilter.orte[0].kiez
-      ], [
-        0,
-        "Friedrichshain-Kreuzberg",
-        "Friedrichshain Nordkiez"
-      ]);
+      expect(termineFilter.orte[0], 'Frankfurter Allee Nord');
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***

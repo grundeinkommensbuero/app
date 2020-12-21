@@ -84,7 +84,7 @@ void main() async {
           [DateTime(2020, 1, 14), DateTime(2020, 1, 16)],
           TimeOfDay(hour: 12, minute: 30),
           TimeOfDay(hour: 15, minute: 0),
-          [ffAlleeNord(), tempVorstadt()]);
+          [ffAlleeNord().kiez, tempVorstadt().kiez]);
 
       var result = await service.saveFilter(filter);
 
@@ -99,22 +99,8 @@ void main() async {
           containsAll([DateTime(2020, 1, 14), DateTime(2020, 1, 16)]));
       expect(filterFromStorage.von, TimeOfDay(hour: 12, minute: 30));
       expect(filterFromStorage.bis, TimeOfDay(hour: 15, minute: 0));
-      expect(
-          filterFromStorage.orte.map((ort) => ort.toJson()),
-          containsAll([
-            {
-              'bezirk': 'Friedrichshain-Kreuzberg',
-              'kiez': 'Frankfurter Allee Nord',
-              'lattitude': 52.51579,
-              'longitude': 13.45399
-            ***REMOVED***,
-            {
-              'bezirk': 'Friedrichshain-Kreuzberg',
-              'kiez': 'Tempelhofer Vorstadt',
-              'lattitude': 52.49653,
-              'longitude': 13.43762
-            ***REMOVED***
-          ]));
+      expect(filterFromStorage.orte,
+          containsAll(['Frankfurter Allee Nord', 'Tempelhofer Vorstadt']));
     ***REMOVED***);
 
     test('is read correctly', () async {
@@ -123,7 +109,7 @@ void main() async {
           [DateTime(2020, 1, 14), DateTime(2020, 1, 16)],
           TimeOfDay(hour: 12, minute: 30),
           TimeOfDay(hour: 15, minute: 0),
-          [ffAlleeNord(), tempVorstadt()]);
+          [ffAlleeNord().kiez, tempVorstadt().kiez]);
       _prefs.setString('filter', jsonEncode(filter.toJson()));
 
       TermineFilter readFilter = await service.loadFilter();
@@ -135,22 +121,8 @@ void main() async {
           containsAll([DateTime(2020, 1, 14), DateTime(2020, 1, 16)]));
       expect(readFilter.von, TimeOfDay(hour: 12, minute: 30));
       expect(readFilter.bis, TimeOfDay(hour: 15, minute: 0));
-      expect(
-          readFilter.orte.map((ort) => ort.toJson()),
-          containsAll([
-            {
-              'bezirk': 'Friedrichshain-Kreuzberg',
-              'kiez': 'Frankfurter Allee Nord',
-              'lattitude': 52.51579,
-              'longitude': 13.45399
-            ***REMOVED***,
-            {
-              'bezirk': 'Friedrichshain-Kreuzberg',
-              'kiez': 'Tempelhofer Vorstadt',
-              'lattitude': 52.49653,
-              'longitude': 13.43762
-            ***REMOVED***
-          ]));
+      expect(readFilter.orte,
+          containsAll(['Frankfurter Allee Nord', 'Tempelhofer Vorstadt']));
     ***REMOVED***);
 
     test('loads empty filter if none is stored', () async {
@@ -159,7 +131,7 @@ void main() async {
           [DateTime(2020, 1, 14), DateTime(2020, 1, 16)],
           TimeOfDay(hour: 12, minute: 30),
           TimeOfDay(hour: 15, minute: 0),
-          [ffAlleeNord(), tempVorstadt()]);
+          [ffAlleeNord().kiez, tempVorstadt().kiez]);
       _prefs.clear();
 
       TermineFilter readFilter = await service.loadFilter();

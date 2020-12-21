@@ -44,7 +44,7 @@ void main() {
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
     when(_termineService.loadActions(any)).thenAnswer((_) async => []);
-    when(_stammdatenService.kieze).thenAnswer((_) async => []);
+    when(_stammdatenService.kieze).thenAnswer((_) async => [ffAlleeNord(), tempVorstadt(), plaenterwald()]);
 
     termineSeiteWidget = MultiProvider(
         providers: [

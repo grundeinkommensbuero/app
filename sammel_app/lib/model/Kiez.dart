@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:latlong/latlong.dart';
+import 'package:collection/collection.dart';
 
 class Kiez {
   String kiez;
@@ -6,12 +8,13 @@ class Kiez {
   LatLng center;
   List<List<double>> polygon;
 
-  Kiez(bezirk, kiez, latitude, longitude) {
+  Kiez(bezirk, kiez, latitude, longitude, List<List<double>> polygon) {
     this.kiez = kiez;
     this.bezirk = bezirk;
     this.center = latitude == null || longitude == null
         ? null
         : LatLng(latitude, longitude);
+    this.polygon = polygon;
   ***REMOVED***
 
   Kiez.fromJson(Map<String, dynamic> json)
@@ -29,8 +32,7 @@ class Kiez {
   bool equals(Kiez that) =>
       this.bezirk == that.bezirk &&
       this.kiez == that.kiez &&
-      this.center.latitude == that.center.latitude &&
-      this.center.longitude == that.center.longitude &&
-      this.polygon.contains(that.polygon) &&
-      that.polygon.contains(this.polygon);
+      this.center?.latitude == that.center?.latitude &&
+      this.center?.longitude == that.center?.longitude &&
+      DeepCollectionEquality().equals(this.polygon, that.polygon); //TODO Testen
 ***REMOVED***

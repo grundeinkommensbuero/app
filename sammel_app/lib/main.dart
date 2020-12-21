@@ -35,9 +35,10 @@ class MyApp extends StatelessWidget {
   static var pushNotificationManager = demoMode
       ? DemoPushNotificationManager(pushService)
       : PushNotificationManager(storageService, userService, firebaseService);
-  var termineService =
-      demoMode ? DemoTermineService(userService) : TermineService(userService);
   static var stammdatenService = StammdatenService();
+  var termineService = demoMode
+      ? DemoTermineService(userService, stammdatenService)
+      : TermineService(userService, stammdatenService);
   static var listLocationService = demoMode
       ? DemoListLocationService(userService)
       : ListLocationService(userService);

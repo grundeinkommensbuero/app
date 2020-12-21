@@ -17,8 +17,8 @@ Map<String, String> bezirke = {
 ***REMOVED***
 
 Future<void> main() async {
-  File centroidsFile = new File('./assets/geodata/lor_berlin_centroids.json');
-  File polygonsFile = new File('./assets/geodata/lor_berlin_polygons.json');
+  File centroidsFile = new File('./assets/documents/lor_berlin_centroids.json');
+  File polygonsFile = new File('./assets/documents/lor_berlin_polygons.json');
   File outputFile = new File('./assets/geodata/lor_berlin.json');
   String centroidString = await centroidsFile.readAsString();
   String polygonsString = await polygonsFile.readAsString();
