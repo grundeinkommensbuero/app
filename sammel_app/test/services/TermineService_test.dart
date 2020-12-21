@@ -6,6 +6,7 @@ import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/BackendService.dart';
+import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
@@ -15,15 +16,19 @@ import '../shared/TestdatenVorrat.dart';
 
 void main() {
   UserService userService;
+  StammdatenService stammdatenService = StammdatenServiceMock();
 
   setUp(() {
     userService = ConfiguredUserServiceMock();
+    reset(stammdatenService);
+    when(stammdatenService.kieze).thenAnswer(
+        (_) async => [ffAlleeNord(), tempVorstadt(), plaenterwald()]);
   });
 
   group('DemoTermineService', () {
     DemoTermineService service;
     setUp(() {
-      service = DemoTermineService(userService);
+      service = DemoTermineService(userService, stammdatenService);
     });
 
     test('uses DemoBackend', () {
@@ -70,7 +75,7 @@ void main() {
 
     test('stores new action', () async {
       expect(service.termine[0].typ, 'Sammeln');
-      expect(service.termine[0].ort.kiez, '1');
+      expect(service.termine[0].ort.kiez, 'Frankfurter Allee Nord');
       expect(service.termine[0].details.kontakt, 'Ruft mich an unter 01234567');
 
       await service.saveAction(
@@ -82,7 +87,7 @@ void main() {
           '');
 
       expect(service.termine[0].typ, 'Infoveranstaltung');
-      expect(service.termine[0].ort.kiez, '2');
+      expect(service.termine[0].ort.kiez, 'Plänterwald');
       expect(service.termine[0].details.kontakt, 'Test123');
     });
 
@@ -129,7 +134,7 @@ void main() {
 
     setUp(() {
       backend = BackendMock();
-      service = TermineService(userService, backend);
+      service = TermineService(userService, stammdatenService, backend);
       service.userService = userService;
     });
 
@@ -142,13 +147,12 @@ void main() {
 
       verify(backend.post(
           'service/termine',
-          ''
-              '{'
+          '{'
               '"typen":["Sammeln"],'
               '"tage":["2020-08-20"],'
               '"von":"15:00:00",'
               '"bis":"18:30:00",'
-              '"orte":[{"id":1,"bezirk":"Friedrichshain-Kreuzberg","ort":"Friedrichshain Nordkiez","lattitude":52.51579,"longitude":13.45399}]'
+              '"orte":["Frankfurter Allee Nord"]'
               '}',
           any));
     });
@@ -167,7 +171,7 @@ void main() {
       expect(actions[0].beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(actions[0].ende, DateTime(2019, 11, 4, 18, 9, 0));
       expect(actions[0].ort.bezirk, 'Friedrichshain-Kreuzberg');
-      expect(actions[0].ort.kiez, 'Friedrichshain Nordkiez');
+      expect(actions[0].ort.kiez, 'Frankfurter Allee Nord');
       expect(actions[0].ort.center.latitude, 52.51579);
       expect(actions[0].ort.center.longitude, 13.45399);
       expect(actions[0].typ, 'Sammeln');
@@ -177,23 +181,23 @@ void main() {
       expect(actions[0].participants[0].id, 11);
       expect(actions[0].participants[0].name, 'Karl Marx');
       expect(actions[0].participants[0].color.value, Colors.red.value);
-      expect(
-          actions[0].details.beschreibung, 'Bringe Westen und Klämmbretter mit');
+      expect(actions[0].details.beschreibung,
+          'Bringe Westen und Klämmbretter mit');
       expect(actions[0].details.treffpunkt, 'Weltzeituhr');
       expect(actions[0].details.kontakt, 'Ruft an unter 012345678');
       expect(actions[1].id, 0);
       expect(actions[1].beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(actions[1].ende, DateTime(2019, 11, 4, 18, 9, 0));
       expect(actions[1].ort.bezirk, 'Friedrichshain-Kreuzberg');
-      expect(actions[1].ort.kiez, 'Friedrichshain Nordkiez');
+      expect(actions[1].ort.kiez, 'Frankfurter Allee Nord');
       expect(actions[1].ort.center.latitude, 52.51579);
       expect(actions[1].ort.center.longitude, 13.45399);
       expect(actions[1].typ, 'Sammeln');
       expect(actions[1].latitude, 52.52116);
       expect(actions[1].longitude, 13.41331);
       expect(actions[1].participants.length, 0);
-      expect(
-          actions[1].details.beschreibung, 'Bringe Westen und Klämmbretter mit');
+      expect(actions[1].details.beschreibung,
+          'Bringe Westen und Klämmbretter mit');
       expect(actions[1].details.treffpunkt, 'Weltzeituhr');
       expect(actions[1].details.kontakt, 'Ruft an unter 012345678');
     });
@@ -216,14 +220,7 @@ void main() {
               '"id":0,'
               '"beginn":"2019-11-04T17:09:00.000",'
               '"ende":"2019-11-04T18:09:00.000",'
-              '"ort":'
-              '{'
-              '"id":1,'
-              '"bezirk":"Friedrichshain-Kreuzberg",'
-              '"ort":"Friedrichshain Nordkiez",'
-              '"lattitude":52.51579,'
-              '"longitude":13.45399'
-              '},'
+              '"ort":"Frankfurter Allee Nord",'
               '"typ":"Sammeln",'
               '"lattitude":52.52116,'
               '"longitude":13.41331,'
@@ -252,7 +249,7 @@ void main() {
       expect(action.beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(action.ende, DateTime(2019, 11, 4, 18, 9, 0));
       expect(action.ort.bezirk, 'Friedrichshain-Kreuzberg');
-      expect(action.ort.kiez, 'Friedrichshain Nordkiez');
+      expect(action.ort.kiez, 'Frankfurter Allee Nord');
       expect(action.ort.center.latitude, 52.51579);
       expect(action.ort.center.longitude, 13.45399);
       expect(action.typ, 'Sammeln');
@@ -288,7 +285,7 @@ void main() {
       expect(action.beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(action.ende, DateTime(2019, 11, 4, 18, 9, 0));
       expect(action.ort.bezirk, 'Friedrichshain-Kreuzberg');
-      expect(action.ort.kiez, 'Friedrichshain Nordkiez');
+      expect(action.ort.kiez, 'Frankfurter Allee Nord');
       expect(action.ort.center.latitude, 52.51579);
       expect(action.ort.center.longitude, 13.45399);
       expect(action.typ, 'Sammeln');
@@ -320,14 +317,7 @@ void main() {
               '"id":0,'
               '"beginn":"2019-11-04T17:09:00.000",'
               '"ende":"2019-11-04T18:09:00.000",'
-              '"ort":'
-              '{'
-              '"id":1,'
-              '"bezirk":"Friedrichshain-Kreuzberg",'
-              '"ort":"Friedrichshain Nordkiez",'
-              '"lattitude":52.51579,'
-              '"longitude":13.45399'
-              '},'
+              '"ort":"Frankfurter Allee Nord",'
               '"typ":"Sammeln",'
               '"lattitude":52.52116,'
               '"longitude":13.41331,'
@@ -361,14 +351,7 @@ void main() {
               '"id":0,'
               '"beginn":"2019-11-04T17:09:00.000",'
               '"ende":"2019-11-04T18:09:00.000",'
-              '"ort":'
-              '{'
-              '"id":1,'
-              '"bezirk":"Friedrichshain-Kreuzberg",'
-              '"ort":"Friedrichshain Nordkiez",'
-              '"lattitude":52.51579,'
-              '"longitude":13.45399'
-              '},'
+              '"ort":"Frankfurter Allee Nord",'
               '"typ":"Sammeln",'
               '"lattitude":52.52116,'
               '"longitude":13.41331,'
@@ -405,10 +388,10 @@ void main() {
 
       await service.leaveAction(0);
 
-      Map<String, String> parameters = verify(
-          backend.post('service/termine/absage', any, any, captureAny))
-          .captured
-          .single;
+      Map<String, String> parameters =
+          verify(backend.post('service/termine/absage', any, any, captureAny))
+              .captured
+              .single;
       expect(parameters.length, 1);
       expect(parameters['id'], '0');
     });
@@ -419,7 +402,11 @@ TermineFilter einFilter() {
   var datum = DateTime.parse('2020-08-20');
   var start = DateTime.parse('2020-08-20 15:00:00');
   var end = DateTime.parse('2020-08-20 18:30:00');
-  var einFilter = TermineFilter(["Sammeln"], [datum],
-      TimeOfDay.fromDateTime(start), TimeOfDay.fromDateTime(end), [ffAlleeNord()]);
+  var einFilter = TermineFilter(
+      ["Sammeln"],
+      [datum],
+      TimeOfDay.fromDateTime(start),
+      TimeOfDay.fromDateTime(end),
+      [ffAlleeNord().kiez]);
   return einFilter;
 }

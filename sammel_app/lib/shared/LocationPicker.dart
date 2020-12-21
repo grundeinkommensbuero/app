@@ -14,8 +14,8 @@ class LocationPicker {
   LocationPicker(
       {final this.key, final this.locations, this.multiMode = false});
 
-  Future<List<Kiez>> showLocationPicker(
-      final context, final List<Kiez> previousSelection) async {
+  Future<List<String>> showLocationPicker(
+      final context, final List<String> previousSelection) async {
     this.districts =
         _generateDistrictList(List.from(previousSelection), locations);
 
@@ -23,8 +23,7 @@ class LocationPicker {
         context: context,
         builder: (context) =>
             StatefulBuilder(builder: (context, setDialogState) {
-              List<String> selectedLocations =
-                  previousSelection?.map((ort) => ort.kiez)?.toList();
+              List<String> selectedLocations = previousSelection?.toList();
               if (selectedLocations == null)
                 selectedLocations = []; // Null-Sicherheit
 
@@ -55,12 +54,12 @@ class LocationPicker {
     return districts
         .expand((bezirk) => bezirk.locationSelection.entries)
         .where((entry) => entry.value)
-        .map((entry) => entry.key)
+        .map((entry) => entry.key.kiez)
         .toList();
   }
 
   List<DistrictItem> _generateDistrictList(
-      List<Kiez> selectedLocations, List<Kiez> allLocations) {
+      List<String> selectedLocations, List<Kiez> allLocations) {
     var bezirkNamen = allLocations.map((ort) => ort.bezirk).toSet();
     return bezirkNamen
         .map((name) => DistrictItem(
@@ -70,7 +69,7 @@ class LocationPicker {
                   (ort) => MapEntry(
                       ort,
                       selectedLocations
-                          .any((filterOrt) => filterOrt.kiez == ort.kiez)))),
+                          .any((filterOrt) => filterOrt == ort.kiez)))),
             false))
         .toList();
   }

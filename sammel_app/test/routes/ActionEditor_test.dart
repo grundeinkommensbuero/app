@@ -37,7 +37,8 @@ void main() {
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
     when(_terminService.loadActions(any)).thenAnswer((_) async => []);
-    when(_stammdatenService.kieze).thenAnswer((_) async => []);
+    when(_stammdatenService.kieze).thenAnswer(
+        (_) async => [ffAlleeNord(), tempVorstadt(), plaenterwald()]);
   });
 
   testWidgets('TermineSeite opens CreateTerminDialog on click at menu button',
@@ -161,7 +162,7 @@ void main() {
       await _openActionCreator(tester);
       ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
-      expect(find.text("in Görlitzer Park und Umgebung"), findsNothing);
+      expect(find.text("in Tempelhofer Vorstadt"), findsNothing);
       when(_stammdatenService.kieze).thenAnswer((_) async => [tempVorstadt()]);
       // ignore: invalid_use_of_protected_member
       actionData.setState(() {
@@ -169,7 +170,7 @@ void main() {
         actionData.validateAllInput();
       });
       await tester.pumpAndSettle();
-      expect(find.text("in Görlitzer Park und Umgebung"), findsOneWidget);
+      expect(find.text("in Tempelhofer Vorstadt"), findsOneWidget);
     });
 
     testWidgets('changing kontakt is correctly shown',
@@ -260,7 +261,7 @@ void main() {
           find.descendant(
               of: find.byType(ActionEditor), matching: find.text('Sammeln')),
           findsOneWidget);
-      expect(find.text('in Friedrichshain Nordkiez'), findsOneWidget);
+      expect(find.text('in Frankfurter Allee Nord'), findsOneWidget);
       expect(find.text('Beschreibung: Bringe Westen und Klämmbretter mit'),
           findsOneWidget);
       expect(find.text('am 04.11.,'), findsOneWidget);
@@ -301,7 +302,7 @@ void main() {
   });
 
   group('validates', () {
-    var actionEditor;
+    ActionEditorState actionEditor;
     setUp(() {
       actionEditor =
           ActionEditorState(TerminTestDaten.einTerminMitTeilisUndDetails());
@@ -330,7 +331,7 @@ void main() {
     });
 
     test('ort', () {
-      actionEditor.action.kiez = null;
+      actionEditor.action.ort = null;
       actionEditor.validateAllInput();
 
       expect(actionEditor.action.validated['ort'], ValidationState.error);
@@ -432,7 +433,7 @@ void main() {
       var actionData = ActionData(
           null,
           null,
-          Kiez('Bezirk', 'Kiez', 52.1, 43.1),
+          Kiez('Bezirk', 'Kiez', 52.1, 43.1, [[]]),
           null,
           null,
           null,
@@ -444,7 +445,7 @@ void main() {
 
     test('returns location, if given and no coordinates', () {
       var actionData = ActionData(null, null,
-          Kiez('Bezirk', 'Ort', 52.1, 43.1), null, null, null, null);
+          Kiez('Bezirk', 'Ort', 52.1, 43.1, [[]]), null, null, null, null);
 
       expect(
           ActionEditorState.determineMapCenter(actionData), LatLng(52.1, 43.1));
@@ -455,8 +456,8 @@ void main() {
 
       expect(ActionEditorState.determineMapCenter(actionData), null);
 
-      actionData = ActionData(null, null, Kiez('Bezirk', 'Kiez', null, null),
-          null, null, null, null);
+      actionData = ActionData(null, null,
+          Kiez('Bezirk', 'Kiez', null, null, [[]]), null, null, null, null);
 
       expect(ActionEditorState.determineMapCenter(actionData), null);
     });

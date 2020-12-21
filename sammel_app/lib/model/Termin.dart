@@ -17,12 +17,11 @@ class Termin {
   Termin(this.id, this.beginn, this.ende, this.ort, this.typ, this.latitude,
       this.longitude, this.participants, this.details);
 
-  Termin.fromJson(Map<String, dynamic> json)
+  Termin.fromJson(Map<String, dynamic> json, List<Kiez> kieze)
       : id = json['id'],
         beginn = DateTime.parse(json['beginn']),
         ende = DateTime.parse(json['ende']),
-        ort = Kiez('Ortsteil', 'Kiez', 13.398831300000001, 52.527806),
-        //Kiez.fromJson(json['ort']), TODO
+        ort = kieze.firstWhere((kiez) => json['ort'] == kiez.kiez),
         typ = json['typ'] ?? 'Termin',
         latitude = json['lattitude'] ?? null,
         longitude = json['longitude'] ?? null,

@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:test/test.dart';
 
@@ -26,7 +25,7 @@ void main() {
           '"id":1,'
           '"beginn":"2020-01-02T15:00:00.000",'
           '"ende":"2020-01-02T18:00:00.000",'
-          '"ort":{"bezirk":"Friedrichshain-Kreuzberg","kiez":"Frankfurter Allee Nord","lattitude":52.49653,"longitude":13.43762},'
+          '"ort":"Frankfurter Allee Nord",'
           '"typ":"Sammeln",'
           '"lattitude":52.52116,'
           '"longitude":13.41331,'
@@ -49,7 +48,7 @@ void main() {
           '"id":1,'
           '"beginn":"2020-01-02T15:00:00.000",'
           '"ende":"2020-01-02T18:00:00.000",'
-          '"ort":{"bezirk":"Friedrichshain-Kreuzberg","kiez":"Frankfurter Allee Nord","lattitude":52.49653,"longitude":13.43762},'
+          '"ort":"Frankfurter Allee Nord",'
           '"typ":"Sammeln",'
           '"lattitude":52.52116,'
           '"longitude":13.41331,'
@@ -73,7 +72,7 @@ void main() {
           '"id":1,'
           '"beginn":"2020-01-02T15:00:00.000",'
           '"ende":"2020-01-02T18:00:00.000",'
-          '"ort":{"bezirk":"Friedrichshain-Kreuzberg","kiez":"Frankfurter Allee Nord","lattitude":52.49653,"longitude":13.43762},'
+          '"ort":"Frankfurter Allee Nord",'
           '"typ":"Sammeln",'
           '"lattitude":52.52116,'
           '"longitude":13.41331,'
@@ -106,14 +105,16 @@ void main() {
   });
   group('deserialisiere', () {
     test('deserialisiert Termin ohne Teilnehmer und Details', () {
-      var termin = Termin.fromJson(jsonDecode('{'
-          '"id":1,'
-          '"beginn":"2020-01-02T15:00:00.000",'
-          '"ende":"2020-01-02T18:00:00.000",'
-          '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez","lattitude":52.49653,"longitude":13.43762},'
-          '"typ":"Sammeln",'
-          '"lattitude":52.52116,'
-          '"longitude":13.41331}'));
+      var termin = Termin.fromJson(
+          jsonDecode('{'
+              '"id":1,'
+              '"beginn":"2020-01-02T15:00:00.000",'
+              '"ende":"2020-01-02T18:00:00.000",'
+              '"ort":"Frankfurter Allee Nord",'
+              '"typ":"Sammeln",'
+              '"lattitude":52.52116,'
+              '"longitude":13.41331}'),
+          [ffAlleeNord()]);
       expect(termin.id, 1);
       expect(termin.beginn, equals(DateTime(2020, 1, 2, 15, 0, 0)));
       expect(termin.ende, equals(DateTime(2020, 1, 2, 18, 0, 0)));
@@ -126,18 +127,20 @@ void main() {
     });
 
     test('deserialisiert Termin mit Teilnehmer und Details', () {
-      var termin = Termin.fromJson(jsonDecode('{'
-          '"beginn":"2020-02-05T09:00:00",'
-          '"participants":[{"id":11,"name":"Karl Marx", "color":4294198070}],'
-          '"details":{'
-          '"id":1,'
-          '"beschreibung":"wir stellen uns an die Ubhf-Eingänge. ihr erkennt mich an der DWE-Weste",'
-          '"kontakt":"kalle@revo.de",'
-          '"treffpunkt":"Weltzeituhr"},'
-          '"ende":"2020-02-05T12:00:00",'
-          '"id":1,'
-          '"ort":{"bezirk":"Friedrichshain-Kreuzberg","kiez":"Frankfurter Allee Nord"},'
-          '"typ":"Sammeln"}'));
+      var termin = Termin.fromJson(
+          jsonDecode('{'
+              '"beginn":"2020-02-05T09:00:00",'
+              '"participants":[{"id":11,"name":"Karl Marx", "color":4294198070}],'
+              '"details":{'
+              '"id":1,'
+              '"beschreibung":"wir stellen uns an die Ubhf-Eingänge. ihr erkennt mich an der DWE-Weste",'
+              '"kontakt":"kalle@revo.de",'
+              '"treffpunkt":"Weltzeituhr"},'
+              '"ende":"2020-02-05T12:00:00",'
+              '"id":1,'
+              '"ort":"Frankfurter Allee Nord",'
+              '"typ":"Sammeln"}'),
+          [ffAlleeNord()]);
       expect(termin.details.treffpunkt, "Weltzeituhr");
       expect(termin.details.beschreibung,
           "wir stellen uns an die Ubhf-Eingänge. ihr erkennt mich an der DWE-Weste");

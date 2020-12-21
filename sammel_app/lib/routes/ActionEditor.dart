@@ -33,7 +33,8 @@ class ActionData {
   ActionData.testDaten() {
     this.von = TimeOfDay.fromDateTime(DateTime.now());
     this.bis = TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 1)));
-    this.ort = Kiez('Friedrichshain-Kreuzberg', 'Kiez', 52.51579, 13.45399);
+    this.ort = Kiez(
+        'Friedrichshain-Kreuzberg', 'Plänterwald', 52.51579, 13.45399, [[]]);
     this.coordinates = LatLng(52.51579, 13.45399);
     this.typ = 'Sammeln';
     this.tage = [DateTime.now()];
@@ -258,7 +259,7 @@ class ActionEditorState extends State<ActionEditor> {
         action.coordinates?.longitude != null)
       return LatLng(action.coordinates.latitude, action.coordinates.longitude);
     // at location
-    return action.ort.center;
+    return action.ort?.center;
   }
 
   void contactSelection() async {
@@ -398,11 +399,14 @@ class ActionEditorState extends State<ActionEditor> {
             key: Key('Location Picker'),
             locations: allLocations,
             multiMode: false)
-        .showLocationPicker(context, List<Kiez>());
+        .showLocationPicker(context, []);
+
+    var kieze = await Provider.of<StammdatenService>(context).kieze;
 
     setState(() {
       if (selectedLocations.isNotEmpty) {
-        this.action.ort = selectedLocations[0];
+        this.action.ort =
+            kieze.firstWhere((kiez) => kiez == selectedLocations[0]);
         validateAllInput();
       }
     });
