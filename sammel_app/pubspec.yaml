@@ -80,6 +80,7 @@ flutter:
    - assets/geodata/plz-berlin-polygons.json
    - assets/geodata/lor_berlin_centroids.json
    - assets/geodata/lor_berlin_polygons.json
+   - assets/geodata/lor_berlin.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

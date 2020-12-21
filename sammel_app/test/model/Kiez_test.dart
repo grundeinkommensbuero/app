@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:sammel_app/model/Kiez.dart';
 import 'package:test/test.dart';
@@ -8,7 +9,8 @@ import '../shared/TestdatenVorrat.dart';
 void main() {
   group('serialisere', () {
     test('serialisiert nur Kiez', () {
-      expect(jsonEncode(Kiez('bezirk1', 'kiez1', 52.49653, 13.43762)), '"kiez1"');
+      expect(
+          jsonEncode(Kiez('bezirk1', 'kiez1', 52.49653, 13.43762)), '"kiez1"');
     ***REMOVED***);
   ***REMOVED***);
   group('equals', () {
@@ -78,5 +80,27 @@ void main() {
               .equals(Kiez('Bezirk', 'Kiez', null, null)),
           false);
     ***REMOVED***);
+  ***REMOVED***);
+
+  test('converter', () async {
+    File centroidsFile = new File('./assets/geodata/lor_berlin_centroids.json');
+    File polygonsFile = new File('./assets/geodata/lor_berlin_polygons.json');
+    String centroidString = await centroidsFile.readAsString();
+    String polygonsString = await polygonsFile.readAsString();
+    Map<String, dynamic> centroidsMap = (jsonDecode(centroidString) as List)
+        .asMap()
+        .map((_, c) => MapEntry(c['properties']['SCHLUESSEL'], c));
+    Map<String, dynamic> polygonsMap = (jsonDecode(polygonsString) as List)
+        .asMap()
+        .map((_, c) => MapEntry(c['properties']['SCHLUESSEL'], c));
+    List<Map<String, dynamic>> kieze = centroidsMap.keys.map((schluessel) => {
+          "bezirk": polygonsMap[schluessel]['properties']['BEZIRK'],
+          "kiez": polygonsMap[schluessel]['properties']['BEZIRKSREG'],
+          "latitude": centroidsMap[schluessel]['geometry']['coordinates'][0],
+          "longitude": centroidsMap[schluessel]['geometry']['coordinates'][1],
+          "polygon": polygonsMap[schluessel]['geometry']['coordinates']
+        ***REMOVED***).toList();
+    var string = jsonEncode(kieze);
+    print(''+string);
   ***REMOVED***);
 ***REMOVED***

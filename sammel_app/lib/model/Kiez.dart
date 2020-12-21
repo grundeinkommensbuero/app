@@ -1,9 +1,11 @@
+
 class Kiez {
   String kiez;
   String bezirk;
+  // TODO LatLng center;
   double latitude;
   double longitude;
-  List<List<double>> area;
+  List<List<double>> polygon;
 
   Kiez(bezirk, kiez, lattitude, longitude) {
     this.kiez = kiez;
@@ -13,21 +15,19 @@ class Kiez {
   ***REMOVED***
 
   Kiez.fromJson(Map<String, dynamic> json)
-      : bezirk = json['properties']['ortsteil'],
-        kiez = json['properties']['kiez'],
-        latitude = json['geometry']['coordinates'][0],
-        longitude = json['geometry']['coordinates'][1];
+      : bezirk = json['bezirk'],
+        kiez = json['kiez'],
+        latitude = json['longitude'],
+        longitude = json['latitude'],
+        polygon = (json['polygon'] as List).map((e) => (e as List).map((e) => e as double).toList()).toList();
 
   String toJson() => kiez;
-
-  void addArea(Map<String, dynamic> json) =>
-      area = (json['geometry']['coordinates'] as List)
-          .map((e) => [e[0] as double, e[1] as double])
-          .toList();
 
   bool equals(Kiez that) =>
       this.bezirk == that.bezirk &&
       this.kiez == that.kiez &&
       this.latitude == that.latitude &&
-      this.longitude == that.longitude;
+      this.longitude == that.longitude &&
+      this.polygon.contains(that.polygon) &&
+      that.polygon.contains(this.polygon);
 ***REMOVED***

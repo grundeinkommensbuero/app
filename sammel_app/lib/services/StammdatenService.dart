@@ -4,22 +4,29 @@ import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/shared/FileReader.dart';
 
 class StammdatenService {
-  StammdatenService();
-  static var fileReader = FileReader();
+  static FileReader fileReader = FileReader();
+  Future<List<Kiez>> kieze = ladeKieze();
 
-  final Future<List<Kiez>> kieze = StammdatenService.ladeKieze();
+  StammdatenService();
 
   static Future<List<Kiez>> ladeKieze() async {
-    var centroidsJsons = await fileReader.loadLorCentroids();
-    var polygonsJsons = await fileReader.loadLorPolygons();
+    var json = await fileReader.loadLor();
 
-    List centroidMaps = jsonDecode(centroidsJsons);
-    List polygonMaps = jsonDecode(polygonsJsons);
+    List centroidMaps = jsonDecode(json);
 
-    List<Kiez> kieze = centroidMaps.map((json) => Kiez.fromJson(json)).toList();
-    kieze.forEach((kiez) => kiez.addArea(
-        polygonMaps.firstWhere((map) => map['properties']['id'] == kiez.kiez)));
+    return centroidMaps.map((json) => Kiez.fromJson(json)).toList();
 
-    return kieze;
+    // Map<String, Kiez> kieze = centroidMaps.asMap().map(
+    //     (_, json) => MapEntry(json['properties']['id'], Kiez.fromJson(json)));
+    // print(kieze);
+    //
+    // kieze.keys.forEach((id) {
+    //   var centroid =
+    //       centroidMaps.firstWhere((c) => c['properties']['id'] == id);
+    //   kieze[id].latitude = centroid['geometry']['coordinates'][0];
+    //   kieze[id].longitude = centroid['geometry']['coordinates'][1];
+    // ***REMOVED***);
+
+    // return kieze.values.toList();
   ***REMOVED***
 ***REMOVED***
