@@ -77,7 +77,7 @@ class TermineRestResourceTest {
         assertEquals(termin.beginn, beginn)
         assertEquals(termin.ende, ende)
         assertEquals(termin.ort?.id, 1)
-        assertEquals(termin.lattitude, terminDto.lattitude)
+        assertEquals(termin.latitude, terminDto.latitude)
         assertEquals(termin.longitude, terminDto.longitude)
         assertEquals(termin.teilnehmer.size, 1)
         assertEquals(termin.teilnehmer[0].id, 11L)

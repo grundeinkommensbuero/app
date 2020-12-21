@@ -67,7 +67,7 @@ class TermineDaoTest {
         assertEquals(termine[1].teilnehmer[0].name, rosa().name)
         assertEquals(termine[1].teilnehmer[1].name, karl().name)
         assertEquals(termine[1].teilnehmer[1].name, karl().name)
-        assertEquals(termine[1].lattitude, 52.48612)
+        assertEquals(termine[1].latitude, 52.48612)
         assertEquals(termine[1].longitude, 13.47192)
     }
 

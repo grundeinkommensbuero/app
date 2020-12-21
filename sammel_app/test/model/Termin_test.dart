@@ -27,7 +27,7 @@ void main() {
           '"ende":"2020-01-02T18:00:00.000",'
           '"ort":"Frankfurter Allee Nord",'
           '"typ":"Sammeln",'
-          '"lattitude":52.52116,'
+          '"latitude":52.52116,'
           '"longitude":13.41331,'
           '"participants":null,'
           '"details":null}');
@@ -50,7 +50,7 @@ void main() {
           '"ende":"2020-01-02T18:00:00.000",'
           '"ort":"Frankfurter Allee Nord",'
           '"typ":"Sammeln",'
-          '"lattitude":52.52116,'
+          '"latitude":52.52116,'
           '"longitude":13.41331,'
           '"participants":[],'
           '"details":null}');
@@ -74,7 +74,7 @@ void main() {
           '"ende":"2020-01-02T18:00:00.000",'
           '"ort":"Frankfurter Allee Nord",'
           '"typ":"Sammeln",'
-          '"lattitude":52.52116,'
+          '"latitude":52.52116,'
           '"longitude":13.41331,'
           '"participants":[{"id":11,"name":"Karl Marx","color":4294198070}],'
           '"details":{'
@@ -112,7 +112,7 @@ void main() {
               '"ende":"2020-01-02T18:00:00.000",'
               '"ort":"Frankfurter Allee Nord",'
               '"typ":"Sammeln",'
-              '"lattitude":52.52116,'
+              '"latitude":52.52116,'
               '"longitude":13.41331}'),
           [ffAlleeNord()]);
       expect(termin.id, 1);

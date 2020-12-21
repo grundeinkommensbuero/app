@@ -23,7 +23,7 @@ class Termin {
         ende = DateTime.parse(json['ende']),
         ort = kieze.firstWhere((kiez) => json['ort'] == kiez.kiez),
         typ = json['typ'] ?? 'Termin',
-        latitude = json['lattitude'] ?? null,
+        latitude = json['latitude'] ?? null,
         longitude = json['longitude'] ?? null,
         participants = (json['participants'] as List)
             ?.map((user) => User.fromJSON(user))
@@ -38,7 +38,7 @@ class Termin {
         'ende': ende.toIso8601String(),
         'ort': ort == null ? null : ort.toJson(),
         'typ': typ,
-        'lattitude': latitude,
+        'latitude': latitude,
         'longitude': longitude,
         'participants': participants?.map((user) => user.toJson())?.toList(),
         'details': details == null ? null : details.toJson(),
