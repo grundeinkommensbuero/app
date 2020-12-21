@@ -10,7 +10,7 @@ import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
-import '../model/Ort_test.dart';
+import '../model/Kiez_test.dart';
 import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';

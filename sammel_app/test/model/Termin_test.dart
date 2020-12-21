@@ -6,7 +6,7 @@ import 'package:sammel_app/model/Termin.dart';
 import 'package:test/test.dart';
 
 import '../shared/TestdatenVorrat.dart';
-import 'Ort_test.dart';
+import 'Kiez_test.dart';
 import 'TerminDetails_test.dart';
 
 void main() {

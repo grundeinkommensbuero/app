@@ -2,7 +2,7 @@ import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:test/test.dart';
 
-import '../model/Ort_test.dart';
+import '../model/Kiez_test.dart';
 
 void main() {
   group('erzeugeDatumZeile berechnet Dauer', () {
