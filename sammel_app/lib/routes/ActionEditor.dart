@@ -406,7 +406,7 @@ class ActionEditorState extends State<ActionEditor> {
     setState(() {
       if (selectedLocations.isNotEmpty) {
         this.action.ort =
-            kieze.firstWhere((kiez) => kiez == selectedLocations[0]);
+            kieze.firstWhere((kiez) => kiez.kiez == selectedLocations[0]);
         validateAllInput();
       ***REMOVED***
     ***REMOVED***);

@@ -17,8 +17,8 @@ Map<String, String> bezirke = {
 ***REMOVED***
 
 Future<void> main() async {
-  File centroidsFile = new File('./assets/documents/lor_berlin_centroids.json');
-  File polygonsFile = new File('./assets/documents/lor_berlin_polygons.json');
+  File centroidsFile = new File('./documents/lor_berlin_centroids.json');
+  File polygonsFile = new File('./documents/lor_berlin_polygons.json');
   File outputFile = new File('./assets/geodata/lor_berlin.json');
   String centroidString = await centroidsFile.readAsString();
   String polygonsString = await polygonsFile.readAsString();
@@ -33,8 +33,8 @@ Future<void> main() async {
     return {
       "kiez": polygonsMap[schluessel]['properties']['BEZIRKSREG'],
       "bezirk": bezirke[bezirksId],
-      "latitude": centroidsMap[schluessel]['geometry']['coordinates'][0],
-      "longitude": centroidsMap[schluessel]['geometry']['coordinates'][1],
+      "longitude": centroidsMap[schluessel]['geometry']['coordinates'][0],
+      "latitude": centroidsMap[schluessel]['geometry']['coordinates'][1],
       "polygon": polygonsMap[schluessel]['geometry']['coordinates']
     ***REMOVED***
   ***REMOVED***).toList();
