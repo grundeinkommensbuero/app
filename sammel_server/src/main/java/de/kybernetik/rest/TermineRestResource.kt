@@ -3,7 +3,6 @@ package de.kybernetik.rest
 import de.kybernetik.database.DatabaseException
 import de.kybernetik.database.benutzer.Benutzer
 import de.kybernetik.database.benutzer.BenutzerDao
-import de.kybernetik.database.stammdaten.Ort
 import de.kybernetik.database.termine.Termin
 import de.kybernetik.database.termine.TerminDetails
 import de.kybernetik.database.termine.TermineDao
@@ -221,7 +220,7 @@ open class TermineRestResource {
         var id: Long? = null,
         var beginn: LocalDateTime? = null,
         var ende: LocalDateTime? = null,
-        var ort: Ort? = null,
+        var ort: String? = null,
         var typ: String? = null,
         var latitude: Double? = null,
         var longitude: Double? = null,

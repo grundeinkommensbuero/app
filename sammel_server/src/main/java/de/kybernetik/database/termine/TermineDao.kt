@@ -46,7 +46,7 @@ open class TermineDao {
         if (filterKlausel.contains(tageKlausel)) query.setParameter("tage", filter.tage.map { it.toDate() })
         if (filterKlausel.contains(vonKlausel)) query.setParameter("von", filter.von!!.atDate(LocalDate.now()))
         if (filterKlausel.contains(bisKlausel)) query.setParameter("bis", filter.bis!!.atDate(LocalDate.now()))
-        if (filterKlausel.contains(orteKlausel)) query.setParameter("orte", filter.orte.map { it.convertToOrt() })
+        if (filterKlausel.contains(orteKlausel)) query.setParameter("orte", filter.orte)
         return query
     }
 

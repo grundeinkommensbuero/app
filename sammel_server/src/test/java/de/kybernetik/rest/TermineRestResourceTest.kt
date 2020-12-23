@@ -1,7 +1,6 @@
 package de.kybernetik.rest
 
 import TestdatenVorrat.Companion.karl
-import TestdatenVorrat.Companion.nordkiez
 import TestdatenVorrat.Companion.rosa
 import TestdatenVorrat.Companion.terminDto
 import TestdatenVorrat.Companion.terminMitTeilnehmerMitDetails
@@ -66,7 +65,7 @@ class TermineRestResourceTest {
     fun `TerminDto konvertiert zu Termin mit Teilnehmern`() {
         val beginn = now()
         val ende = now()
-        val terminDto = TerminDto(1L, beginn, ende, nordkiez(), "Sammeln", 0.0, 1.0,
+        val terminDto = TerminDto(1L, beginn, ende, "Frankfurter Allee Nord", "Sammeln", 0.0, 1.0,
                 listOf(BenutzerDto.convertFromBenutzer(karl())),
                 TerminDetailsDto("treffpunkt", "beschreibung", "kontakt"))
 
@@ -76,7 +75,7 @@ class TermineRestResourceTest {
         assertEquals(termin.typ, "Sammeln")
         assertEquals(termin.beginn, beginn)
         assertEquals(termin.ende, ende)
-        assertEquals(termin.ort?.id, 1)
+        assertEquals(termin.ort, "Frankfurter Allee Nord")
         assertEquals(termin.latitude, terminDto.latitude)
         assertEquals(termin.longitude, terminDto.longitude)
         assertEquals(termin.teilnehmer.size, 1)
