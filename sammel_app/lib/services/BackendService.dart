@@ -84,7 +84,7 @@ class NoUserAuthException implements Exception {}
 
 class Backend {
   static final host = testMode ? 'dwe.idash.org' : '127.0.0.1';
-  static final port = testMode ? 443 : 18443;
+  static final port = testMode ? 443 : 18080;
 
   static final clientContext = SecurityContext();
   static HttpClient client = HttpClient(context: clientContext);
@@ -125,7 +125,7 @@ class Backend {
   Future<HttpClientResponseBody> get(
       String url, Map<String, String> headers) async {
     var uri = Uri.parse(url);
-    uri = Uri.https('$host:$port', uri.path, uri.queryParameters);
+    uri = Uri.http('$host:$port', uri.path, uri.queryParameters);
     return await client
         .getUrl(uri)
         .then((HttpClientRequest request) {
@@ -150,7 +150,7 @@ class Backend {
       String url, String data, Map<String, String> headers,
       [Map<String, String> parameters]) async {
     return await client
-        .postUrl(Uri.https('$host:$port', url, parameters))
+        .postUrl(Uri.http('$host:$port', url, parameters))
         .then((HttpClientRequest request) {
           Backend.headers
               .forEach((key, value) => request.headers.add(key, value));
@@ -175,7 +175,7 @@ class Backend {
   Future<HttpClientResponseBody> delete(
       String url, String data, Map<String, String> headers) async {
     return await client
-        .deleteUrl(Uri.https('$host:$port', url))
+        .deleteUrl(Uri.http('$host:$port', url))
         .then((HttpClientRequest request) {
           Backend.headers
               .forEach((key, value) => request.headers.add(key, value));

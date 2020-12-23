@@ -65,6 +65,13 @@ open class TermineDao {
         return termin
     }
 
+    open fun speichereEvaluation(evaluation: Evaluation): Evaluation {
+        LOG.debug("Speichere Evaluation für ${evaluation.id}")
+        entityManager.merge(evaluation)
+        entityManager.flush()
+        return evaluation
+    }
+
     open fun erstelleNeuenTermin(termin: Termin): Termin {
         termin.details!!.termin = termin
         LOG.debug("Speichere Aktion ${termin}")

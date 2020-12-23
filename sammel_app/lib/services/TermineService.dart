@@ -95,6 +95,11 @@ class TermineService extends AbstractTermineService {
     // TODO
     print('saving evaluation');
     print(evaluation);
+    try {
+      await post('service/termine/evaluation', jsonEncode(evaluation));
+    } catch (e, s) {
+      ErrorService.handleError(e, s, additional: 'Evaluation ist fehlgeschlagen.');
+    }
   }
 }
 
