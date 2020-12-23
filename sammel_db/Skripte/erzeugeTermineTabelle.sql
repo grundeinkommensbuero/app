@@ -12,6 +12,20 @@ create table Termine
             on update cascade
 );
 
+create table Evaluationen
+(
+    id          int auto_increment        primary key,
+    terminId    int     null
+    unterschriften  int null,
+    teilnehmende    int null,
+    stunden     double  null,
+    kommentar   text    null,
+    erkenntnisse    text    null,
+    constraint Evaluationen_Termine_fk
+        foreign key (terminId) references Termine (id)
+            on delete cascade
+);
+
 create table TerminDetails
 (
     termin_id       int auto_increment        primary key,
@@ -36,3 +50,5 @@ create table Termin_Teilnehmer
             on delete cascade
 )
     comment 'Liste der Teilnehmer der Termine';
+
+

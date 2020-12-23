@@ -7,6 +7,7 @@ import de.kybernetik.database.stammdaten.Ort
 import de.kybernetik.database.termine.Termin
 import de.kybernetik.database.termine.TerminDetails
 import de.kybernetik.database.termine.TermineDao
+import de.kybernetik.database.termine.Evaluation
 import de.kybernetik.database.termine.Token
 import org.jboss.logging.Logger
 import de.kybernetik.rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithoutDetails
@@ -189,6 +190,30 @@ open class TermineRestResource {
     ***REMOVED***
 
     @POST
+    @Path("evaluation")
+    @RolesAllowed("named")
+    @Consumes(APPLICATION_JSON)
+    @Produces(APPLICATION_JSON)
+    open fun aktualisiereEvaluation(evaluationAndToken: EvaluationWithTokenDto): Response {
+        if (evaluationAndToken.evaluation?.id == null) return noValidActionResponse
+
+        val tokenFromDb = dao.loadToken(evaluationAndToken.evaluation!!.id!!)?.token
+        if (tokenFromDb != null && tokenFromDb != evaluationAndToken.token) return Response.status(403)
+                .entity(RestFehlermeldung("Evaluieren dieser Aktion ist unautorisiert"))
+                .build()
+
+        try {
+            dao.speichereEvaluation(evaluationAndToken.evaluation!!.convertToEvaluation())
+        ***REMOVED*** catch (e: EJBException) {
+            LOG.error("Fehler beim Mergen der Evaluation: Evaluation: ${evaluationAndToken.evaluation***REMOVED***\n", e)
+            return Response.status(422).entity(e.message).build()
+        ***REMOVED***
+        return Response
+                .ok()
+                .build()
+    ***REMOVED***
+
+    @POST
     @Path("absage")
     @RolesAllowed("user")
     @Produces(APPLICATION_JSON)
@@ -217,29 +242,52 @@ open class TermineRestResource {
         return Response.accepted().build()
     ***REMOVED***
 
-    data class TerminDto(
+    data class EvaluationDto(
         var id: Long? = null,
-        var beginn: LocalDateTime? = null,
-        var ende: LocalDateTime? = null,
-        var ort: Ort? = null,
-        var typ: String? = null,
-        var lattitude: Double? = null,
-        var longitude: Double? = null,
-        var participants: List<BenutzerDto>? = emptyList(),
-        var details: TerminDetailsDto? = TerminDetailsDto()
+        var terminId: Long? = null,
+        var unterschriften: Long? = null,
+        var teilnehmende: Long? = null,
+        var stunden: Double? = null,
+        var kommentar: String? = null,
+        var erkenntnisse: String? = null
+    ) {
+        fun convertToEvaluation(): Evaluation {
+            return Evaluation(
+                    id = id ?: 0,
+                    terminId = terminId,
+                    unterschriften = unterschriften,
+                    teilnehmende = teilnehmende,
+                    stunden = stunden,
+                    kommentar = kommentar,
+                    erkenntnisse = erkenntnisse
+            )
+        ***REMOVED***
+
+    ***REMOVED***
+
+    data class TerminDto(
+            var id: Long? = null,
+            var beginn: LocalDateTime? = null,
+            var ende: LocalDateTime? = null,
+            var ort: Ort? = null,
+            var typ: String? = null,
+            var lattitude: Double? = null,
+            var longitude: Double? = null,
+            var participants: List<BenutzerDto>? = emptyList(),
+            var details: TerminDetailsDto? = TerminDetailsDto()
     ) {
 
         fun convertToTermin(): Termin {
             return Termin(
-                id = id ?: 0,
-                beginn = beginn,
-                ende = ende,
-                ort = ort,
-                typ = typ,
-                lattitude = lattitude,
-                longitude = longitude,
-                teilnehmer = if (participants == null) emptyList() else participants!!.map { it.convertToBenutzer() ***REMOVED***,
-                details = details?.convertToTerminDetails(id)
+                    id = id ?: 0,
+                    beginn = beginn,
+                    ende = ende,
+                    ort = ort,
+                    typ = typ,
+                    lattitude = lattitude,
+                    longitude = longitude,
+                    teilnehmer = if (participants == null) emptyList() else participants!!.map { it.convertToBenutzer() ***REMOVED***,
+                    details = details?.convertToTerminDetails(id)
             )
         ***REMOVED***
 
@@ -251,20 +299,25 @@ open class TermineRestResource {
             ***REMOVED***
 
             fun convertFromTerminWithoutDetails(termin: Termin): TerminDto = TerminDto(
-                termin.id,
-                termin.beginn,
-                termin.ende,
-                termin.ort,
-                termin.typ,
-                termin.lattitude,
-                termin.longitude,
-                termin.teilnehmer.map { BenutzerDto.convertFromBenutzer(it) ***REMOVED***)
+                    termin.id,
+                    termin.beginn,
+                    termin.ende,
+                    termin.ort,
+                    termin.typ,
+                    termin.lattitude,
+                    termin.longitude,
+                    termin.teilnehmer.map { BenutzerDto.convertFromBenutzer(it) ***REMOVED***)
         ***REMOVED***
     ***REMOVED***
 
     data class ActionWithTokenDto(
         var action: TerminDto? = null,
         var token: String? = null
+    )
+
+    data class EvaluationWithTokenDto(
+            var evaluation: EvaluationDto? = null,
+            var token: String? = null
     )
 
     data class TerminDetailsDto(
