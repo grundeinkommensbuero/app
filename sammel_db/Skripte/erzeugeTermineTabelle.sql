@@ -14,16 +14,16 @@ create table Termine
 
 create table Evaluationen
 (
-    id          int auto_increment        primary key,
-    terminId    int     null
+    id      int auto_increment        primary key,
+    termin_id   int     null,
     unterschriften  int null,
     teilnehmende    int null,
     stunden     double  null,
     kommentar   text    null,
-    erkenntnisse    text    null,
-    constraint Evaluationen_Termine_fk
-        foreign key (terminId) references Termine (id)
-            on delete cascade
+    erkenntnisse  text  null,
+    constraint Evaluationen
+        foreign key (termin_id) references Termine (id)
+            on update cascade
 );
 
 create table TerminDetails

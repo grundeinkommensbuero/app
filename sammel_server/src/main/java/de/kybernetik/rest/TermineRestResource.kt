@@ -244,7 +244,7 @@ open class TermineRestResource {
 
     data class EvaluationDto(
         var id: Long? = null,
-        var terminId: Long? = null,
+        var termin_id: Long? = null,
         var unterschriften: Long? = null,
         var teilnehmende: Long? = null,
         var stunden: Double? = null,
@@ -254,7 +254,7 @@ open class TermineRestResource {
         fun convertToEvaluation(): Evaluation {
             return Evaluation(
                     id = id ?: 0,
-                    terminId = terminId,
+                    termin_id = termin_id,
                     unterschriften = unterschriften,
                     teilnehmende = teilnehmende,
                     stunden = stunden,

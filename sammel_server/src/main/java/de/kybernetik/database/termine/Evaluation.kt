@@ -17,7 +17,7 @@ class Evaluation {
     var id: Long = 0
 
     @Column
-    var terminId: Long? = null
+    var termin_id: Long? = null
 
     @Column
     var unterschriften: Long? = null
@@ -38,14 +38,14 @@ class Evaluation {
     constructor()
 
     constructor(id: Long,
-                terminId: Long?,
+                termin_id: Long?,
                 unterschriften: Long?,
                 teilnehmende: Long?,
                 stunden: Double?,
                 kommentar: String?,
                 erkenntnisse: String?) {
         this.id = id
-        this.terminId = terminId
+        this.termin_id = termin_id
         this.unterschriften = unterschriften
         this.stunden = stunden
         this.teilnehmende = teilnehmende
