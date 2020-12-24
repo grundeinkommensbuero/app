@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
+import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
@@ -74,3 +75,5 @@ class FirebaseReceiveServiceMock extends Mock
 class DemoPushSendServiceMock extends Mock implements DemoPushSendService {***REMOVED***
 
 class FileReaderMock extends Mock implements FileReader {***REMOVED***
+
+class GeoServiceMock extends Mock implements GeoService {***REMOVED***

@@ -11,13 +11,27 @@ class Kiez {
   double yBoundMin;
   double yBoundMax;
 
-  Kiez(bezirk, kiez, latitude, longitude, List<List<double>> polygon) {
+  Kiez(
+    bezirk,
+    kiez,
+    latitude,
+    longitude,
+    List<List<double>> polygon, [
+    double xBoundMin,
+    double xBoundMax,
+    double yBoundMin,
+    double yBoundMax,
+  ]) {
     this.kiez = kiez;
     this.bezirk = bezirk;
     this.center = latitude == null || longitude == null
         ? null
         : LatLng(latitude, longitude);
     this.polygon = polygon;
+    this.xBoundMin = xBoundMin;
+    this.xBoundMax = xBoundMax;
+    this.yBoundMin = yBoundMin;
+    this.yBoundMax = yBoundMax;
   ***REMOVED***
 
   Kiez.fromJson(Map<String, dynamic> json)

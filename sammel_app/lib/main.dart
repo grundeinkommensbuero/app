@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/routes/Navigation.dart';
+import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
       : ListLocationService(userService);
   static var chatMessageService =
       ChatMessageService(storageService, pushNotificationManager);
+  static var geoService = GeoService();
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +66,7 @@ class MyApp extends StatelessWidget {
               value: pushNotificationManager),
           Provider<ChatMessageService>.value(value: chatMessageService),
           Provider<AbstractUserService>.value(value: userService),
+          Provider<GeoService>.value(value: geoService),
         ],
         child: MaterialApp(
             title: 'DW & Co. Enteignen',
