@@ -154,23 +154,30 @@ void main() {
       expect(find.byKey(Key('Location Picker')), findsNothing);
       await tester.tap(find.byKey(Key('Open location dialog')));
       await tester.pump();
-      expect(find.byKey(Key('Location Picker')), findsOneWidget);
+      expect(find.byKey(Key('location dialog')), findsOneWidget);
     });
 
-    testWidgets('Location dialog are correctly shown',
+    testWidgets('location caption is correctly shown',
         (WidgetTester tester) async {
       await _openActionCreator(tester);
       ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
-      expect(find.text("in Tempelhofer Vorstadt"), findsNothing);
+      expect(find.text('Tempelhofer Vorstadt in Friedrichshain-Kreuzberg'),
+          findsNothing);
       when(_stammdatenService.kieze).thenAnswer((_) async => [tempVorstadt()]);
       // ignore: invalid_use_of_protected_member
       actionData.setState(() {
         actionData.action.ort = tempVorstadt();
+        actionData.action.terminDetails.treffpunkt = 'Hier';
+        actionData.action.coordinates = LatLng(52.5170365, 13.3888599);
         actionData.validateAllInput();
       });
       await tester.pumpAndSettle();
-      expect(find.text("in Tempelhofer Vorstadt"), findsOneWidget);
+      expect(
+          find.text(
+              '${actionData.action.ort.kiez} in ${actionData.action.ort.bezirk}\n'
+              'Treffpunkt: ${actionData.action.terminDetails.treffpunkt}'),
+          findsOneWidget);
     });
 
     testWidgets('changing kontakt is correctly shown',
@@ -185,21 +192,6 @@ void main() {
       });
       await tester.pump();
       expect(find.text('test1'), findsOneWidget);
-    });
-
-    testWidgets('changing treffpunkt is correctly shown',
-        (WidgetTester tester) async {
-      await _openActionCreator(tester);
-      ActionEditorState actionData =
-          tester.state(find.byKey(Key('action creator')));
-      // ignore: invalid_use_of_protected_member
-      actionData.setState(() {
-        actionData.action.terminDetails.treffpunkt = 'test1';
-        actionData.action.coordinates = LatLng(52.5170365, 13.3888599);
-        actionData.validateAllInput();
-      });
-      await tester.pump();
-      expect(find.text('Treffpunkt: test1'), findsOneWidget);
     });
 
     testWidgets('venue decription w/o coordinates is not displayed',
@@ -261,7 +253,10 @@ void main() {
           find.descendant(
               of: find.byType(ActionEditor), matching: find.text('Sammeln')),
           findsOneWidget);
-      expect(find.text('in Frankfurter Allee Nord'), findsOneWidget);
+      expect(
+          find.text(
+              'Frankfurter Allee Nord in Friedrichshain-Kreuzberg\nTreffpunkt: Weltzeituhr'),
+          findsOneWidget);
       expect(find.text('Beschreibung: Bringe Westen und Klämmbretter mit'),
           findsOneWidget);
       expect(find.text('am 04.11.,'), findsOneWidget);
