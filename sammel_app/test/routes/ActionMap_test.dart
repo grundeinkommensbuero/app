@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:provider/provider.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/routes/ActionMap.dart';
-import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
 import '../TestdataStorage.dart';
@@ -23,9 +21,7 @@ void main() {
   ***REMOVED***);
 
   testWidgets('uses default values', (WidgetTester tester) async {
-    await tester.pumpWidget(Provider<StammdatenService>.value(
-        value: stammdatenService,
-        child: MaterialApp(home: Scaffold(body: ActionMap()))));
+    await tester.pumpWidget(MaterialApp(home: Scaffold(body: ActionMap())));
 
     ActionMap actionMap = tester.widget(find.byType(ActionMap));
     expect(actionMap.termine, []);
@@ -36,20 +32,18 @@ void main() {
   group('action marker', () {
     Widget actionMap;
     setUp(() {
-      actionMap = Provider<StammdatenService>.value(
-          value: stammdatenService,
-          child: MaterialApp(
-              home: Scaffold(
-                  body: ActionMap(
-                      termine: [
-                TerminTestDaten.einTermin()..id = 1,
-                TerminTestDaten.einTermin()..id = 2,
-                TerminTestDaten.einTermin()..id = 3,
-              ],
-                      listLocations: [],
-                      isMyAction: (_) => false,
-                      iAmParticipant: (_) => false,
-                      openActionDetails: () {***REMOVED***))));
+      actionMap = MaterialApp(
+          home: Scaffold(
+              body: ActionMap(
+                  termine: [
+            TerminTestDaten.einTermin()..id = 1,
+            TerminTestDaten.einTermin()..id = 2,
+            TerminTestDaten.einTermin()..id = 3,
+          ],
+                  listLocations: [],
+                  isMyAction: (_) => false,
+                  iAmParticipant: (_) => false,
+                  openActionDetails: () {***REMOVED***)));
     ***REMOVED***);
 
     testWidgets('show all actions', (WidgetTester tester) async {
@@ -63,9 +57,7 @@ void main() {
       var isMyAction = (id) => id == 2;
 
       var morgen = DateTime.now()..add(Duration(days: 1));
-      await tester.pumpWidget(Provider<StammdatenService>.value(
-          value: stammdatenService,
-          child: MaterialApp(
+      await tester.pumpWidget(MaterialApp(
               home: Scaffold(
                   body: ActionMap(
                       termine: [
@@ -76,7 +68,7 @@ void main() {
                       listLocations: [],
                       isMyAction: isMyAction,
                       iAmParticipant: (_) => false,
-                      openActionDetails: () {***REMOVED***)))));
+                      openActionDetails: () {***REMOVED***))));
 
       List<FlatButton> actionMarker = tester
           .widgetList(find.byKey(Key('action marker')))
@@ -94,9 +86,7 @@ void main() {
       var isMyAction = (id) => id == 2;
       var iAmParticipant = (List<User> users) => users.isNotEmpty;
 
-      await tester.pumpWidget(Provider<StammdatenService>.value(
-          value: stammdatenService,
-          child: MaterialApp(
+      await tester.pumpWidget(MaterialApp(
               home: Scaffold(
                   body: ActionMap(
                       termine: [
@@ -109,7 +99,7 @@ void main() {
                       listLocations: [],
                       isMyAction: isMyAction,
                       iAmParticipant: iAmParticipant,
-                      openActionDetails: () {***REMOVED***)))));
+                      openActionDetails: () {***REMOVED***))));
 
       List<FlatButton> actionMarker = tester
           .widgetList(find.byKey(Key('action marker')))
@@ -127,9 +117,7 @@ void main() {
         (WidgetTester tester) async {
       var iAmParticipant = (List<User> users) => users.isNotEmpty;
 
-      await tester.pumpWidget(Provider<StammdatenService>.value(
-          value: stammdatenService,
-          child: MaterialApp(
+      await tester.pumpWidget(MaterialApp(
               home: Scaffold(
                   body: ActionMap(
                       termine: [
@@ -142,7 +130,7 @@ void main() {
                       listLocations: [],
                       isMyAction: (_) => false,
                       iAmParticipant: iAmParticipant,
-                      openActionDetails: () {***REMOVED***)))));
+                      openActionDetails: () {***REMOVED***))));
 
       List<FlatButton> actionMarker = tester
           .widgetList(find.byKey(Key('action marker')))
@@ -159,9 +147,7 @@ void main() {
     testWidgets('react to tap', (WidgetTester tester) async {
       bool iHaveBeenCalled = false;
 
-      await tester.pumpWidget(Provider<StammdatenService>.value(
-          value: stammdatenService,
-          child: MaterialApp(
+      await tester.pumpWidget(MaterialApp(
               home: Scaffold(
                   body: ActionMap(
                       termine: [
@@ -172,7 +158,7 @@ void main() {
                       listLocations: [],
                       isMyAction: (_) => false,
                       iAmParticipant: (_) => false,
-                      openActionDetails: (_, __) => iHaveBeenCalled = true)))));
+                      openActionDetails: (_, __) => iHaveBeenCalled = true))));
 
       expect(iHaveBeenCalled, false);
 
@@ -184,29 +170,25 @@ void main() {
   ***REMOVED***);
 
   testWidgets('shows all list locations', (WidgetTester tester) async {
-    await tester.pumpWidget(Provider<StammdatenService>.value(
-        value: stammdatenService,
-        child: MaterialApp(
+    await tester.pumpWidget(MaterialApp(
             home: Scaffold(
                 body: ActionMap(
                     termine: [],
                     listLocations: [curry36(), cafeKotti(), zukunft()],
                     isMyAction: (_) => false,
-                    openActionDetails: () {***REMOVED***)))));
+                    openActionDetails: () {***REMOVED***))));
 
     expect(find.byKey(Key('list location marker')), findsNWidgets(3));
   ***REMOVED***);
 
   testWidgets('opens list location info on tap', (WidgetTester tester) async {
-    await tester.pumpWidget(Provider<StammdatenService>.value(
-        value: stammdatenService,
-        child: MaterialApp(
+    await tester.pumpWidget(MaterialApp(
             home: Scaffold(
                 body: ActionMap(
                     termine: [],
                     listLocations: [curry36()],
                     isMyAction: (_) => false,
-                    openActionDetails: () {***REMOVED***)))));
+                    openActionDetails: () {***REMOVED***))));
 
     expect(find.byKey(Key('list location marker')), findsOneWidget);
     await tester.tap(find.byKey(Key('list location marker')));
