@@ -40,7 +40,7 @@ class KiezPicker {
                         polygons: visiblePolygons, polygonCulling: true),
                   ];
                   return SimpleDialog(
-                      key: Key('KiezPicker'),
+                      key: Key('kiez picker'),
                       contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
                       titlePadding: EdgeInsets.zero,
                       title: AppBar(
