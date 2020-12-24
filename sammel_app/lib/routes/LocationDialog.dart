@@ -162,6 +162,7 @@ class LocationDialogState extends State<LocationDialog> {
       location.kiez = kiez;
       location.coordinates = point;
       venueController.text = geodata.description;
+      location.description = geodata.description;
       marker = LocationMarker(point);
     ***REMOVED***);
   ***REMOVED***
