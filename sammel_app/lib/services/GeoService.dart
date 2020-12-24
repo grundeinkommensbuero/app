@@ -55,8 +55,6 @@ class GeoData {
   GeoData([this.name, this.street, this.number]);
 
   GeoData.fromJson(Map<String, dynamic> json) {
-    print(
-        '${json['name']} - ${json['address']['road']} - ${json['address']['house_number']}');
     name = json['name'];
     street = json['address'] != null ? json['address']['road'] : null;
     number = json['address'] != null ? json['address']['house_number'] : null;
