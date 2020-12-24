@@ -46,6 +46,7 @@ dependencies:
   google_sign_in: ^4.4.4
   user_location: any
   permission_handler: ^5.0.0+hotfix.4
+  poly: ^ 1.0.5
 
 dev_dependencies:
   flutter_test:
