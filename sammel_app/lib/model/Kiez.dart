@@ -6,6 +6,10 @@ class Kiez {
   String bezirk;
   LatLng center;
   List<List<double>> polygon;
+  double xBoundMin;
+  double xBoundMax;
+  double yBoundMin;
+  double yBoundMax;
 
   Kiez(bezirk, kiez, latitude, longitude, List<List<double>> polygon) {
     this.kiez = kiez;
@@ -24,7 +28,11 @@ class Kiez {
             : LatLng(json['latitude'], json['longitude']),
         polygon = (json['polygon'] as List)
             .map((e) => (e as List).map((e) => e as double).toList())
-            .toList();
+            .toList(),
+        xBoundMin = json['xBoundMin'],
+        xBoundMax = json['xBoundMax'],
+        yBoundMin = json['yBoundMin'],
+        yBoundMax = json['yBoundMax'];
 
   String toJson() => kiez;
 

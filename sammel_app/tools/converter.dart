@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:quiver/iterables.dart';
+
 Map<String, String> bezirke = {
   "01": "Mitte",
   "02": "Friedrichshain-Kreuzberg",
@@ -35,7 +37,19 @@ Future<void> main() async {
       "bezirk": bezirke[bezirksId],
       "longitude": centroidsMap[schluessel]['geometry']['coordinates'][0],
       "latitude": centroidsMap[schluessel]['geometry']['coordinates'][1],
-      "polygon": polygonsMap[schluessel]['geometry']['coordinates']
+      "polygon": polygonsMap[schluessel]['geometry']['coordinates'],
+      "xBoundMin": min<double>(polygonsMap[schluessel]['geometry']
+              ['coordinates']
+          .map<double>((point) => point[1] as double)),
+      "xBoundMax": max<double>(polygonsMap[schluessel]['geometry']
+              ['coordinates']
+          .map<double>((point) => point[1] as double)),
+      "yBoundMin": min<double>(polygonsMap[schluessel]['geometry']
+              ['coordinates']
+          .map<double>((point) => point[0] as double)),
+      "yBoundMax": max<double>(polygonsMap[schluessel]['geometry']
+              ['coordinates']
+          .map<double>((point) => point[0] as double)),
     ***REMOVED***
   ***REMOVED***).toList();
   outputFile.writeAsString(jsonEncode(kieze));
