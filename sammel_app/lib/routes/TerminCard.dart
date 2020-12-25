@@ -38,27 +38,36 @@ class TerminCard extends StatelessWidget {
           children: [
             Image.asset(
               termin.getAsset(),
-              height: 50.0,
+              width: 45.0,
             ),
             SizedBox(
               width: 20.0,
             ),
-            Column(children: [
-              Text(
-                '${termin.typ***REMOVED***',
-                style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 129, 28, 98)),
-              ),
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(
-                  erzeugeOrtText(termin.ort),
-                  style: style,
-                ),
-                Text(erzeugeDatumText(termin.beginn, termin.ende)),
-              ]),
-            ]),
+            Expanded(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Text(
+                      '${termin.typ***REMOVED***',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 129, 28, 98)),
+                    ),
+                    SizedBox(width: 45.0)
+                  ]),
+                  Text(
+                    erzeugeOrtText(termin.ort),
+                    textAlign: TextAlign.start,
+                    style: style,
+                  ),
+                  Text(
+                    erzeugeDatumText(termin.beginn, termin.ende),
+                    textAlign: TextAlign.start,
+                  ),
+                ])),
           ]),
     );
   ***REMOVED***
