@@ -65,9 +65,11 @@ class TermineRestResourceTest {
     fun `TerminDto konvertiert zu Termin mit Teilnehmern`() {
         val beginn = now()
         val ende = now()
-        val terminDto = TerminDto(1L, beginn, ende, "Frankfurter Allee Nord", "Sammeln", 0.0, 1.0,
-                listOf(BenutzerDto.convertFromBenutzer(karl())),
-                TerminDetailsDto("treffpunkt", "beschreibung", "kontakt"))
+        val terminDto = TerminDto(
+            1L, beginn, ende, "Frankfurter Allee Nord", "Sammeln", 0.0, 1.0,
+            listOf(BenutzerDto.convertFromBenutzer(karl())),
+            TerminDetailsDto("treffpunkt", "beschreibung", "kontakt")
+        )
 
         val termin = terminDto.convertToTermin()
 
@@ -119,7 +121,12 @@ class TermineRestResourceTest {
 
     @Test
     fun `getTermineL liefert TerminDtos aus mit Filter`() {
-        whenever(dao.getTermine(any())).thenReturn(listOf(terminOhneTeilnehmerOhneDetails(), terminOhneTeilnehmerMitDetails()))
+        whenever(dao.getTermine(any())).thenReturn(
+            listOf(
+                terminOhneTeilnehmerOhneDetails(),
+                terminOhneTeilnehmerMitDetails()
+            )
+        )
         val filter = TermineFilter()
         val response = resource.getTermine(filter)
 
@@ -137,7 +144,12 @@ class TermineRestResourceTest {
 
     @Test
     fun `getTermine nimmt fuer keinen Filter leeren Filter`() {
-        whenever(dao.getTermine(any())).thenReturn(listOf(terminOhneTeilnehmerOhneDetails(), terminOhneTeilnehmerMitDetails()))
+        whenever(dao.getTermine(any())).thenReturn(
+            listOf(
+                terminOhneTeilnehmerOhneDetails(),
+                terminOhneTeilnehmerMitDetails()
+            )
+        )
         resource.getTermine(null)
 
         val captor = ArgumentCaptor.forClass(TermineFilter::class.java)
@@ -199,6 +211,8 @@ class TermineRestResourceTest {
         val terminDto = terminDto()
         whenever(dao.aktualisiereTermin(any())).thenThrow(EJBException())
         whenever(dao.loadToken(any())).thenReturn(Token(1L, "token"))
+        val terminAlt = terminMitTeilnehmerMitDetails()
+        whenever(dao.getTermin(any())).thenReturn(terminAlt)
 
         val response = resource.aktualisiereTermin(ActionWithTokenDto(terminDto, "token"))
 
@@ -210,6 +224,8 @@ class TermineRestResourceTest {
     fun `aktualisiereTermin aktualisiert Termin in Db`() {
         val terminDto = terminDto()
         whenever(dao.loadToken(any())).thenReturn(Token(1L, "token"))
+        val terminAlt = terminMitTeilnehmerMitDetails()
+        whenever(dao.getTermin(any())).thenReturn(terminAlt)
 
         val response = resource.aktualisiereTermin(ActionWithTokenDto(terminDto, "token"))
 
@@ -222,7 +238,72 @@ class TermineRestResourceTest {
     ***REMOVED***
 
     @Test
+    fun `aktualisiereTermin aktualisiert nicht Teilnehmer`() {
+        val terminAlt = terminMitTeilnehmerMitDetails()
+        val terminNeu = terminDto()
+        whenever(dao.getTermin(any())).thenReturn(terminAlt)
+        whenever(dao.loadToken(any())).thenReturn(Token(1L, "token"))
+
+        val response = resource.aktualisiereTermin(ActionWithTokenDto(terminNeu, "token"))
+
+        val argCaptor = argumentCaptor<Termin>()
+        verify(dao, times(1)).aktualisiereTermin(argCaptor.capture())
+        val termin = argCaptor.firstValue
+        assertTrue(termin.teilnehmer.containsAll(terminAlt.teilnehmer))
+        assertNotEquals(termin.teilnehmer.size, terminNeu.participants!!.size)
+
+        assertEquals(response.status, 200)
+    ***REMOVED***
+
+    @Test
+    fun `aktualisiereTermin informiert Teilnehmer`() {
+        val terminAlt = terminMitTeilnehmerMitDetails()
+        val termin = terminDto()
+        termin.participants = listOf(rosa(), karl()).map { BenutzerDto.convertFromBenutzer(it) ***REMOVED***
+        whenever(dao.getTermin(any())).thenReturn(terminAlt)
+        whenever(dao.loadToken(any())).thenReturn(Token(1L, "token"))
+
+        resource.aktualisiereTermin(ActionWithTokenDto(termin, "token"))
+
+        val notification = argumentCaptor<PushNotificationDto>()
+        val data = argumentCaptor<Map<String, String>>()
+        val empfaenger = argumentCaptor<List<Benutzer>>()
+        verify(pushService)
+            .sendePushNachrichtAnEmpfaenger(notification.capture(), data.capture(), empfaenger.capture())
+        assertEquals(notification.firstValue.title, "Eine Aktion an der du teilnimmst hat sich geändert")
+        assertEquals(notification.firstValue.body, "Sammeln am 22.10. in Frankfurter Allee Nord (null)")
+        assertTrue(empfaenger.firstValue.map { it.id ***REMOVED***.containsAll( listOf(12L)))
+    ***REMOVED***
+
+    @Test
+    fun `aktualisiereTermin prueft Token`() {
+        val terminAlt = terminMitTeilnehmerMitDetails()
+        whenever(dao.getTermin(any())).thenReturn(terminAlt)
+        val terminDto = terminDto()
+
+        whenever(dao.loadToken(1L)).thenReturn(Token(1L, "token"))
+        val response: Response = resource.aktualisiereTermin(ActionWithTokenDto(terminDto, "token"))
+
+        verify(dao, times(1)).loadToken(1L)
+
+        assertEquals(response.status, 200)
+    ***REMOVED***
+
+    @Test
+    fun `aktualisiereTermin liefert 403  bei falschem Token`() {
+        val terminDto = terminDto()
+
+        whenever(dao.loadToken(1L)).thenReturn(Token(1L, "rightToken"))
+        val response: Response = resource.aktualisiereTermin(ActionWithTokenDto(terminDto, "wrongToken"))
+
+        verify(dao, times(1)).loadToken(1L)
+
+        assertEquals(response.status, 403)
+    ***REMOVED***
+
+    @Test
     fun `deleteAction loescht Aktion und Token in Db`() {
+        whenever(dao.getTermin(1L)).thenReturn(terminMitTeilnehmerMitDetails())
         val terminDto = terminDto()
 
         whenever(dao.loadToken(any())).thenReturn(Token(1L, "token"))
@@ -242,7 +323,8 @@ class TermineRestResourceTest {
     ***REMOVED***
 
     @Test
-    fun `deleteAction liefert 404 wenn Aktion n icht gefunden wird`() {
+    fun `deleteAction liefert 404 wenn Aktion nicht gefunden wird`() {
+        whenever(dao.getTermin(1L)).thenReturn(terminMitTeilnehmerMitDetails())
         val terminDto = terminDto()
 
         whenever(dao.deleteAction(any())).thenThrow(DatabaseException(""))
@@ -254,6 +336,7 @@ class TermineRestResourceTest {
 
     @Test
     fun `deleteAction prueft Token`() {
+        whenever(dao.getTermin(1L)).thenReturn(terminMitTeilnehmerMitDetails())
         val terminDto = terminDto()
 
         whenever(dao.loadToken(1L)).thenReturn(Token(1L, "token"))
@@ -267,8 +350,8 @@ class TermineRestResourceTest {
     @Test
     fun `deleteAction liefert 403 bei falschem Token`() {
         val terminDto = terminDto()
-
         whenever(dao.loadToken(1L)).thenReturn(Token(1L, "rightToken"))
+
         val response: Response = resource.deleteAction(ActionWithTokenDto(terminDto, "wrongToken"))
 
         verify(dao, times(1)).loadToken(1L)
@@ -279,7 +362,26 @@ class TermineRestResourceTest {
     ***REMOVED***
 
     @Test
-    fun `deleteAction loescht Aktion auch ohne Token wenn Aktion keinen NoToken in Db hat`() {
+    fun `deleteAction informiert Teilnehmer`() {
+        whenever(dao.loadToken(1L)).thenReturn(Token(1L, "rightToken"))
+        whenever(dao.getTermin(1L)).thenReturn(terminMitTeilnehmerMitDetails())
+        val terminDto = terminDto()
+
+        resource.deleteAction(ActionWithTokenDto(terminDto, "rightToken"))
+
+        val notification = argumentCaptor<PushNotificationDto>()
+        val data = argumentCaptor<Map<String, String>>()
+        val empfaenger = argumentCaptor<List<Benutzer>>()
+        verify(pushService)
+            .sendePushNachrichtAnEmpfaenger(notification.capture(), data.capture(), empfaenger.capture())
+        assertEquals(notification.firstValue.title, "Eine Aktion an der du teilnimmst wurde abgesagt")
+        assertEquals(notification.firstValue.body, "Sammeln am 22.10. in Frankfurter Allee Nord (null) wurde von der Ersteller*in gelöscht")
+        assertTrue(empfaenger.firstValue.map { it.id ***REMOVED***.containsAll( listOf(12L)))
+    ***REMOVED***
+
+    @Test
+    fun `deleteAction loescht Aktion auch ohne Token wenn Aktion keinen Token in Db hat`() {
+        whenever(dao.getTermin(1L)).thenReturn(terminMitTeilnehmerMitDetails())
         val terminDto = terminDto()
 
         whenever(dao.loadToken(1L)).thenReturn(null)
@@ -289,30 +391,6 @@ class TermineRestResourceTest {
         verify(dao, never()).deleteToken(any())
 
         assertEquals(response.status, 200)
-    ***REMOVED***
-
-    @Test
-    fun `editAction prueft Token`() {
-        val terminDto = terminDto()
-
-        whenever(dao.loadToken(1L)).thenReturn(Token(1L, "token"))
-        val response: Response = resource.aktualisiereTermin(ActionWithTokenDto(terminDto, "token"))
-
-        verify(dao, times(1)).loadToken(1L)
-
-        assertEquals(response.status, 200)
-    ***REMOVED***
-
-    @Test
-    fun `editAction liefert 403  bei falschem Token`() {
-        val terminDto = terminDto()
-
-        whenever(dao.loadToken(1L)).thenReturn(Token(1L, "rightToken"))
-        val response: Response = resource.aktualisiereTermin(ActionWithTokenDto(terminDto, "wrongToken"))
-
-        verify(dao, times(1)).loadToken(1L)
-
-        assertEquals(response.status, 403)
     ***REMOVED***
 
     @Test
@@ -372,7 +450,11 @@ class TermineRestResourceTest {
 
         val empfaengerCaptor = argumentCaptor<List<Benutzer>>()
         val notificationCaptor = argumentCaptor<PushNotificationDto>()
-        verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(notificationCaptor.capture(), any(), empfaengerCaptor.capture())
+        verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(
+            notificationCaptor.capture(),
+            any(),
+            empfaengerCaptor.capture()
+        )
         assertTrue(empfaengerCaptor.firstValue.containsAll(listOf(karl)))
         assertEquals("Verstärkung für deine Aktion", notificationCaptor.firstValue.title)
     ***REMOVED***
@@ -388,7 +470,11 @@ class TermineRestResourceTest {
 
         val empfaengerCaptor = argumentCaptor<List<Benutzer>>()
         val notificationCaptor = argumentCaptor<PushNotificationDto>()
-        verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(notificationCaptor.capture(), any(), empfaengerCaptor.capture())
+        verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(
+            notificationCaptor.capture(),
+            any(),
+            empfaengerCaptor.capture()
+        )
         assertTrue(empfaengerCaptor.secondValue.containsAll(listOf(rosa)))
         assertEquals("Verstärkung für eure Aktion", notificationCaptor.secondValue.title)
     ***REMOVED***
@@ -474,7 +560,11 @@ class TermineRestResourceTest {
 
         val empfaengerCaptor = argumentCaptor<List<Benutzer>>()
         val notificationCaptor = argumentCaptor<PushNotificationDto>()
-        verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(notificationCaptor.capture(), any(), empfaengerCaptor.capture())
+        verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(
+            notificationCaptor.capture(),
+            any(),
+            empfaengerCaptor.capture()
+        )
         assertTrue(empfaengerCaptor.firstValue.containsAll(listOf(karl)))
         assertEquals("Absage bei deiner Aktion", notificationCaptor.firstValue.title)
     ***REMOVED***
@@ -490,7 +580,11 @@ class TermineRestResourceTest {
 
         val empfaengerCaptor = argumentCaptor<List<Benutzer>>()
         val notificationCaptor = argumentCaptor<PushNotificationDto>()
-        verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(notificationCaptor.capture(), any(), empfaengerCaptor.capture())
+        verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(
+            notificationCaptor.capture(),
+            any(),
+            empfaengerCaptor.capture()
+        )
         assertTrue(empfaengerCaptor.secondValue.containsAll(listOf(rosa)))
         assertEquals("Absage bei eurer Aktion", notificationCaptor.secondValue.title)
     ***REMOVED***
