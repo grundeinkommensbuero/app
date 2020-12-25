@@ -58,7 +58,16 @@ class ErrorService {
           builder: (_) => AlertDialog(
                 key: key,
                 title: Text(title),
-                content: Text(message),
+                content: Column(mainAxisSize: MainAxisSize.min, children: [
+                  Container(
+                      height: 150,
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(
+                                  'assets/images/housy_problem.png')))),
+                  SizedBox(height: 10),
+                  Text(message),
+                ]),
                 actions: <Widget>[
                   RaisedButton(
                     key: Key('error dialog close button'),

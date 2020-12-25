@@ -335,7 +335,7 @@ class ActionEditorState extends State<ActionEditor> {
   }
 
   typeSelection() async {
-    List<String> moeglicheTypen = ['Sammeln', 'Infoveranstaltung'];
+    List<String> moeglicheTypen = ['Sammeln', 'Infoveranstaltung', 'Workshop'];
     var ausgewTyp = '';
     await showDialog<String>(
         context: context,

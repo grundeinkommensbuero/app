@@ -104,13 +104,7 @@ class TermineSeiteState extends State<TermineSeite>
 
     return Scaffold(
       body: Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  colorFilter: ColorFilter.mode(Color.fromARGB(220, 255, 255, 250), BlendMode.srcOver),
-                  image: AssetImage('assets/images/housy_happy.png'),
-                  scale: 3,
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.center)),
+          decoration: DweTheme.happyHouseBackground,
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
