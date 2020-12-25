@@ -103,20 +103,29 @@ class TermineSeiteState extends State<TermineSeite>
     );
 
     return Scaffold(
-      body: Stack(
-        alignment: Alignment.topCenter,
-        children: [
-          FadeTransition(
-            opacity: _fade,
-            child: SlideTransition(
-              position: _slide,
-              child: IndexedStack(
-                  children: [actionListView, actionMapView], index: navigation),
-            ),
-          ),
-          filterWidget,
-        ],
-      ),
+      body: Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  colorFilter: ColorFilter.mode(Color.fromARGB(220, 255, 255, 250), BlendMode.srcOver),
+                  image: AssetImage('assets/images/happy_house.png'),
+                  scale: 3,
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.center)),
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              FadeTransition(
+                opacity: _fade,
+                child: SlideTransition(
+                  position: _slide,
+                  child: IndexedStack(
+                      children: [actionListView, actionMapView],
+                      index: navigation),
+                ),
+              ),
+              filterWidget,
+            ],
+          )),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: navigation,
         onTap: swithPage,

@@ -31,34 +31,35 @@ class TerminCard extends StatelessWidget {
                 blurRadius: 3.0,
                 spreadRadius: 1.0)
           ]),
-      child: Column(children: [
-        Text(
-          '${termin.typ}',
-          style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 129, 28, 98)),
-        ),
-        Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-          Image.asset(
-            termin.getAsset(),
-            height: 40.0,
-          ),
-          SizedBox(
-            width: 20.0,
-          ),
-          Flexible(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              termin.getAsset(),
+              height: 50.0,
+            ),
+            SizedBox(
+              width: 20.0,
+            ),
+            Column(children: [
+              Text(
+                '${termin.typ}',
+                style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 129, 28, 98)),
+              ),
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(
                   erzeugeOrtText(termin.ort),
                   style: style,
                 ),
                 Text(erzeugeDatumText(termin.beginn, termin.ende)),
-              ])),
-        ]),
-      ]),
+              ]),
+            ]),
+          ]),
     );
   }
 

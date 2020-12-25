@@ -73,7 +73,7 @@ flutter:
    - assets/images/logo.png
    - assets/images/logo_ios.png
    - assets/images/Sammeln.png
-   - assets/images/Sammeln_centered.png
+   - assets/images/happy_house.png
    - assets/images/Infoveranstaltung.png
    - assets/security/sammel-server_local.pem
    - assets/security/root-cert.pem
