@@ -12,8 +12,7 @@ import de.kybernetik.rest.TermineRestResource.TerminDto.Companion.convertFromTer
 import de.kybernetik.services.PushService
 import java.time.LocalDateTime
 import java.time.ZonedDateTime.now
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME
+import java.time.format.DateTimeFormatter.*
 import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
 import javax.ejb.EJBException
@@ -115,7 +114,10 @@ open class TermineRestResource {
             .build()
 
         try {
-            dao.aktualisiereTermin(actionAndToken.action!!.convertToTermin())
+            val neuerTermin = actionAndToken.action!!.convertToTermin()
+            neuerTermin.teilnehmer = dao.getTermin(actionAndToken.action!!.id!!)!!.teilnehmer
+            dao.aktualisiereTermin(neuerTermin)
+            informiereUeberAenderung(neuerTermin)
         } catch (e: EJBException) {
             LOG.error("Fehler beim Mergen des Termins: Termin: ${actionAndToken.action}\n", e)
             return Response.status(422).entity(e.message).build()
@@ -141,8 +143,12 @@ open class TermineRestResource {
                 .build()
 
         try {
-            dao.deleteAction(actionAndToken.action!!.convertToTermin())
+            val termin = actionAndToken.action!!.convertToTermin()
+            val teilnehmer = dao.getTermin(actionAndToken.action!!.id!!)!!.teilnehmer
+            dao.deleteAction(termin)
             if (tokenFromDb != null) dao.deleteToken(Token(actionAndToken.action!!.id!!, actionAndToken.token!!))
+            termin.teilnehmer = teilnehmer
+            informiereUeberLoeschung(termin)
         } catch (e: DatabaseException) {
             return Response.status(404).entity(e.message).build()
         }
@@ -298,7 +304,7 @@ open class TermineRestResource {
         val pushMessage = PushMessageDto(
             PushNotificationDto(
                 "Verstärkung für deine Aktion",
-                "$name ist deiner Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))} beigetreten"
+                "$name ist deiner Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))} beigetreten"
             ),
             mapOf(
                 "type" to "ParticipationMessage",
@@ -323,7 +329,7 @@ open class TermineRestResource {
         pushMessage.notification =
             PushNotificationDto(
                 "Verstärkung für eure Aktion",
-                "$name ist der Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))} beigetreten, an der du teilnimmst"
+                "$name ist der Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))} beigetreten, an der du teilnimmst"
             )
         val restlicheTeilnehmer = aktion.teilnehmer.minus(ersteller)
 
@@ -339,7 +345,7 @@ open class TermineRestResource {
         val pushMessage = PushMessageDto(
             PushNotificationDto(
                 "Absage bei deiner Aktion",
-                "$name nimmt nicht mehr Teil an deiner Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))}"
+                "$name nimmt nicht mehr Teil an deiner Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))}"
             ), mapOf(
                 "type" to "ParticipationMessage",
                 "channel" to "action:${aktion.id}",
@@ -360,11 +366,55 @@ open class TermineRestResource {
 
         pushMessage.notification = PushNotificationDto(
             "Absage bei eurer Aktion",
-            "$name hat die Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))} verlassen, an der du teilnimmst"
+            "$name hat die Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))} verlassen, an der du teilnimmst"
         )
         val teilnehmer = aktion.teilnehmer.minus(ersteller)
 
         LOG.debug("Informiere restliche Teilnehmer ${teilnehmer.map { it.id }} von Aktion ${aktion.id}")
+        pushService.sendePushNachrichtAnEmpfaenger(
+            pushMessage.notification,
+            pushMessage.verschluesselt(),
+            teilnehmer
+        )
+    }
+
+    open fun informiereUeberAenderung(aktion: Termin) {
+        val pushMessage = PushMessageDto(
+            PushNotificationDto(
+                "Eine Aktion an der du teilnimmst hat sich geändert",
+                "${aktion.typ} am ${aktion.beginn!!.format(ofPattern("dd.MM."))} in ${aktion.ort} (${aktion.details!!.treffpunkt})"
+            ),
+            mapOf(
+                "type" to "ActionChanged",
+                "timestamp" to now().format(ISO_OFFSET_DATE_TIME),
+                "action" to aktion.id
+            )
+        )
+        val teilnehmer = aktion.teilnehmer.subList(1, aktion.teilnehmer.size)
+        if (teilnehmer.size > 0)
+            LOG.debug("Informiere Teilnehmer ${teilnehmer.map { it.id }} von Aktion ${aktion.id} über Änderungen")
+        pushService.sendePushNachrichtAnEmpfaenger(
+            pushMessage.notification,
+            pushMessage.verschluesselt(),
+            teilnehmer
+        )
+    }
+
+    open fun informiereUeberLoeschung(aktion: Termin) {
+        val pushMessage = PushMessageDto(
+            PushNotificationDto(
+                "Eine Aktion an der du teilnimmst wurde abgesagt",
+                "${aktion.typ} am ${aktion.beginn!!.format(ofPattern("dd.MM."))} in ${aktion.ort} (${aktion.details!!.treffpunkt}) wurde von der Ersteller*in gelöscht"
+            ),
+            mapOf(
+                "type" to "ActionDeleted",
+                "timestamp" to now().format(ISO_OFFSET_DATE_TIME),
+                "action" to aktion.id
+            )
+        )
+        val teilnehmer = aktion.teilnehmer.subList(1, aktion.teilnehmer.size)
+        if (teilnehmer.size > 0)
+            LOG.debug("Informiere Teilnehmer ${teilnehmer.map { it.id }} von Aktion ${aktion.id} über Löschung")
         pushService.sendePushNachrichtAnEmpfaenger(
             pushMessage.notification,
             pushMessage.verschluesselt(),

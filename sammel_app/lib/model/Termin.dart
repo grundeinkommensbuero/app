@@ -48,10 +48,12 @@ class Termin {
     switch (typ) {
       case 'Sammeln':
         return centered
-            ? 'assets/images/Sammeln.png'
+            ? 'assets/images/Sammeln_centered.png'
             : 'assets/images/Sammeln.png';
       case 'Infoveranstaltung':
         return 'assets/images/Infoveranstaltung.png';
+      case 'Workshop':
+        return 'assets/images/Workshop.png';
     }
     throw UnkownActionTypeException(
         'Cannot find asset for unknwon action type "$typ"');
