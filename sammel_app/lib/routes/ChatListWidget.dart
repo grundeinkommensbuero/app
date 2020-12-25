@@ -42,10 +42,12 @@ class ChatListState extends State<ChatListWidget>
     ***REMOVED***
 
     this.channel.register_widget(this);
-    var list_view = ListView(
-        padding: EdgeInsets.all(8.0),
-        controller: widget.scroll_controller,
-        children: buildListMessage());
+    var list_view = Container(
+        decoration: DweTheme.happyHouseBackground,
+        child: ListView(
+            padding: EdgeInsets.all(8.0),
+            controller: widget.scroll_controller,
+            children: buildListMessage()));
 
     return list_view;
   ***REMOVED***

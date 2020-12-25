@@ -53,10 +53,12 @@ class Termin {
       case 'Infoveranstaltung':
         return 'assets/images/Infoveranstaltung.png';
       case 'Workshop':
-        return 'assets/images/Workshop.png';
+        return centered
+          ? 'assets/images/Workshop_centered.png'
+          : 'assets/images/Workshop.png';
     ***REMOVED***
     throw UnkownActionTypeException(
-        'Cannot find asset for unknwon action type "$typ"');
+        'Cannot find asset for unknown action type "$typ"');
   ***REMOVED***
 
   static final int Function(Termin a, Termin b) compareByStart =
