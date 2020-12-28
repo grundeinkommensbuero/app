@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sammel_app/services/AuthFehler.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
+import 'package:sammel_app/shared/MessageException.dart';
 import 'package:sammel_app/shared/ServerException.dart';
 
 class ErrorService {
@@ -21,38 +22,42 @@ class ErrorService {
   ***REMOVED***
 
   static handleError(error, StackTrace stacktrace, {String context***REMOVED***) async {
-    print('Fehler aufgetreten: $error\n$stacktrace');
-    if (context == null) context = '';
+    print('Fehler aufgetreten: $error');
 
     if (error is NoUserAuthException) {
       pushMessage('Dein Account konnte nicht authentifziert werden.',
-          '${error.message***REMOVED***$context$EMAIL');
+          [context, error.message, EMAIL].where((e) => e != null).join(' '));
       return;
     ***REMOVED***
 
     if (error is AuthFehler) {
       pushMessage('Fehler bei Nutzer-Authentifizierung',
-          '${error.message***REMOVED***$context$EMAIL');
+          [context, error.message, EMAIL].where((e) => e != null).join(' '));
       return;
     ***REMOVED***
     if (error is RestFehler) {
       pushMessage(
           'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten',
-          '${error.message***REMOVED***$context$EMAIL');
+          [context, error.message, EMAIL].where((e) => e != null).join(' '));
       return;
     ***REMOVED***
     if (error is ServerException) {
       pushMessage(
           'Bei der Kommunikation mit dem Server ist ein technischer Fehler aufgetreten',
-          '${error.message***REMOVED***$context$EMAIL');
+          [context, error.message, EMAIL].where((e) => e != null).join(' '));
       return;
     ***REMOVED***
     if (error is ConnectivityException) {
       pushMessage('Ein Verbindungs-Problem ist aufgetreten',
-          '$context ${error.message***REMOVED***$EMAIL');
+          [context, error.message, EMAIL].where((e) => e != null).join(' '));
       return;
     ***REMOVED***
-    pushMessage('Ein Fehler ist aufgetreten', '$context$EMAIL');
+    if (error is WarningException) {
+      pushMessage('Warnung',
+          [context, error.message, EMAIL].where((e) => e != null).join(' '));
+      return;
+    ***REMOVED***
+    pushMessage('Ein Fehler ist aufgetreten', [context, EMAIL].where((e) => e != null).join(' '));
   ***REMOVED***
 
   static void pushMessage(String titel, String message) {

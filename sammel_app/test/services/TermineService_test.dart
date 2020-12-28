@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http_server/http_server.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/Termin.dart';
@@ -147,7 +148,7 @@ void main() {
     test('loadActions calls right path and serializes Filter correctly',
         () async {
       when(backend.post('service/termine', any, any))
-          .thenAnswer((_) async => HttpClientResponseBodyMock([], 200));
+          .thenAnswer((_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock([], 200)));
 
       await service.loadActions(einFilter());
 
@@ -165,10 +166,10 @@ void main() {
 
     test('loadActions deserializes actions correctly', () async {
       when(backend.post('service/termine', any, any))
-          .thenAnswer((_) async => HttpClientResponseBodyMock([
+          .thenAnswer((_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock([
                 TerminTestDaten.einTerminMitTeilisUndDetails().toJson(),
                 TerminTestDaten.einTerminOhneTeilisMitDetails().toJson()
-              ], 200));
+              ], 200)));
 
       var actions = await service.loadActions(einFilter());
 
@@ -212,8 +213,8 @@ void main() {
         'createTermin calls right path and serializes action and token correctly',
         () async {
       when(backend.post('service/termine/neu', any, any)).thenAnswer(
-          (_) async => HttpClientResponseBodyMock(
-              TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200));
+          (_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
+              TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200)));
 
       await service.createAction(
           TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
@@ -245,8 +246,8 @@ void main() {
 
     test('createTermin deserializes action correctly', () async {
       when(backend.post('service/termine/neu', any, any)).thenAnswer(
-          (_) async => HttpClientResponseBodyMock(
-              TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200));
+          (_) => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
+              TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200)));
 
       var action = await service.createAction(
           TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
@@ -272,8 +273,8 @@ void main() {
 
     test('getActionWithDetails calls right path', () async {
       when(backend.get('service/termine/termin?id=0', any)).thenAnswer(
-          (_) async => HttpClientResponseBodyMock(
-              TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200));
+          (_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
+              TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200)));
 
       await service.getActionWithDetails(0);
 
@@ -282,8 +283,8 @@ void main() {
 
     test('getActionWithDetails deserializes action correctly', () async {
       when(backend.get('service/termine/termin?id=0', any)).thenAnswer(
-          (_) async => HttpClientResponseBodyMock(
-              TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200));
+          (_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
+              TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200)));
 
       var action = await service.getActionWithDetails(0);
 
@@ -310,7 +311,7 @@ void main() {
         'saveAction calls right path and serialises action and token correctly',
         () async {
       when(backend.post('service/termine/termin', any, any))
-          .thenAnswer((_) async => HttpClientResponseBodyMock('response', 200));
+          .thenAnswer((_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock('response', 200)));
 
       await service.saveAction(
           TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
@@ -344,7 +345,7 @@ void main() {
         'deleteAction calls right path and serialises action and token correctly',
         () async {
       when(backend.delete('service/termine/termin', any, any))
-          .thenAnswer((_) async => HttpClientResponseBodyMock('response', 200));
+          .thenAnswer((_) => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock('response', 200)));
 
       await service.deleteAction(
           TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
@@ -376,7 +377,7 @@ void main() {
 
     test('joinAction calls correct path with parameters', () async {
       when(backend.post(any, any, any))
-          .thenAnswer((_) async => HttpClientResponseBodyMock(null, 202));
+          .thenAnswer((_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(null, 202)));
 
       await service.joinAction(0);
 
@@ -390,7 +391,7 @@ void main() {
 
     test('leaveAction calls correct path with parameters', () async {
       when(backend.post(any, any, any))
-          .thenAnswer((_) async => HttpClientResponseBodyMock(null, 202));
+          .thenAnswer((_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(null, 202)));
 
       await service.leaveAction(0);
 

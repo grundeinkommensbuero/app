@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/services/BackendService.dart';
@@ -32,7 +33,7 @@ void main() {
       'longitude': 13.4655402
     ***REMOVED***
     List<Map<String, dynamic>> listlocations = [cafeKottiJson, zukunftJson];
-    var response = HttpClientResponseBodyMock(listlocations, 200);
+    HttpClientResponseBody response = HttpClientResponseBodyMock(listlocations, 200);
     when(backend.get('/service/listlocations/actives', any))
         .thenAnswer((_) async => response);
 

@@ -432,7 +432,7 @@ class TermineSeiteState extends State<TermineSeite>
       ***REMOVED***);
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
-          context: 'Aktion konnte nicht erzeugt werden. ');
+          context: 'Aktion konnte nicht erzeugt werden.');
     ***REMOVED***
   ***REMOVED***
 

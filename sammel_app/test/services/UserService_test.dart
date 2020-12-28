@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/BackendService.dart';
@@ -30,10 +31,10 @@ void main() {
       when(storageService.loadSecret()).thenAnswer((_) async => 'secret');
       when(firebase.token).thenAnswer((_) async => 'firebaseToken');
       when(backendMock.post('service/benutzer/authentifiziere', any, any))
-          .thenAnswer((_) async => HttpClientResponseBodyMock(true, 200));
+          .thenAnswer((_) => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(true, 200)));
       when(backendMock.post('service/benutzer/neu', any, any)).thenAnswer(
-          (_) async => HttpClientResponseBodyMock(
-              User(11, '', Colors.red).toJson(), 200));
+          (_) => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
+              User(11, '', Colors.red).toJson(), 200)));
     ***REMOVED***);
 
     group('user streams', () {
@@ -210,7 +211,7 @@ void main() {
 
       test('registers new user if authentication to server fails', () async {
         when(backendMock.post('service/benutzer/authentifiziere', any, any))
-            .thenAnswer((_) async => HttpClientResponseBodyMock(false, 200));
+            .thenAnswer((_) => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(false, 200)));
 
         UserService(storageService, firebase, backendMock);
 

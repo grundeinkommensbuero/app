@@ -6,7 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:http_server/http_server.dart';
 import 'package:sammel_app/main.dart';
 import 'package:sammel_app/model/Health.dart';
+import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/UserService.dart';
+import 'package:sammel_app/shared/MessageException.dart';
 import 'package:sammel_app/shared/ServerException.dart';
 
 import 'AuthFehler.dart';
@@ -100,14 +102,14 @@ class BackendService {
   ***REMOVED***
 
   // http client throws SocketException on connection errors
-  checkConnectivity({originalError***REMOVED***) async {
+  Future<HttpClientResponseBody> checkConnectivity({originalError***REMOVED***) async {
     if ((await Connectivity().checkConnectivity()) == ConnectivityResult.none) {
       // no internet connection
       throw ConnectivityException(
           'Es scheint keine Internet-Verbindung zu bestehen.');
     ***REMOVED***
 
-    var healthCall = getServerHealth();
+    var healthCall = backend.getServerHealth();
     var googleCall = backend.callGoogle();
 
     try {
@@ -143,10 +145,6 @@ class BackendService {
       ***REMOVED***
     ***REMOVED***
   ***REMOVED***
-
-  Future<ServerHealth> getServerHealth() async =>
-      backend.get('service/health', {***REMOVED***).then(
-          (HttpClientResponseBody body) => ServerHealth.fromJson(body.body));
 ***REMOVED***
 
 class NoUserAuthException implements Exception {
@@ -157,6 +155,7 @@ class NoUserAuthException implements Exception {
 class Backend {
   static final host = testMode ? 'dwe.idash.org' : '10.0.2.2';
   static final port = testMode ? 443 : 18443;
+  final String version;
 
   static final clientContext = SecurityContext();
   static HttpClient client = HttpClient(context: clientContext);
@@ -166,8 +165,21 @@ class Backend {
     HttpHeaders.acceptHeader: "*/*",
   ***REMOVED***
 
-  Backend() {
+  Backend(this.version) {
     ladeZertifikat();
+    var serverHealth = getServerHealth();
+    serverHealth.then((health) {
+      if (!health.alive)
+        ErrorService.handleError(
+            WarningException("Der Server meldet Probleme: ${health.status***REMOVED***"),
+            StackTrace.current);
+      if (int.parse(this.version.substring(this.version.indexOf('+') + 1)) <
+          int.parse(health.minClient.substring(this.version.indexOf('+') + 1)))
+        ErrorService.handleError(
+            WarningException(
+                'Deine App-Version ist veraltet. Dies ist die Version $version, du musst aber mindestens Version ${health.minClient***REMOVED*** benutzen, damit die App richtig funktioniert.'),
+            StackTrace.current);
+    ***REMOVED***);
   ***REMOVED***
 
   // Assets müssen außerhalb von Widgets mit dieser asynchronen Funktion ermittelt werden
@@ -268,6 +280,9 @@ class Backend {
 
   Future<void> callGoogle() =>
       client.get("google.de", 80, '').then((r) => r.close());
+
+  Future<ServerHealth> getServerHealth() => get('service/health', {***REMOVED***)
+      .then((HttpClientResponseBody body) => ServerHealth.fromJson(body.body));
 ***REMOVED***
 
 class WrongResponseFormatException implements ServerException {
@@ -300,6 +315,16 @@ class DemoBackend implements Backend {
 
   @override
   callGoogle() => throw UnimplementedError();
+
+  @override
+  getServerHealth() => throw UnimplementedError();
+
+  @override
+  bool compareVersions(String version, String minClient) =>
+      throw UnimplementedError();
+
+  @override
+  String get version => throw UnimplementedError();
 ***REMOVED***
 
 class DemoBackendShouldNeverBeUsedError {***REMOVED***

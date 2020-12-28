@@ -36,6 +36,7 @@ class UserServiceMock extends Mock implements UserService {***REMOVED***
 
 class ConfiguredUserServiceMock extends Mock implements UserService {
   final me = karl();
+
   ConfiguredUserServiceMock() {
     when(this.user).thenAnswer((_) => Stream.value(me));
     when(this.userHeaders)
@@ -47,8 +48,9 @@ class ChatMessageServiceMock extends Mock implements ChatMessageService {***REMO
 
 class BackendMock extends Mock implements Backend {
   BackendMock() {
-    when(this.post('service/benutzer/authentifiziere', any, any))
-        .thenAnswer((_) async => HttpClientResponseBodyMock(true, 200));
+    when(this.post('service/benutzer/authentifiziere', any, any)).thenAnswer(
+        (_) => Future<HttpClientResponseBody>.value(
+            HttpClientResponseBodyMock(true, 200)));
   ***REMOVED***
 ***REMOVED***
 
