@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
 import 'package:http_server/http_server.dart';
 import 'package:sammel_app/main.dart';
+import 'package:sammel_app/model/Health.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ServerException.dart';
 
@@ -20,9 +22,7 @@ class BackendService {
 
   BackendService.userService();
 
-  BackendService(AbstractUserService userService, [Backend backendMock]) {
-    backend = backendMock ?? Backend();
-
+  BackendService(AbstractUserService userService, this.backend) {
     // UserService ist sein eigener UserService
     if (!(this is AbstractUserService)) {
       if (userService == null) throw ArgumentError.notNull('userService');
@@ -30,45 +30,65 @@ class BackendService {
     ***REMOVED***
   ***REMOVED***
 
-  Future<HttpClientResponseBody> delete(String url, String data,
-      {bool appAuth***REMOVED***) async {
-    var response = await backend.delete(url, data, await authHeaders(appAuth));
-
-    if (response.response.statusCode >= 200 &&
-        response.response.statusCode < 300) return response;
-
-    if (response.response.statusCode == 403)
-      throw AuthFehler.fromJson(response.body);
-
-    // else
-    throw RestFehler(response.body.toString());
-  ***REMOVED***
-
   Future<HttpClientResponseBody> get(String url, {bool appAuth***REMOVED***) async {
-    var response = await backend.get(url, await authHeaders(appAuth));
+    try {
+      var response = await backend.get(url, await authHeaders(appAuth)).timeout(
+          Duration(seconds: 2),
+          onTimeout: () async => await checkConnectivity());
 
-    if (response.response.statusCode >= 200 &&
-        response.response.statusCode < 300) return response;
+      if (response.response.statusCode >= 200 &&
+          response.response.statusCode < 300) return response;
 
-    if (response.response.statusCode == 403) throw AuthFehler(response.body);
+      if (response.response.statusCode == 403) throw AuthFehler(response.body);
 
-    // else
-    throw RestFehler(response.body.toString());
+      // else
+      throw RestFehler(response.body.toString());
+    ***REMOVED*** on SocketException catch (e) {
+      await checkConnectivity(originalError: e);
+    ***REMOVED***
   ***REMOVED***
 
   Future<HttpClientResponseBody> post(String url, String data,
       {Map<String, String> parameters, bool appAuth***REMOVED***) async {
-    var response =
-        await backend.post(url, data, await authHeaders(appAuth), parameters);
+    try {
+      var post = backend
+          .post(url, data, await authHeaders(appAuth), parameters)
+          .timeout(Duration(seconds: 2),
+              onTimeout: () async => await checkConnectivity());
+      var response = await post;
 
-    if (response.response.statusCode >= 200 &&
-        response.response.statusCode < 300) return response;
+      if (response.response.statusCode >= 200 &&
+          response.response.statusCode < 300) return response;
 
-    if (response.response.statusCode == 403)
-      throw AuthFehler.fromJson(response.body);
+      if (response.response.statusCode == 403)
+        throw AuthFehler.fromJson(response.body);
 
-    // else
-    throw RestFehler(response.body.toString());
+      // else
+      throw RestFehler(response.body.toString());
+    ***REMOVED*** on SocketException catch (e) {
+      await checkConnectivity(originalError: e);
+    ***REMOVED***
+  ***REMOVED***
+
+  Future<HttpClientResponseBody> delete(String url, String data,
+      {bool appAuth***REMOVED***) async {
+    try {
+      var response = await backend
+          .delete(url, data, await authHeaders(appAuth))
+          .timeout(Duration(seconds: 2),
+              onTimeout: () async => await checkConnectivity());
+
+      if (response.response.statusCode >= 200 &&
+          response.response.statusCode < 300) return response;
+
+      if (response.response.statusCode == 403)
+        throw AuthFehler.fromJson(response.body);
+
+      // else
+      throw RestFehler(response.body.toString());
+    ***REMOVED*** on SocketException catch (e) {
+      await checkConnectivity(originalError: e);
+    ***REMOVED***
   ***REMOVED***
 
   Future<Map<String, String>> authHeaders(bool appAuth) {
@@ -78,9 +98,61 @@ class BackendService {
       return userService.userHeaders.timeout(Duration(seconds: 10),
           onTimeout: () => throw NoUserAuthException);
   ***REMOVED***
+
+  // http client throws SocketException on connection errors
+  checkConnectivity({originalError***REMOVED***) async {
+    if ((await Connectivity().checkConnectivity()) == ConnectivityResult.none) {
+      // no internet connection
+      throw ConnectivityException(
+          'Es scheint keine Internet-Verbindung zu bestehen.');
+    ***REMOVED***
+
+    var healthCall = getServerHealth();
+    var googleCall = backend.callGoogle();
+
+    try {
+      var serverHealth = await healthCall.timeout(Duration(seconds: 2),
+          onTimeout: () async =>
+              await googleCall.timeout(Duration(seconds: 2), onTimeout: () {
+                // both server and google don't respond
+                throw ConnectivityException(
+                    "Die Internet-Verbindung scheint sehr langsam zu sein.");
+              ***REMOVED***).then((_) {
+                // server doesn't respond but google does
+                throw ConnectivityException(
+                    'Der Server antwortet leider nicht. Möglicherweise ist er überlastet, versuch es doch später nochmal');
+              ***REMOVED***));
+      // Server responds but has issues
+      if (serverHealth.alive)
+        throw ConnectivityException(
+            'Ein Verbindungsproblem ist aufgetreten: ${originalError?.message***REMOVED***');
+      else
+        // Server responds and is healthy
+        throw throw ConnectivityException(
+            'Der Server hat leider gerade technische Probleme: ${serverHealth.status***REMOVED***');
+    ***REMOVED*** on SocketException catch (e) {
+      try {
+        await googleCall;
+        // server refuses but google answers
+        throw ConnectivityException(
+            'Der Server reagiert nicht, obwohl eine Internet-Verbindung besteht. Vielleicht gibt es ein technisches Problem, bitte versuch es später nochmal. ${e.message***REMOVED***');
+      ***REMOVED*** on SocketException catch (e) {
+        // both server and google refuse
+        throw ConnectivityException(
+            'Das Internet scheint nicht erreichbar zu sein: ${e.message***REMOVED***');
+      ***REMOVED***
+    ***REMOVED***
+  ***REMOVED***
+
+  Future<ServerHealth> getServerHealth() async =>
+      backend.get('service/health', {***REMOVED***).then(
+          (HttpClientResponseBody body) => ServerHealth.fromJson(body.body));
 ***REMOVED***
 
-class NoUserAuthException implements Exception {***REMOVED***
+class NoUserAuthException implements Exception {
+  var message =
+      'Es ist ein Fehler aufgetreten beim Verifizieren deines Benutzer*in-Accounts. Probiere es eventuell zu einem späteren Zeitpunkt noch einmal oder versuche die App nochmal neu zu installieren, wenn du keine eigenen Aktionen betreust.';
+***REMOVED***
 
 class Backend {
   static final host = testMode ? 'dwe.idash.org' : '10.0.2.2';
@@ -94,14 +166,8 @@ class Backend {
     HttpHeaders.acceptHeader: "*/*",
   ***REMOVED***
 
-  // Zertifikat muss nur einmal global über alle Services geladen werden
-  static bool zertifikatGeladen = false;
-
   Backend() {
-    if (!zertifikatGeladen) {
-      zertifikatGeladen = true;
-      ladeZertifikat();
-    ***REMOVED***
+    ladeZertifikat();
   ***REMOVED***
 
   // Assets müssen außerhalb von Widgets mit dieser asynchronen Funktion ermittelt werden
@@ -199,12 +265,21 @@ class Backend {
   static String body(List<dynamic> response) {
     return response.map((dyn) => dyn as String).join();
   ***REMOVED***
+
+  Future<void> callGoogle() =>
+      client.get("google.de", 80, '').then((r) => r.close());
 ***REMOVED***
 
 class WrongResponseFormatException implements ServerException {
   final String message;
 
   WrongResponseFormatException([this.message = 'Falsches Format']);
+***REMOVED***
+
+class ConnectivityException implements Exception {
+  var message;
+
+  ConnectivityException(this.message);
 ***REMOVED***
 
 class DemoBackend implements Backend {
@@ -222,6 +297,9 @@ class DemoBackend implements Backend {
           String url, String data, Map<String, String> headers,
           [Map<String, String> parameters]) =>
       throw DemoBackendShouldNeverBeUsedError();
+
+  @override
+  callGoogle() => throw UnimplementedError();
 ***REMOVED***
 
 class DemoBackendShouldNeverBeUsedError {***REMOVED***

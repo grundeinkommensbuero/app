@@ -181,7 +181,7 @@ class TermineSeiteState extends State<TermineSeite>
         this.termine = termine..sort(Termin.compareByStart);
       ***REMOVED***);
     ***REMOVED***).catchError((e, s) => ErrorService.handleError(e, s,
-        additional: "Aktionen konnten nicht geladen werden."));
+        context: "Aktionen konnten nicht geladen werden."));
   ***REMOVED***
 
   void showRestError(RestFehler e) {
@@ -271,7 +271,7 @@ class TermineSeiteState extends State<TermineSeite>
         showActionOnMap(terminMitDetails);
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
-          additional: 'Aktionen konnten nicht geladen werden.');
+          context: 'Aktion konnte nicht geladen werden.');
     ***REMOVED***
   ***REMOVED***
 
@@ -390,7 +390,7 @@ class TermineSeiteState extends State<TermineSeite>
       setState(() => updateAction(editedAction, false));
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
-          additional: 'Aktion konnte nicht gespeichert werden.');
+          context: 'Aktion konnte nicht gespeichert werden.');
     ***REMOVED***
   ***REMOVED***
 
@@ -400,9 +400,9 @@ class TermineSeiteState extends State<TermineSeite>
       await termineService.deleteAction(action, token);
       storageService.deleteActionToken(action.id);
       setState(() => updateAction(action, true));
-    ***REMOVED*** on RestFehler catch (error) {
-      ErrorService.pushMessage(
-          'Aktion konnte nicht gelöscht werden', error.message);
+    ***REMOVED*** catch (e, s) {
+      ErrorService.handleError(e, s,
+          context: 'Aktion konnte nicht gelöscht werden.');
     ***REMOVED***
   ***REMOVED***
 
@@ -432,7 +432,7 @@ class TermineSeiteState extends State<TermineSeite>
       ***REMOVED***);
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
-          additional: 'Aktion konnte nicht erzeugt werden. ');
+          context: 'Aktion konnte nicht erzeugt werden. ');
     ***REMOVED***
   ***REMOVED***
 

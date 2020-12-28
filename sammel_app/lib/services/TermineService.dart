@@ -16,9 +16,8 @@ import 'UserService.dart';
 
 abstract class AbstractTermineService extends BackendService {
   AbstractTermineService(
-      AbstractUserService userService, this.stammdatenService,
-      [Backend backendMock])
-      : super(userService, backendMock);
+      AbstractUserService userService, this.stammdatenService, Backend backend)
+      : super(userService, backend);
   StammdatenService stammdatenService;
 
   Future<List<Termin>> loadActions(TermineFilter filter);
@@ -37,9 +36,9 @@ abstract class AbstractTermineService extends BackendService {
 ***REMOVED***
 
 class TermineService extends AbstractTermineService {
-  TermineService(AbstractUserService userService, stammdatenService,
-      [Backend backendMock])
-      : super(userService, stammdatenService, backendMock);
+  TermineService(
+      AbstractUserService userService, stammdatenService, Backend backend)
+      : super(userService, stammdatenService, backend);
 
   Future<List<Termin>> loadActions(TermineFilter filter) async {
     HttpClientResponseBody response =
@@ -82,7 +81,7 @@ class TermineService extends AbstractTermineService {
           parameters: {'id': '$id'***REMOVED***);
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
-          additional: 'Teilnahme ist fehlgeschlagen.');
+          context: 'Teilnahme ist fehlgeschlagen.');
     ***REMOVED***
   ***REMOVED***
 
@@ -91,7 +90,7 @@ class TermineService extends AbstractTermineService {
       await post('service/termine/absage', jsonEncode(null),
           parameters: {'id': '$id'***REMOVED***);
     ***REMOVED*** catch (e, s) {
-      ErrorService.handleError(e, s, additional: 'Absage ist fehlgeschlagen.');
+      ErrorService.handleError(e, s, context: 'Absage ist fehlgeschlagen.');
     ***REMOVED***
   ***REMOVED***
 ***REMOVED***
@@ -100,8 +99,8 @@ class DemoTermineService extends AbstractTermineService {
   DemoTermineService(
       AbstractUserService userService, StammdatenService stammdatenService)
       : super(userService, stammdatenService, DemoBackend()) {
-    stammdatenService.kieze.then((kieze) {
-      termine = [
+    termine = stammdatenService.kieze.then((kieze) {
+      return [
         Termin(
             1,
             DateTime(heute.year, heute.month - 1, heute.day - 1, 9, 0, 0),
@@ -156,11 +155,11 @@ class DemoTermineService extends AbstractTermineService {
   ***REMOVED***
 
   static var heute = DateTime.now();
-  List<Termin> termine;
+  Future<List<Termin>> termine;
 
   @override
   Future<List<Termin>> loadActions(TermineFilter filter) async {
-    return termine.where((termin) {
+    return (await termine).where((termin) {
       var von = DateTime(termin.beginn?.year, termin.beginn.month,
           termin.beginn.day, filter.von?.hour ?? 0, filter.von?.minute ?? 0);
       var bis = DateTime(termin.beginn.year, termin.beginn.month,
@@ -186,36 +185,38 @@ class DemoTermineService extends AbstractTermineService {
 
   @override
   Future<Termin> createAction(Termin termin, String token) async {
-    int highestId = termine.map((termin) => termin.id).reduce(max);
+    int highestId = (await termine).map((termin) => termin.id).reduce(max);
     termin.id = highestId + 1;
-    termine.add(termin);
+    (await termine).add(termin);
     return termin;
   ***REMOVED***
 
   @override
   Future<Termin> getActionWithDetails(int id) async {
-    return termine.firstWhere((termin) => termin.id == id);
+    return (await termine).firstWhere((termin) => termin.id == id);
   ***REMOVED***
 
   @override
   Future<void> saveAction(Termin newAction, String token) async {
+    var termine = await this.termine;
     termine[termine.indexWhere((oldAction) => oldAction.id == newAction.id)] =
         newAction;
   ***REMOVED***
 
   @override
-  deleteAction(Termin action, String token) {
+  deleteAction(Termin action, String token) async {
+    var termine = await this.termine;
     termine.removeAt(termine.indexWhere((a) => a.id == action.id));
   ***REMOVED***
 
-  joinAction(int id) {
-    var stored = termine.firstWhere((a) => a.id == id);
+  joinAction(int id) async {
+    var stored = (await termine).firstWhere((a) => a.id == id);
     if (!stored.participants.map((e) => e.id).contains(1))
       stored.participants.add(User(11, 'Ich', Colors.red));
   ***REMOVED***
 
-  leaveAction(int id) {
-    var stored = termine.firstWhere((a) => a.id == id);
+  leaveAction(int id) async {
+    var stored = (await termine).firstWhere((a) => a.id == id);
     if (stored.participants.map((e) => e.id).contains(1))
       stored.participants.remove(User(11, 'Ich', Colors.red));
   ***REMOVED***

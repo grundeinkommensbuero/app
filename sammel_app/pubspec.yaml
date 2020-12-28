@@ -47,6 +47,7 @@ dependencies:
   user_location: any
   permission_handler: ^5.0.0+hotfix.4
   poly: ^1.0.5
+  connectivity: ^2.0.2
 
 dev_dependencies:
   flutter_test:
