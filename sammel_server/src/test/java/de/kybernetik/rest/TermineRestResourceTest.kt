@@ -14,6 +14,7 @@ import de.kybernetik.database.benutzer.BenutzerDao
 import de.kybernetik.database.termine.Termin
 import de.kybernetik.database.termine.TermineDao
 import de.kybernetik.database.termine.Token
+import de.kybernetik.rest.PushMessageDtoTest.Companion.entschluessele
 import org.apache.http.auth.BasicUserPrincipal
 import org.junit.Before
 import org.junit.Rule
@@ -28,7 +29,6 @@ import de.kybernetik.services.PushService
 import java.time.LocalDateTime.now
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter.*
-import java.util.*
 import javax.ejb.EJBException
 import javax.ws.rs.core.Response
 import javax.ws.rs.core.SecurityContext
@@ -272,7 +272,7 @@ class TermineRestResourceTest {
             .sendePushNachrichtAnEmpfaenger(notification.capture(), data.capture(), empfaenger.capture())
         assertEquals(notification.firstValue.title, "Eine Aktion an der du teilnimmst hat sich geändert")
         assertEquals(notification.firstValue.body, "Sammeln am 22.10. in Frankfurter Allee Nord (null)")
-        assertTrue(empfaenger.firstValue.map { it.id }.containsAll( listOf(12L)))
+        assertTrue(empfaenger.firstValue.map { it.id }.containsAll(listOf(12L)))
     }
 
     @Test
@@ -375,8 +375,11 @@ class TermineRestResourceTest {
         verify(pushService)
             .sendePushNachrichtAnEmpfaenger(notification.capture(), data.capture(), empfaenger.capture())
         assertEquals(notification.firstValue.title, "Eine Aktion an der du teilnimmst wurde abgesagt")
-        assertEquals(notification.firstValue.body, "Sammeln am 22.10. in Frankfurter Allee Nord (null) wurde von der Ersteller*in gelöscht")
-        assertTrue(empfaenger.firstValue.map { it.id }.containsAll( listOf(12L)))
+        assertEquals(
+            notification.firstValue.body,
+            "Sammeln am 22.10. in Frankfurter Allee Nord (null) wurde von der Ersteller*in gelöscht"
+        )
+        assertTrue(empfaenger.firstValue.map { it.id }.containsAll(listOf(12L)))
     }
 
     @Test
@@ -490,8 +493,8 @@ class TermineRestResourceTest {
 
         val dataCaptor = argumentCaptor<Map<String, String>>()
         verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(any(), dataCaptor.capture(), any())
-        val data1 = entschluessele(dataCaptor.firstValue)
-        val data2 = entschluessele(dataCaptor.secondValue)
+        val data1 = deserialisiereJsonMap(entschluessele(dataCaptor.firstValue))
+        val data2 = deserialisiereJsonMap(entschluessele(dataCaptor.secondValue))
         assertEquals(data1["channel"], "action:2")
         assertNotNull(data1["timestamp"])
         assertEquals(data1["action"], 2.0)
@@ -600,8 +603,8 @@ class TermineRestResourceTest {
 
         val dataCaptor = argumentCaptor<Map<String, String>>()
         verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(any(), dataCaptor.capture(), any())
-        val data1 = entschluessele(dataCaptor.firstValue)
-        val data2 = entschluessele(dataCaptor.secondValue)
+        val data1 = deserialisiereJsonMap(entschluessele(dataCaptor.firstValue))
+        val data2 = deserialisiereJsonMap(entschluessele(dataCaptor.secondValue))
         assertEquals(data1["channel"], "action:2")
         assertNotNull(data1["timestamp"])
         assertEquals(data1["action"], 2.0)
@@ -614,13 +617,8 @@ class TermineRestResourceTest {
         assertEquals(data2["joins"], false)
     }
 
-    fun entschluessele(data: Map<String, String>?): Map<String, Any?> {
-        val payload = data!!["payload"]
-        val bytes: ByteArray = Base64.getDecoder().decode(payload)!!
-        val json: String = bytes.decodeToString()
-        @Suppress("UNCHECKED_CAST")
-        return GsonBuilder().serializeNulls().create().fromJson(json, Map::class.java) as Map<String, Any?>
-    }
+    fun deserialisiereJsonMap(json: String): Map<String, Any?> =
+        GsonBuilder().serializeNulls().create().fromJson<Map<String, Any?>>(json, Map::class.java)!!
 
     @Test
     fun test() {

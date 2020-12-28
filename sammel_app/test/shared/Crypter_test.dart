@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
-import 'dart:typed_data';
 
 import 'package:cryptography/cryptography.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -38,9 +36,8 @@ void main() {
   test('decrypt decrypts aes message', () {
     var decrypted = decrypt({
       'encrypted': 'AES',
-      'payload':
-          'ZagL61xqlbsQngSOPk+kwk+r+xtY4w45rznrQvJX4/yOrqMtFdZeb7Pz6jG15YrVw1Sagn8zb1/7xMvYvg/BXw==',
-      'nonce': 'bfgpdq3XdvnYI4cowQrjOQ=='
+      'payload': 'v88JF1h2K1BvYCAqsUZGs51T1cE1OmowBJ0m0ioNuMM=',
+      'nonce': 'f8U6qg+JFSFINyrBE/jhqQ=='
     });
     expect(decrypted['content'], plaintext);
   });
@@ -55,10 +52,10 @@ void main() {
   });
 
   test('create a secret key and nonce', () {
-    final cipher = CipherWithAppendedMac(aesCbc, Hmac(sha256));
-    List<int> bytes = cipher.newSecretKeySync().extractSync();
+    List<int> bytes = aesCbc.newSecretKeySync().extractSync();
     print(base64.encode(bytes));
-    print(base64Encode(cipher.newNonce().bytes));
+    print(base64Encode(aesCbc.newNonce().bytes));
+    print(base64.decode('jpp/xDmqUhxF3X+lv0hre/AMwryUxZtpscdKS2+ofsc=').length);
   });
 
   test('create cypher text', () async {
