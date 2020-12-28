@@ -14,8 +14,7 @@ Map<dynamic, dynamic> decrypt(dynamic data) {
   if (data['encrypted'] == 'AES') {
     if (data['payload'] == null) return {***REMOVED***
     final nonce = Nonce(base64.decode(data['nonce']));
-    final cipher = CipherWithAppendedMac(aesCbc, Hmac(sha256));
-    final decrypted = cipher.decryptSync(base64.decode(data['payload']),
+    final decrypted = aesCbc.decryptSync(base64.decode(data['payload']),
         secretKey: key, nonce: nonce);
     final decoded = jsonDecode(utf8.decode(decrypted));
     print('Verschlüsselte Push-Nachricht: ${decoded***REMOVED***');

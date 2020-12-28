@@ -11,6 +11,7 @@ import de.kybernetik.database.pushmessages.PushMessage
 import de.kybernetik.database.pushmessages.PushMessageDao
 import de.kybernetik.database.termine.Termin
 import de.kybernetik.database.termine.TermineDao
+import de.kybernetik.rest.PushMessageDtoTest.Companion.entschluessele
 import org.apache.http.auth.BasicUserPrincipal
 import org.junit.Before
 import org.junit.Test
@@ -24,7 +25,6 @@ import org.mockito.junit.MockitoRule
 import de.kybernetik.services.FirebaseService
 import de.kybernetik.services.FirebaseService.MissingMessageTarget
 import de.kybernetik.services.PushService
-import java.util.*
 import java.util.Collections.singletonList
 import javax.ws.rs.core.SecurityContext
 import kotlin.test.assertEquals
@@ -79,7 +79,7 @@ class PushNotificationResourceTest {
         val dataCaptor = argumentCaptor<Map<String, String>>()
         val empfaengerCaptor = argumentCaptor<List<String>>()
         verify(firebase, atLeastOnce()).sendePushNachrichtAnEmpfaenger(notificationCaptor.capture(), dataCaptor.capture(), empfaengerCaptor.capture())
-        assertTrue { entschluessele(dataCaptor.firstValue).isEmpty() ***REMOVED***
+        assertTrue { deserialisiereJsonMap(entschluessele(dataCaptor.firstValue)).isEmpty() ***REMOVED***
         assertEquals(notificationCaptor.firstValue, notification)
         assertEquals(empfaengerCaptor.firstValue, empfaenger)
     ***REMOVED***
@@ -109,9 +109,9 @@ class PushNotificationResourceTest {
         assertEquals(notificationArgument.firstValue.title, "Titel")
         assertEquals(notificationArgument.firstValue.body, "Inhalt")
         val entschluesselt = entschluessele(dataArgument.firstValue)
-        assertEquals(entschluesselt.size, 2)
-        assertEquals(entschluesselt["schlüssel1"], "inhalt1")
-        assertEquals(entschluesselt["schlüssel2"], "inhalt2")
+        assertEquals(deserialisiereJsonMap(entschluesselt).size, 2)
+        assertEquals(deserialisiereJsonMap(entschluesselt)["schlüssel1"], "inhalt1")
+        assertEquals(deserialisiereJsonMap(entschluesselt)["schlüssel2"], "inhalt2")
         assertEquals(empfaengerArgument.firstValue.size, 1)
         assertEquals(empfaengerArgument.firstValue[0], "Empfänger")
     ***REMOVED***
@@ -128,7 +128,7 @@ class PushNotificationResourceTest {
         val dataCaptor = argumentCaptor<Map<String, String>>()
         val empfaengerCaptor = argumentCaptor<String>()
         verify(firebase, atLeastOnce()).sendePushNachrichtAnTopic(notificationCaptor.capture(), dataCaptor.capture(), empfaengerCaptor.capture())
-        assertTrue { entschluessele(dataCaptor.firstValue).isEmpty() ***REMOVED***
+        assertTrue { deserialisiereJsonMap(entschluessele(dataCaptor.firstValue)).isEmpty() ***REMOVED***
         assertEquals(notificationCaptor.firstValue, notification)
         assertEquals(empfaengerCaptor.firstValue, kanal)
     ***REMOVED***
@@ -157,9 +157,9 @@ class PushNotificationResourceTest {
         assertEquals(notificationArgument.firstValue.title, "Titel")
         assertEquals(notificationArgument.firstValue.body, "Inhalt")
         val entschluesselt = entschluessele(dataArgument.firstValue)
-        assertEquals(entschluesselt.size, 2)
-        assertEquals(entschluesselt["schlüssel1"], "inhalt1")
-        assertEquals(entschluesselt["schlüssel2"], "inhalt2")
+        assertEquals(deserialisiereJsonMap(entschluesselt).size, 2)
+        assertEquals(deserialisiereJsonMap(entschluesselt)["schlüssel1"], "inhalt1")
+        assertEquals(deserialisiereJsonMap(entschluesselt)["schlüssel2"], "inhalt2")
         assertEquals(topicArgument.firstValue, "Kanal")
     ***REMOVED***
 
@@ -214,7 +214,7 @@ class PushNotificationResourceTest {
         val dataCaptor = argumentCaptor<Map<String, String>>()
         val teilnehmerCaptor = argumentCaptor<List<Benutzer>>()
         verify(pushService, atLeastOnce()).sendePushNachrichtAnEmpfaenger(notificationCaptor.capture(), dataCaptor.capture(), teilnehmerCaptor.capture())
-        assertTrue { entschluessele(dataCaptor.firstValue).isEmpty() ***REMOVED***
+        assertTrue { deserialisiereJsonMap(entschluessele(dataCaptor.firstValue)).isEmpty() ***REMOVED***
         assertEquals(notificationCaptor.firstValue, notification)
         assertEquals(teilnehmerCaptor.firstValue, teilnehmer)
     ***REMOVED***
@@ -276,11 +276,6 @@ class PushNotificationResourceTest {
         (assertNull((response!!.entity as List<PushMessageDto>)[0].recipients))
     ***REMOVED***
 
-    fun entschluessele(data: Map<String, String>?): Map<String, Any?> {
-        val payload = data!!["payload"]
-        val bytes: ByteArray = Base64.getDecoder().decode(payload)!!
-        val json: String = bytes.decodeToString()
-        @Suppress("UNCHECKED_CAST")
-        return GsonBuilder().serializeNulls().create().fromJson(json, Map::class.java) as Map<String, Any?>
-    ***REMOVED***
+    fun deserialisiereJsonMap(json: String): Map<String, Any?> =
+        GsonBuilder().serializeNulls().create().fromJson<Map<String, Any?>>(json, Map::class.java)!!
 ***REMOVED***
