@@ -52,8 +52,8 @@ class PullService extends BackendService implements PushReceiveService {
   Timer timer;
   MessageHandler onMessage = (_) async => Map();
 
-  PullService(AbstractUserService userService, [Backend backendMock])
-      : super(userService, backendMock) {
+  PullService(AbstractUserService userService, Backend backend)
+      : super(userService, backend) {
     timer = Timer.periodic(Duration(seconds: 10), (_) => pull());
   }
 
@@ -71,7 +71,7 @@ class PullService extends BackendService implements PushReceiveService {
         content.forEach((message) => onMessage(message));
     } catch (e, s) {
       ErrorService.handleError(e, s,
-          additional:
+          context:
               'Beim Abrufen von Nachrichten ist ein Fehler aufgetreten. Das regelmäßige Abrufen von Nachrichten wird deshalb deaktiviert');
       timer.cancel();
     }

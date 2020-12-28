@@ -132,7 +132,7 @@ open class TermineRestResource {
     @RolesAllowed("named")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
-    open fun deleteAction(actionAndToken: ActionWithTokenDto): Response {
+    open fun loescheAktion(actionAndToken: ActionWithTokenDto): Response {
         if (actionAndToken.action?.id == null)
             return noValidActionResponse
 
@@ -145,7 +145,7 @@ open class TermineRestResource {
         try {
             val termin = actionAndToken.action!!.convertToTermin()
             val teilnehmer = dao.getTermin(actionAndToken.action!!.id!!)!!.teilnehmer
-            dao.deleteAction(termin)
+            dao.loescheAktion(termin)
             if (tokenFromDb != null) dao.deleteToken(Token(actionAndToken.action!!.id!!, actionAndToken.token!!))
             termin.teilnehmer = teilnehmer
             informiereUeberLoeschung(termin)

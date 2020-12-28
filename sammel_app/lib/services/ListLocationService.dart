@@ -8,16 +8,15 @@ import 'UserService.dart';
 abstract class AbstractListLocationService extends BackendService {
   Future<List<ListLocation>> getActiveListLocations();
 
-  AbstractListLocationService(AbstractUserService userService,
-      [Backend backendMock])
-      : super(userService, backendMock);
+  AbstractListLocationService(AbstractUserService userService, Backend backend)
+      : super(userService, backend);
 }
 
 class ListLocationService extends AbstractListLocationService {
   List<ListLocation> cache;
 
-  ListLocationService(AbstractUserService userService, [Backend backendMock])
-      : super(userService, backendMock);
+  ListLocationService(AbstractUserService userService, Backend backend)
+      : super(userService, backend);
 
   @override
   Future<List<ListLocation>> getActiveListLocations() async {
@@ -27,7 +26,7 @@ class ListLocationService extends AbstractListLocationService {
       response = await get('/service/listlocations/actives');
     } catch (e, s) {
       ErrorService.handleError(e, s,
-          additional: 'Listen-Orte konnten nicht geladen werden.');
+          context: 'Listen-Orte konnten nicht geladen werden.');
       return [];
     }
     final listLocations = (response.body as List)

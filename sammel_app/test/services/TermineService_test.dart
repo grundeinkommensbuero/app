@@ -74,9 +74,10 @@ void main() {
     });
 
     test('stores new action', () async {
-      expect(service.termine[0].typ, 'Sammeln');
-      expect(service.termine[0].ort.kiez, 'Frankfurter Allee Nord');
-      expect(service.termine[0].details.kontakt, 'Ruft mich an unter 01234567');
+      var termine = await service.termine;
+      expect(termine[0].typ, 'Sammeln');
+      expect(termine[0].ort.kiez, 'Frankfurter Allee Nord');
+      expect(termine[0].details.kontakt, 'Ruft mich an unter 01234567');
 
       await service.saveAction(
           TerminTestDaten.einTermin()
@@ -86,45 +87,50 @@ void main() {
             ..details = TerminDetails('bla', 'blub', 'Test123'),
           '');
 
-      expect(service.termine[0].typ, 'Infoveranstaltung');
-      expect(service.termine[0].ort.kiez, 'Plänterwald');
-      expect(service.termine[0].details.kontakt, 'Test123');
+      termine = await service.termine;
+      expect(termine[0].typ, 'Infoveranstaltung');
+      expect(termine[0].ort.kiez, 'Plänterwald');
+      expect(termine[0].details.kontakt, 'Test123');
     });
 
     test('joinAction adds user to action', () async {
-      service.termine[0].participants = [rosa()];
+      var termine = await service.termine;
+      termine[0].participants = [rosa()];
 
       await service.joinAction(1);
 
-      expect(service.termine[0].participants.map((e) => e.id),
-          containsAll([11, 12]));
+      termine = await service.termine;
+      expect(termine[0].participants.map((e) => e.id), containsAll([11, 12]));
     });
 
     test('joinAction ignores if user already partakes', () async {
-      service.termine[0].participants = [rosa(), karl()];
+      var termine = await service.termine;
+      termine[0].participants = [rosa(), karl()];
 
       await service.joinAction(1);
 
-      expect(service.termine[0].participants.map((e) => e.id),
-          containsAll([11, 12]));
+      termine = await service.termine;
+      expect(termine[0].participants.map((e) => e.id), containsAll([11, 12]));
     });
 
     test('leaveAction removes user from action', () async {
-      service.termine[0].participants = [rosa(), karl()];
+      var termine = await service.termine;
+      termine[0].participants = [rosa(), karl()];
 
       await service.leaveAction(1);
 
-      expect(
-          service.termine[0].participants.map((e) => e.id), containsAll([12]));
+      termine = await service.termine;
+      expect(termine[0].participants.map((e) => e.id), containsAll([12]));
     });
 
     test('leaveAction ignores if user doesnt partake', () async {
-      service.termine[0].participants = [rosa()];
+      var termine = await service.termine;
+      termine[0].participants = [rosa()];
 
       await service.leaveAction(1);
 
-      expect(
-          service.termine[0].participants.map((e) => e.id), containsAll([12]));
+      termine = await service.termine;
+      expect(termine[0].participants.map((e) => e.id), containsAll([12]));
     });
   });
 

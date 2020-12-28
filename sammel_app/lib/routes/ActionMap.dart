@@ -45,7 +45,7 @@ class ActionMapState extends State<ActionMap> {
   @override
   void initState() {
     super.initState();
-    Permission.location.request().then((status) =>
+    Permission.locationWhenInUse.request().then((status) =>
         setState(() => locationPermissionGranted = status.isGranted));
   }
 

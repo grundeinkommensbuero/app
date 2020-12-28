@@ -255,13 +255,13 @@ class TermineDaoTest {
     }
 
     @Test
-    fun deleteActionRemovesActionInDb() {
+    fun loescheAktionRemovesActionInDb() {
         val termin = Termin(1, beginn, ende, "Frankfurter Allee Nord2", sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
         val terminFromDb = Termin(1, beginn, ende, "Frankfurter Allee Nord", sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
 
         whenever(entityManager.find(Termin::class.java, 1L)).thenReturn(terminFromDb)
 
-        dao.deleteAction(termin)
+        dao.loescheAktion(termin)
 
         verify(entityManager, atLeastOnce()).find(Termin::class.java, 1L)
         verify(entityManager, atLeastOnce()).remove(terminFromDb)
@@ -269,22 +269,22 @@ class TermineDaoTest {
     }
 
     @Test(expected = DatabaseException::class)
-    fun deleteActionThrowsNotFoundExceptionIfActionDoesNotExist() {
+    fun loescheAktionThrowsNotFoundExceptionIfActionDoesNotExist() {
         val termin = Termin(1, beginn, ende, "Frankfurter Allee Nord", sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
 
         whenever(entityManager.find(Termin::class.java, 1L)).thenThrow(IllegalArgumentException())
 
-        dao.deleteAction(termin)
+        dao.loescheAktion(termin)
     }
 
     @Test(expected = DatabaseException::class)
-    fun deleteActionThrowsNotFoundExceptionIfDeletionFails() {
+    fun loescheAktionThrowsNotFoundExceptionIfDeletionFails() {
         val termin = Termin(1, beginn, ende, "Frankfurter Allee Nord2", sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
         val actionFromDb = Termin(1, beginn, ende, "Frankfurter Allee Nord", sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
         whenever(entityManager.find(Termin::class.java, 1L)).thenReturn(actionFromDb)
         whenever(entityManager.remove(actionFromDb)).thenThrow(IllegalArgumentException())
 
-        dao.deleteAction(termin)
+        dao.loescheAktion(termin)
     }
 
     @Test

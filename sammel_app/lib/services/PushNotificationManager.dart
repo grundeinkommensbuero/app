@@ -23,8 +23,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
   AbstractUserService userService;
 
   PushNotificationManager(
-      this.storageService, this.userService, firebaseService,
-      [Backend backend]) {
+      this.storageService, this.userService, firebaseService, Backend backend) {
     createPushListener(firebaseService, backend);
   }
 
@@ -112,7 +111,8 @@ class DemoPushNotificationManager implements AbstractPushNotificationManager {
   DemoPushNotificationManager(this.pushService);
 
   @override
-  void register_message_callback(String type, PushNotificationListener callback) {
+  void register_message_callback(
+      String type, PushNotificationListener callback) {
     pushService.stream
         .where((data) => data.type == type)
         .listen((data) => callback.receive_message(data.toJson()));

@@ -20,8 +20,8 @@ abstract class AbstractPushSendService extends BackendService {
 }
 
 class PushSendService extends AbstractPushSendService {
-  PushSendService(AbstractUserService userService, [Backend backendMock])
-      : super(userService, backendMock);
+  PushSendService(AbstractUserService userService, Backend backend)
+      : super(userService, backend);
 
   pushToDevices(List<String> recipients, PushData data,
       PushNotification notification) async {
@@ -37,7 +37,7 @@ class PushSendService extends AbstractPushSendService {
               .toJson()));
     } catch (e, s) {
       ErrorService.handleError(e, s,
-          additional: 'Push-Nachricht an Geräte konnte nicht versandt werden');
+          context: 'Push-Nachricht an Geräte konnte nicht versandt werden');
     }
   }
 
@@ -52,11 +52,12 @@ class PushSendService extends AbstractPushSendService {
           jsonEncode(PushMessage(data, notification).toJson()));
     } catch (e, s) {
       ErrorService.handleError(e, s,
-          additional: 'Push-Nachricht an Thema konnte nicht versandt werden');
+          context: 'Push-Nachricht an Thema konnte nicht versandt werden');
     }
   }
 
-  pushToAction(int actionId, PushData data, PushNotification notification) {
+  pushToAction(
+      int actionId, PushData data, PushNotification notification) async {
     if (actionId == null) {
       throw MissingTargetError(
           "Für Push-Nachrichten an Aktionen muss die Aktions-ID angegeben werden.");
@@ -65,11 +66,11 @@ class PushSendService extends AbstractPushSendService {
     print(
         'Push-Message: ${jsonEncode(PushMessage(data, notification).toJson())}');
     try {
-      post('service/push/action/$actionId',
+      await post('service/push/action/$actionId',
           jsonEncode(PushMessage(data, notification).toJson()));
     } catch (e, s) {
       ErrorService.handleError(e, s,
-          additional: 'Push-Nachricht an Aktion konnte nicht versandt werden.');
+          context: 'Push-Nachricht an Aktion konnte nicht versandt werden.');
     }
   }
 }

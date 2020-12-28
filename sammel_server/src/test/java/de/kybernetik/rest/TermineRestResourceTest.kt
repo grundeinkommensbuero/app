@@ -302,17 +302,17 @@ class TermineRestResourceTest {
     }
 
     @Test
-    fun `deleteAction loescht Aktion und Token in Db`() {
+    fun `loescheAktion loescht Aktion und Token in Db`() {
         whenever(dao.getTermin(1L)).thenReturn(terminMitTeilnehmerMitDetails())
         val terminDto = terminDto()
 
         whenever(dao.loadToken(any())).thenReturn(Token(1L, "token"))
-        val response: Response = resource.deleteAction(ActionWithTokenDto(terminDto, "token"))
+        val response: Response = resource.loescheAktion(ActionWithTokenDto(terminDto, "token"))
 
         assertEquals(response.status, 200)
 
         val argCaptor = argumentCaptor<Termin>()
-        verify(dao, times(1)).deleteAction(argCaptor.capture())
+        verify(dao, times(1)).loescheAktion(argCaptor.capture())
         val termin = argCaptor.firstValue
         assertEquals(termin.id, terminDto.id)
 
@@ -323,24 +323,24 @@ class TermineRestResourceTest {
     }
 
     @Test
-    fun `deleteAction liefert 404 wenn Aktion nicht gefunden wird`() {
+    fun `loescheAktion liefert 404 wenn Aktion nicht gefunden wird`() {
         whenever(dao.getTermin(1L)).thenReturn(terminMitTeilnehmerMitDetails())
         val terminDto = terminDto()
 
-        whenever(dao.deleteAction(any())).thenThrow(DatabaseException(""))
+        whenever(dao.loescheAktion(any())).thenThrow(DatabaseException(""))
         whenever(dao.loadToken(any())).thenReturn(Token(1L, "token"))
-        val response: Response = resource.deleteAction(ActionWithTokenDto(terminDto, "token"))
+        val response: Response = resource.loescheAktion(ActionWithTokenDto(terminDto, "token"))
 
         assertEquals(response.status, 404)
     }
 
     @Test
-    fun `deleteAction prueft Token`() {
+    fun `loescheAktion prueft Token`() {
         whenever(dao.getTermin(1L)).thenReturn(terminMitTeilnehmerMitDetails())
         val terminDto = terminDto()
 
         whenever(dao.loadToken(1L)).thenReturn(Token(1L, "token"))
-        val response: Response = resource.deleteAction(ActionWithTokenDto(terminDto, "token"))
+        val response: Response = resource.loescheAktion(ActionWithTokenDto(terminDto, "token"))
 
         verify(dao, times(1)).loadToken(1L)
 
@@ -348,26 +348,26 @@ class TermineRestResourceTest {
     }
 
     @Test
-    fun `deleteAction liefert 403 bei falschem Token`() {
+    fun `loescheAktion liefert 403 bei falschem Token`() {
         val terminDto = terminDto()
         whenever(dao.loadToken(1L)).thenReturn(Token(1L, "rightToken"))
 
-        val response: Response = resource.deleteAction(ActionWithTokenDto(terminDto, "wrongToken"))
+        val response: Response = resource.loescheAktion(ActionWithTokenDto(terminDto, "wrongToken"))
 
         verify(dao, times(1)).loadToken(1L)
-        verify(dao, never()).deleteAction(any())
+        verify(dao, never()).loescheAktion(any())
         verify(dao, never()).deleteToken(any())
 
         assertEquals(response.status, 403)
     }
 
     @Test
-    fun `deleteAction informiert Teilnehmer`() {
+    fun `loescheAktion informiert Teilnehmer`() {
         whenever(dao.loadToken(1L)).thenReturn(Token(1L, "rightToken"))
         whenever(dao.getTermin(1L)).thenReturn(terminMitTeilnehmerMitDetails())
         val terminDto = terminDto()
 
-        resource.deleteAction(ActionWithTokenDto(terminDto, "rightToken"))
+        resource.loescheAktion(ActionWithTokenDto(terminDto, "rightToken"))
 
         val notification = argumentCaptor<PushNotificationDto>()
         val data = argumentCaptor<Map<String, String>>()
@@ -380,14 +380,14 @@ class TermineRestResourceTest {
     }
 
     @Test
-    fun `deleteAction loescht Aktion auch ohne Token wenn Aktion keinen Token in Db hat`() {
+    fun `loescheAktion loescht Aktion auch ohne Token wenn Aktion keinen Token in Db hat`() {
         whenever(dao.getTermin(1L)).thenReturn(terminMitTeilnehmerMitDetails())
         val terminDto = terminDto()
 
         whenever(dao.loadToken(1L)).thenReturn(null)
-        val response: Response = resource.deleteAction(ActionWithTokenDto(terminDto, "token"))
+        val response: Response = resource.loescheAktion(ActionWithTokenDto(terminDto, "token"))
 
-        verify(dao, times(1)).deleteAction(any())
+        verify(dao, times(1)).loescheAktion(any())
         verify(dao, never()).deleteToken(any())
 
         assertEquals(response.status, 200)

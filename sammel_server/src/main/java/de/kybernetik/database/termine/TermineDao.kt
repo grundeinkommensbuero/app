@@ -67,7 +67,7 @@ open class TermineDao {
 
     open fun erstelleNeuenTermin(termin: Termin): Termin {
         termin.details!!.termin = termin
-        LOG.debug("Speichere Aktion ${termin}")
+        LOG.debug("Speichere Aktion ${termin.id}")
         entityManager.persist(termin)
         entityManager.flush()
         return termin
@@ -75,7 +75,7 @@ open class TermineDao {
     }
 
     @Throws(DatabaseException::class)
-    open fun deleteAction(action: Termin) {
+    open fun loescheAktion(action: Termin) {
         val actionFromDb: Termin
         try {
             actionFromDb = entityManager.find(Termin::class.java, action.id)

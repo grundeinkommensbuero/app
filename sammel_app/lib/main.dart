@@ -13,6 +13,8 @@ import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 
+import 'services/BackendService.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp());
@@ -27,22 +29,24 @@ const bool clearButton = false;
 class MyApp extends StatelessWidget {
   static var firebaseService = FirebaseReceiveService();
   static var storageService = StorageService();
+  static final backend = Backend();
   static final userService = demoMode
       ? DemoUserService()
-      : UserService(storageService, firebaseService);
+      : UserService(storageService, firebaseService, backend);
   static var pushService = demoMode
       ? DemoPushSendService(userService)
-      : PushSendService(userService);
+      : PushSendService(userService, backend);
   static var pushNotificationManager = demoMode
       ? DemoPushNotificationManager(pushService)
-      : PushNotificationManager(storageService, userService, firebaseService);
+      : PushNotificationManager(
+          storageService, userService, firebaseService, backend);
   static var stammdatenService = StammdatenService();
   var termineService = demoMode
       ? DemoTermineService(userService, stammdatenService)
-      : TermineService(userService, stammdatenService);
+      : TermineService(userService, stammdatenService, backend);
   static var listLocationService = demoMode
       ? DemoListLocationService(userService)
-      : ListLocationService(userService);
+      : ListLocationService(userService, backend);
   static var chatMessageService =
       ChatMessageService(storageService, pushNotificationManager);
   static var geoService = GeoService();

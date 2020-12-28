@@ -81,7 +81,7 @@ void main() {
 
     test('adds optional message to Error text', () {
       ErrorService.handleError(RestFehler('Nachricht. '), StackTrace.empty,
-          additional: 'Zusätzliche Info');
+          context: 'Zusätzliche Info');
 
       expect(ErrorService.messageQueue.length, 1);
       expect(
