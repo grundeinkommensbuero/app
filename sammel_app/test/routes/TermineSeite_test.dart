@@ -22,7 +22,6 @@ import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 
-import '../model/Kiez_test.dart';
 import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';
@@ -44,7 +43,9 @@ void main() {
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
     when(_termineService.loadActions(any)).thenAnswer((_) async => []);
-    when(_stammdatenService.kieze).thenAnswer((_) async => [ffAlleeNord(), tempVorstadt(), plaenterwald()]);
+    when(_stammdatenService.kieze).thenAnswer(
+        (_) async => [ffAlleeNord(), tempVorstadt(), plaenterwald()]);
+    ErrorService.displayedTypes = [];
 
     termineSeiteWidget = MultiProvider(
         providers: [
@@ -593,7 +594,7 @@ void main() {
           LatLng(52.49653, 13.43762));
 
       when(_termineService.createAction(any, any))
-          .thenThrow(RestFehler('Fehlerbeschreibung. '));
+          .thenThrow(RestFehler('Fehlerbeschreibung.'));
 
       await tester.tap(find.byKey(Key('action editor finish button')));
       await tester.pumpAndSettle();
@@ -601,7 +602,7 @@ void main() {
       expect(find.byKey(Key('error dialog')), findsOneWidget);
       expect(
           find.text(
-              'Fehlerbeschreibung. Aktion konnte nicht erzeugt werden. \nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com'),
+              'Aktion konnte nicht erzeugt werden. Fehlerbeschreibung. \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com'),
           findsOneWidget);
     });
   });
@@ -1069,11 +1070,11 @@ void main() {
             .thenThrow(RestFehler('message'));
 
         await tester.tap(find.byKey(Key('delete confirmation yes button')));
-        await tester.pump();
+        await tester.pumpAndSettle(Duration(seconds: 10));
 
         expect(find.byKey(Key('error dialog')), findsOneWidget);
-        expect(
-            find.text('Aktion konnte nicht gelöscht werden'), findsOneWidget);
+        expect(find.text('Aktion konnte nicht gelöscht werden. message \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com'),
+            findsOneWidget);
       });
 
       testWidgets('shows alert popup on AuthFehler',
@@ -1098,7 +1099,7 @@ void main() {
 
         expect(find.byKey(Key('error dialog')), findsOneWidget);
         expect(
-            find.text('Aktion konnte nicht gelöscht werden'), findsOneWidget);
+            find.text('Aktion konnte nicht gelöscht werden. message \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com'), findsOneWidget);
       });
     });
   });

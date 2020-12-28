@@ -20,7 +20,8 @@ void main() {
   runApp(MyApp());
 }
 
-const Mode mode = Mode.DEMO;
+const Mode mode = Mode.LOCAL;
+const version = '0.3.4+12';
 
 // Debug
 const bool pullMode = false;
@@ -29,7 +30,7 @@ const bool clearButton = false;
 class MyApp extends StatelessWidget {
   static var firebaseService = FirebaseReceiveService();
   static var storageService = StorageService();
-  static final backend = Backend();
+  static final backend = Backend(version);
   static final userService = demoMode
       ? DemoUserService()
       : UserService(storageService, firebaseService, backend);

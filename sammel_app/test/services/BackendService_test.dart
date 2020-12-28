@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/services/AuthFehler.dart';
 import 'package:sammel_app/services/BackendService.dart';
@@ -46,12 +47,14 @@ main() {
 
       group('uses app credentials if appAuth flag is set', () {
         setUp(() {
-          when(backend.get(any, any))
-              .thenAnswer((_) async => HttpClientResponseBodyMock(null, 200));
-          when(backend.post(any, any, any))
-              .thenAnswer((_) async => HttpClientResponseBodyMock(null, 200));
-          when(backend.delete(any, any, any))
-              .thenAnswer((_) async => HttpClientResponseBodyMock(null, 200));
+          var httpClientResponseBodyMock =
+              HttpClientResponseBodyMock(null, 200);
+          when(backend.get(any, any)).thenAnswer((_) =>
+              Future<HttpClientResponseBody>.value(httpClientResponseBodyMock));
+          when(backend.post(any, any, any)).thenAnswer((_) =>
+              Future<HttpClientResponseBody>.value(httpClientResponseBodyMock));
+          when(backend.delete(any, any, any)).thenAnswer((_) =>
+              Future<HttpClientResponseBody>.value(httpClientResponseBodyMock));
         });
 
         test('with get requests', () async {
@@ -75,12 +78,15 @@ main() {
 
       group('uses user credentials if appAuth flag is not set or false', () {
         setUp(() {
-          when(backend.get(any, any))
-              .thenAnswer((_) async => HttpClientResponseBodyMock(null, 200));
-          when(backend.post(any, any, any))
-              .thenAnswer((_) async => HttpClientResponseBodyMock(null, 200));
-          when(backend.delete(any, any, any))
-              .thenAnswer((_) async => HttpClientResponseBodyMock(null, 200));
+          when(backend.get(any, any)).thenAnswer((_) =>
+              Future<HttpClientResponseBody>.value(
+                  HttpClientResponseBodyMock(null, 200)));
+          when(backend.post(any, any, any)).thenAnswer((_) =>
+              Future<HttpClientResponseBody>.value(
+                  HttpClientResponseBodyMock(null, 200)));
+          when(backend.delete(any, any, any)).thenAnswer((_) =>
+              Future<HttpClientResponseBody>.value(
+                  HttpClientResponseBodyMock(null, 200)));
         });
 
         test('with get requests', () async {
@@ -128,22 +134,25 @@ main() {
       });
 
       test('for get', () async {
-        when(mock.get(any, any)).thenAnswer(
-            (_) async => HttpClientResponseBodyMock('response', 200));
+        when(mock.get(any, any)).thenAnswer((_) =>
+            Future<HttpClientResponseBody>.value(
+                HttpClientResponseBodyMock('response', 200)));
         await service.get('any URL');
         verify(mock.get('any URL', any)).called(1);
       });
 
       test('for post', () async {
-        when(mock.post(any, any, any)).thenAnswer(
-            (_) async => HttpClientResponseBodyMock('response', 200));
+        when(mock.post(any, any, any)).thenAnswer((_) =>
+            Future<HttpClientResponseBody>.value(
+                HttpClientResponseBodyMock('response', 200)));
         await service.post('any URL', 'any data');
         verify(mock.post('any URL', 'any data', any)).called(1);
       });
 
       test('for delete', () async {
-        when(mock.delete(any, any, any)).thenAnswer(
-            (_) async => HttpClientResponseBodyMock('response', 200));
+        when(mock.delete(any, any, any)).thenAnswer((_) =>
+            Future<HttpClientResponseBody>.value(
+                HttpClientResponseBodyMock('response', 200)));
         await service.delete('any URL', 'any data');
         verify(mock.delete('any URL', 'any data', any)).called(1);
       });
@@ -174,15 +183,17 @@ main() {
     });
 
     test('throws rest error on non-200 and non-403 status code', () {
-      when(mock.get(any, any)).thenAnswer(
-          (_) async => HttpClientResponseBodyMock('Dies ist ein Fehler', 400));
+      when(mock.get(any, any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(
+              HttpClientResponseBodyMock('Dies ist ein Fehler', 400)));
 
       expect(() => service.get('anyUrl'), throwsA((e) => e is RestFehler));
     });
 
     test('throws auth error on 403 status code', () {
-      when(mock.get(any, any)).thenAnswer(
-          (_) async => HttpClientResponseBodyMock('Dies ist ein Fehler', 403));
+      when(mock.get(any, any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(
+              HttpClientResponseBodyMock('Dies ist ein Fehler', 403)));
 
       expect(() => service.get('anyUrl'), throwsA((e) => e is AuthFehler));
     });

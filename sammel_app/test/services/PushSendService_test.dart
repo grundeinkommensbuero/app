@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/services/PushSendService.dart';
@@ -31,8 +32,9 @@ main() {
     });
 
     test('pushToDevices sendet Push-Nachricht an Server', () async {
-      when(backendMock.post(any, any, any))
-          .thenAnswer((_) async => HttpClientResponseBodyMock(null, 200));
+      when(backendMock.post(any, any, any)).thenAnswer((_) async =>
+          Future<HttpClientResponseBody>.value(
+              HttpClientResponseBodyMock(null, 200)));
       await service.pushToDevices(
           ['Empfänger'], PushData(), PushNotification('Titel', 'Inhalt'));
 
@@ -56,8 +58,9 @@ main() {
     });
 
     test('pushToTopic sendet Push-Nachricht an Server', () async {
-      when(backendMock.post(any, any, any))
-          .thenAnswer((_) async => HttpClientResponseBodyMock(null, 200));
+      when(backendMock.post(any, any, any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(
+              HttpClientResponseBodyMock(null, 200)));
       await service.pushToTopic(
           'Thema', PushData(), PushNotification('Titel', 'Inhalt'));
 
