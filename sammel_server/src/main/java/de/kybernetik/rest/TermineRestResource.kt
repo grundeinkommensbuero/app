@@ -301,7 +301,7 @@ open class TermineRestResource {
 
     open fun informiereUeberTeilnahme(benutzer: Benutzer, aktion: Termin) {
         val name = if (benutzer.name.isNullOrBlank()) "Jemand" else benutzer.name!!
-        val pushMessage = PushMessageDto(
+        var pushMessage = PushMessageDto(
             PushNotificationDto(
                 "Verstärkung für deine Aktion",
                 "$name ist deiner Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))} beigetreten"
@@ -318,24 +318,25 @@ open class TermineRestResource {
         val ersteller = aktion.teilnehmer[0]
 
         LOG.debug("Informiere Ersteller ${ersteller.id} von Aktion ${aktion.id}")
-        pushService.sendePushNachrichtAnEmpfaenger(pushMessage.notification, pushMessage, listOf(ersteller)
-        )
+        pushService.sendePushNachrichtAnEmpfaenger(pushMessage, listOf(ersteller))
 
         val teilnehmer = aktion.teilnehmer.minus(ersteller)
         LOG.debug("Informiere restliche Teilnehmer ${teilnehmer.map { it.id }} von Aktion ${aktion.id}")
-        pushMessage.notification =
+        pushMessage = PushMessageDto(
             PushNotificationDto(
                 "Verstärkung für eure Aktion",
                 "$name ist der Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))} beigetreten, an der du teilnimmst"
-            )
+            ),
+            pushMessage.data
+        )
         val restlicheTeilnehmer = aktion.teilnehmer.minus(ersteller)
 
-        pushService.sendePushNachrichtAnEmpfaenger(pushMessage.notification, pushMessage, restlicheTeilnehmer)
+        pushService.sendePushNachrichtAnEmpfaenger(pushMessage, restlicheTeilnehmer)
     }
 
     open fun informiereUeberAbsage(benutzer: Benutzer, aktion: Termin) {
         val name = if (benutzer.name.isNullOrBlank()) "Jemand" else benutzer.name!!
-        val pushMessage = PushMessageDto(
+        var pushMessage = PushMessageDto(
             PushNotificationDto(
                 "Absage bei deiner Aktion",
                 "$name nimmt nicht mehr Teil an deiner Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))}"
@@ -351,20 +352,18 @@ open class TermineRestResource {
         val ersteller = aktion.teilnehmer[0]
 
         LOG.debug("Informiere Ersteller ${ersteller.id} von Aktion ${aktion.id}")
-        pushService.sendePushNachrichtAnEmpfaenger(
-            pushMessage.notification,
-            pushMessage,
-            listOf(ersteller)
-        )
+        pushService.sendePushNachrichtAnEmpfaenger(pushMessage, listOf(ersteller))
 
-        pushMessage.notification = PushNotificationDto(
-            "Absage bei eurer Aktion",
-            "$name hat die Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))} verlassen, an der du teilnimmst"
+        pushMessage = PushMessageDto(
+            PushNotificationDto(
+                "Absage bei eurer Aktion",
+                "$name hat die Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))} verlassen, an der du teilnimmst"
+            ), pushMessage.data
         )
         val teilnehmer = aktion.teilnehmer.minus(ersteller)
 
         LOG.debug("Informiere restliche Teilnehmer ${teilnehmer.map { it.id }} von Aktion ${aktion.id}")
-        pushService.sendePushNachrichtAnEmpfaenger(pushMessage.notification, pushMessage, teilnehmer)
+        pushService.sendePushNachrichtAnEmpfaenger(pushMessage, teilnehmer)
     }
 
     open fun informiereUeberAenderung(aktion: Termin) {
@@ -382,7 +381,7 @@ open class TermineRestResource {
         val teilnehmer = aktion.teilnehmer.subList(1, aktion.teilnehmer.size)
         if (teilnehmer.size > 0)
             LOG.debug("Informiere Teilnehmer ${teilnehmer.map { it.id }} von Aktion ${aktion.id} über Änderungen")
-        pushService.sendePushNachrichtAnEmpfaenger(pushMessage.notification, pushMessage, teilnehmer)
+        pushService.sendePushNachrichtAnEmpfaenger(pushMessage, teilnehmer)
     }
 
     open fun informiereUeberLoeschung(aktion: Termin) {
@@ -400,7 +399,7 @@ open class TermineRestResource {
         val teilnehmer = aktion.teilnehmer.subList(1, aktion.teilnehmer.size)
         if (teilnehmer.size > 0)
             LOG.debug("Informiere Teilnehmer ${teilnehmer.map { it.id }} von Aktion ${aktion.id} über Löschung")
-        pushService.sendePushNachrichtAnEmpfaenger(pushMessage.notification, pushMessage, teilnehmer)
+        pushService.sendePushNachrichtAnEmpfaenger(pushMessage, teilnehmer)
     }
 }
 

@@ -53,7 +53,7 @@ class PushServiceTest {
 
     @Test
     fun `sendePushNachrichtAnEmpfaenger ignoriert leere Anfragen`() {
-        service.sendePushNachrichtAnEmpfaenger(PushNotificationDto(), PushMessageDto(), emptyList())
+        service.sendePushNachrichtAnEmpfaenger(PushMessageDto(), emptyList())
 
         verify(firebaseService, never()).sendePushNachrichtAnEmpfaenger(any(), any(), any())
         verify(pushDao, never()).speicherePushMessageFuerEmpfaenger(any(), any(), any())
@@ -67,8 +67,8 @@ class PushServiceTest {
         whenever(benutzerDao.getFirebaseKeys(teilnehmerInnen)).thenReturn(firebaseKeys)
 
         val notification = PushNotificationDto()
-        val data = PushMessageDto()
-        service.sendePushNachrichtAnEmpfaenger(notification, data, teilnehmerInnen)
+        val data = PushMessageDto(notification)
+        service.sendePushNachrichtAnEmpfaenger(data, teilnehmerInnen)
 
         verify(firebaseService, times(1))
                 .sendePushNachrichtAnEmpfaenger(notification, emptyMap(), firebaseKeys)
@@ -79,7 +79,7 @@ class PushServiceTest {
         val teilnehmer = listOf(karl(), rosa())
         whenever(benutzerDao.getFirebaseKeys(teilnehmer)).thenReturn(emptyList())
 
-        service.sendePushNachrichtAnEmpfaenger(PushNotificationDto(), PushMessageDto(), teilnehmer)
+        service.sendePushNachrichtAnEmpfaenger(PushMessageDto(PushNotificationDto()), teilnehmer)
 
         verify(firebaseService, never()).sendePushNachrichtAnEmpfaenger(any(), any(), any())
     }
@@ -90,7 +90,7 @@ class PushServiceTest {
         whenever(benutzerDao.getBenutzerOhneFirebase(teilnehmerInnen)).thenReturn(teilnehmerInnen)
 
         val notification = PushNotificationDto()
-        service.sendePushNachrichtAnEmpfaenger(notification, PushMessageDto(), teilnehmerInnen)
+        service.sendePushNachrichtAnEmpfaenger(PushMessageDto(notification), teilnehmerInnen)
 
         val notificationCaptor = argumentCaptor<PushNotificationDto>()
         val teilnehmerCaptor = argumentCaptor<List<Benutzer>>()
@@ -107,7 +107,7 @@ class PushServiceTest {
         val teilnehmer = listOf(karl(), rosa())
         whenever(benutzerDao.getBenutzerOhneFirebase(teilnehmer)).thenReturn(emptyList())
 
-        service.sendePushNachrichtAnEmpfaenger(PushNotificationDto(), PushMessageDto(), teilnehmer)
+        service.sendePushNachrichtAnEmpfaenger(PushMessageDto(PushNotificationDto()), teilnehmer)
 
         verify(pushDao, never()).speicherePushMessageFuerEmpfaenger(any(), any(), any())
     }
