@@ -6,7 +6,6 @@ import TestdatenVorrat.Companion.terminDto
 import TestdatenVorrat.Companion.terminMitTeilnehmerMitDetails
 import TestdatenVorrat.Companion.terminOhneTeilnehmerMitDetails
 import TestdatenVorrat.Companion.terminOhneTeilnehmerOhneDetails
-import com.google.gson.GsonBuilder
 import com.nhaarman.mockitokotlin2.*
 import de.kybernetik.database.DatabaseException
 import de.kybernetik.database.benutzer.Benutzer
@@ -264,13 +263,12 @@ class TermineRestResourceTest {
 
         resource.aktualisiereTermin(ActionWithTokenDto(termin, "token"))
 
-        val notification = argumentCaptor<PushNotificationDto>()
-        val data = argumentCaptor<PushMessageDto>()
+        val nachricht = argumentCaptor<PushMessageDto>()
         val empfaenger = argumentCaptor<List<Benutzer>>()
         verify(pushService)
-            .sendePushNachrichtAnEmpfaenger(notification.capture(), data.capture(), empfaenger.capture())
-        assertEquals(notification.firstValue.title, "Eine Aktion an der du teilnimmst hat sich geändert")
-        assertEquals(notification.firstValue.body, "Sammeln am 22.10. in Frankfurter Allee Nord (null)")
+            .sendePushNachrichtAnEmpfaenger(nachricht.capture(), empfaenger.capture())
+        assertEquals(nachricht.firstValue.notification!!.title, "Eine Aktion an der du teilnimmst hat sich geändert")
+        assertEquals(nachricht.firstValue.notification!!.body, "Sammeln am 22.10. in Frankfurter Allee Nord (null)")
         assertTrue(empfaenger.firstValue.map { it.id ***REMOVED***.containsAll(listOf(12L)))
     ***REMOVED***
 
@@ -368,14 +366,13 @@ class TermineRestResourceTest {
 
         resource.loescheAktion(ActionWithTokenDto(terminDto, "rightToken"))
 
-        val notification = argumentCaptor<PushNotificationDto>()
         val data = argumentCaptor<PushMessageDto>()
         val empfaenger = argumentCaptor<List<Benutzer>>()
         verify(pushService)
-            .sendePushNachrichtAnEmpfaenger(notification.capture(), data.capture(), empfaenger.capture())
-        assertEquals(notification.firstValue.title, "Eine Aktion an der du teilnimmst wurde abgesagt")
+            .sendePushNachrichtAnEmpfaenger(data.capture(), empfaenger.capture())
+        assertEquals(data.firstValue.notification!!.title, "Eine Aktion an der du teilnimmst wurde abgesagt")
         assertEquals(
-            notification.firstValue.body,
+            data.firstValue.notification!!.body,
             "Sammeln am 22.10. in Frankfurter Allee Nord (null) wurde von der Ersteller*in gelöscht"
         )
         assertTrue(empfaenger.firstValue.map { it.id ***REMOVED***.containsAll(listOf(12L)))
@@ -450,15 +447,14 @@ class TermineRestResourceTest {
 
         resource.informiereUeberTeilnahme(bini, aktion)
 
+        val nachricht = argumentCaptor<PushMessageDto>()
         val empfaengerCaptor = argumentCaptor<List<Benutzer>>()
-        val notificationCaptor = argumentCaptor<PushNotificationDto>()
         verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(
-            notificationCaptor.capture(),
-            any(),
+            nachricht.capture(),
             empfaengerCaptor.capture()
         )
         assertTrue(empfaengerCaptor.firstValue.containsAll(listOf(karl)))
-        assertEquals("Verstärkung für deine Aktion", notificationCaptor.firstValue.title)
+        assertEquals("Verstärkung für deine Aktion", nachricht.firstValue.notification!!.title)
     ***REMOVED***
 
     @Test
@@ -471,14 +467,13 @@ class TermineRestResourceTest {
         resource.informiereUeberTeilnahme(bini, aktion)
 
         val empfaengerCaptor = argumentCaptor<List<Benutzer>>()
-        val notificationCaptor = argumentCaptor<PushNotificationDto>()
+        val nachricht = argumentCaptor<PushMessageDto>()
         verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(
-            notificationCaptor.capture(),
-            any(),
+            nachricht.capture(),
             empfaengerCaptor.capture()
         )
         assertTrue(empfaengerCaptor.secondValue.containsAll(listOf(rosa)))
-        assertEquals("Verstärkung für eure Aktion", notificationCaptor.secondValue.title)
+        assertEquals("Verstärkung für eure Aktion", nachricht.secondValue.notification!!.title)
     ***REMOVED***
 
     @Test
@@ -490,10 +485,10 @@ class TermineRestResourceTest {
 
         resource.informiereUeberTeilnahme(bini, aktion)
 
-        val dataCaptor = argumentCaptor<PushMessageDto>()
-        verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(any(), dataCaptor.capture(), any())
-        val data1 = dataCaptor.firstValue.data!!
-        val data2 = dataCaptor.secondValue.data!!
+        val nachrichtCaptor = argumentCaptor<PushMessageDto>()
+        verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(nachrichtCaptor.capture(), any())
+        val data1 = nachrichtCaptor.firstValue.data!!
+        val data2 = nachrichtCaptor.secondValue.data!!
         assertEquals(data1["channel"], "action:2")
         assertNotNull(data1["timestamp"])
         assertEquals(data1["action"], 2L)
@@ -561,14 +556,13 @@ class TermineRestResourceTest {
         resource.informiereUeberAbsage(bini, aktion)
 
         val empfaengerCaptor = argumentCaptor<List<Benutzer>>()
-        val notificationCaptor = argumentCaptor<PushNotificationDto>()
+        val nachrichtCaptor = argumentCaptor<PushMessageDto>()
         verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(
-            notificationCaptor.capture(),
-            any(),
+            nachrichtCaptor.capture(),
             empfaengerCaptor.capture()
         )
         assertTrue(empfaengerCaptor.firstValue.containsAll(listOf(karl)))
-        assertEquals("Absage bei deiner Aktion", notificationCaptor.firstValue.title)
+        assertEquals("Absage bei deiner Aktion", nachrichtCaptor.firstValue.notification!!.title)
     ***REMOVED***
 
     @Test
@@ -580,15 +574,14 @@ class TermineRestResourceTest {
 
         resource.informiereUeberAbsage(bini, aktion)
 
+        val nachrichtCaptor = argumentCaptor<PushMessageDto>()
         val empfaengerCaptor = argumentCaptor<List<Benutzer>>()
-        val notificationCaptor = argumentCaptor<PushNotificationDto>()
         verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(
-            notificationCaptor.capture(),
-            any(),
+            nachrichtCaptor.capture(),
             empfaengerCaptor.capture()
         )
         assertTrue(empfaengerCaptor.secondValue.containsAll(listOf(rosa)))
-        assertEquals("Absage bei eurer Aktion", notificationCaptor.secondValue.title)
+        assertEquals("Absage bei eurer Aktion", nachrichtCaptor.secondValue.notification!!.title)
     ***REMOVED***
 
     @Test
@@ -600,10 +593,10 @@ class TermineRestResourceTest {
 
         resource.informiereUeberAbsage(bini, aktion)
 
-        val dataCaptor = argumentCaptor<PushMessageDto>()
-        verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(any(), dataCaptor.capture(), any())
-        val data1 = dataCaptor.firstValue.data!!
-        val data2 = dataCaptor.secondValue.data!!
+        val nachrichtCaptor = argumentCaptor<PushMessageDto>()
+        verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(nachrichtCaptor.capture(), any())
+        val data1 = nachrichtCaptor.firstValue.data!!
+        val data2 = nachrichtCaptor.secondValue.data!!
         assertEquals(data1["channel"], "action:2")
         assertNotNull(data1["timestamp"])
         assertEquals(data1["action"], 2L)

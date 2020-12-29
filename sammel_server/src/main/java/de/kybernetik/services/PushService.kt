@@ -32,25 +32,21 @@ open class PushService {
     private val secureRandom = SecureRandom()
     private val LOG = Logger.getLogger(PushService::class.java)
 
-    open fun sendePushNachrichtAnEmpfaenger(
-        notification: PushNotificationDto?,
-        data: PushMessageDto,
-        empfaenger: List<Benutzer>
-    ) {
+    open fun sendePushNachrichtAnEmpfaenger(nachricht: PushMessageDto, empfaenger: List<Benutzer>) {
         val firebaseKeys = benutzerDao.getFirebaseKeys(empfaenger)
         val benutzerOhneFirebase = benutzerDao.getBenutzerOhneFirebase(empfaenger)
 
-        val verschluesselt = verschluessele(data.data)
+        val verschluesselt = verschluessele(nachricht.data)
         if (firebaseKeys.isNotEmpty())
-            firebase.sendePushNachrichtAnEmpfaenger(notification, verschluesselt, firebaseKeys)
+            firebase.sendePushNachrichtAnEmpfaenger(nachricht.notification, verschluesselt, firebaseKeys)
         if (benutzerOhneFirebase.isNotEmpty())
-            pushDao.speicherePushMessageFuerEmpfaenger(notification, verschluesselt, benutzerOhneFirebase)
+            pushDao.speicherePushMessageFuerEmpfaenger(nachricht.notification, verschluesselt, benutzerOhneFirebase)
     ***REMOVED***
 
-    open fun sendePushNachrichtAnTopic(notification: PushNotificationDto?, data: PushMessageDto, topic: String) {
-        val verschluesselt = verschluessele(data.data)
-        firebase.sendePushNachrichtAnTopic(notification, verschluesselt, topic)
-        pushDao.sendePushNachrichtAnTopic(notification, verschluesselt, topic)
+    open fun sendePushNachrichtAnTopic(nachricht: PushMessageDto, topic: String) {
+        val verschluesselt = verschluessele(nachricht.data)
+        firebase.sendePushNachrichtAnTopic(nachricht.notification, verschluesselt, topic)
+        pushDao.sendePushNachrichtAnTopic(nachricht.notification, verschluesselt, topic)
     ***REMOVED***
 
     open fun verschluessele(data: Map<String, Any?>?): Map<String, String>? {

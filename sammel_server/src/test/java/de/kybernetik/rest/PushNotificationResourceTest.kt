@@ -58,47 +58,19 @@ class PushNotificationResourceTest {
     lateinit var resource: PushNotificationResource
 
     @Test
-    fun `pushToTopic sendet Nachricht an PushService weiter mit leeren Daten und Benachrichtigung`() {
-        val notification = PushNotificationDto()
-        val kanal = "Kanal"
+    fun `pushToTopic sendet Nachricht an PushService weiter`() {
+        val nachricht = PushMessageDto(
+            PushNotificationDto("Titel", "Inhalt"),
+            mapOf(Pair("schlüssel1", "inhalt1"), Pair("schlüssel2", "inhalt2"))
+        )
 
-        val nachricht = PushMessageDto(notification, emptyMap<String, String>())
-        resource.pushToTopic(nachricht, topic = kanal)
+        resource.pushToTopic(nachricht, topic = "Kanal")
 
-        val notificationCaptor = argumentCaptor<PushNotificationDto>()
-        val dataCaptor = argumentCaptor<PushMessageDto>()
-        val empfaengerCaptor = argumentCaptor<String>()
-        verify(pushService, atLeastOnce()).sendePushNachrichtAnTopic(notificationCaptor.capture(), dataCaptor.capture(), empfaengerCaptor.capture())
-        assertEquals(dataCaptor.firstValue, nachricht)
-        assertEquals(notificationCaptor.firstValue, notification)
-        assertEquals(empfaengerCaptor.firstValue, kanal)
-    ***REMOVED***
-
-    @Test
-    fun `pushToTopic sendet Nachricht an PushService weiter ohne Daten und Benachrichtigung`() {
-        val kanal = "Kanal"
-
-        val nachricht = PushMessageDto(null, null)
-        resource.pushToTopic(nachricht, topic = kanal)
-
-        verify(pushService, atLeastOnce()).sendePushNachrichtAnTopic(null, nachricht, kanal)
-    ***REMOVED***
-
-    @Test
-    fun `pushToTopic sendet Nachricht an PushService mit gefuellten Daten und Benachrichtigung`() {
-        val notification = PushNotificationDto("Titel", "Inhalt")
-        val data = mapOf(Pair("schlüssel1", "inhalt1"), Pair("schlüssel2", "inhalt2"))
-
-        resource.pushToTopic(PushMessageDto(notification, data), topic = "Kanal")
-
-        val notificationArgument = argumentCaptor<PushNotificationDto>()
-        val dataArgument = argumentCaptor<PushMessageDto>()
+        val messageArgument = argumentCaptor<PushMessageDto>()
         val topicArgument = argumentCaptor<String>()
         verify(pushService, times(1))
-                .sendePushNachrichtAnTopic(notificationArgument.capture(), dataArgument.capture(), topicArgument.capture())
-        assertEquals(notificationArgument.firstValue.title, "Titel")
-        assertEquals(notificationArgument.firstValue.body, "Inhalt")
-        assertEquals(dataArgument.firstValue.data!!, data)
+                .sendePushNachrichtAnTopic(messageArgument.capture(), topicArgument.capture())
+        assertEquals(messageArgument.firstValue, nachricht)
     ***REMOVED***
 
     @Test
@@ -118,7 +90,7 @@ class PushNotificationResourceTest {
 
         assertEquals(response!!.status, 403)
         assertEquals("Du bist nicht Teilnehmer*in dieser Aktion", (response.entity as RestFehlermeldung).meldung)
-        verify(pushService, never()).sendePushNachrichtAnEmpfaenger(anyOrNull(), anyOrNull(), anyList())
+        verify(pushService, never()).sendePushNachrichtAnEmpfaenger(anyOrNull(), anyList())
 
         // ohne Teilnehmer
         whenever(termineDao.getTermin(1L))
@@ -132,7 +104,7 @@ class PushNotificationResourceTest {
 
         assertEquals(response!!.status, 403)
         assertEquals("Du bist nicht Teilnehmer*in dieser Aktion", (response.entity as RestFehlermeldung).meldung)
-        verify(pushService, never()).sendePushNachrichtAnEmpfaenger(anyOrNull(), anyOrNull(), anyList())
+        verify(pushService, never()).sendePushNachrichtAnEmpfaenger(anyOrNull(), anyList())
     ***REMOVED***
 
     @Test
@@ -148,12 +120,11 @@ class PushNotificationResourceTest {
 
         resource.pushToParticipants(PushMessageDto(notification, data), actionId = 1L)
 
-        val notificationCaptor = argumentCaptor<PushNotificationDto>()
-        val dataCaptor = argumentCaptor<PushMessageDto>()
+        val nachrichtCaptor = argumentCaptor<PushMessageDto>()
         val teilnehmerCaptor = argumentCaptor<List<Benutzer>>()
-        verify(pushService, atLeastOnce()).sendePushNachrichtAnEmpfaenger(notificationCaptor.capture(), dataCaptor.capture(), teilnehmerCaptor.capture())
-        assertTrue { dataCaptor.firstValue.data!!.isEmpty() ***REMOVED***
-        assertEquals(notificationCaptor.firstValue, notification)
+        verify(pushService, atLeastOnce()).sendePushNachrichtAnEmpfaenger(nachrichtCaptor.capture(), teilnehmerCaptor.capture())
+        assertTrue { nachrichtCaptor.firstValue.data!!.isEmpty() ***REMOVED***
+        assertEquals(nachrichtCaptor.firstValue.notification, notification)
         assertEquals(teilnehmerCaptor.firstValue, teilnehmer)
     ***REMOVED***
 

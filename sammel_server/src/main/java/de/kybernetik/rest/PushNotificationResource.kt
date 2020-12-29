@@ -46,7 +46,7 @@ open class PushNotificationResource {
                     .build()
         ***REMOVED***
 
-        pushService.sendePushNachrichtAnEmpfaenger(nachricht.notification, nachricht, teilnehmer)
+        pushService.sendePushNachrichtAnEmpfaenger(nachricht, teilnehmer)
 
         return Response.accepted().build()
     ***REMOVED***
@@ -55,7 +55,7 @@ open class PushNotificationResource {
     @RolesAllowed("named")
     @POST
     open fun pushToTopic(nachricht: PushMessageDto, @PathParam("topic") topic: String) =
-        pushService.sendePushNachrichtAnTopic(nachricht.notification, nachricht, topic)
+        pushService.sendePushNachrichtAnTopic(nachricht, topic)
 
     @Path("pull")
     @RolesAllowed("user")
