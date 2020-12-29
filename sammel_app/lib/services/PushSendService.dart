@@ -64,7 +64,7 @@ class PushSendService extends AbstractPushSendService {
     ***REMOVED***
 
     print(
-        'Push-Message: ${jsonEncode(PushMessage(data, notification).toJson())***REMOVED***');
+        'Sende Push-Message: ${jsonEncode(PushMessage(data, notification).toJson())***REMOVED***');
     try {
       await post('service/push/action/$actionId',
           jsonEncode(PushMessage(data, notification).toJson()));
