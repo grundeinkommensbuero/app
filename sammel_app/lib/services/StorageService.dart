@@ -114,7 +114,5 @@ class StorageService {
   // for Debugging only
   loadCostumPushToken() => prefs.then((prefs) => prefs.getString(_PUSHTOKEN));
 
-  Future<void> reload() async {
-    (await _prefs).reload();
-  ***REMOVED***
+  Future<void> reload() async => await _prefs.then((prefs) => prefs.reload());
 ***REMOVED***

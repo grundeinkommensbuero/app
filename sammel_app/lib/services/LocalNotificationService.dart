@@ -1,10 +1,10 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 
 // Siehe https://pub.dev/packages/flutter_local_notifications
 
-void initializeLocalNotifications(flutterLocalNotificationsPlugin) async {
+void initializeLocalNotifications(
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('push_icon');
   final IOSInitializationSettings initializationSettingsIOS =
@@ -26,6 +26,7 @@ Future onDidReceiveLocalNotification(
 ***REMOVED***
 
 Future selectNotification(String payload) {
+  print('Nachricht geklickt');
   // TODO on tap
 ***REMOVED***
 

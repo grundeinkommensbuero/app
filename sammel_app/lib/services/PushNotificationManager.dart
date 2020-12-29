@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
@@ -108,11 +107,8 @@ Future<void> handleBackgroundChatMessage(Map<String, dynamic> data) async {
 
   var storageService = StorageService();
   var chatChannel = await storageService.loadChatChannel(data['channel']);
-  print('Channel ${data['channel']***REMOVED*** geladen mit ${chatChannel.channel_messages.length***REMOVED*** Nachrichten');
   chatChannel.add_message_or_mark_as_received(chatMessage.message);
   await storageService.saveChatChannel(chatChannel);
-  var chatChannelAfter = await storageService.loadChatChannel(data['channel']);
-  print('Channel ${data['channel']***REMOVED*** gespeichert mit ${chatChannelAfter.channel_messages.length***REMOVED*** Nachrichten');
 ***REMOVED***
 
 class DemoPushNotificationManager implements AbstractPushNotificationManager {

@@ -7,6 +7,7 @@ import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
+import 'ChatPage.dart';
 import 'FAQ.dart';
 import 'TermineSeite.dart';
 
@@ -20,7 +21,7 @@ class Navigation extends StatefulWidget {
 ***REMOVED***
 
 class NavigationState extends State<Navigation>
-    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
+    with SingleTickerProviderStateMixin {
   int navigation = 0;
   List<int> history = [];
   GlobalKey actionPage = GlobalKey(debugLabel: 'action page');
@@ -31,8 +32,6 @@ class NavigationState extends State<Navigation>
   FAQ faq;
 
   AbstractPushSendService pushService;
-
-  StorageService storageService;
 
   @override
   void initState() {
@@ -48,19 +47,17 @@ class NavigationState extends State<Navigation>
       parent: _animationController,
       curve: Curves.easeIn,
     ));
-    WidgetsBinding.instance.addObserver(this); // for didChangeAppLifecycleState
   ***REMOVED***
 
   @override
   Widget build(BuildContext context) {
     ErrorService.setContext(context);
-    if (storageService == null)
-      storageService = Provider.of<StorageService>(context);
 
     var pages = [
       TermineSeite(key: actionPage),
       ActionEditor(onFinish: newActionCreated, key: Key('action creator')),
-      faq = FAQ()
+      faq = FAQ(),
+      ChatPage()
     ];
     List<String> titles = [
       'Aktionen',
@@ -214,18 +211,5 @@ class NavigationState extends State<Navigation>
   void navigateToActionPage() {
     switchPage(0);
     history.removeLast();
-  ***REMOVED***
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this); // for didChangeAppLifecycleState
-    super.dispose();
-  ***REMOVED***
-
-  // Lädt Speicher neu nach, falls sich im Schlaf etwas geändert hat
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    print('App-Zustand: $state');
-    if(state == AppLifecycleState.resumed) storageService.reload();
   ***REMOVED***
 ***REMOVED***
