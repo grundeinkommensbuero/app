@@ -28,7 +28,6 @@ class ChatChannel {
   @override
   Future<void> pushParticipationMessage(ParticipationMessage message) {
     channel_messages.add(message);
-
     ccl?.channelChanged(this);
   }
 
@@ -39,21 +38,6 @@ class ChatChannel {
       channel_messages.add(message);
     else
       ownMessage.obtained_from_server = true;
-  }
-
-  //FIXME wozu brauchten wir das?
-  void restore_channel(ChatChannel channel) {
-    if (channel == null) {
-      return;
-    }
-
-    for (Message message in channel.channel_messages) {
-      add_message_or_mark_as_received(message);
-    }
-
-    channel_messages.sort((a, b) => a.timestamp.isBefore(b.timestamp) ? -1 : 1);
-
-    ccl?.channelChanged(this);
   }
 
   void register_widget(ChannelChangeListener c) {

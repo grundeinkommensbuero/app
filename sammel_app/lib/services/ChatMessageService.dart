@@ -37,7 +37,7 @@ class ChatMessageService implements PushNotificationListener {
       await getChannel('action:$idNr');
 
   Future<ChatChannel> getChannel(String id) async {
-    // if (!channels.containsKey(id)) {
+    if (!channels.containsKey(id)) {
       ChatChannel storedChannel =
           await this.storage_service.loadChatChannel(id);
       if (storedChannel != null)
@@ -47,7 +47,7 @@ class ChatMessageService implements PushNotificationListener {
         await this.storage_service.saveChatChannel(newChannel);
         channels[newChannel.id] = newChannel;
       }
-    // }
+    }
     return channels[id];
   }
 
@@ -59,5 +59,17 @@ class ChatMessageService implements PushNotificationListener {
 
   void register_channel(ChatChannel channel) {
     channels[channel.id] = channel;
+  }
+
+  Future<void> reload() async {
+    await storage_service.reload();
+    channels.keys.toList().forEach((id) async {
+      var currentChannel = await storage_service.loadChatChannel(id);
+      if (channels[id].channel_messages.length !=
+          currentChannel.channel_messages.length) {
+        channels[id].channel_messages = currentChannel.channel_messages;
+        channels[id].ccl.channelChanged(channels[id]);
+      }
+    });
   }
 }
