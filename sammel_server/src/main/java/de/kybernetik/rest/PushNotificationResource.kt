@@ -3,8 +3,6 @@ package de.kybernetik.rest
 import de.kybernetik.database.pushmessages.PushMessageDao
 import de.kybernetik.database.termine.TermineDao
 import org.jboss.logging.Logger
-import de.kybernetik.services.FirebaseService
-import de.kybernetik.services.FirebaseService.MissingMessageTarget
 import de.kybernetik.services.PushService
 import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
@@ -25,9 +23,6 @@ open class PushNotificationResource {
     private lateinit var pushService: PushService
 
     @EJB
-    private lateinit var firebase: FirebaseService
-
-    @EJB
     private lateinit var termineDao: TermineDao
 
     @EJB
@@ -35,15 +30,6 @@ open class PushNotificationResource {
 
     @Context
     private lateinit var context: SecurityContext
-
-    @Path("devices")
-    @RolesAllowed("named")
-    @POST
-    open fun pushToDevices(nachricht: PushMessageDto) {
-        if (nachricht.recipients == null)
-            throw MissingMessageTarget("Die Nachricht enthält keine Empfänger")
-        firebase.sendePushNachrichtAnEmpfaenger(nachricht.notification, nachricht.verschluesselt(), nachricht.recipients!!)
-    ***REMOVED***
 
     @Path("action/{actionId***REMOVED***")
     @RolesAllowed("named")
@@ -60,7 +46,7 @@ open class PushNotificationResource {
                     .build()
         ***REMOVED***
 
-        pushService.sendePushNachrichtAnEmpfaenger(nachricht.notification, nachricht.verschluesselt(), teilnehmer)
+        pushService.sendePushNachrichtAnEmpfaenger(nachricht.notification, nachricht, teilnehmer)
 
         return Response.accepted().build()
     ***REMOVED***
@@ -68,9 +54,8 @@ open class PushNotificationResource {
     @Path("topic/{topic***REMOVED***")
     @RolesAllowed("named")
     @POST
-    open fun pushToTopic(nachricht: PushMessageDto, @PathParam("topic") topic: String) {
-        firebase.sendePushNachrichtAnTopic(nachricht.notification, nachricht.verschluesselt(), topic)
-    ***REMOVED***
+    open fun pushToTopic(nachricht: PushMessageDto, @PathParam("topic") topic: String) =
+        pushService.sendePushNachrichtAnTopic(nachricht.notification, nachricht, topic)
 
     @Path("pull")
     @RolesAllowed("user")

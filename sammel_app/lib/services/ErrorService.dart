@@ -22,7 +22,7 @@ class ErrorService {
   ***REMOVED***
 
   static handleError(error, StackTrace stacktrace, {String context***REMOVED***) async {
-    print('Fehler aufgetreten: $error');
+    print('Fehler aufgetreten: $error\n$stacktrace');
 
     if (error is NoUserAuthException) {
       pushMessage('Dein Account konnte nicht authentifziert werden.',

@@ -55,7 +55,7 @@ class BackendService {
     try {
       var post = backend
           .post(url, data, await authHeaders(appAuth), parameters)
-          .timeout(Duration(seconds: 2),
+          .timeout(Duration(seconds: 10),
               onTimeout: () async => await checkConnectivity());
       var response = await post;
 
@@ -124,12 +124,12 @@ class BackendService {
                 throw ConnectivityException(
                     'Der Server antwortet leider nicht. Möglicherweise ist er überlastet, versuch es doch später nochmal');
               ***REMOVED***));
-      // Server responds but has issues
+      // Server responds and is healthy
       if (serverHealth.alive)
         throw ConnectivityException(
             'Ein Verbindungsproblem ist aufgetreten: ${originalError?.message***REMOVED***');
       else
-        // Server responds and is healthy
+        // Server responds but has issues
         throw throw ConnectivityException(
             'Der Server hat leider gerade technische Probleme: ${serverHealth.status***REMOVED***');
     ***REMOVED*** on SocketException catch (e) {

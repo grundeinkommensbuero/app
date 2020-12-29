@@ -14,7 +14,6 @@ import de.kybernetik.database.benutzer.BenutzerDao
 import de.kybernetik.database.termine.Termin
 import de.kybernetik.database.termine.TermineDao
 import de.kybernetik.database.termine.Token
-import de.kybernetik.rest.PushMessageDtoTest.Companion.entschluessele
 import org.apache.http.auth.BasicUserPrincipal
 import org.junit.Before
 import org.junit.Rule
@@ -266,7 +265,7 @@ class TermineRestResourceTest {
         resource.aktualisiereTermin(ActionWithTokenDto(termin, "token"))
 
         val notification = argumentCaptor<PushNotificationDto>()
-        val data = argumentCaptor<Map<String, String>>()
+        val data = argumentCaptor<PushMessageDto>()
         val empfaenger = argumentCaptor<List<Benutzer>>()
         verify(pushService)
             .sendePushNachrichtAnEmpfaenger(notification.capture(), data.capture(), empfaenger.capture())
@@ -370,7 +369,7 @@ class TermineRestResourceTest {
         resource.loescheAktion(ActionWithTokenDto(terminDto, "rightToken"))
 
         val notification = argumentCaptor<PushNotificationDto>()
-        val data = argumentCaptor<Map<String, String>>()
+        val data = argumentCaptor<PushMessageDto>()
         val empfaenger = argumentCaptor<List<Benutzer>>()
         verify(pushService)
             .sendePushNachrichtAnEmpfaenger(notification.capture(), data.capture(), empfaenger.capture())
@@ -491,18 +490,18 @@ class TermineRestResourceTest {
 
         resource.informiereUeberTeilnahme(bini, aktion)
 
-        val dataCaptor = argumentCaptor<Map<String, String>>()
+        val dataCaptor = argumentCaptor<PushMessageDto>()
         verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(any(), dataCaptor.capture(), any())
-        val data1 = deserialisiereJsonMap(entschluessele(dataCaptor.firstValue))
-        val data2 = deserialisiereJsonMap(entschluessele(dataCaptor.secondValue))
+        val data1 = dataCaptor.firstValue.data!!
+        val data2 = dataCaptor.secondValue.data!!
         assertEquals(data1["channel"], "action:2")
         assertNotNull(data1["timestamp"])
-        assertEquals(data1["action"], 2.0)
+        assertEquals(data1["action"], 2L)
         assertEquals(data1["username"], "Bini Adamczak")
         assertEquals(data1["joins"], true)
         assertEquals(data2["channel"], "action:2")
         assertNotNull(data2["timestamp"])
-        assertEquals(data2["action"], 2.0)
+        assertEquals(data2["action"], 2L)
         assertEquals(data2["username"], "Bini Adamczak")
         assertEquals(data2["joins"], true)
     ***REMOVED***
@@ -601,24 +600,21 @@ class TermineRestResourceTest {
 
         resource.informiereUeberAbsage(bini, aktion)
 
-        val dataCaptor = argumentCaptor<Map<String, String>>()
+        val dataCaptor = argumentCaptor<PushMessageDto>()
         verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(any(), dataCaptor.capture(), any())
-        val data1 = deserialisiereJsonMap(entschluessele(dataCaptor.firstValue))
-        val data2 = deserialisiereJsonMap(entschluessele(dataCaptor.secondValue))
+        val data1 = dataCaptor.firstValue.data!!
+        val data2 = dataCaptor.secondValue.data!!
         assertEquals(data1["channel"], "action:2")
         assertNotNull(data1["timestamp"])
-        assertEquals(data1["action"], 2.0)
+        assertEquals(data1["action"], 2L)
         assertEquals(data1["username"], "Bini Adamczak")
         assertEquals(data1["joins"], false)
         assertEquals(data2["channel"], "action:2")
         assertNotNull(data2["timestamp"])
-        assertEquals(data2["action"], 2.0)
+        assertEquals(data2["action"], 2L)
         assertEquals(data2["username"], "Bini Adamczak")
         assertEquals(data2["joins"], false)
     ***REMOVED***
-
-    fun deserialisiereJsonMap(json: String): Map<String, Any?> =
-        GsonBuilder().serializeNulls().create().fromJson<Map<String, Any?>>(json, Map::class.java)!!
 
     @Test
     fun test() {

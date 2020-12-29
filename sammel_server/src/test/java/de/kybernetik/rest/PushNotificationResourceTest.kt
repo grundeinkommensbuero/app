@@ -1,7 +1,7 @@
 package de.kybernetik.rest
 
 import TestdatenVorrat.Companion.karl
-import com.google.gson.GsonBuilder
+import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.atLeastOnce
 import com.nhaarman.mockitokotlin2.whenever
@@ -11,7 +11,6 @@ import de.kybernetik.database.pushmessages.PushMessage
 import de.kybernetik.database.pushmessages.PushMessageDao
 import de.kybernetik.database.termine.Termin
 import de.kybernetik.database.termine.TermineDao
-import de.kybernetik.rest.PushMessageDtoTest.Companion.entschluessele
 import org.apache.http.auth.BasicUserPrincipal
 import org.junit.Before
 import org.junit.Test
@@ -22,8 +21,6 @@ import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
-import de.kybernetik.services.FirebaseService
-import de.kybernetik.services.FirebaseService.MissingMessageTarget
 import de.kybernetik.services.PushService
 import java.util.Collections.singletonList
 import javax.ws.rs.core.SecurityContext
@@ -39,9 +36,6 @@ class PushNotificationResourceTest {
 
     @Mock
     lateinit var pushService: PushService
-
-    @Mock
-    lateinit var firebase: FirebaseService
 
     @Mock
     lateinit var termineDao: TermineDao
@@ -63,104 +57,48 @@ class PushNotificationResourceTest {
     @InjectMocks
     lateinit var resource: PushNotificationResource
 
-    @Test(expected = MissingMessageTarget::class)
-    fun `pushToDevices erwartet Empfaenger`() =
-            resource.pushToDevices(PushMessageDto(notification = PushNotificationDto(), data = emptyMap()))
-
     @Test
-    fun `pushToDevices sendet Nachricht an Firebase weiter mit leeren Daten und Benachrichtigung`() {
+    fun `pushToTopic sendet Nachricht an PushService weiter mit leeren Daten und Benachrichtigung`() {
         val notification = PushNotificationDto()
-        val data = emptyMap<String, String>()
-        val empfaenger = listOf("Empfänger")
-
-        resource.pushToDevices(PushMessageDto(notification, data, recipients = empfaenger))
-
-        val notificationCaptor = argumentCaptor<PushNotificationDto>()
-        val dataCaptor = argumentCaptor<Map<String, String>>()
-        val empfaengerCaptor = argumentCaptor<List<String>>()
-        verify(firebase, atLeastOnce()).sendePushNachrichtAnEmpfaenger(notificationCaptor.capture(), dataCaptor.capture(), empfaengerCaptor.capture())
-        assertTrue { deserialisiereJsonMap(entschluessele(dataCaptor.firstValue)).isEmpty() ***REMOVED***
-        assertEquals(notificationCaptor.firstValue, notification)
-        assertEquals(empfaengerCaptor.firstValue, empfaenger)
-    ***REMOVED***
-
-    @Test
-    fun `pushToDevices sendet Nachricht an Firebase weiter ohne Daten und Benachrichtigung`() {
-        val empfaenger = listOf("Empfänger")
-
-        resource.pushToDevices(PushMessageDto(null, null, recipients = empfaenger))
-
-        verify(firebase, atLeastOnce()).sendePushNachrichtAnEmpfaenger(null, null, empfaenger)
-    ***REMOVED***
-
-    @Test
-    fun `pushToDevices sendet Nachricht an Firebase mit gefuellten Daten und Benachrichtigung`() {
-        val notification = PushNotificationDto("Titel", "Inhalt")
-        val data = mapOf(Pair("schlüssel1", "inhalt1"), Pair("schlüssel2", "inhalt2"))
-        val empfaenger = listOf("Empfänger")
-
-        resource.pushToDevices(PushMessageDto(notification, data, recipients = empfaenger))
-
-        val notificationArgument = argumentCaptor<PushNotificationDto>()
-        val dataArgument = argumentCaptor<Map<String, String>>()
-        val empfaengerArgument = argumentCaptor<List<String>>()
-        verify(firebase, times(1))
-                .sendePushNachrichtAnEmpfaenger(notificationArgument.capture(), dataArgument.capture(), empfaengerArgument.capture())
-        assertEquals(notificationArgument.firstValue.title, "Titel")
-        assertEquals(notificationArgument.firstValue.body, "Inhalt")
-        val entschluesselt = entschluessele(dataArgument.firstValue)
-        assertEquals(deserialisiereJsonMap(entschluesselt).size, 2)
-        assertEquals(deserialisiereJsonMap(entschluesselt)["schlüssel1"], "inhalt1")
-        assertEquals(deserialisiereJsonMap(entschluesselt)["schlüssel2"], "inhalt2")
-        assertEquals(empfaengerArgument.firstValue.size, 1)
-        assertEquals(empfaengerArgument.firstValue[0], "Empfänger")
-    ***REMOVED***
-
-    @Test
-    fun `pushToTopic sendet Nachricht an Firebase weiter mit leeren Daten und Benachrichtigung`() {
-        val notification = PushNotificationDto()
-        val data = emptyMap<String, String>()
         val kanal = "Kanal"
 
-        resource.pushToTopic(PushMessageDto(notification, data), topic = kanal)
+        val nachricht = PushMessageDto(notification, emptyMap<String, String>())
+        resource.pushToTopic(nachricht, topic = kanal)
 
         val notificationCaptor = argumentCaptor<PushNotificationDto>()
-        val dataCaptor = argumentCaptor<Map<String, String>>()
+        val dataCaptor = argumentCaptor<PushMessageDto>()
         val empfaengerCaptor = argumentCaptor<String>()
-        verify(firebase, atLeastOnce()).sendePushNachrichtAnTopic(notificationCaptor.capture(), dataCaptor.capture(), empfaengerCaptor.capture())
-        assertTrue { deserialisiereJsonMap(entschluessele(dataCaptor.firstValue)).isEmpty() ***REMOVED***
+        verify(pushService, atLeastOnce()).sendePushNachrichtAnTopic(notificationCaptor.capture(), dataCaptor.capture(), empfaengerCaptor.capture())
+        assertEquals(dataCaptor.firstValue, nachricht)
         assertEquals(notificationCaptor.firstValue, notification)
         assertEquals(empfaengerCaptor.firstValue, kanal)
     ***REMOVED***
 
     @Test
-    fun `pushToTopic sendet Nachricht an Firebase weiter ohne Daten und Benachrichtigung`() {
+    fun `pushToTopic sendet Nachricht an PushService weiter ohne Daten und Benachrichtigung`() {
         val kanal = "Kanal"
 
-        resource.pushToTopic(PushMessageDto(null, null), topic = kanal)
+        val nachricht = PushMessageDto(null, null)
+        resource.pushToTopic(nachricht, topic = kanal)
 
-        verify(firebase, atLeastOnce()).sendePushNachrichtAnTopic(null, null, kanal)
+        verify(pushService, atLeastOnce()).sendePushNachrichtAnTopic(null, nachricht, kanal)
     ***REMOVED***
 
     @Test
-    fun `pushToTopic sendet Nachricht an Firebase mit gefuellten Daten und Benachrichtigung`() {
+    fun `pushToTopic sendet Nachricht an PushService mit gefuellten Daten und Benachrichtigung`() {
         val notification = PushNotificationDto("Titel", "Inhalt")
         val data = mapOf(Pair("schlüssel1", "inhalt1"), Pair("schlüssel2", "inhalt2"))
 
         resource.pushToTopic(PushMessageDto(notification, data), topic = "Kanal")
 
         val notificationArgument = argumentCaptor<PushNotificationDto>()
-        val dataArgument = argumentCaptor<Map<String, String>>()
+        val dataArgument = argumentCaptor<PushMessageDto>()
         val topicArgument = argumentCaptor<String>()
-        verify(firebase, times(1))
+        verify(pushService, times(1))
                 .sendePushNachrichtAnTopic(notificationArgument.capture(), dataArgument.capture(), topicArgument.capture())
         assertEquals(notificationArgument.firstValue.title, "Titel")
         assertEquals(notificationArgument.firstValue.body, "Inhalt")
-        val entschluesselt = entschluessele(dataArgument.firstValue)
-        assertEquals(deserialisiereJsonMap(entschluesselt).size, 2)
-        assertEquals(deserialisiereJsonMap(entschluesselt)["schlüssel1"], "inhalt1")
-        assertEquals(deserialisiereJsonMap(entschluesselt)["schlüssel2"], "inhalt2")
-        assertEquals(topicArgument.firstValue, "Kanal")
+        assertEquals(dataArgument.firstValue.data!!, data)
     ***REMOVED***
 
     @Test
@@ -180,7 +118,7 @@ class PushNotificationResourceTest {
 
         assertEquals(response!!.status, 403)
         assertEquals("Du bist nicht Teilnehmer*in dieser Aktion", (response.entity as RestFehlermeldung).meldung)
-        verify(firebase, never()).sendePushNachrichtAnEmpfaenger(any(), anyMap(), anyList())
+        verify(pushService, never()).sendePushNachrichtAnEmpfaenger(anyOrNull(), anyOrNull(), anyList())
 
         // ohne Teilnehmer
         whenever(termineDao.getTermin(1L))
@@ -194,7 +132,7 @@ class PushNotificationResourceTest {
 
         assertEquals(response!!.status, 403)
         assertEquals("Du bist nicht Teilnehmer*in dieser Aktion", (response.entity as RestFehlermeldung).meldung)
-        verify(firebase, never()).sendePushNachrichtAnEmpfaenger(any(), anyMap(), anyList())
+        verify(pushService, never()).sendePushNachrichtAnEmpfaenger(anyOrNull(), anyOrNull(), anyList())
     ***REMOVED***
 
     @Test
@@ -211,10 +149,10 @@ class PushNotificationResourceTest {
         resource.pushToParticipants(PushMessageDto(notification, data), actionId = 1L)
 
         val notificationCaptor = argumentCaptor<PushNotificationDto>()
-        val dataCaptor = argumentCaptor<Map<String, String>>()
+        val dataCaptor = argumentCaptor<PushMessageDto>()
         val teilnehmerCaptor = argumentCaptor<List<Benutzer>>()
         verify(pushService, atLeastOnce()).sendePushNachrichtAnEmpfaenger(notificationCaptor.capture(), dataCaptor.capture(), teilnehmerCaptor.capture())
-        assertTrue { deserialisiereJsonMap(entschluessele(dataCaptor.firstValue)).isEmpty() ***REMOVED***
+        assertTrue { dataCaptor.firstValue.data!!.isEmpty() ***REMOVED***
         assertEquals(notificationCaptor.firstValue, notification)
         assertEquals(teilnehmerCaptor.firstValue, teilnehmer)
     ***REMOVED***
@@ -275,7 +213,4 @@ class PushNotificationResourceTest {
         @Suppress("UNCHECKED_CAST")
         (assertNull((response!!.entity as List<PushMessageDto>)[0].recipients))
     ***REMOVED***
-
-    fun deserialisiereJsonMap(json: String): Map<String, Any?> =
-        GsonBuilder().serializeNulls().create().fromJson<Map<String, Any?>>(json, Map::class.java)!!
 ***REMOVED***
