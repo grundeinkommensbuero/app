@@ -38,13 +38,11 @@ class StorageService {
   Future<bool> saveChatChannel(ChatChannel channel) => prefs.then((prefs) =>
       prefs.setString('$_CHANNEL:${channel.id}', jsonEncode(channel.toJson())));
 
-  Future<ChatChannel> loadChatChannel(String id) async {
-    return prefs.then((prefs) {
+  Future<ChatChannel> loadChatChannel(String id) async => prefs.then((prefs) {
       var json = prefs.getString('$_CHANNEL:${id}');
       if(json == null) return null;
       return ChatChannel.fromJSON(jsonDecode(json));
     });
-  }
 
   markActionIdAsStored(int id) => prefs.then((prefs) => _getActionList().then(
       (list) => prefs.setStringList(_ACTIONLIST, list..add(id.toString()))));
@@ -115,4 +113,8 @@ class StorageService {
 
   // for Debugging only
   loadCostumPushToken() => prefs.then((prefs) => prefs.getString(_PUSHTOKEN));
+
+  Future<void> reload() async {
+    (await _prefs).reload();
+  }
 }

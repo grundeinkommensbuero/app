@@ -54,11 +54,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //FIXME kann das weg? >
-    // ChatChannel smc = ChatChannel('SimpleMessageChannel');
-    // chatMessageService.register_channel(smc);
-    // <
-
     return MultiProvider(
         providers: [
           Provider<AbstractTermineService>.value(value: termineService),

@@ -39,10 +39,6 @@ open class FirebaseService {
 
         // Quelle: https://firebase.google.com/docs/cloud-messaging/send-message#send-messages-to-multiple-devices
         val message = MulticastMessage.builder()
-            .setNotification(
-                if (notification == null) null
-                else Notification.builder().setTitle(notification.title).setBody(notification.body).build()
-            )
             .putAllData(data ?: emptyMap())
             .addAllTokens(empfaenger.distinct())
             .build()

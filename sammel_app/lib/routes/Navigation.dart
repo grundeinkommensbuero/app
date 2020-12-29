@@ -20,7 +20,7 @@ class Navigation extends StatefulWidget {
 }
 
 class NavigationState extends State<Navigation>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   int navigation = 0;
   List<int> history = [];
   GlobalKey actionPage = GlobalKey(debugLabel: 'action page');
@@ -31,6 +31,8 @@ class NavigationState extends State<Navigation>
   FAQ faq;
 
   AbstractPushSendService pushService;
+
+  StorageService storageService;
 
   @override
   void initState() {
@@ -46,12 +48,14 @@ class NavigationState extends State<Navigation>
       parent: _animationController,
       curve: Curves.easeIn,
     ));
+    WidgetsBinding.instance.addObserver(this); // for didChangeAppLifecycleState
   }
 
   @override
   Widget build(BuildContext context) {
     ErrorService.setContext(context);
-    pushService = Provider.of<AbstractPushSendService>(context);
+    if (storageService == null)
+      storageService = Provider.of<StorageService>(context);
 
     var pages = [
       TermineSeite(key: actionPage),
@@ -210,5 +214,18 @@ class NavigationState extends State<Navigation>
   void navigateToActionPage() {
     switchPage(0);
     history.removeLast();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this); // for didChangeAppLifecycleState
+    super.dispose();
+  }
+
+  // Lädt Speicher neu nach, falls sich im Schlaf etwas geändert hat
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print('App-Zustand: $state');
+    if(state == AppLifecycleState.resumed) storageService.reload();
   }
 }
