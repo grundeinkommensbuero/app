@@ -25,7 +25,11 @@ open class FirebaseService {
     @EJB
     private lateinit var firebase: Firebase
 
-    open fun sendePushNachrichtAnEmpfaenger(notification: PushNotificationDto?, data: Map<String, String>?, empfaenger: List<String>) {
+    open fun sendePushNachrichtAnEmpfaenger(
+        notification: PushNotificationDto?,
+        data: Map<String, String>?,
+        empfaenger: List<String>
+    ) {
         LOG.debug("Sende Nachricht $notification/$data an Empfänger $empfaenger")
 
         if (empfaenger.isEmpty())
@@ -35,12 +39,13 @@ open class FirebaseService {
 
         // Quelle: https://firebase.google.com/docs/cloud-messaging/send-message#send-messages-to-multiple-devices
         val message = MulticastMessage.builder()
-                .setNotification(
-                        if (notification == null) null
-                        else Notification.builder().setTitle(notification.title).setBody(notification.body).build())
-                .putAllData(data ?: emptyMap())
-                .addAllTokens(empfaenger.distinct())
-                .build()
+            .setNotification(
+                if (notification == null) null
+                else Notification.builder().setTitle(notification.title).setBody(notification.body).build()
+            )
+            .putAllData(data ?: emptyMap())
+            .addAllTokens(empfaenger.distinct())
+            .build()
         val response = firebase.sendMulticast(message)
         LOG.debug("${response?.successCount}  Nachrichten wurden erfolgreich an Firebase versendet")
     }
@@ -53,19 +58,20 @@ open class FirebaseService {
 
         // Quelle: https://firebase.google.com/docs/cloud-messaging/send-message#send-messages-to-topics
         val message: Message = Message.builder()
-                .setNotification(
-                        if (notification == null) null
-                        else Notification.builder().setTitle(notification.title).setBody(notification.body).build())
-                .putAllData(data)
-                .setTopic(topic)
-                .build()
+            .setNotification(
+                if (notification == null) null
+                else Notification.builder().setTitle(notification.title).setBody(notification.body).build()
+            )
+            .putAllData(data)
+            .setTopic(topic)
+            .build()
 
         val response = firebase.send(message)
         LOG.debug("Erfolgreich Nachricht an Topic $topic gesendet: $response")
     }
 
     open fun sendeNachrichtAnAlle(notification: PushNotificationDto?, data: Map<String, String>?) =
-            sendePushNachrichtAnTopic(notification, data, "global")
+        sendePushNachrichtAnTopic(notification, data, "global")
 
     open fun informiereUeberTeilnahme(benutzer: Benutzer, aktion: Termin) {
         val empfaenger = benutzerDao.getFirebaseKeys(aktion.teilnehmer)
@@ -73,19 +79,25 @@ open class FirebaseService {
 
         // Informiere Ersteller*in
         sendePushNachrichtAnEmpfaenger(
-                PushNotificationDto("Verstärkung für deine Aktion",
-                        "$name ist deiner Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))} " +
-                                "beigetreten"),
-                mapOf(Pair("action", aktion.id.toString())),
-                listOf(empfaenger[0]))
+            PushNotificationDto(
+                "Verstärkung für deine Aktion",
+                "$name ist deiner Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))} " +
+                        "beigetreten"
+            ),
+            mapOf(Pair("action", aktion.id.toString())),
+            listOf(empfaenger[0])
+        )
 
         //Informiere Teilnehmer*innen
         sendePushNachrichtAnEmpfaenger(
-                PushNotificationDto("Verstärkung für eure Aktion",
-                        "$name ist der Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))} " +
-                                "beigetreten, an der du teilnimmst"),
-                mapOf(Pair("action", aktion.id.toString())),
-                empfaenger.subList(1, empfaenger.size))
+            PushNotificationDto(
+                "Verstärkung für eure Aktion",
+                "$name ist der Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))} " +
+                        "beigetreten, an der du teilnimmst"
+            ),
+            mapOf(Pair("action", aktion.id.toString())),
+            empfaenger.subList(1, empfaenger.size)
+        )
     }
 
     open fun informiereUeberAbsage(benutzer: Benutzer, aktion: Termin) {
@@ -94,19 +106,25 @@ open class FirebaseService {
 
         // Informiere Ersteller*in
         sendePushNachrichtAnEmpfaenger(
-                PushNotificationDto("Absage bei deiner Aktion",
-                        "$name nimmt nicht mehr Teil an deiner Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))}"),
-                mapOf(Pair("action", aktion.id.toString())),
-                listOf(empfaenger[0]))
+            PushNotificationDto(
+                "Absage bei deiner Aktion",
+                "$name nimmt nicht mehr Teil an deiner Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))}"
+            ),
+            mapOf(Pair("action", aktion.id.toString())),
+            listOf(empfaenger[0])
+        )
 
         //Informiere Teilnehmer*innen
         if (empfaenger.size > 1)
             sendePushNachrichtAnEmpfaenger(
-                    PushNotificationDto("Absage bei eurer Aktion",
-                            "$name hat die Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))} " +
-                                    "verlassen, an der du teilnimmst"),
-                    mapOf(Pair("action", aktion.id.toString())),
-                    empfaenger.subList(1, empfaenger.size))
+                PushNotificationDto(
+                    "Absage bei eurer Aktion",
+                    "$name hat die Aktion vom ${aktion.beginn?.format(DateTimeFormatter.ofPattern("dd.MM."))} " +
+                            "verlassen, an der du teilnimmst"
+                ),
+                mapOf(Pair("action", aktion.id.toString())),
+                empfaenger.subList(1, empfaenger.size)
+            )
     }
 
     class MissingMessageTarget(message: String) : Exception(message)

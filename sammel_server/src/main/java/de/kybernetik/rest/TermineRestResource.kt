@@ -318,10 +318,7 @@ open class TermineRestResource {
         val ersteller = aktion.teilnehmer[0]
 
         LOG.debug("Informiere Ersteller ${ersteller.id} von Aktion ${aktion.id}")
-        pushService.sendePushNachrichtAnEmpfaenger(
-            pushMessage.notification,
-            pushMessage.verschluesselt(),
-            listOf(ersteller)
+        pushService.sendePushNachrichtAnEmpfaenger(pushMessage.notification, pushMessage, listOf(ersteller)
         )
 
         val teilnehmer = aktion.teilnehmer.minus(ersteller)
@@ -333,11 +330,7 @@ open class TermineRestResource {
             )
         val restlicheTeilnehmer = aktion.teilnehmer.minus(ersteller)
 
-        pushService.sendePushNachrichtAnEmpfaenger(
-            pushMessage.notification,
-            pushMessage.verschluesselt(),
-            restlicheTeilnehmer
-        )
+        pushService.sendePushNachrichtAnEmpfaenger(pushMessage.notification, pushMessage, restlicheTeilnehmer)
     }
 
     open fun informiereUeberAbsage(benutzer: Benutzer, aktion: Termin) {
@@ -360,7 +353,7 @@ open class TermineRestResource {
         LOG.debug("Informiere Ersteller ${ersteller.id} von Aktion ${aktion.id}")
         pushService.sendePushNachrichtAnEmpfaenger(
             pushMessage.notification,
-            pushMessage.verschluesselt(),
+            pushMessage,
             listOf(ersteller)
         )
 
@@ -371,11 +364,7 @@ open class TermineRestResource {
         val teilnehmer = aktion.teilnehmer.minus(ersteller)
 
         LOG.debug("Informiere restliche Teilnehmer ${teilnehmer.map { it.id }} von Aktion ${aktion.id}")
-        pushService.sendePushNachrichtAnEmpfaenger(
-            pushMessage.notification,
-            pushMessage.verschluesselt(),
-            teilnehmer
-        )
+        pushService.sendePushNachrichtAnEmpfaenger(pushMessage.notification, pushMessage, teilnehmer)
     }
 
     open fun informiereUeberAenderung(aktion: Termin) {
@@ -393,11 +382,7 @@ open class TermineRestResource {
         val teilnehmer = aktion.teilnehmer.subList(1, aktion.teilnehmer.size)
         if (teilnehmer.size > 0)
             LOG.debug("Informiere Teilnehmer ${teilnehmer.map { it.id }} von Aktion ${aktion.id} über Änderungen")
-        pushService.sendePushNachrichtAnEmpfaenger(
-            pushMessage.notification,
-            pushMessage.verschluesselt(),
-            teilnehmer
-        )
+        pushService.sendePushNachrichtAnEmpfaenger(pushMessage.notification, pushMessage, teilnehmer)
     }
 
     open fun informiereUeberLoeschung(aktion: Termin) {
@@ -415,11 +400,7 @@ open class TermineRestResource {
         val teilnehmer = aktion.teilnehmer.subList(1, aktion.teilnehmer.size)
         if (teilnehmer.size > 0)
             LOG.debug("Informiere Teilnehmer ${teilnehmer.map { it.id }} von Aktion ${aktion.id} über Löschung")
-        pushService.sendePushNachrichtAnEmpfaenger(
-            pushMessage.notification,
-            pushMessage.verschluesselt(),
-            teilnehmer
-        )
+        pushService.sendePushNachrichtAnEmpfaenger(pushMessage.notification, pushMessage, teilnehmer)
     }
 }
 
