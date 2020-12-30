@@ -3,13 +3,17 @@ import 'package:provider/provider.dart';
 import 'package:quiver/strings.dart';
 import 'package:sammel_app/services/UserService.dart';
 
-Future<String> showUsernameDialog({BuildContext context}) => showDialog(
+Future<String> showUsernameDialog(
+        {BuildContext context, bool hideHint = false}) =>
+    showDialog(
       context: context,
-      child: UsernameDialog(),
+      child: UsernameDialog(hideHint),
     );
 
 class UsernameDialog extends StatefulWidget {
-  UsernameDialog() : super(key: Key('username dialog'));
+  bool hideHint;
+
+  UsernameDialog(this.hideHint) : super(key: Key('username dialog'));
 
   @override
   State<StatefulWidget> createState() => UsernameDialogState();
@@ -27,8 +31,11 @@ class UsernameDialogState extends State<UsernameDialog> {
       title: Text('Benutzer*in-Name'),
       content: SingleChildScrollView(
           child: Column(children: [
-        Text(
-            'Um diese Aktion auszuführen musst du dir einen Benutzer*in-Name geben'),
+        (widget.hideHint
+            ? SizedBox()
+            : Text(
+                'Um diese Aktion auszuführen musst du dir einen Benutzer*in-Name geben',
+                key: Key('username dialog hint'))),
         TextField(
           key: Key('user name input'),
           autofocus: true,
