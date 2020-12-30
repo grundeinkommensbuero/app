@@ -106,7 +106,7 @@ class ProfilePageState extends State<ProfilePage> {
               ],
             )),
         floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.info),
+            child: Icon(Icons.info_outline_rounded, size: 40.0, color: DweTheme.yellow),
             onPressed: () => showAboutDialog(context)));
   ***REMOVED***
 
@@ -202,7 +202,14 @@ class ProfileItem extends StatelessWidget {
             decoration: BoxDecoration(
                 border: Border.all(color: DweTheme.purple),
                 borderRadius: BorderRadius.circular(10.0),
-                color: DweTheme.yellowLight),
+                color: DweTheme.yellowLight,
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey,
+                      offset: Offset(1.0, 1.0),
+                      blurRadius: 3.0,
+                      spreadRadius: 1.0)
+                ]),
             child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
