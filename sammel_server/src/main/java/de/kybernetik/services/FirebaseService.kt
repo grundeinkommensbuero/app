@@ -51,6 +51,7 @@ open class FirebaseService {
                     .setCollapseKey(notification.collapseId)
                     .build())
                 .addAllTokens(empfaenger.distinct())
+                .putAllData(data ?: emptyMap())
                 .build()
             pushResponse = firebase.sendMulticast(pushMessage)
         ***REMOVED***
@@ -91,6 +92,7 @@ open class FirebaseService {
                     .setCollapseKey(notification.collapseId)
                     .build())
                 .setTopic(topic)
+                .putAllData(data ?: emptyMap())
                 .build()
             pushResponse = firebase.send(pushMessage)
         ***REMOVED***
