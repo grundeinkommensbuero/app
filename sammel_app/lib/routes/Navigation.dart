@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
+import 'package:sammel_app/routes/ProfilePage.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StorageService.dart';
@@ -57,12 +58,14 @@ class NavigationState extends State<Navigation>
       TermineSeite(key: actionPage),
       ActionEditor(onFinish: newActionCreated, key: Key('action creator')),
       faq = FAQ(),
+      ProfilePage(),
       ChatPage()
     ];
     List<String> titles = [
       'Aktionen',
       'Zum Sammeln aufrufen',
       'Tipps und Argumente',
+      'Profil',
     ];
 
     _slide = Tween<Offset>(
@@ -143,6 +146,12 @@ class NavigationState extends State<Navigation>
                         title: 'Fragen und Antworten',
                         subtitle: 'Tipps, Tricks und Argumentationshilfen',
                         index: 2),
+                    menuEntry(
+                        key: Key('profile navigation button'),
+                        title: 'Dein Profil',
+                        subtitle:
+                            'Dein Name, dein Kiez und deine Benachrichtigungen',
+                        index: 3),
                   ],
                 ))));
   ***REMOVED***

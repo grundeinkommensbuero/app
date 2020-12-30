@@ -12,6 +12,7 @@ import 'TestdatenVorrat.dart';
 void main() {
   String result;
   var _userService = UserServiceMock();
+  var hideHint = false;
 
   setUpUI((tester) async {
     result = null;
@@ -28,8 +29,8 @@ void main() {
               return Center(
                   child: RaisedButton(
                       child: const Text('X'),
-                      onPressed: () async =>
-                          result = await showUsernameDialog(context: context)));
+                      onPressed: () async => result = await showUsernameDialog(
+                          context: context, hideHint: hideHint)));
             ***REMOVED***,
           ),
         ))));
@@ -45,6 +46,18 @@ void main() {
             'Um diese Aktion auszuführen musst du dir einen Benutzer*in-Name geben'),
         findsOneWidget);
     expect(find.byKey(Key('user name input')), findsOneWidget);
+  ***REMOVED***);
+
+  testUI('hides Hint with flag true', (tester) async {
+    hideHint = true;
+
+    await openDialog(tester);
+
+    expect(
+        find.text(
+            'Um diese Aktion auszuführen musst du dir einen Benutzer*in-Name geben'),
+        findsNothing);
+    hideHint = false;
   ***REMOVED***);
 
   testUI('Fertig calls userSerivice and returns true', (tester) async {

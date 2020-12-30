@@ -19,6 +19,8 @@ class StorageService {
   static const String _PUSHTOKEN = 'pushToken';
   static const String _PULL_MODE = 'pullMode';
   static const String _CHANNEL = 'channel';
+  static const String _MYKIEZ = 'mykiez';
+  static const String _NOTIFICATION = 'notification';
 
   StorageService() {
     _prefs = SharedPreferences.getInstance();
@@ -39,10 +41,10 @@ class StorageService {
       prefs.setString('$_CHANNEL:${channel.id***REMOVED***', jsonEncode(channel.toJson())));
 
   Future<ChatChannel> loadChatChannel(String id) async => prefs.then((prefs) {
-      var json = prefs.getString('$_CHANNEL:${id***REMOVED***');
-      if(json == null) return null;
-      return ChatChannel.fromJSON(jsonDecode(json));
-    ***REMOVED***);
+        var json = prefs.getString('$_CHANNEL:${id***REMOVED***');
+        if (json == null) return null;
+        return ChatChannel.fromJSON(jsonDecode(json));
+      ***REMOVED***);
 
   markActionIdAsStored(int id) => prefs.then((prefs) => _getActionList().then(
       (list) => prefs.setStringList(_ACTIONLIST, list..add(id.toString()))));
@@ -110,6 +112,20 @@ class StorageService {
 
   Future<bool> isPullMode() =>
       prefs.then((prefs) => prefs.getBool(_PULL_MODE) ?? false);
+
+  Future<void> saveMyKiez(List<String> kieze) =>
+      prefs.then((prefs) => prefs.setStringList(_MYKIEZ, kieze));
+
+  Future<List<String>> loadMyKiez() => _prefs.then((prefs) async {
+        var list = prefs.getStringList(_MYKIEZ);
+        return list != null ? list : [];
+      ***REMOVED***);
+
+  Future<bool> saveNotificationPreference(String preference) =>
+      prefs.then((prefs) => prefs.setString(_NOTIFICATION, preference));
+
+  Future<String> loadNotificationPreference() =>
+      prefs.then((prefs) => prefs.getString(_NOTIFICATION));
 
   // for Debugging only
   loadCostumPushToken() => prefs.then((prefs) => prefs.getString(_PUSHTOKEN));
