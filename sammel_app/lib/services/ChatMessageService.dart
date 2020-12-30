@@ -68,7 +68,7 @@ class ChatMessageService implements PushNotificationListener {
       if (channels[id].channel_messages.length !=
           currentChannel.channel_messages.length) {
         channels[id].channel_messages = currentChannel.channel_messages;
-        channels[id].ccl.channelChanged(channels[id]);
+        channels[id].ccl?.channelChanged(channels[id]);
       }
     });
   }

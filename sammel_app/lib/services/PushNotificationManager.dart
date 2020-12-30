@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sammel_app/model/PushMessage.dart';
+import 'package:sammel_app/services/LocalNotificationService.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StorageService.dart';
@@ -9,7 +11,6 @@ import 'package:sammel_app/shared/Crypter.dart';
 
 import 'BackendService.dart';
 import 'ErrorService.dart';
-import 'LocalNotificationService.dart';
 
 abstract class AbstractPushNotificationManager {
   void register_message_callback(String id, PushNotificationListener callback);
@@ -27,6 +28,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
   PushNotificationManager(
       this.storageService, this.userService, firebaseService, Backend backend) {
     createPushListener(firebaseService, backend);
+    initializeLocalNotifications();
   }
 
   createPushListener(
@@ -95,7 +97,8 @@ void unsubscribeFromChannel(String topic) async {
 Future<dynamic> backgroundMessageHandler(Map<String, dynamic> message) async {
   var data = decrypt(message['data']);
   print('Background-Messenger meldet Nachrichten-Ankunft: $data');
-  if(data['type'] == "SimpleChatMessage") handleBackgroundChatMessage(data);
+  if (data['type'] == "SimpleChatMessage")
+    handleBackgroundChatMessage(data);
   else
     print('Unbekannter Nachrichtentyp: ${message['type']}');
 }
@@ -103,7 +106,7 @@ Future<dynamic> backgroundMessageHandler(Map<String, dynamic> message) async {
 Future<void> handleBackgroundChatMessage(Map<String, dynamic> data) async {
   var chatMessage = ChatMessagePushData.fromJson(data);
 
-  sendChatNotification(chatMessage);
+  // sendChatNotification(chatMessage);
 
   var storageService = StorageService();
   var chatChannel = await storageService.loadChatChannel(data['channel']);
@@ -114,6 +117,7 @@ Future<void> handleBackgroundChatMessage(Map<String, dynamic> data) async {
 class DemoPushNotificationManager implements AbstractPushNotificationManager {
   DemoPushSendService pushService;
   PushNotificationListener callback;
+
   DemoPushNotificationManager(this.pushService);
 
   @override
