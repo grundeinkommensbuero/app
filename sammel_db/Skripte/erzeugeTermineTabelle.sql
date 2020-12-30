@@ -16,13 +16,17 @@ create table Evaluationen
 (
     id      int auto_increment        primary key,
     termin_id   int     null,
+    user_id     int     null,
     unterschriften  int null,
-    teilnehmende    int null,
+    bewertung    int null,
     stunden     double  null,
     kommentar   text    null,
-    erkenntnisse  text  null,
-    constraint Evaluationen
+    situation  text  null,
+    constraint Evaluationen_Termine_fk
         foreign key (termin_id) references Termine (id)
+            on update cascade,
+    constraint Evaluationen_Benutzer_fk
+        foreign key (user_id) references Benutzer (id)
             on update cascade
 );
 

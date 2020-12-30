@@ -6,10 +6,19 @@ import 'TerminDetails.dart';
 class Evaluation {
   int terminId;
   int unterschriften;
-  int teilnehmende;
+  int bewertung;
   double stunden;
   String kommentar;
-  String erkenntnisse;
+  String situation;
 
-  Evaluation(this.terminId, this.unterschriften, this.teilnehmende, this.stunden, this.kommentar, this.erkenntnisse);
+  Evaluation(this.terminId, this.unterschriften, this.bewertung, this.stunden, this.kommentar, this.situation);
+
+  Map<String, dynamic> toJson() => {
+    'termin_id': terminId,
+    'unterschriften': unterschriften,
+    'bewertung': bewertung,
+    'stunden': stunden,
+    'kommentar': kommentar,
+    'situation': situation
+  };
 }

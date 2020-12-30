@@ -66,8 +66,8 @@ open class TermineDao {
     }
 
     open fun speichereEvaluation(evaluation: Evaluation): Evaluation {
-        LOG.debug("Speichere Evaluation für ${evaluation.id}")
-        entityManager.merge(evaluation)
+        LOG.debug("Speichere Evaluation für ${evaluation.id} für Termin ${evaluation.termin_id}")
+        entityManager.persist(evaluation)
         entityManager.flush()
         return evaluation
     }

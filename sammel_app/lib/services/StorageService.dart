@@ -13,6 +13,7 @@ class StorageService {
 
   static const String _ACTION = 'action';
   static const String _ACTIONLIST = 'actionlist';
+  static const String _EVALUATIONLIST = 'evaluationlist';
   static const String _FILTER = 'filter';
   static const String _USER = 'user';
   static const String _SECRET = 'secret';
@@ -49,6 +50,9 @@ class StorageService {
   unmarkActionIdAsStored(int id) => prefs.then((prefs) => _getActionList().then(
       (list) => prefs.setStringList(_ACTIONLIST, list..remove(id.toString()))));
 
+  markActionIdAsEvaluated(int id) => prefs.then((prefs) => _getEvaluationList().then(
+          (list) => prefs.setStringList(_EVALUATIONLIST, list..add(id.toString()))));
+
   Future<List<int>> loadAllStoredActionIds() => prefs.then((prefs) async {
         List<String> stringList = prefs.getStringList(_ACTIONLIST);
         if (stringList == null) return [];
@@ -56,10 +60,22 @@ class StorageService {
         return intList;
       });
 
+  Future<List<int>> loadAllStoredEvaluations() => prefs.then((prefs) async {
+    List<String> stringList = prefs.getStringList(_EVALUATIONLIST);
+    if (stringList == null) return [];
+    List<int> intList = stringList.map((id) => int.parse(id)).toList();
+    return intList;
+  });
+
   Future<List<String>> _getActionList() => _prefs.then((prefs) async {
         var list = prefs.getStringList(_ACTIONLIST);
         return list != null ? list : [];
       });
+
+  Future<List<String>> _getEvaluationList() => _prefs.then((prefs) async {
+    var list = prefs.getStringList(_EVALUATIONLIST);
+    return list != null ? list : [];
+  });
 
   // Filter Properties
 

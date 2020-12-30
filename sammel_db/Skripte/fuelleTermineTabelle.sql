@@ -1,7 +1,6 @@
 INSERT INTO Termine (id, beginn, ende, ort, typ, lattitude, longitude) VALUES (1, '2020-02-05 09:00:00', '2020-02-05 12:00:00', 1, 'Sammeln', 52.52116, 13.41331);
 INSERT INTO Termine (id, beginn, ende, ort, typ, lattitude, longitude) VALUES (2, '2020-02-07 11:00:00', '2020-02-07 13:00:00', 2, 'Sammeln', 52.48756, 13.46336);
 INSERT INTO Termine (id, beginn, ende, ort, typ, lattitude, longitude) VALUES (3, '2020-02-11 23:00:00', '2020-02-12 02:00:00', 3, 'Sammeln', 52.49655, 13.43759);
-INSERT INTO Termine (id, beginn, ende, ort, typ, lattitude, longitude) VALUES (4, '2020-02-13 18:00:00', '2020-02-13 20:30:00', 2, 'Infoveranstaltung', 52.48612, 13.47192);
 
 INSERT INTO TerminDetails (termin_id, treffpunkt, beschreibung, kontakt) VALUES (1, 'Weltzeituhr', 'wir stellen uns an die Ubhf-Eingänge. ihr erkennt mich an der DWE-Weste', 'kalle@revo.de');
 INSERT INTO TerminDetails (termin_id, treffpunkt, beschreibung, kontakt) VALUES (2, 'Friseurladen', 'Klemmbrett raus und los!', 'kalle@revo.de');
@@ -15,4 +14,4 @@ INSERT INTO Termin_Teilnehmer (termin, teilnehmer) VALUES (3, 12);
 INSERT INTO Termin_Teilnehmer (termin, teilnehmer) VALUES (4, 11);
 INSERT INTO Termin_Teilnehmer (termin, teilnehmer) VALUES (4, 12);
 
-INSERT INTO Evaluationen (id, terminId, unterschriften, teilnehmende, stunden, kommentar, erkenntnisse) VALUES (1, 1, 48, 2, 4.5, 'War am Regnen', 'Nicht be Regen sammeln gehen');
+INSERT INTO Evaluationen (id, termin_id, user_id, unterschriften, bewertung, stunden, kommentar, situation) VALUES (6, 1, 1, 48, 2, 4.5, 'War am Regnen', 'Nicht bei Regen sammeln gehen');

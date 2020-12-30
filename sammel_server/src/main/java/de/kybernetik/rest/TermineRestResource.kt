@@ -191,21 +191,20 @@ open class TermineRestResource {
 
     @POST
     @Path("evaluation")
-    @RolesAllowed("named")
+    @RolesAllowed("user")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
-    open fun aktualisiereEvaluation(evaluationAndToken: EvaluationWithTokenDto): Response {
-        if (evaluationAndToken.evaluation?.id == null) return noValidActionResponse
+    open fun aktualisiereEvaluation(evaluation: EvaluationDto): Response {
+        if (evaluation.termin_id == null) return noValidActionResponse
+        LOG.debug("aktualisiere evaluation für ${evaluation.termin_id}");
 
-        val tokenFromDb = dao.loadToken(evaluationAndToken.evaluation!!.id!!)?.token
-        if (tokenFromDb != null && tokenFromDb != evaluationAndToken.token) return Response.status(403)
-                .entity(RestFehlermeldung("Evaluieren dieser Aktion ist unautorisiert"))
-                .build()
+
+        val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
 
         try {
-            dao.speichereEvaluation(evaluationAndToken.evaluation!!.convertToEvaluation())
+            dao.speichereEvaluation(evaluation.convertToEvaluation(userAusDb!!.id))
         } catch (e: EJBException) {
-            LOG.error("Fehler beim Mergen der Evaluation: Evaluation: ${evaluationAndToken.evaluation}\n", e)
+            LOG.error("Fehler beim Mergen der Evaluation: Evaluation: ${evaluation}\n", e);
             return Response.status(422).entity(e.message).build()
         }
         return Response
@@ -246,20 +245,21 @@ open class TermineRestResource {
         var id: Long? = null,
         var termin_id: Long? = null,
         var unterschriften: Long? = null,
-        var teilnehmende: Long? = null,
+        var bewertung: Long? = null,
         var stunden: Double? = null,
         var kommentar: String? = null,
-        var erkenntnisse: String? = null
+        var situation: String? = null
     ) {
-        fun convertToEvaluation(): Evaluation {
+        fun convertToEvaluation(user_id: Long?): Evaluation {
             return Evaluation(
                     id = id ?: 0,
                     termin_id = termin_id,
+                    user_id = user_id,
                     unterschriften = unterschriften,
-                    teilnehmende = teilnehmende,
+                    bewertung = bewertung,
                     stunden = stunden,
                     kommentar = kommentar,
-                    erkenntnisse = erkenntnisse
+                    situation = situation
             )
         }
 
