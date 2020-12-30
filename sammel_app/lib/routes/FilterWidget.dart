@@ -159,7 +159,7 @@ class FilterWidgetState extends State<FilterWidget>
   ***REMOVED***
 
   typeSelection() async {
-    List<String> moeglicheTypen = ['Sammeln', 'Infoveranstaltung'];
+    List<String> moeglicheTypen = ['Sammeln', 'Infoveranstaltung', 'Workshop'];
     List<String> ausgewTypen = List<String>()
       ..addAll(filter.typen == null ? [] : filter.typen);
     await showDialog<List<String>>(
