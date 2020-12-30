@@ -92,9 +92,6 @@ class TermineService extends AbstractTermineService {
   ***REMOVED***
 
   saveEvaluation(Evaluation evaluation) async {
-    // TODO
-    print('saving evaluation');
-    print(evaluation);
     try {
       await post('service/termine/evaluation', jsonEncode(evaluation));
     ***REMOVED*** catch (e, s) {
@@ -229,7 +226,7 @@ class DemoTermineService extends AbstractTermineService {
   ***REMOVED***
 
   @override
-  Future<void> saveEvaluation(Evaluation evaluation, /*String token*/) async {
+  Future<void> saveEvaluation(Evaluation evaluation) async {
     // TODO
     return;
   ***REMOVED***

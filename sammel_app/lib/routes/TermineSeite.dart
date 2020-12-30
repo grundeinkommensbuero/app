@@ -54,6 +54,8 @@ class TermineSeiteState extends State<TermineSeite>
   List<int> myActions = [];
   User me;
 
+  List<int> myEvaluations = []; // Liste von Termin Ids, die der Nutzer bereits evaluiert hat
+
   int navigation = 0;
   AnimationController _animationController;
   Animation<Offset> _slide;
@@ -159,6 +161,11 @@ class TermineSeiteState extends State<TermineSeite>
         .loadAllStoredActionIds()
         .then((ids) => setState(() => myActions = ids));
 
+    storageService
+        .loadAllStoredEvaluations()
+        .then((ids) => setState(() => myEvaluations = ids));
+
+
     var listLocationService = Provider.of<AbstractListLocationService>(context);
     listLocationService.getActiveListLocations().then((listLocations) {
       setState(() {
@@ -242,12 +249,15 @@ class TermineSeiteState extends State<TermineSeite>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          isMyAction(termin.id)
-                              ? isPastAction(termin)
-                                  ? evaluateButton(termin, context)
-                                  : editAndDeleteButtons(termin, context)
+                          isPastAction(termin)
+                            ? participant(termin)
+                              ? evaluateButton(termin, context)
                               : joinOrLeaveButton(
-                                  terminMitDetails, setDialogState),
+                              terminMitDetails, setDialogState) // TODO Was soll bei vergangenen Aktionen, bei denen man nicht teilgenommen hat, angezeigt werden?
+                            : isMyAction(termin.id)
+                                ? editAndDeleteButtons(termin, context)
+                                : joinOrLeaveButton(
+                                    terminMitDetails, setDialogState),
                           Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: []..add(RaisedButton(
@@ -295,11 +305,10 @@ class TermineSeiteState extends State<TermineSeite>
   ***REMOVED***
 
   Widget evaluateButton(Termin termin, BuildContext context) {
-    final isEvaluated = false; // TODO
     return SizedBox(
         width: 100.0,
-        child: isEvaluated
-            ? Text('Thank you!')
+        child: haveEvaluated(termin.id)
+            ? Text('Danke!')
             : RaisedButton(
                 key: Key('action evaluate button'),
                 padding: EdgeInsets.all(5.0),
@@ -360,10 +369,11 @@ class TermineSeiteState extends State<TermineSeite>
   ***REMOVED***
 
   bool isMyAction(int id) {
-    // TODO
-    // reset
-    return true;
-    // return myActions?.contains(id);
+    return myActions?.contains(id);
+  ***REMOVED***
+
+  bool haveEvaluated(int id) {
+    return myEvaluations?.contains(id);
   ***REMOVED***
 
   bool isPastAction(Termin action) {
@@ -465,19 +475,16 @@ class TermineSeiteState extends State<TermineSeite>
           ],
         ));
     await saveEvaluation(evaluation);
-    // TODO
-    // maybe navigate somewhere interesting here or show a thank-you popup
-    // otherwise replace this with saveEvaluation directly
   ***REMOVED***
 
   Future<void> saveEvaluation(Evaluation evaluation) async {
     print('saveEvaluation');
     try {
-      // String token = await storageService.loadActionToken(editedAction.id);
       await termineService.saveEvaluation(
-        evaluation, /*token*/
+        evaluation
       );
-      // setState(() => updateAction(editedAction, false)); // TODO update that evaluation exists
+      setState(() => myEvaluations = myEvaluations..add(evaluation.terminId));
+      await storageService.markActionIdAsEvaluated(evaluation.terminId);
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
           additional: 'Evaluation konnte nicht gespeichert werden.');
@@ -557,8 +564,11 @@ class TermineSeiteState extends State<TermineSeite>
     ***REMOVED***);
   ***REMOVED***
 
-  participant(Termin termin) =>
-      termin.participants.map((e) => e.id).contains(me?.id);
+  participant(Termin termin) {
+    print(termin.participants.toString());
+    print(me?.id.toString());
+    return termin.participants.map((e) => e.id).contains(me?.id);
+***REMOVED***
 ***REMOVED***
 
 AlertDialog confirmDeleteDialog(BuildContext context) => AlertDialog(

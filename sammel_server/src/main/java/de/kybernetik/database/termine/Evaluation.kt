@@ -20,10 +20,13 @@ class Evaluation {
     var termin_id: Long? = null
 
     @Column
+    var user_id: Long? = null
+
+    @Column
     var unterschriften: Long? = null
 
     @Column
-    var teilnehmende: Long? = null
+    var bewertung: Long? = null
 
     @Column
     var stunden: Double? = null
@@ -32,24 +35,26 @@ class Evaluation {
     var kommentar: String? = null
 
     @Column
-    var erkenntnisse: String? = null
+    var situation: String? = null
 
     @Suppress("unused")
     constructor()
 
     constructor(id: Long,
                 termin_id: Long?,
+                user_id: Long?,
                 unterschriften: Long?,
-                teilnehmende: Long?,
+                bewertung: Long?,
                 stunden: Double?,
                 kommentar: String?,
-                erkenntnisse: String?) {
+                situation: String?) {
         this.id = id
         this.termin_id = termin_id
+        this.user_id = user_id
         this.unterschriften = unterschriften
         this.stunden = stunden
-        this.teilnehmende = teilnehmende
+        this.bewertung = bewertung
         this.kommentar = kommentar
-        this.erkenntnisse = erkenntnisse
+        this.situation = situation
     ***REMOVED***
 ***REMOVED***
