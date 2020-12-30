@@ -97,7 +97,7 @@ class ProfilePageState extends State<ProfilePage> {
                           style: TextStyle(fontSize: 28.0)),
                       SizedBox(height: 10.0),
                       Text(
-                        'Wie oft und aktuell willst du über Sammel-Aktionen in deinem Kiez benachrichtigt werden?',
+                        'Wie oft und aktuell willst du über neue Sammel-Aktionen in deinem Kiez informiert werden?',
                         style: TextStyle(
                             fontWeight: FontWeight.normal, color: Colors.black),
                       )
