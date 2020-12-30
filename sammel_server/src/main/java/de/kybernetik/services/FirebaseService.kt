@@ -50,8 +50,8 @@ open class FirebaseService {
                     .build())
                     .setCollapseKey(notification.collapseId)
                     .build())
-                .addAllTokens(empfaenger.distinct())
                 .putAllData(data ?: emptyMap())
+                .addAllTokens(empfaenger.distinct())
                 .build()
             pushResponse = firebase.sendMulticast(pushMessage)
         }
@@ -67,10 +67,6 @@ open class FirebaseService {
 
         // Quelle: https://firebase.google.com/docs/cloud-messaging/send-message#send-messages-to-topics
         val dataMessage: Message = Message.builder()
-            .setNotification(
-                if (notification == null) null
-                else Notification.builder().setTitle(notification.title).setBody(notification.body).build()
-            )
             .putAllData(data)
             .setTopic(topic)
             .build()
@@ -91,8 +87,8 @@ open class FirebaseService {
                     .build())
                     .setCollapseKey(notification.collapseId)
                     .build())
-                .setTopic(topic)
                 .putAllData(data ?: emptyMap())
+                .setTopic(topic)
                 .build()
             pushResponse = firebase.send(pushMessage)
         }
