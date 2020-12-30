@@ -304,7 +304,8 @@ open class TermineRestResource {
         var pushMessage = PushMessageDto(
             PushNotificationDto(
                 "Verstärkung für deine Aktion",
-                "$name ist deiner Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))} beigetreten"
+                "$name ist deiner Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))} beigetreten",
+                "Teilnahmen und Absagen"
             ),
             mapOf(
                 "type" to "ParticipationMessage",
@@ -325,7 +326,8 @@ open class TermineRestResource {
         pushMessage = PushMessageDto(
             PushNotificationDto(
                 "Verstärkung für eure Aktion",
-                "$name ist der Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))} beigetreten, an der du teilnimmst"
+                "$name ist der Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))} beigetreten, an der du teilnimmst",
+                "Teilnahmen und Absagen"
             ),
             pushMessage.data
         )
@@ -339,7 +341,8 @@ open class TermineRestResource {
         var pushMessage = PushMessageDto(
             PushNotificationDto(
                 "Absage bei deiner Aktion",
-                "$name nimmt nicht mehr Teil an deiner Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))}"
+                "$name nimmt nicht mehr Teil an deiner Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))}",
+                "Teilnahmen und Absagen"
             ), mapOf(
                 "type" to "ParticipationMessage",
                 "channel" to "action:${aktion.id}",
@@ -357,7 +360,8 @@ open class TermineRestResource {
         pushMessage = PushMessageDto(
             PushNotificationDto(
                 "Absage bei eurer Aktion",
-                "$name hat die Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))} verlassen, an der du teilnimmst"
+                "$name hat die Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))} verlassen, an der du teilnimmst",
+                "Teilnahmen und Absagen"
             ), pushMessage.data
         )
         val teilnehmer = aktion.teilnehmer.minus(ersteller)
@@ -370,7 +374,8 @@ open class TermineRestResource {
         val pushMessage = PushMessageDto(
             PushNotificationDto(
                 "Eine Aktion an der du teilnimmst hat sich geändert",
-                "${aktion.typ} am ${aktion.beginn!!.format(ofPattern("dd.MM."))} in ${aktion.ort} (${aktion.details!!.treffpunkt})"
+                "${aktion.typ} am ${aktion.beginn!!.format(ofPattern("dd.MM."))} in ${aktion.ort} (${aktion.details!!.treffpunkt})",
+                "Änderungen an Aktionen"
             ),
             mapOf(
                 "type" to "ActionChanged",
@@ -388,7 +393,8 @@ open class TermineRestResource {
         val pushMessage = PushMessageDto(
             PushNotificationDto(
                 "Eine Aktion an der du teilnimmst wurde abgesagt",
-                "${aktion.typ} am ${aktion.beginn!!.format(ofPattern("dd.MM."))} in ${aktion.ort} (${aktion.details!!.treffpunkt}) wurde von der Ersteller*in gelöscht"
+                "${aktion.typ} am ${aktion.beginn!!.format(ofPattern("dd.MM."))} in ${aktion.ort} (${aktion.details!!.treffpunkt}) wurde von der Ersteller*in gelöscht",
+                "Änderungen an Aktionen"
             ),
             mapOf(
                 "type" to "ActionDeleted",

@@ -41,10 +41,12 @@ open class PushNotificationResource {
         if ((teilnehmer == null || !(teilnehmer.map { it.id }.contains(context.userPrincipal.name.toLong())))) {
             LOG.debug("Benutzer ${context.userPrincipal.name} darf keine Push-Message an Aktion $actionId mit Teilnehmern ${teilnehmer?.map { it.id }} schicken")
             return Response
-                    .status(FORBIDDEN)
-                    .entity(RestFehlermeldung("Du bist nicht Teilnehmer*in dieser Aktion"))
-                    .build()
+                .status(FORBIDDEN)
+                .entity(RestFehlermeldung("Du bist nicht Teilnehmer*in dieser Aktion"))
+                .build()
         }
+
+        nachricht.notification?.channel = "Aktionen-Chats"
 
         pushService.sendePushNachrichtAnEmpfaenger(nachricht, teilnehmer)
 
@@ -65,14 +67,14 @@ open class PushNotificationResource {
         LOG.debug("Push-Messages für Benutzer $userId abgefragt")
 
         val pushMessages =
-                pushMessageDao.ladeAllePushMessagesFuerBenutzer(userId)
+            pushMessageDao.ladeAllePushMessagesFuerBenutzer(userId)
         LOG.debug("${pushMessages.size} PushMessages für Benutzer $userId geladen: ${pushMessages.map { it.id }}")
 
         pushMessageDao.loeschePushMessages(pushMessages)
 
         return Response
-                .ok()
-                .entity(pushMessages.map { PushMessageDto.convertFromPushMessage(it) })
-                .build()
+            .ok()
+            .entity(pushMessages.map { PushMessageDto.convertFromPushMessage(it) })
+            .build()
     }
 }
