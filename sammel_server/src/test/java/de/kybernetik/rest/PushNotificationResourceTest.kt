@@ -60,7 +60,7 @@ class PushNotificationResourceTest {
     @Test
     fun `pushToTopic sendet Nachricht an PushService weiter`() {
         val nachricht = PushMessageDto(
-            PushNotificationDto("Titel", "Inhalt"),
+            PushNotificationDto("Titel", "Inhalt", "Allgemein"),
             mapOf(Pair("schlüssel1", "inhalt1"), Pair("schlüssel2", "inhalt2"))
         )
 
@@ -83,7 +83,7 @@ class PushNotificationResourceTest {
         whenever(benutzerDao.getFirebaseKeys(anyList())).thenReturn(singletonList("firebase-key 1"))
         whenever(context.userPrincipal).thenReturn(BasicUserPrincipal("12")) // rosa statt karl
 
-        val notification = PushNotificationDto()
+        val notification = PushNotificationDto(channel = "Allgemein")
         val data = emptyMap<String, String>()
 
         var response = resource.pushToParticipants(PushMessageDto(notification, data), actionId = 1L)
@@ -115,7 +115,7 @@ class PushNotificationResourceTest {
                         teilnehmer,
                         52.48612, 13.47192, null))
 
-        val notification = PushNotificationDto()
+        val notification = PushNotificationDto(channel = "Allgemein")
         val data = emptyMap<String, String>()
 
         resource.pushToParticipants(PushMessageDto(notification, data), actionId = 1L)
@@ -131,9 +131,9 @@ class PushNotificationResourceTest {
     @Test
     fun `pullNotifications liest Benutzer-ID aus Credentials`() {
         val pushMessages = listOf(
-                PushMessage(karl(), emptyMap(), PushNotificationDto()),
-                PushMessage(karl(), emptyMap(), PushNotificationDto()),
-                PushMessage(karl(), emptyMap(), PushNotificationDto()))
+                PushMessage(karl(), emptyMap(), PushNotificationDto(channel = "Allgemein")),
+                PushMessage(karl(), emptyMap(), PushNotificationDto(channel = "Allgemein")),
+                PushMessage(karl(), emptyMap(), PushNotificationDto(channel = "Allgemein")))
         whenever(pushMessageDao.ladeAllePushMessagesFuerBenutzer(11))
                 .thenReturn(pushMessages)
 
@@ -145,9 +145,9 @@ class PushNotificationResourceTest {
     @Test
     fun `pullNotifications liefert pushMessages aus`() {
         val pushMessages = listOf(
-                PushMessage(karl(), emptyMap(), PushNotificationDto(title = "1")),
-                PushMessage(karl(), emptyMap(), PushNotificationDto(title = "2")),
-                PushMessage(karl(), emptyMap(), PushNotificationDto(title = "3")))
+                PushMessage(karl(), emptyMap(), PushNotificationDto(title = "1", channel = "Allgemein")),
+                PushMessage(karl(), emptyMap(), PushNotificationDto(title = "2", channel = "Allgemein")),
+                PushMessage(karl(), emptyMap(), PushNotificationDto(title = "3", channel = "Allgemein")))
         whenever(pushMessageDao.ladeAllePushMessagesFuerBenutzer(11))
                 .thenReturn(pushMessages)
 
@@ -163,9 +163,9 @@ class PushNotificationResourceTest {
     @Test
     fun `pullNotifications loescht Nachrichten in DB`() {
         val pushMessages = listOf(
-                PushMessage(karl(), emptyMap(), PushNotificationDto(title = "1")),
-                PushMessage(karl(), emptyMap(), PushNotificationDto(title = "2")),
-                PushMessage(karl(), emptyMap(), PushNotificationDto(title = "3")))
+                PushMessage(karl(), emptyMap(), PushNotificationDto(title = "1", channel = "Allgemein")),
+                PushMessage(karl(), emptyMap(), PushNotificationDto(title = "2", channel = "Allgemein")),
+                PushMessage(karl(), emptyMap(), PushNotificationDto(title = "3", channel = "Allgemein")))
         whenever(pushMessageDao.ladeAllePushMessagesFuerBenutzer(11))
                 .thenReturn(pushMessages)
 
@@ -177,7 +177,10 @@ class PushNotificationResourceTest {
     @Test
     fun `pullNotifications liefert keine Empfaenger aus`() {
         whenever(pushMessageDao.ladeAllePushMessagesFuerBenutzer(11))
-                .thenReturn(singletonList(PushMessage(karl(), emptyMap(), PushNotificationDto(title = "1"))))
+                .thenReturn(singletonList(PushMessage(karl(), emptyMap(), PushNotificationDto(
+                    title = "1",
+                    channel = "Allgemein"
+                ))))
 
         val response = resource.pullNotifications()
 
