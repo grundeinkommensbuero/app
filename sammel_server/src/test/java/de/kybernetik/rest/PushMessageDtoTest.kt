@@ -15,7 +15,7 @@ class PushMessageDtoTest {
             PushMessage(
                 karl(),
                 mapOf("key1" to "value1", "key2" to "value2"),
-                PushNotificationDto("Titel", "Inhalt", "Allgemein")
+                PushNotificationDto("Titel", "Inhalt", "Allgemein", null)
             )
         )
 

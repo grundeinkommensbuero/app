@@ -66,7 +66,7 @@ class PushServiceTest {
         val firebaseKeys = listOf("key1", "key2")
         whenever(benutzerDao.getFirebaseKeys(teilnehmerInnen)).thenReturn(firebaseKeys)
 
-        val notification = PushNotificationDto(channel = "Allgemein")
+        val notification = PushNotificationDto(channel = "Allgemein", collapseId = null)
         val data = PushMessageDto(notification)
         service.sendePushNachrichtAnEmpfaenger(data, teilnehmerInnen)
 
@@ -79,7 +79,10 @@ class PushServiceTest {
         val teilnehmer = listOf(karl(), rosa())
         whenever(benutzerDao.getFirebaseKeys(teilnehmer)).thenReturn(emptyList())
 
-        service.sendePushNachrichtAnEmpfaenger(PushMessageDto(PushNotificationDto(channel = "Allgemein")), teilnehmer)
+        service.sendePushNachrichtAnEmpfaenger(PushMessageDto(PushNotificationDto(
+            channel = "Allgemein",
+            collapseId = null
+        )), teilnehmer)
 
         verify(firebaseService, never()).sendePushNachrichtAnEmpfaenger(any(), any(), any())
     }
@@ -89,7 +92,7 @@ class PushServiceTest {
         val teilnehmerInnen = listOf(karl(), rosa())
         whenever(benutzerDao.getBenutzerOhneFirebase(teilnehmerInnen)).thenReturn(teilnehmerInnen)
 
-        val notification = PushNotificationDto(channel = "Allgemein")
+        val notification = PushNotificationDto(channel = "Allgemein", collapseId = null)
         service.sendePushNachrichtAnEmpfaenger(PushMessageDto(notification), teilnehmerInnen)
 
         val notificationCaptor = argumentCaptor<PushNotificationDto>()
@@ -107,7 +110,10 @@ class PushServiceTest {
         val teilnehmer = listOf(karl(), rosa())
         whenever(benutzerDao.getBenutzerOhneFirebase(teilnehmer)).thenReturn(emptyList())
 
-        service.sendePushNachrichtAnEmpfaenger(PushMessageDto(PushNotificationDto(channel = "Allgemein")), teilnehmer)
+        service.sendePushNachrichtAnEmpfaenger(PushMessageDto(PushNotificationDto(
+            channel = "Allgemein",
+            collapseId = null
+        )), teilnehmer)
 
         verify(pushDao, never()).speicherePushMessageFuerEmpfaenger(any(), any(), any())
     }
@@ -118,7 +124,7 @@ class PushServiceTest {
             PushMessage(
                 karl(),
                 mapOf("key1" to "value1", "key2" to "value2"),
-                PushNotificationDto("Titel", "Inhalt", "Allgemein")
+                PushNotificationDto("Titel", "Inhalt", "Allgemein", null)
             )
         )
 
@@ -144,7 +150,7 @@ class PushServiceTest {
             PushMessage(
                 karl(),
                 mapOf("key1" to "value1", "key2" to "value2"),
-                PushNotificationDto("Titel", "Inhalt", "Allgemein")
+                PushNotificationDto("Titel", "Inhalt", "Allgemein", null)
             )
         )
 

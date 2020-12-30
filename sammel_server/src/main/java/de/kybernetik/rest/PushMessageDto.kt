@@ -18,5 +18,6 @@ data class PushMessageDto(
 data class PushNotificationDto(
     var title: String? = null,
     var body: String? = null,
-    var channel: String? = null
+    var channel: String? = null,
+    var collapseId: String? = null
 ) : Serializable

@@ -375,7 +375,8 @@ open class TermineRestResource {
             PushNotificationDto(
                 "Eine Aktion an der du teilnimmst hat sich geändert",
                 "${aktion.typ} am ${aktion.beginn!!.format(ofPattern("dd.MM."))} in ${aktion.ort} (${aktion.details!!.treffpunkt})",
-                "Änderungen an Aktionen"
+                "Änderungen an Aktionen",
+                "action:change:${aktion.id}"
             ),
             mapOf(
                 "type" to "ActionChanged",
@@ -394,7 +395,8 @@ open class TermineRestResource {
             PushNotificationDto(
                 "Eine Aktion an der du teilnimmst wurde abgesagt",
                 "${aktion.typ} am ${aktion.beginn!!.format(ofPattern("dd.MM."))} in ${aktion.ort} (${aktion.details!!.treffpunkt}) wurde von der Ersteller*in gelöscht",
-                "Änderungen an Aktionen"
+                "Änderungen an Aktionen",
+                "action:change:${aktion.id}"
             ),
             mapOf(
                 "type" to "ActionDeleted",

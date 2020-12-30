@@ -1,7 +1,6 @@
 package de.kybernetik.services
 
 import com.google.firebase.messaging.*
-import de.kybernetik.database.benutzer.BenutzerDao
 import org.jboss.logging.Logger
 import de.kybernetik.rest.PushNotificationDto
 import java.lang.Exception
@@ -13,9 +12,6 @@ import javax.ejb.Startup
 @Singleton
 open class FirebaseService {
     private val LOG = Logger.getLogger(FirebaseService::class.java)
-
-    @EJB
-    private lateinit var benutzerDao: BenutzerDao
 
     @EJB
     private lateinit var firebase: Firebase
@@ -89,7 +85,9 @@ open class FirebaseService {
                     .setBody(notification.body)
                     .setClickAction(".Application")
                     .setChannelId(notification.channel)
-                    .build()).build())
+                    .build())
+                    .setCollapseKey(notification.collapseId)
+                    .build())
                 .setTopic(topic)
                 .build()
             pushResponse = firebase.send(pushMessage)

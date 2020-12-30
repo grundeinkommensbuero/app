@@ -25,7 +25,7 @@ const version = '0.3.4+14';
 
 // Debug
 const bool pullMode = false;
-const bool clearButton = false;
+const bool clearButton = true;
 
 class MyApp extends StatelessWidget {
   static var firebaseService = FirebaseReceiveService();
