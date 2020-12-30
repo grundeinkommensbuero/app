@@ -25,7 +25,7 @@ const version = '0.3.4+14';
 
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
+const bool clearButton = true;
 
 class MyApp extends StatelessWidget {
   static var firebaseService = FirebaseReceiveService();

@@ -375,7 +375,8 @@ open class TermineRestResource {
             PushNotificationDto(
                 "Eine Aktion an der du teilnimmst hat sich geändert",
                 "${aktion.typ***REMOVED*** am ${aktion.beginn!!.format(ofPattern("dd.MM."))***REMOVED*** in ${aktion.ort***REMOVED*** (${aktion.details!!.treffpunkt***REMOVED***)",
-                "Änderungen an Aktionen"
+                "Änderungen an Aktionen",
+                "action:change:${aktion.id***REMOVED***"
             ),
             mapOf(
                 "type" to "ActionChanged",
@@ -394,7 +395,8 @@ open class TermineRestResource {
             PushNotificationDto(
                 "Eine Aktion an der du teilnimmst wurde abgesagt",
                 "${aktion.typ***REMOVED*** am ${aktion.beginn!!.format(ofPattern("dd.MM."))***REMOVED*** in ${aktion.ort***REMOVED*** (${aktion.details!!.treffpunkt***REMOVED***) wurde von der Ersteller*in gelöscht",
-                "Änderungen an Aktionen"
+                "Änderungen an Aktionen",
+                "action:change:${aktion.id***REMOVED***"
             ),
             mapOf(
                 "type" to "ActionDeleted",
