@@ -227,7 +227,7 @@ class DemoTermineService extends AbstractTermineService {
 
   @override
   Future<void> saveEvaluation(Evaluation evaluation) async {
-    // TODO
+    // hier muss man nix machen, es wird sowieso lokal gespeichert, dass man eine Evaluation abgegeben hat
     return;
   ***REMOVED***
 ***REMOVED***
