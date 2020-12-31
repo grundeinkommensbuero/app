@@ -9,6 +9,7 @@ import de.kybernetik.database.termine.TermineDao
 import de.kybernetik.database.termine.Token
 import org.jboss.logging.Logger
 import de.kybernetik.rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithoutDetails
+import de.kybernetik.services.NeueAktionenNotification
 import de.kybernetik.services.PushService
 import java.time.LocalDateTime
 import java.time.ZonedDateTime.now
@@ -41,6 +42,9 @@ open class TermineRestResource {
 
     @EJB
     private lateinit var pushService: PushService
+
+    @EJB
+    private lateinit var neueAktionenNotification: NeueAktionenNotification
 
     @Context
     private lateinit var context: SecurityContext
@@ -95,7 +99,11 @@ open class TermineRestResource {
         val token = actionAndToken.token
         if (!token.isNullOrEmpty()) dao.storeToken(updatedAction.id, token)
 
-        pushService.pusheNeueAktionenNotification(listOf(actionAndToken.action!!))
+        pushService.pusheNeueAktionenNotification(
+            listOf(actionAndToken.action!!),
+            "${actionAndToken.action!!.ort***REMOVED***-sofort"
+        )
+        neueAktionenNotification.merkeNeueAktion(actionAndToken.action!!)
 
         return Response
             .ok()

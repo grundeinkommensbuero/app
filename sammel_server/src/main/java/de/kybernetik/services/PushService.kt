@@ -78,7 +78,7 @@ open class PushService {
         ***REMOVED***
     ***REMOVED***
 
-    open fun pusheNeueAktionenNotification(aktionen: List<TerminDto>) {
+    open fun pusheNeueAktionenNotification(aktionen: List<TerminDto>, topic: String) {
         LOG.debug("Neue Aktionen als Push-Messages zu versenden: ${aktionen.map { it.id ***REMOVED******REMOVED***")
         if (aktionen.isNullOrEmpty()) return
 
@@ -100,8 +100,8 @@ open class PushService {
                 "action" to listOf(aktionen.map { it.id ***REMOVED***)
             )
         )
-        val topic = URLEncoder.encode("${aktionen[0].ort***REMOVED***-täglich", Charsets.UTF_8.name()).replace("+", "%20")
-        sendePushNachrichtAnTopic(pushMessage, topic)
+        val topicEnc = URLEncoder.encode(topic, Charsets.UTF_8.name()).replace("+", "%20")
+        sendePushNachrichtAnTopic(pushMessage, topicEnc)
     ***REMOVED***
 
 ***REMOVED***
