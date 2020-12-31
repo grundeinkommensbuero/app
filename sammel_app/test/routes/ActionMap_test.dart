@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/routes/ActionMap.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
@@ -11,8 +12,14 @@ import '../shared/TestdatenVorrat.dart';
 
 final terminService = TermineServiceMock();
 final storageService = StorageServiceMock();
+final stammdatenService = StammdatenServiceMock();
 
 void main() {
+  setUp(() {
+    reset(stammdatenService);
+    when(stammdatenService.kieze).thenAnswer((_) async => [ffAlleeNord()]);
+  });
+
   testWidgets('uses default values', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(home: Scaffold(body: ActionMap())));
 
@@ -51,17 +58,17 @@ void main() {
 
       var morgen = DateTime.now()..add(Duration(days: 1));
       await tester.pumpWidget(MaterialApp(
-          home: Scaffold(
-              body: ActionMap(
-                  termine: [
-            TerminTestDaten.anActionFrom(morgen)..id = 1,
-            TerminTestDaten.anActionFrom(morgen)..id = 2,
-            TerminTestDaten.anActionFrom(morgen)..id = 3,
-          ],
-                  listLocations: [],
-                  isMyAction: isMyAction,
-                  iAmParticipant: (_) => false,
-                  openActionDetails: () {}))));
+              home: Scaffold(
+                  body: ActionMap(
+                      termine: [
+                TerminTestDaten.anActionFrom(morgen)..id = 1,
+                TerminTestDaten.anActionFrom(morgen)..id = 2,
+                TerminTestDaten.anActionFrom(morgen)..id = 3,
+              ],
+                      listLocations: [],
+                      isMyAction: isMyAction,
+                      iAmParticipant: (_) => false,
+                      openActionDetails: () {}))));
 
       List<FlatButton> actionMarker = tester
           .widgetList(find.byKey(Key('action marker')))
@@ -80,19 +87,19 @@ void main() {
       var iAmParticipant = (List<User> users) => users.isNotEmpty;
 
       await tester.pumpWidget(MaterialApp(
-          home: Scaffold(
-              body: ActionMap(
-                  termine: [
-            TerminTestDaten.einTermin()..id = 1,
-            TerminTestDaten.einTermin()..id = 2,
-            TerminTestDaten.einTermin()
-              ..id = 3
-              ..participants = [karl()],
-          ],
-                  listLocations: [],
-                  isMyAction: isMyAction,
-                  iAmParticipant: iAmParticipant,
-                  openActionDetails: () {}))));
+              home: Scaffold(
+                  body: ActionMap(
+                      termine: [
+                TerminTestDaten.einTermin()..id = 1,
+                TerminTestDaten.einTermin()..id = 2,
+                TerminTestDaten.einTermin()
+                  ..id = 3
+                  ..participants = [karl()],
+              ],
+                      listLocations: [],
+                      isMyAction: isMyAction,
+                      iAmParticipant: iAmParticipant,
+                      openActionDetails: () {}))));
 
       List<FlatButton> actionMarker = tester
           .widgetList(find.byKey(Key('action marker')))
@@ -111,19 +118,19 @@ void main() {
       var iAmParticipant = (List<User> users) => users.isNotEmpty;
 
       await tester.pumpWidget(MaterialApp(
-          home: Scaffold(
-              body: ActionMap(
-                  termine: [
-            TerminTestDaten.einTermin()..id = 1,
-            TerminTestDaten.einTermin()
-              ..id = 2
-              ..participants = [karl()],
-            TerminTestDaten.einTermin()..id = 3,
-          ],
-                  listLocations: [],
-                  isMyAction: (_) => false,
-                  iAmParticipant: iAmParticipant,
-                  openActionDetails: () {}))));
+              home: Scaffold(
+                  body: ActionMap(
+                      termine: [
+                TerminTestDaten.einTermin()..id = 1,
+                TerminTestDaten.einTermin()
+                  ..id = 2
+                  ..participants = [karl()],
+                TerminTestDaten.einTermin()..id = 3,
+              ],
+                      listLocations: [],
+                      isMyAction: (_) => false,
+                      iAmParticipant: iAmParticipant,
+                      openActionDetails: () {}))));
 
       List<FlatButton> actionMarker = tester
           .widgetList(find.byKey(Key('action marker')))
@@ -141,17 +148,17 @@ void main() {
       bool iHaveBeenCalled = false;
 
       await tester.pumpWidget(MaterialApp(
-          home: Scaffold(
-              body: ActionMap(
-                  termine: [
-            TerminTestDaten.einTermin()..id = 1,
-            TerminTestDaten.einTermin()..id = 2,
-            TerminTestDaten.einTermin()..id = 3,
-          ],
-                  listLocations: [],
-                  isMyAction: (_) => false,
-                  iAmParticipant: (_) => false,
-                  openActionDetails: (_, __) => iHaveBeenCalled = true))));
+              home: Scaffold(
+                  body: ActionMap(
+                      termine: [
+                TerminTestDaten.einTermin()..id = 1,
+                TerminTestDaten.einTermin()..id = 2,
+                TerminTestDaten.einTermin()..id = 3,
+              ],
+                      listLocations: [],
+                      isMyAction: (_) => false,
+                      iAmParticipant: (_) => false,
+                      openActionDetails: (_, __) => iHaveBeenCalled = true))));
 
       expect(iHaveBeenCalled, false);
 
@@ -164,24 +171,24 @@ void main() {
 
   testWidgets('shows all list locations', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-            body: ActionMap(
-                termine: [],
-                listLocations: [curry36(), cafeKotti(), zukunft()],
-                isMyAction: (_) => false,
-                openActionDetails: () {}))));
+            home: Scaffold(
+                body: ActionMap(
+                    termine: [],
+                    listLocations: [curry36(), cafeKotti(), zukunft()],
+                    isMyAction: (_) => false,
+                    openActionDetails: () {}))));
 
     expect(find.byKey(Key('list location marker')), findsNWidgets(3));
   });
 
   testWidgets('opens list location info on tap', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
-        home: Scaffold(
-            body: ActionMap(
-                termine: [],
-                listLocations: [curry36()],
-                isMyAction: (_) => false,
-                openActionDetails: () {}))));
+            home: Scaffold(
+                body: ActionMap(
+                    termine: [],
+                    listLocations: [curry36()],
+                    isMyAction: (_) => false,
+                    openActionDetails: () {}))));
 
     expect(find.byKey(Key('list location marker')), findsOneWidget);
     await tester.tap(find.byKey(Key('list location marker')));

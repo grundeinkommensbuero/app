@@ -1,6 +1,6 @@
 import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
-import 'package:sammel_app/model/Ort.dart';
+import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
@@ -31,39 +31,49 @@ class TerminCard extends StatelessWidget {
                 blurRadius: 3.0,
                 spreadRadius: 1.0)
           ]),
-      child: Column(children: [
-        Text(
-          '${termin.typ}',
-          style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 129, 28, 98)),
-        ),
-        Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-          Image.asset(
-            termin.getAsset(),
-            height: 40.0,
-          ),
-          SizedBox(
-            width: 20.0,
-          ),
-          Flexible(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                Text(
-                  erzeugeOrtText(termin.ort),
-                  style: style,
-                ),
-                Text(erzeugeDatumText(termin.beginn, termin.ende)),
-              ])),
-        ]),
-      ]),
+      child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.asset(
+              termin.getAsset(),
+              width: 45.0,
+            ),
+            SizedBox(
+              width: 20.0,
+            ),
+            Expanded(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Text(
+                      '${termin.typ}',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 129, 28, 98)),
+                    ),
+                    SizedBox(width: 45.0)
+                  ]),
+                  Text(
+                    erzeugeOrtText(termin.ort),
+                    textAlign: TextAlign.start,
+                    style: style,
+                  ),
+                  Text(
+                    erzeugeDatumText(termin.beginn, termin.ende),
+                    textAlign: TextAlign.start,
+                  ),
+                ])),
+          ]),
     );
   }
 
-  static String erzeugeOrtText(Ort ort) {
-    return '${ort.bezirk}, ${ort.ort}';
+  static String erzeugeOrtText(Kiez ort) {
+    return '${ort.bezirk}, ${ort.kiez}';
   }
 
   static String erzeugeDatumText(DateTime beginn, DateTime ende) {

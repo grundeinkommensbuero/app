@@ -2,7 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
+import 'package:uuid/uuid.dart';
 import 'package:provider/provider.dart';
+
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
@@ -11,20 +13,22 @@ import 'package:sammel_app/routes/EvaluationEditor.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/Evaluation.dart';
 import 'package:sammel_app/routes/ActionMap.dart';
+import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
-import 'package:sammel_app/shared/ChatMessageService.dart';
-import 'package:sammel_app/shared/ChatWindow.dart';
+import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
-import 'package:sammel_app/shared/user_data.dart';
-import 'package:uuid/uuid.dart';
+
+import 'ActionEditor.dart';
+import 'ActionMap.dart';
 import 'ActionList.dart';
 import 'FilterWidget.dart';
 import 'ActionDetailsPage.dart';
+import 'ChatWindow.dart';
 
 class TermineSeite extends StatefulWidget {
   TermineSeite({Key key}) : super(key: key ?? Key('action page'));
@@ -106,20 +110,23 @@ class TermineSeiteState extends State<TermineSeite>
     );
 
     return Scaffold(
-      body: Stack(
-        alignment: Alignment.topCenter,
-        children: [
-          FadeTransition(
-            opacity: _fade,
-            child: SlideTransition(
-              position: _slide,
-              child: IndexedStack(
-                  children: [actionListView, actionMapView], index: navigation),
-            ),
-          ),
-          filterWidget,
-        ],
-      ),
+      body: Container(
+          decoration: DweTheme.happyHouseBackground,
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              FadeTransition(
+                opacity: _fade,
+                child: SlideTransition(
+                  position: _slide,
+                  child: IndexedStack(
+                      children: [actionListView, actionMapView],
+                      index: navigation),
+                ),
+              ),
+              filterWidget,
+            ],
+          )),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: navigation,
         onTap: swithPage,
@@ -186,7 +193,7 @@ class TermineSeiteState extends State<TermineSeite>
         this.termine = termine..sort(Termin.compareByStart);
       });
     }).catchError((e, s) => ErrorService.handleError(e, s,
-        additional: "Aktionen konnten nicht geladen werden."));
+        context: "Aktionen konnten nicht geladen werden."));
   }
 
   void showRestError(RestFehler e) {
@@ -284,13 +291,13 @@ class TermineSeiteState extends State<TermineSeite>
         showActionOnMap(terminMitDetails);
     } catch (e, s) {
       ErrorService.handleError(e, s,
-          additional: 'Aktionen konnten nicht geladen werden.');
+          context: 'Aktion konnte nicht geladen werden.');
     }
   }
 
   openChatWindow(Termin termin) async {
-    Channel message_channel =
-        await chatMessageService.getActionChannel(termin.id);
+    ChatChannel message_channel =
+        await chatMessageService.getChatChannel(termin.id);
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -425,7 +432,7 @@ class TermineSeiteState extends State<TermineSeite>
       setState(() => updateAction(editedAction, false));
     } catch (e, s) {
       ErrorService.handleError(e, s,
-          additional: 'Aktion konnte nicht gespeichert werden.');
+          context: 'Aktion konnte nicht gespeichert werden.');
     }
   }
 
@@ -498,9 +505,9 @@ class TermineSeiteState extends State<TermineSeite>
       await termineService.deleteAction(action, token);
       storageService.deleteActionToken(action.id);
       setState(() => updateAction(action, true));
-    } on RestFehler catch (error) {
-      ErrorService.pushMessage(
-          'Aktion konnte nicht gelöscht werden', error.message);
+    } catch (e, s) {
+      ErrorService.handleError(e, s,
+          context: 'Aktion konnte nicht gelöscht werden.');
     }
   }
 
@@ -530,7 +537,7 @@ class TermineSeiteState extends State<TermineSeite>
       });
     } catch (e, s) {
       ErrorService.handleError(e, s,
-          additional: 'Aktion konnte nicht erzeugt werden. ');
+          context: 'Aktion konnte nicht erzeugt werden.');
     }
   }
 
@@ -549,7 +556,6 @@ class TermineSeiteState extends State<TermineSeite>
   }
 
   Future<void> joinAction(Termin termin) async {
-    chatMessageService.createActionChannel(termin.id);
     await termineService.joinAction(termin.id);
     setState(() {
       termine.firstWhere((t) => t.id == termin.id).participants.add(me);

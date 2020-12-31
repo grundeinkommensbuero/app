@@ -1,15 +1,14 @@
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
-
-import 'Ort.dart';
 
 class TermineFilter {
   List<String> typen;
   List<DateTime> tage;
   TimeOfDay von;
   TimeOfDay bis;
-  List<Ort> orte;
+  List<String> orte;
 
   TermineFilter(this.typen, this.tage, this.von, this.bis, this.orte);
 
@@ -26,8 +25,7 @@ class TermineFilter {
         bis = json['bis'] == null ? null : TimeOfDay.fromDateTime(
           // Dirty Hack für Bug https://github.com/dart-lang/intl/issues/244
             DateFormat("yyyy HH:mm:ss").parse('2019 ' + json['bis'])),
-        orte =
-        (json['orte'] as List).map((json) => Ort.fromJson(json)).toList();
+        orte = (json['orte'] as List<dynamic>).map((e) => e as String).toList();
 
   Map<String, dynamic> toJson() => {
         'typen': typen,

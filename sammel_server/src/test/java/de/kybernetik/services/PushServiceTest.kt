@@ -2,12 +2,16 @@ package de.kybernetik.services
 
 import TestdatenVorrat.Companion.karl
 import TestdatenVorrat.Companion.rosa
+import com.google.gson.GsonBuilder
 import com.nhaarman.mockitokotlin2.*
 import de.kybernetik.database.benutzer.Benutzer
 import de.kybernetik.database.benutzer.BenutzerDao
+import de.kybernetik.database.pushmessages.PushMessage
 import de.kybernetik.database.pushmessages.PushMessageDao
+import de.kybernetik.rest.PushMessageDto
 import de.kybernetik.rest.PushNotificationDto
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 
 import org.junit.Rule
@@ -15,7 +19,14 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
+import java.util.*
+import javax.crypto.Cipher
+import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.SecretKeySpec
 import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 class PushServiceTest {
     @Rule
@@ -42,7 +53,7 @@ class PushServiceTest {
 
     @Test
     fun `sendePushNachrichtAnEmpfaenger ignoriert leere Anfragen`() {
-        service.sendePushNachrichtAnEmpfaenger(PushNotificationDto(), emptyMap(), emptyList())
+        service.sendePushNachrichtAnEmpfaenger(PushMessageDto(), emptyList())
 
         verify(firebaseService, never()).sendePushNachrichtAnEmpfaenger(any(), any(), any())
         verify(pushDao, never()).speicherePushMessageFuerEmpfaenger(any(), any(), any())
@@ -55,12 +66,12 @@ class PushServiceTest {
         val firebaseKeys = listOf("key1", "key2")
         whenever(benutzerDao.getFirebaseKeys(teilnehmerInnen)).thenReturn(firebaseKeys)
 
-        val notification = PushNotificationDto()
-        val data = emptyMap<String, String>()
-        service.sendePushNachrichtAnEmpfaenger(notification, data, teilnehmerInnen)
+        val notification = PushNotificationDto(channel = "Allgemein", collapseId = null)
+        val data = PushMessageDto(notification)
+        service.sendePushNachrichtAnEmpfaenger(data, teilnehmerInnen)
 
         verify(firebaseService, times(1))
-                .sendePushNachrichtAnEmpfaenger(notification, data, firebaseKeys)
+                .sendePushNachrichtAnEmpfaenger(notification, emptyMap(), firebaseKeys)
     }
 
     @Test
@@ -68,7 +79,10 @@ class PushServiceTest {
         val teilnehmer = listOf(karl(), rosa())
         whenever(benutzerDao.getFirebaseKeys(teilnehmer)).thenReturn(emptyList())
 
-        service.sendePushNachrichtAnEmpfaenger(PushNotificationDto(), emptyMap(), teilnehmer)
+        service.sendePushNachrichtAnEmpfaenger(PushMessageDto(PushNotificationDto(
+            channel = "Allgemein",
+            collapseId = null
+        )), teilnehmer)
 
         verify(firebaseService, never()).sendePushNachrichtAnEmpfaenger(any(), any(), any())
     }
@@ -78,9 +92,8 @@ class PushServiceTest {
         val teilnehmerInnen = listOf(karl(), rosa())
         whenever(benutzerDao.getBenutzerOhneFirebase(teilnehmerInnen)).thenReturn(teilnehmerInnen)
 
-        val notification = PushNotificationDto()
-        val data = emptyMap<String, String>()
-        service.sendePushNachrichtAnEmpfaenger(notification, data, teilnehmerInnen)
+        val notification = PushNotificationDto(channel = "Allgemein", collapseId = null)
+        service.sendePushNachrichtAnEmpfaenger(PushMessageDto(notification), teilnehmerInnen)
 
         val notificationCaptor = argumentCaptor<PushNotificationDto>()
         val teilnehmerCaptor = argumentCaptor<List<Benutzer>>()
@@ -88,7 +101,7 @@ class PushServiceTest {
         verify(pushDao, times(1))
                 .speicherePushMessageFuerEmpfaenger(notificationCaptor.capture(), dataCaptor.capture(), teilnehmerCaptor.capture())
         assertEquals(notification, notificationCaptor.firstValue)
-        assertEquals(data, dataCaptor.firstValue)
+        assertTrue(dataCaptor.firstValue.isEmpty())
         assertEquals(teilnehmerInnen, teilnehmerCaptor.firstValue)
     }
 
@@ -97,8 +110,72 @@ class PushServiceTest {
         val teilnehmer = listOf(karl(), rosa())
         whenever(benutzerDao.getBenutzerOhneFirebase(teilnehmer)).thenReturn(emptyList())
 
-        service.sendePushNachrichtAnEmpfaenger(PushNotificationDto(), emptyMap(), teilnehmer)
+        service.sendePushNachrichtAnEmpfaenger(PushMessageDto(PushNotificationDto(
+            channel = "Allgemein",
+            collapseId = null
+        )), teilnehmer)
 
         verify(pushDao, never()).speicherePushMessageFuerEmpfaenger(any(), any(), any())
+    }
+
+    @Test
+    fun `verschluesselt() reicht verschluesselte Daten heraus`() {
+        val dto = PushMessageDto.convertFromPushMessage(
+            PushMessage(
+                karl(),
+                mapOf("key1" to "value1", "key2" to "value2"),
+                PushNotificationDto("Titel", "Inhalt", "Allgemein", null)
+            )
+        )
+
+        val nachricht = service.verschluessele(dto.data)!!
+        val ciphertext = nachricht["payload"]!!
+        assertFalse(ciphertext.contains("key1"))
+        assertFalse(ciphertext.contains("value1"))
+        assertFalse(ciphertext.contains("key2"))
+        assertFalse(ciphertext.contains("value2"))
+
+        val plaintext = entschluessele(nachricht)
+
+        println("Paintext: $plaintext")
+
+        val data = GsonBuilder().serializeNulls().create().fromJson(plaintext, Map::class.java)
+        assertEquals(data["key1"], "value1")
+        assertEquals(data["key2"], "value2")
+    }
+
+    @Test
+    fun `verschluesselt() notiert Verschluesselungstyp und Nonce`() {
+        val dto = PushMessageDto.convertFromPushMessage(
+            PushMessage(
+                karl(),
+                mapOf("key1" to "value1", "key2" to "value2"),
+                PushNotificationDto("Titel", "Inhalt", "Allgemein", null)
+            )
+        )
+
+        val nachricht = service.verschluessele(dto.data)!!
+        assertEquals(nachricht["encrypted"], "AES")
+        assertNotNull(nachricht["nonce"])
+    }
+
+    @Ignore("Zum manuellen Testen Log-Level in Funktion auf info stellen")
+    @Test
+    fun verschluessele() {
+        service.verschluessele(mapOf("content" to "Hello World"))
+    }
+
+    companion object {
+        fun entschluessele(data: Map<String, String>): String {
+            val nonce = data["nonce"] as String
+            val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
+            cipher.init(
+                Cipher.DECRYPT_MODE,
+                SecretKeySpec(Base64.getDecoder().decode("vue8NkTYyN1e2OoHGcapLZWiCTC+13Eqk9gXBSq4azc="), "AES"),
+                IvParameterSpec(Base64.getDecoder().decode(nonce))
+            )
+            val plainbytes = cipher.doFinal(Base64.getDecoder().decode(data["payload"]))
+            return String(plainbytes, Charsets.UTF_8)
+        }
     }
 }

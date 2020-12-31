@@ -3,8 +3,6 @@ package de.kybernetik.rest
 import de.kybernetik.database.pushmessages.PushMessageDao
 import de.kybernetik.database.termine.TermineDao
 import org.jboss.logging.Logger
-import de.kybernetik.services.FirebaseService
-import de.kybernetik.services.FirebaseService.MissingMessageTarget
 import de.kybernetik.services.PushService
 import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
@@ -25,9 +23,6 @@ open class PushNotificationResource {
     private lateinit var pushService: PushService
 
     @EJB
-    private lateinit var firebase: FirebaseService
-
-    @EJB
     private lateinit var termineDao: TermineDao
 
     @EJB
@@ -35,15 +30,6 @@ open class PushNotificationResource {
 
     @Context
     private lateinit var context: SecurityContext
-
-    @Path("devices")
-    @RolesAllowed("named")
-    @POST
-    open fun pushToDevices(nachricht: PushMessageDto) {
-        if (nachricht.recipients == null)
-            throw MissingMessageTarget("Die Nachricht enthält keine Empfänger")
-        firebase.sendePushNachrichtAnEmpfaenger(nachricht.notification, nachricht.verschluesselt(), nachricht.recipients!!)
-    }
 
     @Path("action/{actionId}")
     @RolesAllowed("named")
@@ -55,12 +41,15 @@ open class PushNotificationResource {
         if ((teilnehmer == null || !(teilnehmer.map { it.id }.contains(context.userPrincipal.name.toLong())))) {
             LOG.debug("Benutzer ${context.userPrincipal.name} darf keine Push-Message an Aktion $actionId mit Teilnehmern ${teilnehmer?.map { it.id }} schicken")
             return Response
-                    .status(FORBIDDEN)
-                    .entity(RestFehlermeldung("Du bist nicht Teilnehmer*in dieser Aktion"))
-                    .build()
+                .status(FORBIDDEN)
+                .entity(RestFehlermeldung("Du bist nicht Teilnehmer*in dieser Aktion"))
+                .build()
         }
 
-        pushService.sendePushNachrichtAnEmpfaenger(nachricht.notification, nachricht.verschluesselt(), teilnehmer)
+        nachricht.notification?.channel = "Aktionen-Chats"
+        nachricht.notification?.collapseId = "chat:action:${actionId}"
+
+        pushService.sendePushNachrichtAnEmpfaenger(nachricht, teilnehmer)
 
         return Response.accepted().build()
     }
@@ -68,9 +57,8 @@ open class PushNotificationResource {
     @Path("topic/{topic}")
     @RolesAllowed("named")
     @POST
-    open fun pushToTopic(nachricht: PushMessageDto, @PathParam("topic") topic: String) {
-        firebase.sendePushNachrichtAnTopic(nachricht.notification, nachricht.verschluesselt(), topic)
-    }
+    open fun pushToTopic(nachricht: PushMessageDto, @PathParam("topic") topic: String) =
+        pushService.sendePushNachrichtAnTopic(nachricht, topic)
 
     @Path("pull")
     @RolesAllowed("user")
@@ -80,14 +68,14 @@ open class PushNotificationResource {
         LOG.debug("Push-Messages für Benutzer $userId abgefragt")
 
         val pushMessages =
-                pushMessageDao.ladeAllePushMessagesFuerBenutzer(userId)
+            pushMessageDao.ladeAllePushMessagesFuerBenutzer(userId)
         LOG.debug("${pushMessages.size} PushMessages für Benutzer $userId geladen: ${pushMessages.map { it.id }}")
 
         pushMessageDao.loeschePushMessages(pushMessages)
 
         return Response
-                .ok()
-                .entity(pushMessages.map { PushMessageDto.convertFromPushMessage(it) })
-                .build()
+            .ok()
+            .entity(pushMessages.map { PushMessageDto.convertFromPushMessage(it) })
+            .build()
     }
 }

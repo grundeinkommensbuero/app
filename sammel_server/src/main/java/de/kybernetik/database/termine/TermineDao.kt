@@ -46,7 +46,7 @@ open class TermineDao {
         if (filterKlausel.contains(tageKlausel)) query.setParameter("tage", filter.tage.map { it.toDate() })
         if (filterKlausel.contains(vonKlausel)) query.setParameter("von", filter.von!!.atDate(LocalDate.now()))
         if (filterKlausel.contains(bisKlausel)) query.setParameter("bis", filter.bis!!.atDate(LocalDate.now()))
-        if (filterKlausel.contains(orteKlausel)) query.setParameter("orte", filter.orte.map { it.convertToOrt() })
+        if (filterKlausel.contains(orteKlausel)) query.setParameter("orte", filter.orte)
         return query
     }
 
@@ -74,7 +74,7 @@ open class TermineDao {
 
     open fun erstelleNeuenTermin(termin: Termin): Termin {
         termin.details!!.termin = termin
-        LOG.debug("Speichere Aktion ${termin}")
+        LOG.debug("Speichere Aktion ${termin.id}")
         entityManager.persist(termin)
         entityManager.flush()
         return termin
@@ -82,7 +82,7 @@ open class TermineDao {
     }
 
     @Throws(DatabaseException::class)
-    open fun deleteAction(action: Termin) {
+    open fun loescheAktion(action: Termin) {
         val actionFromDb: Termin
         try {
             actionFromDb = entityManager.find(Termin::class.java, action.id)

@@ -13,10 +13,11 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
-import 'package:sammel_app/shared/ChatMessageService.dart';
+import 'package:sammel_app/services/ChatMessageService.dart';
 
 import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';
+import '../shared/TestdatenVorrat.dart';
 
 final _stammdatenService = StammdatenServiceMock();
 final _termineService = TermineServiceMock();
@@ -32,21 +33,24 @@ void main() {
 
     setUpUI((WidgetTester tester) async {
       navigation = Navigation();
-      when(_storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
+      when(_storageService.loadAllStoredActionIds())
+          .thenAnswer((_) async => []);
       when(_listLocationService.getActiveListLocations())
           .thenAnswer((_) async => []);
       when(_storageService.loadFilter())
           .thenAnswer((_) async => TermineFilter.leererFilter());
       when(_termineService.loadActions(any)).thenAnswer((_) async => []);
-      when(_stammdatenService.ladeOrte()).thenAnswer((_) async => []);
+      when(_stammdatenService.kieze).thenAnswer(
+          (_) async => [ffAlleeNord(), tempVorstadt(), plaenterwald()]);
 
       await tester.pumpWidget(MultiProvider(providers: [
         Provider<AbstractTermineService>.value(value: _termineService),
-        Provider<AbstractListLocationService>.value(value: _listLocationService),
+        Provider<AbstractListLocationService>.value(
+            value: _listLocationService),
         Provider<StorageService>.value(value: _storageService),
         Provider<AbstractPushSendService>.value(value: _pushService),
         Provider<AbstractUserService>.value(value: _userService),
-        Provider<AbstractStammdatenService>.value(value: _stammdatenService),
+        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<ChatMessageService>.value(value: _chatService),
       ], child: MaterialApp(home: navigation)));
     });

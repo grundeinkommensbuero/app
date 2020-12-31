@@ -1,51 +1,19 @@
-import 'package:http_server/http_server.dart';
-import 'package:sammel_app/model/Ort.dart';
-import 'package:sammel_app/services/ErrorService.dart';
+import 'dart:convert';
 
-import 'BackendService.dart';
-import 'UserService.dart';
+import 'package:sammel_app/model/Kiez.dart';
+import 'package:sammel_app/shared/FileReader.dart';
 
-abstract class AbstractStammdatenService extends BackendService {
-  Future<List<Ort>> ladeOrte();
+class StammdatenService {
+  static FileReader fileReader = FileReader();
+  Future<List<Kiez>> kieze = ladeKieze();
 
-  AbstractStammdatenService(AbstractUserService userService,
-      [Backend backendMock])
-      : super(userService, backendMock);
-}
+  StammdatenService();
 
-class StammdatenService extends AbstractStammdatenService {
-  StammdatenService(AbstractUserService userService, [Backend backendMock])
-      : super(userService, backendMock);
+  static Future<List<Kiez>> ladeKieze() async {
+    var json = await fileReader.loadLor();
 
-  Future<List<Ort>> ladeOrte() async {
-    try {
-      HttpClientResponseBody response = await get('/service/stammdaten/orte');
+    List centroidMaps = jsonDecode(json);
 
-      final orte = (response.body as List)
-          .map((jsonOrt) => Ort.fromJson(jsonOrt))
-          .toList();
-      return orte;
-    } catch (e, s) {
-      ErrorService.handleError(e, s,
-          additional: 'Orte konnten nicht geladen werden.');
-      return [];
-    }
+    return centroidMaps.map((json) => Kiez.fromJson(json)).toList();
   }
-}
-
-class DemoStammdatenService extends AbstractStammdatenService {
-  DemoStammdatenService(
-    userService,
-  ) : super(userService, DemoBackend());
-
-  static Ort nordkiez = Ort(1, 'Friedrichshain-Kreuzberg',
-      'Friedrichshain Nordkiez', 52.51579, 13.45399);
-  static Ort treptowerPark =
-      Ort(2, 'Treptow-Köpenick', 'Treptower Park', 52.48993, 13.46839);
-  static Ort goerli = Ort(3, 'Friedrichshain-Kreuzberg',
-      'Görlitzer Park und Umgebung', 52.49653, 13.43762);
-
-  static List<Ort> orte = [nordkiez, treptowerPark, goerli];
-
-  Future<List<Ort>> ladeOrte() async => orte;
 }

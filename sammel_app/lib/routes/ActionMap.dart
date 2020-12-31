@@ -38,6 +38,8 @@ class ActionMap extends StatefulWidget {
 }
 
 class ActionMapState extends State<ActionMap> {
+  List<String> selected = ['10317'];
+
   ActionMapState();
 
   var locationPermissionGranted = false;
@@ -45,7 +47,7 @@ class ActionMapState extends State<ActionMap> {
   @override
   void initState() {
     super.initState();
-    Permission.location.request().then((status) =>
+    Permission.locationWhenInUse.request().then((status) =>
         setState(() => locationPermissionGranted = status.isGranted));
   }
 
@@ -57,15 +59,6 @@ class ActionMapState extends State<ActionMap> {
       TileLayerOptions(
           urlTemplate: "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
           subdomains: ['a', 'b', 'c']),
-//        PolygonLayerOptions(polygons: [
-//          Polygon(
-//              color: Color.fromARGB(40, DweTheme.purple.red, DweTheme.purple.green, DweTheme.purple.blue),
-//              borderStrokeWidth: 2.0,
-//              borderColor: Color.fromARGB(150, DweTheme.purple.red, DweTheme.purple.green, DweTheme.purple.blue),
-//              points: widget.termine
-//                  .map((action) => LatLng(action.lattitude, action.longitude))
-//                  .toList())
-//        ]),
       MarkerLayerOptions(markers: markers),
     ];
 
@@ -116,6 +109,11 @@ class ActionMapState extends State<ActionMap> {
       updateMapLocationOnPositionChange: false,
       showMoveToCurrentLocationFloatingActionButton: false,
     ));
+  }
+
+  Color generateColor(String bezirk) {
+    return Color.fromARGB(150, bezirk.hashCode * 10, bezirk.hashCode * 100,
+        bezirk.hashCode * 1000);
   }
 }
 

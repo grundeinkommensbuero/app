@@ -1,12 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:test/test.dart';
 
 import '../shared/TestdatenVorrat.dart';
-import 'Ort_test.dart';
 import 'TerminDetails_test.dart';
 
 void main() {
@@ -17,8 +15,7 @@ void main() {
               1,
               DateTime(2020, 1, 2, 15, 0, 0),
               DateTime(2020, 1, 2, 18, 0, 0),
-              Ort(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez', 52.49653,
-                  13.43762),
+              ffAlleeNord(),
               'Sammeln',
               52.52116,
               13.41331,
@@ -28,9 +25,9 @@ void main() {
           '"id":1,'
           '"beginn":"2020-01-02T15:00:00.000",'
           '"ende":"2020-01-02T18:00:00.000",'
-          '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez","lattitude":52.49653,"longitude":13.43762},'
+          '"ort":"Frankfurter Allee Nord",'
           '"typ":"Sammeln",'
-          '"lattitude":52.52116,'
+          '"latitude":52.52116,'
           '"longitude":13.41331,'
           '"participants":null,'
           '"details":null}');
@@ -41,8 +38,7 @@ void main() {
               1,
               DateTime(2020, 1, 2, 15, 0, 0),
               DateTime(2020, 1, 2, 18, 0, 0),
-              Ort(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez', 52.49653,
-                  13.43762),
+              ffAlleeNord(),
               'Sammeln',
               52.52116,
               13.41331,
@@ -52,9 +48,9 @@ void main() {
           '"id":1,'
           '"beginn":"2020-01-02T15:00:00.000",'
           '"ende":"2020-01-02T18:00:00.000",'
-          '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez","lattitude":52.49653,"longitude":13.43762},'
+          '"ort":"Frankfurter Allee Nord",'
           '"typ":"Sammeln",'
-          '"lattitude":52.52116,'
+          '"latitude":52.52116,'
           '"longitude":13.41331,'
           '"participants":[],'
           '"details":null}');
@@ -66,8 +62,7 @@ void main() {
               1,
               DateTime(2020, 1, 2, 15, 0, 0),
               DateTime(2020, 1, 2, 18, 0, 0),
-              Ort(15, "Friedrichshain-Kreuzberg", "Fhain - Nordkiez", 52.49653,
-                  13.43762),
+              ffAlleeNord(),
               'Sammeln',
               52.52116,
               13.41331,
@@ -77,9 +72,9 @@ void main() {
           '"id":1,'
           '"beginn":"2020-01-02T15:00:00.000",'
           '"ende":"2020-01-02T18:00:00.000",'
-          '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez","lattitude":52.49653,"longitude":13.43762},'
+          '"ort":"Frankfurter Allee Nord",'
           '"typ":"Sammeln",'
-          '"lattitude":52.52116,'
+          '"latitude":52.52116,'
           '"longitude":13.41331,'
           '"participants":[{"id":11,"name":"Karl Marx","color":4294198070}],'
           '"details":{'
@@ -110,42 +105,42 @@ void main() {
   });
   group('deserialisiere', () {
     test('deserialisiert Termin ohne Teilnehmer und Details', () {
-      var termin = Termin.fromJson(jsonDecode('{'
-          '"id":1,'
-          '"beginn":"2020-01-02T15:00:00.000",'
-          '"ende":"2020-01-02T18:00:00.000",'
-          '"ort":{"id":15,"bezirk":"Friedrichshain-Kreuzberg","ort":"Fhain - Nordkiez","lattitude":52.49653,"longitude":13.43762},'
-          '"typ":"Sammeln",'
-          '"lattitude":52.52116,'
-          '"longitude":13.41331}'));
+      var termin = Termin.fromJson(
+          jsonDecode('{'
+              '"id":1,'
+              '"beginn":"2020-01-02T15:00:00.000",'
+              '"ende":"2020-01-02T18:00:00.000",'
+              '"ort":"Frankfurter Allee Nord",'
+              '"typ":"Sammeln",'
+              '"latitude":52.52116,'
+              '"longitude":13.41331}'),
+          [ffAlleeNord()]);
       expect(termin.id, 1);
       expect(termin.beginn, equals(DateTime(2020, 1, 2, 15, 0, 0)));
       expect(termin.ende, equals(DateTime(2020, 1, 2, 18, 0, 0)));
       expect(termin.typ, 'Sammeln');
       expect(termin.latitude, 52.52116);
       expect(termin.longitude, 13.41331);
-      expect(
-          termin.ort.toString(),
-          Ort(15, 'Friedrichshain-Kreuzberg', 'Fhain - Nordkiez', 52.49653,
-                  13.43762)
-              .toString());
+      expect(termin.ort.toString(), ffAlleeNord().toString());
       expect(termin.participants, isNull);
       expect(termin.details, isNull);
     });
 
     test('deserialisiert Termin mit Teilnehmer und Details', () {
-      var termin = Termin.fromJson(jsonDecode('{'
-          '"beginn":"2020-02-05T09:00:00",'
-          '"participants":[{"id":11,"name":"Karl Marx", "color":4294198070}],'
-          '"details":{'
-          '"id":1,'
-          '"beschreibung":"wir stellen uns an die Ubhf-Eingänge. ihr erkennt mich an der DWE-Weste",'
-          '"kontakt":"kalle@revo.de",'
-          '"treffpunkt":"Weltzeituhr"},'
-          '"ende":"2020-02-05T12:00:00",'
-          '"id":1,'
-          '"ort":{"bezirk":"Friedrichshain-Kreuzberg","id":1,"ort":"Friedrichshain Nordkiez"},'
-          '"typ":"Sammeln"}'));
+      var termin = Termin.fromJson(
+          jsonDecode('{'
+              '"beginn":"2020-02-05T09:00:00",'
+              '"participants":[{"id":11,"name":"Karl Marx", "color":4294198070}],'
+              '"details":{'
+              '"id":1,'
+              '"beschreibung":"wir stellen uns an die Ubhf-Eingänge. ihr erkennt mich an der DWE-Weste",'
+              '"kontakt":"kalle@revo.de",'
+              '"treffpunkt":"Weltzeituhr"},'
+              '"ende":"2020-02-05T12:00:00",'
+              '"id":1,'
+              '"ort":"Frankfurter Allee Nord",'
+              '"typ":"Sammeln"}'),
+          [ffAlleeNord()]);
       expect(termin.details.treffpunkt, "Weltzeituhr");
       expect(termin.details.beschreibung,
           "wir stellen uns an die Ubhf-Eingänge. ihr erkennt mich an der DWE-Weste");
@@ -158,13 +153,13 @@ void main() {
 
   test('compareByStart orders actions by Start value', () {
     var now = DateTime.now();
-    var action1 = Termin(1, now, now.add(Duration(hours: 1)), goerli(),
+    var action1 = Termin(1, now, now.add(Duration(hours: 1)), tempVorstadt(),
         'Sammeln', 52.52116, 13.41331, [], null);
     var action2 = Termin(
         2,
         now.add(Duration(days: 1)),
         now.add(Duration(days: 1)).add(Duration(hours: 1)),
-        nordkiez(),
+        ffAlleeNord(),
         'Sammeln',
         52.52116,
         13.41331,
@@ -174,7 +169,7 @@ void main() {
         3,
         now.add(Duration(days: 365)),
         now.add(Duration(days: 365, hours: 1)),
-        treptowerPark(),
+        plaenterwald(),
         'Sammeln',
         52.52116,
         13.41331,
@@ -184,7 +179,7 @@ void main() {
         4,
         now.subtract(Duration(hours: 1)),
         now.add(Duration(hours: 1)),
-        treptowerPark(),
+        plaenterwald(),
         'Sammeln',
         52.52116,
         13.41331,
@@ -246,7 +241,7 @@ class TerminTestDaten {
       0,
       DateTime(2019, 11, 4, 17, 9, 0),
       DateTime(2019, 11, 4, 18, 9, 0),
-      nordkiez(),
+      ffAlleeNord(),
       'Sammeln',
       52.52116,
       13.41331,
@@ -257,7 +252,7 @@ class TerminTestDaten {
       0,
       date,
       date.add(Duration(hours: 1)),
-      nordkiez(),
+      ffAlleeNord(),
       'Sammeln',
       52.52116,
       13.41331,
@@ -271,7 +266,7 @@ class TerminTestDaten {
       0,
       DateTime(2019, 11, 4, 17, 9, 0),
       DateTime(2019, 11, 4, 18, 9, 0),
-      nordkiez(),
+      ffAlleeNord(),
       'Sammeln',
       52.52116,
       13.41331,

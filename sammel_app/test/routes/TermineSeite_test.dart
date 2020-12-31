@@ -20,9 +20,8 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
-import 'package:sammel_app/shared/ChatMessageService.dart';
+import 'package:sammel_app/services/ChatMessageService.dart';
 
-import '../model/Ort_test.dart';
 import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';
@@ -44,7 +43,9 @@ void main() {
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
     when(_termineService.loadActions(any)).thenAnswer((_) async => []);
-    when(_stammdatenService.ladeOrte()).thenAnswer((_) async => []);
+    when(_stammdatenService.kieze).thenAnswer(
+        (_) async => [ffAlleeNord(), tempVorstadt(), plaenterwald()]);
+    ErrorService.displayedTypes = [];
 
     termineSeiteWidget = MultiProvider(
         providers: [
@@ -53,7 +54,7 @@ void main() {
               value: _listLocationService),
           Provider<StorageService>.value(value: _storageService),
           Provider<AbstractUserService>.value(value: _userService),
-          Provider<AbstractStammdatenService>.value(value: _stammdatenService),
+          Provider<StammdatenService>.value(value: _stammdatenService),
           Provider<ChatMessageService>.value(value: _chatMessageService),
         ],
         child: MaterialApp(home: Builder(builder: (BuildContext context) {
@@ -74,9 +75,9 @@ void main() {
       when(userService.user).thenAnswer((_) => Stream.value(me));
 
       when(_termineService.loadActions(any)).thenAnswer((_) async => [
-            TerminTestDaten.anActionFrom(today)..ort = goerli(),
-            TerminTestDaten.anActionFrom(tomorrow)..ort = nordkiez(),
-            TerminTestDaten.anActionFrom(yesterday)..ort = treptowerPark(),
+            TerminTestDaten.anActionFrom(today)..ort = tempVorstadt(),
+            TerminTestDaten.anActionFrom(tomorrow)..ort = ffAlleeNord(),
+            TerminTestDaten.anActionFrom(yesterday)..ort = plaenterwald(),
           ]);
 
       await tester.pumpWidget(termineSeiteWidget);
@@ -87,19 +88,19 @@ void main() {
       expect(
           find.descendant(
               of: find.byType(TerminCard).first,
-              matching: find.text(TerminCard.erzeugeOrtText(treptowerPark()))),
+              matching: find.text(TerminCard.erzeugeOrtText(plaenterwald()))),
           findsOneWidget);
 
       expect(
           find.descendant(
               of: find.byType(TerminCard).at(1),
-              matching: find.text(TerminCard.erzeugeOrtText(goerli()))),
+              matching: find.text(TerminCard.erzeugeOrtText(tempVorstadt()))),
           findsOneWidget);
 
       expect(
           find.descendant(
               of: find.byType(TerminCard).last,
-              matching: find.text(TerminCard.erzeugeOrtText(nordkiez()))),
+              matching: find.text(TerminCard.erzeugeOrtText(ffAlleeNord()))),
           findsOneWidget);
     });
 
@@ -399,7 +400,7 @@ void main() {
       editorState.action = ActionData(
           TimeOfDay.fromDateTime(today),
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
-          goerli(),
+          tempVorstadt(),
           'Infoveranstaltung',
           [today],
           TerminDetails('test1', 'test2', 'test3'),
@@ -410,7 +411,7 @@ void main() {
               1337,
               today,
               today.add(Duration(hours: 2)),
-              goerli(),
+              tempVorstadt(),
               'Infoveranstaltung',
               52.52116,
               13.41331,
@@ -461,7 +462,7 @@ void main() {
       editorState.action = ActionData(
           TimeOfDay.fromDateTime(today),
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
-          goerli(),
+          tempVorstadt(),
           'Sammeln',
           [today],
           TerminDetails('test1', 'test2', 'test3'),
@@ -472,7 +473,7 @@ void main() {
             1337,
             today,
             today.add(Duration(hours: 2)),
-            goerli(),
+            tempVorstadt(),
             'Infoveranstaltung',
             52.52116,
             13.41331,
@@ -524,7 +525,7 @@ void main() {
       editorState.action = ActionData(
           TimeOfDay.fromDateTime(today),
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
-          goerli(),
+          tempVorstadt(),
           'Infoveranstaltung',
           [today],
           TerminDetails('test1', 'test2', 'test3'),
@@ -535,7 +536,7 @@ void main() {
               1337,
               today,
               today.add(Duration(hours: 2)),
-              goerli(),
+              tempVorstadt(),
               'Infoveranstaltung',
               52.52116,
               13.41331,
@@ -586,14 +587,14 @@ void main() {
       editorState.action = ActionData(
           TimeOfDay.fromDateTime(today),
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
-          goerli(),
+          tempVorstadt(),
           'Infoveranstaltung',
           [today],
           TerminDetails('test1', 'test2', 'test3'),
           LatLng(52.49653, 13.43762));
 
       when(_termineService.createAction(any, any))
-          .thenThrow(RestFehler('Fehlerbeschreibung. '));
+          .thenThrow(RestFehler('Fehlerbeschreibung.'));
 
       await tester.tap(find.byKey(Key('action editor finish button')));
       await tester.pumpAndSettle();
@@ -601,7 +602,7 @@ void main() {
       expect(find.byKey(Key('error dialog')), findsOneWidget);
       expect(
           find.text(
-              'Fehlerbeschreibung. Aktion konnte nicht erzeugt werden. \nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com'),
+              'Aktion konnte nicht erzeugt werden. Fehlerbeschreibung. \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com'),
           findsOneWidget);
     });
   });
@@ -1069,11 +1070,11 @@ void main() {
             .thenThrow(RestFehler('message'));
 
         await tester.tap(find.byKey(Key('delete confirmation yes button')));
-        await tester.pump();
+        await tester.pumpAndSettle(Duration(seconds: 10));
 
         expect(find.byKey(Key('error dialog')), findsOneWidget);
-        expect(
-            find.text('Aktion konnte nicht gelöscht werden'), findsOneWidget);
+        expect(find.text('Aktion konnte nicht gelöscht werden. message \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com'),
+            findsOneWidget);
       });
 
       testWidgets('shows alert popup on AuthFehler',
@@ -1098,7 +1099,7 @@ void main() {
 
         expect(find.byKey(Key('error dialog')), findsOneWidget);
         expect(
-            find.text('Aktion konnte nicht gelöscht werden'), findsOneWidget);
+            find.text('Aktion konnte nicht gelöscht werden. message \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com'), findsOneWidget);
       });
     });
   });
@@ -1197,7 +1198,7 @@ void main() {
     test('only updates action w/o remove flag', () {
       var newAction = TerminTestDaten.einTermin()
         ..id = 2
-        ..ort = goerli();
+        ..ort = tempVorstadt();
 
       actionPageState.updateAction(newAction, false);
 
@@ -1208,8 +1209,8 @@ void main() {
               .where((action) => action.id == 2)
               .toList()[0]
               .ort
-              .id,
-          goerli().id);
+              .kiez,
+          tempVorstadt().kiez);
     });
 
     test('sorts new list by date', () {
@@ -1319,7 +1320,7 @@ _pumpNavigation(WidgetTester tester) async {
         Provider<StorageService>.value(value: _storageService),
         Provider<AbstractListLocationService>(
             create: (context) => _listLocationService),
-        Provider<AbstractStammdatenService>.value(value: _stammdatenService),
+        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<PushSendService>.value(value: _pushService),
         Provider<AbstractUserService>.value(value: _userService),
         Provider<AbstractPushSendService>.value(value: _pushService),

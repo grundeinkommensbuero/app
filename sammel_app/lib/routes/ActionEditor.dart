@@ -4,27 +4,25 @@ import 'package:intl/intl.dart';
 import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:quiver/strings.dart';
-import 'package:sammel_app/model/Ort.dart';
+import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/User.dart';
-import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
-import 'package:sammel_app/shared/LocationPicker.dart';
 import 'package:sammel_app/shared/showMultipleDatePicker.dart';
 import 'package:sammel_app/shared/showTimeRangePicker.dart';
 import 'package:sammel_app/shared/showUsernameDialog.dart';
 
-import 'VenueDialog.dart';
+import 'LocationDialog.dart';
 
 enum ValidationState { not_validated, error, ok }
 
 class ActionData {
   TimeOfDay von;
   TimeOfDay bis;
-  Ort ort;
+  Kiez ort;
   String typ;
   List<DateTime> tage;
   TerminDetails terminDetails;
@@ -33,8 +31,8 @@ class ActionData {
   ActionData.testDaten() {
     this.von = TimeOfDay.fromDateTime(DateTime.now());
     this.bis = TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 1)));
-    this.ort = Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
-        52.51579, 13.45399);
+    this.ort = Kiez(
+        'Friedrichshain-Kreuzberg', 'Plänterwald', 52.51579, 13.45399, [[]]);
     this.coordinates = LatLng(52.51579, 13.45399);
     this.typ = 'Sammeln';
     this.tage = [DateTime.now()];
@@ -133,12 +131,9 @@ class ActionEditorState extends State<ActionEditor> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         InputButton(
+                            key: Key('Open location dialog'),
                             onTap: locationSelection,
-                            child: locationButtonCaption(this.action),
-                            key: Key('Open location dialog')),
-                        InputButton(
-                            onTap: venueSelection,
-                            child: venueButtonCaption(this.action)),
+                            child: locationButtonCaption(this.action)),
                       ]))
                 ]),
                 Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -239,16 +234,18 @@ class ActionEditorState extends State<ActionEditor> {
     )
   ]);
 
-  void venueSelection() async {
-    Venue ergebnis = await showVenueDialog(
+  void locationSelection() async {
+    Location ergebnis = await showLocationDialog(
         context: context,
         initDescription: action.terminDetails.treffpunkt,
         initCoordinates: action.coordinates,
+        initKiez: action.ort,
         center: determineMapCenter(action));
 
     setState(() {
       action.terminDetails.treffpunkt = ergebnis?.description;
       action.coordinates = ergebnis?.coordinates;
+      action.ort = ergebnis?.kiez;
       validateAllInput();
     });
   }
@@ -259,10 +256,7 @@ class ActionEditorState extends State<ActionEditor> {
         action.coordinates?.longitude != null)
       return LatLng(action.coordinates.latitude, action.coordinates.longitude);
     // at location
-    if (action.ort?.latitude != null && action.ort?.latitude != null)
-      return LatLng(action.ort.latitude, action.ort.longitude);
-
-    return null;
+    return action.ort?.center;
   }
 
   void contactSelection() async {
@@ -341,7 +335,7 @@ class ActionEditorState extends State<ActionEditor> {
   }
 
   typeSelection() async {
-    List<String> moeglicheTypen = ['Sammeln', 'Infoveranstaltung'];
+    List<String> moeglicheTypen = ['Sammeln', 'Infoveranstaltung', 'Workshop'];
     var ausgewTyp = '';
     await showDialog<String>(
         context: context,
@@ -396,23 +390,6 @@ class ActionEditorState extends State<ActionEditor> {
     });
   }
 
-  locationSelection() async {
-    var allLocations =
-        await Provider.of<AbstractStammdatenService>(context).ladeOrte();
-    var selectedLocations = await LocationPicker(
-            key: Key('Location Picker'),
-            locations: allLocations,
-            multiMode: false)
-        .showLocationPicker(context, List<Ort>());
-
-    setState(() {
-      if (selectedLocations.isNotEmpty) {
-        this.action.ort = selectedLocations[0];
-        validateAllInput();
-      }
-    });
-  }
-
   void descriptionSelection() async {
     var ergebnis = await showTextInputDialog(
         this.action.terminDetails.beschreibung,
@@ -442,8 +419,8 @@ class ActionEditorState extends State<ActionEditor> {
     return build_text_row(text, this.action.validated['tage']);
   }
 
-  Widget venueButtonCaption(ActionData termin) {
-    Text text;
+  Widget locationButtonCaption(ActionData termin) {
+    Widget text;
     if (this.action.validated['venue'] == ValidationState.error ||
         this.action.validated['venue'] == ValidationState.not_validated) {
       text = Text(
@@ -451,7 +428,8 @@ class ActionEditorState extends State<ActionEditor> {
         style: TextStyle(color: DweTheme.purple),
       );
     } else {
-      text = Text('Treffpunkt: ${termin.terminDetails.treffpunkt}');
+      text = Text('${termin.ort.kiez} in ${termin.ort.bezirk}\n'
+          'Treffpunkt: ${termin.terminDetails.treffpunkt}');
     }
     return build_text_row(text, this.action.validated['venue']);
   }
@@ -517,17 +495,6 @@ class ActionEditorState extends State<ActionEditor> {
     //beschriftung += ',';
 
     return build_text_row(text, val);
-  }
-
-  Widget locationButtonCaption(ActionData termin) {
-    Text text;
-    if (termin.validated['ort'] == ValidationState.not_validated ||
-        termin.validated['ort'] == ValidationState.error)
-      text = Text("Wähle einen Ort", style: TextStyle(color: DweTheme.purple));
-    else {
-      text = Text("in " + termin.ort.ort);
-    }
-    return build_text_row(text, termin.validated['ort']);
   }
 
   void validateAllInput() {

@@ -14,6 +14,10 @@ abstract class PushReceiveService {
       MessageHandler onResume,
       MessageHandler onLaunch,
       MessageHandler onBackgroundMessage});
+
+  void subscribeToKiezActionTopics(List<String> kieze, String option);
+
+  void unsubscribeFromKiezActionTopics(List<String> kieze, String notification);
 }
 
 class FirebaseReceiveService implements PushReceiveService {
@@ -27,15 +31,16 @@ class FirebaseReceiveService implements PushReceiveService {
     initializeFirebase();
   }
 
-  Future<void> initializeFirebase() async {
+  initializeFirebase() async {
     // DEBUG
     if (pullMode) return;
 
     // For iOS request permission first.
     await firebaseMessaging.requestNotificationPermissions();
 
-    token = firebaseMessaging.getToken();
-    await token;
+    token = firebaseMessaging
+        .getToken()
+        .timeout(Duration(seconds: 5), onTimeout: () => null);
   }
 
   @override
@@ -45,14 +50,32 @@ class FirebaseReceiveService implements PushReceiveService {
           onResume: onResume,
           onLaunch: onLaunch,
           onBackgroundMessage: onBackgroundMessage);
+
+  @override
+  void unsubscribeFromKiezActionTopics(List<String> kieze, String interval) {
+    kieze.forEach((kiez) {
+      var topic = Uri.encodeComponent('$kiez-$interval');
+      print('Unsubscribe zu Topic $topic');
+      firebaseMessaging.unsubscribeFromTopic(topic);
+    });
+  }
+
+  @override
+  void subscribeToKiezActionTopics(List<String> kieze, String interval) {
+    kieze.forEach((kiez) {
+      var topic = Uri.encodeComponent('$kiez-$interval');
+      print('Subscribe zu Topic $topic');
+      firebaseMessaging.subscribeToTopic(topic);
+    });
+  }
 }
 
 class PullService extends BackendService implements PushReceiveService {
   Timer timer;
   MessageHandler onMessage = (_) async => Map();
 
-  PullService(AbstractUserService userService, [Backend backendMock])
-      : super(userService, backendMock) {
+  PullService(AbstractUserService userService, Backend backend)
+      : super(userService, backend) {
     timer = Timer.periodic(Duration(seconds: 10), (_) => pull());
   }
 
@@ -70,9 +93,20 @@ class PullService extends BackendService implements PushReceiveService {
         content.forEach((message) => onMessage(message));
     } catch (e, s) {
       ErrorService.handleError(e, s,
-          additional:
+          context:
               'Beim Abrufen von Nachrichten ist ein Fehler aufgetreten. Das regelmäßige Abrufen von Nachrichten wird deshalb deaktiviert');
       timer.cancel();
     }
+  }
+
+  @override
+  void subscribeToKiezActionTopics(List<String> kieze, String option) {
+    // TODO: implement subscribeToKiezActionTopics
+  }
+
+  @override
+  void unsubscribeFromKiezActionTopics(
+      List<String> kieze, String notification) {
+    // TODO: implement unsubscribeFromKiezActionTopics
   }
 }

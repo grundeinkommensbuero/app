@@ -23,7 +23,7 @@ main() {
     await tester.pumpWidget(widget);
 
     expect(find.text('Friedrichshain-Kreuzberg'), findsOneWidget);
-    expect(find.text('Friedrichshain Nordkiez'), findsOneWidget);
+    expect(find.text('Frankfurter Allee Nord'), findsOneWidget);
     expect(find.text('Treffpunkt: Weltzeituhr'), findsOneWidget);
     expect(find.text('Bringe Westen und Klämmbretter mit'), findsOneWidget);
     expect(find.text('Ruft an unter 012345678'), findsOneWidget);

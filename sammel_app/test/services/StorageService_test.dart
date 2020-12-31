@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -85,12 +84,7 @@ void main() async {
           [DateTime(2020, 1, 14), DateTime(2020, 1, 16)],
           TimeOfDay(hour: 12, minute: 30),
           TimeOfDay(hour: 15, minute: 0),
-          [
-            Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
-                52.51579, 13.45399),
-            Ort(2, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung',
-                52.49653, 13.43762)
-          ]);
+          [ffAlleeNord().kiez, tempVorstadt().kiez]);
 
       var result = await service.saveFilter(filter);
 
@@ -105,24 +99,8 @@ void main() async {
           containsAll([DateTime(2020, 1, 14), DateTime(2020, 1, 16)]));
       expect(filterFromStorage.von, TimeOfDay(hour: 12, minute: 30));
       expect(filterFromStorage.bis, TimeOfDay(hour: 15, minute: 0));
-      expect(
-          filterFromStorage.orte.map((ort) => ort.toJson()),
-          containsAll([
-            {
-              'id': 1,
-              'bezirk': 'Friedrichshain-Kreuzberg',
-              'ort': 'Friedrichshain Nordkiez',
-              'lattitude': 52.51579,
-              'longitude': 13.45399
-            },
-            {
-              'id': 2,
-              'bezirk': 'Friedrichshain-Kreuzberg',
-              'ort': 'Görlitzer Park und Umgebung',
-              'lattitude': 52.49653,
-              'longitude': 13.43762
-            }
-          ]));
+      expect(filterFromStorage.orte,
+          containsAll(['Frankfurter Allee Nord', 'Tempelhofer Vorstadt']));
     });
 
     test('is read correctly', () async {
@@ -131,12 +109,7 @@ void main() async {
           [DateTime(2020, 1, 14), DateTime(2020, 1, 16)],
           TimeOfDay(hour: 12, minute: 30),
           TimeOfDay(hour: 15, minute: 0),
-          [
-            Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
-                52.51579, 13.45399),
-            Ort(2, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung',
-                52.49653, 13.43762)
-          ]);
+          [ffAlleeNord().kiez, tempVorstadt().kiez]);
       _prefs.setString('filter', jsonEncode(filter.toJson()));
 
       TermineFilter readFilter = await service.loadFilter();
@@ -148,24 +121,8 @@ void main() async {
           containsAll([DateTime(2020, 1, 14), DateTime(2020, 1, 16)]));
       expect(readFilter.von, TimeOfDay(hour: 12, minute: 30));
       expect(readFilter.bis, TimeOfDay(hour: 15, minute: 0));
-      expect(
-          readFilter.orte.map((ort) => ort.toJson()),
-          containsAll([
-            {
-              'id': 1,
-              'bezirk': 'Friedrichshain-Kreuzberg',
-              'ort': 'Friedrichshain Nordkiez',
-              'lattitude': 52.51579,
-              'longitude': 13.45399
-            },
-            {
-              'id': 2,
-              'bezirk': 'Friedrichshain-Kreuzberg',
-              'ort': 'Görlitzer Park und Umgebung',
-              'lattitude': 52.49653,
-              'longitude': 13.43762
-            }
-          ]));
+      expect(readFilter.orte,
+          containsAll(['Frankfurter Allee Nord', 'Tempelhofer Vorstadt']));
     });
 
     test('loads empty filter if none is stored', () async {
@@ -174,12 +131,7 @@ void main() async {
           [DateTime(2020, 1, 14), DateTime(2020, 1, 16)],
           TimeOfDay(hour: 12, minute: 30),
           TimeOfDay(hour: 15, minute: 0),
-          [
-            Ort(1, 'Friedrichshain-Kreuzberg', 'Friedrichshain Nordkiez',
-                52.51579, 13.45399),
-            Ort(2, 'Friedrichshain-Kreuzberg', 'Görlitzer Park und Umgebung',
-                52.49653, 13.43762)
-          ]);
+          [ffAlleeNord().kiez, tempVorstadt().kiez]);
       _prefs.clear();
 
       TermineFilter readFilter = await service.loadFilter();

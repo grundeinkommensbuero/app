@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
-import 'package:sammel_app/model/User.dart';
+import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
@@ -12,8 +12,9 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
-import 'package:sammel_app/shared/ChatMessageService.dart';
+import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
+import 'package:sammel_app/shared/FileReader.dart';
 
 import 'TestdatenVorrat.dart';
 
@@ -35,6 +36,7 @@ class UserServiceMock extends Mock implements UserService {}
 
 class ConfiguredUserServiceMock extends Mock implements UserService {
   final me = karl();
+
   ConfiguredUserServiceMock() {
     when(this.user).thenAnswer((_) => Stream.value(me));
     when(this.userHeaders)
@@ -46,8 +48,9 @@ class ChatMessageServiceMock extends Mock implements ChatMessageService {}
 
 class BackendMock extends Mock implements Backend {
   BackendMock() {
-    when(this.post('service/benutzer/authentifiziere', any, any))
-        .thenAnswer((_) async => HttpClientResponseBodyMock(true, 200));
+    when(this.post('service/benutzer/authentifiziere', any, any)).thenAnswer(
+        (_) => Future<HttpClientResponseBody>.value(
+            HttpClientResponseBodyMock(true, 200)));
   }
 }
 
@@ -72,3 +75,7 @@ class FirebaseReceiveServiceMock extends Mock
     implements FirebaseReceiveService {}
 
 class DemoPushSendServiceMock extends Mock implements DemoPushSendService {}
+
+class FileReaderMock extends Mock implements FileReader {}
+
+class GeoServiceMock extends Mock implements GeoService {}

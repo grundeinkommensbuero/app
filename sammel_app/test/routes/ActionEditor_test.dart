@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong/latlong.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
-import 'package:sammel_app/model/Ort.dart';
+import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/User.dart';
@@ -16,11 +16,11 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
-import 'package:sammel_app/shared/ChatMessageService.dart';
+import 'package:sammel_app/services/ChatMessageService.dart';
 
-import '../model/Ort_test.dart';
 import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';
+import '../shared/TestdatenVorrat.dart';
 
 final _stammdatenService = StammdatenServiceMock();
 final _terminService = TermineServiceMock();
@@ -37,7 +37,8 @@ void main() {
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
     when(_terminService.loadActions(any)).thenAnswer((_) async => []);
-    when(_stammdatenService.ladeOrte()).thenAnswer((_) async => []);
+    when(_stammdatenService.kieze).thenAnswer(
+        (_) async => [ffAlleeNord(), tempVorstadt(), plaenterwald()]);
   });
 
   testWidgets('TermineSeite opens CreateTerminDialog on click at menu button',
@@ -149,27 +150,34 @@ void main() {
 
     testWidgets('Location dialog opens correctly', (WidgetTester tester) async {
       await _openActionCreator(tester);
-      when(_stammdatenService.ladeOrte()).thenAnswer((_) async => [goerli()]);
+      when(_stammdatenService.kieze).thenAnswer((_) async => [tempVorstadt()]);
       expect(find.byKey(Key('Location Picker')), findsNothing);
       await tester.tap(find.byKey(Key('Open location dialog')));
       await tester.pump();
-      expect(find.byKey(Key('Location Picker')), findsOneWidget);
+      expect(find.byKey(Key('location dialog')), findsOneWidget);
     });
 
-    testWidgets('Location dialog are correctly shown',
+    testWidgets('location caption is correctly shown',
         (WidgetTester tester) async {
       await _openActionCreator(tester);
       ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
-      expect(find.text("in Görlitzer Park und Umgebung"), findsNothing);
-      when(_stammdatenService.ladeOrte()).thenAnswer((_) async => [goerli()]);
+      expect(find.text('Tempelhofer Vorstadt in Friedrichshain-Kreuzberg'),
+          findsNothing);
+      when(_stammdatenService.kieze).thenAnswer((_) async => [tempVorstadt()]);
       // ignore: invalid_use_of_protected_member
       actionData.setState(() {
-        actionData.action.ort = goerli();
+        actionData.action.ort = tempVorstadt();
+        actionData.action.terminDetails.treffpunkt = 'Hier';
+        actionData.action.coordinates = LatLng(52.5170365, 13.3888599);
         actionData.validateAllInput();
       });
       await tester.pumpAndSettle();
-      expect(find.text("in Görlitzer Park und Umgebung"), findsOneWidget);
+      expect(
+          find.text(
+              '${actionData.action.ort.kiez} in ${actionData.action.ort.bezirk}\n'
+              'Treffpunkt: ${actionData.action.terminDetails.treffpunkt}'),
+          findsOneWidget);
     });
 
     testWidgets('changing kontakt is correctly shown',
@@ -184,21 +192,6 @@ void main() {
       });
       await tester.pump();
       expect(find.text('test1'), findsOneWidget);
-    });
-
-    testWidgets('changing treffpunkt is correctly shown',
-        (WidgetTester tester) async {
-      await _openActionCreator(tester);
-      ActionEditorState actionData =
-          tester.state(find.byKey(Key('action creator')));
-      // ignore: invalid_use_of_protected_member
-      actionData.setState(() {
-        actionData.action.terminDetails.treffpunkt = 'test1';
-        actionData.action.coordinates = LatLng(52.5170365, 13.3888599);
-        actionData.validateAllInput();
-      });
-      await tester.pump();
-      expect(find.text('Treffpunkt: test1'), findsOneWidget);
     });
 
     testWidgets('venue decription w/o coordinates is not displayed',
@@ -260,7 +253,10 @@ void main() {
           find.descendant(
               of: find.byType(ActionEditor), matching: find.text('Sammeln')),
           findsOneWidget);
-      expect(find.text('in Friedrichshain Nordkiez'), findsOneWidget);
+      expect(
+          find.text(
+              'Frankfurter Allee Nord in Friedrichshain-Kreuzberg\nTreffpunkt: Weltzeituhr'),
+          findsOneWidget);
       expect(find.text('Beschreibung: Bringe Westen und Klämmbretter mit'),
           findsOneWidget);
       expect(find.text('am 04.11.,'), findsOneWidget);
@@ -301,7 +297,7 @@ void main() {
   });
 
   group('validates', () {
-    var actionEditor;
+    ActionEditorState actionEditor;
     setUp(() {
       actionEditor =
           ActionEditorState(TerminTestDaten.einTerminMitTeilisUndDetails());
@@ -414,7 +410,7 @@ void main() {
       state.action = ActionData(
           TimeOfDay.now(),
           TimeOfDay.now(),
-          nordkiez(),
+          ffAlleeNord(),
           '',
           [DateTime.now()],
           TerminDetails('treffpunkt', 'beschreibung', 'kontakt'),
@@ -432,7 +428,7 @@ void main() {
       var actionData = ActionData(
           null,
           null,
-          Ort(0, 'Bezirk', 'Ort', 52.1, 43.1),
+          Kiez('Bezirk', 'Kiez', 52.1, 43.1, [[]]),
           null,
           null,
           null,
@@ -444,7 +440,7 @@ void main() {
 
     test('returns location, if given and no coordinates', () {
       var actionData = ActionData(null, null,
-          Ort(0, 'Bezirk', 'Ort', 52.1, 43.1), null, null, null, null);
+          Kiez('Bezirk', 'Ort', 52.1, 43.1, [[]]), null, null, null, null);
 
       expect(
           ActionEditorState.determineMapCenter(actionData), LatLng(52.1, 43.1));
@@ -455,8 +451,8 @@ void main() {
 
       expect(ActionEditorState.determineMapCenter(actionData), null);
 
-      actionData = ActionData(null, null, Ort(0, 'Bezirk', 'Ort', null, null),
-          null, null, null, null);
+      actionData = ActionData(null, null,
+          Kiez('Bezirk', 'Kiez', null, null, [[]]), null, null, null, null);
 
       expect(ActionEditorState.determineMapCenter(actionData), null);
     });
@@ -589,10 +585,10 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      state.action.ort = nordkiez();
+      state.action.ort = ffAlleeNord();
       Termin action = (await state.generateActions())[0];
 
-      expect(action.ort.equals(nordkiez()), true);
+      expect(action.ort.equals(ffAlleeNord()), true);
     });
 
     testWidgets('with new type, w/ changes', (WidgetTester tester) async {
@@ -670,7 +666,7 @@ void main() {
 
       var actionEditor = ActionEditor(onFinish: onFinish);
       await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractStammdatenService>.value(value: _stammdatenService),
+        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<AbstractUserService>.value(value: userServiceMock),
       ], child: MaterialApp(home: actionEditor)));
 
@@ -837,7 +833,7 @@ _pumpNavigation(WidgetTester tester) async {
         Provider<StorageService>.value(value: _storageService),
         Provider<AbstractListLocationService>(
             create: (context) => _listLocationService),
-        Provider<AbstractStammdatenService>.value(value: _stammdatenService),
+        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<AbstractPushSendService>.value(value: _pushService),
         Provider<AbstractUserService>.value(value: _userService),
         Provider<ChatMessageService>.value(value: _chatService),
@@ -855,7 +851,7 @@ _pumpActionPage(WidgetTester tester) async {
         Provider<StorageService>.value(value: _storageService),
         Provider<AbstractListLocationService>(
             create: (context) => _listLocationService),
-        Provider<AbstractStammdatenService>.value(value: _stammdatenService),
+        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<AbstractUserService>.value(value: _userService),
         Provider<PushSendService>.value(value: _pushService),
         Provider<ChatMessageService>.value(value: _chatService),
