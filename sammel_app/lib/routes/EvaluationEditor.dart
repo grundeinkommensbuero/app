@@ -1,26 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:intl/intl.dart';
-import 'package:latlong/latlong.dart';
-import 'package:provider/provider.dart';
-import 'package:quiver/strings.dart';
 import 'package:sammel_app/model/Evaluation.dart';
-import 'package:sammel_app/model/Ort.dart';
-import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/model/TerminDetails.dart';
-import 'package:sammel_app/model/User.dart';
-import 'package:sammel_app/services/StammdatenService.dart';
-import 'package:sammel_app/services/UserService.dart';
-import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
-import 'package:sammel_app/shared/LocationPicker.dart';
-import 'package:sammel_app/shared/showMultipleDatePicker.dart';
-import 'package:sammel_app/shared/showTimeRangePicker.dart';
-import 'package:sammel_app/shared/showUsernameDialog.dart';
-
-import 'VenueDialog.dart';
 
 enum ValidationState { not_validated, error, ok ***REMOVED***
 class Option<T1, T2> {

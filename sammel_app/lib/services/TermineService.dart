@@ -5,7 +5,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:http_server/http_server.dart';
 import 'package:sammel_app/model/Evaluation.dart';
-import 'package:sammel_app/model/Ort.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
@@ -102,7 +101,7 @@ class TermineService extends AbstractTermineService {
     try {
       await post('service/termine/evaluation', jsonEncode(evaluation));
     ***REMOVED*** catch (e, s) {
-      ErrorService.handleError(e, s, additional: 'Evaluation ist fehlgeschlagen.');
+      ErrorService.handleError(e, s, context: 'Evaluation ist fehlgeschlagen.');
     ***REMOVED***
   ***REMOVED***
 ***REMOVED***

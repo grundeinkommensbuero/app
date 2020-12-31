@@ -1,8 +1,3 @@
-import 'package:sammel_app/model/User.dart';
-
-import 'Ort.dart';
-import 'TerminDetails.dart';
-
 class Evaluation {
   int terminId;
   int unterschriften;
