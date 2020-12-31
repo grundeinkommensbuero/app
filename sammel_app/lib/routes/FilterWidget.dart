@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
-import 'package:sammel_app/shared/LocationPicker.dart';
+import 'package:sammel_app/shared/KiezPicker.dart';
 import 'package:sammel_app/shared/showMultipleDatePicker.dart';
 import 'package:sammel_app/shared/showTimeRangePicker.dart';
 
@@ -31,7 +32,7 @@ class FilterWidgetState extends State<FilterWidget>
   var expanded = false;
 
   StorageService storageService;
-  var allLocations;
+  List<Kiez> allLocations;
 
   @override
   Widget build(BuildContext context) {
@@ -103,8 +104,8 @@ class FilterWidgetState extends State<FilterWidget>
           this.filter = filter != null ? filter : TermineFilter.leererFilter();
           widget.onApply(filter); //lade initial Termine
         ***REMOVED***));
-    Provider.of<AbstractStammdatenService>(context)
-        .ladeOrte()
+    Provider.of<StammdatenService>(context)
+        .kieze
         .then((locations) => setState(() => allLocations = locations));
     _initialized = true;
   ***REMOVED***
@@ -140,7 +141,7 @@ class FilterWidgetState extends State<FilterWidget>
 
   String ortButtonBeschriftung(TermineFilter filter) {
     if (filter?.orte == null || filter.orte.isEmpty) return "überall";
-    return "in " + filter.orte.map((ort) => ort.ort).toList().join(", ");
+    return "in " + filter.orte.map((ort) => ort).toList().join(", ");
   ***REMOVED***
 
   void onApply() {
@@ -158,7 +159,7 @@ class FilterWidgetState extends State<FilterWidget>
   ***REMOVED***
 
   typeSelection() async {
-    List<String> moeglicheTypen = ['Sammeln', 'Infoveranstaltung'];
+    List<String> moeglicheTypen = ['Sammeln', 'Infoveranstaltung', 'Workshop'];
     List<String> ausgewTypen = List<String>()
       ..addAll(filter.typen == null ? [] : filter.typen);
     await showDialog<List<String>>(
@@ -225,13 +226,13 @@ class FilterWidgetState extends State<FilterWidget>
       ***REMOVED***);
 
   locationSelection() async {
-    var selectedLocations = await LocationPicker(
-            locations: allLocations,
-            key: Key('locations selection dialog'),
-            multiMode: true)
-        .showLocationPicker(context, filter.orte);
+    var selectedLocations = await KiezPicker(allLocations
+            .where((kiez) => filter.orte.contains(kiez.kiez))
+            .toList())
+        .showKiezPicker(context);
 
-    setState(() => filter.orte = selectedLocations);
+    if(selectedLocations == null) return;
+    setState(() => filter.orte = selectedLocations.map((k) => k.kiez).toList());
   ***REMOVED***
 
   resetLocations() => setState(() => filter.orte = []);

@@ -20,7 +20,7 @@ abstract class AbstractUserService extends BackendService {
   User latestUser;
   Future<Map<String, String>> userHeaders;
 
-  AbstractUserService([Backend backendService]) : super(null, backendService) {
+  AbstractUserService(Backend backend) : super(null, backend) {
     this._userStream = streamController.stream;
     _userStream.listen((user) => latestUser = user);
   ***REMOVED***
@@ -41,7 +41,7 @@ class UserService extends AbstractUserService {
   StorageService storageService;
   FirebaseReceiveService firebase;
 
-  UserService(this.storageService, this.firebase, [Backend backend])
+  UserService(this.storageService, this.firebase, Backend backend)
       : super(backend) {
     getOrCreateUser();
     generateUserHeaders();
@@ -50,16 +50,20 @@ class UserService extends AbstractUserService {
   ***REMOVED***
 
   getOrCreateUser() async {
-    var user = await storageService.loadUser();
-    if (user != null)
-      await verifyUser(user).catchError((e, s) async {
-        ErrorService.handleError(e, s,
-            additional: 'Ein neuer Benutzer wird angelegt.');
+    try {
+      var user = await storageService.loadUser();
+      if (user != null)
+        await verifyUser(user).catchError((e, s) async {
+          ErrorService.handleError(e, s,
+              context: 'Ein neuer Benutzer wird angelegt.');
+          user = await createNewUser();
+        ***REMOVED***, test: (e) => e is InvalidUserException);
+      else
         user = await createNewUser();
-      ***REMOVED***, test: (e) => e is InvalidUserException);
-    else
-      user = await createNewUser();
-    streamController.add(user);
+      streamController.add(user);
+    ***REMOVED*** catch (e) {
+      streamController.addError(e);
+    ***REMOVED***
   ***REMOVED***
 
   Future<User> createNewUser() async {
@@ -74,7 +78,7 @@ class UserService extends AbstractUserService {
           appAuth: true);
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
-          additional: 'Anlegen eine*r neuen Benutzer*in ist gescheitert.');
+          context: 'Anlegen eine*r neuen Benutzer*in ist gescheitert.');
       throw e;
     ***REMOVED***
     var userFromServer = User.fromJSON(response.body);
@@ -95,7 +99,7 @@ class UserService extends AbstractUserService {
           appAuth: true);
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
-          additional: 'Benutzer*indaten konnte nicht überprüft werden.');
+          context: 'Benutzer*indaten konnte nicht überprüft werden.');
       rethrow;
     ***REMOVED***
     bool authenticated = response.body;
@@ -130,7 +134,7 @@ class UserService extends AbstractUserService {
       this.streamController.add(userFromServer);
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
-          additional: 'Benutzer*in-Name konnte nicht geändert werden.');
+          context: 'Benutzer*in-Name konnte nicht geändert werden.');
       throw e;
     ***REMOVED***
   ***REMOVED***

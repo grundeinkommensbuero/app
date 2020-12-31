@@ -13,11 +13,11 @@ Authorization: Basic MTE6YWM0MzA5NjAtMDVlYi0xMWViLThhMjYtZmRjNzY4M2E4NGJj
     "ort": {
       "bezirk": "Friedrichshain-Kreuzberg",
       "id": 1,
-      "lattitude": 52.51579,
+      "latitude": 52.51579,
       "longitude": 13.45399,
       "ort": "Friedrichshain Nordkiez"
     ***REMOVED***,
-    "lattitude": 52.52116,
+    "latitude": 52.52116,
     "longitude": 13.41331,
     "participants": [
       {

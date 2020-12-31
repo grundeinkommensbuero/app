@@ -11,13 +11,16 @@ import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/BackendService.dart';
+import 'package:sammel_app/services/StammdatenService.dart';
 
 import 'ErrorService.dart';
 import 'UserService.dart';
 
 abstract class AbstractTermineService extends BackendService {
-  AbstractTermineService(AbstractUserService userService, [Backend backendMock])
-      : super(userService, backendMock);
+  AbstractTermineService(
+      AbstractUserService userService, this.stammdatenService, Backend backend)
+      : super(userService, backend);
+  StammdatenService stammdatenService;
 
   Future<List<Termin>> loadActions(TermineFilter filter);
 
@@ -37,14 +40,16 @@ abstract class AbstractTermineService extends BackendService {
 ***REMOVED***
 
 class TermineService extends AbstractTermineService {
-  TermineService(AbstractUserService userService, [Backend backendMock])
-      : super(userService, backendMock);
+  TermineService(
+      AbstractUserService userService, stammdatenService, Backend backend)
+      : super(userService, stammdatenService, backend);
 
   Future<List<Termin>> loadActions(TermineFilter filter) async {
     HttpClientResponseBody response =
         await post('service/termine', jsonEncode(filter));
+    var kieze = await stammdatenService.kieze;
     final termine = (response.body as List)
-        .map((jsonTermin) => Termin.fromJson(jsonTermin))
+        .map((jsonTermin) => Termin.fromJson(jsonTermin, kieze))
         .toList();
     return termine;
   ***REMOVED***
@@ -53,13 +58,15 @@ class TermineService extends AbstractTermineService {
     ActionWithToken actionWithToken = ActionWithToken(termin, token);
     var response =
         await post('service/termine/neu', jsonEncode(actionWithToken));
-    return Termin.fromJson(response.body);
+    var kieze = await stammdatenService.kieze;
+    return Termin.fromJson(response.body, kieze);
   ***REMOVED***
 
   @override
   Future<Termin> getActionWithDetails(int id) async {
     var response = await get('service/termine/termin?id=' + id.toString());
-    return Termin.fromJson(response.body);
+    var kieze = await stammdatenService.kieze;
+    return Termin.fromJson(response.body, kieze);
   ***REMOVED***
 
   saveAction(Termin action, String token) async {
@@ -78,7 +85,7 @@ class TermineService extends AbstractTermineService {
           parameters: {'id': '$id'***REMOVED***);
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
-          additional: 'Teilnahme ist fehlgeschlagen.');
+          context: 'Teilnahme ist fehlgeschlagen.');
     ***REMOVED***
   ***REMOVED***
 
@@ -87,7 +94,7 @@ class TermineService extends AbstractTermineService {
       await post('service/termine/absage', jsonEncode(null),
           parameters: {'id': '$id'***REMOVED***);
     ***REMOVED*** catch (e, s) {
-      ErrorService.handleError(e, s, additional: 'Absage ist fehlgeschlagen.');
+      ErrorService.handleError(e, s, context: 'Absage ist fehlgeschlagen.');
     ***REMOVED***
   ***REMOVED***
 
@@ -101,71 +108,70 @@ class TermineService extends AbstractTermineService {
 ***REMOVED***
 
 class DemoTermineService extends AbstractTermineService {
-  DemoTermineService(AbstractUserService userService)
-      : super(userService, DemoBackend());
+  DemoTermineService(
+      AbstractUserService userService, StammdatenService stammdatenService)
+      : super(userService, stammdatenService, DemoBackend()) {
+    termine = stammdatenService.kieze.then((kieze) {
+      return [
+        Termin(
+            1,
+            DateTime(heute.year, heute.month - 1, heute.day - 1, 9, 0, 0),
+            DateTime(heute.year, heute.month - 1, heute.day - 1, 12, 0, 0),
+            kieze.firstWhere((kiez) => kiez.kiez == 'Frankfurter Allee Nord'),
+            'Sammeln',
+            52.52116,
+            13.41331,
+            [],
+            TerminDetails('Weltzeituhr', 'Bringe Westen und Klämmbretter mit',
+                'Ruft mich an unter 01234567')),
+        Termin(
+            2,
+            DateTime(heute.year, heute.month, heute.day - 1, 11, 0, 0),
+            DateTime(heute.year, heute.month, heute.day - 1, 13, 0, 0),
+            kieze.firstWhere((kiez) => kiez.kiez == 'Plänterwald'),
+            'Sammeln',
+            52.48756,
+            13.46336,
+            [User(11, "Karl Marx", Colors.red)],
+            TerminDetails('Hinter der 3. Parkbank links',
+                'wir machen die Parkeingänge', 'Schreibt mir unter e@mail.de')),
+        Termin(
+            3,
+            DateTime(heute.year, heute.month, heute.day, 23, 0, 0),
+            DateTime(heute.year, heute.month, heute.day + 1, 2, 0, 0),
+            kieze.firstWhere((kiez) => kiez.kiez == 'Tempelhofer Vorstadt'),
+            'Sammeln',
+            52.49655,
+            13.43759,
+            [
+              User(11, "Karl Marx", Colors.red),
+              User(11, "Karl Marx", Colors.purple),
+            ],
+            TerminDetails('wir telefonieren uns zusammen',
+                'bitte seid pünktlich', 'Meine Handynummer ist 01234567')),
+        Termin(
+            4,
+            DateTime(heute.year, heute.month, heute.day + 1, 18, 0, 0),
+            DateTime(heute.year, heute.month, heute.day + 1, 20, 30, 0),
+            kieze.firstWhere((kiez) => kiez.kiez == 'Plänterwald'),
+            'Infoveranstaltung',
+            52.48612,
+            13.47192,
+            [User(12, "Rosa Luxemburg", Colors.purple)],
+            TerminDetails(
+                'DGB-Haus, Raum 1312',
+                'Ihr seid alle herzlich eingeladen zur Strategiediskussion',
+                'Meldet euch doch bitte an unter info@dwenteignen.de damit wir das Buffet planen können')),
+      ];
+    ***REMOVED***);
+  ***REMOVED***
 
-  static Ort nordkiez = Ort(1, 'Friedrichshain-Kreuzberg',
-      'Friedrichshain Nordkiez', 52.51579, 13.45399);
-  static Ort treptowerPark =
-      Ort(2, 'Treptow-Köpenick', 'Treptower Park', 52.48993, 13.46839);
-  static Ort goerli = Ort(3, 'Friedrichshain-Kreuzberg',
-      'Görlitzer Park und Umgebung', 52.49653, 13.43762);
   static var heute = DateTime.now();
-  List<Termin> termine = [
-    Termin(
-        1,
-        DateTime(heute.year, heute.month - 1, heute.day - 1, 9, 0, 0),
-        DateTime(heute.year, heute.month - 1, heute.day - 1, 12, 0, 0),
-        nordkiez,
-        'Sammeln',
-        52.52116,
-        13.41331,
-        [],
-        TerminDetails('Weltzeituhr', 'Bringe Westen und Klämmbretter mit',
-            'Ruft mich an unter 01234567')),
-    Termin(
-        2,
-        DateTime(heute.year, heute.month, heute.day - 1, 11, 0, 0),
-        DateTime(heute.year, heute.month, heute.day - 1, 13, 0, 0),
-        treptowerPark,
-        'Sammeln',
-        52.48756,
-        13.46336,
-        [User(11, "Karl Marx", Colors.red)],
-        TerminDetails('Hinter der 3. Parkbank links',
-            'wir machen die Parkeingänge', 'Schreibt mir unter e@mail.de')),
-    Termin(
-        3,
-        DateTime(heute.year, heute.month, heute.day, 23, 0, 0),
-        DateTime(heute.year, heute.month, heute.day + 1, 2, 0, 0),
-        goerli,
-        'Sammeln',
-        52.49655,
-        13.43759,
-        [
-          User(11, "Karl Marx", Colors.red),
-          User(11, "Karl Marx", Colors.purple),
-        ],
-        TerminDetails('wir telefonieren uns zusammen', 'bitte seid pünktlich',
-            'Meine Handynummer ist 01234567')),
-    Termin(
-        4,
-        DateTime(heute.year, heute.month, heute.day + 1, 18, 0, 0),
-        DateTime(heute.year, heute.month, heute.day + 1, 20, 30, 0),
-        treptowerPark,
-        'Infoveranstaltung',
-        52.48612,
-        13.47192,
-        [User(12, "Rosa Luxemburg", Colors.purple)],
-        TerminDetails(
-            'DGB-Haus, Raum 1312',
-            'Ihr seid alle herzlich eingeladen zur Strategiediskussion',
-            'Meldet euch doch bitte an unter info@dwenteignen.de damit wir das Buffet planen können')),
-  ];
+  Future<List<Termin>> termine;
 
   @override
   Future<List<Termin>> loadActions(TermineFilter filter) async {
-    return termine.where((termin) {
+    return (await termine).where((termin) {
       var von = DateTime(termin.beginn?.year, termin.beginn.month,
           termin.beginn.day, filter.von?.hour ?? 0, filter.von?.minute ?? 0);
       var bis = DateTime(termin.beginn.year, termin.beginn.month,
@@ -182,7 +188,7 @@ class DemoTermineService extends AbstractTermineService {
               : filter.tage.contains(datum)) &&
           (filter.orte == null || filter.orte.isEmpty
               ? true
-              : filter.orte.map((o) => o.ort).contains(termin.ort.ort)) &&
+              : filter.orte.contains(termin.ort.kiez)) &&
           (filter.typen == null || filter.typen.isEmpty
               ? true
               : filter.typen.contains(termin.typ));
@@ -191,36 +197,38 @@ class DemoTermineService extends AbstractTermineService {
 
   @override
   Future<Termin> createAction(Termin termin, String token) async {
-    int highestId = termine.map((termin) => termin.id).reduce(max);
+    int highestId = (await termine).map((termin) => termin.id).reduce(max);
     termin.id = highestId + 1;
-    termine.add(termin);
+    (await termine).add(termin);
     return termin;
   ***REMOVED***
 
   @override
   Future<Termin> getActionWithDetails(int id) async {
-    return termine.firstWhere((termin) => termin.id == id);
+    return (await termine).firstWhere((termin) => termin.id == id);
   ***REMOVED***
 
   @override
   Future<void> saveAction(Termin newAction, String token) async {
+    var termine = await this.termine;
     termine[termine.indexWhere((oldAction) => oldAction.id == newAction.id)] =
         newAction;
   ***REMOVED***
 
   @override
-  deleteAction(Termin action, String token) {
+  deleteAction(Termin action, String token) async {
+    var termine = await this.termine;
     termine.removeAt(termine.indexWhere((a) => a.id == action.id));
   ***REMOVED***
 
-  joinAction(int id) {
-    var stored = termine.firstWhere((a) => a.id == id);
+  joinAction(int id) async {
+    var stored = (await termine).firstWhere((a) => a.id == id);
     if (!stored.participants.map((e) => e.id).contains(1))
       stored.participants.add(User(11, 'Ich', Colors.red));
   ***REMOVED***
 
-  leaveAction(int id) {
-    var stored = termine.firstWhere((a) => a.id == id);
+  leaveAction(int id) async {
+    var stored = (await termine).firstWhere((a) => a.id == id);
     if (stored.participants.map((e) => e.id).contains(1))
       stored.participants.remove(User(11, 'Ich', Colors.red));
   ***REMOVED***

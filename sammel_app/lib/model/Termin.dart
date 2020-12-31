@@ -1,14 +1,14 @@
 import 'package:sammel_app/model/Evaluation.dart';
 import 'package:sammel_app/model/User.dart';
 
-import 'Ort.dart';
+import 'Kiez.dart';
 import 'TerminDetails.dart';
 
 class Termin {
   int id;
   DateTime beginn;
   DateTime ende;
-  Ort ort;
+  Kiez ort;
   String typ;
   double latitude;
   double longitude;
@@ -18,13 +18,13 @@ class Termin {
   Termin(this.id, this.beginn, this.ende, this.ort, this.typ, this.latitude,
       this.longitude, this.participants, this.details);
 
-  Termin.fromJson(Map<String, dynamic> json)
+  Termin.fromJson(Map<String, dynamic> json, List<Kiez> kieze)
       : id = json['id'],
         beginn = DateTime.parse(json['beginn']),
         ende = DateTime.parse(json['ende']),
-        ort = Ort.fromJson(json['ort']),
+        ort = kieze.firstWhere((kiez) => json['ort'] == kiez.kiez),
         typ = json['typ'] ?? 'Termin',
-        latitude = json['lattitude'] ?? null,
+        latitude = json['latitude'] ?? null,
         longitude = json['longitude'] ?? null,
         participants = (json['participants'] as List)
             ?.map((user) => User.fromJSON(user))
@@ -37,9 +37,9 @@ class Termin {
         'id': id,
         'beginn': beginn.toIso8601String(),
         'ende': ende.toIso8601String(),
-        'ort':  ort == null ? null : ort.toJson(),
+        'ort': ort == null ? null : ort.toJson(),
         'typ': typ,
-        'lattitude': latitude,
+        'latitude': latitude,
         'longitude': longitude,
         'participants': participants?.map((user) => user.toJson())?.toList(),
         'details': details == null ? null : details.toJson(),
@@ -53,9 +53,13 @@ class Termin {
             : 'assets/images/Sammeln.png';
       case 'Infoveranstaltung':
         return 'assets/images/Infoveranstaltung.png';
+      case 'Workshop':
+        return centered
+          ? 'assets/images/Workshop_centered.png'
+          : 'assets/images/Workshop.png';
     ***REMOVED***
     throw UnkownActionTypeException(
-        'Cannot find asset for unknwon action type "$typ"');
+        'Cannot find asset for unknown action type "$typ"');
   ***REMOVED***
 
   static final int Function(Termin a, Termin b) compareByStart =

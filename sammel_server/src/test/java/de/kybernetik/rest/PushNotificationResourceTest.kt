@@ -1,7 +1,7 @@
 package de.kybernetik.rest
 
 import TestdatenVorrat.Companion.karl
-import com.google.gson.GsonBuilder
+import com.nhaarman.mockitokotlin2.anyOrNull
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.atLeastOnce
 import com.nhaarman.mockitokotlin2.whenever
@@ -21,10 +21,7 @@ import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
-import de.kybernetik.services.FirebaseService
-import de.kybernetik.services.FirebaseService.MissingMessageTarget
 import de.kybernetik.services.PushService
-import java.util.*
 import java.util.Collections.singletonList
 import javax.ws.rs.core.SecurityContext
 import kotlin.test.assertEquals
@@ -39,9 +36,6 @@ class PushNotificationResourceTest {
 
     @Mock
     lateinit var pushService: PushService
-
-    @Mock
-    lateinit var firebase: FirebaseService
 
     @Mock
     lateinit var termineDao: TermineDao
@@ -63,104 +57,20 @@ class PushNotificationResourceTest {
     @InjectMocks
     lateinit var resource: PushNotificationResource
 
-    @Test(expected = MissingMessageTarget::class)
-    fun `pushToDevices erwartet Empfaenger`() =
-            resource.pushToDevices(PushMessageDto(notification = PushNotificationDto(), data = emptyMap()))
-
     @Test
-    fun `pushToDevices sendet Nachricht an Firebase weiter mit leeren Daten und Benachrichtigung`() {
-        val notification = PushNotificationDto()
-        val data = emptyMap<String, String>()
-        val empfaenger = listOf("Empfänger")
+    fun `pushToTopic sendet Nachricht an PushService weiter`() {
+        val nachricht = PushMessageDto(
+            PushNotificationDto("Titel", "Inhalt", "Allgemein", null),
+            mapOf(Pair("schlüssel1", "inhalt1"), Pair("schlüssel2", "inhalt2"))
+        )
 
-        resource.pushToDevices(PushMessageDto(notification, data, recipients = empfaenger))
+        resource.pushToTopic(nachricht, topic = "Kanal")
 
-        val notificationCaptor = argumentCaptor<PushNotificationDto>()
-        val dataCaptor = argumentCaptor<Map<String, String>>()
-        val empfaengerCaptor = argumentCaptor<List<String>>()
-        verify(firebase, atLeastOnce()).sendePushNachrichtAnEmpfaenger(notificationCaptor.capture(), dataCaptor.capture(), empfaengerCaptor.capture())
-        assertTrue { entschluessele(dataCaptor.firstValue).isEmpty() ***REMOVED***
-        assertEquals(notificationCaptor.firstValue, notification)
-        assertEquals(empfaengerCaptor.firstValue, empfaenger)
-    ***REMOVED***
-
-    @Test
-    fun `pushToDevices sendet Nachricht an Firebase weiter ohne Daten und Benachrichtigung`() {
-        val empfaenger = listOf("Empfänger")
-
-        resource.pushToDevices(PushMessageDto(null, null, recipients = empfaenger))
-
-        verify(firebase, atLeastOnce()).sendePushNachrichtAnEmpfaenger(null, null, empfaenger)
-    ***REMOVED***
-
-    @Test
-    fun `pushToDevices sendet Nachricht an Firebase mit gefuellten Daten und Benachrichtigung`() {
-        val notification = PushNotificationDto("Titel", "Inhalt")
-        val data = mapOf(Pair("schlüssel1", "inhalt1"), Pair("schlüssel2", "inhalt2"))
-        val empfaenger = listOf("Empfänger")
-
-        resource.pushToDevices(PushMessageDto(notification, data, recipients = empfaenger))
-
-        val notificationArgument = argumentCaptor<PushNotificationDto>()
-        val dataArgument = argumentCaptor<Map<String, String>>()
-        val empfaengerArgument = argumentCaptor<List<String>>()
-        verify(firebase, times(1))
-                .sendePushNachrichtAnEmpfaenger(notificationArgument.capture(), dataArgument.capture(), empfaengerArgument.capture())
-        assertEquals(notificationArgument.firstValue.title, "Titel")
-        assertEquals(notificationArgument.firstValue.body, "Inhalt")
-        val entschluesselt = entschluessele(dataArgument.firstValue)
-        assertEquals(entschluesselt.size, 2)
-        assertEquals(entschluesselt["schlüssel1"], "inhalt1")
-        assertEquals(entschluesselt["schlüssel2"], "inhalt2")
-        assertEquals(empfaengerArgument.firstValue.size, 1)
-        assertEquals(empfaengerArgument.firstValue[0], "Empfänger")
-    ***REMOVED***
-
-    @Test
-    fun `pushToTopic sendet Nachricht an Firebase weiter mit leeren Daten und Benachrichtigung`() {
-        val notification = PushNotificationDto()
-        val data = emptyMap<String, String>()
-        val kanal = "Kanal"
-
-        resource.pushToTopic(PushMessageDto(notification, data), topic = kanal)
-
-        val notificationCaptor = argumentCaptor<PushNotificationDto>()
-        val dataCaptor = argumentCaptor<Map<String, String>>()
-        val empfaengerCaptor = argumentCaptor<String>()
-        verify(firebase, atLeastOnce()).sendePushNachrichtAnTopic(notificationCaptor.capture(), dataCaptor.capture(), empfaengerCaptor.capture())
-        assertTrue { entschluessele(dataCaptor.firstValue).isEmpty() ***REMOVED***
-        assertEquals(notificationCaptor.firstValue, notification)
-        assertEquals(empfaengerCaptor.firstValue, kanal)
-    ***REMOVED***
-
-    @Test
-    fun `pushToTopic sendet Nachricht an Firebase weiter ohne Daten und Benachrichtigung`() {
-        val kanal = "Kanal"
-
-        resource.pushToTopic(PushMessageDto(null, null), topic = kanal)
-
-        verify(firebase, atLeastOnce()).sendePushNachrichtAnTopic(null, null, kanal)
-    ***REMOVED***
-
-    @Test
-    fun `pushToTopic sendet Nachricht an Firebase mit gefuellten Daten und Benachrichtigung`() {
-        val notification = PushNotificationDto("Titel", "Inhalt")
-        val data = mapOf(Pair("schlüssel1", "inhalt1"), Pair("schlüssel2", "inhalt2"))
-
-        resource.pushToTopic(PushMessageDto(notification, data), topic = "Kanal")
-
-        val notificationArgument = argumentCaptor<PushNotificationDto>()
-        val dataArgument = argumentCaptor<Map<String, String>>()
+        val messageArgument = argumentCaptor<PushMessageDto>()
         val topicArgument = argumentCaptor<String>()
-        verify(firebase, times(1))
-                .sendePushNachrichtAnTopic(notificationArgument.capture(), dataArgument.capture(), topicArgument.capture())
-        assertEquals(notificationArgument.firstValue.title, "Titel")
-        assertEquals(notificationArgument.firstValue.body, "Inhalt")
-        val entschluesselt = entschluessele(dataArgument.firstValue)
-        assertEquals(entschluesselt.size, 2)
-        assertEquals(entschluesselt["schlüssel1"], "inhalt1")
-        assertEquals(entschluesselt["schlüssel2"], "inhalt2")
-        assertEquals(topicArgument.firstValue, "Kanal")
+        verify(pushService, times(1))
+                .sendePushNachrichtAnTopic(messageArgument.capture(), topicArgument.capture())
+        assertEquals(messageArgument.firstValue, nachricht)
     ***REMOVED***
 
     @Test
@@ -173,14 +83,14 @@ class PushNotificationResourceTest {
         whenever(benutzerDao.getFirebaseKeys(anyList())).thenReturn(singletonList("firebase-key 1"))
         whenever(context.userPrincipal).thenReturn(BasicUserPrincipal("12")) // rosa statt karl
 
-        val notification = PushNotificationDto()
+        val notification = PushNotificationDto(channel = "Allgemein", collapseId = null)
         val data = emptyMap<String, String>()
 
         var response = resource.pushToParticipants(PushMessageDto(notification, data), actionId = 1L)
 
         assertEquals(response!!.status, 403)
         assertEquals("Du bist nicht Teilnehmer*in dieser Aktion", (response.entity as RestFehlermeldung).meldung)
-        verify(firebase, never()).sendePushNachrichtAnEmpfaenger(any(), anyMap(), anyList())
+        verify(pushService, never()).sendePushNachrichtAnEmpfaenger(anyOrNull(), anyList())
 
         // ohne Teilnehmer
         whenever(termineDao.getTermin(1L))
@@ -194,7 +104,7 @@ class PushNotificationResourceTest {
 
         assertEquals(response!!.status, 403)
         assertEquals("Du bist nicht Teilnehmer*in dieser Aktion", (response.entity as RestFehlermeldung).meldung)
-        verify(firebase, never()).sendePushNachrichtAnEmpfaenger(any(), anyMap(), anyList())
+        verify(pushService, never()).sendePushNachrichtAnEmpfaenger(anyOrNull(), anyList())
     ***REMOVED***
 
     @Test
@@ -205,26 +115,25 @@ class PushNotificationResourceTest {
                         teilnehmer,
                         52.48612, 13.47192, null))
 
-        val notification = PushNotificationDto()
+        val notification = PushNotificationDto(channel = "Allgemein", collapseId = null)
         val data = emptyMap<String, String>()
 
         resource.pushToParticipants(PushMessageDto(notification, data), actionId = 1L)
 
-        val notificationCaptor = argumentCaptor<PushNotificationDto>()
-        val dataCaptor = argumentCaptor<Map<String, String>>()
+        val nachrichtCaptor = argumentCaptor<PushMessageDto>()
         val teilnehmerCaptor = argumentCaptor<List<Benutzer>>()
-        verify(pushService, atLeastOnce()).sendePushNachrichtAnEmpfaenger(notificationCaptor.capture(), dataCaptor.capture(), teilnehmerCaptor.capture())
-        assertTrue { entschluessele(dataCaptor.firstValue).isEmpty() ***REMOVED***
-        assertEquals(notificationCaptor.firstValue, notification)
+        verify(pushService, atLeastOnce()).sendePushNachrichtAnEmpfaenger(nachrichtCaptor.capture(), teilnehmerCaptor.capture())
+        assertTrue { nachrichtCaptor.firstValue.data!!.isEmpty() ***REMOVED***
+        assertEquals(nachrichtCaptor.firstValue.notification, notification)
         assertEquals(teilnehmerCaptor.firstValue, teilnehmer)
     ***REMOVED***
 
     @Test
     fun `pullNotifications liest Benutzer-ID aus Credentials`() {
         val pushMessages = listOf(
-                PushMessage(karl(), emptyMap(), PushNotificationDto()),
-                PushMessage(karl(), emptyMap(), PushNotificationDto()),
-                PushMessage(karl(), emptyMap(), PushNotificationDto()))
+                PushMessage(karl(), emptyMap(), PushNotificationDto(channel = "Allgemein", collapseId = null)),
+                PushMessage(karl(), emptyMap(), PushNotificationDto(channel = "Allgemein", collapseId = null)),
+                PushMessage(karl(), emptyMap(), PushNotificationDto(channel = "Allgemein", collapseId = null)))
         whenever(pushMessageDao.ladeAllePushMessagesFuerBenutzer(11))
                 .thenReturn(pushMessages)
 
@@ -236,9 +145,21 @@ class PushNotificationResourceTest {
     @Test
     fun `pullNotifications liefert pushMessages aus`() {
         val pushMessages = listOf(
-                PushMessage(karl(), emptyMap(), PushNotificationDto(title = "1")),
-                PushMessage(karl(), emptyMap(), PushNotificationDto(title = "2")),
-                PushMessage(karl(), emptyMap(), PushNotificationDto(title = "3")))
+                PushMessage(karl(), emptyMap(), PushNotificationDto(
+                    title = "1",
+                    channel = "Allgemein",
+                    collapseId = null
+                )),
+                PushMessage(karl(), emptyMap(), PushNotificationDto(
+                    title = "2",
+                    channel = "Allgemein",
+                    collapseId = null
+                )),
+                PushMessage(karl(), emptyMap(), PushNotificationDto(
+                    title = "3",
+                    channel = "Allgemein",
+                    collapseId = null
+                )))
         whenever(pushMessageDao.ladeAllePushMessagesFuerBenutzer(11))
                 .thenReturn(pushMessages)
 
@@ -254,9 +175,21 @@ class PushNotificationResourceTest {
     @Test
     fun `pullNotifications loescht Nachrichten in DB`() {
         val pushMessages = listOf(
-                PushMessage(karl(), emptyMap(), PushNotificationDto(title = "1")),
-                PushMessage(karl(), emptyMap(), PushNotificationDto(title = "2")),
-                PushMessage(karl(), emptyMap(), PushNotificationDto(title = "3")))
+                PushMessage(karl(), emptyMap(), PushNotificationDto(
+                    title = "1",
+                    channel = "Allgemein",
+                    collapseId = null
+                )),
+                PushMessage(karl(), emptyMap(), PushNotificationDto(
+                    title = "2",
+                    channel = "Allgemein",
+                    collapseId = null
+                )),
+                PushMessage(karl(), emptyMap(), PushNotificationDto(
+                    title = "3",
+                    channel = "Allgemein",
+                    collapseId = null
+                )))
         whenever(pushMessageDao.ladeAllePushMessagesFuerBenutzer(11))
                 .thenReturn(pushMessages)
 
@@ -268,19 +201,15 @@ class PushNotificationResourceTest {
     @Test
     fun `pullNotifications liefert keine Empfaenger aus`() {
         whenever(pushMessageDao.ladeAllePushMessagesFuerBenutzer(11))
-                .thenReturn(singletonList(PushMessage(karl(), emptyMap(), PushNotificationDto(title = "1"))))
+                .thenReturn(singletonList(PushMessage(karl(), emptyMap(), PushNotificationDto(
+                    title = "1",
+                    channel = "Allgemein",
+                    collapseId = null
+                ))))
 
         val response = resource.pullNotifications()
 
         @Suppress("UNCHECKED_CAST")
         (assertNull((response!!.entity as List<PushMessageDto>)[0].recipients))
-    ***REMOVED***
-
-    fun entschluessele(data: Map<String, String>?): Map<String, Any?> {
-        val payload = data!!["payload"]
-        val bytes: ByteArray = Base64.getDecoder().decode(payload)!!
-        val json: String = bytes.decodeToString()
-        @Suppress("UNCHECKED_CAST")
-        return GsonBuilder().serializeNulls().create().fromJson(json, Map::class.java) as Map<String, Any?>
     ***REMOVED***
 ***REMOVED***

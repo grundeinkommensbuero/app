@@ -1,15 +1,12 @@
 create table Termine
 (
     id      int auto_increment        primary key,
-    beginn  datetime    null,
-    ende    datetime    null,
-    ort     int         null,
-    typ     varchar(40) null,
-    lattitude  double   null,
-    longitude  double   null,
-    constraint Termine_Ort_fk
-        foreign key (Ort) references Stamm_Orte (id)
-            on update cascade
+    beginn  datetime     null,
+    ende    datetime     null,
+    ort     varchar(120) null,
+    typ     varchar(40)  null,
+    latitude  double     null,
+    longitude  double    null
 );
 
 create table Evaluationen

@@ -31,7 +31,7 @@ open class ActionExportRestResource {
         val actions = dao.getTermine(filter)
         LOG.info("Aktionen ${actions.map { action -> action.id ***REMOVED******REMOVED*** gefunden")
         val geoJsonActions = actions
-                .filter { action -> action.longitude != null && action.lattitude != null ***REMOVED***
+                .filter { action -> action.longitude != null && action.latitude != null ***REMOVED***
                 .map { action -> GeoJsonAction.convertFromAction(action) ***REMOVED***
         val geoJsoncollection = GeoJsonCollection(geoJsonActions)
         LOG.debug("${geoJsonActions.size***REMOVED*** Aktionen ausgegeben")
@@ -56,13 +56,13 @@ open class ActionExportRestResource {
         companion object {
             fun convertFromAction(action: Termin): GeoJsonAction {
 
-                if (action.lattitude == null || action.longitude == null)
+                if (action.latitude == null || action.longitude == null)
                     throw GeoJsonParseException("Kann kein GeoJson-Objekt ohne Koordinaten erzeugen (Aktions-ID ${action.id***REMOVED***")
 
                 return GeoJsonAction(
                         action.typ ?: "Aktion",
                         GeoJsonProperties(action.typ ?: "Aktion", generateJsonDescription(action)),
-                        GeoJsonGeometry(listOf(action.longitude!!, action.lattitude!!)))
+                        GeoJsonGeometry(listOf(action.longitude!!, action.latitude!!)))
             ***REMOVED***
 
             fun generateJsonDescription(action: Termin): String =

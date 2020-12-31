@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
@@ -8,17 +9,18 @@ import 'package:test/test.dart';
 import '../shared/Mocks.dart';
 
 main() {
-  FirebaseMessaging firebaseMock;
+  FirebaseMessaging firebaseMock = FirebaseMessagingMock();
   UserService userService = ConfiguredUserServiceMock();
 
   setUp(() {
-    firebaseMock = FirebaseMessagingMock();
+    reset(firebaseMock);
     when(firebaseMock.getToken()).thenAnswer((_) async => "firebase-token");
   ***REMOVED***);
 
   group('FirebaseReceiveService', () {
+    when(firebaseMock.getToken()).thenAnswer((_) async => '123');
+
     test('takes Mock if given', () {
-      when(firebaseMock.getToken()).thenAnswer((_) => null);
       var firebaseListener = FirebaseReceiveService(firebaseMock);
 
       expect(firebaseListener.firebaseMessaging, firebaseMock);
@@ -26,7 +28,6 @@ main() {
     ***REMOVED***);
 
     test('registers onMessage listener', () {
-      when(firebaseMock.getToken()).thenAnswer((_) => null);
       var firebaseListener = FirebaseReceiveService(firebaseMock);
       var onMessage = (_) async => null;
 
@@ -65,8 +66,9 @@ main() {
 
     group("pull", () {
       test('requests messages from server', () async {
-        when(backend.get('service/push/pull', any))
-            .thenAnswer((_) async => HttpClientResponseBodyMock([], 200));
+        when(backend.get('service/push/pull', any)).thenAnswer((_) =>
+            Future<HttpClientResponseBody>.value(
+                HttpClientResponseBodyMock([], 200)));
 
         await service.pull();
 
@@ -78,12 +80,14 @@ main() {
             (_) async => fail('onMessage should not have been called');
         service.subscribe(onMessage: onMessage);
 
-        when(backend.get('service/push/pull', any))
-            .thenAnswer((_) async => HttpClientResponseBodyMock(null, 200));
+        when(backend.get('service/push/pull', any)).thenAnswer((_) =>
+            Future<HttpClientResponseBody>.value(
+                HttpClientResponseBodyMock(null, 200)));
         await service.pull();
 
-        when(backend.get('service/push/pull', any))
-            .thenAnswer((_) async => HttpClientResponseBodyMock([], 200));
+        when(backend.get('service/push/pull', any)).thenAnswer((_) =>
+            Future<HttpClientResponseBody>.value(
+                HttpClientResponseBodyMock([], 200)));
         await service.pull();
       ***REMOVED***);
 
@@ -91,9 +95,9 @@ main() {
         var called = 0;
         var onMessage = (_) async => called++;
         service.subscribe(onMessage: onMessage);
-        when(backend.get('service/push/pull', any)).thenAnswer((_) async =>
-            HttpClientResponseBodyMock(
-                [Map<String, dynamic>(), Map<String, dynamic>()], 200));
+        when(backend.get('service/push/pull', any)).thenAnswer((_) =>
+            Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
+                [Map<String, dynamic>(), Map<String, dynamic>()], 200)));
 
         await service.pull();
 
@@ -104,9 +108,9 @@ main() {
         var onMessage =
             (_) async => fail('onMessage should not have been called');
         service.subscribe(onMessage: onMessage);
-        when(backend.get('service/push/pull', any)).thenAnswer((_) async =>
-            HttpClientResponseBodyMock(
-                [Map<String, dynamic>(), Map<String, dynamic>()], 403));
+        when(backend.get('service/push/pull', any)).thenAnswer((_) =>
+            Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
+                [Map<String, dynamic>(), Map<String, dynamic>()], 403)));
 
         await service.pull();
       ***REMOVED***);

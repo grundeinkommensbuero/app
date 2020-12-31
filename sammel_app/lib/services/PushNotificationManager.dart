@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:sammel_app/model/PushMessage.dart';
+import 'package:sammel_app/services/LocalNotificationService.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StorageService.dart';
@@ -11,6 +13,10 @@ import 'ErrorService.dart';
 
 abstract class AbstractPushNotificationManager {
   void register_message_callback(String id, PushNotificationListener callback);
+
+  void unsubscribeFromKiezActionTopics(List<String> kieze, String interval);
+
+  void subscribeToKiezActionTopics(List<String> kieze, String interval);
 ***REMOVED***
 
 abstract class PushNotificationListener {
@@ -23,9 +29,9 @@ class PushNotificationManager implements AbstractPushNotificationManager {
   AbstractUserService userService;
 
   PushNotificationManager(
-      this.storageService, this.userService, firebaseService,
-      [Backend backend]) {
+      this.storageService, this.userService, firebaseService, Backend backend) {
     createPushListener(firebaseService, backend);
+    initializeLocalNotifications();
   ***REMOVED***
 
   createPushListener(
@@ -53,27 +59,13 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     listener.subscribe(
         onMessage: onMessageCallback,
         onResume: onMessageCallback,
-        onLaunch: onMessageCallback);
-    //, onBackgroundMessage: onBackgroundMessage2);
-    // _firebaseMessaging.configure(onMessage: ()=>this.onMessage);
+        onLaunch: onMessageCallback,
+        onBackgroundMessage: backgroundMessageHandler);
   ***REMOVED***
 
   Map<String, PushNotificationListener> callback_map = Map();
 
   Future<String> pushToken;
-
-/*
-  void onMessageCallback(Map<String, dynamic> message) async {
-    print('message received' + message.toString());
-    Map<String, dynamic> data = message['data'];
-    if (data.containsKey('type')) {
-      String type = data['type'];
-      if (callback_map.containsKey(type)) {
-        data.remove('type');
-        callback_map[type](data);
-      ***REMOVED***
-    ***REMOVED***
-   */
 
   Future<dynamic> onMessageCallback(Map<dynamic, dynamic> message) async {
     print('Push-Nachricht empfangen: $message');
@@ -96,6 +88,14 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     this.callback_map[id] = callback;
   ***REMOVED***
 
+  @override
+  void subscribeToKiezActionTopics(List<String> kieze, String interval) =>
+      listener.subscribeToKiezActionTopics(kieze, interval);
+
+  @override
+  void unsubscribeFromKiezActionTopics(List<String> kieze, String interval) =>
+      listener.unsubscribeFromKiezActionTopics(kieze, interval);
+
 /*void subscribeToChannel(String topic) async {
   listener.subscribeToTopic(topic);
 ***REMOVED***
@@ -105,6 +105,26 @@ void unsubscribeFromChannel(String topic) async {
 ***REMOVED****/
 ***REMOVED***
 
+Future<dynamic> backgroundMessageHandler(Map<String, dynamic> message) async {
+  var data = decrypt(message['data']);
+  print('Background-Messenger meldet Nachrichten-Ankunft: $data');
+  if (data['type'] == "SimpleChatMessage")
+    handleBackgroundChatMessage(data);
+  else
+    print('Unbekannter Nachrichtentyp: ${message['type']***REMOVED***');
+***REMOVED***
+
+Future<void> handleBackgroundChatMessage(Map<String, dynamic> data) async {
+  var chatMessage = ChatMessagePushData.fromJson(data);
+
+  // sendChatNotification(chatMessage);
+
+  var storageService = StorageService();
+  var chatChannel = await storageService.loadChatChannel(data['channel']);
+  chatChannel.add_message_or_mark_as_received(chatMessage.message);
+  await storageService.saveChatChannel(chatChannel);
+***REMOVED***
+
 class DemoPushNotificationManager implements AbstractPushNotificationManager {
   DemoPushSendService pushService;
   PushNotificationListener callback;
@@ -112,9 +132,18 @@ class DemoPushNotificationManager implements AbstractPushNotificationManager {
   DemoPushNotificationManager(this.pushService);
 
   @override
-  void register_message_callback(String type, PushNotificationListener callback) {
+  void register_message_callback(
+      String type, PushNotificationListener callback) {
     pushService.stream
         .where((data) => data.type == type)
         .listen((data) => callback.receive_message(data.toJson()));
   ***REMOVED***
+
+  // Ignore
+  @override
+  void subscribeToKiezActionTopics(List<String> kieze, String interval) {***REMOVED***
+
+  // Ignore
+  @override
+  void unsubscribeFromKiezActionTopics(List<String> kieze, String interval) {***REMOVED***
 ***REMOVED***

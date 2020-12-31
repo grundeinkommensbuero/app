@@ -10,6 +10,7 @@ void main() {
   setUp(() {
     ErrorService.messageQueue = List<List<String>>();
     ErrorService.setContext(null);
+    ErrorService.displayedTypes = [];
   ***REMOVED***);
 
   group('pushMessage', () {
@@ -55,7 +56,7 @@ void main() {
       expect(ErrorService.messageQueue[0][0],
           'Fehler bei Nutzer-Authentifizierung');
       expect(ErrorService.messageQueue[0][1],
-          'Nachricht\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com');
+          'Nachricht \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com');
     ***REMOVED***);
 
     test('recognizes and handles RestFehler', () {
@@ -65,7 +66,7 @@ void main() {
       expect(ErrorService.messageQueue[0][0],
           'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten');
       expect(ErrorService.messageQueue[0][1],
-          'Nachricht\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com');
+          'Nachricht \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com');
     ***REMOVED***);
 
     test('recognizes and handles WrongResponseFormatException', () {
@@ -76,17 +77,17 @@ void main() {
       expect(ErrorService.messageQueue[0][0],
           'Bei der Kommunikation mit dem Server ist ein technischer Fehler aufgetreten');
       expect(ErrorService.messageQueue[0][1],
-          'Nachricht\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com');
+          'Nachricht \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com');
     ***REMOVED***);
 
     test('adds optional message to Error text', () {
-      ErrorService.handleError(RestFehler('Nachricht. '), StackTrace.empty,
-          additional: 'Zusätzliche Info');
+      ErrorService.handleError(RestFehler('Nachricht.'), StackTrace.empty,
+          context: 'Zusätzliche Info.');
 
       expect(ErrorService.messageQueue.length, 1);
       expect(
           ErrorService.messageQueue[0][1],
-          'Nachricht. Zusätzliche Info\n'
+          'Zusätzliche Info. Nachricht. \n\n'
           'Wenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com');
     ***REMOVED***);
   ***REMOVED***);

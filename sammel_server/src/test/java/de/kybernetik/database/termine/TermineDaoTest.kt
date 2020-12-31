@@ -2,15 +2,11 @@ package de.kybernetik.database.termine
 
 import TestdatenVorrat.Companion.infoveranstaltung
 import TestdatenVorrat.Companion.karl
-import TestdatenVorrat.Companion.nordkiez
 import TestdatenVorrat.Companion.rosa
 import TestdatenVorrat.Companion.sammeltermin
 import TestdatenVorrat.Companion.terminDetails
-import TestdatenVorrat.Companion.treptowerPark
 import com.nhaarman.mockitokotlin2.*
 import de.kybernetik.database.DatabaseException
-import de.kybernetik.database.stammdaten.Ort
-import de.kybernetik.database.stammdaten.StammdatenDaoTest
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentCaptor
@@ -50,8 +46,8 @@ class TermineDaoTest {
 
     @Test
     fun getTermineLiefertAlleTermineAusDbMitLeeremFilter() {
-        val termin1 = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
-        val termin2 = Termin(2, beginn, ende, treptowerPark(), infoveranstaltung(), listOf(rosa(), karl()), 52.48612, 13.47192, terminDetails())
+        val termin1 = Termin(1, beginn, ende, "Frankfurter Alee Nord", sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
+        val termin2 = Termin(2, beginn, ende, "Plänterwald", infoveranstaltung(), listOf(rosa(), karl()), 52.48612, 13.47192, terminDetails())
         val termineInDb = listOf(termin1, termin2)
         whenever(entityManager.createQuery(anyString(), any<Class<Termin>>()))
                 .thenReturn(typedQuery)
@@ -67,7 +63,7 @@ class TermineDaoTest {
         assertEquals(termine[1].teilnehmer[0].name, rosa().name)
         assertEquals(termine[1].teilnehmer[1].name, karl().name)
         assertEquals(termine[1].teilnehmer[1].name, karl().name)
-        assertEquals(termine[1].lattitude, 52.48612)
+        assertEquals(termine[1].latitude, 52.48612)
         assertEquals(termine[1].longitude, 13.47192)
     ***REMOVED***
 
@@ -172,12 +168,12 @@ class TermineDaoTest {
     fun erzeugeGetTermineQueryErgaenztOrteKlauselWennNichtNull() {
         whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)
 
-        dao.erzeugeGetTermineQuery(TermineFilter(emptyList(), emptyList(), null, null, listOf(StammdatenDaoTest.nordkiezDto())))
+        dao.erzeugeGetTermineQuery(TermineFilter(emptyList(), emptyList(), null, null, listOf("Frankfurter Allee Nord")))
 
         verify(entityManager, atLeastOnce()).createQuery(matches(".*\\swhere termine\\.ort in \\(:orte\\)"), any<Class<Termin>>())
         val tageCaptor = ArgumentCaptor.forClass(List::class.java)
         verify(typedQuery, atLeastOnce()).setParameter(matches("orte"), tageCaptor.capture())
-        assertEquals((tageCaptor.value[0] as Ort).id, StammdatenDaoTest.nordkiezDto().convertToOrt().id)
+        assertEquals((tageCaptor.value[0] as String), "Frankfurter Allee Nord")
     ***REMOVED***
 
     @Test
@@ -201,7 +197,7 @@ class TermineDaoTest {
                 listOf(LocalDate.of(2019, 11, 18)),
                 LocalTime.of(12, 0, 0),
                 LocalTime.of(18, 0, 0),
-                listOf(StammdatenDaoTest.nordkiezDto())))
+                listOf("Frankfurter Allee Nord")))
 
         val queryCaptor = ArgumentCaptor.forClass(String::class.java)
         verify(entityManager, atLeastOnce()).createQuery(queryCaptor.capture(), any<Class<Termin>>())
@@ -219,7 +215,7 @@ class TermineDaoTest {
 
     @Test
     fun getTerminLiefertTerminMitDetailsAusDb() {
-        val terminInDb = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
+        val terminInDb = Termin(1, beginn, ende, "Frankfurter Allee Nord", sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
         whenever(entityManager.find(any<Class<Termin>>(), anyLong()))
                 .thenReturn(terminInDb)
 
@@ -231,7 +227,7 @@ class TermineDaoTest {
 
     @Test
     fun aktualisiereTerminSchreibtTerminInDb() {
-        val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
+        val termin = Termin(1, beginn, ende, "Frankfurter Allee Nord", sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
 
         dao.aktualisiereTermin(termin)
 
@@ -241,7 +237,7 @@ class TermineDaoTest {
 
     @Test(expected = DatenkonsistenzException::class)
     fun `aktualisiereTerminSchreibt ueberprueft ob Termin-ID und TerminDetails-ID uebereinstimmen`() {
-        val termin = Termin(2, beginn, ende, nordkiez(), sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
+        val termin = Termin(2, beginn, ende, "Frankfurter Allee Nord", sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
 
         dao.aktualisiereTermin(termin)
 
@@ -250,7 +246,7 @@ class TermineDaoTest {
 
     @Test
     fun erstelleNeuenTerminSchreibtTerminInDb() {
-        val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
+        val termin = Termin(1, beginn, ende, "Frankfurter Allee Nord", sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
 
         dao.erstelleNeuenTermin(termin)
 
@@ -259,13 +255,13 @@ class TermineDaoTest {
     ***REMOVED***
 
     @Test
-    fun deleteActionRemovesActionInDb() {
-        val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
-        val terminFromDb = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
+    fun loescheAktionRemovesActionInDb() {
+        val termin = Termin(1, beginn, ende, "Frankfurter Allee Nord2", sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
+        val terminFromDb = Termin(1, beginn, ende, "Frankfurter Allee Nord", sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
 
         whenever(entityManager.find(Termin::class.java, 1L)).thenReturn(terminFromDb)
 
-        dao.deleteAction(termin)
+        dao.loescheAktion(termin)
 
         verify(entityManager, atLeastOnce()).find(Termin::class.java, 1L)
         verify(entityManager, atLeastOnce()).remove(terminFromDb)
@@ -273,22 +269,22 @@ class TermineDaoTest {
     ***REMOVED***
 
     @Test(expected = DatabaseException::class)
-    fun deleteActionThrowsNotFoundExceptionIfActionDoesNotExist() {
-        val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
+    fun loescheAktionThrowsNotFoundExceptionIfActionDoesNotExist() {
+        val termin = Termin(1, beginn, ende, "Frankfurter Allee Nord", sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
 
         whenever(entityManager.find(Termin::class.java, 1L)).thenThrow(IllegalArgumentException())
 
-        dao.deleteAction(termin)
+        dao.loescheAktion(termin)
     ***REMOVED***
 
     @Test(expected = DatabaseException::class)
-    fun deleteActionThrowsNotFoundExceptionIfDeletionFails() {
-        val termin = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
-        val actionFromDb = Termin(1, beginn, ende, nordkiez(), sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
+    fun loescheAktionThrowsNotFoundExceptionIfDeletionFails() {
+        val termin = Termin(1, beginn, ende, "Frankfurter Allee Nord2", sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
+        val actionFromDb = Termin(1, beginn, ende, "Frankfurter Allee Nord", sammeltermin(), emptyList(), 52.48612, 13.47192, terminDetails())
         whenever(entityManager.find(Termin::class.java, 1L)).thenReturn(actionFromDb)
         whenever(entityManager.remove(actionFromDb)).thenThrow(IllegalArgumentException())
 
-        dao.deleteAction(termin)
+        dao.loescheAktion(termin)
     ***REMOVED***
 
     @Test

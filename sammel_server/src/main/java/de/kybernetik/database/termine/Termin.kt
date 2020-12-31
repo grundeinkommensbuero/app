@@ -1,6 +1,5 @@
 package de.kybernetik.database.termine
 
-import de.kybernetik.database.stammdaten.Ort
 import de.kybernetik.database.benutzer.Benutzer
 import java.time.LocalDateTime
 import javax.persistence.*
@@ -22,15 +21,14 @@ class Termin {
     @Column
     var ende: LocalDateTime? = null
 
-    @ManyToOne
-    @JoinColumn(name = "ort")
-    var ort: Ort? = null
+    @Column
+    var ort: String? = null
 
     @Column
     var typ: String? = null
 
     @Column
-    var lattitude: Double? = null
+    var latitude: Double? = null
 
     @Column
     var longitude: Double? = null
@@ -51,9 +49,9 @@ class Termin {
     constructor(id: Long,
                 beginn: LocalDateTime?,
                 ende: LocalDateTime?,
-                ort: Ort?,
+                ort: String?,
                 typ: String?, teilnehmer: List<Benutzer>,
-                lattitude: Double?,
+                latitude: Double?,
                 longitude: Double?,
                 details: TerminDetails?) {
         this.id = id
@@ -61,7 +59,7 @@ class Termin {
         this.ende = ende
         this.ort = ort
         this.typ = typ
-        this.lattitude = lattitude
+        this.latitude = latitude
         this.longitude = longitude
         this.details = details
         this.teilnehmer = teilnehmer

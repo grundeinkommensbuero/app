@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
-import 'package:sammel_app/shared/user_data.dart';
+import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageService {
@@ -20,6 +20,8 @@ class StorageService {
   static const String _PUSHTOKEN = 'pushToken';
   static const String _PULL_MODE = 'pullMode';
   static const String _CHANNEL = 'channel';
+  static const String _MYKIEZ = 'mykiez';
+  static const String _NOTIF_INTERVAL = 'notifInterval';
 
   StorageService() {
     _prefs = SharedPreferences.getInstance();
@@ -36,13 +38,14 @@ class StorageService {
   Future<String> loadActionToken(int id) =>
       prefs.then((prefs) => prefs.getString('$_ACTION:${id.toString()***REMOVED***'));
 
-  Future<bool> saveActionChannel(ActionChannel channel) => prefs.then((prefs) =>
+  Future<bool> saveChatChannel(ChatChannel channel) => prefs.then((prefs) =>
       prefs.setString('$_CHANNEL:${channel.id***REMOVED***', jsonEncode(channel.toJson())));
 
-  Future<Channel> loadActionChannel(String id) async {
-    return prefs.then((prefs) =>
-        ActionChannel.fromJSON(jsonDecode(prefs.getString('$_CHANNEL:${id***REMOVED***'))));
-  ***REMOVED***
+  Future<ChatChannel> loadChatChannel(String id) async => prefs.then((prefs) {
+        var json = prefs.getString('$_CHANNEL:${id***REMOVED***');
+        if (json == null) return null;
+        return ChatChannel.fromJSON(jsonDecode(json));
+      ***REMOVED***);
 
   markActionIdAsStored(int id) => prefs.then((prefs) => _getActionList().then(
       (list) => prefs.setStringList(_ACTIONLIST, list..add(id.toString()))));
@@ -126,6 +129,22 @@ class StorageService {
   Future<bool> isPullMode() =>
       prefs.then((prefs) => prefs.getBool(_PULL_MODE) ?? false);
 
+  Future<void> saveMyKiez(List<String> kieze) =>
+      prefs.then((prefs) => prefs.setStringList(_MYKIEZ, kieze));
+
+  Future<List<String>> loadMyKiez() => _prefs.then((prefs) async {
+        var list = prefs.getStringList(_MYKIEZ);
+        return list != null ? list : [];
+      ***REMOVED***);
+
+  Future<bool> saveNotificationInterval(String interval) =>
+      prefs.then((prefs) => prefs.setString(_NOTIF_INTERVAL, interval));
+
+  Future<String> loadNotificationInterval() =>
+      prefs.then((prefs) => prefs.getString(_NOTIF_INTERVAL));
+
   // for Debugging only
   loadCostumPushToken() => prefs.then((prefs) => prefs.getString(_PUSHTOKEN));
+
+  Future<void> reload() async => await _prefs.then((prefs) => prefs.reload());
 ***REMOVED***

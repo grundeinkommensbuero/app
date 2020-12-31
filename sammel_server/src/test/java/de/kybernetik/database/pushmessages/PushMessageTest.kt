@@ -19,7 +19,7 @@ class PushMessageTest {
         val pushMessage = PushMessage(
                 karl(),
                 mapOf("key1" to "value1", "key2" to "value2"),
-                PushNotificationDto(title = "Titel", body = "Inhalt"))
+                PushNotificationDto(title = "Titel", body = "Inhalt", channel = "Allgemein", collapseId = null))
 
         assertEquals(pushMessage.getDaten()!!.size, 2)
         assertEquals(pushMessage.getDaten()!!["key1"], "value1")

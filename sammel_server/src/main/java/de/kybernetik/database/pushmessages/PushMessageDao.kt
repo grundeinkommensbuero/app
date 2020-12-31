@@ -19,8 +19,8 @@ open class PushMessageDao {
 
     open fun ladeAllePushMessagesFuerBenutzer(id: Long?): List<PushMessage> {
         val resultList = entityManager
-                .createQuery("select m from PushMessages m where m.empfaenger = $id", PushMessage::class.java)
-                .resultList
+            .createQuery("select m from PushMessages m where m.empfaenger = $id", PushMessage::class.java)
+            .resultList
         return resultList
     ***REMOVED***
 
@@ -41,4 +41,12 @@ open class PushMessageDao {
         ***REMOVED***
         entityManager.flush()
     ***REMOVED***
+
+    @Suppress("UNUSED_PARAMETER")
+    fun sendePushNachrichtAnTopic(
+        notification: PushNotificationDto?,
+        verschluesselt: Map<String, String>?,
+        topic: String
+    ): Unit {***REMOVED*** /*=
+        throw NotImplementedError()*/
 ***REMOVED***
