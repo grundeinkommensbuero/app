@@ -494,7 +494,7 @@ class TermineSeiteState extends State<TermineSeite>
       await storageService.markActionIdAsEvaluated(evaluation.terminId);
     } catch (e, s) {
       ErrorService.handleError(e, s,
-          additional: 'Evaluation konnte nicht gespeichert werden.');
+          context: 'Evaluation konnte nicht gespeichert werden.');
     }
     return;
   }
