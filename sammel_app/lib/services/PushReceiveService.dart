@@ -14,6 +14,10 @@ abstract class PushReceiveService {
       MessageHandler onResume,
       MessageHandler onLaunch,
       MessageHandler onBackgroundMessage***REMOVED***);
+
+  void subscribeToKiezActionTopics(List<String> kieze, String option);
+
+  void unsubscribeFromKiezActionTopics(List<String> kieze, String notification);
 ***REMOVED***
 
 class FirebaseReceiveService implements PushReceiveService {
@@ -46,6 +50,24 @@ class FirebaseReceiveService implements PushReceiveService {
           onResume: onResume,
           onLaunch: onLaunch,
           onBackgroundMessage: onBackgroundMessage);
+
+  @override
+  void unsubscribeFromKiezActionTopics(List<String> kieze, String interval) {
+    kieze.forEach((kiez) {
+      var topic = Uri.encodeComponent('$kiez-$interval');
+      print('Unsubscribe zu Topic $topic');
+      firebaseMessaging.unsubscribeFromTopic(topic);
+    ***REMOVED***);
+  ***REMOVED***
+
+  @override
+  void subscribeToKiezActionTopics(List<String> kieze, String interval) {
+    kieze.forEach((kiez) {
+      var topic = Uri.encodeComponent('$kiez-$interval');
+      print('Subscribe zu Topic $topic');
+      firebaseMessaging.subscribeToTopic(topic);
+    ***REMOVED***);
+  ***REMOVED***
 ***REMOVED***
 
 class PullService extends BackendService implements PushReceiveService {
@@ -75,5 +97,16 @@ class PullService extends BackendService implements PushReceiveService {
               'Beim Abrufen von Nachrichten ist ein Fehler aufgetreten. Das regelmäßige Abrufen von Nachrichten wird deshalb deaktiviert');
       timer.cancel();
     ***REMOVED***
+  ***REMOVED***
+
+  @override
+  void subscribeToKiezActionTopics(List<String> kieze, String option) {
+    // TODO: implement subscribeToKiezActionTopics
+  ***REMOVED***
+
+  @override
+  void unsubscribeFromKiezActionTopics(
+      List<String> kieze, String notification) {
+    // TODO: implement unsubscribeFromKiezActionTopics
   ***REMOVED***
 ***REMOVED***

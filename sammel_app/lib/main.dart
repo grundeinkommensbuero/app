@@ -20,7 +20,7 @@ void main() {
   runApp(MyApp());
 ***REMOVED***
 
-const Mode mode = Mode.DEMO;
+const Mode mode = Mode.LOCAL;
 const version = '0.3.4+14';
 
 ***REMOVED***

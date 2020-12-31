@@ -13,6 +13,10 @@ import 'ErrorService.dart';
 
 abstract class AbstractPushNotificationManager {
   void register_message_callback(String id, PushNotificationListener callback);
+
+  void unsubscribeFromKiezActionTopics(List<String> kieze, String interval);
+
+  void subscribeToKiezActionTopics(List<String> kieze, String interval);
 ***REMOVED***
 
 abstract class PushNotificationListener {
@@ -84,6 +88,14 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     this.callback_map[id] = callback;
   ***REMOVED***
 
+  @override
+  void subscribeToKiezActionTopics(List<String> kieze, String interval) =>
+      listener.subscribeToKiezActionTopics(kieze, interval);
+
+  @override
+  void unsubscribeFromKiezActionTopics(List<String> kieze, String interval) =>
+      listener.unsubscribeFromKiezActionTopics(kieze, interval);
+
 /*void subscribeToChannel(String topic) async {
   listener.subscribeToTopic(topic);
 ***REMOVED***
@@ -126,4 +138,12 @@ class DemoPushNotificationManager implements AbstractPushNotificationManager {
         .where((data) => data.type == type)
         .listen((data) => callback.receive_message(data.toJson()));
   ***REMOVED***
+
+  // Ignore
+  @override
+  void subscribeToKiezActionTopics(List<String> kieze, String interval) {***REMOVED***
+
+  // Ignore
+  @override
+  void unsubscribeFromKiezActionTopics(List<String> kieze, String interval) {***REMOVED***
 ***REMOVED***
