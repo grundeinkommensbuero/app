@@ -14,3 +14,5 @@ INSERT INTO Termin_Teilnehmer (termin, teilnehmer) VALUES (2, 11);
 INSERT INTO Termin_Teilnehmer (termin, teilnehmer) VALUES (3, 12);
 INSERT INTO Termin_Teilnehmer (termin, teilnehmer) VALUES (4, 11);
 INSERT INTO Termin_Teilnehmer (termin, teilnehmer) VALUES (4, 12);
+
+INSERT INTO Evaluationen (id, termin_id, user_id, unterschriften, bewertung, stunden, kommentar, situation) VALUES (6, 1, 1, 48, 2, 4.5, 'War am Regnen', 'Nicht bei Regen sammeln gehen');
