@@ -20,7 +20,13 @@ abstract class AbstractPushNotificationManager {
 ***REMOVED***
 
 abstract class PushNotificationListener {
-  void receive_message(Map<dynamic, dynamic> data) {***REMOVED***
+  void receive_message(Map<dynamic, dynamic> data, NotificationType notificationType) {***REMOVED***
+***REMOVED***
+
+enum NotificationType
+{
+  DEFAULT,
+  RESUME
 ***REMOVED***
 
 class PushNotificationManager implements AbstractPushNotificationManager {
@@ -58,7 +64,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
 
     listener.subscribe(
         onMessage: onMessageCallback,
-        onResume: onMessageCallback,
+        onResume: onResumeCallback,
         onLaunch: onMessageCallback,
         onBackgroundMessage: backgroundMessageHandler);
   ***REMOVED***
@@ -69,18 +75,27 @@ class PushNotificationManager implements AbstractPushNotificationManager {
 
   Future<dynamic> onMessageCallback(Map<dynamic, dynamic> message) async {
     print('Push-Nachricht empfangen: $message');
+    handle_message(message, NotificationType.DEFAULT);
+  ***REMOVED***
+
+  void handle_message(Map message, NotificationType key) {
     try {
       var data = decrypt(message['data']);
       if (data.containsKey('type')) {
         String type = data['type'];
         print('Type: $type');
         if (callback_map.containsKey(type)) {
-          callback_map[type].receive_message(data);
+          callback_map[type].receive_message(data, key);
         ***REMOVED***
       ***REMOVED***
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s);
     ***REMOVED***
+  ***REMOVED***
+
+  Future<dynamic> onResumeCallback(Map<dynamic, dynamic> message) async {
+    print('Resume-Nachricht empfangen: $message');
+    handle_message(message, NotificationType.RESUME);
   ***REMOVED***
 
   @override
@@ -136,7 +151,7 @@ class DemoPushNotificationManager implements AbstractPushNotificationManager {
       String type, PushNotificationListener callback) {
     pushService.stream
         .where((data) => data.type == type)
-        .listen((data) => callback.receive_message(data.toJson()));
+        .listen((data) => callback.receive_message(data.toJson(), NotificationType.DEFAULT));
   ***REMOVED***
 
   // Ignore

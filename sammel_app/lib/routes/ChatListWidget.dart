@@ -145,7 +145,7 @@ class ChatListState extends State<ChatListWidget>
         ? '\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen'
         : '';
     return RichText(
-        key: Key('Participation Message'),
+     //   key: Key('Participation Message'),
         textAlign: TextAlign.center,
         text: TextSpan(
             text: message.username ?? 'Jemand',
