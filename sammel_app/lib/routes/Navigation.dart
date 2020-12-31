@@ -99,7 +99,7 @@ class NavigationState extends State<Navigation>
             ),
           ),
           floatingActionButton: widget.clearButton == true
-              ? FloatingActionButton(
+              ? FloatingActionButton(heroTag: 'clearButtonHero',
                   onPressed: () => Provider.of<StorageService>(context)
                       .clearAllPreferences(),
                   child: Icon(Icons.delete_forever),

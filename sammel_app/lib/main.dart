@@ -27,6 +27,9 @@ const version = '0.3.4+14';
 const bool pullMode = false;
 const bool clearButton = true;
 
+final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
+
+
 class MyApp extends StatelessWidget {
   static var firebaseService = FirebaseReceiveService();
   static var storageService = StorageService();
@@ -71,7 +74,8 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
             title: 'DW & Co. Enteignen',
             theme: DweTheme.themeData,
-            home: Navigation(clearButton)));
+            home: Navigation(clearButton),
+           navigatorKey: navigatorKey,));
   }
 }
 

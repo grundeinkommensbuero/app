@@ -1,9 +1,16 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/model/ChatChannel.dart';
+import 'package:sammel_app/model/Termin.dart';
+import 'package:sammel_app/routes/ChatWindow.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/StorageService.dart';
+import 'package:sammel_app/services/TermineService.dart';
+
+import '../main.dart';
 
 class ChatMessageService implements PushNotificationListener {
   ChatMessageService(
@@ -16,8 +23,9 @@ class ChatMessageService implements PushNotificationListener {
   Map<String, ChatChannel> channels = Map<String, ChatChannel>();
   StorageService storage_service;
 
+
   @override
-  Future<void> receive_message(Map<dynamic, dynamic> data) async {
+  Future<void> receive_message(Map<dynamic, dynamic> data, NotificationType notificationType) async {
     try {
       ChatPushData mpd = ChatPushData.fromJson(data);
       ChatChannel channel = await getChannel(mpd.channel);
@@ -27,6 +35,15 @@ class ChatMessageService implements PushNotificationListener {
         if (data['type'] == PushDataTypes.ParticipationMessage)
           channel.pushParticipationMessage(ParticipationMessage.fromJson(data));
         this.storage_service.saveChatChannel(channel);
+        if (notificationType == NotificationType.RESUME)
+          {
+            //we need to put the message channel in the foreground
+
+            int termin_id = int.parse(channel.id.split(':')[1]);
+            Future<Termin> termin = Provider.of<AbstractTermineService>(navigatorKey.currentContext).getActionWithDetails(termin_id);
+            termin.then((value) =>  navigatorKey.currentState.push( MaterialPageRoute(
+                builder: (context) => ChatWindow(channel, value))));
+          }
       }
     } on UnreadablePushMessage catch (e, s) {
       ErrorService.handleError(e, s);
