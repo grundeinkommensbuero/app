@@ -26,7 +26,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   http: ^0.12.0+2
   quiver: '>=2.0.0 <3.0.0'
-  flutter_local_notifications: ^3.0.2
+  flutter_local_notifications: ^0.8.4
   date_format: ^1.0.6
   http_server: ^0.9.8+3
   provider: ^3.1.0
@@ -46,9 +46,6 @@ dependencies:
   google_sign_in: ^4.4.4
   user_location: any
   permission_handler: ^5.0.0+hotfix.4
-  poly: ^1.0.5
-  connectivity: ^2.0.2
-  cryptography: ^1.4.0
 
 dev_dependencies:
   flutter_test:
@@ -76,15 +73,9 @@ flutter:
    - assets/images/logo_ios.png
    - assets/images/Sammeln.png
    - assets/images/Sammeln_centered.png
-   - assets/images/Workshop.png
-   - assets/images/Workshop_centered.png
    - assets/images/Infoveranstaltung.png
-   - assets/images/housy_happy.png
-   - assets/images/housy_info.png
-   - assets/images/housy_problem.png
    - assets/security/sammel-server_local.pem
    - assets/security/root-cert.pem
-   - assets/geodata/lor_berlin.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
