@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/main.dart';
+import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
@@ -21,11 +23,12 @@ class ProfilePageState extends State<ProfilePage> {
   StorageService storageService;
   AbstractUserService userService;
   StammdatenService stammdatenService;
+  AbstractPushNotificationManager pushNotificationManager;
   String name = '';
   List<String> myKieze = [];
-  String notification;
-
-  static const notificationOptions = [
+  String interval;
+  
+  static const intervalOptions = [
     'sofort',
     'täglich',
     'wöchentlich',
@@ -38,13 +41,14 @@ class ProfilePageState extends State<ProfilePage> {
       storageService = Provider.of<StorageService>(context);
       userService = Provider.of<AbstractUserService>(context);
       stammdatenService = Provider.of<StammdatenService>(context);
+      pushNotificationManager = Provider.of<AbstractPushNotificationManager>(context);
       userService.user.listen((user) => setState(() => name = user.name));
       storageService
           .loadMyKiez()
           .then((kieze) => setState(() => myKieze = kieze));
       storageService
-          .loadNotificationPreference()
-          .then((pref) => setState(() => notification = pref));
+          .loadNotificationInterval()
+          .then((pref) => setState(() => interval = pref));
       init = true;
     }
     var kiezeCaption = (myKieze ?? []).join(', ');
@@ -73,84 +77,104 @@ class ProfilePageState extends State<ProfilePage> {
                     title: "Dein Kiez",
                     child: Container(
                         child: Column(children: [
-                      Text(
-                        kiezeCaption,
-                        maxLines: 20,
-                        style: TextStyle(
-                            fontSize:
+                          Text(
+                            kiezeCaption,
+                            maxLines: 20,
+                            style: TextStyle(
+                                fontSize:
                                 (28.0 - ((kiezeCaption ?? '').length) / 9)),
-                      ),
-                      SizedBox(height: 10.0),
-                      Text(
-                        'Mit deinen Kiezen bestimmst du wo du über neue Aktionen informiert werden willst.',
-                        style: TextStyle(
-                            fontWeight: FontWeight.normal, color: Colors.black),
-                      )
-                    ])),
+                          ),
+                          SizedBox(height: 10.0),
+                          Text(
+                            'Mit deinen Kiezen bestimmst du wo du über neue Aktionen informiert werden willst.',
+                            style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                color: Colors.black),
+                          )
+                        ])),
                     onPressed: (_) => showKiezPicker()),
                 SizedBox(height: 20.0),
                 ProfileItem(
                     title: "Deine Benachtichtigungen",
                     child: Container(
                         child: Column(children: [
-                      Text(notification ?? 'nie',
-                          style: TextStyle(fontSize: 28.0)),
-                      SizedBox(height: 10.0),
-                      Text(
-                        'Wie oft und aktuell willst du über neue Sammel-Aktionen in deinem Kiez informiert werden?',
-                        style: TextStyle(
-                            fontWeight: FontWeight.normal, color: Colors.black),
-                      )
-                    ])),
+                          Text(interval ?? 'nie',
+                              style: TextStyle(fontSize: 28.0)),
+                          SizedBox(height: 10.0),
+                          Text(
+                            'Wie oft und aktuell willst du über neue Sammel-Aktionen in deinem Kiez informiert werden?',
+                            style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                color: Colors.black),
+                          )
+                        ])),
                     onPressed: (context) => showNotificationDialog(context))
               ],
             )),
         floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.info_outline_rounded, size: 40.0, color: DweTheme.yellow),
+            child: Icon(Icons.info_outline_rounded,
+                size: 40.0, color: DweTheme.yellow),
             onPressed: () => showAboutDialog(context)));
   }
 
   showKiezPicker() async {
     var allLocations = await stammdatenService.kieze;
     var selection = (await KiezPicker(allLocations
-                .where((kiez) => myKieze.contains(kiez.kiez))
-                .toList())
-            .showKiezPicker(context))
+        .where((kiez) => myKieze.contains(kiez.kiez))
+        .toList())
+        .showKiezPicker(context))
         .map((kiez) => kiez.kiez)
         .toList();
+
+    if (!ListEquality().equals(selection, myKieze))
+      renewTopicSubscriptions(selection, interval);
+
     storageService.saveMyKiez(selection);
     setState(() => myKieze = selection);
   }
 
   showNotificationDialog(BuildContext context) async {
-    var selection = await showDialog(
+    String selection = await showDialog(
         context: context,
-        builder: (context) => SimpleDialog(
-            key: Key('notification selection dialog'),
-            contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
-            titlePadding: EdgeInsets.all(15.0),
-            title: const Text(
-                'Wie häufig möchtest du Infos über anstehende Aktionen bekommen?'),
-            children: []
-              ..addAll(notificationOptions.map((option) => RadioListTile(
-                    groupValue: notification,
-                    value: option,
-                    title: Text(option),
-                    onChanged: (selected) => Navigator.pop(context, selected),
-                  )))));
+        builder: (context) =>
+            SimpleDialog(
+                key: Key('notification selection dialog'),
+                contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
+                titlePadding: EdgeInsets.all(15.0),
+                title: const Text(
+                    'Wie häufig möchtest du Infos über anstehende Aktionen bekommen?'),
+                children: []
+                  ..addAll(intervalOptions.map((option) =>
+                      RadioListTile(
+                        groupValue: interval,
+                        value: option,
+                        title: Text(option),
+                        onChanged: (selected) =>
+                            Navigator.pop(context, selected),
+                      )))));
 
-    storageService.saveNotificationPreference(selection);
-    setState(() => notification = selection);
+    if (selection != interval)
+      renewTopicSubscriptions(myKieze, selection);
+
+    storageService.saveNotificationInterval(selection);
+    setState(() => interval = selection);
+  }
+
+  void renewTopicSubscriptions(List<String> newKieze, String newInterval) {
+    pushNotificationManager.unsubscribeFromKiezActionTopics(myKieze, interval);
+    if(newInterval == "nie") return;
+    pushNotificationManager.subscribeToKiezActionTopics(newKieze, newInterval);
   }
 }
 
 showAboutDialog(BuildContext context) {
   showDialog(
       context: context,
-      builder: (context) => AboutDialog(
+      builder: (context) =>
+          AboutDialog(
             applicationName: 'Deutsche Wohnen & Co. Enteignen',
             applicationIcon:
-                Image.asset('assets/images/housy_info.png', width: 80.0),
+            Image.asset('assets/images/housy_info.png', width: 80.0),
             applicationVersion: version,
             children: [
               SizedBox(height: 15.0),
@@ -166,8 +190,9 @@ showAboutDialog(BuildContext context) {
                             color: Colors.indigo,
                             decoration: TextDecoration.underline),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () => launch(
-                              'https://gitlab.com/kybernetik/sammel-app'))),
+                          ..onTap = () =>
+                              launch(
+                                  'https://gitlab.com/kybernetik/sammel-app'))),
                 RichText(
                     text: TextSpan(
                         text: 'e@mail.com',
@@ -219,15 +244,15 @@ class ProfileItem extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                        Text(title,
-                            style: TextStyle(
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.normal,
-                                color: Colors.black)),
-                        SizedBox(height: 10.0),
-                        child,
-                        SizedBox(width: 15.0)
-                      ])),
+                            Text(title,
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.black)),
+                            SizedBox(height: 10.0),
+                            child,
+                            SizedBox(width: 15.0)
+                          ])),
                   Icon(Icons.edit),
                 ])));
   }

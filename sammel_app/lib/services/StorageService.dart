@@ -20,7 +20,7 @@ class StorageService {
   static const String _PULL_MODE = 'pullMode';
   static const String _CHANNEL = 'channel';
   static const String _MYKIEZ = 'mykiez';
-  static const String _NOTIFICATION = 'notification';
+  static const String _NOTIF_INTERVAL = 'notifInterval';
 
   StorageService() {
     _prefs = SharedPreferences.getInstance();
@@ -121,11 +121,11 @@ class StorageService {
         return list != null ? list : [];
       });
 
-  Future<bool> saveNotificationPreference(String preference) =>
-      prefs.then((prefs) => prefs.setString(_NOTIFICATION, preference));
+  Future<bool> saveNotificationInterval(String interval) =>
+      prefs.then((prefs) => prefs.setString(_NOTIF_INTERVAL, interval));
 
-  Future<String> loadNotificationPreference() =>
-      prefs.then((prefs) => prefs.getString(_NOTIFICATION));
+  Future<String> loadNotificationInterval() =>
+      prefs.then((prefs) => prefs.getString(_NOTIF_INTERVAL));
 
   // for Debugging only
   loadCostumPushToken() => prefs.then((prefs) => prefs.getString(_PUSHTOKEN));
