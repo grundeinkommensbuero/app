@@ -7,7 +7,10 @@ import de.kybernetik.database.benutzer.BenutzerDao
 import de.kybernetik.database.pushmessages.PushMessageDao
 import de.kybernetik.rest.*
 import org.jboss.logging.Logger
+import java.net.URLEncoder
 import java.security.SecureRandom
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
@@ -72,6 +75,25 @@ open class PushService {
             LOG.error("Serialisieren von Push-Nachricht gescheitert", e)
             return null
         ***REMOVED***
+    ***REMOVED***
+
+    fun pusheNeueAktionNotification(aktion: TermineRestResource.TerminDto) {
+        val pushMessage = PushMessageDto(
+            PushNotificationDto(
+                "Eine neue Aktion in deinem Kiez",
+                "${aktion.typ***REMOVED*** am ${aktion.beginn!!.format(DateTimeFormatter.ofPattern("dd.MM. 'um' HH:mm 'Uhr'"))***REMOVED***, ${aktion.ort***REMOVED***",
+                "Aktionen im Kiez"
+            ),
+            mapOf(
+                "type" to "NewKiezActions",
+                "channel" to "kiez:new_action",
+                "timestamp" to ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME),
+                "action" to listOf(aktion.id)
+            )
+        )
+        val topic = URLEncoder.encode("${aktion.ort***REMOVED***-täglich", Charsets.UTF_8.name()).replace("+", "%20")
+        LOG.debug("Sende Push-Nachrich zu Aktion {${aktion.id***REMOVED******REMOVED*** an Topic $topic")
+        sendePushNachrichtAnTopic(pushMessage, topic)
     ***REMOVED***
 
 ***REMOVED***

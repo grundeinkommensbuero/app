@@ -94,6 +94,9 @@ open class TermineRestResource {
         val updatedAction = dao.erstelleNeuenTermin(actionAndToken.action!!.convertToTermin())
         val token = actionAndToken.token
         if (!token.isNullOrEmpty()) dao.storeToken(updatedAction.id, token)
+
+        pushService.pusheNeueAktionNotification(actionAndToken.action!!)
+
         return Response
             .ok()
             .entity(convertFromTerminWithoutDetails(updatedAction))
