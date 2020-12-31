@@ -20,7 +20,9 @@ open class TermineDao {
     private lateinit var entityManager: EntityManager
 
     open fun getTermine(filter: TermineFilter): List<Termin> {
-        return erzeugeGetTermineQuery(filter).resultList
+        val ergebnisse = erzeugeGetTermineQuery(filter).resultList
+        LOG.debug("Gefundene Aktionen nach Filter ${filter.typen***REMOVED***, ${filter.tage***REMOVED***, ${filter.von***REMOVED***, ${filter.bis***REMOVED***, ${filter.orte***REMOVED***: ${ergebnisse.map { it.id ***REMOVED******REMOVED***")
+        return ergebnisse
     ***REMOVED***
 
     private val typenKlausel = "termine.typ in (:typen)"

@@ -95,7 +95,7 @@ open class TermineRestResource {
         val token = actionAndToken.token
         if (!token.isNullOrEmpty()) dao.storeToken(updatedAction.id, token)
 
-        pushService.pusheNeueAktionNotification(actionAndToken.action!!)
+        pushService.pusheNeueAktionenNotification(listOf(actionAndToken.action!!))
 
         return Response
             .ok()
