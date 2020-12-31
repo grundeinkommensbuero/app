@@ -43,7 +43,7 @@ open class PushMessageDao {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    fun sendePushNachrichtAnTopic(
+    open fun sendePushNachrichtAnTopic(
         notification: PushNotificationDto?,
         verschluesselt: Map<String, String>?,
         topic: String

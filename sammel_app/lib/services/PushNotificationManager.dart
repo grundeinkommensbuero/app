@@ -111,7 +111,7 @@ Future<dynamic> backgroundMessageHandler(Map<String, dynamic> message) async {
   if (data['type'] == "SimpleChatMessage")
     handleBackgroundChatMessage(data);
   else
-    print('Unbekannter Nachrichtentyp: ${message['type']}');
+    print('Unbekannter Nachrichtentyp: ${data['type']}');
 }
 
 Future<void> handleBackgroundChatMessage(Map<String, dynamic> data) async {
