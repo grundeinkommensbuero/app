@@ -31,7 +31,6 @@ void main() {
           true, DateTime(2020, 12, 13, 11, 22), 'Karl Marx', true));
       await tester.pump(Duration(minutes: 5));
 
-      expect(find.byKey(Key('Participation Message')), findsOneWidget);
       expect(
           find.byWidgetPredicate((widget) =>
               widget is RichText &&
@@ -48,7 +47,6 @@ void main() {
           true, DateTime(2020, 12, 13, 11, 22), null, true));
       await tester.pump(Duration(minutes: 5));
 
-      expect(find.byKey(Key('Participation Message')), findsOneWidget);
       expect(
           find.byWidgetPredicate((widget) =>
               widget is RichText &&
@@ -65,7 +63,6 @@ void main() {
           true, DateTime(2020, 12, 13, 11, 22), 'Karl Marx', false));
       await tester.pump(Duration(minutes: 5));
 
-      expect(find.byKey(Key('Participation Message')), findsOneWidget);
       expect(
           find.byWidgetPredicate((widget) =>
               widget is RichText &&
@@ -82,7 +79,6 @@ void main() {
           true, DateTime(2020, 12, 13, 11, 22), null, false));
       await tester.pump(Duration(minutes: 5));
 
-      expect(find.byKey(Key('Participation Message')), findsOneWidget);
       expect(
           find.byWidgetPredicate((widget) =>
               widget is RichText &&
