@@ -1,7 +1,11 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:sammel_app/main.dart';
 import 'package:sammel_app/model/PushMessage.dart';
+import 'package:sammel_app/services/ChatMessageService.dart';
+import 'package:sammel_app/services/PushNotificationManager.dart';
 
 // Siehe https://pub.dev/packages/flutter_local_notifications
 
@@ -30,64 +34,92 @@ const AndroidNotificationChannel defaultChannel = AndroidNotificationChannel(
   'Allgemeine Infos',
 );
 
-Future<FlutterLocalNotificationsPlugin> initializeLocalNotifications() async {
-  final FlutterLocalNotificationsPlugin plugin =
-      FlutterLocalNotificationsPlugin();
+class LocalNotificationService
+{
+  ValueNotifier plugin = ValueNotifier(null);
+  ChatMessageService cms = null;
+  LocalNotificationService(ChatMessageService cms)
+  {
+    initializeLocalNotifications().then((value) => plugin.value = value);
+    this.cms = cms;
+  }
 
-  const androidInitializationSettings =
-  AndroidInitializationSettings('push_icon');
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      androidInitializationSettings;
+  Future<FlutterLocalNotificationsPlugin> initializeLocalNotifications() async {
+    final FlutterLocalNotificationsPlugin plugin =
+    FlutterLocalNotificationsPlugin();
 
-  final IOSInitializationSettings initializationSettingsIOS =
-      IOSInitializationSettings(
-          onDidReceiveLocalNotification: onDidReceiveLocalNotification);
-  final MacOSInitializationSettings initializationSettingsMacOS =
-      MacOSInitializationSettings();
-  final InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS,
-      macOS: initializationSettingsMacOS);
-  await plugin.initialize(initializationSettings,
-      onSelectNotification: selectNotification);
+    const androidInitializationSettings =
+    AndroidInitializationSettings('push_icon');
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        androidInitializationSettings;
 
-  final notifications = plugin.resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>();
-  notifications?.createNotificationChannel(participationChannel);
-  notifications?.createNotificationChannel(changesChannel);
-  notifications?.createNotificationChannel(actionChatChannel);
-  notifications?.createNotificationChannel(defaultChannel);
+    final IOSInitializationSettings initializationSettingsIOS =
+    IOSInitializationSettings(
+        onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+    final MacOSInitializationSettings initializationSettingsMacOS =
+    MacOSInitializationSettings();
+    final InitializationSettings initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid,
+        iOS: initializationSettingsIOS,
+        macOS: initializationSettingsMacOS);
+    await plugin.initialize(initializationSettings,
+        onSelectNotification: selectNotification);
 
-  return plugin;
+    final notifications = plugin.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>();
+    notifications?.createNotificationChannel(participationChannel);
+    notifications?.createNotificationChannel(changesChannel);
+    notifications?.createNotificationChannel(actionChatChannel);
+    notifications?.createNotificationChannel(defaultChannel);
+
+    return plugin;
+  }
+
+  Future onDidReceiveLocalNotification(
+      int id, String title, String body, String payload) {
+    // TODO wichtig für ältere iOS-Versionen
+  }
+
+  Future selectNotification(String payload) {
+    print('Nachricht geklickt');
+    var chatMessage = ChatMessagePushData.fromJson(jsonDecode(payload));
+    cms.receive_message(chatMessage.toJson(), NotificationType.LOCAL_MESSAGE);
+
+    // TODO on tap
+  }
+
+  Future sendChatNotification(ChatMessagePushData chatMessage) async {
+    AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails('Aktionen-Chats', 'Aktionen-Chats',
+        'Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst',
+        ticker:
+        'Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst');
+
+
+    NotificationDetails platformChannelSpecifics =
+    NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    print('Setze Notification ab');
+    if (plugin.value == null)
+    {
+      //sendchatnotification called before init complete
+      plugin.addListener(() => plugin.value.show(
+          chatMessage.channel.hashCode,
+          'Nachricht von ${chatMessage.message.sender_name}',
+          chatMessage.message.text,
+          platformChannelSpecifics,
+          payload: jsonEncode(chatMessage.toJson())));
+    }
+    else {
+      plugin.value.show(
+          chatMessage.channel.hashCode,
+          'Nachricht von ${chatMessage.message.sender_name}',
+          chatMessage.message.text,
+          platformChannelSpecifics,
+          payload: jsonEncode(chatMessage.toJson()));
+    }
+  }
+
+
 }
 
-Future onDidReceiveLocalNotification(
-    int id, String title, String body, String payload) {
-  // TODO wichtig für ältere iOS-Versionen
-}
-
-Future selectNotification(String payload) {
-  print('Nachricht geklickt');
-  var chatMessage = ChatMessagePushData.fromJson(jsonDecode(payload));
-  // TODO on tap
-}
-
-Future sendChatNotification(ChatMessagePushData chatMessage) async {
-  AndroidNotificationDetails androidPlatformChannelSpecifics =
-      AndroidNotificationDetails('Aktionen-Chats', 'Aktionen-Chats',
-          'Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst',
-          ticker:
-              'Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst');
-
-  var plugin = await initializeLocalNotifications();
-  NotificationDetails platformChannelSpecifics =
-      NotificationDetails(android: androidPlatformChannelSpecifics);
-
-  print('Setze Notification ab');
-  plugin.show(
-      chatMessage.channel.hashCode,
-      'Nachricht von ${chatMessage.message.sender_name}',
-      chatMessage.message.text,
-      platformChannelSpecifics,
-      payload: jsonEncode(chatMessage.toJson()));
-}
