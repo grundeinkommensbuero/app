@@ -25,8 +25,7 @@ class ChatMessageService implements PushNotificationListener {
 
 
   @override
-  Future<void> receive_message(
-      Map<dynamic, dynamic> data, NotificationType notificationType) async {
+  Future<void> receive_message(Map<dynamic, dynamic> data, NotificationType notificationType) async {
     try {
       ChatPushData mpd = ChatPushData.fromJson(data);
       ChatChannel channel = await getChannel(mpd.channel);
