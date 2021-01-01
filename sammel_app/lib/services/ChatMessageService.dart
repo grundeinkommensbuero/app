@@ -24,8 +24,7 @@ class ChatMessageService implements PushNotificationListener {
   StorageService storage_service;
 
   @override
-  Future<void> receive_message(
-      Map<dynamic, dynamic> data, NotificationType notificationType) async {
+  Future<void> receive_message(Map<dynamic, dynamic> data) async {
     try {
       ChatPushData mpd = ChatPushData.fromJson(data);
       ChatChannel channel = await getChannel(mpd.channel);
@@ -35,21 +34,22 @@ class ChatMessageService implements PushNotificationListener {
         if (data['type'] == PushDataTypes.ParticipationMessage)
           channel.pushParticipationMessage(ParticipationMessage.fromJson(data));
         this.storage_service.saveChatChannel(channel);
-        if (notificationType == NotificationType.RESUME) {
-          //we need to put the message channel in the foreground
-
-          int termin_id = int.parse(channel.id.split(':')[1]);
-          Future<Termin> termin =
-              Provider.of<AbstractTermineService>(navigatorKey.currentContext)
-                  .getActionWithDetails(termin_id);
-          termin.then((value) => navigatorKey.currentState.push(
-              MaterialPageRoute(
-                  builder: (context) => ChatWindow(channel, value))));
-        ***REMOVED***
       ***REMOVED***
     ***REMOVED*** on UnreadablePushMessage catch (e, s) {
       ErrorService.handleError(e, s);
     ***REMOVED***
+  ***REMOVED***
+
+  @override
+  Future<void> handleNotificationTap(Map<dynamic, dynamic> data) async {
+    final channel = await getChannel(ChatPushData.fromJson(data).channel);
+    int termin_id = int.parse(channel.id.split(':')[1]);
+    Future<Termin> termin =
+    Provider.of<AbstractTermineService>(navigatorKey.currentContext)
+        .getActionWithDetails(termin_id);
+    termin.then((value) => navigatorKey.currentState.push(
+        MaterialPageRoute(
+            builder: (context) => ChatWindow(channel, value))));
   ***REMOVED***
 
   Future<ChatChannel> getChatChannel(int idNr) async =>
