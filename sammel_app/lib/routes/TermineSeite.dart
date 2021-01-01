@@ -571,10 +571,7 @@ class TermineSeiteState extends State<TermineSeite>
   ***REMOVED***
 
   participant(Termin termin) {
-    print(termin.participants.toString());
-    print(me?.id.toString());
     return termin.participants.map((e) => e.id).contains(me?.id);
-***REMOVED***
 ***REMOVED***
 
 AlertDialog confirmDeleteDialog(BuildContext context) => AlertDialog(
