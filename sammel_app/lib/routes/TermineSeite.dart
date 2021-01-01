@@ -9,7 +9,7 @@ import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
-import 'package:sammel_app/routes/EvaluationEditor.dart';
+import 'package:sammel_app/routes/EvaluationForm.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/Evaluation.dart';
 import 'package:sammel_app/routes/ActionMap.dart';
@@ -457,7 +457,7 @@ class TermineSeiteState extends State<TermineSeite>
                 Container(
                     width: MediaQuery.of(context).size.width * 0.8,
                     height: MediaQuery.of(context).size.height * 0.8,
-                    child: EvaluationEditor(
+                    child: EvaluationForm(
                         onFinish: afterActionEvaluation,
                         key: Key('evaluation editor'),
                         terminId: termin.id))

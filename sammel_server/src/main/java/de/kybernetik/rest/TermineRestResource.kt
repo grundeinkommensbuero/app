@@ -204,7 +204,7 @@ open class TermineRestResource {
     @Produces(APPLICATION_JSON)
     open fun aktualisiereEvaluation(evaluation: EvaluationDto): Response {
         if (evaluation.termin_id == null) return noValidActionResponse
-        LOG.debug("aktualisiere evaluation für ${evaluation.termin_id}");
+        LOG.debug("Aktualisiere Evaluation für ${evaluation.termin_id}")
 
 
         val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
@@ -212,7 +212,7 @@ open class TermineRestResource {
         try {
             dao.speichereEvaluation(evaluation.convertToEvaluation(userAusDb!!.id))
         } catch (e: EJBException) {
-            LOG.error("Fehler beim Mergen der Evaluation: Evaluation: ${evaluation}\n", e);
+            LOG.error("Fehler beim Mergen der Evaluation: Evaluation: ${evaluation}\n", e)
             return Response.status(422).entity(e.message).build()
         }
         return Response
@@ -321,11 +321,6 @@ open class TermineRestResource {
     data class ActionWithTokenDto(
         var action: TerminDto? = null,
         var token: String? = null
-    )
-
-    data class EvaluationWithTokenDto(
-            var evaluation: EvaluationDto? = null,
-            var token: String? = null
     )
 
     data class TerminDetailsDto(
