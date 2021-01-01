@@ -104,20 +104,15 @@ class PushNotificationManager implements AbstractPushNotificationManager {
   }
 
   @override
-  void subscribeToKiezActionTopics(List<String> kieze, String interval) =>
-      listener.subscribeToKiezActionTopics(kieze, interval);
+  void subscribeToKiezActionTopics(List<String> kieze, String interval) {
+    kieze.forEach((kiez) => listener.subscribeToTopic('$kiez-$interval'));
+  }
 
   @override
-  void unsubscribeFromKiezActionTopics(List<String> kieze, String interval) =>
-      listener.unsubscribeFromKiezActionTopics(kieze, interval);
-
-/*void subscribeToChannel(String topic) async {
-  listener.subscribeToTopic(topic);
-}
-
-void unsubscribeFromChannel(String topic) async {
-  listener.unsubscribeFromTopic(topic);
-}*/
+  void unsubscribeFromKiezActionTopics(List<String> kieze, String interval) {
+    kieze.forEach((kiez) =>
+      listener.unsubscribeFromTopic('$kiez-$interval'));
+  }
 }
 
 Future<dynamic> backgroundMessageHandler(Map<String, dynamic> message) async {
