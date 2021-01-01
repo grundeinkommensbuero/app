@@ -1,6 +1,5 @@
 package de.kybernetik.database.termine
 
-import de.kybernetik.database.stammdaten.Ort
 import de.kybernetik.database.benutzer.Benutzer
 import java.time.LocalDateTime
 import javax.persistence.*
