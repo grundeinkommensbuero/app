@@ -29,10 +29,6 @@ const bool clearButton = false;
 
 final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
 
-
-final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
-
-
 class MyApp extends StatelessWidget {
   static var firebaseService = FirebaseReceiveService();
   static var storageService = StorageService();
@@ -55,7 +51,7 @@ class MyApp extends StatelessWidget {
       ? DemoListLocationService(userService)
       : ListLocationService(userService, backend);
   static var chatMessageService =
-      ChatMessageService(storageService, pushNotificationManager);
+      ChatMessageService(storageService, pushNotificationManager, navigatorKey);
   static var geoService = GeoService();
 
   @override
