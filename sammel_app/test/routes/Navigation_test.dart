@@ -8,6 +8,7 @@ import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
+import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
@@ -26,6 +27,7 @@ final _storageService = StorageServiceMock();
 final _pushService = PushSendServiceMock();
 final _userService = ConfiguredUserServiceMock();
 final _chatService = ChatMessageServiceMock();
+final _pushManager = PushNotificationManagerMock();
 
 void main() {
   group('Navigation', () {
@@ -35,6 +37,9 @@ void main() {
       navigation = Navigation();
       when(_storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => []);
+      when(_storageService.loadMyKiez()).thenAnswer((_) async => []);
+      when(_storageService.loadNotificationInterval())
+          .thenAnswer((_) async => 'nie');
       when(_listLocationService.getActiveListLocations())
           .thenAnswer((_) async => []);
       when(_storageService.loadFilter())
@@ -52,6 +57,7 @@ void main() {
         Provider<AbstractUserService>.value(value: _userService),
         Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<ChatMessageService>.value(value: _chatService),
+        Provider<AbstractPushNotificationManager>.value(value: _pushManager),
       ], child: MaterialApp(home: navigation)));
     });
 
