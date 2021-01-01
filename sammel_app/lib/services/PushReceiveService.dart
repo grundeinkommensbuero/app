@@ -15,9 +15,9 @@ abstract class PushReceiveService {
       MessageHandler onLaunch,
       MessageHandler onBackgroundMessage***REMOVED***);
 
-  void subscribeToKiezActionTopics(List<String> kieze, String option);
+  void subscribeToTopic(String topic);
 
-  void unsubscribeFromKiezActionTopics(List<String> kieze, String notification);
+  void unsubscribeFromTopic(String topic);
 ***REMOVED***
 
 class FirebaseReceiveService implements PushReceiveService {
@@ -52,21 +52,25 @@ class FirebaseReceiveService implements PushReceiveService {
           onBackgroundMessage: onBackgroundMessage);
 
   @override
-  void unsubscribeFromKiezActionTopics(List<String> kieze, String interval) {
-    kieze.forEach((kiez) {
-      var topic = Uri.encodeComponent('$kiez-$interval');
-      print('Unsubscribe zu Topic $topic');
-      firebaseMessaging.unsubscribeFromTopic(topic);
-    ***REMOVED***);
+  void subscribeToTopic(String topic) {
+    if (pullMode) {
+      print('Subscribe zu Topic $topic');
+      var topicEnc = Uri.encodeComponent(topic);
+      firebaseMessaging.subscribeToTopic(topicEnc);
+    ***REMOVED*** else {
+      // TODO
+    ***REMOVED***
   ***REMOVED***
 
   @override
-  void subscribeToKiezActionTopics(List<String> kieze, String interval) {
-    kieze.forEach((kiez) {
-      var topic = Uri.encodeComponent('$kiez-$interval');
-      print('Subscribe zu Topic $topic');
-      firebaseMessaging.subscribeToTopic(topic);
-    ***REMOVED***);
+  void unsubscribeFromTopic(String topic) {
+    if (pullMode) {
+      print('Unsubscribe zu Topic $topic');
+      var topicEnc = Uri.encodeComponent(topic);
+      firebaseMessaging.unsubscribeFromTopic(topicEnc);
+    ***REMOVED*** else {
+      // TODO
+    ***REMOVED***
   ***REMOVED***
 ***REMOVED***
 
@@ -100,13 +104,12 @@ class PullService extends BackendService implements PushReceiveService {
   ***REMOVED***
 
   @override
-  void subscribeToKiezActionTopics(List<String> kieze, String option) {
+  void subscribeToTopic(String topic) {
     // TODO: implement subscribeToKiezActionTopics
   ***REMOVED***
 
   @override
-  void unsubscribeFromKiezActionTopics(
-      List<String> kieze, String notification) {
+  void unsubscribeFromTopic(String topic) {
     // TODO: implement unsubscribeFromKiezActionTopics
   ***REMOVED***
 ***REMOVED***
