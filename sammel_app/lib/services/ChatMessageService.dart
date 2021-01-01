@@ -4,6 +4,7 @@ import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/model/Termin.dart';
+import 'package:sammel_app/routes/ChatListWidget.dart';
 import 'package:sammel_app/routes/ChatWindow.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
@@ -11,6 +12,7 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 
 import '../main.dart';
+import 'LocalNotificationService.dart';
 
 class ChatMessageService implements PushNotificationListener {
   ChatMessageService(
@@ -35,19 +37,46 @@ class ChatMessageService implements PushNotificationListener {
         if (data['type'] == PushDataTypes.ParticipationMessage)
           channel.pushParticipationMessage(ParticipationMessage.fromJson(data));
         this.storage_service.saveChatChannel(channel);
-        if (notificationType == NotificationType.RESUME)
+        if (notificationType == NotificationType.DEFAULT)
+          {
+            //app is open. chat if chat window is open
+            ChatListState cls = channel.ccl;
+            if (cls == null || ModalRoute.of(cls.context)?.isActive == false)
+              {
+                //chat window is not opened. push local message
+                print('non active window');
+                Provider.of<LocalNotificationService>(navigatorKey.currentContext).sendChatNotification(ChatMessagePushData.fromJson(data));
+              ***REMOVED***
+
+          ***REMOVED***
+        else if (notificationType == NotificationType.RESUME)
           {
             //we need to put the message channel in the foreground
+            ChatListState cls = channel.ccl;
 
-            int termin_id = int.parse(channel.id.split(':')[1]);
-            Future<Termin> termin = Provider.of<AbstractTermineService>(navigatorKey.currentContext).getActionWithDetails(termin_id);
-            termin.then((value) =>  navigatorKey.currentState.push( MaterialPageRoute(
-                builder: (context) => ChatWindow(channel, value))));
+            create_or_recreat_chat_page(cls, channel);
+          ***REMOVED***
+        else if  (notificationType == NotificationType.LOCAL_MESSAGE)
+          {
+            receive_message(data, NotificationType.RESUME);
           ***REMOVED***
       ***REMOVED***
     ***REMOVED*** on UnreadablePushMessage catch (e, s) {
       ErrorService.handleError(e, s);
     ***REMOVED***
+  ***REMOVED***
+
+  void create_or_recreat_chat_page(ChatListState cls, ChatChannel channel) {
+    if (cls == null || ModalRoute.of(cls?.context)?.isActive == false)
+      {
+        if (cls != null) {
+          Navigator.pop(cls.context);
+        ***REMOVED***
+        int termin_id = int.parse(channel.id.split(':')[1]);
+        Future<Termin> termin = Provider.of<AbstractTermineService>(navigatorKey.currentContext).getActionWithDetails(termin_id);
+        termin.then((value) =>  navigatorKey.currentState.push( MaterialPageRoute(
+            builder: (context) => ChatWindow(channel, value))));
+      ***REMOVED***
   ***REMOVED***
 
   Future<ChatChannel> getChatChannel(int idNr) async =>
