@@ -5,6 +5,7 @@ import 'package:sammel_app/model/Evaluation.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
 enum ValidationState { not_validated, error, ok ***REMOVED***
+
 class Option<T1, T2> {
   final T1 text;
   final T2 value;
@@ -20,6 +21,7 @@ class EvaluationData {
   String situation = '';
 
   EvaluationData();
+
   var validated = {
     'unterschriften': ValidationState.not_validated,
     'bewertung': ValidationState.not_validated,
@@ -31,23 +33,23 @@ class EvaluationData {
 ***REMOVED***
 
 // ignore: must_be_immutable
-class EvaluationEditor extends StatefulWidget {
+class EvaluationForm extends StatefulWidget {
   Function onFinish;
   int terminId;
 
-  EvaluationEditor({this.onFinish, Key key, this.terminId***REMOVED***) : super(key: key) {
-    if (onFinish == null) onFinish = (Evaluation _) {***REMOVED*** // TODO unclear if this is necessary or what it does, presumably it passes a default function that does nothing
+  EvaluationForm({this.onFinish, Key key, this.terminId***REMOVED***) : super(key: key) {
+    if (onFinish == null) onFinish = (_) {***REMOVED***
   ***REMOVED***
 
   @override
-  EvaluationEditorState createState() => EvaluationEditorState(this.terminId);
+  EvaluationFormState createState() => EvaluationFormState(this.terminId);
 ***REMOVED***
 
-class EvaluationEditorState extends State<EvaluationEditor> {
+class EvaluationFormState extends State<EvaluationForm> {
   int terminId;
   EvaluationData evaluation = EvaluationData();
 
-  EvaluationEditorState(this.terminId) : super();
+  EvaluationFormState(this.terminId) : super();
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +78,8 @@ class EvaluationEditorState extends State<EvaluationEditor> {
                         ),
                         InputButton(
                             onTap: unterschriftenSelection,
-                            child: unterschriftenButtonCaption(this.evaluation)),
+                            child:
+                                unterschriftenButtonCaption(this.evaluation)),
                       ]))
                 ]),
                 Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -88,14 +91,14 @@ class EvaluationEditorState extends State<EvaluationEditor> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Bewertung',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            InputButton(
-                                onTap: bewertungSelection,
-                                child: bewertungButtonCaption(this.evaluation)),
-                          ]))
+                        Text(
+                          'Bewertung',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        InputButton(
+                            onTap: bewertungSelection,
+                            child: bewertungButtonCaption(this.evaluation)),
+                      ]))
                 ]),
                 Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Icon(Icons.info_outline, size: 40.0),
@@ -106,14 +109,14 @@ class EvaluationEditorState extends State<EvaluationEditor> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Dauer',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            InputButton(
-                                onTap: stundenSelection,
-                                child: stundenButtonCaption(this.evaluation)),
-                          ]))
+                        Text(
+                          'Dauer',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        InputButton(
+                            onTap: stundenSelection,
+                            child: stundenButtonCaption(this.evaluation)),
+                      ]))
                 ]),
                 Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Icon(Icons.info_outline, size: 40.0),
@@ -124,14 +127,14 @@ class EvaluationEditorState extends State<EvaluationEditor> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Anmerkung',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            InputButton(
-                                onTap: kommentarSelection,
-                                child: kommentarButtonCaption(this.evaluation)),
-                          ]))
+                        Text(
+                          'Anmerkung',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        InputButton(
+                            onTap: kommentarSelection,
+                            child: kommentarButtonCaption(this.evaluation)),
+                      ]))
                 ]),
                 Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Icon(Icons.info_outline, size: 40.0),
@@ -142,14 +145,14 @@ class EvaluationEditorState extends State<EvaluationEditor> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Situation',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            InputButton(
-                                onTap: situationSelection,
-                                child: situationButtonCaption(this.evaluation)),
-                          ]))
+                        Text(
+                          'Situation',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        InputButton(
+                            onTap: situationSelection,
+                            child: situationButtonCaption(this.evaluation)),
+                      ]))
                 ]),
               ]),
         ),
@@ -266,50 +269,42 @@ class EvaluationEditorState extends State<EvaluationEditor> {
     if (description != null) {
       input_widget = SingleChildScrollView(
           child: ListBody(children: [
-            Text(description),
-            SizedBox(height: 10),
-            input_field
-          ]));
+        Text(description),
+        SizedBox(height: 10),
+        input_field
+      ]));
     ***REMOVED*** else {
       input_widget = input_field;
     ***REMOVED***
 
-    Widget cancelButton = FlatButton(
-      child: Text("Abbrechen"),
-      onPressed: () {
-        Navigator.pop(context, current_value);
-      ***REMOVED***,
-    );
-    Widget continueButton = FlatButton(
-      child: Text("Fertig"),
-      onPressed: () {
-        Navigator.pop(context, current_input);
-      ***REMOVED***,
-    );
     // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      key: key,
-      title: Text(title),
-      content: input_widget,
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
 
     // show the dialog
     return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      ***REMOVED***,
-    );
+        context: context,
+        builder: (context) => AlertDialog(
+              key: key,
+              title: Text(title),
+              content: input_widget,
+              actions: [
+                FlatButton(
+                  child: Text("Abbrechen"),
+                  onPressed: () {
+                    Navigator.pop(context, current_value);
+                  ***REMOVED***,
+                ),
+                FlatButton(
+                  child: Text("Fertig"),
+                  onPressed: () {
+                    Navigator.pop(context, current_input);
+                  ***REMOVED***,
+                ),
+              ],
+            ));
   ***REMOVED***
 
-
-
-  Future<String> showRadioInputDialog(
-      String current_value, String title, String description, List<Option<String, String>> options, Key key) {
+  Future<String> showRadioInputDialog(String current_value, String title,
+      String description, List<Option<String, String>> options, Key key) {
     String current_input = current_value;
     current_input = 'One';
 
@@ -320,22 +315,20 @@ class EvaluationEditorState extends State<EvaluationEditor> {
     ***REMOVED***
 
     MyRadioInput input_field = new MyRadioInput(
-    onValueChange: _onValueChange,
-    initialValue: current_input,
+      onValueChange: _onValueChange,
+      initialValue: current_input,
       options: options,
     );
-
-
 
     Widget input_widget;
 
     if (description != null) {
       input_widget = SingleChildScrollView(
           child: ListBody(children: [
-            Text(description),
-            SizedBox(height: 10),
-            input_field
-          ]));
+        Text(description),
+        SizedBox(height: 10),
+        input_field
+      ]));
     ***REMOVED*** else {
       input_widget = input_field;
     ***REMOVED***
@@ -373,13 +366,15 @@ class EvaluationEditorState extends State<EvaluationEditor> {
   ***REMOVED***
 
   void unterschriftenSelection() async {
-    var ergebnis = await showNumberInputDialog( // should be number input
+    var ergebnis = await showNumberInputDialog(
+        // should be number input
         this.evaluation.unterschriften.toString(),
         'Anzahl Unterschriften',
         'Wie viele Unterschriften hast Du gesammelt?',
         Key('unterschriften input dialog'));
     setState(() {
-      this.evaluation.unterschriften = int.tryParse(ergebnis) ?? this.evaluation.unterschriften;
+      this.evaluation.unterschriften =
+          int.tryParse(ergebnis) ?? this.evaluation.unterschriften;
       validateAllInput();
     ***REMOVED***);
   ***REMOVED***
@@ -400,10 +395,17 @@ class EvaluationEditorState extends State<EvaluationEditor> {
         this.evaluation.bewertung.toString(),
         'Bewertung',
         'Wie fandest Du die Aktion?',
-        [Option('sehr gut', '5'), Option('gut', '4'), Option('mittelmäßig', '3'), Option('schlecht', '2'), Option('sehr schlecht', '1')],
+        [
+          Option('sehr gut', '5'),
+          Option('gut', '4'),
+          Option('mittelmäßig', '3'),
+          Option('schlecht', '2'),
+          Option('sehr schlecht', '1')
+        ],
         Key('bewertung input dialog'));
     setState(() {
-      this.evaluation.bewertung = int.tryParse(ergebnis) ?? this.evaluation.bewertung;
+      this.evaluation.bewertung =
+          int.tryParse(ergebnis) ?? this.evaluation.bewertung;
       validateAllInput();
     ***REMOVED***);
   ***REMOVED***
@@ -420,13 +422,15 @@ class EvaluationEditorState extends State<EvaluationEditor> {
   ***REMOVED***
 
   void stundenSelection() async {
-    var ergebnis = await showNumberInputDialog( // should be number input
+    var ergebnis = await showNumberInputDialog(
+        // should be number input
         this.evaluation.stunden.toString(),
         'Wie viele Stunden warst Du sammeln?',
         'Auf die nächste halbe Stunde gerundet',
         Key('stunden input dialog'));
     setState(() {
-      this.evaluation.stunden = double.tryParse(ergebnis) ?? this.evaluation.stunden;
+      this.evaluation.stunden =
+          double.tryParse(ergebnis) ?? this.evaluation.stunden;
       validateAllInput();
     ***REMOVED***);
   ***REMOVED***
@@ -443,7 +447,8 @@ class EvaluationEditorState extends State<EvaluationEditor> {
   ***REMOVED***
 
   void kommentarSelection() async {
-    var ergebnis = await showTextInputDialog( // should be number input
+    var ergebnis = await showTextInputDialog(
+        // should be number input
         this.evaluation.kommentar,
         'Kommentar',
         'Optional: Anmerkung zu den Daten?',
@@ -466,7 +471,8 @@ class EvaluationEditorState extends State<EvaluationEditor> {
   ***REMOVED***
 
   void situationSelection() async {
-    var ergebnis = await showTextInputDialog( // should be number input
+    var ergebnis = await showTextInputDialog(
+        // should be number input
         this.evaluation.situation.toString(),
         'situation',
         'Wie war die Situation??',
@@ -512,9 +518,9 @@ class EvaluationEditorState extends State<EvaluationEditor> {
 
   void validateInt(field, name) {
     this.evaluation.validated[name] =
-    (field != null && field is int && field > 0)
-        ? ValidationState.ok
-        : ValidationState.error;
+        (field != null && field is int && field > 0)
+            ? ValidationState.ok
+            : ValidationState.error;
   ***REMOVED***
 
   finishPressed() async {
@@ -525,8 +531,16 @@ class EvaluationEditorState extends State<EvaluationEditor> {
     if (evaluation.validated['all'] == ValidationState.ok) {
       validateAllInput();
       if (evaluation.validated['all'] == ValidationState.ok) {
-        widget.onFinish(Evaluation(this.terminId, evaluation.unterschriften, evaluation.bewertung, evaluation.stunden, evaluation.kommentar, evaluation.situation)); // maybe the Evaluation/EvaluationData two-tap is superfluous here
-        setState(() => evaluation = EvaluationData()); // reset Form for next use
+        widget.onFinish(Evaluation(
+            this.terminId,
+            evaluation.unterschriften,
+            evaluation.bewertung,
+            evaluation.stunden,
+            evaluation.kommentar,
+            evaluation
+                .situation)); // maybe the Evaluation/EvaluationData two-tap is superfluous here
+        setState(
+            () => evaluation = EvaluationData()); // reset Form for next use
       ***REMOVED***
     ***REMOVED***
   ***REMOVED***
@@ -588,19 +602,18 @@ class MyRadioInputState extends State<MyRadioInput> {
   Widget build(BuildContext context) {
     return new Column(
         children: widget.options.map((option) {
-          print('building children');
-          return RadioListTile<String>(
-            title: Text(option.text),
-            value: option.value,
-            groupValue: _selectedValue,
-            onChanged: (String value) {
-              setState(() {
-                _selectedValue = value;
-              ***REMOVED***);
-              widget.onValueChange(value);
-            ***REMOVED***,
-          );
-        ***REMOVED***).toList()
-    );
+      print('building children');
+      return RadioListTile<String>(
+        title: Text(option.text),
+        value: option.value,
+        groupValue: _selectedValue,
+        onChanged: (String value) {
+          setState(() {
+            _selectedValue = value;
+          ***REMOVED***);
+          widget.onValueChange(value);
+        ***REMOVED***,
+      );
+    ***REMOVED***).toList());
   ***REMOVED***
 ***REMOVED***
