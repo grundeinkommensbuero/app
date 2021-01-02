@@ -90,10 +90,10 @@ class TermineSeiteState extends State<TermineSeite>
     ));
 
     var actionListView = Column(children: [
+      // An erstes Element Abstand nach oben anhängen, damit oberste Aktion nicht von Filter verdeckt wird
       SizedBox(
         height: 50.0,
       ),
-      // An erstes Element Abstand nach oben anhängen, damit oberste Aktion nicht von Filter verdeckt wird
       Expanded(
           child: ActionList(
               termine, isMyAction, iAmParticipant, openTerminDetails,
@@ -124,7 +124,7 @@ class TermineSeiteState extends State<TermineSeite>
                       index: navigation),
                 ),
               ),
-              filterWidget,
+              filterWidget
             ],
           )),
       bottomNavigationBar: BottomNavigationBar(
@@ -182,8 +182,8 @@ class TermineSeiteState extends State<TermineSeite>
     _initialized = true;
   }
 
-  void ladeTermine(TermineFilter filter) {
-    termineService.loadActions(filter).then((termine) {
+  Future<void >ladeTermine(TermineFilter filter) async {
+    await termineService.loadActions(filter).then((termine) {
       setState(() {
         this.termine = termine..sort(Termin.compareByStart);
       });
