@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http_server/http_server.dart';
@@ -15,9 +16,9 @@ abstract class PushReceiveService {
       MessageHandler onLaunch,
       MessageHandler onBackgroundMessage});
 
-  void subscribeToTopic(String topic);
+  void subscribeToTopics(List<String> topics);
 
-  void unsubscribeFromTopic(String topic);
+  void unsubscribeFromTopics(List<String> topic);
 }
 
 class FirebaseReceiveService implements PushReceiveService {
@@ -52,10 +53,8 @@ class FirebaseReceiveService implements PushReceiveService {
           onBackgroundMessage: onBackgroundMessage);
 
   @override
-  void subscribeToTopic(String topic) {
-    if (pullMode) {
-      // TODO
-    } else {
+  void subscribeToTopics(List<String> topics) {
+    for (String topic in topics) {
       print('Subscribe zu Topic $topic');
       var topicEnc = Uri.encodeComponent(topic);
       firebaseMessaging.subscribeToTopic(topicEnc);
@@ -63,10 +62,8 @@ class FirebaseReceiveService implements PushReceiveService {
   }
 
   @override
-  void unsubscribeFromTopic(String topic) {
-    if (pullMode) {
-      // TODO
-    } else {
+  void unsubscribeFromTopics(List<String> topics) {
+    for (String topic in topics) {
       print('Unsubscribe von Topic $topic');
       var topicEnc = Uri.encodeComponent(topic);
       firebaseMessaging.unsubscribeFromTopic(topicEnc);
@@ -104,12 +101,22 @@ class PullService extends BackendService implements PushReceiveService {
   }
 
   @override
-  void subscribeToTopic(String topic) {
-    // TODO: implement subscribeToKiezActionTopics
+  void subscribeToTopics(List<String> topics) {
+    try {
+      post('service/push/pull/subscribe', jsonEncode(topics));
+    } catch (e, s) {
+      ErrorService.handleError(e, s,
+          context: 'Fehler beim Anmelden der Benachrichtigungen zu $topics');
+    }
   }
 
   @override
-  void unsubscribeFromTopic(String topic) {
-    // TODO: implement unsubscribeFromKiezActionTopics
+  void unsubscribeFromTopics(List<String> topics) {
+    try {
+      post('service/push/pull/subscribe', jsonEncode(topics));
+    } catch (e, s) {
+      ErrorService.handleError(e, s,
+          context: 'Fehler beim Abmelden der Benachrichtigungen zu $topics');
+    }
   }
 }
