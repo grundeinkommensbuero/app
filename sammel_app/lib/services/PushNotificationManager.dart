@@ -110,12 +110,14 @@ class PushNotificationManager implements AbstractPushNotificationManager {
 
   @override
   void subscribeToKiezActionTopics(List<String> kieze, String interval) {
-    kieze.forEach((kiez) => listener.subscribeToTopic('$kiez-$interval'));
+    var topics = kieze.map((kiez) => '$kiez-$interval').toList();
+    listener.subscribeToTopics(topics);
   ***REMOVED***
 
   @override
   void unsubscribeFromKiezActionTopics(List<String> kieze, String interval) {
-    kieze.forEach((kiez) => listener.unsubscribeFromTopic('$kiez-$interval'));
+    var topics = kieze.map((kiez) => '$kiez-$interval').toList();
+    listener.unsubscribeFromTopics(topics);
   ***REMOVED***
 ***REMOVED***
 
