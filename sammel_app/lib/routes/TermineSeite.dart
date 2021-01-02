@@ -36,9 +36,9 @@ class TermineSeite extends StatefulWidget {
 class TermineSeiteState extends State<TermineSeite>
     with SingleTickerProviderStateMixin {
   static var filterKey = GlobalKey();
-  static AbstractTermineService termineService;
-  static StorageService storageService;
-  static ChatMessageService chatMessageService;
+  AbstractTermineService termineService;
+  StorageService storageService;
+  ChatMessageService chatMessageService;
   static final TextStyle style = TextStyle(
     color: Color.fromARGB(255, 129, 28, 98),
     fontSize: 15.0,
@@ -89,9 +89,16 @@ class TermineSeiteState extends State<TermineSeite>
       curve: Curves.easeIn,
     ));
 
-    var actionListView = ActionList(
-        termine, isMyAction, iAmParticipant, openTerminDetails,
-        key: Key('action list'));
+    var actionListView = Column(children: [
+      SizedBox(
+        height: 50.0,
+      ),
+      // An erstes Element Abstand nach oben anhängen, damit oberste Aktion nicht von Filter verdeckt wird
+      Expanded(
+          child: ActionList(
+              termine, isMyAction, iAmParticipant, openTerminDetails,
+              key: Key('action list')))
+    ]);
     var actionMapView = ActionMap(
       key: Key('action map'),
       termine: termine,
@@ -199,7 +206,7 @@ class TermineSeiteState extends State<TermineSeite>
         ));
   ***REMOVED***
 
-  openTerminDetails(BuildContext context, Termin termin) async {
+  openTerminDetails(Termin termin) async {
     try {
       var terminMitDetails =
           await termineService.getActionWithDetails(termin.id);
@@ -380,7 +387,7 @@ class TermineSeiteState extends State<TermineSeite>
 
   afterActionEdit(List<Termin> editedAction) async {
     await saveAction(editedAction[0]);
-    openTerminDetails(context, editedAction[0]); // recursive and I know it
+    openTerminDetails(editedAction[0]); // recursive and I know it
   ***REMOVED***
 
   Future<void> saveAction(Termin editedAction) async {
@@ -453,7 +460,10 @@ class TermineSeiteState extends State<TermineSeite>
   Future<void> joinAction(Termin termin) async {
     await termineService.joinAction(termin.id);
     setState(() {
-      termine.firstWhere((t) => t.id == termin.id).participants.add(me);
+      termine
+          .firstWhere((t) => t.id == termin.id, orElse: () => null)
+          ?.participants
+          ?.add(me);
     ***REMOVED***);
   ***REMOVED***
 
@@ -467,6 +477,16 @@ class TermineSeiteState extends State<TermineSeite>
 
   participant(Termin termin) =>
       termin.participants.map((e) => e.id).contains(me?.id);
+
+  void zeigeAktionen(String title, List<Termin> actions) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => Scaffold(
+                appBar: AppBar(title: Text(title)),
+                body: ActionList(
+                    actions, isMyAction, iAmParticipant, openTerminDetails))));
+  ***REMOVED***
 ***REMOVED***
 
 AlertDialog confirmDeleteDialog(BuildContext context) => AlertDialog(

@@ -14,8 +14,9 @@ import 'TermineSeite.dart';
 
 class Navigation extends StatefulWidget {
   var clearButton = false;
+  GlobalKey actionPage;
 
-  Navigation([this.clearButton]) : super(key: Key('navigation'));
+  Navigation(this.actionPage, [this.clearButton]) : super(key: Key('navigation'));
 
   @override
   State<StatefulWidget> createState() => NavigationState();
@@ -25,7 +26,6 @@ class NavigationState extends State<Navigation>
     with SingleTickerProviderStateMixin {
   int navigation = 0;
   List<int> history = [];
-  GlobalKey actionPage = GlobalKey(debugLabel: 'action page');
   AnimationController _animationController;
   Animation<Offset> _slide;
   Animation<double> _fade;
@@ -55,7 +55,7 @@ class NavigationState extends State<Navigation>
     ErrorService.setContext(context);
 
     var pages = [
-      TermineSeite(key: actionPage),
+      TermineSeite(key: widget.actionPage),
       ActionEditor(onFinish: newActionCreated, key: Key('action creator')),
       faq = FAQ(),
       ProfilePage(),
@@ -202,7 +202,7 @@ class NavigationState extends State<Navigation>
   ***REMOVED***
 
   void addActionsToActionPage(List<Termin> actions) {
-    actions.forEach((action) => (actionPage.currentState as TermineSeiteState)
+    actions.forEach((action) => (widget.actionPage.currentState as TermineSeiteState)
         .createAndAddAction(action));
   ***REMOVED***
 

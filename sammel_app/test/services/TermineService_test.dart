@@ -7,6 +7,7 @@ import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/BackendService.dart';
+import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
@@ -18,6 +19,7 @@ import '../shared/TestdatenVorrat.dart';
 void main() {
   UserService userService;
   StammdatenService stammdatenService = StammdatenServiceMock();
+  PushNotificationManager pushManager = PushNotificationManagerMock();
 
   setUp(() {
     userService = ConfiguredUserServiceMock();
@@ -141,14 +143,16 @@ void main() {
 
     setUp(() {
       backend = BackendMock();
-      service = TermineService(userService, stammdatenService, backend);
+      service = TermineService(
+          userService, stammdatenService, backend, pushManager, null);
       service.userService = userService;
     ***REMOVED***);
 
     test('loadActions calls right path and serializes Filter correctly',
         () async {
-      when(backend.post('service/termine', any, any))
-          .thenAnswer((_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock([], 200)));
+      when(backend.post('service/termine', any, any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(
+              HttpClientResponseBodyMock([], 200)));
 
       await service.loadActions(einFilter());
 
@@ -165,11 +169,11 @@ void main() {
     ***REMOVED***);
 
     test('loadActions deserializes actions correctly', () async {
-      when(backend.post('service/termine', any, any))
-          .thenAnswer((_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock([
-                TerminTestDaten.einTerminMitTeilisUndDetails().toJson(),
-                TerminTestDaten.einTerminOhneTeilisMitDetails().toJson()
-              ], 200)));
+      when(backend.post('service/termine', any, any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock([
+            TerminTestDaten.einTerminMitTeilisUndDetails().toJson(),
+            TerminTestDaten.einTerminOhneTeilisMitDetails().toJson()
+          ], 200)));
 
       var actions = await service.loadActions(einFilter());
 
@@ -212,8 +216,8 @@ void main() {
     test(
         'createTermin calls right path and serializes action and token correctly',
         () async {
-      when(backend.post('service/termine/neu', any, any)).thenAnswer(
-          (_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
+      when(backend.post('service/termine/neu', any, any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
               TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200)));
 
       await service.createAction(
@@ -245,8 +249,8 @@ void main() {
     ***REMOVED***);
 
     test('createTermin deserializes action correctly', () async {
-      when(backend.post('service/termine/neu', any, any)).thenAnswer(
-          (_) => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
+      when(backend.post('service/termine/neu', any, any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
               TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200)));
 
       var action = await service.createAction(
@@ -272,8 +276,8 @@ void main() {
     ***REMOVED***);
 
     test('getActionWithDetails calls right path', () async {
-      when(backend.get('service/termine/termin?id=0', any)).thenAnswer(
-          (_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
+      when(backend.get('service/termine/termin?id=0', any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
               TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200)));
 
       await service.getActionWithDetails(0);
@@ -282,8 +286,8 @@ void main() {
     ***REMOVED***);
 
     test('getActionWithDetails deserializes action correctly', () async {
-      when(backend.get('service/termine/termin?id=0', any)).thenAnswer(
-          (_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
+      when(backend.get('service/termine/termin?id=0', any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
               TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200)));
 
       var action = await service.getActionWithDetails(0);
@@ -310,8 +314,9 @@ void main() {
     test(
         'saveAction calls right path and serialises action and token correctly',
         () async {
-      when(backend.post('service/termine/termin', any, any))
-          .thenAnswer((_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock('response', 200)));
+      when(backend.post('service/termine/termin', any, any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(
+              HttpClientResponseBodyMock('response', 200)));
 
       await service.saveAction(
           TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
@@ -344,8 +349,9 @@ void main() {
     test(
         'deleteAction calls right path and serialises action and token correctly',
         () async {
-      when(backend.delete('service/termine/termin', any, any))
-          .thenAnswer((_) => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock('response', 200)));
+      when(backend.delete('service/termine/termin', any, any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(
+              HttpClientResponseBodyMock('response', 200)));
 
       await service.deleteAction(
           TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
@@ -376,8 +382,9 @@ void main() {
     ***REMOVED***);
 
     test('joinAction calls correct path with parameters', () async {
-      when(backend.post(any, any, any))
-          .thenAnswer((_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(null, 202)));
+      when(backend.post(any, any, any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(
+              HttpClientResponseBodyMock(null, 202)));
 
       await service.joinAction(0);
 
@@ -390,8 +397,9 @@ void main() {
     ***REMOVED***);
 
     test('leaveAction calls correct path with parameters', () async {
-      when(backend.post(any, any, any))
-          .thenAnswer((_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(null, 202)));
+      when(backend.post(any, any, any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(
+              HttpClientResponseBodyMock(null, 202)));
 
       await service.leaveAction(0);
 
@@ -414,6 +422,7 @@ TermineFilter einFilter() {
       [datum],
       TimeOfDay.fromDateTime(start),
       TimeOfDay.fromDateTime(end),
-      [ffAlleeNord().kiez]);
+      [ffAlleeNord().kiez],
+      []);
   return einFilter;
 ***REMOVED***

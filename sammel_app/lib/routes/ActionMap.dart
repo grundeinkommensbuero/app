@@ -117,7 +117,7 @@ class ActionMapState extends State<ActionMap> {
 
 class ActionMarker extends Marker {
   bool ownAction = false;
-  Function onTap;
+  Function(Termin) onTap;
   bool participant;
 
   ActionMarker(Termin action, {this.ownAction, this.onTap, this.participant***REMOVED***)
@@ -132,7 +132,7 @@ class ActionMarker extends Marker {
               child: FlatButton(
                   key: Key('action marker'),
                   onPressed:
-                      onTap != null ? () => onTap(context, action) : null,
+                      onTap != null ? () => onTap(action) : null,
                   color:
                       DweTheme.actionColor(action.ende, ownAction, participant),
                   shape: CircleBorder(

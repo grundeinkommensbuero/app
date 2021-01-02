@@ -31,7 +31,7 @@ open class PushService {
     @EJB
     private lateinit var benutzerDao: BenutzerDao
 
-    private val GSON = GsonBuilder().serializeNulls().create()
+    private val GSON = GsonBuilder().create()
     private val KEY = SecretKeySpec(Base64.getDecoder().decode("vue8NkTYyN1e2OoHGcapLZWiCTC+13Eqk9gXBSq4azc="), "AES")
     private val secureRandom = SecureRandom()
     private val LOG = Logger.getLogger(PushService::class.java)
@@ -93,11 +93,11 @@ open class PushService {
 
         val pushMessage = PushMessageDto(
             PushNotificationDto(title, body, "Aktionen im Kiez"),
-            mapOf(
+            mapOf<String, Any>(
                 "type" to "NewKiezActions",
                 "channel" to "kiez:new_action",
                 "timestamp" to ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME),
-                "action" to listOf(aktionen.map { it.id ***REMOVED***)
+                "actions" to aktionen
             )
         )
         val topicEnc = URLEncoder.encode(topic, Charsets.UTF_8.name()).replace("+", "%20")

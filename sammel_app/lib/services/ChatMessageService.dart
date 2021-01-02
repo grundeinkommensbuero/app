@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/model/ChatChannel.dart';
-import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/routes/ChatWindow.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
@@ -44,11 +43,9 @@ class ChatMessageService implements PushNotificationListener {
   Future<void> handleNotificationTap(Map<dynamic, dynamic> data) async {
     final channel = await getChannel(ChatPushData.fromJson(data).channel);
     int termin_id = int.parse(channel.id.split(':')[1]);
-    Future<Termin> termin =
     Provider.of<AbstractTermineService>(navigatorKey.currentContext)
-        .getActionWithDetails(termin_id);
-    termin.then((value) => navigatorKey.currentState.push(
-        MaterialPageRoute(
+        .getActionWithDetails(termin_id)
+        .then((value) => navigatorKey.currentState.push(MaterialPageRoute(
             builder: (context) => ChatWindow(channel, value))));
   ***REMOVED***
 
