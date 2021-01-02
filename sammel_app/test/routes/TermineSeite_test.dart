@@ -1113,8 +1113,8 @@ void main() {
     TermineSeiteState actionPageState;
     setUp(() {
       actionPageState = TermineSeiteState();
-      TermineSeiteState.storageService = _storageService;
-      TermineSeiteState.termineService = _termineService;
+      actionPageState.storageService = _storageService;
+      actionPageState.termineService = _termineService;
     ***REMOVED***);
 
     test('is uniquely generated at action creation and sent to server', () {
@@ -1333,7 +1333,7 @@ _pumpNavigation(WidgetTester tester) async {
         Provider<AbstractPushNotificationManager>.value(value: _pushManager),
       ],
       child: MaterialApp(
-        home: Navigation(),
+        home: Navigation(GlobalKey(debugLabel: 'action page')),
       )));
   await tester.pumpAndSettle();
 ***REMOVED***

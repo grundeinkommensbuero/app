@@ -163,7 +163,8 @@ void main() {
               '"tage":["2020-08-20"],'
               '"von":"15:00:00",'
               '"bis":"18:30:00",'
-              '"orte":["Frankfurter Allee Nord"]'
+              '"orte":["Frankfurter Allee Nord"],'
+              'ids:[]'
               '***REMOVED***',
           any));
     ***REMOVED***);

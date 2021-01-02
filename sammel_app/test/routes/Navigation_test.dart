@@ -32,9 +32,10 @@ final _pushManager = PushNotificationManagerMock();
 void main() {
   group('Navigation', () {
     Navigation navigation;
+    var actionPage = GlobalKey(debugLabel: 'action page');
 
     setUpUI((WidgetTester tester) async {
-      navigation = Navigation();
+      navigation = Navigation(actionPage);
       when(_storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => []);
       when(_storageService.loadMyKiez()).thenAnswer((_) async => []);
@@ -78,12 +79,12 @@ void main() {
     testUI('starts with ActionPage ', (WidgetTester tester) async {
       NavigationState state = tester.state(find.byWidget(navigation));
       expect(state.navigation, 0);
-      expect(find.byKey(state.actionPage), findsOneWidget);
+      expect(find.byKey(actionPage), findsOneWidget);
     ***REMOVED***);
 
     testUI('creates ActionPage and ActionCreator', (WidgetTester tester) async {
       NavigationState state = tester.state(find.byWidget(navigation));
-      expect(find.byKey(state.actionPage), findsOneWidget);
+      expect(find.byKey(actionPage), findsOneWidget);
       expect(find.byKey(Key('action creator')), findsOneWidget);
     ***REMOVED***);
 
@@ -128,7 +129,7 @@ void main() {
       await openActionPage(tester);
 
       expect(state.navigation, 0);
-      expect(find.byKey(state.actionPage), findsOneWidget);
+      expect(find.byKey(actionPage), findsOneWidget);
     ***REMOVED***);
 
     testUI('stores navigation history', (WidgetTester tester) async {

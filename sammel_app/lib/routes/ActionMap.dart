@@ -15,7 +15,7 @@ class ActionMap extends StatefulWidget {
   final List<ListLocation> listLocations;
   final Function isMyAction;
   final Function iAmParticipant;
-  final Function openActionDetails;
+  final Function(Termin) openActionDetails;
   final MapController mapController;
 
   // no better way yet: https://github.com/dart-lang/sdk/issues/4596
