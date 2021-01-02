@@ -61,7 +61,7 @@ open class BenutzerDao {
     }
 
     open fun getFirebaseKeys(benutzerListe: List<Benutzer>): List<String> {
-        if(benutzerListe.isEmpty())
+        if (benutzerListe.isEmpty())
             return emptyList()
         _log.debug("Sammle Firebase-Keys für Nutzer ${benutzerListe.map { it.id }}")
         return entityManager
@@ -74,10 +74,13 @@ open class BenutzerDao {
             .resultList
     }
 
-    open fun getBenutzerOhneFirebase(benutzerListe: List<Benutzer>): List<Benutzer> {
-        if(benutzerListe.isEmpty())
+    open fun getBenutzerOhneFirebase(benutzerListe: List<Benutzer>): List<Benutzer> =
+        getBenutzerOhneFirebaseViaId(benutzerListe.map { it.id })
+
+    open fun getBenutzerOhneFirebaseViaId(benutzerListe: List<Long>): List<Benutzer> {
+        if (benutzerListe.isEmpty())
             return emptyList()
-        _log.debug("Sammle Benutzer ohne Firebase-Keys aus ${benutzerListe.map { it.id }}")
+        _log.debug("Sammle Benutzer ohne Firebase-Keys aus $benutzerListe")
         return entityManager
             .createQuery(
                 "select benutzer from Benutzer benutzer, Credentials creds " +
@@ -85,9 +88,11 @@ open class BenutzerDao {
                         "and creds.id = benutzer.id " +
                         "and creds.isFirebase = false", Benutzer::class.java
             )
-            .setParameter("ids", benutzerListe.map { it.id })
+            .setParameter("ids", benutzerListe)
             .resultList
+
     }
+
 
     open fun gibNutzerNamedRolle(benutzer: Benutzer) {
         entityManager
