@@ -5,6 +5,7 @@ import com.google.gson.JsonSyntaxException
 import de.kybernetik.database.benutzer.Benutzer
 import de.kybernetik.database.benutzer.BenutzerDao
 import de.kybernetik.database.pushmessages.PushMessageDao
+import de.kybernetik.database.subscriptions.SubscriptionDao
 import de.kybernetik.rest.*
 import de.kybernetik.rest.TermineRestResource.TerminDto
 import org.jboss.logging.Logger
@@ -31,6 +32,9 @@ open class PushService {
     @EJB
     private lateinit var benutzerDao: BenutzerDao
 
+    @EJB
+    private lateinit var subscriptionDao: SubscriptionDao
+
     private val GSON = GsonBuilder().create()
     private val KEY = SecretKeySpec(Base64.getDecoder().decode("vue8NkTYyN1e2OoHGcapLZWiCTC+13Eqk9gXBSq4azc="), "AES")
     private val secureRandom = SecureRandom()
@@ -50,7 +54,11 @@ open class PushService {
     open fun sendePushNachrichtAnTopic(nachricht: PushMessageDto, topic: String) {
         val verschluesselt = verschluessele(nachricht.data)
         firebase.sendePushNachrichtAnTopic(nachricht.notification, verschluesselt, topic)
-        pushDao.sendePushNachrichtAnTopic(nachricht.notification, verschluesselt, topic)
+
+        val subscribers = subscriptionDao.getSubscribersForTopic(topic)
+        val benutzerOhneFirebase = benutzerDao.getBenutzerOhneFirebaseViaId(subscribers)
+        if (benutzerOhneFirebase.isNotEmpty())
+            pushDao.speicherePushMessageFuerEmpfaenger(nachricht.notification, verschluesselt, benutzerOhneFirebase)
     ***REMOVED***
 
     open fun verschluessele(data: Map<String, Any?>?): Map<String, String>? {
@@ -82,7 +90,7 @@ open class PushService {
         LOG.debug("Neue Aktionen als Push-Messages zu versenden: ${aktionen.map { it.id ***REMOVED******REMOVED***")
         if (aktionen.isNullOrEmpty()) return
 
-        if(aktionen.map { it.ort ***REMOVED***.distinct().size > 1)
+        if (aktionen.map { it.ort ***REMOVED***.distinct().size > 1)
             LOG.warn("Orte aus unterschiedlichen Aktionen in derselben Push-Nachricht")
 
         val title = if (aktionen.size == 1) "Neue Aktion in deinem Kiez" else "Neue Aktionen in deinem Kiez"

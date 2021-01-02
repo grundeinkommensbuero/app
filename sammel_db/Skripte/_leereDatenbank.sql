@@ -8,3 +8,4 @@ drop table Stamm_Orte;
 drop table TerminDetails;
 drop table Token;
 drop table points;
+drop table Subscriptions;
