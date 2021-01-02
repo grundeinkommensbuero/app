@@ -2,11 +2,11 @@ package de.kybernetik.services
 
 import TestdatenVorrat.Companion.karl
 import TestdatenVorrat.Companion.rosa
+import TestdatenVorrat.Companion.terminOhneTeilnehmerMitDetails
 import com.google.gson.GsonBuilder
 import com.nhaarman.mockitokotlin2.*
 import de.kybernetik.database.benutzer.Benutzer
 import de.kybernetik.database.benutzer.BenutzerDao
-import de.kybernetik.database.pushmessages.PushMessage
 import de.kybernetik.database.pushmessages.PushMessageDao
 import de.kybernetik.rest.PushMessageDto
 import de.kybernetik.rest.PushNotificationDto
@@ -27,6 +27,10 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
+import de.kybernetik.database.pushmessages.PushMessage
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+
 
 class PushServiceTest {
     @Rule
@@ -71,7 +75,7 @@ class PushServiceTest {
         service.sendePushNachrichtAnEmpfaenger(data, teilnehmerInnen)
 
         verify(firebaseService, times(1))
-                .sendePushNachrichtAnEmpfaenger(notification, emptyMap(), firebaseKeys)
+            .sendePushNachrichtAnEmpfaenger(notification, emptyMap(), firebaseKeys)
     }
 
     @Test
@@ -79,10 +83,14 @@ class PushServiceTest {
         val teilnehmer = listOf(karl(), rosa())
         whenever(benutzerDao.getFirebaseKeys(teilnehmer)).thenReturn(emptyList())
 
-        service.sendePushNachrichtAnEmpfaenger(PushMessageDto(PushNotificationDto(
-            channel = "Allgemein",
-            collapseId = null
-        )), teilnehmer)
+        service.sendePushNachrichtAnEmpfaenger(
+            PushMessageDto(
+                PushNotificationDto(
+                    channel = "Allgemein",
+                    collapseId = null
+                )
+            ), teilnehmer
+        )
 
         verify(firebaseService, never()).sendePushNachrichtAnEmpfaenger(any(), any(), any())
     }
@@ -99,7 +107,11 @@ class PushServiceTest {
         val teilnehmerCaptor = argumentCaptor<List<Benutzer>>()
         val dataCaptor = argumentCaptor<Map<String, String>>()
         verify(pushDao, times(1))
-                .speicherePushMessageFuerEmpfaenger(notificationCaptor.capture(), dataCaptor.capture(), teilnehmerCaptor.capture())
+            .speicherePushMessageFuerEmpfaenger(
+                notificationCaptor.capture(),
+                dataCaptor.capture(),
+                teilnehmerCaptor.capture()
+            )
         assertEquals(notification, notificationCaptor.firstValue)
         assertTrue(dataCaptor.firstValue.isEmpty())
         assertEquals(teilnehmerInnen, teilnehmerCaptor.firstValue)
@@ -110,10 +122,14 @@ class PushServiceTest {
         val teilnehmer = listOf(karl(), rosa())
         whenever(benutzerDao.getBenutzerOhneFirebase(teilnehmer)).thenReturn(emptyList())
 
-        service.sendePushNachrichtAnEmpfaenger(PushMessageDto(PushNotificationDto(
-            channel = "Allgemein",
-            collapseId = null
-        )), teilnehmer)
+        service.sendePushNachrichtAnEmpfaenger(
+            PushMessageDto(
+                PushNotificationDto(
+                    channel = "Allgemein",
+                    collapseId = null
+                )
+            ), teilnehmer
+        )
 
         verify(pushDao, never()).speicherePushMessageFuerEmpfaenger(any(), any(), any())
     }
@@ -163,6 +179,18 @@ class PushServiceTest {
     @Test
     fun verschluessele() {
         service.verschluessele(mapOf("content" to "Hello World"))
+    }
+
+    @Test
+    fun test() {
+        val GSON = GsonBuilder().create()
+
+        val json = GSON.toJson(mapOf<String, Any>(
+            "type" to "ActionChanged",
+            "timestamp" to ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME),
+            "action" to  listOf(terminOhneTeilnehmerMitDetails())))
+
+        println(json)
     }
 
     companion object {

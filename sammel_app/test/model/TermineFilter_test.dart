@@ -20,7 +20,8 @@ void main() {
               [DateTime(2019, 11, 22, 0, 0, 0), DateTime(2019, 1, 30, 0, 0, 0)],
               TimeOfDay(hour: 4, minute: 10),
               TimeOfDay(hour: 23, minute: 0),
-              [ffAlleeNord().kiez])),
+              [ffAlleeNord().kiez],
+              [])),
           '{'
           '"typen":["Sammeln","Infoveranstaltung"],'
           '"tage":["2019-11-22","2019-01-30"],'

@@ -54,22 +54,22 @@ class FirebaseReceiveService implements PushReceiveService {
   @override
   void subscribeToTopic(String topic) {
     if (pullMode) {
+      // TODO
+    } else {
       print('Subscribe zu Topic $topic');
       var topicEnc = Uri.encodeComponent(topic);
       firebaseMessaging.subscribeToTopic(topicEnc);
-    } else {
-      // TODO
     }
   }
 
   @override
   void unsubscribeFromTopic(String topic) {
     if (pullMode) {
-      print('Unsubscribe zu Topic $topic');
+      // TODO
+    } else {
+      print('Unsubscribe von Topic $topic');
       var topicEnc = Uri.encodeComponent(topic);
       firebaseMessaging.unsubscribeFromTopic(topicEnc);
-    } else {
-      // TODO
     }
   }
 }

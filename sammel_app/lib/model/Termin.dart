@@ -1,4 +1,5 @@
 import 'package:sammel_app/model/User.dart';
+import 'package:sammel_app/shared/ChronoHelfer.dart';
 
 import 'Kiez.dart';
 import 'TerminDetails.dart';
@@ -19,8 +20,8 @@ class Termin {
 
   Termin.fromJson(Map<String, dynamic> json, List<Kiez> kieze)
       : id = json['id'],
-        beginn = DateTime.parse(json['beginn']),
-        ende = DateTime.parse(json['ende']),
+        beginn = ChronoHelfer.deserializeJsonDateTime(json['beginn']),
+        ende = ChronoHelfer.deserializeJsonDateTime(json['ende']),
         ort = kieze.firstWhere((kiez) => json['ort'] == kiez.kiez),
         typ = json['typ'] ?? 'Termin',
         latitude = json['latitude'] ?? null,
@@ -54,8 +55,8 @@ class Termin {
         return 'assets/images/Infoveranstaltung.png';
       case 'Workshop':
         return centered
-          ? 'assets/images/Workshop_centered.png'
-          : 'assets/images/Workshop.png';
+            ? 'assets/images/Workshop_centered.png'
+            : 'assets/images/Workshop.png';
     }
     throw UnkownActionTypeException(
         'Cannot find asset for unknown action type "$typ"');

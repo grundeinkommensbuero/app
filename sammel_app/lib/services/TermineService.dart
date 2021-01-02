@@ -4,11 +4,15 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http_server/http_server.dart';
+import 'package:sammel_app/main.dart';
+import 'package:sammel_app/model/ActionListPushData.dart';
+import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/BackendService.dart';
+import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 
 import 'ErrorService.dart';
@@ -35,10 +39,17 @@ abstract class AbstractTermineService extends BackendService {
   leaveAction(int id);
 }
 
-class TermineService extends AbstractTermineService {
-  TermineService(
-      AbstractUserService userService, stammdatenService, Backend backend)
-      : super(userService, stammdatenService, backend);
+class TermineService extends AbstractTermineService
+    implements PushNotificationListener {
+  GlobalKey<NavigatorState> navigatorKey;
+
+  TermineService(AbstractUserService userService, stammdatenService,
+      Backend backend, PushNotificationManager manager, this.navigatorKey)
+      : super(userService, stammdatenService, backend) {
+    manager.register_message_callback(PushDataTypes.NewKiezActions, this);
+    manager.register_message_callback(PushDataTypes.ActionChanged, this);
+    manager.register_message_callback(PushDataTypes.ActionDeleted, this);
+  }
 
   Future<List<Termin>> loadActions(TermineFilter filter) async {
     HttpClientResponseBody response =
@@ -80,8 +91,7 @@ class TermineService extends AbstractTermineService {
       await post('service/termine/teilnahme', jsonEncode(null),
           parameters: {'id': '$id'});
     } catch (e, s) {
-      ErrorService.handleError(e, s,
-          context: 'Teilnahme ist fehlgeschlagen.');
+      ErrorService.handleError(e, s, context: 'Teilnahme ist fehlgeschlagen.');
     }
   }
 
@@ -93,6 +103,36 @@ class TermineService extends AbstractTermineService {
       ErrorService.handleError(e, s, context: 'Absage ist fehlgeschlagen.');
     }
   }
+
+  @override
+  void handleNotificationTap(Map<dynamic, dynamic> data) async {
+    final actionData =
+        ActionListPushData.fromJson(data, await stammdatenService.kieze);
+    actionData.actions..sort(Termin.compareByStart);
+
+    print('Type: ${actionData.type}');
+    if (actionData.type ==
+        PushDataTypes.NewKiezActions) if (actionData.actions.length == 1)
+      actionPageKey.currentState.openTerminDetails(actionData.actions[0]);
+    else {
+      actionPageKey.currentState
+          .zeigeAktionen('Neue Aktionen', actionData.actions);
+    }
+
+    if (actionData.type == PushDataTypes.ActionChanged) {
+      print('Aktion: ${actionData}');
+      actionPageKey.currentState.openTerminDetails(actionData.actions[0]);
+    }
+
+    if (actionData.type == PushDataTypes.ActionDeleted) {
+      actionData.actions[0].id = null;
+      actionPageKey.currentState
+          .zeigeAktionen('Gelöschte Aktionen', actionData.actions);
+    }
+  }
+
+  @override
+  void receive_message(Map<dynamic, dynamic> data) {}
 }
 
 class DemoTermineService extends AbstractTermineService {
@@ -179,7 +219,10 @@ class DemoTermineService extends AbstractTermineService {
               : filter.orte.contains(termin.ort.kiez)) &&
           (filter.typen == null || filter.typen.isEmpty
               ? true
-              : filter.typen.contains(termin.typ));
+              : filter.typen.contains(termin.typ)) &&
+          (filter.ids == null || filter.ids.isEmpty
+              ? true
+              : filter.ids.contains(termin.id));
     }).toList();
   }
 
