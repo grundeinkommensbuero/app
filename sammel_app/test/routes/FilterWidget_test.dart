@@ -17,7 +17,7 @@ import '../shared/TestdatenVorrat.dart';
 int numberOfTimesCalled = 0;
 TermineFilter iWasCalledResult;
 
-iWasCalled(TermineFilter result) {
+Future<dynamic> iWasCalled(TermineFilter result) {
   numberOfTimesCalled++;
   iWasCalledResult = result;
 ***REMOVED***
