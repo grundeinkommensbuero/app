@@ -21,7 +21,7 @@ void main() {
   runApp(MyApp());
 }
 
-const Mode mode = Mode.LOCAL;
+const Mode mode = Mode.TEST;
 const version = '0.3.4+14';
 
 // Debug

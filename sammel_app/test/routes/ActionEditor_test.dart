@@ -413,10 +413,10 @@ void main() {
       expect(state.action.validated['all'], ValidationState.ok);
 
       state.action = ActionData(
+          '',
           TimeOfDay.now(),
           TimeOfDay.now(),
           ffAlleeNord(),
-          '',
           [DateTime.now()],
           TerminDetails('treffpunkt', 'beschreibung', 'kontakt'),
           LatLng(52.48993, 13.46839));
@@ -433,8 +433,8 @@ void main() {
       var actionData = ActionData(
           null,
           null,
-          Kiez('Bezirk', 'Kiez', 52.1, 43.1, [[]]),
           null,
+          Kiez('Bezirk', 'Kiez', 52.1, 43.1, [[]]),
           null,
           null,
           LatLng(52.2, 43.2));
@@ -444,8 +444,8 @@ void main() {
     });
 
     test('returns location, if given and no coordinates', () {
-      var actionData = ActionData(null, null,
-          Kiez('Bezirk', 'Ort', 52.1, 43.1, [[]]), null, null, null, null);
+      var actionData = ActionData(null, null, null,
+          Kiez('Bezirk', 'Ort', 52.1, 43.1, [[]]), null, null, null);
 
       expect(
           ActionEditorState.determineMapCenter(actionData), LatLng(52.1, 43.1));
@@ -456,8 +456,8 @@ void main() {
 
       expect(ActionEditorState.determineMapCenter(actionData), null);
 
-      actionData = ActionData(null, null,
-          Kiez('Bezirk', 'Kiez', null, null, [[]]), null, null, null, null);
+      actionData = ActionData(null, null, null,
+          Kiez('Bezirk', 'Kiez', null, null, [[]]), null, null, null);
 
       expect(ActionEditorState.determineMapCenter(actionData), null);
     });
