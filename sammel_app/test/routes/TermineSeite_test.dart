@@ -403,10 +403,10 @@ void main() {
           tester.state(find.byKey(Key('action creator')));
 
       editorState.action = ActionData(
+          'Infoveranstaltung',
           TimeOfDay.fromDateTime(today),
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
           tempVorstadt(),
-          'Infoveranstaltung',
           [today],
           TerminDetails('test1', 'test2', 'test3'),
           LatLng(52.49653, 13.43762));
@@ -465,10 +465,10 @@ void main() {
           tester.state(find.byKey(Key('action creator')));
 
       editorState.action = ActionData(
+          'Sammeln',
           TimeOfDay.fromDateTime(today),
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
           tempVorstadt(),
-          'Sammeln',
           [today],
           TerminDetails('test1', 'test2', 'test3'),
           LatLng(52.49653, 13.43762));
@@ -528,10 +528,10 @@ void main() {
           tester.state(find.byKey(Key('action creator')));
 
       editorState.action = ActionData(
+          'Infoveranstaltung',
           TimeOfDay.fromDateTime(today),
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
           tempVorstadt(),
-          'Infoveranstaltung',
           [today],
           TerminDetails('test1', 'test2', 'test3'),
           LatLng(52.49653, 13.43762));
@@ -590,10 +590,10 @@ void main() {
           tester.state(find.byKey(Key('action creator')));
 
       editorState.action = ActionData(
+          'Infoveranstaltung',
           TimeOfDay.fromDateTime(today),
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
           tempVorstadt(),
-          'Infoveranstaltung',
           [today],
           TerminDetails('test1', 'test2', 'test3'),
           LatLng(52.49653, 13.43762));
