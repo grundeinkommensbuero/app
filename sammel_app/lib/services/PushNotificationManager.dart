@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:sammel_app/model/PushMessage.dart';
-import 'package:sammel_app/services/LocalNotificationService.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StorageService.dart';
