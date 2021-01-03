@@ -15,6 +15,7 @@ import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 
 import 'services/BackendService.dart';
+import 'services/LocalNotificationService.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,6 +58,8 @@ class MyApp extends StatelessWidget {
   static var chatMessageService =
       ChatMessageService(storageService, pushNotificationManager, navigatorKey);
   static var geoService = GeoService();
+  static var localNotificationService =
+      LocalNotificationService(chatMessageService);
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +76,8 @@ class MyApp extends StatelessWidget {
           Provider<ChatMessageService>.value(value: chatMessageService),
           Provider<AbstractUserService>.value(value: userService),
           Provider<GeoService>.value(value: geoService),
+          Provider<LocalNotificationService>.value(
+              value: localNotificationService),
         ],
         child: MaterialApp(
           title: 'DW & Co. Enteignen',

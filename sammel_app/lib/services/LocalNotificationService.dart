@@ -2,10 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:sammel_app/main.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
-import 'package:sammel_app/services/PushNotificationManager.dart';
 
 // Siehe https://pub.dev/packages/flutter_local_notifications
 
@@ -83,7 +81,7 @@ class LocalNotificationService
   Future selectNotification(String payload) {
     print('Nachricht geklickt');
     var chatMessage = ChatMessagePushData.fromJson(jsonDecode(payload));
-    cms.receive_message(chatMessage.toJson(), NotificationType.LOCAL_MESSAGE);
+    cms.receive_message(chatMessage.toJson());
 
     // TODO on tap
   }
