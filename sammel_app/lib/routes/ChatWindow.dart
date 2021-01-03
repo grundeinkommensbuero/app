@@ -235,6 +235,8 @@ class ChatWindowState extends State<ChatWindow> {
       textFieldHasFocus = false;
       FocusScope.of(context).requestFocus(FocusNode());
     ***REMOVED*** else {
+      this.channel.dispose_widget();
+      myFocusNode.dispose();
       Navigator.pop(context);
     ***REMOVED***
   ***REMOVED***

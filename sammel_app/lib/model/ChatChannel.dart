@@ -1,5 +1,7 @@
+import 'package:flutter/widgets.dart';
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
+import 'package:sammel_app/routes/ChatListWidget.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/routes/ChatWindow.dart';
 
@@ -40,11 +42,16 @@ class ChatChannel {
       ownMessage.obtained_from_server = true;
   ***REMOVED***
 
-  void register_widget(ChannelChangeListener c) {
+  void register_channel_change_listener(ChannelChangeListener c) {
     if (ccl == null)
       ccl = c;
-    else
-      print('The Channel is already associated to a widget');
+    else if(c != ccl)
+      {
+        print('The Channel is already associated to a widget');
+        ChatListState cls = ccl;
+        Navigator.pop(cls.context);
+        ccl = c;
+      ***REMOVED***
   ***REMOVED***
 
   void dispose_widget() {

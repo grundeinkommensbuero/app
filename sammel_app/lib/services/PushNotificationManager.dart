@@ -26,7 +26,8 @@ abstract class PushNotificationListener {
 enum NotificationType
 {
   DEFAULT,
-  RESUME
+  RESUME,
+  LOCAL_MESSAGE
 ***REMOVED***
 
 class PushNotificationManager implements AbstractPushNotificationManager {
@@ -37,7 +38,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
   PushNotificationManager(
       this.storageService, this.userService, firebaseService, Backend backend) {
     createPushListener(firebaseService, backend);
-    initializeLocalNotifications();
+   // initializeLocalNotifications();
   ***REMOVED***
 
   createPushListener(
@@ -127,7 +128,7 @@ Future<dynamic> backgroundMessageHandler(Map<String, dynamic> message) async {
 Future<void> handleBackgroundChatMessage(Map<String, dynamic> data) async {
   var chatMessage = ChatMessagePushData.fromJson(data);
 
-  // sendChatNotification(chatMessage);
+  //sendChatNotification(chatMessage);
 
   var storageService = StorageService();
   var chatChannel = await storageService.loadChatChannel(data['channel']);

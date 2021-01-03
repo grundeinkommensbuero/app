@@ -41,14 +41,17 @@ class ChatListState extends State<ChatListWidget>
           .listen((user) => setState(() => this.user = user));
     ***REMOVED***
 
-    this.channel.register_widget(this);
+    this.channel.register_channel_change_listener(this);
     var list_view = Container(
         decoration: DweTheme.happyHouseBackground,
         child: ListView(
             padding: EdgeInsets.all(8.0),
             controller: widget.scroll_controller,
             children: buildListMessage()));
-
+    Timer(
+        Duration(milliseconds: 500),
+            () => widget.scroll_controller
+            .jumpTo(widget.scroll_controller.position.maxScrollExtent));
     return list_view;
   ***REMOVED***
 
