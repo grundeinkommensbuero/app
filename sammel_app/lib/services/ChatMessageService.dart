@@ -25,8 +25,7 @@ class ChatMessageService implements PushNotificationListener {
   StorageService storage_service;
 
   @override
-  Future<void> receive_message(
-      Map<dynamic, dynamic> data, NotificationType notificationType) async {
+  Future<void> receive_message(Map<dynamic, dynamic> data) async {
     try {
       ChatPushData mpd = ChatPushData.fromJson(data);
       ChatChannel channel = await getChannel(mpd.channel);
@@ -36,33 +35,28 @@ class ChatMessageService implements PushNotificationListener {
         if (data['type'] == PushDataTypes.ParticipationMessage)
           channel.pushParticipationMessage(ParticipationMessage.fromJson(data));
         this.storage_service.saveChatChannel(channel);
-        if (notificationType == NotificationType.DEFAULT)
-          {
-            //app is open. chat if chat window is open
-            ChatListState cls = channel.ccl;
-            if (cls == null || ModalRoute.of(cls.context)?.isActive == false)
-              {
-                //chat window is not opened. push local message
-                print('non active window');
-                Provider.of<LocalNotificationService>(navigatorKey.currentContext).sendChatNotification(ChatMessagePushData.fromJson(data));
-              ***REMOVED***
-
-          ***REMOVED***
-        else if (notificationType == NotificationType.RESUME)
-          {
-            //we need to put the message channel in the foreground
-            ChatListState cls = channel.ccl;
-
-            create_or_recreat_chat_page(cls, channel);
-          ***REMOVED***
-        else if  (notificationType == NotificationType.LOCAL_MESSAGE)
-          {
-            receive_message(data, NotificationType.RESUME);
-          ***REMOVED***
+        //app is open. chat if chat window is open
+        ChatListState cls = channel.ccl;
+        if (cls == null || ModalRoute.of(cls.context)?.isActive == false)
+        {
+          //chat window is not opened. push local message
+          print('non active window');
+          Provider.of<LocalNotificationService>(navigatorKey.currentContext).sendChatNotification(ChatMessagePushData.fromJson(data));
+        ***REMOVED***
       ***REMOVED***
     ***REMOVED*** on UnreadablePushMessage catch (e, s) {
       ErrorService.handleError(e, s);
     ***REMOVED***
+  ***REMOVED***
+
+  @override
+  Future<void> handleNotificationTap(Map<dynamic, dynamic> data) async {
+    final channel = await getChannel(ChatPushData.fromJson(data).channel);
+    int termin_id = int.parse(channel.id.split(':')[1]);
+    Provider.of<AbstractTermineService>(navigatorKey.currentContext)
+        .getActionWithDetails(termin_id)
+        .then((value) => navigatorKey.currentState.push(MaterialPageRoute(
+            builder: (context) => ChatWindow(channel, value))));
   ***REMOVED***
 
   void create_or_recreat_chat_page(ChatListState cls, ChatChannel channel) {

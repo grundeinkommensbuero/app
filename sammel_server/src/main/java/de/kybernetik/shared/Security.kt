@@ -36,7 +36,7 @@ open class Security {
         val startTime = now()
         val encryptableSpec = EncryptablePasswordSpec(secret.toCharArray(), SaltedPasswordAlgorithmSpec(salt))
         val password = BCRYPTFACTORY.generatePassword(encryptableSpec) as BCryptPassword
-        LOG.info("Secret in ${startTime.until(now(), MILLIS)***REMOVED*** Millisekunden gehasht mit Salt ${encodeHexString(salt)***REMOVED***")
+        LOG.trace("Secret in ${startTime.until(now(), MILLIS)***REMOVED*** Millisekunden gehasht mit Salt ${encodeHexString(salt)***REMOVED***")
         return password.hash
     ***REMOVED***
 

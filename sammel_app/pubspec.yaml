@@ -49,6 +49,7 @@ dependencies:
   poly: ^1.0.5
   connectivity: ^2.0.2
   cryptography: ^1.4.0
+  loading_indicator: ^1.2.0
 
 dev_dependencies:
   flutter_test:

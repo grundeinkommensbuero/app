@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/routes/Navigation.dart';
+import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
@@ -27,7 +28,9 @@ const version = '0.3.4+14';
 ***REMOVED***
 ***REMOVED***
 
-final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<TermineSeiteState> actionPageKey =
+    GlobalKey<TermineSeiteState>();
 
 class MyApp extends StatelessWidget {
   static var firebaseService = FirebaseReceiveService();
@@ -46,7 +49,8 @@ class MyApp extends StatelessWidget {
   static var stammdatenService = StammdatenService();
   var termineService = demoMode
       ? DemoTermineService(userService, stammdatenService)
-      : TermineService(userService, stammdatenService, backend);
+      : TermineService(userService, stammdatenService, backend,
+          pushNotificationManager, navigatorKey);
   static var listLocationService = demoMode
       ? DemoListLocationService(userService)
       : ListLocationService(userService, backend);
@@ -71,10 +75,11 @@ class MyApp extends StatelessWidget {
           Provider<GeoService>.value(value: geoService),
         ],
         child: MaterialApp(
-            title: 'DW & Co. Enteignen',
-            theme: DweTheme.themeData,
-            home: Navigation(clearButton),
-           navigatorKey: navigatorKey,));
+          title: 'DW & Co. Enteignen',
+          theme: DweTheme.themeData,
+          home: Navigation(actionPageKey, clearButton),
+          navigatorKey: navigatorKey,
+        ));
   ***REMOVED***
 ***REMOVED***
 

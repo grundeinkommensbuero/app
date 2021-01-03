@@ -4,9 +4,10 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 data class TermineFilter(
-        var typen: List<String> = emptyList(),
-        var tage: List<LocalDate> = emptyList(),
+        var typen: List<String>? = emptyList(),
+        var tage: List<LocalDate>? = emptyList(),
         var von: LocalTime? = null,
         var bis: LocalTime? = null,
-        var orte: List<String> = emptyList()
+        var orte: List<String>? = emptyList(),
+        var ids: List<Long>? = emptyList()
 )

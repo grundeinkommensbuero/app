@@ -97,4 +97,16 @@ class ChronoHelfer {
     if (start == null || end == null) return '';
     return 'von ${dateTimeToStringHHmm(start)***REMOVED*** bis ${dateTimeToStringHHmm(end)***REMOVED*** Uhr';
   ***REMOVED***
+
+  // Unterstützt DateTime-String-Repräsentationen und Objekte
+  static DateTime deserializeJsonDateTime(dynamic json) {
+    if (json is String) return DateTime.parse(json);
+    return DateTime(
+        json['date']['year'],
+        json['date']['month'],
+        json['date']['day'],
+        json['time']['hour'],
+        json['time']['minute'],
+        json['time']['second']);
+  ***REMOVED***
 ***REMOVED***

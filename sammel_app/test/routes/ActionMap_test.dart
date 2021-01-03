@@ -43,7 +43,7 @@ void main() {
                   listLocations: [],
                   isMyAction: (_) => false,
                   iAmParticipant: (_) => false,
-                  openActionDetails: () {***REMOVED***)));
+                  openActionDetails: (_) {***REMOVED***)));
     ***REMOVED***);
 
     testWidgets('show all actions', (WidgetTester tester) async {
@@ -68,7 +68,7 @@ void main() {
                       listLocations: [],
                       isMyAction: isMyAction,
                       iAmParticipant: (_) => false,
-                      openActionDetails: () {***REMOVED***))));
+                      openActionDetails: (_) {***REMOVED***))));
 
       List<FlatButton> actionMarker = tester
           .widgetList(find.byKey(Key('action marker')))
@@ -99,7 +99,7 @@ void main() {
                       listLocations: [],
                       isMyAction: isMyAction,
                       iAmParticipant: iAmParticipant,
-                      openActionDetails: () {***REMOVED***))));
+                      openActionDetails: (_) {***REMOVED***))));
 
       List<FlatButton> actionMarker = tester
           .widgetList(find.byKey(Key('action marker')))
@@ -130,7 +130,7 @@ void main() {
                       listLocations: [],
                       isMyAction: (_) => false,
                       iAmParticipant: iAmParticipant,
-                      openActionDetails: () {***REMOVED***))));
+                      openActionDetails: (_) {***REMOVED***))));
 
       List<FlatButton> actionMarker = tester
           .widgetList(find.byKey(Key('action marker')))
@@ -158,7 +158,7 @@ void main() {
                       listLocations: [],
                       isMyAction: (_) => false,
                       iAmParticipant: (_) => false,
-                      openActionDetails: (_, __) => iHaveBeenCalled = true))));
+                      openActionDetails: (_) => iHaveBeenCalled = true))));
 
       expect(iHaveBeenCalled, false);
 
@@ -176,7 +176,7 @@ void main() {
                     termine: [],
                     listLocations: [curry36(), cafeKotti(), zukunft()],
                     isMyAction: (_) => false,
-                    openActionDetails: () {***REMOVED***))));
+                    openActionDetails: (_) {***REMOVED***))));
 
     expect(find.byKey(Key('list location marker')), findsNWidgets(3));
   ***REMOVED***);
@@ -188,7 +188,7 @@ void main() {
                     termine: [],
                     listLocations: [curry36()],
                     isMyAction: (_) => false,
-                    openActionDetails: () {***REMOVED***))));
+                    openActionDetails: (_) {***REMOVED***))));
 
     expect(find.byKey(Key('list location marker')), findsOneWidget);
     await tester.tap(find.byKey(Key('list location marker')));

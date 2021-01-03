@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/ChatChannel.dart';
@@ -15,7 +14,7 @@ void main() {
 
   setUp(() {
     reset(storageService);
-    service = ChatMessageService(storageService, manager);
+    service = ChatMessageService(storageService, manager, null);
   ***REMOVED***);
 
   group('getChannel', () {
