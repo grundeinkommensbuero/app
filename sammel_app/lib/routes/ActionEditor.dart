@@ -41,13 +41,14 @@ class ActionData {
   }
 
   ActionData(
-      [this.von,
+      [this.typ,
+      this.von,
       this.bis,
       this.ort,
-      this.typ,
       this.tage,
       this.terminDetails,
       this.coordinates]) {
+    this.typ = this.typ ?? 'Sammeln';
     this.tage = this.tage ?? [];
     this.terminDetails = this.terminDetails ?? TerminDetails('', '', '');
   }
@@ -336,7 +337,7 @@ class ActionEditorState extends State<ActionEditor> {
 
   typeSelection() async {
     List<String> moeglicheTypen = ['Sammeln', 'Infoveranstaltung', 'Workshop'];
-    var ausgewTyp = '';
+    var ausgewTyp = action.typ;
     await showDialog<String>(
         context: context,
         builder: (context) =>
@@ -371,7 +372,7 @@ class ActionEditorState extends State<ActionEditor> {
   daysSelection() async {
     var selectedDates = await showMultipleDatePicker(this.action.tage, context,
         key: Key('days selection dialog'),
-        multiMode: /*widget.initAction == null ? true : false*/ true);
+        multiMode: isNewAction ? true : false);
     setState(() {
       if (selectedDates != null)
         this.action.tage = selectedDates
@@ -446,12 +447,6 @@ class ActionEditorState extends State<ActionEditor> {
       val = ValidationState.error;
     }
     return build_text_row(text, val);
-    /*
-    return (termin.terminDetails.kontakt == null ||
-            termin.terminDetails.kontakt == '')
-        ? Text('Ein paar Worte über dich',
-            style: TextStyle(color: DweTheme.purple))
-        : ;*/
   }
 
   Widget descriptionButtonCaption(ActionData termin) {

@@ -17,7 +17,7 @@ import '../shared/TestdatenVorrat.dart';
 int numberOfTimesCalled = 0;
 TermineFilter iWasCalledResult;
 
-iWasCalled(TermineFilter result) {
+Future<dynamic> iWasCalled(TermineFilter result) {
   numberOfTimesCalled++;
   iWasCalledResult = result;
 }
@@ -327,7 +327,8 @@ void main() {
           [DateTime(2019, 12, 16)],
           TimeOfDay(hour: 19, minute: 15),
           TimeOfDay(hour: 20, minute: 21),
-          ['kiez']);
+          ['kiez'],
+          []);
 
       numberOfTimesCalled = 0;
       iWasCalledResult = null;
@@ -375,7 +376,8 @@ void main() {
           [DateTime(2020, 1, 14), DateTime(2020, 1, 16)],
           TimeOfDay(hour: 12, minute: 30),
           TimeOfDay(hour: 15, minute: 0),
-          [ffAlleeNord().kiez, tempVorstadt().kiez]));
+          [ffAlleeNord().kiez, tempVorstadt().kiez],
+          []));
 
       await pumpFilterWidget(tester);
 

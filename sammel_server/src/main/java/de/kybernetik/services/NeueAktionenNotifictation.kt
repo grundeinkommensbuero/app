@@ -3,7 +3,7 @@ package de.kybernetik.services
 import de.kybernetik.database.termine.TermineDao
 import de.kybernetik.rest.TermineFilter
 import de.kybernetik.rest.TermineRestResource.TerminDto
-import de.kybernetik.rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithDetails
+import de.kybernetik.rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithoutDetails
 import org.jboss.logging.Logger
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
@@ -20,29 +20,6 @@ open class NeueAktionenNotification {
 
     @EJB
     private lateinit var pushService: PushService
-
-    @Schedule(dayOfWeek = "Wed", hour = "18")
-    @Suppress("unused")
-    open fun weeklyNeueAktionenNotification() {
-        LOG.debug("Starte Job für wöchentliche Push-Nachrichten über neue Aktionen")
-        try {
-            val filter = TermineFilter(tage = (0L..14L).map { LocalDate.now().plus(it, ChronoUnit.DAYS) })
-            val aktionen = termineDao.getTermine(filter)
-
-            LOG.debug("Aktionen der nächsten 2 Wochen: ${aktionen.map { it.id }}")
-            for (kiez in aktionen.map { it.ort }.distinct()) {
-                val aktionenInKiez = aktionen.filter { it.ort == kiez }
-                pushService.pusheNeueAktionenNotification(
-                    aktionenInKiez.map(::convertFromTerminWithDetails),
-                    "${aktionenInKiez[0].ort}-wöchentlich"
-                )
-            }
-
-            LOG.debug("Job für wöchentliche Push-Nachrichten über neue Aktionen abgeschlossen")
-        } catch (e: InterruptedException) {
-            LOG.error("Fehler im wöchentlichen Job für neue Aktionen", e)
-        }
-    }
 
     @Schedule(hour = "18")
     @Suppress("unused")
@@ -65,6 +42,29 @@ open class NeueAktionenNotification {
     open fun merkeNeueAktion(aktion: TerminDto) {
         LOG.debug("Merke neue Aktion ${aktion.id} vor")
         neueAktionen24h.add(aktion)
+    }
+
+    @Schedule(dayOfWeek = "Wed", hour = "18")
+    @Suppress("unused")
+    open fun weeklyNeueAktionenNotification() {
+        LOG.debug("Starte Job für wöchentliche Push-Nachrichten über neue Aktionen")
+        try {
+            val filter = TermineFilter(tage = (0L..14L).map { LocalDate.now().plus(it, ChronoUnit.DAYS) })
+            val aktionen = termineDao.getTermine(filter)
+
+            LOG.debug("Aktionen der nächsten 2 Wochen: ${aktionen.map { it.id }}")
+            for (kiez in aktionen.map { it.ort }.distinct()) {
+                val aktionenInKiez = aktionen.filter { it.ort == kiez }
+                pushService.pusheNeueAktionenNotification(
+                    aktionenInKiez.map(::convertFromTerminWithoutDetails),
+                    "${aktionenInKiez[0].ort}-wöchentlich"
+                )
+            }
+
+            LOG.debug("Job für wöchentliche Push-Nachrichten über neue Aktionen abgeschlossen")
+        } catch (e: InterruptedException) {
+            LOG.error("Fehler im wöchentlichen Job für neue Aktionen", e)
+        }
     }
 
 }

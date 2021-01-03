@@ -15,7 +15,7 @@ class ActionMap extends StatefulWidget {
   final List<ListLocation> listLocations;
   final Function isMyAction;
   final Function iAmParticipant;
-  final Function openActionDetails;
+  final Function(Termin) openActionDetails;
   final MapController mapController;
 
   // no better way yet: https://github.com/dart-lang/sdk/issues/4596
@@ -117,7 +117,7 @@ class ActionMapState extends State<ActionMap> {
 
 class ActionMarker extends Marker {
   bool ownAction = false;
-  Function onTap;
+  Function(Termin) onTap;
   bool participant;
 
   ActionMarker(Termin action, {this.ownAction, this.onTap, this.participant})
@@ -132,7 +132,7 @@ class ActionMarker extends Marker {
               child: FlatButton(
                   key: Key('action marker'),
                   onPressed:
-                      onTap != null ? () => onTap(context, action) : null,
+                      onTap != null ? () => onTap(action) : null,
                   color:
                       DweTheme.actionColor(action.ende, ownAction, participant),
                   shape: CircleBorder(

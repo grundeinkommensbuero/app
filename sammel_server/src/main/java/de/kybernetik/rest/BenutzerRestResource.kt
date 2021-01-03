@@ -138,7 +138,7 @@ open class BenutzerRestResource {
                     .entity(false)
                     .build()
         }
-        _log.warn(credentials.roles)
+        _log.trace(credentials.roles)
         val verifiziert: Boolean?
         try {
             verifiziert = security.verifiziereSecretMitHash(login.secret!!, Security.HashMitSalt(credentials.secret, credentials.salt))

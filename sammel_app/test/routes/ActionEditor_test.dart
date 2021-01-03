@@ -846,7 +846,7 @@ _pumpNavigation(WidgetTester tester) async {
         Provider<ChatMessageService>.value(value: _chatService),
       ],
       child: MaterialApp(
-        home: Navigation(),
+        home: Navigation(GlobalKey(debugLabel: 'action page')),
       )));
   await tester.pumpAndSettle();
 }

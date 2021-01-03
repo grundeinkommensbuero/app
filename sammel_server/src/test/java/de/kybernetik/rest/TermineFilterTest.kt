@@ -16,10 +16,10 @@ class TermineFilterTest {
                 LocalTime.of(18, 0 ,0),
                 listOf("Frankfurter Allee Nord"))
 
-        assertTrue(filter.typen.containsAll(listOf("Sammeln", "Infoveranstaltung")))
-        assertTrue(filter.tage.containsAll(listOf(heute)))
+        assertTrue(filter.typen!!.containsAll(listOf("Sammeln", "Infoveranstaltung")))
+        assertTrue(filter.tage!!.containsAll(listOf(heute)))
         assertEquals(filter.von?.hour,12)
         assertEquals(filter.bis?.hour, 18)
-        assertEquals(filter.orte[0], "Frankfurter Allee Nord")
+        assertEquals(filter.orte!![0], "Frankfurter Allee Nord")
     }
 }

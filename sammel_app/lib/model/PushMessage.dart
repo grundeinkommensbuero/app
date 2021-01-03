@@ -30,7 +30,10 @@ class PushNotification {
 
 class PushDataTypes {
   static final SimpleChatMessage = 'SimpleChatMessage';
-  static String ParticipationMessage = 'ParticipationMessage';
+  static final ParticipationMessage = 'ParticipationMessage';
+  static final NewKiezActions = 'NewKiezActions';
+  static final ActionChanged = 'ActionChanged';
+  static final ActionDeleted = 'ActionDeleted';
 }
 
 // Alle Data-Objekte müssen in eine flache Map<String, String> serialisiert werden können

@@ -20,14 +20,9 @@ abstract class AbstractPushNotificationManager {
 }
 
 abstract class PushNotificationListener {
-  void receive_message(Map<dynamic, dynamic> data, NotificationType notificationType) {}
-}
+  void receive_message(Map<dynamic, dynamic> data) {}
 
-enum NotificationType
-{
-  DEFAULT,
-  RESUME,
-  LOCAL_MESSAGE
+  void handleNotificationTap(Map<dynamic, dynamic> data) {}
 }
 
 class PushNotificationManager implements AbstractPushNotificationManager {
@@ -66,7 +61,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     listener.subscribe(
         onMessage: onMessageCallback,
         onResume: onResumeCallback,
-        onLaunch: onMessageCallback,
+        onLaunch: onResumeCallback,
         onBackgroundMessage: backgroundMessageHandler);
   }
 
@@ -76,17 +71,16 @@ class PushNotificationManager implements AbstractPushNotificationManager {
 
   Future<dynamic> onMessageCallback(Map<dynamic, dynamic> message) async {
     print('Push-Nachricht empfangen: $message');
-    handle_message(message, NotificationType.DEFAULT);
+    handle_message(message);
   }
 
-  void handle_message(Map message, NotificationType key) {
+  void handle_message(Map message) {
     try {
       var data = decrypt(message['data']);
       if (data.containsKey('type')) {
         String type = data['type'];
-        print('Type: $type');
         if (callback_map.containsKey(type)) {
-          callback_map[type].receive_message(data, key);
+          callback_map[type].receive_message(data);
         }
       }
     } catch (e, s) {
@@ -96,7 +90,17 @@ class PushNotificationManager implements AbstractPushNotificationManager {
 
   Future<dynamic> onResumeCallback(Map<dynamic, dynamic> message) async {
     print('Resume-Nachricht empfangen: $message');
-    handle_message(message, NotificationType.RESUME);
+    try {
+      var data = decrypt(message['data']);
+      if (data.containsKey('type')) {
+        String type = data['type'];
+        if (callback_map.containsKey(type)) {
+          callback_map[type].handleNotificationTap(data);
+        }
+      }
+    } catch (e, s) {
+      ErrorService.handleError(e, s);
+    }
   }
 
   @override
@@ -106,13 +110,14 @@ class PushNotificationManager implements AbstractPushNotificationManager {
 
   @override
   void subscribeToKiezActionTopics(List<String> kieze, String interval) {
-    kieze.forEach((kiez) => listener.subscribeToTopic('$kiez-$interval'));
+    var topics = kieze.map((kiez) => '$kiez-$interval').toList();
+    listener.subscribeToTopics(topics);
   }
 
   @override
   void unsubscribeFromKiezActionTopics(List<String> kieze, String interval) {
-    kieze.forEach((kiez) =>
-      listener.unsubscribeFromTopic('$kiez-$interval'));
+    var topics = kieze.map((kiez) => '$kiez-$interval').toList();
+    listener.unsubscribeFromTopics(topics);
   }
 }
 
@@ -147,7 +152,7 @@ class DemoPushNotificationManager implements AbstractPushNotificationManager {
       String type, PushNotificationListener callback) {
     pushService.stream
         .where((data) => data.type == type)
-        .listen((data) => callback.receive_message(data.toJson(), NotificationType.DEFAULT));
+        .listen((data) => callback.receive_message(data.toJson()));
   }
 
   // Ignore
