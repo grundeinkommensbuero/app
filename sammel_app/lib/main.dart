@@ -21,7 +21,7 @@ void main() {
   runApp(MyApp());
 }
 
-const Mode mode = Mode.TEST;
+const Mode mode = Mode.DEMO;
 const version = '0.3.4+14';
 
 // Debug
