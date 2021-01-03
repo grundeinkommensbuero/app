@@ -4,7 +4,7 @@ import de.kybernetik.database.DatabaseException
 import org.jboss.logging.Logger
 import de.kybernetik.rest.TermineFilter
 import de.kybernetik.shared.toDate
-import java.time.LocalDate
+import java.time.LocalDate.now
 import javax.ejb.Stateless
 import javax.inject.Inject
 import javax.persistence.EntityManager
@@ -25,6 +25,7 @@ open class TermineDao {
         return ergebnisse
     ***REMOVED***
 
+    private val aktuellKlausel: String = "DATE(termine.ende) > (:vor7Tagen)"
     private val typenKlausel = "termine.typ in (:typen)"
     private val tageKlausel = "DATE(termine.beginn) in (:tage)"
     private val vonKlausel = "TIME(termine.beginn) >= TIME(:von)"
@@ -35,6 +36,8 @@ open class TermineDao {
     @Suppress("JpaQueryApiInspection") // IDEA kriegt die Query nicht zusammen
     open fun erzeugeGetTermineQuery(filter: TermineFilter): TypedQuery<Termin> {
         val filterKlausel = mutableListOf<String>()
+        // TODO vor Release einkommentieren
+//        filterKlausel.add(aktuellKlausel)
         if (!filter.typen.isNullOrEmpty()) filterKlausel.add(typenKlausel)
         if (!filter.tage.isNullOrEmpty()) filterKlausel.add(tageKlausel)
         if (filter.von != null) filterKlausel.add(vonKlausel)
@@ -46,10 +49,11 @@ open class TermineDao {
         if (filterKlausel.isNotEmpty()) sql += " where " + filterKlausel.joinToString(" and ")
         val query = entityManager.createQuery(sql, Termin::class.java)
 
+//        query.setParameter("vor7Tagen", now().minusDays(7).toDate())
         if (filterKlausel.contains(typenKlausel)) query.setParameter("typen", filter.typen)
         if (filterKlausel.contains(tageKlausel)) query.setParameter("tage", filter.tage!!.map { it.toDate() ***REMOVED***)
-        if (filterKlausel.contains(vonKlausel)) query.setParameter("von", filter.von!!.atDate(LocalDate.now()))
-        if (filterKlausel.contains(bisKlausel)) query.setParameter("bis", filter.bis!!.atDate(LocalDate.now()))
+        if (filterKlausel.contains(vonKlausel)) query.setParameter("von", filter.von!!.atDate(now()))
+        if (filterKlausel.contains(bisKlausel)) query.setParameter("bis", filter.bis!!.atDate(now()))
         if (filterKlausel.contains(orteKlausel)) query.setParameter("orte", filter.orte)
         if (filterKlausel.contains(idsKlausel)) query.setParameter("ids", filter.ids)
         return query
