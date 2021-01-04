@@ -126,7 +126,7 @@ class _ActionDetailsPage extends State<ActionDetailsPage> {
                   Icons.subdirectory_arrow_right,
                   size: 18.0,
                 ),
-                SelectableText(widget.action.ort.kiez),
+                SelectableText(widget.action.ort.name),
               ]),
               ExpandableConstrainedBox(
                 child: SelectableText(

@@ -90,7 +90,7 @@ class LocationDialogState extends State<LocationDialog> {
         ),
         Text(
             location.kiez != null
-                ? '${location.kiez.kiez***REMOVED*** in ${location.kiez.bezirk***REMOVED***'
+                ? '${location.kiez.name***REMOVED*** in ${location.kiez.bezirk***REMOVED***'
                 : '',
             style: TextStyle(fontSize: 13, color: DweTheme.purple),
             softWrap: false,
@@ -145,17 +145,13 @@ class LocationDialogState extends State<LocationDialog> {
       ErrorService.handleError(e, s);
       return '';
     ***REMOVED***);
-    var kiez = (await Provider.of<StammdatenService>(context).kieze)
-        .where((kiez) =>
-            kiez.xBoundMax > point.latitude &&
-            kiez.xBoundMin < point.latitude &&
-            kiez.yBoundMax > point.longitude &&
-            kiez.yBoundMin < point.latitude)
-        .firstWhere(
-            (kiez) => poly
-                .toPolyFromListOfList(kiez.polygon)
-                .contains(point.longitude, point.latitude),
-            orElse: () => null);
+    var kiez = (await StammdatenService.kieze).firstWhere(
+        (kiez) => poly.Polygon(kiez.polygon
+                .map((latlng) =>
+                    poly.Point<num>(latlng.latitude, latlng.longitude))
+                .toList())
+            .contains(point.latitude, point.longitude),
+        orElse: () => null);
 
     if (kiez == null) return;
     setState(() {

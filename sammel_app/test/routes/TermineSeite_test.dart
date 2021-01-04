@@ -48,8 +48,6 @@ void main() {
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
     when(_termineService.loadActions(any)).thenAnswer((_) async => []);
-    when(_stammdatenService.kieze).thenAnswer(
-        (_) async => [ffAlleeNord(), tempVorstadt(), plaenterwald()]);
     ErrorService.displayedTypes = [];
 
     termineSeiteWidget = MultiProvider(
@@ -1214,8 +1212,8 @@ void main() {
               .where((action) => action.id == 2)
               .toList()[0]
               .ort
-              .kiez,
-          tempVorstadt().kiez);
+              .name,
+          tempVorstadt().name);
     ***REMOVED***);
 
     test('sorts new list by date', () {

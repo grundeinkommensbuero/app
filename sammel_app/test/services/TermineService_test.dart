@@ -8,7 +8,6 @@ import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
-import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
@@ -18,20 +17,16 @@ import '../shared/TestdatenVorrat.dart';
 
 void main() {
   UserService userService;
-  StammdatenService stammdatenService = StammdatenServiceMock();
   PushNotificationManager pushManager = PushNotificationManagerMock();
 
   setUp(() {
     userService = ConfiguredUserServiceMock();
-    reset(stammdatenService);
-    when(stammdatenService.kieze).thenAnswer(
-        (_) async => [ffAlleeNord(), tempVorstadt(), plaenterwald()]);
   ***REMOVED***);
 
   group('DemoTermineService', () {
     DemoTermineService service;
     setUp(() {
-      service = DemoTermineService(userService, stammdatenService);
+      service = DemoTermineService(userService);
     ***REMOVED***);
 
     test('uses DemoBackend', () {
@@ -79,7 +74,7 @@ void main() {
     test('stores new action', () async {
       var termine = await service.termine;
       expect(termine[0].typ, 'Sammeln');
-      expect(termine[0].ort.kiez, 'Frankfurter Allee Nord');
+      expect(termine[0].ort.name, 'Frankfurter Allee Nord');
       expect(termine[0].details.kontakt, 'Ruft mich an unter 01234567');
 
       await service.saveAction(
@@ -92,7 +87,7 @@ void main() {
 
       termine = await service.termine;
       expect(termine[0].typ, 'Infoveranstaltung');
-      expect(termine[0].ort.kiez, 'Plänterwald');
+      expect(termine[0].ort.name, 'Plänterwald');
       expect(termine[0].details.kontakt, 'Test123');
     ***REMOVED***);
 
@@ -144,7 +139,7 @@ void main() {
     setUp(() {
       backend = BackendMock();
       service = TermineService(
-          userService, stammdatenService, backend, pushManager, null);
+          userService, backend, pushManager, null);
       service.userService = userService;
     ***REMOVED***);
 
@@ -183,9 +178,7 @@ void main() {
       expect(actions[0].beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(actions[0].ende, DateTime(2019, 11, 4, 18, 9, 0));
       expect(actions[0].ort.bezirk, 'Friedrichshain-Kreuzberg');
-      expect(actions[0].ort.kiez, 'Frankfurter Allee Nord');
-      expect(actions[0].ort.center.latitude, 52.51579);
-      expect(actions[0].ort.center.longitude, 13.45399);
+      expect(actions[0].ort.name, 'Frankfurter Allee Nord');
       expect(actions[0].typ, 'Sammeln');
       expect(actions[0].latitude, 52.52116);
       expect(actions[0].longitude, 13.41331);
@@ -201,9 +194,7 @@ void main() {
       expect(actions[1].beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(actions[1].ende, DateTime(2019, 11, 4, 18, 9, 0));
       expect(actions[1].ort.bezirk, 'Friedrichshain-Kreuzberg');
-      expect(actions[1].ort.kiez, 'Frankfurter Allee Nord');
-      expect(actions[1].ort.center.latitude, 52.51579);
-      expect(actions[1].ort.center.longitude, 13.45399);
+      expect(actions[1].ort.name, 'Frankfurter Allee Nord');
       expect(actions[1].typ, 'Sammeln');
       expect(actions[1].latitude, 52.52116);
       expect(actions[1].longitude, 13.41331);
@@ -261,9 +252,7 @@ void main() {
       expect(action.beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(action.ende, DateTime(2019, 11, 4, 18, 9, 0));
       expect(action.ort.bezirk, 'Friedrichshain-Kreuzberg');
-      expect(action.ort.kiez, 'Frankfurter Allee Nord');
-      expect(action.ort.center.latitude, 52.51579);
-      expect(action.ort.center.longitude, 13.45399);
+      expect(action.ort.name, 'Frankfurter Allee Nord');
       expect(action.typ, 'Sammeln');
       expect(action.latitude, 52.52116);
       expect(action.longitude, 13.41331);
@@ -297,9 +286,7 @@ void main() {
       expect(action.beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(action.ende, DateTime(2019, 11, 4, 18, 9, 0));
       expect(action.ort.bezirk, 'Friedrichshain-Kreuzberg');
-      expect(action.ort.kiez, 'Frankfurter Allee Nord');
-      expect(action.ort.center.latitude, 52.51579);
-      expect(action.ort.center.longitude, 13.45399);
+      expect(action.ort.name, 'Frankfurter Allee Nord');
       expect(action.typ, 'Sammeln');
       expect(action.latitude, 52.52116);
       expect(action.longitude, 13.41331);
@@ -423,7 +410,7 @@ TermineFilter einFilter() {
       [datum],
       TimeOfDay.fromDateTime(start),
       TimeOfDay.fromDateTime(end),
-      [ffAlleeNord().kiez],
+      [ffAlleeNord().name],
       []);
   return einFilter;
 ***REMOVED***

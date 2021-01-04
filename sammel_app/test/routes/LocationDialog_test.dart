@@ -9,7 +9,6 @@ import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 
 import '../shared/Mocks.dart';
-import '../shared/TestdatenVorrat.dart';
 
 final GeoService geoService = GeoServiceMock();
 final stammdatenService = StammdatenServiceMock();
@@ -20,19 +19,6 @@ void main() {
     reset(stammdatenService);
     when(geoService.getDescriptionToPoint(any))
         .thenAnswer((_) async => GeoData('name', 'street', '12'));
-    when(stammdatenService.kieze).thenAnswer((_) async => [
-          ffAlleeNord()
-            ..xBoundMin = -180
-            ..xBoundMax = 180
-            ..yBoundMin = -180
-            ..yBoundMax = 180
-            ..polygon = [
-              [-180, -180],
-              [-180, 180],
-              [180, 180],
-              [180, -180]
-            ]
-        ]);
   ***REMOVED***);
 
   testWidgets('opens dialog', (WidgetTester tester) async {

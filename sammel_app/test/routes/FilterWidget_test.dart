@@ -4,7 +4,6 @@ import 'package:flutter_test_ui/flutter_test_ui.dart';
 import 'package:intl/intl.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
-import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/FilterWidget.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
@@ -29,30 +28,6 @@ void main() {
   group('ui', () {
     setUpUI((WidgetTester tester) async {
       when(_storageService.loadFilter()).thenAnswer((_) async => null);
-      when(_stammdatenService.kieze).thenAnswer((_) async => [
-            Kiez('district1', 'kiez1', 52.49653, 13.43762, [
-              [13.3695276, 52.4988695],
-              [13.3703602, 52.4995103],
-              [13.3703573, 52.4995166],
-              [13.3703586, 52.499531],
-              [13.3705551, 52.4996823],
-              [13.370586, 52.4996851],
-              [13.3707796, 52.4998338],
-              [13.3708454, 52.4998986],
-              [13.3708658, 52.4999283]
-            ]),
-            Kiez('district2', 'kiez2', 52.49653, 13.43762, [
-              [13.3695276, 52.4988695],
-              [13.3703602, 52.4995103],
-              [13.3703573, 52.4995166],
-              [13.3703586, 52.499531],
-              [13.3705551, 52.4996823],
-              [13.370586, 52.4996851],
-              [13.3707796, 52.4998338],
-              [13.3708454, 52.4998986],
-              [13.3708658, 52.4999283]
-            ])
-          ]);
       await pumpFilterWidget(tester);
     ***REMOVED***);
 
@@ -199,7 +174,6 @@ void main() {
 
     testUI('Filter opens Locations selection with click at locations button',
         (WidgetTester tester) async {
-      when(_stammdatenService.kieze).thenAnswer((_) async => []);
 
       await pumpFilterWidget(tester);
 
@@ -348,10 +322,6 @@ void main() {
 
   group('storage function', () {
     setUpUI((WidgetTester tester) async {
-      when(_stammdatenService.kieze).thenAnswer((_) async => [
-            Kiez('district1', 'kiez1', 52.49653, 13.43762, [[]]),
-            Kiez('district2', 'kiez2', 52.49653, 13.43762, [[]])
-          ]);
     ***REMOVED***);
 
     testUI('initializes filter with default values if no storage is found',
@@ -376,7 +346,7 @@ void main() {
           [DateTime(2020, 1, 14), DateTime(2020, 1, 16)],
           TimeOfDay(hour: 12, minute: 30),
           TimeOfDay(hour: 15, minute: 0),
-          [ffAlleeNord().kiez, tempVorstadt().kiez],
+          [ffAlleeNord().name, tempVorstadt().name],
           []));
 
       await pumpFilterWidget(tester);

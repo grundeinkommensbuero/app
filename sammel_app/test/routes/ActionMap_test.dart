@@ -17,7 +17,6 @@ final stammdatenService = StammdatenServiceMock();
 void main() {
   setUp(() {
     reset(stammdatenService);
-    when(stammdatenService.kieze).thenAnswer((_) async => [ffAlleeNord()]);
   ***REMOVED***);
 
   testWidgets('uses default values', (WidgetTester tester) async {

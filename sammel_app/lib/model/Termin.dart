@@ -22,7 +22,7 @@ class Termin {
       : id = json['id'],
         beginn = ChronoHelfer.deserializeJsonDateTime(json['beginn']),
         ende = ChronoHelfer.deserializeJsonDateTime(json['ende']),
-        ort = kieze.firstWhere((kiez) => json['ort'] == kiez.kiez),
+        ort = kieze.firstWhere((kiez) => json['ort'] == kiez.name),
         typ = json['typ'] ?? 'Termin',
         latitude = json['latitude'] ?? null,
         longitude = json['longitude'] ?? null,

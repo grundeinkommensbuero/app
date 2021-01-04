@@ -31,8 +31,7 @@ class ActionData {
   ActionData.testDaten() {
     this.von = TimeOfDay.fromDateTime(DateTime.now());
     this.bis = TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 1)));
-    this.ort = Kiez(
-        'Friedrichshain-Kreuzberg', 'Plänterwald', 52.51579, 13.45399, [[]]);
+    this.ort = Kiez('Friedrichshain-Kreuzberg', 'Plänterwald', []);
     this.coordinates = LatLng(52.51579, 13.45399);
     this.typ = 'Sammeln';
     this.tage = [DateTime.now()];
@@ -256,8 +255,8 @@ class ActionEditorState extends State<ActionEditor> {
     if (action.coordinates?.latitude != null &&
         action.coordinates?.longitude != null)
       return LatLng(action.coordinates.latitude, action.coordinates.longitude);
-    // at location
-    return action.ort?.center;
+
+    return null;
   ***REMOVED***
 
   void contactSelection() async {
@@ -429,7 +428,7 @@ class ActionEditorState extends State<ActionEditor> {
         style: TextStyle(color: DweTheme.purple),
       );
     ***REMOVED*** else {
-      text = Text('${termin.ort.kiez***REMOVED*** in ${termin.ort.bezirk***REMOVED***\n'
+      text = Text('${termin.ort.name***REMOVED*** in ${termin.ort.bezirk***REMOVED***\n'
           'Treffpunkt: ${termin.terminDetails.treffpunkt***REMOVED***');
     ***REMOVED***
     return build_text_row(text, this.action.validated['venue']);

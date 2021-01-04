@@ -115,8 +115,7 @@ class FilterWidgetState extends State<FilterWidget>
       widget.onApply(filter).whenComplete(() =>
           setState(() => loading = false)); //lade initial Termine
     ***REMOVED***);
-    Provider
-        .of<StammdatenService>(context)
+    StammdatenService
         .kieze
         .then((locations) => setState(() => allLocations = locations));
     _initialized = true;
@@ -244,12 +243,12 @@ class FilterWidgetState extends State<FilterWidget>
 
   locationSelection() async {
     var selectedLocations = await KiezPicker(allLocations
-        .where((kiez) => filter.orte.contains(kiez.kiez))
+        .where((kiez) => filter.orte.contains(kiez.name))
         .toList())
         .showKiezPicker(context);
 
     if (selectedLocations == null) return;
-    setState(() => filter.orte = selectedLocations.map((k) => k.kiez).toList());
+    setState(() => filter.orte = selectedLocations.map((k) => k.name).toList());
   ***REMOVED***
 
   resetLocations() => setState(() => filter.orte = []);

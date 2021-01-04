@@ -82,7 +82,7 @@ class ChatWindowState extends State<ChatWindow> {
                     style: TextStyle(
                         fontSize: 13.0, fontWeight: FontWeight.normal)),
                 TextSpan(
-                    text: termin.ort.kiez,
+                    text: termin.ort.name,
                     style: TextStyle(fontWeight: FontWeight.bold)),
               ], style: TextStyle(color: DweTheme.purple, fontSize: 13.0)),
               softWrap: false,

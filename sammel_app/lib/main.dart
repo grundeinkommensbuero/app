@@ -7,7 +7,6 @@ import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StorageService.dart';
-import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
@@ -46,11 +45,10 @@ class MyApp extends StatelessWidget {
       ? DemoPushNotificationManager(pushService)
       : PushNotificationManager(
           storageService, userService, firebaseService, backend);
-  static var stammdatenService = StammdatenService();
   var termineService = demoMode
-      ? DemoTermineService(userService, stammdatenService)
-      : TermineService(userService, stammdatenService, backend,
-          pushNotificationManager, navigatorKey);
+      ? DemoTermineService(userService)
+      : TermineService(
+          userService, backend, pushNotificationManager, navigatorKey);
   static var listLocationService = demoMode
       ? DemoListLocationService(userService)
       : ListLocationService(userService, backend);
@@ -63,7 +61,6 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
         providers: [
           Provider<AbstractTermineService>.value(value: termineService),
-          Provider<StammdatenService>.value(value: stammdatenService),
           Provider<AbstractListLocationService>.value(
               value: listLocationService),
           Provider<StorageService>.value(value: storageService),

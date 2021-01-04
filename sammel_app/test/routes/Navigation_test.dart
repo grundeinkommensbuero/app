@@ -18,7 +18,6 @@ import 'package:sammel_app/services/ChatMessageService.dart';
 
 import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';
-import '../shared/TestdatenVorrat.dart';
 
 final _stammdatenService = StammdatenServiceMock();
 final _termineService = TermineServiceMock();
@@ -46,8 +45,6 @@ void main() {
       when(_storageService.loadFilter())
           .thenAnswer((_) async => TermineFilter.leererFilter());
       when(_termineService.loadActions(any)).thenAnswer((_) async => []);
-      when(_stammdatenService.kieze).thenAnswer(
-          (_) async => [ffAlleeNord(), tempVorstadt(), plaenterwald()]);
 
       await tester.pumpWidget(MultiProvider(providers: [
         Provider<AbstractTermineService>.value(value: _termineService),
@@ -83,7 +80,6 @@ void main() {
     ***REMOVED***);
 
     testUI('creates ActionPage and ActionCreator', (WidgetTester tester) async {
-      NavigationState state = tester.state(find.byWidget(navigation));
       expect(find.byKey(actionPage), findsOneWidget);
       expect(find.byKey(Key('action creator')), findsOneWidget);
     ***REMOVED***);
