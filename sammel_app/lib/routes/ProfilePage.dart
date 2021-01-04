@@ -22,7 +22,6 @@ class ProfilePageState extends State<ProfilePage> {
   var init = false;
   StorageService storageService;
   AbstractUserService userService;
-  StammdatenService stammdatenService;
   AbstractPushNotificationManager pushNotificationManager;
   String name = '';
   List<String> myKieze = [];
@@ -35,7 +34,6 @@ class ProfilePageState extends State<ProfilePage> {
     if (init == false) {
       storageService = Provider.of<StorageService>(context);
       userService = Provider.of<AbstractUserService>(context);
-      stammdatenService = Provider.of<StammdatenService>(context);
       pushNotificationManager =
           Provider.of<AbstractPushNotificationManager>(context);
       userService.user.listen((user) => setState(() => name = user.name));
@@ -111,12 +109,12 @@ class ProfilePageState extends State<ProfilePage> {
   }
 
   showKiezPicker() async {
-    var allLocations = await stammdatenService.kieze;
+    var allLocations = await StammdatenService.kieze;
     var selection = (await KiezPicker(allLocations
-                .where((kiez) => myKieze.contains(kiez.kiez))
+                .where((kiez) => myKieze.contains(kiez.name))
                 .toList())
             .showKiezPicker(context))
-        ?.map((kiez) => kiez.kiez)
+        ?.map((kiez) => kiez.name)
         ?.toList();
 
     if (selection != null && !ListEquality().equals(selection, myKieze)) {

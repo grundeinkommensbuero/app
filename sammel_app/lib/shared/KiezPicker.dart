@@ -3,7 +3,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:poly/poly.dart' as poly;
-import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 
@@ -22,7 +21,7 @@ class KiezPicker {
   }
 
   Future<List<Kiez>> showKiezPicker(context) async {
-    kieze = await Provider.of<StammdatenService>(context).kieze;
+    kieze = await StammdatenService.kieze;
     outlines2kieze = generateKiezOutlines(kieze);
     areas2kieze = generateKiezAreas(kieze);
     return await showDialog(
@@ -82,17 +81,13 @@ class KiezPicker {
   }
 
   markKiez(LatLng position) {
-    var tappedKiez = kieze
-        .where((kiez) =>
-            kiez.xBoundMax > position.latitude &&
-            kiez.xBoundMin < position.latitude &&
-            kiez.yBoundMax > position.longitude &&
-            kiez.yBoundMin < position.latitude)
-        .firstWhere(
-            (kiez) => poly
-                .toPolyFromListOfList(kiez.polygon)
-                .contains(position.longitude, position.latitude),
-            orElse: () => null);
+    var tappedKiez = kieze.firstWhere(
+        (kiez) => poly.Polygon(kiez.polygon
+                .map((latlng) =>
+                    poly.Point<num>(latlng.latitude, latlng.longitude))
+                .toList())
+            .contains(position.latitude, position.longitude),
+        orElse: () => null);
 
     if (tappedKiez == null) return;
 
@@ -112,9 +107,7 @@ Map<Kiez, Polygon> generateKiezOutlines(List<Kiez> kieze) {
           borderStrokeWidth: 2.0,
           borderColor: Color.fromARGB(250, DweTheme.purple.red,
               DweTheme.purple.green, DweTheme.purple.blue),
-          points: kiez.polygon
-              .map((point) => LatLng(point[1], point[0]))
-              .toList())));
+          points: kiez.polygon)));
 }
 
 Map<Kiez, Polygon> generateKiezAreas(List<Kiez> kieze) {
@@ -123,7 +116,5 @@ Map<Kiez, Polygon> generateKiezAreas(List<Kiez> kieze) {
       Polygon(
           color: Color.fromARGB(150, DweTheme.yellow.red, DweTheme.yellow.green,
               DweTheme.yellow.blue),
-          points: kiez.polygon
-              .map((point) => LatLng(point[1], point[0]))
-              .toList())));
+          points: kiez.polygon)));
 }

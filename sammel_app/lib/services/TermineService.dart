@@ -19,8 +19,7 @@ import 'ErrorService.dart';
 import 'UserService.dart';
 
 abstract class AbstractTermineService extends BackendService {
-  AbstractTermineService(
-      AbstractUserService userService, this.stammdatenService, Backend backend)
+  AbstractTermineService(AbstractUserService userService, Backend backend)
       : super(userService, backend);
   StammdatenService stammdatenService;
 
@@ -43,9 +42,9 @@ class TermineService extends AbstractTermineService
     implements PushNotificationListener {
   GlobalKey<NavigatorState> navigatorKey;
 
-  TermineService(AbstractUserService userService, stammdatenService,
-      Backend backend, PushNotificationManager manager, this.navigatorKey)
-      : super(userService, stammdatenService, backend) {
+  TermineService(AbstractUserService userService, Backend backend,
+      PushNotificationManager manager, this.navigatorKey)
+      : super(userService, backend) {
     manager.register_message_callback(PushDataTypes.NewKiezActions, this);
     manager.register_message_callback(PushDataTypes.ActionChanged, this);
     manager.register_message_callback(PushDataTypes.ActionDeleted, this);
@@ -54,7 +53,7 @@ class TermineService extends AbstractTermineService
   Future<List<Termin>> loadActions(TermineFilter filter) async {
     HttpClientResponseBody response =
         await post('service/termine', jsonEncode(filter));
-    var kieze = await stammdatenService.kieze;
+    var kieze = await StammdatenService.kieze;
     final termine = (response.body as List)
         .map((jsonTermin) => Termin.fromJson(jsonTermin, kieze))
         .toList();
@@ -65,14 +64,14 @@ class TermineService extends AbstractTermineService
     ActionWithToken actionWithToken = ActionWithToken(termin, token);
     var response =
         await post('service/termine/neu', jsonEncode(actionWithToken));
-    var kieze = await stammdatenService.kieze;
+    var kieze = await StammdatenService.kieze;
     return Termin.fromJson(response.body, kieze);
   }
 
   @override
   Future<Termin> getActionWithDetails(int id) async {
     var response = await get('service/termine/termin?id=' + id.toString());
-    var kieze = await stammdatenService.kieze;
+    var kieze = await StammdatenService.kieze;
     return Termin.fromJson(response.body, kieze);
   }
 
@@ -107,7 +106,7 @@ class TermineService extends AbstractTermineService
   @override
   void handleNotificationTap(Map<dynamic, dynamic> data) async {
     final actionData =
-        ActionListPushData.fromJson(data, await stammdatenService.kieze);
+        ActionListPushData.fromJson(data, await StammdatenService.kieze);
     actionData.actions..sort(Termin.compareByStart);
 
     print('Type: ${actionData.type}');
@@ -136,16 +135,15 @@ class TermineService extends AbstractTermineService
 }
 
 class DemoTermineService extends AbstractTermineService {
-  DemoTermineService(
-      AbstractUserService userService, StammdatenService stammdatenService)
-      : super(userService, stammdatenService, DemoBackend()) {
-    termine = stammdatenService.kieze.then((kieze) {
+  DemoTermineService(AbstractUserService userService)
+      : super(userService, DemoBackend()) {
+    termine = StammdatenService.kieze.then((kieze) {
       return [
         Termin(
             1,
             DateTime(heute.year, heute.month - 1, heute.day - 1, 9, 0, 0),
             DateTime(heute.year, heute.month - 1, heute.day - 1, 12, 0, 0),
-            kieze.firstWhere((kiez) => kiez.kiez == 'Frankfurter Allee Nord'),
+            kieze.firstWhere((kiez) => kiez.name == 'Frankfurter Allee Nord'),
             'Sammeln',
             52.52116,
             13.41331,
@@ -156,7 +154,7 @@ class DemoTermineService extends AbstractTermineService {
             2,
             DateTime(heute.year, heute.month, heute.day - 1, 11, 0, 0),
             DateTime(heute.year, heute.month, heute.day - 1, 13, 0, 0),
-            kieze.firstWhere((kiez) => kiez.kiez == 'Plänterwald'),
+            kieze.firstWhere((kiez) => kiez.name == 'Plänterwald'),
             'Sammeln',
             52.48756,
             13.46336,
@@ -167,7 +165,7 @@ class DemoTermineService extends AbstractTermineService {
             3,
             DateTime(heute.year, heute.month, heute.day, 23, 0, 0),
             DateTime(heute.year, heute.month, heute.day + 1, 2, 0, 0),
-            kieze.firstWhere((kiez) => kiez.kiez == 'Tempelhofer Vorstadt'),
+            kieze.firstWhere((kiez) => kiez.name == 'Tempelhofer Vorstadt'),
             'Sammeln',
             52.49655,
             13.43759,
@@ -181,7 +179,7 @@ class DemoTermineService extends AbstractTermineService {
             4,
             DateTime(heute.year, heute.month, heute.day + 1, 18, 0, 0),
             DateTime(heute.year, heute.month, heute.day + 1, 20, 30, 0),
-            kieze.firstWhere((kiez) => kiez.kiez == 'Plänterwald'),
+            kieze.firstWhere((kiez) => kiez.name == 'Plänterwald'),
             'Infoveranstaltung',
             52.48612,
             13.47192,
@@ -216,7 +214,7 @@ class DemoTermineService extends AbstractTermineService {
               : filter.tage.contains(datum)) &&
           (filter.orte == null || filter.orte.isEmpty
               ? true
-              : filter.orte.contains(termin.ort.kiez)) &&
+              : filter.orte.contains(termin.ort.name)) &&
           (filter.typen == null || filter.typen.isEmpty
               ? true
               : filter.typen.contains(termin.typ)) &&
