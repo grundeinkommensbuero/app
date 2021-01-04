@@ -18,7 +18,7 @@ class Termin {
   Termin(this.id, this.beginn, this.ende, this.ort, this.typ, this.latitude,
       this.longitude, this.participants, this.details);
 
-  Termin.fromJson(Map<String, dynamic> json, List<Kiez> kieze)
+  Termin.fromJson(Map<String, dynamic> json, Set<Kiez> kieze)
       : id = json['id'],
         beginn = ChronoHelfer.deserializeJsonDateTime(json['beginn']),
         ende = ChronoHelfer.deserializeJsonDateTime(json['ende']),
