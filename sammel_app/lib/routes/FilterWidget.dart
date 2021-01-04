@@ -25,6 +25,8 @@ class FilterWidget extends StatefulWidget {
 class FilterWidgetState extends State<FilterWidget>
     with TickerProviderStateMixin {
   TermineFilter filter = TermineFilter.leererFilter();
+  StammdatenService stammdatenService;
+
   var _initialized = false;
 
   var _zeroPadding = MaterialTapTargetSize.shrinkWrap;
@@ -49,24 +51,24 @@ class FilterWidgetState extends State<FilterWidget>
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     FilterElement(
-                      key: Key("type button"),
+                      key: Key('type button'),
                       child: Text(artButtonBeschriftung()),
                       selectionFunction: typeSelection,
                       resetFunction: resetType,
                     ),
                     FilterElement(
-                      key: Key("days button"),
+                      key: Key('days button'),
                       child: tageButtonBeschriftung(),
                       selectionFunction: daysSelection,
                       resetFunction: resetDays,
                     ),
                     FilterElement(
-                        key: Key("time button"),
+                        key: Key('time button'),
                         child: Text(uhrzeitButtonBeschriftung(filter)),
                         selectionFunction: timeSelection,
                         resetFunction: resetTime),
                     FilterElement(
-                      key: Key("locations button"),
+                      key: Key('locations button'),
                       child: Text(ortButtonBeschriftung(filter)),
                       selectionFunction:
                           allLocations != null ? locationSelection : null,
@@ -78,7 +80,7 @@ class FilterWidgetState extends State<FilterWidget>
               width: double.infinity,
               height: 50.0,
               child: RaisedButton(
-                key: Key("filter button"),
+                key: Key('filter button'),
                 color: Color.fromARGB(255, 129, 28, 98),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.vertical(
@@ -108,6 +110,7 @@ class FilterWidgetState extends State<FilterWidget>
                     setState(() => buttonText = '');
                     expanded = false;
                     onApply();
+                    storageService.saveFilter(filter);
                   ***REMOVED*** else {
                     setState(() => buttonText = 'Anwenden');
                     expanded = true;
@@ -120,7 +123,7 @@ class FilterWidgetState extends State<FilterWidget>
           ? FlatButton(
               splashColor: Colors.transparent,
               textColor: DweTheme.yellow,
-              onPressed: () => onApply(),
+              onPressed: onApply,
               child: Text(loading ? '' : 'Aktualisieren', textScaleFactor: 1.2))
           : SizedBox()
     ]);
@@ -128,15 +131,15 @@ class FilterWidgetState extends State<FilterWidget>
 
   // Kann nicht im Konstruktor ausgeführt werden, weil der Provider den context braucht, der ins build reingereicht wird
   void initialize(BuildContext context) {
+    stammdatenService = Provider.of<StammdatenService>(context);
     storageService = Provider.of<StorageService>(context);
     storageService.loadFilter().then((filter) {
       setState(() {
         this.filter = filter != null ? filter : TermineFilter.leererFilter();
       ***REMOVED***);
-      widget.onApply(filter).whenComplete(
-          () => setState(() => loading = false)); //lade initial Termine
+      onApply();
     ***REMOVED***);
-    StammdatenService.kieze
+    stammdatenService.kieze
         .then((locations) => setState(() => allLocations = locations));
     _initialized = true;
   ***REMOVED***
@@ -175,14 +178,10 @@ class FilterWidgetState extends State<FilterWidget>
     return "in " + filter.orte.map((ort) => ort).toList().join(", ");
   ***REMOVED***
 
-  void onApply() {
-    setState(() {
-      loading = true;
-      widget
-          .onApply(filter)
-          .whenComplete(() => setState(() => loading = false));
-      storageService.saveFilter(filter);
-    ***REMOVED***);
+  Future<void> onApply() async {
+    setState(() => loading = true);
+    await widget.onApply(filter);
+    setState(() => loading = false);
   ***REMOVED***
 
   typeSelection() async {

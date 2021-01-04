@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-import 'package:quiver/collection.dart';
 import 'package:sammel_app/model/Kiez.dart';
 import 'package:test/test.dart';
 
@@ -10,7 +8,7 @@ import '../shared/TestdatenVorrat.dart';
 void main() {
   group('serialisere', () {
     test('serialisiert nur Kiez', () {
-      expect(jsonEncode(Kiez('bezirk1', 'kiez1', [])), '"kiez1"');
+      expect(jsonEncode(Kiez('kiez1', 'bezirk1', [])), '"kiez1"');
     ***REMOVED***);
   ***REMOVED***);
   group('equals', () {
@@ -29,45 +27,26 @@ void main() {
           false);
     ***REMOVED***);
     test('returns false for null location', () {
-      expect(Kiez(null, 'Kiez', []).equals(Kiez('Bezirk', 'Kiez', [])), false);
+      expect(Kiez(null, 'Kiez', []).equals(Kiez('Kiez', 'Bezirk', [])), false);
     ***REMOVED***);
     test('returns false for location and null', () {
-      expect(Kiez('Bezirk', 'Kiez', []).equals(Kiez(null, 'Kiez', [])), false);
+      expect(Kiez('Kiez', 'Bezirk', []).equals(Kiez(null, 'Kiez', [])), false);
     ***REMOVED***);
 
     test('returns false for different place', () {
-      expect(Kiez('Bezirk', 'Ort 1', []).equals(Kiez('Bezirk', 'Ort 2', [])),
+      expect(Kiez('Ort 1', 'Bezirk', []).equals(Kiez('Bezirk', 'Ort 2', [])),
           false);
     ***REMOVED***);
     test('returns false for null place', () {
       expect(
-          Kiez('Bezirk', null, [])
-              .equals(Kiez('Bezirk', 'Kiez', [])),
+          Kiez(null, 'Bezirk', [])
+              .equals(Kiez('Kiez', 'Bezirk', [])),
           false);
     ***REMOVED***);
     test('returns false for place and null', () {
       expect(
-          Kiez('Bezirk', 'Kiez', [])
+          Kiez('Kiez', 'Bezirk', [])
               .equals(Kiez('Bezirk', null, [])),
-          false);
-    ***REMOVED***);
-
-    test('returns false for different coordinates', () {
-      expect(
-          Kiez('Bezirk', 'Kiez', [])
-              .equals(Kiez('Bezirk', 'Kiez', [])),
-          false);
-    ***REMOVED***);
-    test('returns false for null coordinates', () {
-      expect(
-          Kiez('Bezirk', 'Kiez', [])
-              .equals(Kiez('Bezirk', 'Kiez', [])),
-          false);
-    ***REMOVED***);
-    test('returns false for coordinates and null', () {
-      expect(
-          Kiez('Bezirk', 'Kiez', [])
-              .equals(Kiez('Bezirk', 'Kiez', [])),
           false);
     ***REMOVED***);
   ***REMOVED***);

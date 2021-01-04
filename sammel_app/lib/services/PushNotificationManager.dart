@@ -53,8 +53,6 @@ class PushNotificationManager implements AbstractPushNotificationManager {
         listener = PullService(userService, backend);
       ***REMOVED*** else {
         listener = firebaseService;
-        // For testing purposes print the Firebase Messaging token
-        print("Firebase token: $token");
       ***REMOVED***
     ***REMOVED***
 
@@ -62,7 +60,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
         onMessage: onMessageCallback,
         onResume: onResumeCallback,
         onLaunch: onResumeCallback,
-        onBackgroundMessage: backgroundMessageHandler);
+        /*onBackgroundMessage: backgroundMessageHandler*/);
   ***REMOVED***
 
   Map<String, PushNotificationListener> callback_map = Map();

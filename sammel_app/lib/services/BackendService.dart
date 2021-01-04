@@ -157,6 +157,11 @@ class Backend {
   static final port = testMode ? 443 : 18443;
   final String version;
 
+  final Future<void> zertifikatGeladen = ladeZertifikat().timeout(
+      Duration(seconds: 10),
+      onTimeout: () =>
+          throw TimeoutException('SSL-Zertifikat konnte nicht geladen werden'));
+
   static final clientContext = SecurityContext();
   static HttpClient client = HttpClient(context: clientContext);
 
@@ -166,7 +171,6 @@ class Backend {
   ***REMOVED***
 
   Backend(this.version) {
-    ladeZertifikat();
     var serverHealth = getServerHealth();
     serverHealth.then((health) {
       if (!health.alive)
@@ -200,6 +204,7 @@ class Backend {
 
   Future<HttpClientResponseBody> get(
       String url, Map<String, String> headers) async {
+    await zertifikatGeladen;
     var uri = Uri.parse(url);
     uri = Uri.https('$host:$port', uri.path, uri.queryParameters);
     return await client
@@ -225,6 +230,7 @@ class Backend {
   Future<HttpClientResponseBody> post(
       String url, String data, Map<String, String> headers,
       [Map<String, String> parameters]) async {
+    await zertifikatGeladen;
     return await client
         .postUrl(Uri.https('$host:$port', url, parameters))
         .then((HttpClientRequest request) {
@@ -250,6 +256,7 @@ class Backend {
 
   Future<HttpClientResponseBody> delete(
       String url, String data, Map<String, String> headers) async {
+    await zertifikatGeladen;
     return await client
         .deleteUrl(Uri.https('$host:$port', url))
         .then((HttpClientRequest request) {
@@ -325,6 +332,9 @@ class DemoBackend implements Backend {
 
   @override
   String get version => throw UnimplementedError();
+
+  @override
+  Future<void> get zertifikatGeladen => throw UnimplementedError();
 ***REMOVED***
 
 class DemoBackendShouldNeverBeUsedError {***REMOVED***

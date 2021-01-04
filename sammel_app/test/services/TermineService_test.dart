@@ -18,15 +18,18 @@ import '../shared/TestdatenVorrat.dart';
 void main() {
   UserService userService;
   PushNotificationManager pushManager = PushNotificationManagerMock();
+  final stammdatenService = StammdatenServiceMock();
 
   setUp(() {
     userService = ConfiguredUserServiceMock();
+    when(stammdatenService.kieze).thenAnswer(
+        (_) async => [ffAlleeNord(), tempVorstadt(), plaenterwald()].toSet());
   ***REMOVED***);
 
   group('DemoTermineService', () {
     DemoTermineService service;
     setUp(() {
-      service = DemoTermineService(userService);
+      service = DemoTermineService(userService, stammdatenService);
     ***REMOVED***);
 
     test('uses DemoBackend', () {
@@ -139,7 +142,7 @@ void main() {
     setUp(() {
       backend = BackendMock();
       service = TermineService(
-          userService, backend, pushManager, null);
+          userService, backend, stammdatenService, pushManager, null);
       service.userService = userService;
     ***REMOVED***);
 

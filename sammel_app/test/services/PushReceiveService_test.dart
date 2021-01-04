@@ -21,10 +21,11 @@ main() {
     when(firebaseMock.getToken()).thenAnswer((_) async => '123');
 
     test('takes Mock if given', () {
-      var firebaseListener = FirebaseReceiveService(firebaseMock);
+      FirebaseReceiveService(firebaseMock);
 
-      expect(firebaseListener.firebaseMessaging, firebaseMock);
-      expect(firebaseListener.firebaseMessaging is FirebaseMessagingMock, true);
+      expect(FirebaseReceiveService.firebaseMessaging, firebaseMock);
+      expect(FirebaseReceiveService.firebaseMessaging is FirebaseMessagingMock,
+          true);
     ***REMOVED***);
 
     test('registers onMessage listener', () {

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:sammel_app/model/Kiez.dart';
@@ -5,16 +6,26 @@ import 'package:sammel_app/shared/FileReader.dart';
 
 class StammdatenService {
   static FileReader fileReader = FileReader();
-  static final Future<Set<Kiez>> _kieze = loadKieze();
-  static final Future<Set<Bezirk>> bezirke = loadBezirke();
-  static final Future<Set<Ortsteil>> ortsteile = loadOrtsteile();
+  static final _kieze = StreamController<Set<Kiez>>.broadcast();
+  static final _bezirke = StreamController<Set<Bezirk>>.broadcast();
+  static final _ortsteile = StreamController<Set<Ortsteil>>.broadcast();
 
-  // warte auf Anreicherung der Kieze durch Bezirke
-  static Future<Set<Kiez>> get kieze => bezirke.then((_) => _kieze);
+  Future<Set<Bezirk>> bezirke = _bezirke.stream.first;
+  Future<Set<Ortsteil>> ortsteile = _ortsteile.stream.first;
+  Future<Set<Kiez>> kieze = _kieze.stream.first;
 
-  StammdatenService();
+  StammdatenService() {
+    loadKieze().then((kieze) async {
+      final ortsteile = await loadOrtsteile(kieze);
+      final bezirke = await loadBezirke(ortsteile);
+      _bezirke.add(bezirke);
+      _ortsteile.add(ortsteile);
+      // warte auf Anreicherung der Kieze durch Bezirke
+      _kieze.add(kieze);
+    ***REMOVED***);
+  ***REMOVED***
 
-  static Future<Set<Kiez>> loadKieze() async {
+  Future<Set<Kiez>> loadKieze() async {
     var jsonCentroids = await fileReader.loadKiezeCentroids();
     var jsonPolygons = await fileReader.loadKiezePolygons();
 
@@ -30,25 +41,7 @@ class StammdatenService {
         .toSet();
   ***REMOVED***
 
-  static Future<Set<Bezirk>> loadBezirke() async {
-    final json = await fileReader.loadBezirke();
-
-    final centroidsList = (jsonDecode(json)['features'] as List);
-
-    final bezirke =
-        centroidsList.map((bezirkJson) => Bezirk.fromJson(bezirkJson)).toSet();
-
-    final ortsteile = await StammdatenService.ortsteile;
-    bezirke.forEach((bezirk) => bezirk.ortsteile = ortsteile
-        .where((ortsteil) => ortsteil.id.startsWith(bezirk.id))
-        .map((ortsteil) =>
-            ortsteil..kieze.forEach((kiez) => kiez.bezirk = bezirk.name))
-        .toSet());
-
-    return bezirke;
-  ***REMOVED***
-
-  static Future<Set<Ortsteil>> loadOrtsteile() async {
+  Future<Set<Ortsteil>> loadOrtsteile(Set<Kiez> kieze) async {
     final jsonCentroids = await fileReader.loadOrtsteileCentroids();
     final jsonPolygons = await fileReader.loadOrtsteilePolygons();
 
@@ -63,10 +56,26 @@ class StammdatenService {
         .map((id) => Ortsteil.fromJson(centroidsMap[id], polygonsMap[id]))
         .toSet();
 
-    var kieze = await _kieze;
     ortsteile.forEach((ortsteil) => ortsteil.kieze =
         kieze.where((kiez) => kiez.id.startsWith(ortsteil.id)).toSet());
 
     return ortsteile;
+  ***REMOVED***
+
+  Future<Set<Bezirk>> loadBezirke(Set<Ortsteil> ortsteile) async {
+    final json = await fileReader.loadBezirke();
+
+    final centroidsList = (jsonDecode(json)['features'] as List);
+
+    final bezirke =
+        centroidsList.map((bezirkJson) => Bezirk.fromJson(bezirkJson)).toSet();
+
+    bezirke.forEach((bezirk) => bezirk.ortsteile = ortsteile
+        .where((ortsteil) => ortsteil.id.startsWith(bezirk.id))
+        .map((ortsteil) =>
+            ortsteil..kieze.forEach((kiez) => kiez.bezirk = bezirk.name))
+        .toSet());
+
+    return bezirke;
   ***REMOVED***
 ***REMOVED***
