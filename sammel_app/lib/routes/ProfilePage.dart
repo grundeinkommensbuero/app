@@ -112,7 +112,7 @@ class ProfilePageState extends State<ProfilePage> {
     var allLocations = await StammdatenService.kieze;
     var selection = (await KiezPicker(allLocations
                 .where((kiez) => myKieze.contains(kiez.name))
-                .toList())
+                .toSet())
             .showKiezPicker(context))
         ?.map((kiez) => kiez.name)
         ?.toList();

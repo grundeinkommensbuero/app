@@ -34,7 +34,7 @@ class FilterWidgetState extends State<FilterWidget>
   var loading = true;
 
   StorageService storageService;
-  List<Kiez> allLocations;
+  Set<Kiez> allLocations;
 
   @override
   Widget build(BuildContext context) {
@@ -244,7 +244,7 @@ class FilterWidgetState extends State<FilterWidget>
   locationSelection() async {
     var selectedLocations = await KiezPicker(allLocations
         .where((kiez) => filter.orte.contains(kiez.name))
-        .toList())
+        .toSet())
         .showKiezPicker(context);
 
     if (selectedLocations == null) return;
