@@ -41,9 +41,9 @@ class Kiez {
   String bezirk;
   List<LatLng> polygon;
 
-  Kiez(String name, String ortsteil, List<LatLng> polygon) {
+  Kiez(String name, String bezirk, List<LatLng> polygon) {
     this.name = name;
-    this.bezirk = ortsteil;
+    this.bezirk = bezirk;
     this.polygon = polygon;
   }
 

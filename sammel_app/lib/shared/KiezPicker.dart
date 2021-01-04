@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:poly/poly.dart' as poly;
+import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 
@@ -23,14 +24,18 @@ class KiezPicker {
   double KIEZE_THRESHOLD = 12;
   double ORTSTEILE_THRESHOLD = 11;
 
+  StammdatenService stammdatenService;
+
   KiezPicker(this.selectedKieze) {
     if (this.selectedKieze == null) this.selectedKieze = {};
   }
 
   Future<Set<Kiez>> showKiezPicker(context) async {
-    kieze = await StammdatenService.kieze;
-    ortsteile = await StammdatenService.ortsteile;
-    bezirke = await StammdatenService.bezirke;
+    stammdatenService = Provider.of<StammdatenService>(context);
+
+    kieze = await stammdatenService.kieze;
+    ortsteile = await stammdatenService.ortsteile;
+    bezirke = await stammdatenService.bezirke;
     kiezeOutlines = generateKiezOutlines(kieze);
     ortsteileOutlines = generateOrtsteilOutlines(ortsteile);
     bezirkeOutlines = generateBezirkOutlines(bezirke);
@@ -53,7 +58,6 @@ class KiezPicker {
                   contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
                   titlePadding: EdgeInsets.zero,
                   title: AppBar(
-                      leading: null,
                       automaticallyImplyLeading: false,
                       title: const Text('Bezirke oder Kieze auswählen')),
                   children: [

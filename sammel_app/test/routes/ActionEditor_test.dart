@@ -100,7 +100,7 @@ void main() {
           findsOneWidget);
     });
 
-    testWidgets('Type dialog shows correct no typ',
+    testWidgets('Type dialog shows Sammeln as default',
         (WidgetTester tester) async {
       await _openActionCreator(tester);
 
@@ -108,7 +108,7 @@ void main() {
       expect(
           find.descendant(
               of: find.byKey(Key('action creator')),
-              matching: find.text('Wähle die Art der Aktion')),
+              matching: find.text('Sammeln')),
           findsOneWidget);
     });
 
@@ -439,15 +439,7 @@ void main() {
           ActionEditorState.determineMapCenter(actionData), LatLng(52.2, 43.2));
     });
 
-    test('returns location, if given and no coordinates', () {
-      var actionData = ActionData(null, null, null,
-          Kiez('Bezirk', 'Ort', []), null, null, null);
-
-      expect(
-          ActionEditorState.determineMapCenter(actionData), LatLng(52.1, 43.1));
-    });
-
-    test('returns null, if neither coordinates nor location given', () {
+    test('returns null, if no coordinates given', () {
       var actionData = ActionData(null, null, null, null, null, null, null);
 
       expect(ActionEditorState.determineMapCenter(actionData), null);
@@ -718,7 +710,7 @@ void main() {
       expect(state.action.von, isNull);
       expect(state.action.bis, isNull);
       expect(state.action.ort, isNull);
-      expect(state.action.typ, isNull);
+      expect(state.action.typ, 'Sammeln');
       expect(state.action.tage, isEmpty);
       expect(state.action.terminDetails.beschreibung, isEmpty);
       expect(state.action.terminDetails.kontakt, isEmpty);
@@ -745,7 +737,7 @@ void main() {
       expect(state.action.von, isNull);
       expect(state.action.bis, isNull);
       expect(state.action.ort, isNull);
-      expect(state.action.typ, isNull);
+      expect(state.action.typ, 'Sammeln');
       expect(state.action.tage, isEmpty);
       expect(state.action.terminDetails.beschreibung, isEmpty);
       expect(state.action.terminDetails.kontakt, isEmpty);

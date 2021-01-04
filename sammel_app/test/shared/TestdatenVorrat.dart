@@ -8,7 +8,7 @@ User karl() => User(11, 'Karl Marx', Colors.red);
 User rosa() => User(12, 'Rosa Luxemburg', Colors.purple);
 
 Kiez ffAlleeNord() =>
-    Kiez('Friedrichshain-Kreuzberg', 'Frankfurter Allee Nord', [
+    Kiez('Frankfurter Allee Nord', 'Friedrichshain-Kreuzberg', [
       LatLng(13.4471675, 52.5264082),
       LatLng(13.4474491, 52.5260284),
       LatLng(13.4478982, 52.5253839),
@@ -132,7 +132,7 @@ Kiez ffAlleeNord() =>
     ]);
 
 Kiez tempVorstadt() =>
-    Kiez('Friedrichshain-Kreuzberg', 'Tempelhofer Vorstadt', [
+    Kiez('Tempelhofer Vorstadt', 'Friedrichshain-Kreuzberg', [
       LatLng(13.420225, 52.4961569),
       LatLng(13.4197404, 52.4961965),
       LatLng(13.4193312, 52.496176),
@@ -441,7 +441,7 @@ Kiez tempVorstadt() =>
     ]);
 
 Kiez plaenterwald() =>
-    Kiez('Treptow-Köpenick', 'Plänterwald', [
+    Kiez('Plänterwald', 'Treptow-Köpenick', [
       LatLng(13.4907077, 52.487443),
       LatLng(13.490441, 52.4875047),
       LatLng(13.4898694, 52.4876352),

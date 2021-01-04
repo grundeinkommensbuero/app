@@ -20,6 +20,7 @@ class ProfilePage extends StatefulWidget {
 
 class ProfilePageState extends State<ProfilePage> {
   var init = false;
+  StammdatenService stammdatenService;
   StorageService storageService;
   AbstractUserService userService;
   AbstractPushNotificationManager pushNotificationManager;
@@ -29,9 +30,11 @@ class ProfilePageState extends State<ProfilePage> {
 
   static const intervalOptions = ['sofort', 'täglich', 'wöchentlich', 'nie'];
 
+
   @override
   Widget build(BuildContext context) {
     if (init == false) {
+      stammdatenService = Provider.of<StammdatenService>(context);
       storageService = Provider.of<StorageService>(context);
       userService = Provider.of<AbstractUserService>(context);
       pushNotificationManager =
@@ -109,7 +112,7 @@ class ProfilePageState extends State<ProfilePage> {
   }
 
   showKiezPicker() async {
-    var allLocations = await StammdatenService.kieze;
+    var allLocations = await stammdatenService.kieze;
     var selection = (await KiezPicker(allLocations
                 .where((kiez) => myKieze.contains(kiez.name))
                 .toSet())

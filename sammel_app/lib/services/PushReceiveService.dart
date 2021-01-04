@@ -22,26 +22,29 @@ abstract class PushReceiveService {
 }
 
 class FirebaseReceiveService implements PushReceiveService {
-  FirebaseMessaging firebaseMessaging;
-
-  Future<String> token;
+  static FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  static StreamController<String> _tokenStreamController = StreamController();
+  Future<String> token = _tokenStreamController.stream.first;
 
   FirebaseReceiveService([FirebaseMessaging firebaseMock]) {
-    firebaseMessaging =
-        firebaseMock != null ? firebaseMock : FirebaseMessaging();
-    initializeFirebase();
+    if (firebaseMock != null)
+      firebaseMessaging = firebaseMock;
+    else if (pullMode) { // DEBUG
+      _tokenStreamController.add(null);
+    } else
+      initializeFirebase();
   }
 
   initializeFirebase() async {
-    // DEBUG
-    if (pullMode) return;
+    await firebaseMessaging
+        .getToken()
+        .timeout(Duration(seconds: 5), onTimeout: () => null)
+        .then((token) => _tokenStreamController.add(token));
 
     // For iOS request permission first.
     await firebaseMessaging.requestNotificationPermissions();
 
-    token = firebaseMessaging
-        .getToken()
-        .timeout(Duration(seconds: 5), onTimeout: () => null);
+    print('Firebase initialisiert mit Token: ${await token}');
   }
 
   @override
@@ -77,6 +80,7 @@ class PullService extends BackendService implements PushReceiveService {
 
   PullService(AbstractUserService userService, Backend backend)
       : super(userService, backend) {
+    print('Starte Pulling');
     timer = Timer.periodic(Duration(seconds: 10), (_) => pull());
   }
 
