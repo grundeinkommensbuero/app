@@ -182,7 +182,7 @@ class TermineSeiteState extends State<TermineSeite>
     _initialized = true;
   ***REMOVED***
 
-  Future<void >ladeTermine(TermineFilter filter) async {
+  Future<void> ladeTermine(TermineFilter filter) async {
     await termineService.loadActions(filter).then((termine) {
       setState(() {
         this.termine = termine..sort(Termin.compareByStart);

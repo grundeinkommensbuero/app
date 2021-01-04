@@ -22,13 +22,13 @@ void main() {
 
     expect(kieze.length, 3);
 
-    expect(kieze[0].bezirk, 'Mitte');
-    expect(kieze[0].name, 'Tiergarten Süd');
+    expect(kieze.toList()[0].bezirk, 'Mitte');
+    expect(kieze.toList()[0].name, 'Tiergarten Süd');
 
-    expect(kieze[1].bezirk, 'Mitte');
-    expect(kieze[1].name, 'Regierungsviertel');
+    expect(kieze.toList()[1].bezirk, 'Mitte');
+    expect(kieze.toList()[1].name, 'Regierungsviertel');
 
-    expect(kieze[2].bezirk, 'Mitte');
-    expect(kieze[2].name, 'Alexanderplatz');
+    expect(kieze.toList()[2].bezirk, 'Mitte');
+    expect(kieze.toList()[2].name, 'Alexanderplatz');
   ***REMOVED***);
 ***REMOVED***
