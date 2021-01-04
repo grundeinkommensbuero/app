@@ -89,7 +89,7 @@ class FilterWidgetState extends State<FilterWidget>
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(Icons.playlist_add_check),
+                    SizedBox(width: 50),
                     loading
                         ? Container(
                             width: 30,
@@ -100,7 +100,7 @@ class FilterWidgetState extends State<FilterWidget>
                         : Text(buttonText,
                             key: Key('filter button text'),
                             textScaleFactor: 1.2),
-                    Icon(expanded ? Icons.done : Icons.arrow_drop_down),
+                    Icon(expanded ? Icons.done : Icons.filter_alt_sharp),
                   ],
                 ),
                 onPressed: () {
