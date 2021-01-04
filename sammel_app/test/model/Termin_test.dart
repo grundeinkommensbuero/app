@@ -114,7 +114,7 @@ void main() {
               '"typ":"Sammeln",'
               '"latitude":52.52116,'
               '"longitude":13.41331}'),
-          [ffAlleeNord()]);
+          [ffAlleeNord()].toSet());
       expect(termin.id, 1);
       expect(termin.beginn, equals(DateTime(2020, 1, 2, 15, 0, 0)));
       expect(termin.ende, equals(DateTime(2020, 1, 2, 18, 0, 0)));
@@ -140,7 +140,7 @@ void main() {
               '"id":1,'
               '"ort":"Frankfurter Allee Nord",'
               '"typ":"Sammeln"}'),
-          [ffAlleeNord()]);
+          [ffAlleeNord()].toSet());
       expect(termin.details.treffpunkt, "Weltzeituhr");
       expect(termin.details.beschreibung,
           "wir stellen uns an die Ubhf-Eingänge. ihr erkennt mich an der DWE-Weste");

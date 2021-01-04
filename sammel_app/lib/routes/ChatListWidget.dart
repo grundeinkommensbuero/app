@@ -107,7 +107,7 @@ class ChatListState extends State<ChatListWidget>
                                 ),
                           Padding(
                               padding: EdgeInsets.only(top: 3.0, bottom: 5.0),
-                              child: Text(
+                              child: SelectableText(
                                 message.text,
                                 textScaleFactor: 1.2,
                               )),
