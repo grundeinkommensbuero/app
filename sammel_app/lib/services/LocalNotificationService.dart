@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
+import 'package:sammel_app/services/PushNotificationManager.dart';
 
 // Siehe https://pub.dev/packages/flutter_local_notifications
 
@@ -35,11 +36,11 @@ const AndroidNotificationChannel defaultChannel = AndroidNotificationChannel(
 class LocalNotificationService
 {
   ValueNotifier plugin = ValueNotifier(null);
-  ChatMessageService cms = null;
-  LocalNotificationService(ChatMessageService cms)
+  PushNotificationManager pnm = null;
+  LocalNotificationService(PushNotificationManager pnm)
   {
     initializeLocalNotifications().then((value) => plugin.value = value);
-    this.cms = cms;
+    this.pnm = pnm;
   }
 
   Future<FlutterLocalNotificationsPlugin> initializeLocalNotifications() async {
@@ -80,8 +81,8 @@ class LocalNotificationService
 
   Future selectNotification(String payload) {
     print('Nachricht geklickt');
-    var chatMessage = ChatMessagePushData.fromJson(jsonDecode(payload));
-    cms.receive_message(chatMessage.toJson());
+    Map<dynamic, dynamic> json_data = jsonDecode(payload);
+    pnm.onLocalMessageCallback(json_data);
 
     // TODO on tap
   }

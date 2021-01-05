@@ -70,12 +70,29 @@ class PushNotificationManager implements AbstractPushNotificationManager {
 
   Future<dynamic> onMessageCallback(Map<dynamic, dynamic> message) async {
     print('Push-Nachricht empfangen: $message');
-    handle_message(message);
+    handle_message(message, true);
   }
 
-  void handle_message(Map message) {
+  Future<dynamic> onLocalMessageCallback(Map<dynamic, dynamic> message) async {
+    print('Local-Nachricht empfangen: $message');
+    String type = message['type'];
+    if (callback_map.containsKey(type)) {
+      callback_map[type].handleNotificationTap(message);
+    }
+  }
+
+  void handle_message(Map message, bool is_encrypted) {
     try {
-      var data = decrypt(message['data']);
+      var data = null;
+      if (is_encrypted)
+      {
+        data = decrypt(message['data']);
+      }
+      else
+        {
+          data = message;
+        }
+
       if (data.containsKey('type')) {
         String type = data['type'];
         if (callback_map.containsKey(type)) {

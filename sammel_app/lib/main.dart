@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
       ChatMessageService(storageService, pushNotificationManager, navigatorKey);
   static var geoService = GeoService();
   static var localNotificationService =
-      LocalNotificationService(chatMessageService);
+      LocalNotificationService(pushNotificationManager);
 
   @override
   Widget build(BuildContext context) {
