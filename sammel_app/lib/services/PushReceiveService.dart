@@ -27,6 +27,7 @@ class FirebaseReceiveService implements PushReceiveService {
   Future<String> token;
 
   FirebaseReceiveService([FirebaseMessaging firebaseMock]) {
+    print('init firebase');
     firebaseMessaging =
         firebaseMock != null ? firebaseMock : FirebaseMessaging();
     initializeFirebase();

@@ -43,18 +43,18 @@ class ChatChannel {
   ***REMOVED***
 
   void register_channel_change_listener(ChannelChangeListener c) {
-    if (ccl == null)
+    if (ccl == null) {
       ccl = c;
+    ***REMOVED***
     else if(c != ccl)
       {
         print('The Channel is already associated to a widget');
-        ChatListState cls = ccl;
-        Navigator.pop(cls.context);
         ccl = c;
       ***REMOVED***
   ***REMOVED***
 
   void dispose_widget() {
+    print('disposing widget');
     ccl = null;
   ***REMOVED***
 

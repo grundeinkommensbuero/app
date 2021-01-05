@@ -15,9 +15,13 @@ import 'ChatWindow.dart';
 
 class ChatListWidget extends StatefulWidget {
   ChatChannel channel;
-  ScrollController scroll_controller = ScrollController();
+  ScrollController scroll_controller = null;
+  double position = 0;
 
-  ChatListWidget(this.channel, {Key key***REMOVED***) : super(key: key);
+  ChatListWidget(this.channel, {Key key***REMOVED***) : super(key: key)
+  {
+    scroll_controller = ScrollController(keepScrollOffset: false);
+  ***REMOVED***
 
   @override
   ChatListState createState() => ChatListState(this.channel);
@@ -31,6 +35,9 @@ class ChatListState extends State<ChatListWidget>
 
   ChatListState(ChatChannel channel) {
     this.channel = channel;
+    this.channel.register_channel_change_listener(this);
+   // widget.scroll_controller.addListener(() {widget.position = widget.scroll_controller.hasClients ? widget.scroll_controller.position.extentBefore : 0; ***REMOVED***);
+
   ***REMOVED***
 
   Widget build(context) {
@@ -41,17 +48,19 @@ class ChatListState extends State<ChatListWidget>
           .listen((user) => setState(() => this.user = user));
     ***REMOVED***
 
-    this.channel.register_channel_change_listener(this);
     var list_view = Container(
         decoration: DweTheme.happyHouseBackground,
         child: ListView(
             padding: EdgeInsets.all(8.0),
             controller: widget.scroll_controller,
-            children: buildListMessage()));
+            children:  buildListMessage().reversed.toList(), reverse: true));//widget.position == 0 ? buildListMessage().reversed.toList() : buildListMessage() , reverse: widget.position == 0,  ));
+     //   if(widget.position>0)
+     //     widget.scroll_controller.jumpTo(widget.position);
+    /*
     Timer(
         Duration(milliseconds: 500),
             () => widget.scroll_controller
-            .jumpTo(widget.scroll_controller.position.maxScrollExtent));
+            .jumpTo(widget.scroll_controller.position.maxScrollExtent));*/
     return list_view;
   ***REMOVED***
 
@@ -62,10 +71,11 @@ class ChatListState extends State<ChatListWidget>
       widget.channel = channel;
     ***REMOVED***);
     //we need this hack to enable scrolling to the end of the list on message received
+    /*
     Timer(
         Duration(milliseconds: 500),
         () => widget.scroll_controller
-            .jumpTo(widget.scroll_controller.position.maxScrollExtent));
+            .jumpTo(widget.scroll_controller.position.maxScrollExtent));*/
   ***REMOVED***
 
   List<Widget> buildListMessage() {

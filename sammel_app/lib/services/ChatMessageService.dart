@@ -54,11 +54,8 @@ class ChatMessageService implements PushNotificationListener {
   @override
   Future<void> handleNotificationTap(Map<dynamic, dynamic> data) async {
     final channel = await getChannel(ChatPushData.fromJson(data).channel);
-    int termin_id = int.parse(channel.id.split(':')[1]);
-    Provider.of<AbstractTermineService>(navigatorKey.currentContext)
-        .getActionWithDetails(termin_id)
-        .then((value) => navigatorKey.currentState.push(MaterialPageRoute(
-            builder: (context) => ChatWindow(channel, value))));
+    ChatListState cls = channel.ccl;
+    create_or_recreat_chat_page(cls, channel);
   ***REMOVED***
 
   void create_or_recreat_chat_page(ChatListState cls, ChatChannel channel) {
@@ -67,11 +64,10 @@ class ChatMessageService implements PushNotificationListener {
         Navigator.pop(cls.context);
       ***REMOVED***
       int termin_id = int.parse(channel.id.split(':')[1]);
-      Future<Termin> termin =
-          Provider.of<AbstractTermineService>(navigatorKey.currentContext)
-              .getActionWithDetails(termin_id);
-      termin.then((value) => navigatorKey.currentState.push(
-          MaterialPageRoute(builder: (context) => ChatWindow(channel, value))));
+      Provider.of<AbstractTermineService>(navigatorKey.currentContext)
+          .getActionWithDetails(termin_id)
+          .then((value) => navigatorKey.currentState.push(MaterialPageRoute(
+          builder: (context) => ChatWindow(channel, value))));
     ***REMOVED***
   ***REMOVED***
 

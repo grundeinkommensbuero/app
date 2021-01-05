@@ -62,8 +62,8 @@ class ChatMessage implements Message {
         msg.sender_name == msg.sender_name &&
         timestamp.isAtSameMomentAs(msg.timestamp) &&
         message_color.value == msg.message_color.value &&
-        user_id == msg.user_id &&
-        obtained_from_server == msg.obtained_from_server;
+        user_id == msg.user_id;// &&
+       // obtained_from_server == msg.obtained_from_server;
   ***REMOVED***
 ***REMOVED***
 
