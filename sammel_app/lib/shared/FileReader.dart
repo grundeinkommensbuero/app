@@ -8,7 +8,7 @@ class FileReader {
   static const kieze_polygons = 'assets/geodata/Bezirksregionen/Berlin_bezirksregionen_polygons.geojson';
   static const ortsteile_centroids = 'assets/geodata/Prognoseraeume/Berlin_prognoseraeume_poi.geojson';
   static const ortsteile_polygons = 'assets/geodata/Prognoseraeume/Berlin_prognoseraeume_polygons.geojson';
-  static const bezirke = 'assets/geodata/Bezirke/Berlin_bezirke.geojson';
+  static const bezirke = 'assets/geodata/Bezirke/Berlin_bezirke_custom_generalized.geojson';
 
   FileReader();
 

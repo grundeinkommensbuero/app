@@ -85,7 +85,7 @@ flutter:
    - assets/images/housy_problem.png
    - assets/security/sammel-server_local.pem
    - assets/security/root-cert.pem
-   - assets/geodata/Bezirke/Berlin_bezirke.geojson
+   - assets/geodata/Bezirke/Berlin_bezirke_custom_generalized.geojson
    - assets/geodata/Bezirksregionen/Berlin_bezirksregionen_poi.geojson
    - assets/geodata/Bezirksregionen/Berlin_bezirksregionen_polygons.geojson
    - assets/geodata/Prognoseraeume/Berlin_prognoseraeume_poi.geojson
