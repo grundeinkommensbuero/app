@@ -8,8 +8,8 @@ class Bezirk {
   Set<Ortsteil> ortsteile;
 
   Bezirk.fromJson(json)
-      : id = (json['properties']['Gemeinde_s'] as String).substring(1),
-        name = json['properties']['Gemeinde_n'],
+      : id = (json['properties']['BEZIRK'] as String),
+        name = json['properties']['BEZIRKSREG'],
         polygon = json['geometry']['type'] == 'MultiPolygon'
             ? (json['geometry']['coordinates'][0][0] as List)
                 .map((e) => LatLng(e[1], e[0]))
