@@ -7,6 +7,8 @@ class Bezirk {
   List<LatLng> polygon;
   Set<Ortsteil> ortsteile;
 
+  Bezirk(this.id, this.name, this.polygon, this.ortsteile);
+
   Bezirk.fromJson(json)
       : id = (json['properties']['BEZIRK'] as String),
         name = json['properties']['BEZIRKSREG'],
@@ -23,6 +25,8 @@ class Ortsteil {
   String id;
   List<LatLng> polygon;
   Set<Kiez> kieze;
+
+  Ortsteil(this.id, this.polygon, this.kieze);
 
   Ortsteil.fromJson(centroidJson, polygonJson)
       : id = centroidJson['properties']['SCHLUESSEL'],
