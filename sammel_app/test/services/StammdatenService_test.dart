@@ -21,7 +21,6 @@ FileReader fileReaderMock = TestFileReader();
 void main() {
   StammdatenService stammdatenService;
   setUp(() {
-    reset(fileReaderMock);
     StammdatenService.fileReader = TestFileReader();
     stammdatenService = StammdatenService();
   });

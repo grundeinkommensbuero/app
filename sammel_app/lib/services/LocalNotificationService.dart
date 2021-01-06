@@ -69,7 +69,6 @@ Future onDidReceiveLocalNotification(
 Future selectNotification(String payload) {
   print('Nachricht geklickt');
   var chatMessage = ChatMessagePushData.fromJson(jsonDecode(payload));
-  // TODO on tap
 }
 
 Future sendChatNotification(ChatMessagePushData chatMessage) async {
@@ -83,7 +82,6 @@ Future sendChatNotification(ChatMessagePushData chatMessage) async {
   NotificationDetails platformChannelSpecifics =
       NotificationDetails(android: androidPlatformChannelSpecifics);
 
-  print('Setze Notification ab');
   plugin.show(
       chatMessage.channel.hashCode,
       'Nachricht von ${chatMessage.message.sender_name}',

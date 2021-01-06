@@ -220,8 +220,6 @@ class ChatWindowState extends State<ChatWindow> {
     this.channel.dispose_widget();
     myFocusNode.dispose();
     super.dispose();
-    //this method not called when user press android back button or quit
-    print('dispose');
   }
 
   void onFocusChange() {

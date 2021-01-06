@@ -137,12 +137,9 @@ class FilterWidgetState extends State<FilterWidget>
       });
       onApply();
     });
-    print('<FilterWidget> StammdatenService.kieze');
-    Provider.of<StammdatenService>(context).kieze.then((locations) {
-      print('<FilterWidget> allLocations = locations');
-      setState(() => allLocations = locations);
-    });
-    print('<FilterWidget> _initialized = true;');
+    Provider.of<StammdatenService>(context)
+        .kieze
+        .then((locations) => setState(() => allLocations = locations));
     _initialized = true;
   }
 

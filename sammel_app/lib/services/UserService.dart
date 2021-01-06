@@ -112,7 +112,6 @@ class UserService extends AbstractUserService {
   Future<String> generateSecret() async {
     String secret = Uuid().v1();
     await storageService.saveSecret(secret);
-    print('Secret gespeichert: $secret');
     return secret;
   }
 
