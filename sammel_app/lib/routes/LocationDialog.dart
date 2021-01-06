@@ -44,8 +44,6 @@ class LocationDialogState extends State<LocationDialog> {
   Location location;
   TextEditingController venueController;
 
-  StammdatenService stammdatenService;
-
   LocationDialogState(
       Location initVenue, LocationMarker initMarker, LatLng center) {
     marker = initMarker;
@@ -55,9 +53,6 @@ class LocationDialogState extends State<LocationDialog> {
 
   @override
   Widget build(BuildContext context) {
-    if(stammdatenService == null)
-      stammdatenService = Provider.of<StammdatenService>(context);
-
     return AlertDialog(
       title: Text('Treffpunkt'),
       content: SingleChildScrollView(
@@ -81,7 +76,7 @@ class LocationDialogState extends State<LocationDialog> {
                         center: widget.center ?? LatLng(52.5170365, 13.3888599),
                         zoom: widget.center != null ? 14.0 : 10.0,
                         maxZoom: 19.0,
-                        onTap: (LatLng point) => locationSelected(point)),
+                        onTap: locationSelected),
                     layers: [
                       TileLayerOptions(
                           urlTemplate:
@@ -143,14 +138,14 @@ class LocationDialogState extends State<LocationDialog> {
     );
   }
 
-  void locationSelected(LatLng point) async {
+  locationSelected(LatLng point) async {
     var geodata = await Provider.of<GeoService>(context)
         .getDescriptionToPoint(point)
         .catchError((e, s) {
       ErrorService.handleError(e, s);
       return '';
     });
-    var kiez = (await stammdatenService.kieze).firstWhere(
+    var kiez = (await StammdatenService.kieze).firstWhere(
         (kiez) => poly.Polygon(kiez.polygon
                 .map((latlng) =>
                     poly.Point<num>(latlng.latitude, latlng.longitude))

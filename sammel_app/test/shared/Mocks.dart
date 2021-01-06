@@ -14,11 +14,17 @@ import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
-import 'package:sammel_app/shared/FileReader.dart';
 
 import 'TestdatenVorrat.dart';
 
-class StammdatenServiceMock extends Mock implements StammdatenService {}
+void configureStammdatenMock() {
+    StammdatenService.kieze =
+        Future.value([ffAlleeNord(), tempVorstadt(), plaenterwald()].toSet());
+    StammdatenService.ortsteile =
+        Future.value([fhainOst(), kreuzbergSued(), koepenick1()].toSet());
+    StammdatenService.bezirke =
+        Future.value([friedrichshain(), kreuzberg(), koepenick()].toSet());
+}
 
 class TermineServiceMock extends Mock implements AbstractTermineService {}
 
@@ -75,7 +81,5 @@ class FirebaseReceiveServiceMock extends Mock
     implements FirebaseReceiveService {}
 
 class DemoPushSendServiceMock extends Mock implements DemoPushSendService {}
-
-class FileReaderMock extends Mock implements FileReader {}
 
 class GeoServiceMock extends Mock implements GeoService {}

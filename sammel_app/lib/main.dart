@@ -6,7 +6,6 @@ import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
-import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
@@ -33,7 +32,6 @@ final GlobalKey<TermineSeiteState> actionPageKey =
     GlobalKey<TermineSeiteState>();
 
 class MyApp extends StatelessWidget {
-  static var stammdatenService = StammdatenService();
   static var firebaseService = FirebaseReceiveService();
   static var storageService = StorageService();
   static final backend = Backend(version);
@@ -48,9 +46,9 @@ class MyApp extends StatelessWidget {
       : PushNotificationManager(
           storageService, userService, firebaseService, backend);
   var termineService = demoMode
-      ? DemoTermineService(userService, stammdatenService)
-      : TermineService(userService, backend, stammdatenService,
-          pushNotificationManager, navigatorKey);
+      ? DemoTermineService(userService)
+      : TermineService(
+          userService, backend, pushNotificationManager, navigatorKey);
   static var listLocationService = demoMode
       ? DemoListLocationService(userService)
       : ListLocationService(userService, backend);
@@ -62,7 +60,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          Provider<StammdatenService>.value(value: stammdatenService),
           Provider<AbstractTermineService>.value(value: termineService),
           Provider<AbstractListLocationService>.value(
               value: listLocationService),

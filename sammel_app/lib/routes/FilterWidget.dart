@@ -25,7 +25,6 @@ class FilterWidget extends StatefulWidget {
 class FilterWidgetState extends State<FilterWidget>
     with TickerProviderStateMixin {
   TermineFilter filter = TermineFilter.leererFilter();
-  StammdatenService stammdatenService;
 
   var _initialized = false;
 
@@ -131,7 +130,6 @@ class FilterWidgetState extends State<FilterWidget>
 
   // Kann nicht im Konstruktor ausgeführt werden, weil der Provider den context braucht, der ins build reingereicht wird
   void initialize(BuildContext context) {
-    stammdatenService = Provider.of<StammdatenService>(context);
     storageService = Provider.of<StorageService>(context);
     storageService.loadFilter().then((filter) {
       setState(() {
@@ -139,7 +137,7 @@ class FilterWidgetState extends State<FilterWidget>
       });
       onApply();
     });
-    stammdatenService.kieze
+    StammdatenService.kieze
         .then((locations) => setState(() => allLocations = locations));
     _initialized = true;
   }

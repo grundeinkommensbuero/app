@@ -23,7 +23,8 @@ abstract class PushReceiveService {
 
 class FirebaseReceiveService implements PushReceiveService {
   static FirebaseMessaging firebaseMessaging = FirebaseMessaging();
-  static StreamController<String> _tokenStreamController = StreamController();
+  static StreamController<String> _tokenStreamController =
+      StreamController.broadcast();
   Future<String> token = _tokenStreamController.stream.first;
 
   FirebaseReceiveService([FirebaseMessaging firebaseMock]) {

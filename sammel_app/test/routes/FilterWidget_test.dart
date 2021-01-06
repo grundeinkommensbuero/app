@@ -6,7 +6,6 @@ import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/FilterWidget.dart';
-import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 
@@ -22,14 +21,10 @@ Future iWasCalled(TermineFilter result) async {
   return Future.value();
 }
 
-final _stammdatenService = StammdatenServiceMock();
 final _storageService = StorageServiceMock();
 
 void main() {
-  setUp(() {
-    when(_stammdatenService.kieze).thenAnswer(
-        (_) async => [ffAlleeNord(), tempVorstadt(), plaenterwald()].toSet());
-  });
+  configureStammdatenMock();
 
   group('ui', () {
     setUpUI((WidgetTester tester) async {
@@ -372,7 +367,6 @@ void main() {
 Future pumpFilterWidget(WidgetTester tester) async {
   FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key('filter'));
   await tester.pumpWidget(MultiProvider(providers: [
-    Provider<StammdatenService>.value(value: _stammdatenService),
     Provider<StorageService>.value(value: _storageService)
   ], child: MaterialApp(home: filterWidget)));
 }

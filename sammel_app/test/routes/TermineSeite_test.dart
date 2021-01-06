@@ -27,7 +27,6 @@ import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';
 
-final _stammdatenService = StammdatenServiceMock();
 final _termineService = TermineServiceMock();
 final _listLocationService = ListLocationServiceMock();
 final _storageService = StorageServiceMock();
@@ -37,6 +36,8 @@ final _chatMessageService = ChatMessageServiceMock();
 final _pushManager = PushNotificationManagerMock();
 
 void main() {
+  configureStammdatenMock();
+
   MultiProvider termineSeiteWidget;
 
   setUp(() {
@@ -57,7 +58,6 @@ void main() {
               value: _listLocationService),
           Provider<StorageService>.value(value: _storageService),
           Provider<AbstractUserService>.value(value: _userService),
-          Provider<StammdatenService>.value(value: _stammdatenService),
           Provider<ChatMessageService>.value(value: _chatMessageService),
         ],
         child: MaterialApp(home: Builder(builder: (BuildContext context) {
@@ -164,8 +164,10 @@ void main() {
           ]);
 
       await tester.pumpWidget(termineSeiteWidget);
+      await StammdatenService.bezirke;
+      await tester.pumpAndSettle(Duration(seconds: 1));
 
-      expect(find.text('Filter'), findsOneWidget);
+      expect(find.text('Aktualisieren'), findsOneWidget);
     });
 
     testWidgets('opens on tap', (WidgetTester tester) async {
@@ -177,7 +179,7 @@ void main() {
 
       await tester.pumpWidget(termineSeiteWidget);
 
-      await tester.tap(find.text('Filter'));
+      await tester.tap(find.byIcon(Icons.filter_alt_sharp));
 
       await tester.pump();
 
@@ -1323,7 +1325,6 @@ _pumpNavigation(WidgetTester tester) async {
         Provider<StorageService>.value(value: _storageService),
         Provider<AbstractListLocationService>(
             create: (context) => _listLocationService),
-        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<PushSendService>.value(value: _pushService),
         Provider<AbstractUserService>.value(value: _userService),
         Provider<AbstractPushSendService>.value(value: _pushService),

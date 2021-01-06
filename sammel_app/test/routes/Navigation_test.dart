@@ -10,7 +10,6 @@ import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/PushSendService.dart';
-import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
@@ -19,7 +18,6 @@ import 'package:sammel_app/services/ChatMessageService.dart';
 import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';
 
-final _stammdatenService = StammdatenServiceMock();
 final _termineService = TermineServiceMock();
 final _listLocationService = ListLocationServiceMock();
 final _storageService = StorageServiceMock();
@@ -29,6 +27,8 @@ final _chatService = ChatMessageServiceMock();
 final _pushManager = PushNotificationManagerMock();
 
 void main() {
+  configureStammdatenMock();
+
   group('Navigation', () {
     Navigation navigation;
     var actionPage = GlobalKey(debugLabel: 'action page');
@@ -53,7 +53,6 @@ void main() {
         Provider<StorageService>.value(value: _storageService),
         Provider<AbstractPushSendService>.value(value: _pushService),
         Provider<AbstractUserService>.value(value: _userService),
-        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<ChatMessageService>.value(value: _chatService),
         Provider<AbstractPushNotificationManager>.value(value: _pushManager),
       ], child: MaterialApp(home: navigation)));

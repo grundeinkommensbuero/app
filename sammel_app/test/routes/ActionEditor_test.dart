@@ -23,7 +23,6 @@ import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';
 
-final _stammdatenService = StammdatenServiceMock();
 final _terminService = TermineServiceMock();
 final _listLocationService = ListLocationServiceMock();
 final _storageService = StorageServiceMock();
@@ -33,6 +32,8 @@ final _chatService = ChatMessageServiceMock();
 final _pushManager = PushNotificationManagerMock();
 
 void main() {
+  configureStammdatenMock();
+
   setUp(() {
     when(_storageService.loadFilter()).thenAnswer((_) async => null);
     when(_storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
@@ -659,7 +660,6 @@ void main() {
 
       var actionEditor = ActionEditor(onFinish: onFinish);
       await tester.pumpWidget(MultiProvider(providers: [
-        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<AbstractUserService>.value(value: userServiceMock),
       ], child: MaterialApp(home: actionEditor)));
 
@@ -826,7 +826,6 @@ _pumpNavigation(WidgetTester tester) async {
         Provider<StorageService>.value(value: _storageService),
         Provider<AbstractListLocationService>(
             create: (context) => _listLocationService),
-        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<AbstractPushSendService>.value(value: _pushService),
         Provider<AbstractUserService>.value(value: _userService),
         Provider<ChatMessageService>.value(value: _chatService),
@@ -846,7 +845,6 @@ _pumpActionPage(WidgetTester tester) async {
         Provider<StorageService>.value(value: _storageService),
         Provider<AbstractListLocationService>(
             create: (context) => _listLocationService),
-        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<AbstractUserService>.value(value: _userService),
         Provider<PushSendService>.value(value: _pushService),
         Provider<ChatMessageService>.value(value: _chatService),
