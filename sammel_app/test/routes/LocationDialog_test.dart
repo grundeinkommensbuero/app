@@ -7,25 +7,24 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/routes/LocationDialog.dart';
 import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
-import 'package:sammel_app/shared/FileReader.dart';
 
 import '../services/StammdatenService_test.dart';
 import '../shared/Mocks.dart';
 
-final StammdatenService _stammdatenService = StammdatenServiceMock();
+StammdatenService _stammdatenService;
 final GeoService _geoService = GeoServiceMock();
-final FileReader _fileReaderMock = TestFileReader();
 
 void main() {
   setUp(() async {
     reset(_geoService);
     when(_geoService.getDescriptionToPoint(any))
         .thenAnswer((_) async => GeoData('name', 'street', '12'));
-    reset(_stammdatenService);
-    when(_stammdatenService);
-    reset(_fileReaderMock);
     StammdatenService.fileReader = TestFileReader();
-    await _stammdatenService.kieze;
+    _stammdatenService = StammdatenService();
+    var kieze = await _stammdatenService.kieze;
+    kieze = await _stammdatenService.kieze;
+    kieze = await _stammdatenService.kieze;
+    kieze = await _stammdatenService.kieze;
   ***REMOVED***);
 
   testWidgets('opens dialog', (WidgetTester tester) async {
@@ -115,7 +114,7 @@ void main() {
   ***REMOVED***);
 
   group('centers map', () {
-    testWidgets('at given coordinates', (WidgetTester tester) async {
+    testWidgets('at given coordinates', (tester) async {
       await pumpLocationDialogTester(
           tester, null, null, LatLng(52.49653, 13.43762));
       await tester.tap(find.byKey(Key('open location dialog')));
@@ -126,8 +125,7 @@ void main() {
       expect(map.options.zoom, 14.0);
     ***REMOVED***);
 
-    testWidgets('at Berlin with no coordinates given',
-        (WidgetTester tester) async {
+    testWidgets('at Berlin with no coordinates given', (tester) async {
       await tester.pumpWidget(
           MaterialApp(home: LocationDialogTester(null, null, null)));
       await tester.tap(find.byKey(Key('open location dialog')));
@@ -142,57 +140,70 @@ void main() {
   group('reads input', () {
     testWidgets('with tap on map and creates marker',
         (WidgetTester tester) async {
-      await _pumpLocationDialogTester(
-          tester, LocationDialogTester('description', null, null));
+      // WTF
+      await tester.runAsync(() async {
+        await _pumpLocationDialogTester(
+            tester, LocationDialogTester('description', null, null));
+        await tester.tap(find.byKey(Key('open location dialog')));
 
-      await tester.tap(find.byKey(Key('open location dialog')));
-      await tester.pump();
-      expect(find.byKey(Key('location marker')), findsNothing);
+        await tester.pump();
+        expect(find.byKey(Key('location marker')), findsNothing);
 
-      await tester.tap(find.byKey(Key('venue map')));
-      await tester.pumpAndSettle(Duration(seconds: 10));
+        await tester.tap(find.byKey(Key('venue map')));
+        await Future.delayed(Duration(seconds: 1));
 
-      expect(find.byKey(Key('location marker')), findsOneWidget);
+        await tester.pump();
+        expect(find.byKey(Key('location marker')), findsOneWidget);
+      ***REMOVED***);
     ***REMOVED***);
 
     testWidgets('with tap on map and moves marker',
         (WidgetTester tester) async {
-      var initCoordinates = LatLng(52.51579, 13.45399);
-      await _pumpLocationDialogTester(
-          tester, LocationDialogTester('description', initCoordinates, null));
+      await tester.runAsync(() async {
+        var initCoordinates = LatLng(52.51579, 13.45399);
+        await _pumpLocationDialogTester(
+            tester, LocationDialogTester('description', initCoordinates, null));
 
-      await tester.tap(find.byKey(Key('open location dialog')));
-      await tester.pump();
+        await tester.tap(find.byKey(Key('open location dialog')));
+        LocationDialogState state;
 
-      LocationDialogState state = tester.state(find.byType(LocationDialog));
-      expect(state.marker.point == initCoordinates, true);
+        await tester.pump();
+        state = tester.state(find.byType(LocationDialog));
 
-      await tester.tap(find.byKey(Key('venue map')));
-      await tester.pumpAndSettle();
+        expect(state.marker.point == initCoordinates, true);
 
-      expect(find.byKey(Key('location marker')), findsOneWidget);
-      expect(state.marker.point != initCoordinates, true);
+        await tester.tap(find.byKey(Key('venue map')));
+        await Future.delayed(Duration(seconds: 1));
+
+        await tester.pumpAndSettle();
+
+        expect(find.byKey(Key('location marker')), findsOneWidget);
+        expect(state.marker.point != initCoordinates, true);
+      ***REMOVED***);
     ***REMOVED***);
   ***REMOVED***);
 
   group('returns', () {
     testWidgets('coordinates', (WidgetTester tester) async {
-      await _pumpLocationDialogTester(
-          tester, LocationDialogTester('description', null, null));
+      await tester.runAsync(() async {
+        await _pumpLocationDialogTester(
+            tester, LocationDialogTester('description', null, null));
 
-      await tester.tap(find.byKey(Key('open location dialog')));
-      await tester.pump();
-      LocationDialogState state = tester.state(find.byType(LocationDialog));
+        await tester.tap(find.byKey(Key('open location dialog')));
+        await tester.pump();
+        LocationDialogState state = tester.state(find.byType(LocationDialog));
 
-      await tester.tap(find.byKey(Key('venue map')));
-      await tester.pumpAndSettle();
+        await tester.tap(find.byKey(Key('venue map')));
+        await tester.pumpAndSettle();
 
-      await tester.tap(find.byKey(Key('venue dialog finish button')));
-      await tester.pump();
+        await tester.tap(find.byKey(Key('venue dialog finish button')));
+        await tester.pump();
+        await Future.delayed(Duration(seconds: 1));
 
-      LocationDialogTester venueTester =
-          tester.widget(find.byType(LocationDialogTester));
-      expect(venueTester.result.coordinates, state.marker.point);
+        LocationDialogTester venueTester =
+            tester.widget(find.byType(LocationDialogTester));
+        expect(venueTester.result.coordinates, state.marker.point);
+      ***REMOVED***);
     ***REMOVED***);
 
     testWidgets('new coordinates', (WidgetTester tester) async {

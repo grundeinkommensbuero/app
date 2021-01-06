@@ -42,6 +42,7 @@ void main() {
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
     when(_terminService.loadActions(any)).thenAnswer((_) async => []);
+    when(_pushManager.pushToken).thenAnswer((_) async => 'Token');
   ***REMOVED***);
 
   testWidgets('TermineSeite opens CreateTerminDialog on click at menu button',
@@ -841,6 +842,7 @@ _pumpNavigation(WidgetTester tester) async {
 _pumpActionPage(WidgetTester tester) async {
   await tester.pumpWidget(MultiProvider(
       providers: [
+        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<AbstractTermineService>.value(value: _terminService),
         Provider<StorageService>.value(value: _storageService),
         Provider<AbstractListLocationService>(

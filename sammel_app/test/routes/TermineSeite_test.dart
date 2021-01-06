@@ -48,6 +48,7 @@ void main() {
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
     when(_termineService.loadActions(any)).thenAnswer((_) async => []);
+    when(_pushManager.pushToken).thenAnswer((_) => Future.value('Token'));
     ErrorService.displayedTypes = [];
 
     termineSeiteWidget = MultiProvider(
@@ -167,9 +168,7 @@ void main() {
       await tester.pumpAndSettle(Duration(seconds: 1));
       // await StammdatenService.kieze;
 
-      print('<Test> Warte auf Aktualisiern-Button');
       expect(find.text('Aktualisieren'), findsOneWidget);
-      print('<Test> Aktualisieren-Button gefunden');
     ***REMOVED***);
 
     testWidgets('opens on tap', (WidgetTester tester) async {

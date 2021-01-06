@@ -58,7 +58,6 @@ class StammdatenService {
   ***REMOVED***
 
   static Future<Set<Bezirk>> loadBezirke() async {
-    print('Lade Bezirke');
     var o = await _ortsteile;
     final json = await fileReader.bezirke;
 

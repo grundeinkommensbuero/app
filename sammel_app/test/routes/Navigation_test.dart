@@ -45,6 +45,7 @@ void main() {
       when(_storageService.loadFilter())
           .thenAnswer((_) async => TermineFilter.leererFilter());
       when(_termineService.loadActions(any)).thenAnswer((_) async => []);
+      when(_pushManager.pushToken).thenAnswer((_) async => 'Token');
 
       await tester.pumpWidget(MultiProvider(providers: [
         Provider<StammdatenService>.value(value: _stammdatenService),

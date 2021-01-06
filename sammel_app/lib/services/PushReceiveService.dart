@@ -40,16 +40,15 @@ class FirebaseReceiveService implements PushReceiveService {
   ***REMOVED***
 
   initializeFirebase() async {
-    print('Initialisiere Firebase');
     await firebaseMessaging
         .getToken()
         .timeout(Duration(seconds: 5), onTimeout: () => null)
         .then((token) => _tokenStreamController.add(token));
 
-    print('Firebase initialisiert mit Token: ${await token***REMOVED***');
-
     // For iOS request permission first.
     firebaseMessaging.requestNotificationPermissions();
+
+    print('Firebase initialisiert mit Token: ${await token***REMOVED***');
   ***REMOVED***
 
   @override
