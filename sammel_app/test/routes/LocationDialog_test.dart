@@ -7,23 +7,27 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/routes/LocationDialog.dart';
 import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
+import 'package:sammel_app/shared/FileReader.dart';
 
+import '../services/StammdatenService_test.dart';
 import '../shared/Mocks.dart';
 
 final GeoService geoService = GeoServiceMock();
-final stammdatenService = StammdatenServiceMock();
+FileReader fileReaderMock = TestFileReader();
 
 void main() {
-  setUp(() {
+  setUp(() async {
     reset(geoService);
-    reset(stammdatenService);
     when(geoService.getDescriptionToPoint(any))
         .thenAnswer((_) async => GeoData('name', 'street', '12'));
+    reset(fileReaderMock);
+    StammdatenService.fileReader = TestFileReader();
+    await StammdatenService.kieze;
   ***REMOVED***);
 
   testWidgets('opens dialog', (WidgetTester tester) async {
-    await tester.pumpWidget(Provider<GeoService>.value(
-        value: geoService,
+    await tester.pumpWidget(MultiProvider(
+        providers: [Provider<GeoService>.value(value: geoService)],
         child: MaterialApp(
             home: LocationDialogTester('description', null, null))));
 
@@ -39,8 +43,8 @@ void main() {
     testWidgets('shows map', (WidgetTester tester) async {
       var initCoordinates;
       var center;
-      await tester.pumpWidget(MaterialApp(
-          home: LocationDialogTester('description', initCoordinates, center)));
+      await pumpLocationDialogTester(
+          tester, 'description', initCoordinates, center);
 
       await tester.tap(find.byKey(Key('open location dialog')));
       await tester.pump();
@@ -51,8 +55,8 @@ void main() {
     testWidgets('shows description input field', (WidgetTester tester) async {
       var initCoordinates;
       var center;
-      await tester.pumpWidget(MaterialApp(
-          home: LocationDialogTester('description', initCoordinates, center)));
+      await pumpLocationDialogTester(
+          tester, 'description', initCoordinates, center);
 
       await tester.tap(find.byKey(Key('open location dialog')));
       await tester.pump();
@@ -66,8 +70,8 @@ void main() {
         (WidgetTester tester) async {
       var initCoordinates;
       var center;
-      await tester.pumpWidget(MaterialApp(
-          home: LocationDialogTester('description', initCoordinates, center)));
+      await pumpLocationDialogTester(
+          tester, 'description', initCoordinates, center);
 
       await tester.tap(find.byKey(Key('open location dialog')));
       await tester.pump();
@@ -79,8 +83,8 @@ void main() {
         (WidgetTester tester) async {
       var initCoordinates = LatLng(52.51579, 13.45399);
       var center;
-      await tester.pumpWidget(MaterialApp(
-          home: LocationDialogTester('description', initCoordinates, center)));
+      await pumpLocationDialogTester(
+          tester, 'description', initCoordinates, center);
 
       await tester.tap(find.byKey(Key('open location dialog')));
       await tester.pump();
@@ -94,8 +98,8 @@ void main() {
     testWidgets('description', (WidgetTester tester) async {
       var initCoordinates = LatLng(52.51579, 13.45399);
       var center;
-      await tester.pumpWidget(MaterialApp(
-          home: LocationDialogTester('description', initCoordinates, center)));
+      await pumpLocationDialogTester(
+          tester, 'description', initCoordinates, center);
 
       await tester.tap(find.byKey(Key('open location dialog')));
       await tester.pump();
@@ -106,8 +110,8 @@ void main() {
 
   group('centers map', () {
     testWidgets('at given coordinates', (WidgetTester tester) async {
-      await tester.pumpWidget(MaterialApp(
-          home: LocationDialogTester(null, null, LatLng(52.49653, 13.43762))));
+      await pumpLocationDialogTester(
+          tester, null, null, LatLng(52.49653, 13.43762));
       await tester.tap(find.byKey(Key('open location dialog')));
       await tester.pump();
 
@@ -132,7 +136,7 @@ void main() {
   group('reads input', () {
     testWidgets('with tap on map and creates marker',
         (WidgetTester tester) async {
-      await _pumpLocationTester(
+      await _pumpLocationDialogTester(
           tester, LocationDialogTester('description', null, null));
 
       await tester.tap(find.byKey(Key('open location dialog')));
@@ -140,7 +144,7 @@ void main() {
       expect(find.byKey(Key('location marker')), findsNothing);
 
       await tester.tap(find.byKey(Key('venue map')));
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(Duration(seconds: 10));
 
       expect(find.byKey(Key('location marker')), findsOneWidget);
     ***REMOVED***);
@@ -148,7 +152,7 @@ void main() {
     testWidgets('with tap on map and moves marker',
         (WidgetTester tester) async {
       var initCoordinates = LatLng(52.51579, 13.45399);
-      await _pumpLocationTester(
+      await _pumpLocationDialogTester(
           tester, LocationDialogTester('description', initCoordinates, null));
 
       await tester.tap(find.byKey(Key('open location dialog')));
@@ -167,7 +171,7 @@ void main() {
 
   group('returns', () {
     testWidgets('coordinates', (WidgetTester tester) async {
-      await _pumpLocationTester(
+      await _pumpLocationDialogTester(
           tester, LocationDialogTester('description', null, null));
 
       await tester.tap(find.byKey(Key('open location dialog')));
@@ -186,7 +190,7 @@ void main() {
     ***REMOVED***);
 
     testWidgets('new coordinates', (WidgetTester tester) async {
-      await _pumpLocationTester(
+      await _pumpLocationDialogTester(
           tester,
           LocationDialogTester(
               'description', LatLng(52.51579, 13.45399), null));
@@ -207,7 +211,8 @@ void main() {
     ***REMOVED***);
 
     testWidgets('description', (WidgetTester tester) async {
-      await _pumpLocationTester(tester, LocationDialogTester(null, null, null));
+      await _pumpLocationDialogTester(
+          tester, LocationDialogTester(null, null, null));
 
       await tester.tap(find.byKey(Key('open location dialog')));
       await tester.pump();
@@ -224,8 +229,7 @@ void main() {
     ***REMOVED***);
 
     testWidgets('new description', (WidgetTester tester) async {
-      await tester.pumpWidget(
-          MaterialApp(home: LocationDialogTester('description', null, null)));
+      await pumpLocationDialogTester(tester, 'description', null, null);
 
       await tester.tap(find.byKey(Key('open location dialog')));
       await tester.pump();
@@ -242,10 +246,8 @@ void main() {
     ***REMOVED***);
 
     testWidgets('old values, with no input', (WidgetTester tester) async {
-      await _pumpLocationTester(
-          tester,
-          LocationDialogTester(
-              'description', LatLng(52.51579, 13.45399), null));
+      await pumpLocationDialogTester(
+          tester, 'description', LatLng(52.51579, 13.45399), null);
 
       await tester.tap(find.byKey(Key('open location dialog')));
       await tester.pump();
@@ -261,12 +263,16 @@ void main() {
   ***REMOVED***);
 ***REMOVED***
 
-_pumpLocationTester(
+Future pumpLocationDialogTester(
+    WidgetTester tester, description, initCoordinates, center) async {
+  await tester.pumpWidget(MaterialApp(
+      home: LocationDialogTester(description, initCoordinates, center)));
+***REMOVED***
+
+_pumpLocationDialogTester(
     WidgetTester tester, LocationDialogTester locationDialogTester) async {
-  await tester.pumpWidget(MultiProvider(providers: [
-    Provider<GeoService>.value(value: geoService),
-    Provider<StammdatenService>.value(value: stammdatenService)
-  ], child: MaterialApp(home: locationDialogTester)));
+  await tester.pumpWidget(Provider.value(
+      value: geoService, child: MaterialApp(home: locationDialogTester)));
 ***REMOVED***
 
 // nur eine Testklasse

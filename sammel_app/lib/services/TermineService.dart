@@ -19,10 +19,8 @@ import 'ErrorService.dart';
 import 'UserService.dart';
 
 abstract class AbstractTermineService extends BackendService {
-  AbstractTermineService(
-      AbstractUserService userService, this.stammdatenService, Backend backend)
+  AbstractTermineService(AbstractUserService userService, Backend backend)
       : super(userService, backend);
-  StammdatenService stammdatenService;
 
   Future<List<Termin>> loadActions(TermineFilter filter);
 
@@ -44,8 +42,8 @@ class TermineService extends AbstractTermineService
   GlobalKey<NavigatorState> navigatorKey;
 
   TermineService(AbstractUserService userService, Backend backend,
-      stammdatenService, PushNotificationManager manager, this.navigatorKey)
-      : super(userService, stammdatenService, backend) {
+      PushNotificationManager manager, this.navigatorKey)
+      : super(userService, backend) {
     manager.register_message_callback(PushDataTypes.NewKiezActions, this);
     manager.register_message_callback(PushDataTypes.ActionChanged, this);
     manager.register_message_callback(PushDataTypes.ActionDeleted, this);
@@ -54,7 +52,7 @@ class TermineService extends AbstractTermineService
   Future<List<Termin>> loadActions(TermineFilter filter) async {
     HttpClientResponseBody response =
         await post('service/termine', jsonEncode(filter));
-    var kieze = await stammdatenService.kieze;
+    var kieze = await StammdatenService.kieze;
     final termine = (response.body as List)
         .map((jsonTermin) => Termin.fromJson(jsonTermin, kieze))
         .toList();
@@ -65,14 +63,14 @@ class TermineService extends AbstractTermineService
     ActionWithToken actionWithToken = ActionWithToken(termin, token);
     var response =
         await post('service/termine/neu', jsonEncode(actionWithToken));
-    var kieze = await stammdatenService.kieze;
+    var kieze = await StammdatenService.kieze;
     return Termin.fromJson(response.body, kieze);
   ***REMOVED***
 
   @override
   Future<Termin> getActionWithDetails(int id) async {
     var response = await get('service/termine/termin?id=' + id.toString());
-    var kieze = await stammdatenService.kieze;
+    var kieze = await StammdatenService.kieze;
     return Termin.fromJson(response.body, kieze);
   ***REMOVED***
 
@@ -107,7 +105,7 @@ class TermineService extends AbstractTermineService
   @override
   void handleNotificationTap(Map<dynamic, dynamic> data) async {
     final actionData =
-        ActionListPushData.fromJson(data, await stammdatenService.kieze);
+        ActionListPushData.fromJson(data, await StammdatenService.kieze);
     actionData.actions..sort(Termin.compareByStart);
 
     print('Type: ${actionData.type***REMOVED***');
@@ -136,10 +134,9 @@ class TermineService extends AbstractTermineService
 ***REMOVED***
 
 class DemoTermineService extends AbstractTermineService {
-  DemoTermineService(
-      AbstractUserService userService, StammdatenService stammdatenService)
-      : super(userService, stammdatenService, DemoBackend()) {
-    termine = stammdatenService.kieze.then((kieze) => [
+  DemoTermineService(AbstractUserService userService)
+      : super(userService, DemoBackend()) {
+    termine = StammdatenService.kieze.then((kieze) => [
           Termin(
               1,
               DateTime(heute.year, heute.month - 1, heute.day - 1, 9, 0, 0),

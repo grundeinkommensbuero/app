@@ -3,43 +3,31 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:poly/poly.dart' as poly;
-import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 
 import 'DweTheme.dart';
 
 class KiezPicker {
-  Set<Kiez> kieze = {***REMOVED***
-  Set<Ortsteil> ortsteile = {***REMOVED***
-  Set<Bezirk> bezirke = {***REMOVED***
   Set<Kiez> selectedKieze = {***REMOVED***
   var mapController = MapController();
-  Set<Polygon> kiezeOutlines;
-  Set<Polygon> ortsteileOutlines;
-  Set<Polygon> bezirkeOutlines;
-  var kiezeAreas;
   List<Polygon> visiblePolygons = [];
 
   double KIEZE_THRESHOLD = 12;
   double ORTSTEILE_THRESHOLD = 11;
 
-  StammdatenService stammdatenService;
+  static Set<Kiez> kieze;
+  static Set<Ortsteil> ortsteile;
+  static Set<Bezirk> bezirke;
 
   KiezPicker(this.selectedKieze) {
     if (this.selectedKieze == null) this.selectedKieze = {***REMOVED***
   ***REMOVED***
 
   Future<Set<Kiez>> showKiezPicker(context) async {
-    stammdatenService = Provider.of<StammdatenService>(context);
-
-    kieze = await stammdatenService.kieze;
-    ortsteile = await stammdatenService.ortsteile;
-    bezirke = await stammdatenService.bezirke;
-    kiezeOutlines = generateKiezOutlines(kieze);
-    ortsteileOutlines = generateOrtsteilOutlines(ortsteile);
-    bezirkeOutlines = generateBezirkOutlines(bezirke);
-    kiezeAreas = generateKiezAreas(kieze);
+    ortsteile = await StammdatenService.ortsteile;
+    kieze = await StammdatenService.kieze;
+    bezirke = await StammdatenService.bezirke;
 
     return await showDialog(
         context: context,
@@ -92,14 +80,14 @@ class KiezPicker {
 
   getVisiblePolygons() {
     if (mapController.zoom > KIEZE_THRESHOLD)
-      this.visiblePolygons = kiezeOutlines.toList();
+      this.visiblePolygons = generateKiezeOutlines(kieze).toList();
     else if (mapController.zoom > ORTSTEILE_THRESHOLD)
-      this.visiblePolygons = ortsteileOutlines.toList();
+      this.visiblePolygons = generateOrtsteileOutlines(ortsteile).toList();
     else
-      this.visiblePolygons = bezirkeOutlines.toList();
+      this.visiblePolygons = generateBezirkeOutlines(bezirke).toList();
 
-    selectedKieze
-        .forEach((selected) => this.visiblePolygons.add(kiezeAreas[selected]));
+    selectedKieze.forEach((selected) =>
+        this.visiblePolygons.add(generateKiezeAreas(kieze)[selected]));
   ***REMOVED***
 
   markKiez(LatLng position) {
@@ -134,7 +122,7 @@ class KiezPicker {
   ***REMOVED***
 ***REMOVED***
 
-Set<Polygon> generateKiezOutlines(Set<Kiez> kieze) {
+Set<Polygon> generateKiezeOutlines(Set<Kiez> kieze) {
   return kieze
       .map((kiez) => Polygon(
           color: Colors.transparent,
@@ -145,7 +133,7 @@ Set<Polygon> generateKiezOutlines(Set<Kiez> kieze) {
       .toSet();
 ***REMOVED***
 
-Set<Polygon> generateBezirkOutlines(Set<Bezirk> bezirke) {
+Set<Polygon> generateBezirkeOutlines(Set<Bezirk> bezirke) {
   return bezirke
       .map((bezirk) => Polygon(
           color: Colors.transparent,
@@ -156,7 +144,7 @@ Set<Polygon> generateBezirkOutlines(Set<Bezirk> bezirke) {
       .toSet();
 ***REMOVED***
 
-Set<Polygon> generateOrtsteilOutlines(Set<Ortsteil> ortsteile) {
+Set<Polygon> generateOrtsteileOutlines(Set<Ortsteil> ortsteile) {
   return ortsteile
       .map((ortsteil) => Polygon(
           color: Colors.transparent,
@@ -167,7 +155,7 @@ Set<Polygon> generateOrtsteilOutlines(Set<Ortsteil> ortsteile) {
       .toSet();
 ***REMOVED***
 
-Map<Kiez, Polygon> generateKiezAreas(Set<Kiez> kieze) {
+Map<Kiez, Polygon> generateKiezeAreas(Set<Kiez> kieze) {
   return kieze.toList().asMap().map((_, kiez) => MapEntry(
       kiez,
       Polygon(
