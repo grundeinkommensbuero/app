@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:poly/poly.dart' as poly;
+import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 
@@ -25,9 +26,10 @@ class KiezPicker {
   }
 
   Future<Set<Kiez>> showKiezPicker(context) async {
-    ortsteile = await StammdatenService.ortsteile;
-    kieze = await StammdatenService.kieze;
-    bezirke = await StammdatenService.bezirke;
+    final stammdatenService = Provider.of<StammdatenService>(context);
+    ortsteile = await stammdatenService.ortsteile;
+    kieze = await stammdatenService.kieze;
+    bezirke = await stammdatenService.bezirke;
 
     return await showDialog(
         context: context,

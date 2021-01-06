@@ -27,6 +27,7 @@ import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';
 
+final _stammdatenService = StammdatenServiceMock();
 final _termineService = TermineServiceMock();
 final _listLocationService = ListLocationServiceMock();
 final _storageService = StorageServiceMock();
@@ -36,8 +37,6 @@ final _chatMessageService = ChatMessageServiceMock();
 final _pushManager = PushNotificationManagerMock();
 
 void main() {
-  configureStammdatenMock();
-
   MultiProvider termineSeiteWidget;
 
   setUp(() {
@@ -53,6 +52,7 @@ void main() {
 
     termineSeiteWidget = MultiProvider(
         providers: [
+          Provider<StammdatenService>.value(value: _stammdatenService),
           Provider<AbstractTermineService>.value(value: _termineService),
           Provider<AbstractListLocationService>.value(
               value: _listLocationService),
@@ -164,10 +164,12 @@ void main() {
           ]);
 
       await tester.pumpWidget(termineSeiteWidget);
-      await StammdatenService.bezirke;
       await tester.pumpAndSettle(Duration(seconds: 1));
+      // await StammdatenService.kieze;
 
+      print('<Test> Warte auf Aktualisiern-Button');
       expect(find.text('Aktualisieren'), findsOneWidget);
+      print('<Test> Aktualisieren-Button gefunden');
     });
 
     testWidgets('opens on tap', (WidgetTester tester) async {
@@ -1321,6 +1323,7 @@ void main() {
 _pumpNavigation(WidgetTester tester) async {
   await tester.pumpWidget(MultiProvider(
       providers: [
+        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<AbstractTermineService>.value(value: _termineService),
         Provider<StorageService>.value(value: _storageService),
         Provider<AbstractListLocationService>(

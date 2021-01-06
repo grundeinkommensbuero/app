@@ -23,6 +23,7 @@ import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';
 
+final _stammdatenService = StammdatenServiceMock();
 final _terminService = TermineServiceMock();
 final _listLocationService = ListLocationServiceMock();
 final _storageService = StorageServiceMock();
@@ -32,8 +33,6 @@ final _chatService = ChatMessageServiceMock();
 final _pushManager = PushNotificationManagerMock();
 
 void main() {
-  configureStammdatenMock();
-
   setUp(() {
     when(_storageService.loadFilter()).thenAnswer((_) async => null);
     when(_storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
@@ -822,6 +821,7 @@ void main() {
 _pumpNavigation(WidgetTester tester) async {
   await tester.pumpWidget(MultiProvider(
       providers: [
+        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<AbstractTermineService>.value(value: _terminService),
         Provider<StorageService>.value(value: _storageService),
         Provider<AbstractListLocationService>(

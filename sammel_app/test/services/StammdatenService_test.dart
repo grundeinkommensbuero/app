@@ -19,13 +19,15 @@ final bezirke =
 FileReader fileReaderMock = TestFileReader();
 
 void main() {
+  StammdatenService stammdatenService;
   setUp(() {
     reset(fileReaderMock);
     StammdatenService.fileReader = TestFileReader();
+    stammdatenService = StammdatenService();
   });
 
   test('reads Kiez main features from files', () async {
-    var kieze = await StammdatenService.kieze;
+    var kieze = await stammdatenService.kieze;
 
     expect(kieze.length, 138);
 

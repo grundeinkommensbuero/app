@@ -17,13 +17,15 @@ import 'package:sammel_app/services/PushNotificationManager.dart';
 
 import 'TestdatenVorrat.dart';
 
-void configureStammdatenMock() {
-    StammdatenService.kieze =
-        Future.value([ffAlleeNord(), tempVorstadt(), plaenterwald()].toSet());
-    StammdatenService.ortsteile =
-        Future.value([fhainOst(), kreuzbergSued(), koepenick1()].toSet());
-    StammdatenService.bezirke =
-        Future.value([friedrichshain(), kreuzberg(), koepenick()].toSet());
+class StammdatenServiceMock extends Mock implements StammdatenService {
+  StammdatenServiceMock() {
+    when(this.kieze).thenAnswer((_) =>
+        Future.value([ffAlleeNord(), tempVorstadt(), plaenterwald()].toSet()));
+    when(this.ortsteile).thenAnswer((_) =>
+        Future.value([fhainOst(), kreuzbergSued(), koepenick1()].toSet()));
+    when(this.bezirke).thenAnswer((_) =>
+        Future.value([friedrichshain(), kreuzberg(), koepenick()].toSet()));
+  }
 }
 
 class TermineServiceMock extends Mock implements AbstractTermineService {}

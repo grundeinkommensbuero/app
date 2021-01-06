@@ -19,12 +19,15 @@ abstract class PushReceiveService {
   void subscribeToTopics(List<String> topics);
 
   void unsubscribeFromTopics(List<String> topic);
+
+  Future<String> token;
 }
 
 class FirebaseReceiveService implements PushReceiveService {
   static FirebaseMessaging firebaseMessaging = FirebaseMessaging();
   static StreamController<String> _tokenStreamController =
       StreamController.broadcast();
+  @override
   Future<String> token = _tokenStreamController.stream.first;
 
   FirebaseReceiveService([FirebaseMessaging firebaseMock]) {
@@ -37,15 +40,16 @@ class FirebaseReceiveService implements PushReceiveService {
   }
 
   initializeFirebase() async {
+    print('Initialisiere Firebase');
     await firebaseMessaging
         .getToken()
         .timeout(Duration(seconds: 5), onTimeout: () => null)
         .then((token) => _tokenStreamController.add(token));
 
-    // For iOS request permission first.
-    await firebaseMessaging.requestNotificationPermissions();
-
     print('Firebase initialisiert mit Token: ${await token}');
+
+    // For iOS request permission first.
+    firebaseMessaging.requestNotificationPermissions();
   }
 
   @override
@@ -124,4 +128,7 @@ class PullService extends BackendService implements PushReceiveService {
           context: 'Fehler beim Abmelden der Benachrichtigungen zu $topics');
     }
   }
+
+  @override
+  Future<String> token = Future.value('Pull-Modus');
 }

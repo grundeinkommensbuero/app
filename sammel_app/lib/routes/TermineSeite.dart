@@ -183,8 +183,10 @@ class TermineSeiteState extends State<TermineSeite>
   }
 
   Future<void> ladeTermine(TermineFilter filter) async {
+    print('TermineSeite: await termineService.loadActions(filter).then((termine)');
     await termineService.loadActions(filter).then((termine) {
       setState(() {
+        print('TermineSeite: this.termine = termine..sort(Termin.compareByStart);');
         this.termine = termine..sort(Termin.compareByStart);
       });
     }).catchError((e, s) => ErrorService.handleError(e, s,

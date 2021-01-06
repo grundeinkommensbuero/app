@@ -6,15 +6,9 @@ import 'package:sammel_app/shared/DweTheme.dart';
 
 import '../TestdataStorage.dart';
 import '../model/Termin_test.dart';
-import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';
 
-final terminService = TermineServiceMock();
-final storageService = StorageServiceMock();
-
 void main() {
-  configureStammdatenMock();
-
   testWidgets('uses default values', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(home: Scaffold(body: ActionMap())));
 

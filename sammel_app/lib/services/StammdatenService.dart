@@ -7,10 +7,17 @@ class StammdatenService {
   static var fileReader = FileReader();
 
   static Future<Set<Kiez>> _kieze = loadKieze();
-  static Future<Set<Ortsteil>> ortsteile = loadOrtsteile();
-  static Future<Set<Bezirk>> bezirke = loadBezirke();
+  static Future<Set<Ortsteil>> _ortsteile = loadOrtsteile();
+  static Future<Set<Bezirk>> _bezirke = loadBezirke();
+
   // Warten dass Kieze mit Bezirken angereichert wurden
-  static Future<Set<Kiez>> kieze = bezirke.then((_) => _kieze);
+  Future<Set<Kiez>> get kieze => bezirke.then((_) => _kieze);
+
+  Future<Set<Ortsteil>> get ortsteile => _ortsteile;
+
+  Future<Set<Bezirk>> get bezirke => _bezirke;
+
+  StammdatenService();
 
   static Future<Set<Kiez>> loadKieze() async {
     var jsonCentroids = await fileReader.kiezeCentroids;
@@ -52,7 +59,7 @@ class StammdatenService {
 
   static Future<Set<Bezirk>> loadBezirke() async {
     print('Lade Bezirke');
-    var o = await ortsteile;
+    var o = await _ortsteile;
     final json = await fileReader.bezirke;
 
     final centroidsList = (jsonDecode(json)['features'] as List);
@@ -72,8 +79,8 @@ class StammdatenService {
   }
 
   static Future<Kiez> kiezBy(name) =>
-      kieze.then((k) => k.firstWhere((kiez) => name == kiez.name));
+      _kieze.then((k) => k.firstWhere((kiez) => name == kiez.name));
 
   static Future<List<Kiez>> kiezeBy(name) =>
-      kieze.then((k) => k.where((kiez) => name == kiez.name).toList());
+      _kieze.then((k) => k.where((kiez) => name == kiez.name).toList());
 }

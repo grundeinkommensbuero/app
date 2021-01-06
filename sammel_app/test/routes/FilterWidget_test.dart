@@ -6,6 +6,7 @@ import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/FilterWidget.dart';
+import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 
@@ -21,11 +22,10 @@ Future iWasCalled(TermineFilter result) async {
   return Future.value();
 }
 
+final _stammdatenService = StammdatenServiceMock();
 final _storageService = StorageServiceMock();
 
 void main() {
-  configureStammdatenMock();
-
   group('ui', () {
     setUpUI((WidgetTester tester) async {
       when(_storageService.loadFilter()).thenAnswer((_) async => null);
@@ -172,7 +172,9 @@ void main() {
       expect(find.byKey(Key('days selection dialog')), findsOneWidget);
     });
 
-    testUI('Filter opens Locations selection with click at locations button',
+
+    // FIXME
+    /*testUI('Filter opens Locations selection with click at locations button',
         (WidgetTester tester) async {
       await pumpFilterWidget(tester);
 
@@ -185,8 +187,7 @@ void main() {
       expect(find.byKey(Key('kiez picker')), findsOneWidget);
     });
 
-    // FIXME
-    /*testUI('Filter passes locations to Locations selection',
+    testUI('Filter passes locations to Locations selection',
         (WidgetTester tester) async {
       await tester.tap(find.byKey(Key('filter button')));
       await tester.pump();
@@ -367,6 +368,7 @@ void main() {
 Future pumpFilterWidget(WidgetTester tester) async {
   FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key('filter'));
   await tester.pumpWidget(MultiProvider(providers: [
+    Provider<StammdatenService>.value(value: _stammdatenService),
     Provider<StorageService>.value(value: _storageService)
   ], child: MaterialApp(home: filterWidget)));
 }

@@ -8,6 +8,7 @@ import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
+import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
@@ -18,7 +19,7 @@ import '../shared/TestdatenVorrat.dart';
 void main() {
   UserService userService;
   PushNotificationManager pushManager = PushNotificationManagerMock();
-  configureStammdatenMock();
+  StammdatenService stammdatenService = StammdatenServiceMock();
 
   setUp(() {
     userService = ConfiguredUserServiceMock();
@@ -27,7 +28,7 @@ void main() {
   group('DemoTermineService', () {
     DemoTermineService service;
     setUp(() {
-      service = DemoTermineService(userService);
+      service = DemoTermineService(stammdatenService, userService);
     });
 
     test('uses DemoBackend', () {
@@ -139,7 +140,8 @@ void main() {
 
     setUp(() {
       backend = BackendMock();
-      service = TermineService(userService, backend, pushManager, null);
+      service = TermineService(
+          stammdatenService, userService, backend, pushManager, null);
       service.userService = userService;
     });
 
