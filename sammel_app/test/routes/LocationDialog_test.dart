@@ -12,22 +12,28 @@ import 'package:sammel_app/shared/FileReader.dart';
 import '../services/StammdatenService_test.dart';
 import '../shared/Mocks.dart';
 
-final GeoService geoService = GeoServiceMock();
-FileReader fileReaderMock = TestFileReader();
+final StammdatenService _stammdatenService = StammdatenServiceMock();
+final GeoService _geoService = GeoServiceMock();
+final FileReader _fileReaderMock = TestFileReader();
 
 void main() {
   setUp(() async {
-    reset(geoService);
-    when(geoService.getDescriptionToPoint(any))
+    reset(_geoService);
+    when(_geoService.getDescriptionToPoint(any))
         .thenAnswer((_) async => GeoData('name', 'street', '12'));
-    reset(fileReaderMock);
+    reset(_stammdatenService);
+    when(_stammdatenService);
+    reset(_fileReaderMock);
     StammdatenService.fileReader = TestFileReader();
-    await StammdatenService.kieze;
+    await _stammdatenService.kieze;
   ***REMOVED***);
 
   testWidgets('opens dialog', (WidgetTester tester) async {
     await tester.pumpWidget(MultiProvider(
-        providers: [Provider<GeoService>.value(value: geoService)],
+        providers: [
+          Provider<StammdatenService>.value(value: _stammdatenService),
+          Provider<GeoService>.value(value: _geoService)
+        ],
         child: MaterialApp(
             home: LocationDialogTester('description', null, null))));
 
@@ -271,8 +277,10 @@ Future pumpLocationDialogTester(
 
 _pumpLocationDialogTester(
     WidgetTester tester, LocationDialogTester locationDialogTester) async {
-  await tester.pumpWidget(Provider.value(
-      value: geoService, child: MaterialApp(home: locationDialogTester)));
+  await tester.pumpWidget(MultiProvider(providers: [
+    Provider<StammdatenService>.value(value: _stammdatenService),
+    Provider<GeoService>.value(value: _geoService)
+  ], child: MaterialApp(home: locationDialogTester)));
 ***REMOVED***
 
 // nur eine Testklasse

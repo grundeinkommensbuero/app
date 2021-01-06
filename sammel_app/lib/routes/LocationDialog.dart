@@ -145,7 +145,7 @@ class LocationDialogState extends State<LocationDialog> {
       ErrorService.handleError(e, s);
       return '';
     ***REMOVED***);
-    var kiez = (await StammdatenService.kieze).firstWhere(
+    var kiez = (await Provider.of<StammdatenService>(context).kieze).firstWhere(
         (kiez) => poly.Polygon(kiez.polygon
                 .map((latlng) =>
                     poly.Point<num>(latlng.latitude, latlng.longitude))

@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/main.dart';
+import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
@@ -23,7 +24,8 @@ class ProfilePageState extends State<ProfilePage> {
   StorageService storageService;
   AbstractUserService userService;
   AbstractPushNotificationManager pushNotificationManager;
-  String name = '';
+  User user;
+  String token;
   List<String> myKieze = [];
   String interval;
 
@@ -36,7 +38,9 @@ class ProfilePageState extends State<ProfilePage> {
       userService = Provider.of<AbstractUserService>(context);
       pushNotificationManager =
           Provider.of<AbstractPushNotificationManager>(context);
-      userService.user.listen((user) => setState(() => name = user.name));
+      userService.user.listen((user) => setState(() => this.user = user));
+      pushNotificationManager.pushToken
+          .then((token) => setState(() => this.token = token));
       storageService
           .loadMyKiez()
           .then((kieze) => setState(() => myKieze = kieze));
@@ -58,10 +62,10 @@ class ProfilePageState extends State<ProfilePage> {
                   child: Container(
                       alignment: Alignment.center,
                       child: Text(
-                        name ?? '',
+                        user?.name ?? '',
                         overflow: TextOverflow.fade,
                         style: TextStyle(
-                            fontSize: (28.0 - ((name ?? '').length) / 4)),
+                            fontSize: (28.0 - ((user?.name ?? '').length) / 4)),
                       )),
                   onPressed: (context) =>
                       showUsernameDialog(context: context, hideHint: true),
@@ -102,6 +106,12 @@ class ProfilePageState extends State<ProfilePage> {
                     onPressed: (context) => showNotificationDialog(context))
               ],
             )),
+        bottomSheet: Row(children: [
+          Expanded(
+              child: SelectableText(
+                  'Benutzer-ID: ${user?.id***REMOVED***, Push-Token: ${token***REMOVED***',
+                  textAlign: TextAlign.center))
+        ], mainAxisAlignment: MainAxisAlignment.center),
         floatingActionButton: FloatingActionButton(
             child: Icon(Icons.info_outline_rounded,
                 size: 40.0, color: DweTheme.yellow),
@@ -109,9 +119,10 @@ class ProfilePageState extends State<ProfilePage> {
   ***REMOVED***
 
   showKiezPicker() async {
-    var selection = (await KiezPicker((await StammdatenService.kieze)
-                .where((kiez) => myKieze.contains(kiez.name))
-                .toSet())
+    var selection = (await KiezPicker(
+                (await Provider.of<StammdatenService>(context).kieze)
+                    .where((kiez) => myKieze.contains(kiez.name))
+                    .toSet())
             .showKiezPicker(context))
         ?.map((kiez) => kiez.name)
         ?.toList();

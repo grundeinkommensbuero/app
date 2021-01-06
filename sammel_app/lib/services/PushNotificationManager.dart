@@ -7,6 +7,7 @@ import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/Crypter.dart';
+import 'package:validators/validators.dart';
 
 import 'BackendService.dart';
 import 'ErrorService.dart';
@@ -17,6 +18,8 @@ abstract class AbstractPushNotificationManager {
   void unsubscribeFromKiezActionTopics(List<String> kieze, String interval);
 
   void subscribeToKiezActionTopics(List<String> kieze, String interval);
+
+  Future<String> get pushToken;
 ***REMOVED***
 
 abstract class PushNotificationListener {
@@ -30,19 +33,23 @@ class PushNotificationManager implements AbstractPushNotificationManager {
   StorageService storageService;
   AbstractUserService userService;
 
-  PushNotificationManager(
-      this.storageService, this.userService, firebaseService, Backend backend) {
-    createPushListener(firebaseService, backend);
+  @override
+  Future<String> pushToken;
+
+  PushNotificationManager(this.storageService, this.userService,
+      FirebaseReceiveService firebaseService, Backend backend) {
+    var listener = createPushListener(firebaseService, backend);
+    pushToken = listener.then((listener) => listener.token);
     initializeLocalNotifications();
   ***REMOVED***
 
-  createPushListener(
+  Future<PushReceiveService> createPushListener(
       FirebaseReceiveService firebaseService, Backend backend) async {
     if (await storageService.isPullMode())
       listener = PullService(userService, backend);
     else {
-      var token = await firebaseService.token;
-      if (token == null || token.isEmpty) {
+      pushToken = firebaseService.token;
+      if (isNull(await pushToken) || (await pushToken).isEmpty) {
         ErrorService.pushMessage(
             'Problem beim Einrichten von Push-Nachrichten',
             'Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. '
@@ -57,15 +64,16 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     ***REMOVED***
 
     listener.subscribe(
-        onMessage: onMessageCallback,
-        onResume: onResumeCallback,
-        onLaunch: onResumeCallback,
-        /*onBackgroundMessage: backgroundMessageHandler*/);
+      onMessage: onMessageCallback,
+      onResume: onResumeCallback,
+      onLaunch: onResumeCallback,
+      /*onBackgroundMessage: backgroundMessageHandler*/
+    );
+
+    return listener;
   ***REMOVED***
 
   Map<String, PushNotificationListener> callback_map = Map();
-
-  Future<String> pushToken;
 
   Future<dynamic> onMessageCallback(Map<dynamic, dynamic> message) async {
     print('Push-Nachricht empfangen: $message');
@@ -160,4 +168,7 @@ class DemoPushNotificationManager implements AbstractPushNotificationManager {
   // Ignore
   @override
   void unsubscribeFromKiezActionTopics(List<String> kieze, String interval) {***REMOVED***
+
+  @override
+  Future<String> get pushToken => Future.value('Demo-Modus');
 ***REMOVED***
