@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -135,10 +136,10 @@ class TermineSeiteState extends State<TermineSeite>
           BottomNavigationBarItem(
               icon: Icon(Icons.view_list,
                   key: Key('list view navigation button')),
-              label: 'Liste'),
+              label: tr('Liste')),
           BottomNavigationBarItem(
               icon: Icon(Icons.map, key: Key('map view navigation button')),
-              label: 'Karte')
+              label: tr('Karte'))
         ],
       ),
     );

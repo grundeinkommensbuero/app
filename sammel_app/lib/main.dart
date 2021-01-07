@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/routes/Navigation.dart';
@@ -18,7 +19,11 @@ import 'services/BackendService.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+  runApp(EasyLocalization(
+      supportedLocales: [Locale('en'), Locale('de', 'DE')],
+      path: 'assets/languages',
+      fallbackLocale: Locale('en'),
+      child: MyApp()));
 ***REMOVED***
 
 const Mode mode = Mode.DEMO;
@@ -77,6 +82,9 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           title: 'DW & Co. Enteignen',
           theme: DweTheme.themeData,
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
           home: Navigation(actionPageKey, clearButton),
           navigatorKey: navigatorKey,
         ));

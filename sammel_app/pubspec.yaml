@@ -50,6 +50,7 @@ dependencies:
   connectivity: ^2.0.2
   cryptography: ^1.4.0
   loading_indicator: ^1.2.0
+  easy_localization: ^2.3.3
 
 dev_dependencies:
   flutter_test:
@@ -90,6 +91,7 @@ flutter:
    - assets/geodata/Bezirksregionen/Berlin_bezirksregionen_polygons.geojson
    - assets/geodata/Prognoseraeume/Berlin_prognoseraeume_poi.geojson
    - assets/geodata/Prognoseraeume/Berlin_prognoseraeume_polygons.geojson
+   - assets/languages/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
