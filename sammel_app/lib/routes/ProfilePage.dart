@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,12 @@ class ProfilePageState extends State<ProfilePage> {
   String interval;
 
   static const intervalOptions = ['sofort', 'täglich', 'wöchentlich', 'nie'];
+  static const languageOptions = ['de', 'en'];
+
+  var languages = {
+    'de': 'deutsch',
+    'en': 'englisch',
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +48,6 @@ class ProfilePageState extends State<ProfilePage> {
       userService.user.listen((user) => setState(() => this.user = user));
       pushNotificationManager.pushToken
           .then((token) => setState(() => this.token = token));
-      storageService
-          .loadMyKiez()
-          .then((kieze) => setState(() => myKieze = kieze));
       storageService
           .loadNotificationInterval()
           .then((pref) => setState(() => interval = pref));
@@ -57,6 +61,20 @@ class ProfilePageState extends State<ProfilePage> {
             padding: EdgeInsets.all(20.0),
             child: ListView(
               children: [
+                ProfileItem(
+                  title: "Sprache",
+                  child: Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        languages[
+                            EasyLocalization.of(context).locale.languageCode],
+                        overflow: TextOverflow.fade,
+                        style: TextStyle(
+                            fontSize: (28.0 - ((user?.name ?? '').length) / 4)),
+                      )),
+                  onPressed: showLanguageDialog,
+                ),
+                SizedBox(height: 20.0),
                 ProfileItem(
                   title: "Dein Name",
                   child: Container(
@@ -109,7 +127,7 @@ class ProfilePageState extends State<ProfilePage> {
         bottomSheet: Row(children: [
           Expanded(
               child: SelectableText(
-                  'Benutzer-ID: ${user?.id}, Push-Token: ${token}',
+                  'Benutzer-ID: ${user?.id}, Push-Token: $token',
                   textAlign: TextAlign.center))
         ], mainAxisAlignment: MainAxisAlignment.center),
         floatingActionButton: FloatingActionButton(
@@ -132,6 +150,25 @@ class ProfilePageState extends State<ProfilePage> {
       storageService.saveMyKiez(selection);
       setState(() => myKieze = selection);
     }
+  }
+
+  showLanguageDialog(BuildContext context) async {
+    String selection = await showDialog(
+        context: context,
+        builder: (context) => SimpleDialog(
+            key: Key('language selection dialog'),
+            contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
+            titlePadding: EdgeInsets.all(15.0),
+            title: const Text('Sprache'),
+            children: []..addAll(languageOptions.map((option) => RadioListTile(
+                  groupValue: EasyLocalization.of(context).locale.languageCode,
+                  value: option,
+                  title: Text(languages[option]),
+                  onChanged: (selected) => Navigator.pop(context, selected),
+                )))));
+
+    if (selection != null)
+      EasyLocalization.of(context).locale = Locale(selection);
   }
 
   showNotificationDialog(BuildContext context) async {
@@ -167,50 +204,12 @@ class ProfilePageState extends State<ProfilePage> {
   }
 }
 
-showAboutDialog(BuildContext context) {
-  showDialog(
-      context: context,
-      builder: (context) => AboutDialog(
-            applicationName: 'Deutsche Wohnen & Co. Enteignen',
-            applicationIcon:
-                Image.asset('assets/images/housy_info.png', width: 80.0),
-            applicationVersion: version,
-            children: [
-              SizedBox(height: 15.0),
-              Text(
-                  'Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.'),
-              SizedBox(height: 15.0),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                RichText(
-                    text: TextSpan(
-                        text: 'Gitlab-Repository',
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            color: Colors.indigo,
-                            decoration: TextDecoration.underline),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () => launch(
-                              'https://gitlab.com/kybernetik/sammel-app'))),
-                RichText(
-                    text: TextSpan(
-                        text: 'e@mail.com',
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            color: Colors.indigo,
-                            decoration: TextDecoration.underline),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () => launch('e@mail.com')))
-              ])
-            ],
-          ));
-}
-
 class ProfileItem extends StatelessWidget {
-  Widget child;
-  String title;
-  Function(BuildContext) onPressed;
+  final Widget child;
+  final String title;
+  final Function(BuildContext) onPressed;
 
-  ProfileItem({Widget this.child, this.title = '', this.onPressed}) {
+  ProfileItem({this.child, this.title = '', this.onPressed}) {
     assert(child != null);
   }
 
@@ -254,4 +253,42 @@ class ProfileItem extends StatelessWidget {
                   Icon(Icons.edit),
                 ])));
   }
+}
+
+showAboutDialog(BuildContext context) {
+  showDialog(
+      context: context,
+      builder: (context) => AboutDialog(
+            applicationName: 'Deutsche Wohnen & Co. Enteignen',
+            applicationIcon:
+                Image.asset('assets/images/housy_info.png', width: 80.0),
+            applicationVersion: version,
+            children: [
+              SizedBox(height: 15.0),
+              Text(
+                  'Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.'),
+              SizedBox(height: 15.0),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+                RichText(
+                    text: TextSpan(
+                        text: 'Gitlab-Repository',
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            color: Colors.indigo,
+                            decoration: TextDecoration.underline),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => launch(
+                              'https://gitlab.com/kybernetik/sammel-app'))),
+                RichText(
+                    text: TextSpan(
+                        text: 'e@mail.com',
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            color: Colors.indigo,
+                            decoration: TextDecoration.underline),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => launch('e@mail.com')))
+              ])
+            ],
+          ));
 }

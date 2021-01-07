@@ -150,7 +150,7 @@ class NavigationState extends State<Navigation>
                         key: Key('profile navigation button'),
                         title: 'Dein Profil',
                         subtitle:
-                            'Dein Name, dein Kiez und deine Benachrichtigungen',
+                            'Dein Name, dein Kiez und deine Einstellungen',
                         index: 3),
                   ],
                 ))));

@@ -20,7 +20,7 @@ import 'services/BackendService.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(EasyLocalization(
-      supportedLocales: [Locale('en'), Locale('de', 'DE')],
+      supportedLocales: [Locale('en'), Locale('de')],
       path: 'assets/languages',
       fallbackLocale: Locale('en'),
       child: MyApp()));
