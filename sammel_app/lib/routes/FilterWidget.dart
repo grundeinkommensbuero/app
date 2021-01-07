@@ -179,9 +179,7 @@ class FilterWidgetState extends State<FilterWidget>
 
   Future<void> onApply() async {
     setState(() => loading = true);
-    print('FilterWidget: await widget.onApply(filter);');
     await widget.onApply(filter);
-    print('FilterWidget: loading = false;');
     setState(() => loading = false);
   ***REMOVED***
 
