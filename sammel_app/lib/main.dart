@@ -29,8 +29,8 @@ void main() {
       child: MyApp()));
 }
 
-const Mode mode = Mode.LOCAL;
-const version = '0.3.4+14';
+const Mode mode = Mode.DEMO;
+const version = '0.4.0+18';
 
 // Debug
 const bool pullMode = false;
