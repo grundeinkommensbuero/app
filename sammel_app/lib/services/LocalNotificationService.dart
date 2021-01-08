@@ -113,10 +113,3 @@ class LocalNotificationService {
     }
   }
 }
-  plugin.show(
-      chatMessage.channel.hashCode,
-      'Nachricht von {name}'
-          .tr(namedArgs: {'name': chatMessage.message.sender_name}),
-      chatMessage.message.text,
-      platformChannelSpecifics,
-      payload: jsonEncode(chatMessage.toJson()));
