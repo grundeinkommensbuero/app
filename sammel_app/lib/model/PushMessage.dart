@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:sammel_app/shared/ServerException.dart';
 
 import 'Message.dart';
@@ -74,8 +75,9 @@ class ChatMessagePushData extends ChatPushData {
     try {
       this.message = ChatMessage.fromJson(json);
     } on AssertionError catch (e) {
-      throw UnreadablePushMessage(
-          'Unlesbare Teilnahme-Push-Nachricht (Teilnahme) empfangen: ${e.message}');
+      throw UnreadablePushMessage(tr(
+          'Unlesbare Push-Nachricht (Teilnahme) empfangen: {message}',
+          namedArgs: {'named': e.message}));
     }
   }
 }

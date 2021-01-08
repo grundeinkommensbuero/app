@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:calendarro/calendarro.dart';
 import 'package:calendarro/date_utils.dart';
 import 'package:calendarro/default_day_tile.dart';
@@ -70,13 +71,13 @@ Future<List<DateTime>> showMultipleDatePicker(
                   ButtonBar(alignment: MainAxisAlignment.center, children: [
                     RaisedButton(
                       key: Key('days dialog cancel button'),
-                      child: Text("Abbrechen"),
+                      child: Text("Abbrechen").tr(),
                       onPressed: () =>
                           Navigator.pop(context, previousSelectedDates),
                     ),
                     RaisedButton(
                       key: Key('days dialog accept button'),
-                      child: Text("Auswählen"),
+                      child: Text("Auswählen").tr(),
                       onPressed: () =>
                           Navigator.pop(context, selectedDatesFromFilter),
                     )
@@ -155,13 +156,13 @@ class GerCalendarroWeekdayLabelsView extends CalendarroWeekdayLabelsView {
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
-        Expanded(child: Text("Mo", textAlign: TextAlign.center)),
-        Expanded(child: Text("Di", textAlign: TextAlign.center)),
-        Expanded(child: Text("Mi", textAlign: TextAlign.center)),
-        Expanded(child: Text("Do", textAlign: TextAlign.center)),
-        Expanded(child: Text("Fr", textAlign: TextAlign.center)),
-        Expanded(child: Text("Sa", textAlign: TextAlign.center)),
-        Expanded(child: Text("So", textAlign: TextAlign.center)),
+        Expanded(child: Text('Mo', textAlign: TextAlign.center).tr()),
+        Expanded(child: Text('Di', textAlign: TextAlign.center).tr()),
+        Expanded(child: Text('Mi', textAlign: TextAlign.center).tr()),
+        Expanded(child: Text('Do', textAlign: TextAlign.center).tr()),
+        Expanded(child: Text('Fr', textAlign: TextAlign.center).tr()),
+        Expanded(child: Text('Sa', textAlign: TextAlign.center).tr()),
+        Expanded(child: Text('So', textAlign: TextAlign.center).tr()),
       ],
     );
   }

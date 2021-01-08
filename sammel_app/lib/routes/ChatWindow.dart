@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -92,30 +93,6 @@ class ChatWindowState extends State<ChatWindow> {
               style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.normal),
               overflow: TextOverflow.fade)
         ]),
-        /*Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              children: <Widget>[
-                Text(
-                  termin.typ,
-                  style: TextStyle(fontSize: 13.0),
-                  overflow: TextOverflow.fade,
-                ),
-                Text(' in ',
-                    style: TextStyle(
-                        fontSize: 13.0, fontWeight: FontWeight.normal),
-                    overflow: TextOverflow.fade),
-                Text(termin.ort.ort,
-                    style: TextStyle(fontSize: 13.0),
-                    overflow: TextOverflow.fade),
-              ],
-            ),
-            Text(
-                'am ${ChronoHelfer.formatDateOfDateTime(termin.beginn)}, um ${ChronoHelfer.dateTimeToStringHHmm(termin.beginn)} Uhr',
-                style:
-                    TextStyle(fontSize: 13.0, fontWeight: FontWeight.normal)),
-          ]),*/
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.people),
@@ -124,13 +101,6 @@ class ChatWindowState extends State<ChatWindow> {
               openMemberPage(context, termin.participants);
             },
           ),
-          /* IconButton(
-        icon: const Icon(Icons.arrow_back),
-        tooltip: 'Back',
-        onPressed: () {
-          backArrowPressed(context);
-        },
-      )*/
         ]);
   }
 
@@ -139,7 +109,7 @@ class ChatWindowState extends State<ChatWindow> {
       builder: (BuildContext context) {
         return Scaffold(
           appBar: AppBar(
-            title: Text('Members'),
+            title: Text('Teilnehmer*innen').tr(),
           ),
           body: create_member_list_widget(participants),
         );
@@ -149,7 +119,7 @@ class ChatWindowState extends State<ChatWindow> {
 
   Widget create_member_list_widget(List<User> participants) {
     if (participants.length == 0) {
-      return Text('Keine Teilnehmer');
+      return Text('Keine Teilnehmer*innen').tr();
     } else {
       List<Widget> users = participants
           .where((user) => user.name != null && user.name != '')
@@ -162,12 +132,17 @@ class ChatWindowState extends State<ChatWindow> {
           0,
           Padding(
               padding: EdgeInsets.only(left: 15, top: 5, bottom: 5),
-              child: Text('${users.length + a_count} Teilnehmer im Chat',
-                  style:
-                      TextStyle(fontSize: 15, fontWeight: FontWeight.normal))));
+              child: Text('{count} Teilnehmer*innen im Chat',
+                      style: TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.normal))
+                  .tr(namedArgs: {
+                'count': (users.length + a_count).toString()
+              })));
       if (a_count > 0) {
-        users.add(
-            create_user_widget('+ $a_count weitere Teilnehmer', Colors.black));
+        users.add(create_user_widget(
+            '+ {count} weitere Teilnehmer*innen'
+                .tr(namedArgs: {'count': a_count.toString()}),
+            Colors.black));
       }
       return Column(children: users);
     }
@@ -202,8 +177,11 @@ class ChatWindowState extends State<ChatWindow> {
         sender_name: name,
         user_id: user.id);
     ChatPushData mpd = ChatMessagePushData(message, channel.id);
-    pushService.pushToAction(widget.termin.id, mpd,
-        PushNotification("New Chat Message", "Open App to view Message"));
+    pushService.pushToAction(
+        widget.termin.id,
+        mpd,
+        PushNotification(
+            'Neue Chat-Nachricht'.tr(), "Öffne die App um sie zu lesen".tr()));
     channel.pushChatMessage(message);
     controller.clear();
   }

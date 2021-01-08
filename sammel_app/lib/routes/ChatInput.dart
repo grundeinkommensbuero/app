@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +32,7 @@ class ChatInputState extends State<ChatInputWidget> {
                     controller: widget.textEditingController,
                     //     focusNode: myFocusNode,
                     decoration: InputDecoration.collapsed(
-                      hintText: 'Nachricht eingeben...',
+                      hintText: tr('Nachricht eingeben...'),
                       hintStyle: TextStyle(color: Colors.grey),
                     ),
                   ),

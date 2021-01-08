@@ -55,7 +55,7 @@ class UserService extends AbstractUserService {
       if (user != null)
         await verifyUser(user).catchError((e, s) async {
           ErrorService.handleError(e, s,
-              context: 'Ein neuer Benutzer wird angelegt.');
+              context: 'Eine neue Benutzer*in wird angelegt.');
           user = await createNewUser();
         }, test: (e) => e is InvalidUserException);
       else
@@ -78,7 +78,7 @@ class UserService extends AbstractUserService {
           appAuth: true);
     } catch (e, s) {
       ErrorService.handleError(e, s,
-          context: 'Anlegen eine*r neuen Benutzer*in ist gescheitert.');
+          context: 'Anlegen einer neuen Benutzer*in ist gescheitert.');
       throw e;
     }
     var userFromServer = User.fromJSON(response.body);

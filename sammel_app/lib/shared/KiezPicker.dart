@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -49,7 +50,7 @@ class KiezPicker {
                   titlePadding: EdgeInsets.zero,
                   title: AppBar(
                       automaticallyImplyLeading: false,
-                      title: const Text('Bezirke oder Kieze auswählen')),
+                      title: const Text('Bezirke oder Kieze auswählen').tr()),
                   children: [
                     SizedBox(
                         height: MediaQuery.of(context).size.height * 0.7,
@@ -72,7 +73,7 @@ class KiezPicker {
                             mapController: mapController,
                           )),
                           RaisedButton(
-                              child: Text('Auswahl übernehmen'),
+                              child: Text('Auswahl übernehmen').tr(),
                               onPressed: () =>
                                   Navigator.pop(context, selectedKieze))
                         ])),

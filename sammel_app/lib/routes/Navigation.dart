@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
@@ -66,10 +67,10 @@ class NavigationState extends State<Navigation>
       ChatPage()
     ];
     List<String> titles = [
-      'Aktionen',
-      'Zum Sammeln aufrufen',
-      'Tipps und Argumente',
-      'Profil',
+      'Aktionen'.tr(),
+      'Zum Sammeln aufrufen'.tr(),
+      'Tipps und Argumente'.tr(),
+      'Profil'.tr(),
     ];
 
     _slide = Tween<Offset>(
@@ -137,25 +138,25 @@ class NavigationState extends State<Navigation>
                     ),
                     menuEntry(
                         key: Key('action page navigation button'),
-                        title: 'Aktionen',
+                        title: 'Aktionen'.tr(),
                         subtitle:
-                            'Aktionen in einer Liste oder Karte anschauen',
+                            'Aktionen in einer Liste oder Karte anschauen'.tr(),
                         index: 0),
                     menuEntry(
                         key: Key('action creator navigation button'),
-                        title: 'Zum Sammeln einladen',
-                        subtitle: 'Eine Sammel-Aktion ins Leben rufen',
+                        title: 'Zum Sammeln einladen'.tr(),
+                        subtitle: 'Eine Sammel-Aktion ins Leben rufen'.tr(),
                         index: 1),
                     menuEntry(
                         key: Key('faq navigation button'),
-                        title: 'Fragen und Antworten',
-                        subtitle: 'Tipps, Tricks und Argumentationshilfen',
+                        title: 'Fragen und Antworten'.tr(),
+                        subtitle: 'Tipps, Tricks und Argumentationshilfen'.tr(),
                         index: 2),
                     menuEntry(
                         key: Key('profile navigation button'),
-                        title: 'Dein Profil',
+                        title: 'Dein Profil'.tr(),
                         subtitle:
-                            'Dein Name, dein Kiez und deine Einstellungen',
+                            'Dein Name, dein Kiez und deine Einstellungen'.tr(),
                         index: 3),
                   ],
                 ))));

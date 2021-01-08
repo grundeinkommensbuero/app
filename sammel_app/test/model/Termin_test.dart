@@ -214,7 +214,7 @@ void main() {
     test('throws Error when type is unknown', () {
       infoveranstaltung.typ = 'Unbekannt';
       expect(() => infoveranstaltung.getAsset(),
-          throwsA((e) => e is UnkownActionTypeException));
+          throwsA((e) => e is UnknownActionTypeException));
     });
 
     test('returns non-centered icon path', () {
@@ -231,7 +231,7 @@ void main() {
   });
 
   test('UnkownActionTypeException.toString generates message', () {
-    expect(UnkownActionTypeException('this is the message').toString(),
+    expect(UnknownActionTypeException('this is the message').toString(),
         'UnkownActionTypeException: this is the message');
   });
 }

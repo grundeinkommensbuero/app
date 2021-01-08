@@ -27,7 +27,7 @@ class PushSendService extends AbstractPushSendService {
       PushNotification notification) async {
     if (recipients == null || recipients.isEmpty) {
       throw MissingTargetError(
-          "Für Push-Nachrichten an Geräte muss mindestens ein Empfänger angegeben werden.");
+          'Für Push-Nachrichten an Geräte muss mindestens ein Empfänger angegeben werden.');
     }
 
     try {
@@ -44,7 +44,7 @@ class PushSendService extends AbstractPushSendService {
   pushToTopic(String topic, PushData data, PushNotification notification) {
     if (topic == null || topic.isEmpty) {
       throw MissingTargetError(
-          "Für Push-Nachrichten an Topics muss ein Topic angegeben werden.");
+          'Für Push-Nachrichten an Topics muss ein Topic angegeben werden.');
     }
 
     try {
@@ -60,7 +60,7 @@ class PushSendService extends AbstractPushSendService {
       int actionId, PushData data, PushNotification notification) async {
     if (actionId == null) {
       throw MissingTargetError(
-          "Für Push-Nachrichten an Aktionen muss die Aktions-ID angegeben werden.");
+          'Für Push-Nachrichten an Aktionen muss die Aktions-ID angegeben werden.');
     }
 
     print(
@@ -97,7 +97,7 @@ class DemoPushSendService extends AbstractPushSendService {
   pushToTopic(String topic, PushData data, PushNotification notification) {
     if (topic == null || topic.isEmpty) {
       throw MissingTargetError(
-          "Für Push-Nachrichten an Topics muss ein Topic angegeben werden.");
+          'Für Push-Nachrichten an Topics muss ein Topic angegeben werden.');
     }
     controller.add(data);
   }

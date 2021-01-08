@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:convert';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -5,29 +6,31 @@ import 'package:sammel_app/model/PushMessage.dart';
 
 // Siehe https://pub.dev/packages/flutter_local_notifications
 
-const AndroidNotificationChannel participationChannel =
-    AndroidNotificationChannel(
+AndroidNotificationChannel participationChannel = AndroidNotificationChannel(
   'Teilnahmen und Absagen', // id
-  'Teilnahmen und Absagen', // title
-  'Benachrichtigungen über Mitstreiter*innen bei Aktionen an denen du teilnimmst',
+  'Teilnahmen und Absagen'.tr(), // title
+  'Benachrichtigungen über Mitstreiter*innen bei Aktionen an denen du teilnimmst'
+      .tr(),
 );
 
-const AndroidNotificationChannel changesChannel = AndroidNotificationChannel(
+AndroidNotificationChannel changesChannel = AndroidNotificationChannel(
   'Änderungen an Aktionen', // id
-  'Änderungen an Aktionen', // title
-  'Benachrichtigungen wenn sich Aktionen geändert haben oder abgesagt wurden an denen du teilnimmst',
+  'Änderungen an Aktionen'.tr(), // title
+  'Benachrichtigungen wenn sich Aktionen geändert haben oder abgesagt wurden an denen du teilnimmst'
+      .tr(),
 );
 
-const AndroidNotificationChannel actionChatChannel = AndroidNotificationChannel(
+AndroidNotificationChannel actionChatChannel = AndroidNotificationChannel(
   'Aktionen-Chats', // id
-  'Aktionen-Chats', // title
-  'Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst',
+  'Aktionen-Chats'.tr(), // title
+  'Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst'
+      .tr(),
 );
 
-const AndroidNotificationChannel defaultChannel = AndroidNotificationChannel(
+AndroidNotificationChannel defaultChannel = AndroidNotificationChannel(
   'Infos', // id
-  'Infos', // title
-  'Allgemeine Infos',
+  'Infos'.tr(), // title
+  'Allgemeine Infos'.tr(),
 );
 
 Future<FlutterLocalNotificationsPlugin> initializeLocalNotifications() async {
@@ -35,7 +38,7 @@ Future<FlutterLocalNotificationsPlugin> initializeLocalNotifications() async {
       FlutterLocalNotificationsPlugin();
 
   const androidInitializationSettings =
-  AndroidInitializationSettings('push_icon');
+      AndroidInitializationSettings('push_icon');
   const AndroidInitializationSettings initializationSettingsAndroid =
       androidInitializationSettings;
 
@@ -73,7 +76,7 @@ Future selectNotification(String payload) {
 
 Future sendChatNotification(ChatMessagePushData chatMessage) async {
   AndroidNotificationDetails androidPlatformChannelSpecifics =
-      AndroidNotificationDetails('Aktionen-Chats', 'Aktionen-Chats',
+      AndroidNotificationDetails('Aktionen-Chats', 'Aktionen-Chats'.tr(),
           'Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst',
           ticker:
               'Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst');
@@ -84,7 +87,8 @@ Future sendChatNotification(ChatMessagePushData chatMessage) async {
 
   plugin.show(
       chatMessage.channel.hashCode,
-      'Nachricht von ${chatMessage.message.sender_name}',
+      'Nachricht von {name}'
+          .tr(namedArgs: {'name': chatMessage.message.sender_name}),
       chatMessage.message.text,
       platformChannelSpecifics,
       payload: jsonEncode(chatMessage.toJson()));

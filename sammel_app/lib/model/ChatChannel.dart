@@ -66,7 +66,7 @@ class ChatChannel {
         return ChatMessage.fromJson(jsonMsg);
       ErrorService.handleError(
           throw UnkownMessageTypeError(
-              "Unbekannter Nachrichtentyp abgespeichert"),
+              'Unbekannter Nachrichtentyp abgespeichert'),
           StackTrace.current);
     }).toList();
     this.channel_messages?.sort((a, b) => a.timestamp.compareTo(b.timestamp));
