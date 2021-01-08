@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
@@ -16,7 +17,8 @@ class Navigation extends StatefulWidget {
   var clearButton = false;
   GlobalKey actionPage;
 
-  Navigation(this.actionPage, [this.clearButton]) : super(key: Key('navigation'));
+  Navigation(this.actionPage, [this.clearButton])
+      : super(key: Key('navigation'));
 
   @override
   State<StatefulWidget> createState() => NavigationState();
@@ -48,12 +50,14 @@ class NavigationState extends State<Navigation>
       parent: _animationController,
       curve: Curves.easeIn,
     ));
+
+    // Error-Service kann am Ende des ersten Builds Dialoge zeigen
+    SchedulerBinding.instance
+        .addPostFrameCallback((_) => ErrorService.setContext(context));
   ***REMOVED***
 
   @override
   Widget build(BuildContext context) {
-    ErrorService.setContext(context);
-
     var pages = [
       TermineSeite(key: widget.actionPage),
       ActionEditor(onFinish: newActionCreated, key: Key('action creator')),
@@ -99,7 +103,8 @@ class NavigationState extends State<Navigation>
             ),
           ),
           floatingActionButton: widget.clearButton == true
-              ? FloatingActionButton(heroTag: 'clearButtonHero',
+              ? FloatingActionButton(
+                  heroTag: 'clearButtonHero',
                   onPressed: () => Provider.of<StorageService>(context)
                       .clearAllPreferences(),
                   child: Icon(Icons.delete_forever),
@@ -202,8 +207,9 @@ class NavigationState extends State<Navigation>
   ***REMOVED***
 
   void addActionsToActionPage(List<Termin> actions) {
-    actions.forEach((action) => (widget.actionPage.currentState as TermineSeiteState)
-        .createAndAddAction(action));
+    actions.forEach((action) =>
+        (widget.actionPage.currentState as TermineSeiteState)
+            .createAndAddAction(action));
   ***REMOVED***
 
   Future<bool> navigateBack() async {
