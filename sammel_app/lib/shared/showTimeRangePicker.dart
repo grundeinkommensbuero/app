@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
@@ -33,15 +34,17 @@ Future<TimeOfDay> showSingleTimePicker(
                     fontSize: 30.0,
                     fontWeight: FontWeight.bold)),
             child: Theme(
-                data: Theme.of(context).copyWith(textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(primary: DweTheme.purple))),
+                data: Theme.of(context).copyWith(
+                    textButtonTheme: TextButtonThemeData(
+                        style: TextButton.styleFrom(primary: DweTheme.purple))),
                 child: timePicker)));
   ***REMOVED***
   return await showTimePicker(
       context: context,
       initialTime: initialTime,
-      helpText: title,
-      cancelText: 'Keine Auswahl',
-      confirmText: next,
+      helpText: title.tr(),
+      cancelText: 'Keine Auswahl'.tr(),
+      confirmText: next.tr(),
       builder: builder);
 ***REMOVED***
 

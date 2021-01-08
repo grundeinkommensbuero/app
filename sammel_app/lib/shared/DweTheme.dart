@@ -61,7 +61,7 @@ class DweTheme {
           colorFilter: ColorFilter.mode(
               Color.fromARGB(220, 255, 255, 250), BlendMode.srcOver),
           image: AssetImage('assets/images/housy_happy.png'),
-          scale: 1.5,
-          fit: BoxFit.none,
+          scale: 1.8,
+          fit: BoxFit. none,
           alignment: Alignment.topCenter));
 ***REMOVED***

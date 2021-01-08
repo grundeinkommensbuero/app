@@ -84,7 +84,7 @@ void main() async {
           [DateTime(2020, 1, 14), DateTime(2020, 1, 16)],
           TimeOfDay(hour: 12, minute: 30),
           TimeOfDay(hour: 15, minute: 0),
-          [ffAlleeNord().kiez, tempVorstadt().kiez],
+          [ffAlleeNord().name, tempVorstadt().name],
           []);
 
       var result = await service.saveFilter(filter);
@@ -110,7 +110,7 @@ void main() async {
           [DateTime(2020, 1, 14), DateTime(2020, 1, 16)],
           TimeOfDay(hour: 12, minute: 30),
           TimeOfDay(hour: 15, minute: 0),
-          [ffAlleeNord().kiez, tempVorstadt().kiez],
+          [ffAlleeNord().name, tempVorstadt().name],
           []);
       _prefs.setString('filter', jsonEncode(filter.toJson()));
 
@@ -133,7 +133,7 @@ void main() async {
           [DateTime(2020, 1, 14), DateTime(2020, 1, 16)],
           TimeOfDay(hour: 12, minute: 30),
           TimeOfDay(hour: 15, minute: 0),
-          [ffAlleeNord().kiez, tempVorstadt().kiez],
+          [ffAlleeNord().name, tempVorstadt().name],
           []);
       _prefs.clear();
 

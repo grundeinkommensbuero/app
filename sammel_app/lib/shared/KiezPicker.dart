@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -10,21 +11,30 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'DweTheme.dart';
 
 class KiezPicker {
-  List<Kiez> kieze = [];
-  List<Kiez> selectedKieze = [];
+  Set<Kiez> selectedKieze = {***REMOVED***
   var mapController = MapController();
-  var outlines2kieze;
-  var areas2kieze;
   List<Polygon> visiblePolygons = [];
 
+  double KIEZE_THRESHOLD = 12;
+  double REGIONEN_THRESHOLD = 11;
+
+  static Set<Kiez> kieze;
+  static Set<Region> regionen;
+  static Set<Ortsteil> ortsteile;
+
+  StammdatenService stammdatenService;
+
   KiezPicker(this.selectedKieze) {
-    if (this.selectedKieze == null) this.selectedKieze = [];
+    if (this.selectedKieze == null) this.selectedKieze = {***REMOVED***
   ***REMOVED***
 
-  Future<List<Kiez>> showKiezPicker(context) async {
-    kieze = await Provider.of<StammdatenService>(context).kieze;
-    outlines2kieze = generateKiezOutlines(kieze);
-    areas2kieze = generateKiezAreas(kieze);
+  Future<Set<Kiez>> showKiezPicker(context) async {
+    stammdatenService = Provider.of<StammdatenService>(context);
+    regionen = await stammdatenService.regionen;
+    kieze = await stammdatenService.kieze;
+    ortsteile = await stammdatenService.ortsteile;
+    visiblePolygons = generateOrtsteileOutlines(ortsteile).toList();
+
     return await showDialog(
         context: context,
         builder: (context) =>
@@ -42,12 +52,11 @@ class KiezPicker {
                   contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 5.0),
                   titlePadding: EdgeInsets.zero,
                   title: AppBar(
-                      leading: null,
                       automaticallyImplyLeading: false,
-                      title: const Text('Bezirke oder Kieze auswählen')),
+                      title: const Text('Bezirke oder Kieze auswählen').tr()),
                   children: [
                     SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.8,
+                        height: MediaQuery.of(context).size.height * 0.7,
                         width: MediaQuery.of(context).size.width * 0.8,
                         child: Column(children: [
                           Expanded(
@@ -67,7 +76,7 @@ class KiezPicker {
                             mapController: mapController,
                           )),
                           RaisedButton(
-                              child: Text('Auswahl übernehmen'),
+                              child: Text('Auswahl übernehmen').tr(),
                               onPressed: () =>
                                   Navigator.pop(context, selectedKieze))
                         ])),
@@ -76,54 +85,88 @@ class KiezPicker {
   ***REMOVED***
 
   getVisiblePolygons() {
-    this.visiblePolygons = outlines2kieze.values.toList();
-    selectedKieze
-        .forEach((selected) => this.visiblePolygons.add(areas2kieze[selected]));
+    if (mapController.zoom > KIEZE_THRESHOLD)
+      this.visiblePolygons = generateKiezeOutlines(kieze).toList();
+    else if (mapController.zoom > REGIONEN_THRESHOLD)
+      this.visiblePolygons = generateRegionenOutlines(regionen).toList();
+    else
+      this.visiblePolygons = generateOrtsteileOutlines(ortsteile).toList();
+
+    selectedKieze.forEach((selected) =>
+        this.visiblePolygons.add(generateKiezeAreas(kieze)[selected]));
   ***REMOVED***
 
   markKiez(LatLng position) {
-    var tappedKiez = kieze
-        .where((kiez) =>
-            kiez.xBoundMax > position.latitude &&
-            kiez.xBoundMin < position.latitude &&
-            kiez.yBoundMax > position.longitude &&
-            kiez.yBoundMin < position.latitude)
-        .firstWhere(
-            (kiez) => poly
-                .toPolyFromListOfList(kiez.polygon)
-                .contains(position.longitude, position.latitude),
-            orElse: () => null);
+    final zoom = mapController.zoom;
 
-    if (tappedKiez == null) return;
-
-    if (selectedKieze.contains(tappedKiez))
-      selectedKieze.remove(tappedKiez);
+    Iterable<Kiez> tappedKieze;
+    if (zoom > KIEZE_THRESHOLD)
+      tappedKieze = kieze.where((kiez) => isIn(position, kiez.polygon));
+    else if (zoom > REGIONEN_THRESHOLD)
+      tappedKieze = regionen
+          .where((region) => isIn(position, region.polygon))
+          .expand(
+              (region) => kieze.where((kiez) => kiez.region == region.name));
     else
-      selectedKieze.add(tappedKiez);
+      tappedKieze = ortsteile
+          .where((ortsteil) => isIn(position, ortsteil.polygon))
+          .expand((ortsteil) =>
+              kieze.where((kiez) => kiez.ortsteil == ortsteil.name));
+
+    if (selectedKieze.containsAll(tappedKieze))
+      selectedKieze.removeAll(tappedKieze);
+    else
+      selectedKieze.addAll(tappedKieze);
+
     getVisiblePolygons();
+  ***REMOVED***
+
+  bool isIn(LatLng position, List<LatLng> polygon) {
+    return poly.Polygon(polygon
+            .map((latlng) => poly.Point<num>(latlng.latitude, latlng.longitude))
+            .toList())
+        .contains(position.latitude, position.longitude);
   ***REMOVED***
 ***REMOVED***
 
-Map<Kiez, Polygon> generateKiezOutlines(List<Kiez> kieze) {
-  return kieze.asMap().map((_, kiez) => MapEntry(
-      kiez,
-      Polygon(
+Set<Polygon> generateKiezeOutlines(Set<Kiez> kieze) {
+  return kieze
+      .map((kiez) => Polygon(
           color: Colors.transparent,
           borderStrokeWidth: 2.0,
           borderColor: Color.fromARGB(250, DweTheme.purple.red,
               DweTheme.purple.green, DweTheme.purple.blue),
-          points: kiez.polygon
-              .map((point) => LatLng(point[1], point[0]))
-              .toList())));
+          points: kiez.polygon))
+      .toSet();
 ***REMOVED***
 
-Map<Kiez, Polygon> generateKiezAreas(List<Kiez> kieze) {
-  return kieze.asMap().map((_, kiez) => MapEntry(
+Set<Polygon> generateOrtsteileOutlines(Set<Ortsteil> bezirke) {
+  return bezirke
+      .map((bezirk) => Polygon(
+          color: Colors.transparent,
+          borderStrokeWidth: 2.0,
+          borderColor: Color.fromARGB(250, DweTheme.purple.red,
+              DweTheme.purple.green, DweTheme.purple.blue),
+          points: bezirk.polygon))
+      .toSet();
+***REMOVED***
+
+Set<Polygon> generateRegionenOutlines(Set<Region> ortsteile) {
+  return ortsteile
+      .map((ortsteil) => Polygon(
+          color: Colors.transparent,
+          borderStrokeWidth: 2.0,
+          borderColor: Color.fromARGB(250, DweTheme.purple.red,
+              DweTheme.purple.green, DweTheme.purple.blue),
+          points: ortsteil.polygon))
+      .toSet();
+***REMOVED***
+
+Map<Kiez, Polygon> generateKiezeAreas(Set<Kiez> kieze) {
+  return kieze.toList().asMap().map((_, kiez) => MapEntry(
       kiez,
       Polygon(
           color: Color.fromARGB(150, DweTheme.yellow.red, DweTheme.yellow.green,
               DweTheme.yellow.blue),
-          points: kiez.polygon
-              .map((point) => LatLng(point[1], point[0]))
-              .toList())));
+          points: kiez.polygon)));
 ***REMOVED***

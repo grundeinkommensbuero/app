@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -19,29 +20,37 @@ abstract class PushReceiveService {
   void subscribeToTopics(List<String> topics);
 
   void unsubscribeFromTopics(List<String> topic);
+
+  Future<String> token;
 ***REMOVED***
 
 class FirebaseReceiveService implements PushReceiveService {
-  FirebaseMessaging firebaseMessaging;
-
-  Future<String> token;
+  static FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  static StreamController<String> _tokenStreamController =
+      StreamController.broadcast();
+  @override
+  Future<String> token = _tokenStreamController.stream.first;
 
   FirebaseReceiveService([FirebaseMessaging firebaseMock]) {
-    firebaseMessaging =
-        firebaseMock != null ? firebaseMock : FirebaseMessaging();
-    initializeFirebase();
+    if (firebaseMock != null)
+      firebaseMessaging = firebaseMock;
+    else if (pullMode) {
+      // DEBUG
+      _tokenStreamController.add(null);
+    ***REMOVED*** else
+      initializeFirebase();
   ***REMOVED***
 
   initializeFirebase() async {
-    // DEBUG
-    if (pullMode) return;
+    await firebaseMessaging
+        .getToken()
+        .timeout(Duration(seconds: 5), onTimeout: () => null)
+        .then((token) => _tokenStreamController.add(token));
 
     // For iOS request permission first.
-    await firebaseMessaging.requestNotificationPermissions();
+    firebaseMessaging.requestNotificationPermissions();
 
-    token = firebaseMessaging
-        .getToken()
-        .timeout(Duration(seconds: 5), onTimeout: () => null);
+    print('Firebase initialisiert mit Token: ${await token***REMOVED***');
   ***REMOVED***
 
   @override
@@ -77,6 +86,7 @@ class PullService extends BackendService implements PushReceiveService {
 
   PullService(AbstractUserService userService, Backend backend)
       : super(userService, backend) {
+    print('Starte Pulling');
     timer = Timer.periodic(Duration(seconds: 10), (_) => pull());
   ***REMOVED***
 
@@ -106,7 +116,8 @@ class PullService extends BackendService implements PushReceiveService {
       post('service/push/pull/subscribe', jsonEncode(topics));
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
-          context: 'Fehler beim Anmelden der Benachrichtigungen zu $topics');
+          context: 'Fehler beim Anmelden der Benachrichtigungen zu {topics***REMOVED***'
+              .tr(namedArgs: {'topics': topics.toString()***REMOVED***));
     ***REMOVED***
   ***REMOVED***
 
@@ -116,7 +127,11 @@ class PullService extends BackendService implements PushReceiveService {
       post('service/push/pull/subscribe', jsonEncode(topics));
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
-          context: 'Fehler beim Abmelden der Benachrichtigungen zu $topics');
+          context: 'Fehler beim Abmelden der Benachrichtigungen zu {topics***REMOVED***'
+              .tr(namedArgs: {'topics': topics.toString()***REMOVED***));
     ***REMOVED***
   ***REMOVED***
+
+  @override
+  Future<String> token = Future.value('Pull-Modus');
 ***REMOVED***

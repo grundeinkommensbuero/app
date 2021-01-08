@@ -20,14 +20,14 @@ void main() {
               [DateTime(2019, 11, 22, 0, 0, 0), DateTime(2019, 1, 30, 0, 0, 0)],
               TimeOfDay(hour: 4, minute: 10),
               TimeOfDay(hour: 23, minute: 0),
-              [ffAlleeNord().kiez],
+              ['Frankfurter Allee Süd'],
               [])),
           '{'
           '"typen":["Sammeln","Infoveranstaltung"],'
           '"tage":["2019-11-22","2019-01-30"],'
           '"von":"04:10:00",'
           '"bis":"23:00:00",'
-          '"orte":["Frankfurter Allee Nord"],'
+          '"orte":["Frankfurter Allee Süd"],'
           '"ids":[]'
           '***REMOVED***');
     ***REMOVED***);
