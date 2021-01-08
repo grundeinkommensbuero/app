@@ -113,10 +113,3 @@ class LocalNotificationService {
     ***REMOVED***
   ***REMOVED***
 ***REMOVED***
-  plugin.show(
-      chatMessage.channel.hashCode,
-      'Nachricht von {name***REMOVED***'
-          .tr(namedArgs: {'name': chatMessage.message.sender_name***REMOVED***),
-      chatMessage.message.text,
-      platformChannelSpecifics,
-      payload: jsonEncode(chatMessage.toJson()));
