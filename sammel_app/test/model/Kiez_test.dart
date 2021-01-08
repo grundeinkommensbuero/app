@@ -8,7 +8,7 @@ import '../shared/TestdatenVorrat.dart';
 void main() {
   group('serialisere', () {
     test('serialisiert nur Kiez', () {
-      expect(jsonEncode(Kiez('kiez1', 'bezirk1', [])), '"kiez1"');
+      expect(jsonEncode(Kiez('kiez1', 'bezirk1', 'ortsteil1', [])), '"kiez1"');
     ***REMOVED***);
   ***REMOVED***);
   group('equals', () {
@@ -19,34 +19,45 @@ void main() {
     ***REMOVED***);
 
     test('returns true for null locations', () {
-      expect(Kiez(null, null, []).equals(Kiez(null, null, [])), true);
+      expect(
+          Kiez(null, null, null, []).equals(Kiez(null, null, null, [])), true);
     ***REMOVED***);
 
     test('returns false for different location', () {
-      expect(Kiez('Bezirk 1', 'Kiez', []).equals(Kiez('Bezirk 2', 'Kiez', [])),
+      expect(
+          Kiez('Kiez', 'Region 1', 'Ortsteil', [])
+              .equals(Kiez('Kiez', 'Region 2', 'Ortsteil', [])),
           false);
     ***REMOVED***);
-    test('returns false for null location', () {
-      expect(Kiez(null, 'Kiez', []).equals(Kiez('Kiez', 'Bezirk', [])), false);
+    test('returns false for null name', () {
+      expect(
+          Kiez(null, 'Kiez', 'Ortsteil', [])
+              .equals(Kiez('Kiez', 'Region', 'Ortsteil', [])),
+          false);
     ***REMOVED***);
-    test('returns false for location and null', () {
-      expect(Kiez('Kiez', 'Bezirk', []).equals(Kiez(null, 'Kiez', [])), false);
+    test('returns false for name and null', () {
+      expect(
+          Kiez('Kiez', 'Region', 'Ortsteil', [])
+              .equals(Kiez(null, 'Region', 'Ortsteil', [])),
+          false);
     ***REMOVED***);
 
     test('returns false for different place', () {
-      expect(Kiez('Ort 1', 'Bezirk', []).equals(Kiez('Bezirk', 'Ort 2', [])),
+      expect(
+          Kiez('Kiez', 'Region 1', 'Ortsteil', [])
+              .equals(Kiez('Kiez', 'Region 2', 'Ortsteil', [])),
           false);
     ***REMOVED***);
     test('returns false for null place', () {
       expect(
-          Kiez(null, 'Bezirk', [])
-              .equals(Kiez('Kiez', 'Bezirk', [])),
+          Kiez(null, 'Region', 'Ortsteil', [])
+              .equals(Kiez('Kiez', 'Region', 'Ortsteil', [])),
           false);
     ***REMOVED***);
     test('returns false for place and null', () {
       expect(
-          Kiez('Kiez', 'Bezirk', [])
-              .equals(Kiez('Bezirk', null, [])),
+          Kiez('Kiez', 'Region', 'Ortsteil', [])
+              .equals(Kiez(null, 'Region', 'Ortsteil', [])),
           false);
     ***REMOVED***);
   ***REMOVED***);

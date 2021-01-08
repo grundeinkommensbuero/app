@@ -134,7 +134,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                 tr('{kiez***REMOVED*** in {bezirk***REMOVED***\n ⛒ Treffpunkt: {treffpunkt***REMOVED***',
                     namedArgs: {
                       'kiez': widget.action.ort.name,
-                      'bezirk': widget.action.ort.bezirk,
+                      'bezirk': widget.action.ort.region,
                       'treffpunkt': widget.action.details.treffpunkt,
                     ***REMOVED***),
                 style: TextStyle(fontWeight: FontWeight.normal)),

@@ -91,7 +91,7 @@ class LocationDialogState extends State<LocationDialog> {
         ),
         Text(
             location.kiez != null
-                ? '${location.kiez.name***REMOVED*** in ${location.kiez.bezirk***REMOVED***'
+                ? '${location.kiez.name***REMOVED*** in ${location.kiez.region***REMOVED***'
                 : '',
             style: TextStyle(fontSize: 13, color: DweTheme.purple),
             softWrap: false,

@@ -179,7 +179,7 @@ void main() {
       expect(actions[0].id, 0);
       expect(actions[0].beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(actions[0].ende, DateTime(2019, 11, 4, 18, 9, 0));
-      expect(actions[0].ort.bezirk, 'Friedrichshain-Kreuzberg');
+      expect(actions[0].ort.region, 'Friedrichshain-Kreuzberg');
       expect(actions[0].ort.name, 'Frankfurter Allee Nord');
       expect(actions[0].typ, 'Sammeln');
       expect(actions[0].latitude, 52.52116);
@@ -195,7 +195,7 @@ void main() {
       expect(actions[1].id, 0);
       expect(actions[1].beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(actions[1].ende, DateTime(2019, 11, 4, 18, 9, 0));
-      expect(actions[1].ort.bezirk, 'Friedrichshain-Kreuzberg');
+      expect(actions[1].ort.region, 'Friedrichshain-Kreuzberg');
       expect(actions[1].ort.name, 'Frankfurter Allee Nord');
       expect(actions[1].typ, 'Sammeln');
       expect(actions[1].latitude, 52.52116);
@@ -253,7 +253,7 @@ void main() {
       expect(action.id, 0);
       expect(action.beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(action.ende, DateTime(2019, 11, 4, 18, 9, 0));
-      expect(action.ort.bezirk, 'Friedrichshain-Kreuzberg');
+      expect(action.ort.region, 'Friedrichshain-Kreuzberg');
       expect(action.ort.name, 'Frankfurter Allee Nord');
       expect(action.typ, 'Sammeln');
       expect(action.latitude, 52.52116);
@@ -287,7 +287,7 @@ void main() {
       expect(action.id, 0);
       expect(action.beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(action.ende, DateTime(2019, 11, 4, 18, 9, 0));
-      expect(action.ort.bezirk, 'Friedrichshain-Kreuzberg');
+      expect(action.ort.region, 'Friedrichshain-Kreuzberg');
       expect(action.ort.name, 'Frankfurter Allee Nord');
       expect(action.typ, 'Sammeln');
       expect(action.latitude, 52.52116);
