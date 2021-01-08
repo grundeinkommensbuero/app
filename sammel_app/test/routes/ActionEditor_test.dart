@@ -42,8 +42,7 @@ void main() {
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
     when(_terminService.loadActions(any)).thenAnswer((_) async => []);
-    when(_stammdatenService.kieze).thenAnswer(
-        (_) async => [ffAlleeNord(), tempVorstadt(), plaenterwald()]);
+    when(_pushManager.pushToken).thenAnswer((_) async => 'Token');
   });
 
   testWidgets('TermineSeite opens CreateTerminDialog on click at menu button',
@@ -102,7 +101,7 @@ void main() {
           findsOneWidget);
     });
 
-    testWidgets('Type dialog shows correct no typ',
+    testWidgets('Type dialog shows Sammeln as default',
         (WidgetTester tester) async {
       await _openActionCreator(tester);
 
@@ -110,7 +109,7 @@ void main() {
       expect(
           find.descendant(
               of: find.byKey(Key('action creator')),
-              matching: find.text('Wähle die Art der Aktion')),
+              matching: find.text('Sammeln')),
           findsOneWidget);
     });
 
@@ -155,7 +154,6 @@ void main() {
 
     testWidgets('Location dialog opens correctly', (WidgetTester tester) async {
       await _openActionCreator(tester);
-      when(_stammdatenService.kieze).thenAnswer((_) async => [tempVorstadt()]);
       expect(find.byKey(Key('Location Picker')), findsNothing);
       await tester.tap(find.byKey(Key('Open location dialog')));
       await tester.pump();
@@ -169,7 +167,6 @@ void main() {
           tester.state(find.byKey(Key('action creator')));
       expect(find.text('Tempelhofer Vorstadt in Friedrichshain-Kreuzberg'),
           findsNothing);
-      when(_stammdatenService.kieze).thenAnswer((_) async => [tempVorstadt()]);
       // ignore: invalid_use_of_protected_member
       actionData.setState(() {
         actionData.action.ort = tempVorstadt();
@@ -180,7 +177,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(
           find.text(
-              '${actionData.action.ort.kiez} in ${actionData.action.ort.bezirk}\n'
+              '${actionData.action.ort.name} in ${actionData.action.ort.region}\n'
               'Treffpunkt: ${actionData.action.terminDetails.treffpunkt}'),
           findsOneWidget);
     });
@@ -434,7 +431,7 @@ void main() {
           null,
           null,
           null,
-          Kiez('Bezirk', 'Kiez', 52.1, 43.1, [[]]),
+          Kiez('Kiez', 'Region', 'Ortsteil', []),
           null,
           null,
           LatLng(52.2, 43.2));
@@ -443,21 +440,13 @@ void main() {
           ActionEditorState.determineMapCenter(actionData), LatLng(52.2, 43.2));
     });
 
-    test('returns location, if given and no coordinates', () {
-      var actionData = ActionData(null, null, null,
-          Kiez('Bezirk', 'Ort', 52.1, 43.1, [[]]), null, null, null);
-
-      expect(
-          ActionEditorState.determineMapCenter(actionData), LatLng(52.1, 43.1));
-    });
-
-    test('returns null, if neither coordinates nor location given', () {
+    test('returns null, if no coordinates given', () {
       var actionData = ActionData(null, null, null, null, null, null, null);
 
       expect(ActionEditorState.determineMapCenter(actionData), null);
 
-      actionData = ActionData(null, null, null,
-          Kiez('Bezirk', 'Kiez', null, null, [[]]), null, null, null);
+      actionData = ActionData(
+          null, null, null, Kiez('Kiez', 'Region', 'Ortsteil', []), null, null, null);
 
       expect(ActionEditorState.determineMapCenter(actionData), null);
     });
@@ -671,7 +660,6 @@ void main() {
 
       var actionEditor = ActionEditor(onFinish: onFinish);
       await tester.pumpWidget(MultiProvider(providers: [
-        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<AbstractUserService>.value(value: userServiceMock),
       ], child: MaterialApp(home: actionEditor)));
 
@@ -722,7 +710,7 @@ void main() {
       expect(state.action.von, isNull);
       expect(state.action.bis, isNull);
       expect(state.action.ort, isNull);
-      expect(state.action.typ, isNull);
+      expect(state.action.typ, 'Sammeln');
       expect(state.action.tage, isEmpty);
       expect(state.action.terminDetails.beschreibung, isEmpty);
       expect(state.action.terminDetails.kontakt, isEmpty);
@@ -749,7 +737,7 @@ void main() {
       expect(state.action.von, isNull);
       expect(state.action.bis, isNull);
       expect(state.action.ort, isNull);
-      expect(state.action.typ, isNull);
+      expect(state.action.typ, 'Sammeln');
       expect(state.action.tage, isEmpty);
       expect(state.action.terminDetails.beschreibung, isEmpty);
       expect(state.action.terminDetails.kontakt, isEmpty);
@@ -834,11 +822,11 @@ void main() {
 _pumpNavigation(WidgetTester tester) async {
   await tester.pumpWidget(MultiProvider(
       providers: [
+        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<AbstractTermineService>.value(value: _terminService),
         Provider<StorageService>.value(value: _storageService),
         Provider<AbstractListLocationService>(
             create: (context) => _listLocationService),
-        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<AbstractPushSendService>.value(value: _pushService),
         Provider<AbstractUserService>.value(value: _userService),
         Provider<ChatMessageService>.value(value: _chatService),
@@ -854,11 +842,11 @@ _pumpNavigation(WidgetTester tester) async {
 _pumpActionPage(WidgetTester tester) async {
   await tester.pumpWidget(MultiProvider(
       providers: [
+        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<AbstractTermineService>.value(value: _terminService),
         Provider<StorageService>.value(value: _storageService),
         Provider<AbstractListLocationService>(
             create: (context) => _listLocationService),
-        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<AbstractUserService>.value(value: _userService),
         Provider<PushSendService>.value(value: _pushService),
         Provider<ChatMessageService>.value(value: _chatService),

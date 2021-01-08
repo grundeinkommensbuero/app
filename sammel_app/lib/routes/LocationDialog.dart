@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
@@ -54,13 +55,13 @@ class LocationDialogState extends State<LocationDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Treffpunkt'),
+      title: Text('Treffpunkt').tr(),
       content: SingleChildScrollView(
           child: ListBody(children: [
         Text(
           'Wähle auf der Karte einen Treffpunkt aus.',
           textScaleFactor: 0.9,
-        ),
+        ).tr(),
         SizedBox(
           height: 5.0,
         ),
@@ -76,7 +77,7 @@ class LocationDialogState extends State<LocationDialog> {
                         center: widget.center ?? LatLng(52.5170365, 13.3888599),
                         zoom: widget.center != null ? 14.0 : 10.0,
                         maxZoom: 19.0,
-                        onTap: (LatLng point) => locationSelected(point)),
+                        onTap: locationSelected),
                     layers: [
                       TileLayerOptions(
                           urlTemplate:
@@ -90,7 +91,7 @@ class LocationDialogState extends State<LocationDialog> {
         ),
         Text(
             location.kiez != null
-                ? '${location.kiez.kiez} in ${location.kiez.bezirk}'
+                ? '${location.kiez.name} in ${location.kiez.region}'
                 : '',
             style: TextStyle(fontSize: 13, color: DweTheme.purple),
             softWrap: false,
@@ -103,7 +104,7 @@ class LocationDialogState extends State<LocationDialog> {
           'z.B. "Unter der Weltzeituhr" oder "Tempelhofer Feld, '
           'Eingang Kienitzstraße":',
           textScaleFactor: 0.8,
-        ),
+        ).tr(),
         SizedBox(
           height: 5.0,
         ),
@@ -119,7 +120,7 @@ class LocationDialogState extends State<LocationDialog> {
       ])),
       actions: [
         FlatButton(
-          child: Text("Abbrechen"),
+          child: Text("Abbrechen").tr(),
           onPressed: () {
             Navigator.pop(
                 context,
@@ -129,7 +130,7 @@ class LocationDialogState extends State<LocationDialog> {
         ),
         FlatButton(
           key: Key('venue dialog finish button'),
-          child: Text("Fertig"),
+          child: Text("Fertig").tr(),
           onPressed: () {
             Navigator.pop(context, location);
           },
@@ -138,24 +139,20 @@ class LocationDialogState extends State<LocationDialog> {
     );
   }
 
-  void locationSelected(LatLng point) async {
+  locationSelected(LatLng point) async {
     var geodata = await Provider.of<GeoService>(context)
         .getDescriptionToPoint(point)
         .catchError((e, s) {
       ErrorService.handleError(e, s);
       return '';
     });
-    var kiez = (await Provider.of<StammdatenService>(context).kieze)
-        .where((kiez) =>
-            kiez.xBoundMax > point.latitude &&
-            kiez.xBoundMin < point.latitude &&
-            kiez.yBoundMax > point.longitude &&
-            kiez.yBoundMin < point.latitude)
-        .firstWhere(
-            (kiez) => poly
-                .toPolyFromListOfList(kiez.polygon)
-                .contains(point.longitude, point.latitude),
-            orElse: () => null);
+    var kiez = (await Provider.of<StammdatenService>(context).kieze).firstWhere(
+        (kiez) => poly.Polygon(kiez.polygon
+                .map((latlng) =>
+                    poly.Point<num>(latlng.latitude, latlng.longitude))
+                .toList())
+            .contains(point.latitude, point.longitude),
+        orElse: () => null);
 
     if (kiez == null) return;
     setState(() {

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quiver/strings.dart';
@@ -35,7 +36,7 @@ class UsernameDialogState extends State<UsernameDialog> {
             ? SizedBox()
             : Text(
                 'Um diese Aktion auszuführen musst du dir einen Benutzer*in-Name geben',
-                key: Key('username dialog hint'))),
+                key: Key('username dialog hint')).tr()),
         TextField(
           key: Key('user name input'),
           autofocus: true,
@@ -46,12 +47,12 @@ class UsernameDialogState extends State<UsernameDialog> {
       actions: [
         FlatButton(
           key: Key('username dialog cancel button'),
-          child: Text("Abbrechen"),
+          child: Text("Abbrechen").tr(),
           onPressed: () => Navigator.pop(context, null),
         ),
         FlatButton(
           key: Key('username dialog finish button'),
-          child: Text("Fertig"),
+          child: Text("Fertig").tr(),
           onPressed: isValid() ? () => changeUserNameAndClose() : null,
         ),
       ],

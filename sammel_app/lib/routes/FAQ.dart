@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:sammel_app/model/FAQItem.dart';
 import 'package:sammel_app/services/FAQService.dart';
@@ -41,7 +42,7 @@ class FAQState extends State<FAQ> {
                 border: OutlineInputBorder(
                     borderSide: BorderSide.none,
                     borderRadius: BorderRadius.circular(20.0)),
-                hintText: 'Durchsuchen'),
+                hintText: 'Durchsuchen'.tr()),
             onChanged: (text) =>
                 setState(() => items = FAQService.loadItems(text)),
           ),

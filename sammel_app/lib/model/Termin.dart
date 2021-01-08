@@ -18,11 +18,11 @@ class Termin {
   Termin(this.id, this.beginn, this.ende, this.ort, this.typ, this.latitude,
       this.longitude, this.participants, this.details);
 
-  Termin.fromJson(Map<String, dynamic> json, List<Kiez> kieze)
+  Termin.fromJson(Map<String, dynamic> json, Set<Kiez> kieze)
       : id = json['id'],
         beginn = ChronoHelfer.deserializeJsonDateTime(json['beginn']),
         ende = ChronoHelfer.deserializeJsonDateTime(json['ende']),
-        ort = kieze.firstWhere((kiez) => json['ort'] == kiez.kiez),
+        ort = kieze.firstWhere((kiez) => json['ort'] == kiez.name),
         typ = json['typ'] ?? 'Termin',
         latitude = json['latitude'] ?? null,
         longitude = json['longitude'] ?? null,
@@ -58,18 +58,18 @@ class Termin {
             ? 'assets/images/Workshop_centered.png'
             : 'assets/images/Workshop.png';
     }
-    throw UnkownActionTypeException(
-        'Cannot find asset for unknown action type "$typ"');
+    throw UnknownActionTypeException(
+        'Logo für Aktionstyp "$typ" fehlt');
   }
 
   static final int Function(Termin a, Termin b) compareByStart =
       (termin1, termin2) => termin1.beginn.compareTo(termin2.beginn);
 }
 
-class UnkownActionTypeException extends Error {
+class UnknownActionTypeException extends Error {
   var message;
 
-  UnkownActionTypeException(this.message) : super();
+  UnknownActionTypeException(this.message) : super();
 
   @override
   String toString() {

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
@@ -32,7 +33,7 @@ class ActionData {
     this.von = TimeOfDay.fromDateTime(DateTime.now());
     this.bis = TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 1)));
     this.ort = Kiez(
-        'Friedrichshain-Kreuzberg', 'Plänterwald', 52.51579, 13.45399, [[]]);
+        'Plänterwald', 'Friedrichshain-Kreuzberg', 'Treptow-Köpenick 1', []);
     this.coordinates = LatLng(52.51579, 13.45399);
     this.typ = 'Sammeln';
     this.tage = [DateTime.now()];
@@ -256,8 +257,8 @@ class ActionEditorState extends State<ActionEditor> {
     if (action.coordinates?.latitude != null &&
         action.coordinates?.longitude != null)
       return LatLng(action.coordinates.latitude, action.coordinates.longitude);
-    // at location
-    return action.ort?.center;
+
+    return null;
   }
 
   void contactSelection() async {
@@ -429,8 +430,12 @@ class ActionEditorState extends State<ActionEditor> {
         style: TextStyle(color: DweTheme.purple),
       );
     } else {
-      text = Text('${termin.ort.kiez} in ${termin.ort.bezirk}\n'
-          'Treffpunkt: ${termin.terminDetails.treffpunkt}');
+      text = Text('{kiez} in {bezirk}\n ⛒ Treffpunkt: {treffpunkt}')
+          .tr(namedArgs: {
+        'kiez': termin.ort.name,
+        'bezirk': termin.ort.region,
+        'treffpunkt': termin.terminDetails.treffpunkt,
+      });
     }
     return build_text_row(text, this.action.validated['venue']);
   }
@@ -443,7 +448,8 @@ class ActionEditorState extends State<ActionEditor> {
       val = ValidationState.ok;
     } else {
       text = Text('Ein paar Worte über dich',
-          style: TextStyle(color: DweTheme.purple));
+              style: TextStyle(color: DweTheme.purple))
+          .tr();
       val = ValidationState.error;
     }
     return build_text_row(text, val);
@@ -452,10 +458,12 @@ class ActionEditorState extends State<ActionEditor> {
   Widget descriptionButtonCaption(ActionData termin) {
     Text text;
     if (this.action.validated['beschreibung'] == ValidationState.ok) {
-      text = Text('Beschreibung: ${termin.terminDetails.beschreibung}');
+      text = Text('Beschreibung: {beschreibung}')
+          .tr(namedArgs: {'beschreibung': termin.terminDetails.beschreibung});
     } else {
       text = Text('Beschreibe die Aktion kurz',
-          style: TextStyle(color: DweTheme.purple));
+              style: TextStyle(color: DweTheme.purple))
+          .tr();
     }
     return build_text_row(text, this.action.validated['beschreibung']);
   }
@@ -466,7 +474,8 @@ class ActionEditorState extends State<ActionEditor> {
       text = Text(this.action.typ);
     } else {
       text = Text('Wähle die Art der Aktion',
-          style: TextStyle(color: DweTheme.purple));
+              style: TextStyle(color: DweTheme.purple))
+          .tr();
     }
     return build_text_row(text, this.action.validated['typ']);
   }
@@ -475,14 +484,15 @@ class ActionEditorState extends State<ActionEditor> {
     String beschriftung = '';
     ValidationState val;
     if (termin.von != null)
-      beschriftung += 'von ' + ChronoHelfer.timeToStringHHmm(termin.von);
+      beschriftung += tr('von ') + ChronoHelfer.timeToStringHHmm(termin.von);
     if (termin.bis != null)
-      beschriftung += ' bis ' + ChronoHelfer.timeToStringHHmm(termin.bis);
+      beschriftung += tr(' bis ') + ChronoHelfer.timeToStringHHmm(termin.bis);
     Text text;
     if (beschriftung.isEmpty) {
       val = ValidationState.error;
       text =
-          Text('Wähle eine Uhrzeit', style: TextStyle(color: DweTheme.purple));
+          Text('Wähle eine Uhrzeit', style: TextStyle(color: DweTheme.purple))
+              .tr();
     } else {
       val = ValidationState.ok;
       text = Text(beschriftung);
