@@ -10,32 +10,42 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>de</string>
+		<string>en</string>
+	</array>
 	<key>CFBundleName</key>
 	<string>sammel_app</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Für das Darstellen des eigenen Standorts auf der Karte. Nützlich für das einfachere Finden von Treffpunkten.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Diese App benutzt keinen Standort wenn sie geschlossen ist - keine Ahnung warum Apple das glaubt. Wenn du diese Nachricht siehst, melde das bitte als Bug.</string>
-	<key>NSContactsUsageDescription</key>
-	<string>Diese App benutzt keine Kontaktdaten, keine Ahnung warum Apple das glaubt. Wenn du diese Nachricht siehst, melde das bitte als Bug.</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>Diese App benutzt keine Kalenderdaten, keine Ahnung warum Apple das glaubt. Wenn du diese Nachricht siehst, melde das bitte als Bug.</string>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>Diese App benutzt keine Musik, keine Ahnung warum Apple das glaubt. Wenn du diese Nachricht siehst, melde das bitte als Bug.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Diese App benutzt keine Kalenderdaten, keine Ahnung warum Apple das glaubt. Wenn du diese Nachricht siehst, melde das bitte als Bug.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Diese App benutzt keine Kontaktdaten, keine Ahnung warum Apple das glaubt. Wenn du diese Nachricht siehst, melde das bitte als Bug.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Diese App benutzt keinen Standort wenn sie geschlossen ist - keine Ahnung warum Apple das glaubt. Wenn du diese Nachricht siehst, melde das bitte als Bug.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Für das Darstellen des eigenen Standorts auf der Karte. Nützlich für das einfachere Finden von Treffpunkten.</string>
 	<key>NSMotionUsageDescription</key>
 	<string>Diese App benutzt keine Sensordaten, keine Ahnung warum Apple das glaubt. Wenn du diese Nachricht siehst, melde das bitte als Bug.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Diese App benutzt keine Spracherkennung, keine Ahnung warum Apple das glaubt. Wenn du diese Nachricht siehst, melde das bitte als Bug.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -55,10 +65,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>CFBundleLocalizations</key>
-    <array>
-    	<string>de</string>
-    	<string>en</string>
-    </array>
 </dict>
 </plist>
