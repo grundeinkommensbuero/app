@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:async';
 
 import 'package:sammel_app/model/PushMessage.dart';
@@ -50,7 +51,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     else {
       pushToken = firebaseService.token;
       if (isNull(await pushToken) || (await pushToken).isEmpty) {
-        ErrorService.pushMessage(
+        ErrorService.pushError(
             'Problem beim Einrichten von Push-Nachrichten',
             'Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. '
                 'Das kann der Fall sein, wenn etwa ein Google-freies Betriebssystem genutzt wird. '

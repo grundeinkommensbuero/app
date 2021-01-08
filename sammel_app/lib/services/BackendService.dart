@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:async';
 import 'dart:io';
 
@@ -127,11 +128,13 @@ class BackendService {
       // Server responds and is healthy
       if (serverHealth.alive)
         throw ConnectivityException(
-            'Ein Verbindungsproblem ist aufgetreten: ${originalError?.message***REMOVED***');
+            'Ein Verbindungsproblem ist aufgetreten: '.tr() +
+                originalError?.message);
       else
         // Server responds but has issues
         throw throw ConnectivityException(
-            'Der Server hat leider gerade technische Probleme: ${serverHealth.status***REMOVED***');
+            'Der Server hat leider gerade technische Probleme: '.tr() +
+                serverHealth.status);
     ***REMOVED*** on SocketException catch (e) {
       try {
         await googleCall;
@@ -141,7 +144,7 @@ class BackendService {
       ***REMOVED*** on SocketException catch (e) {
         // both server and google refuse
         throw ConnectivityException(
-            'Das Internet scheint nicht erreichbar zu sein: ${e.message***REMOVED***');
+            'Das Internet scheint nicht erreichbar zu sein: '.tr() + e.message);
       ***REMOVED***
     ***REMOVED***
   ***REMOVED***
@@ -181,7 +184,11 @@ class Backend {
           int.parse(health.minClient.substring(this.version.indexOf('+') + 1)))
         ErrorService.handleError(
             WarningException(
-                'Deine App-Version ist veraltet. Dies ist die Version $version, du musst aber mindestens Version ${health.minClient***REMOVED*** benutzen, damit die App richtig funktioniert.'),
+                'Deine App-Version ist veraltet. Dies ist die Version {version***REMOVED***, du musst aber mindestens Version {minClient***REMOVED*** benutzen, damit die App richtig funktioniert.'
+                    .tr(namedArgs: {
+              'version': version,
+              'minClient': health.minClient
+            ***REMOVED***)),
             StackTrace.current);
     ***REMOVED***);
   ***REMOVED***

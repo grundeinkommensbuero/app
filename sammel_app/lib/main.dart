@@ -20,6 +20,8 @@ import 'services/BackendService.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(EasyLocalization(
+      preloaderWidget: Container(
+          color: DweTheme.yellow, child: Image.asset('assets/images/logo.png')),
       supportedLocales: [Locale('en'), Locale('de')],
       path: 'assets/languages',
       fallbackLocale: Locale('en'),

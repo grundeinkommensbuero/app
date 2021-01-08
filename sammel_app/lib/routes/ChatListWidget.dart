@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
@@ -67,9 +68,7 @@ class ChatListState extends State<ChatListWidget>
 
   List<Widget> buildListMessage() {
     List<Message> message_list = widget.channel.getAllMessages();
-    if (message_list == null) {
-      return <Widget>[Text('Send the first Message to this Channel')];
-    ***REMOVED***
+    if (message_list == null) return <Widget>[];
     List<Widget> message_list_widgets = List();
     for (Message message in message_list) {
       if (message is ChatMessage)
@@ -139,13 +138,13 @@ class ChatListState extends State<ChatListWidget>
 
   Widget createParticipationMessageWidget(ParticipationMessage message) {
     var title = message.joins
-        ? ' ist der Aktion beigetreten'
-        : ' hat die Aktion verlassen';
+        ? tr(' ist der Aktion beigetreten')
+        : tr(' hat die Aktion verlassen');
     var subtitle = message.joins
-        ? '\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen'
+        ? tr('\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen')
         : '';
     return RichText(
-     //   key: Key('Participation Message'),
+        //   key: Key('Participation Message'),
         textAlign: TextAlign.center,
         text: TextSpan(
             text: message.username ?? 'Jemand',
@@ -161,23 +160,15 @@ class ChatListState extends State<ChatListWidget>
 
   String formatDateTime(DateTime date) {
     Duration message_sent = DateTime.now().difference(date);
-    if (message_sent < Duration(minutes: 1)) {
-      return 'gerade eben';
-    ***REMOVED*** else if (message_sent < Duration(hours: 1)) {
-      if (message_sent.inMinutes < 2) {
-        return '${message_sent.inMinutes***REMOVED*** Minute';
-      ***REMOVED*** else {
-        return '${message_sent.inMinutes***REMOVED*** Minuten';
-      ***REMOVED***
-    ***REMOVED*** else if (message_sent < Duration(hours: 12)) {
-      if (message_sent.inHours < 2) {
-        return '${message_sent.inHours***REMOVED*** Stunde';
-      ***REMOVED*** else {
-        return '${message_sent.inHours***REMOVED*** Stunden';
-      ***REMOVED***
-    ***REMOVED*** else if (DateTime.now().difference(date) < Duration(days: 1)) {
+    if (message_sent < Duration(minutes: 1))
+      return 'gerade eben'.tr();
+    else if (message_sent < Duration(hours: 1))
+      return '{***REMOVED*** Minuten'.plural(message_sent.inMinutes);
+    else if (message_sent < Duration(hours: 12))
+      return '{***REMOVED*** Stunden'.plural(message_sent.inHours);
+    else if (DateTime.now().difference(date) < Duration(days: 1))
       return ChronoHelfer.dateTimeToStringHHmm(date);
-    ***REMOVED*** else if (DateTime.now().difference(date) < Duration(days: 7)) {
+    else if (DateTime.now().difference(date) < Duration(days: 7)) {
       return DateFormat('EEE, hh:mm').format(date);
     ***REMOVED***
 

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
@@ -54,13 +55,13 @@ class LocationDialogState extends State<LocationDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Treffpunkt'),
+      title: Text('Treffpunkt').tr(),
       content: SingleChildScrollView(
           child: ListBody(children: [
         Text(
           'Wähle auf der Karte einen Treffpunkt aus.',
           textScaleFactor: 0.9,
-        ),
+        ).tr(),
         SizedBox(
           height: 5.0,
         ),
@@ -103,7 +104,7 @@ class LocationDialogState extends State<LocationDialog> {
           'z.B. "Unter der Weltzeituhr" oder "Tempelhofer Feld, '
           'Eingang Kienitzstraße":',
           textScaleFactor: 0.8,
-        ),
+        ).tr(),
         SizedBox(
           height: 5.0,
         ),
@@ -119,7 +120,7 @@ class LocationDialogState extends State<LocationDialog> {
       ])),
       actions: [
         FlatButton(
-          child: Text("Abbrechen"),
+          child: Text("Abbrechen").tr(),
           onPressed: () {
             Navigator.pop(
                 context,
@@ -129,7 +130,7 @@ class LocationDialogState extends State<LocationDialog> {
         ),
         FlatButton(
           key: Key('venue dialog finish button'),
-          child: Text("Fertig"),
+          child: Text("Fertig").tr(),
           onPressed: () {
             Navigator.pop(context, location);
           ***REMOVED***,

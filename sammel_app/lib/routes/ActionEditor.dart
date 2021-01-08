@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
@@ -428,8 +429,12 @@ class ActionEditorState extends State<ActionEditor> {
         style: TextStyle(color: DweTheme.purple),
       );
     ***REMOVED*** else {
-      text = Text('${termin.ort.name***REMOVED*** in ${termin.ort.bezirk***REMOVED***\n'
-          'Treffpunkt: ${termin.terminDetails.treffpunkt***REMOVED***');
+      text =
+          Text('{kiez***REMOVED*** in {bezirk***REMOVED***\n ⛒ Treffpunkt: {treffpunkt***REMOVED***').tr(namedArgs: {
+        'kiez': termin.ort.name,
+        'bezirk': termin.ort.bezirk,
+        'treffpunkt': termin.terminDetails.treffpunkt,
+      ***REMOVED***);
     ***REMOVED***
     return build_text_row(text, this.action.validated['venue']);
   ***REMOVED***
@@ -442,7 +447,8 @@ class ActionEditorState extends State<ActionEditor> {
       val = ValidationState.ok;
     ***REMOVED*** else {
       text = Text('Ein paar Worte über dich',
-          style: TextStyle(color: DweTheme.purple));
+              style: TextStyle(color: DweTheme.purple))
+          .tr();
       val = ValidationState.error;
     ***REMOVED***
     return build_text_row(text, val);
@@ -451,10 +457,12 @@ class ActionEditorState extends State<ActionEditor> {
   Widget descriptionButtonCaption(ActionData termin) {
     Text text;
     if (this.action.validated['beschreibung'] == ValidationState.ok) {
-      text = Text('Beschreibung: ${termin.terminDetails.beschreibung***REMOVED***');
+      text = Text('Beschreibung: {beschreibung***REMOVED***')
+          .tr(namedArgs: {'beschreibung': termin.terminDetails.beschreibung***REMOVED***);
     ***REMOVED*** else {
       text = Text('Beschreibe die Aktion kurz',
-          style: TextStyle(color: DweTheme.purple));
+              style: TextStyle(color: DweTheme.purple))
+          .tr();
     ***REMOVED***
     return build_text_row(text, this.action.validated['beschreibung']);
   ***REMOVED***
@@ -465,7 +473,8 @@ class ActionEditorState extends State<ActionEditor> {
       text = Text(this.action.typ);
     ***REMOVED*** else {
       text = Text('Wähle die Art der Aktion',
-          style: TextStyle(color: DweTheme.purple));
+              style: TextStyle(color: DweTheme.purple))
+          .tr();
     ***REMOVED***
     return build_text_row(text, this.action.validated['typ']);
   ***REMOVED***
@@ -474,14 +483,15 @@ class ActionEditorState extends State<ActionEditor> {
     String beschriftung = '';
     ValidationState val;
     if (termin.von != null)
-      beschriftung += 'von ' + ChronoHelfer.timeToStringHHmm(termin.von);
+      beschriftung += tr('von ') + ChronoHelfer.timeToStringHHmm(termin.von);
     if (termin.bis != null)
-      beschriftung += ' bis ' + ChronoHelfer.timeToStringHHmm(termin.bis);
+      beschriftung += tr(' bis ') + ChronoHelfer.timeToStringHHmm(termin.bis);
     Text text;
     if (beschriftung.isEmpty) {
       val = ValidationState.error;
       text =
-          Text('Wähle eine Uhrzeit', style: TextStyle(color: DweTheme.purple));
+          Text('Wähle eine Uhrzeit', style: TextStyle(color: DweTheme.purple))
+              .tr();
     ***REMOVED*** else {
       val = ValidationState.ok;
       text = Text(beschriftung);

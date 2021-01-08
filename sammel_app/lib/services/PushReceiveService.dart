@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -33,7 +34,8 @@ class FirebaseReceiveService implements PushReceiveService {
   FirebaseReceiveService([FirebaseMessaging firebaseMock]) {
     if (firebaseMock != null)
       firebaseMessaging = firebaseMock;
-    else if (pullMode) { // DEBUG
+    else if (pullMode) {
+      // DEBUG
       _tokenStreamController.add(null);
     ***REMOVED*** else
       initializeFirebase();
@@ -114,7 +116,8 @@ class PullService extends BackendService implements PushReceiveService {
       post('service/push/pull/subscribe', jsonEncode(topics));
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
-          context: 'Fehler beim Anmelden der Benachrichtigungen zu $topics');
+          context: 'Fehler beim Anmelden der Benachrichtigungen zu {topics***REMOVED***'
+              .tr(namedArgs: {'topics': topics.toString()***REMOVED***));
     ***REMOVED***
   ***REMOVED***
 
@@ -124,7 +127,8 @@ class PullService extends BackendService implements PushReceiveService {
       post('service/push/pull/subscribe', jsonEncode(topics));
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
-          context: 'Fehler beim Abmelden der Benachrichtigungen zu $topics');
+          context: 'Fehler beim Abmelden der Benachrichtigungen zu {topics***REMOVED***'
+              .tr(namedArgs: {'topics': topics.toString()***REMOVED***));
     ***REMOVED***
   ***REMOVED***
 

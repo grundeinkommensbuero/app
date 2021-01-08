@@ -1,5 +1,5 @@
-import 'package:date_format/date_format.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/model/Termin.dart';
@@ -78,12 +78,12 @@ class TerminCard extends StatelessWidget {
   ***REMOVED***
 
   static String erzeugeDatumText(DateTime beginn, DateTime ende) {
-    return ''
-        '${ermittlePrefix(beginn)***REMOVED***'
-        '${formatDate(beginn, [dd, '.', mm, '.'])***REMOVED*** '
-        'um ${formatDate(beginn, [HH, ':', nn])***REMOVED*** Uhr, '
-        '${ende.difference(beginn).inHours***REMOVED*** Stunde'
-        '${ende.difference(beginn).inHours > 1 ? 'n' : ''***REMOVED***';
+    return '{prefix***REMOVED***{date***REMOVED*** um {zeit***REMOVED*** Uhr, '.tr(namedArgs: {
+          'prefix': ermittlePrefix(beginn),
+          'date': formatDate(beginn, [dd, '.', mm, '.']),
+          'zeit': formatDate(beginn, [HH, ':', nn])
+        ***REMOVED***) +
+        '{***REMOVED*** Stunden'.plural(ende.difference(beginn).inHours);
   ***REMOVED***
 
   static String ermittlePrefix(DateTime beginn) {
@@ -92,9 +92,9 @@ class TerminCard extends StatelessWidget {
     String prefix = '';
     if (beginn.isAfter(heuteNacht.subtract(Duration(days: 1)))) {
       if (beginn.isBefore(heuteNacht)) {
-        prefix = 'Heute, ';
+        prefix = 'Heute, '.tr();
       ***REMOVED*** else if (beginn.isBefore(heuteNacht.add(Duration(days: 1)))) {
-        prefix = 'Morgen, ';
+        prefix = 'Morgen, '.tr();
       ***REMOVED*** else {
         if (beginn.isBefore(heuteNacht.add(Duration(days: 7)))) {
           prefix = '${ChronoHelfer.wochentag(beginn)***REMOVED***, ';

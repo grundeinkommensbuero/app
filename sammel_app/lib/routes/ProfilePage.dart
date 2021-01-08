@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -105,7 +105,7 @@ class ProfilePageState extends State<ProfilePage> {
                         'Mit deinen Kiezen bestimmst du wo du über neue Aktionen informiert werden willst.',
                         style: TextStyle(
                             fontWeight: FontWeight.normal, color: Colors.black),
-                      )
+                      ).tr()
                     ])),
                     onPressed: (_) => showKiezPicker()),
                 SizedBox(height: 20.0),
@@ -119,7 +119,7 @@ class ProfilePageState extends State<ProfilePage> {
                         'Wie oft und aktuell willst du über neue Sammel-Aktionen in deinem Kiez informiert werden?',
                         style: TextStyle(
                             fontWeight: FontWeight.normal, color: Colors.black),
-                      )
+                      ).tr()
                     ])),
                     onPressed: (context) => showNotificationDialog(context))
               ],
@@ -127,7 +127,7 @@ class ProfilePageState extends State<ProfilePage> {
         bottomSheet: Row(children: [
           Expanded(
               child: SelectableText(
-                  'Benutzer-ID: ${user?.id***REMOVED***, Push-Token: $token',
+                  'User-ID: ${user?.id***REMOVED***, Push-Token: $token',
                   textAlign: TextAlign.center))
         ], mainAxisAlignment: MainAxisAlignment.center),
         floatingActionButton: FloatingActionButton(
@@ -159,7 +159,7 @@ class ProfilePageState extends State<ProfilePage> {
             key: Key('language selection dialog'),
             contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
             titlePadding: EdgeInsets.all(15.0),
-            title: const Text('Sprache'),
+            title: const Text('Sprache').tr(),
             children: []..addAll(languageOptions.map((option) => RadioListTile(
                   groupValue: EasyLocalization.of(context).locale.languageCode,
                   value: option,
@@ -179,11 +179,11 @@ class ProfilePageState extends State<ProfilePage> {
             contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
             titlePadding: EdgeInsets.all(15.0),
             title: const Text(
-                'Wie häufig möchtest du Infos über anstehende Aktionen bekommen?'),
+                'Wie häufig möchtest du Infos über anstehende Aktionen bekommen?').tr(),
             children: []..addAll(intervalOptions.map((option) => RadioListTile(
                   groupValue: interval,
                   value: option,
-                  title: Text(option),
+                  title: Text(option).tr(),
                   onChanged: (selected) => Navigator.pop(context, selected),
                 )))));
 
@@ -245,7 +245,7 @@ class ProfileItem extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 15.0,
                                 fontWeight: FontWeight.normal,
-                                color: Colors.black)),
+                                color: Colors.black)).tr(),
                         SizedBox(height: 10.0),
                         child,
                         SizedBox(width: 15.0)

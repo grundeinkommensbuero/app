@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:intl/intl.dart';
@@ -111,7 +112,7 @@ class FilterWidgetState extends State<FilterWidget>
                     onApply();
                     storageService.saveFilter(filter);
                   ***REMOVED*** else {
-                    setState(() => buttonText = 'Anwenden');
+                    setState(() => buttonText = 'Anwenden'.tr());
                     expanded = true;
                   ***REMOVED***
                 ***REMOVED***,
@@ -123,7 +124,8 @@ class FilterWidgetState extends State<FilterWidget>
               splashColor: Colors.transparent,
               textColor: DweTheme.yellow,
               onPressed: onApply,
-              child: Text(loading ? '' : 'Aktualisieren', textScaleFactor: 1.2))
+              child: Text(loading ? '' : 'Aktualisieren'.tr(),
+                  textScaleFactor: 1.2))
           : SizedBox()
     ]);
   ***REMOVED***
@@ -145,26 +147,26 @@ class FilterWidgetState extends State<FilterWidget>
 
   Text tageButtonBeschriftung() {
     if (filter.tage == null || filter.tage.isEmpty) {
-      return Text("alle Tage,");
+      return Text('alle Tage,').tr();
     ***REMOVED*** else {
-      return Text("am " +
-          filter.tage
-              .map((tag) => DateFormat("dd.MM.").format(tag))
-              .join(", ") +
-          ",");
+      return Text('am {tage***REMOVED***,').tr(namedArgs: {
+        'tage': filter.tage
+            .map((tag) => DateFormat("dd.MM.").format(tag))
+            .join(", ")
+      ***REMOVED***);
     ***REMOVED***
   ***REMOVED***
 
   String artButtonBeschriftung() {
     return filter.typen != null && filter.typen.isNotEmpty
-        ? filter.typen.join(", ")
-        : "Alle Aktions-Arten,";
+        ? filter.typen.join(', ')
+        : 'Alle Aktions-Arten,'.tr();
   ***REMOVED***
 
   static String uhrzeitButtonBeschriftung(TermineFilter filter) {
     String beschriftung = '';
     if (filter.von != null)
-      beschriftung += 'von ' + ChronoHelfer.timeToStringHHmm(filter.von);
+      beschriftung += 'von '.tr() + ChronoHelfer.timeToStringHHmm(filter.von);
     if (filter.bis != null)
       beschriftung += ' bis ' + ChronoHelfer.timeToStringHHmm(filter.bis);
     if (beschriftung.isEmpty) beschriftung = 'jederzeit';
@@ -198,7 +200,7 @@ class FilterWidgetState extends State<FilterWidget>
                   title: AppBar(
                       leading: null,
                       automaticallyImplyLeading: false,
-                      title: const Text('Wähle Aktions-Arten')),
+                      title: const Text('Wähle Aktions-Arten').tr()),
                   children:
                       List.of(moeglicheTypen.map((typ) => CheckboxListTile(
                             checkColor: Colors.black,
@@ -216,7 +218,7 @@ class FilterWidgetState extends State<FilterWidget>
                             ***REMOVED***,
                           )))
                         ..add(RaisedButton(
-                            child: Text('Fertig'),
+                            child: Text('Fertig').tr(),
                             onPressed: () => Navigator.pop(context))));
             ***REMOVED***));
 
