@@ -86,11 +86,9 @@ flutter:
    - assets/images/housy_problem.png
    - assets/security/sammel-server_local.pem
    - assets/security/root-cert.pem
-   - assets/geodata/Bezirke/Berlin_bezirke_custom_generalized.geojson
-   - assets/geodata/Bezirksregionen/Berlin_bezirksregionen_poi.geojson
-   - assets/geodata/Bezirksregionen/Berlin_bezirksregionen_polygons.geojson
-   - assets/geodata/Prognoseraeume/Berlin_prognoseraeume_poi.geojson
-   - assets/geodata/Prognoseraeume/Berlin_prognoseraeume_polygons.geojson
+   - assets/geodata/bezirksregion_generalized.geojson
+   - assets/geodata/ortsteil_generalized.geojson
+   - assets/geodata/prognoseraum_generalized.geojson
    - assets/languages/
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -7,8 +7,8 @@ User karl() => User(11, 'Karl Marx', Colors.red);
 
 User rosa() => User(12, 'Rosa Luxemburg', Colors.purple);
 
-Kiez ffAlleeNord() =>
-    Kiez('Frankfurter Allee Nord', 'Friedrichshain-Kreuzberg', [
+Kiez ffAlleeNord() => Kiez('Frankfurter Allee Nord', 'Friedrichshain Ost',
+        'Friedrichshain-Kreuzberg', [
       LatLng(13.4471675, 52.5264082),
       LatLng(13.4474491, 52.5260284),
       LatLng(13.4478982, 52.5253839),
@@ -132,7 +132,7 @@ Kiez ffAlleeNord() =>
     ]);
 
 Kiez tempVorstadt() =>
-    Kiez('Tempelhofer Vorstadt', 'Friedrichshain-Kreuzberg', [
+    Kiez('Tempelhofer Vorstadt', 'Kreuzberg Süd', 'Friedrichshain-Kreuzberg', [
       LatLng(13.420225, 52.4961569),
       LatLng(13.4197404, 52.4961965),
       LatLng(13.4193312, 52.496176),
@@ -440,7 +440,8 @@ Kiez tempVorstadt() =>
       LatLng(13.420225, 52.4961569)
     ]);
 
-Kiez plaenterwald() => Kiez('Plänterwald', 'Treptow-Köpenick', [
+Kiez plaenterwald() =>
+    Kiez('Plänterwald', 'Treptow-Köpenick 1"', 'Treptow-Köpenick', [
       LatLng(13.4907077, 52.487443),
       LatLng(13.490441, 52.4875047),
       LatLng(13.4898694, 52.4876352),
@@ -633,9 +634,7 @@ Kiez plaenterwald() => Kiez('Plänterwald', 'Treptow-Köpenick', [
       LatLng(13.4907077, 52.487443)
     ]);
 
-Ortsteil fhainOst() => Ortsteil(
-    '0205',
-    [
+Region fhainOst() => Region('0205', [
       LatLng(13.4698292, 52.502662),
       LatLng(13.4702068, 52.5037427),
       LatLng(13.4704236, 52.5040593),
@@ -962,12 +961,9 @@ Ortsteil fhainOst() => Ortsteil(
       LatLng(13.4697854, 52.5025389),
       LatLng(13.4697957, 52.5025676),
       LatLng(13.4698292, 52.502662)
-    ],
-    [ffAlleeNord()].toSet());
+    ]);
 
-Ortsteil koepenick1() => Ortsteil(
-    '0901',
-    [
+Region koepenick1() => Region('0901', [
       LatLng(13.4907077, 52.487443),
       LatLng(13.490441, 52.4875047),
       LatLng(13.4898694, 52.4876352),
@@ -1522,12 +1518,9 @@ Ortsteil koepenick1() => Ortsteil(
       LatLng(13.4909097, 52.4873461),
       LatLng(13.4908212, 52.4873955),
       LatLng(13.4907077, 52.487443)
-    ],
-    [plaenterwald()].toSet());
+    ]);
 
-Ortsteil kreuzbergSued() => Ortsteil(
-    '0202',
-    [
+Region kreuzbergSued() => Region('0202', [
       LatLng(13.371568, 52.48495),
       LatLng(13.3719346, 52.4849481),
       LatLng(13.372382, 52.4849455),
@@ -1833,13 +1826,9 @@ Ortsteil kreuzbergSued() => Ortsteil(
       LatLng(13.3716053, 52.4851208),
       LatLng(13.3716612, 52.4851201),
       LatLng(13.371568, 52.48495)
-    ],
-    [tempVorstadt()].toSet());
+    ]);
 
-Bezirk friedrichshain() => Bezirk(
-    '02',
-    'Friedrichshain',
-    [
+Ortsteil friedrichshain() => Ortsteil('Friedrichshain', [
       LatLng(13.4294014, 52.5085713),
       LatLng(13.4354792, 52.5056445),
       LatLng(13.4371289, 52.5045598),
@@ -1932,13 +1921,9 @@ Bezirk friedrichshain() => Bezirk(
       LatLng(13.4283727, 52.5090702),
       LatLng(13.4291202, 52.5089034),
       LatLng(13.4294014, 52.5085713)
-    ],
-    [fhainOst()].toSet());
+    ]);
 
-Bezirk kreuzberg() => Bezirk(
-    '03', // provisorisch
-    'Kreuzberg',
-    [
+Ortsteil kreuzberg() => Ortsteil('Kreuzberg', [
       LatLng(13.3776486, 52.507967),
       LatLng(13.3749766, 52.5033772),
       LatLng(13.3746814, 52.5032346),
@@ -2028,13 +2013,9 @@ Bezirk kreuzberg() => Bezirk(
       LatLng(13.3992304, 52.5080769),
       LatLng(13.3789401, 52.5069299),
       LatLng(13.3776486, 52.507967)
-    ],
-    [kreuzbergSued()].toSet());
+    ]);
 
-Bezirk koepenick() => Bezirk(
-    '09',
-    'Köpenick',
-    [
+Ortsteil koepenick() => Ortsteil('Köpenick', [
       LatLng(13.5926953, 52.3938125),
       LatLng(13.594155, 52.3924451),
       LatLng(13.5936737, 52.3899609),
@@ -2450,5 +2431,4 @@ Bezirk koepenick() => Bezirk(
       LatLng(13.5932567, 52.3956118),
       LatLng(13.5926759, 52.3943768),
       LatLng(13.5926953, 52.3938125)
-    ],
-    [koepenick1()].toSet());
+    ]);

@@ -6,80 +6,33 @@ import 'package:sammel_app/shared/FileReader.dart';
 class StammdatenService {
   static var fileReader = FileReader();
 
-  static Future<Set<Kiez>> _kieze = loadKieze();
-  static Future<Set<Ortsteil>> _ortsteile = loadOrtsteile();
-  static Future<Set<Bezirk>> _bezirke = loadBezirke();
-
-  // Warten dass Kieze mit Bezirken angereichert wurden
-  Future<Set<Kiez>> get kieze => bezirke.then((_) => _kieze);
-
-  Future<Set<Ortsteil>> get ortsteile => _ortsteile;
-
-  Future<Set<Bezirk>> get bezirke => _bezirke;
+  final Future<Set<Kiez>> kieze = loadKieze();
+  final Future<Set<Region>> regionen = loadRegionen();
+  final Future<Set<Ortsteil>> ortsteile = loadOrtsteile();
 
   StammdatenService();
 
   static Future<Set<Kiez>> loadKieze() async {
-    var jsonCentroids = await fileReader.kiezeCentroids;
-    var jsonPolygons = await fileReader.kiezePolygons;
+    var json = await fileReader.kieze;
 
-    var centroidsMap = (jsonDecode(jsonCentroids)['features'] as List)
-        .asMap()
-        .map((_, json) => MapEntry(json['properties']['SCHLUESSEL'], json));
-    var polygonsMap = (jsonDecode(jsonPolygons)['features'] as List)
-        .asMap()
-        .map((_, json) => MapEntry(json['properties']['SCHLUESSEL'], json));
+    return (jsonDecode(json)['features'] as List)
+        .map((json) => Kiez.fromJson(json))
+        .toSet();
+  }
 
-    return centroidsMap.keys
-        .map((id) => Kiez.fromJson(centroidsMap[id], polygonsMap[id]))
+  static Future<Set<Region>> loadRegionen() async {
+    final json = await fileReader.regionen;
+
+    return (jsonDecode(json)['features'] as List)
+        .map((json) => Region.fromJson(json))
         .toSet();
   }
 
   static Future<Set<Ortsteil>> loadOrtsteile() async {
-    final kieze = await _kieze;
-    final jsonCentroids = await fileReader.ortsteileCentroids;
-    final jsonPolygons = await fileReader.ortsteilePolygons;
+    final json = await fileReader.ortsteile;
 
-    final centroidsMap = (jsonDecode(jsonCentroids)['features'] as List)
-        .asMap()
-        .map((_, json) => MapEntry(json['properties']['SCHLUESSEL'], json));
-    final polygonsMap = (jsonDecode(jsonPolygons)['features'] as List)
-        .asMap()
-        .map((_, json) => MapEntry(json['properties']['SCHLUESSEL'], json));
-
-    final ortsteile = centroidsMap.keys
-        .map((id) => Ortsteil.fromJson(centroidsMap[id], polygonsMap[id]))
+    return (jsonDecode(json)['features'] as List)
+        .map((json) => Ortsteil.fromJson(json))
         .toSet();
-
-    ortsteile.forEach((ortsteil) => ortsteil.kieze =
-        kieze.where((kiez) => kiez.id.startsWith(ortsteil.id)).toSet());
-
-    return ortsteile;
   }
-
-  static Future<Set<Bezirk>> loadBezirke() async {
-    var o = await _ortsteile;
-    final json = await fileReader.bezirke;
-
-    final centroidsList = (jsonDecode(json)['features'] as List);
-
-    final bezirke =
-        centroidsList.map((bezirkJson) => Bezirk.fromJson(bezirkJson)).toSet();
-
-    bezirke.forEach((bezirk) {
-      return bezirk.ortsteile = o
-          .where((ortsteil) => ortsteil.id.startsWith(bezirk.id))
-          .map((ortsteil) =>
-              ortsteil..kieze.forEach((kiez) => kiez.bezirk = bezirk.name))
-          .toSet();
-    });
-
-    return bezirke;
-  }
-
-  static Future<Kiez> kiezBy(name) =>
-      _kieze.then((k) => k.firstWhere((kiez) => name == kiez.name));
-
-  static Future<List<Kiez>> kiezeBy(name) =>
-      _kieze.then((k) => k.where((kiez) => name == kiez.name).toList());
 }

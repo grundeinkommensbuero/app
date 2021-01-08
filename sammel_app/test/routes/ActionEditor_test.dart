@@ -177,7 +177,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(
           find.text(
-              '${actionData.action.ort.name} in ${actionData.action.ort.bezirk}\n'
+              '${actionData.action.ort.name} in ${actionData.action.ort.region}\n'
               'Treffpunkt: ${actionData.action.terminDetails.treffpunkt}'),
           findsOneWidget);
     });
@@ -431,7 +431,7 @@ void main() {
           null,
           null,
           null,
-          Kiez('Bezirk', 'Kiez', []),
+          Kiez('Kiez', 'Region', 'Ortsteil', []),
           null,
           null,
           LatLng(52.2, 43.2));
@@ -446,7 +446,7 @@ void main() {
       expect(ActionEditorState.determineMapCenter(actionData), null);
 
       actionData = ActionData(
-          null, null, null, Kiez('Bezirk', 'Kiez', []), null, null, null);
+          null, null, null, Kiez('Kiez', 'Region', 'Ortsteil', []), null, null, null);
 
       expect(ActionEditorState.determineMapCenter(actionData), null);
     });

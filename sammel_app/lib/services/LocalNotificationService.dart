@@ -8,29 +8,26 @@ import 'package:sammel_app/model/PushMessage.dart';
 
 AndroidNotificationChannel participationChannel = AndroidNotificationChannel(
   'Teilnahmen und Absagen', // id
-  'Teilnahmen und Absagen'.tr(), // title
-  'Benachrichtigungen über Mitstreiter*innen bei Aktionen an denen du teilnimmst'
-      .tr(),
+  'Teilnahmen und Absagen', // title
+  'Benachrichtigungen über Mitstreiter*innen bei Aktionen an denen du teilnimmst',
 );
 
 AndroidNotificationChannel changesChannel = AndroidNotificationChannel(
   'Änderungen an Aktionen', // id
-  'Änderungen an Aktionen'.tr(), // title
-  'Benachrichtigungen wenn sich Aktionen geändert haben oder abgesagt wurden an denen du teilnimmst'
-      .tr(),
+  'Änderungen an Aktionen', // title
+  'Benachrichtigungen wenn sich Aktionen geändert haben oder abgesagt wurden an denen du teilnimmst',
 );
 
 AndroidNotificationChannel actionChatChannel = AndroidNotificationChannel(
   'Aktionen-Chats', // id
-  'Aktionen-Chats'.tr(), // title
-  'Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst'
-      .tr(),
+  'Aktionen-Chats', // title
+  'Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst',
 );
 
 AndroidNotificationChannel defaultChannel = AndroidNotificationChannel(
   'Infos', // id
-  'Infos'.tr(), // title
-  'Allgemeine Infos'.tr(),
+  'Infos', // title
+  'Allgemeine Infos',
 );
 
 Future<FlutterLocalNotificationsPlugin> initializeLocalNotifications() async {
@@ -76,7 +73,7 @@ Future selectNotification(String payload) {
 
 Future sendChatNotification(ChatMessagePushData chatMessage) async {
   AndroidNotificationDetails androidPlatformChannelSpecifics =
-      AndroidNotificationDetails('Aktionen-Chats', 'Aktionen-Chats'.tr(),
+      AndroidNotificationDetails('Aktionen-Chats', 'Aktionen-Chats',
           'Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst',
           ticker:
               'Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst');

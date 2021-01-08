@@ -21,9 +21,9 @@ class StammdatenServiceMock extends Mock implements StammdatenService {
   StammdatenServiceMock() {
     when(this.kieze).thenAnswer((_) =>
         Future.value([ffAlleeNord(), tempVorstadt(), plaenterwald()].toSet()));
-    when(this.ortsteile).thenAnswer((_) =>
+    when(this.regionen).thenAnswer((_) =>
         Future.value([fhainOst(), kreuzbergSued(), koepenick1()].toSet()));
-    when(this.bezirke).thenAnswer((_) =>
+    when(this.ortsteile).thenAnswer((_) =>
         Future.value([friedrichshain(), kreuzberg(), koepenick()].toSet()));
   }
 }

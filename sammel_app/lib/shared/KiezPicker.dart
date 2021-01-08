@@ -16,21 +16,24 @@ class KiezPicker {
   List<Polygon> visiblePolygons = [];
 
   double KIEZE_THRESHOLD = 12;
-  double ORTSTEILE_THRESHOLD = 11;
+  double REGIONEN_THRESHOLD = 11;
 
   static Set<Kiez> kieze;
+  static Set<Region> regionen;
   static Set<Ortsteil> ortsteile;
-  static Set<Bezirk> bezirke;
+
+  StammdatenService stammdatenService;
 
   KiezPicker(this.selectedKieze) {
     if (this.selectedKieze == null) this.selectedKieze = {};
   }
 
   Future<Set<Kiez>> showKiezPicker(context) async {
-    final stammdatenService = Provider.of<StammdatenService>(context);
-    ortsteile = await stammdatenService.ortsteile;
+    stammdatenService = Provider.of<StammdatenService>(context);
+    regionen = await stammdatenService.regionen;
     kieze = await stammdatenService.kieze;
-    bezirke = await stammdatenService.bezirke;
+    ortsteile = await stammdatenService.ortsteile;
+    visiblePolygons = generateOrtsteileOutlines(ortsteile).toList();
 
     return await showDialog(
         context: context,
@@ -84,10 +87,10 @@ class KiezPicker {
   getVisiblePolygons() {
     if (mapController.zoom > KIEZE_THRESHOLD)
       this.visiblePolygons = generateKiezeOutlines(kieze).toList();
-    else if (mapController.zoom > ORTSTEILE_THRESHOLD)
-      this.visiblePolygons = generateOrtsteileOutlines(ortsteile).toList();
+    else if (mapController.zoom > REGIONEN_THRESHOLD)
+      this.visiblePolygons = generateRegionenOutlines(regionen).toList();
     else
-      this.visiblePolygons = generateBezirkeOutlines(bezirke).toList();
+      this.visiblePolygons = generateOrtsteileOutlines(ortsteile).toList();
 
     selectedKieze.forEach((selected) =>
         this.visiblePolygons.add(generateKiezeAreas(kieze)[selected]));
@@ -99,15 +102,16 @@ class KiezPicker {
     Iterable<Kiez> tappedKieze;
     if (zoom > KIEZE_THRESHOLD)
       tappedKieze = kieze.where((kiez) => isIn(position, kiez.polygon));
-    else if (zoom > ORTSTEILE_THRESHOLD)
+    else if (zoom > REGIONEN_THRESHOLD)
+      tappedKieze = regionen
+          .where((region) => isIn(position, region.polygon))
+          .expand(
+              (region) => kieze.where((kiez) => kiez.region == region.name));
+    else
       tappedKieze = ortsteile
           .where((ortsteil) => isIn(position, ortsteil.polygon))
-          .expand((ortsteil) => ortsteil.kieze);
-    else
-      tappedKieze = bezirke
-          .where((bezirk) => isIn(position, bezirk.polygon))
-          .expand((bezirke) => bezirke.ortsteile)
-          .expand((orsteil) => orsteil.kieze);
+          .expand((ortsteil) =>
+              kieze.where((kiez) => kiez.ortsteil == ortsteil.name));
 
     if (selectedKieze.containsAll(tappedKieze))
       selectedKieze.removeAll(tappedKieze);
@@ -136,7 +140,7 @@ Set<Polygon> generateKiezeOutlines(Set<Kiez> kieze) {
       .toSet();
 }
 
-Set<Polygon> generateBezirkeOutlines(Set<Bezirk> bezirke) {
+Set<Polygon> generateOrtsteileOutlines(Set<Ortsteil> bezirke) {
   return bezirke
       .map((bezirk) => Polygon(
           color: Colors.transparent,
@@ -147,7 +151,7 @@ Set<Polygon> generateBezirkeOutlines(Set<Bezirk> bezirke) {
       .toSet();
 }
 
-Set<Polygon> generateOrtsteileOutlines(Set<Ortsteil> ortsteile) {
+Set<Polygon> generateRegionenOutlines(Set<Region> ortsteile) {
   return ortsteile
       .map((ortsteil) => Polygon(
           color: Colors.transparent,
