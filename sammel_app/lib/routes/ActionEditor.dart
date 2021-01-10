@@ -131,7 +131,7 @@ class ActionEditorState extends State<ActionEditor> {
                         Text(
                           'Wo? ',
                           style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
+                        ).tr(),
                         InputButton(
                             key: Key('Open location dialog'),
                             onTap: locationSelection,
@@ -150,7 +150,7 @@ class ActionEditorState extends State<ActionEditor> {
                         Text(
                           'Wann?',
                           style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
+                        ).tr(),
                         InputButton(
                             onTap: daysSelection, child: daysButtonCaption()),
                         InputButton(
@@ -171,7 +171,7 @@ class ActionEditorState extends State<ActionEditor> {
                         Text(
                           'Was?',
                           style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
+                        ).tr(),
                         InputButton(
                           onTap: typeSelection,
                           child: typeButtonCaption(),
@@ -194,7 +194,7 @@ class ActionEditorState extends State<ActionEditor> {
                         Text(
                           'Wer?',
                           style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
+                        ).tr(),
                         InputButton(
                             onTap: contactSelection,
                             child: contactButtonCaption(this.action)),
@@ -211,14 +211,14 @@ class ActionEditorState extends State<ActionEditor> {
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             RaisedButton(
                 key: Key('action editor cancel button'),
-                child: Text('Abbrechen'),
+                child: Text('Abbrechen').tr(),
                 onPressed: () {
                   setState(() => action = ActionData());
                   Navigator.maybePop(context);
                 }),
             RaisedButton(
                 key: Key('action editor finish button'),
-                child: Text('Fertig'),
+                child: Text('Fertig').tr(),
                 onPressed: () => finishPressed())
           ]),
         ));
@@ -228,12 +228,12 @@ class ActionEditorState extends State<ActionEditor> {
     Text(
       'Das Volksbegehren lebt von deiner Beteiligung! \n',
       style: TextStyle(fontWeight: FontWeight.bold),
-    ),
+    ).tr(),
     Text(
       'Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. '
       'Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.',
       textScaleFactor: 1.0,
-    )
+    ).tr()
   ]);
 
   void locationSelection() async {
@@ -305,13 +305,13 @@ class ActionEditorState extends State<ActionEditor> {
     }
 
     Widget cancelButton = FlatButton(
-      child: Text("Abbrechen"),
+      child: Text("Abbrechen").tr(),
       onPressed: () {
         Navigator.pop(context, current_value);
       },
     );
     Widget continueButton = FlatButton(
-      child: Text("Fertig"),
+      child: Text("Fertig").tr(),
       onPressed: () {
         Navigator.pop(context, current_input);
       },
@@ -319,7 +319,7 @@ class ActionEditorState extends State<ActionEditor> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       key: key,
-      title: Text(title),
+      title: Text(title).tr(),
       content: input_widget,
       actions: [
         cancelButton,
@@ -352,7 +352,7 @@ class ActionEditorState extends State<ActionEditor> {
                     ..addAll(moeglicheTypen.map((typ) => RadioListTile(
                           groupValue: ausgewTyp,
                           value: typ,
-                          title: Text(typ),
+                          title: Text(typ).tr(),
                           onChanged: (neuerWert) {
                             setDialogState(() {
                               ausgewTyp = neuerWert;
@@ -360,7 +360,7 @@ class ActionEditorState extends State<ActionEditor> {
                           },
                         )))
                     ..add(RaisedButton(
-                        child: Text('Fertig'),
+                        child: Text('Fertig').tr(),
                         onPressed: () => Navigator.pop(context))));
             }));
 

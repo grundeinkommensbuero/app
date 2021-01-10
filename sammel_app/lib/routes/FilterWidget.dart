@@ -206,7 +206,7 @@ class FilterWidgetState extends State<FilterWidget>
                             checkColor: Colors.black,
                             activeColor: DweTheme.yellowLight,
                             value: ausgewTypen.contains(typ),
-                            title: Text(typ),
+                            title: Text(typ).tr(),
                             onChanged: (neuerWert) {
                               setDialogState(() {
                                 if (neuerWert) {
