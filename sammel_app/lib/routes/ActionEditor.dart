@@ -433,7 +433,7 @@ class ActionEditorState extends State<ActionEditor> {
       text = Text('{kiez} in {bezirk}\n ⛒ Treffpunkt: {treffpunkt}')
           .tr(namedArgs: {
         'kiez': termin.ort.name,
-        'bezirk': termin.ort.region,
+        'bezirk': termin.ort.ortsteil,
         'treffpunkt': termin.terminDetails.treffpunkt,
       });
     }

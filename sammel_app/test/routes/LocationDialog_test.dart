@@ -1,3 +1,4 @@
+import 'package:easy_localization/src/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,15 +17,13 @@ final GeoService _geoService = GeoServiceMock();
 
 void main() {
   setUp(() async {
+    Localization.load(Locale('en'), translations: TranslationsMock());
     reset(_geoService);
     when(_geoService.getDescriptionToPoint(any))
         .thenAnswer((_) async => GeoData('name', 'street', '12'));
     StammdatenService.fileReader = TestFileReader();
     _stammdatenService = StammdatenService();
-    var kieze = await _stammdatenService.kieze;
-    kieze = await _stammdatenService.kieze;
-    kieze = await _stammdatenService.kieze;
-    kieze = await _stammdatenService.kieze;
+    await _stammdatenService.kieze;
   });
 
   testWidgets('opens dialog', (WidgetTester tester) async {

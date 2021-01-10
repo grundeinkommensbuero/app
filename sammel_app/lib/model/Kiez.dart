@@ -64,7 +64,7 @@ class Kiez {
 
   bool equals(Kiez that) =>
       this.name == that.name &&
-      this.ortsteil == that.ortsteil &&
+      this.region == that.region &&
       this.ortsteil == that.ortsteil &&
       DeepCollectionEquality().equals(this.polygon, that.polygon); //TODO Testen
 }

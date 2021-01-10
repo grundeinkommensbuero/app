@@ -1,5 +1,7 @@
 import 'dart:io';
 
+
+import 'package:easy_localization/src/translations.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
@@ -85,3 +87,10 @@ class FirebaseReceiveServiceMock extends Mock
 class DemoPushSendServiceMock extends Mock implements DemoPushSendService {}
 
 class GeoServiceMock extends Mock implements GeoService {}
+
+class TranslationsMock extends Mock implements Translations {
+  TranslationsMock([Function(Translations) training]) {
+    when(this.get(any)).thenAnswer((inv) => inv.positionalArguments[0]);
+    if(training != null) training(this);
+  }
+}

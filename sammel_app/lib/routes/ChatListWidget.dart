@@ -29,6 +29,7 @@ class ChatListState extends State<ChatListWidget>
   ChatChannel channel;
   User user;
   bool force_scrolling = false;
+  Timer timer;
 
   ChatListState(ChatChannel channel) {
     this.channel = channel;
@@ -49,7 +50,7 @@ class ChatListState extends State<ChatListWidget>
             padding: EdgeInsets.all(8.0),
             controller: widget.scroll_controller,
             children: buildListMessage()));
-    Timer(
+    timer = Timer(
         Duration(milliseconds: 500),
             () => widget.scroll_controller
             .jumpTo(widget.scroll_controller.position.maxScrollExtent));
@@ -176,5 +177,10 @@ class ChatListState extends State<ChatListWidget>
     }
 
     return DateFormat('MMM d, hh:mm').format(date);
+  }
+
+  dispose() {
+    super.dispose();
+    timer.cancel();
   }
 }

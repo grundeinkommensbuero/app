@@ -10,7 +10,7 @@ final kieze =
 final regionen =
     File('./assets/geodata/prognoseraum_generalized.geojson');
 final ortsteile =
-    File('/assets/geodata/ortsteil_generalized.geojson');
+    File('./assets/geodata/ortsteil_generalized.geojson');
 
 FileReader fileReaderMock = TestFileReader();
 

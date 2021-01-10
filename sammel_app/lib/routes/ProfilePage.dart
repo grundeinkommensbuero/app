@@ -66,8 +66,10 @@ class ProfilePageState extends State<ProfilePage> {
                   child: Container(
                       alignment: Alignment.center,
                       child: Text(
-                        languages[
-                            EasyLocalization.of(context).locale.languageCode],
+                        languages[EasyLocalization.of(context)
+                                ?.locale
+                                ?.languageCode] ??
+                            'Keine',
                         overflow: TextOverflow.fade,
                         style: TextStyle(
                             fontSize: (28.0 - ((user?.name ?? '').length) / 4)),
@@ -126,8 +128,7 @@ class ProfilePageState extends State<ProfilePage> {
             )),
         bottomSheet: Row(children: [
           Expanded(
-              child: SelectableText(
-                  'User-ID: ${user?.id}, Push-Token: $token',
+              child: SelectableText('User-ID: ${user?.id}, Push-Token: $token',
                   textAlign: TextAlign.center))
         ], mainAxisAlignment: MainAxisAlignment.center),
         floatingActionButton: FloatingActionButton(
@@ -179,7 +180,8 @@ class ProfilePageState extends State<ProfilePage> {
             contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
             titlePadding: EdgeInsets.all(15.0),
             title: const Text(
-                'Wie häufig möchtest du Infos über anstehende Aktionen bekommen?').tr(),
+                    'Wie häufig möchtest du Infos über anstehende Aktionen bekommen?')
+                .tr(),
             children: []..addAll(intervalOptions.map((option) => RadioListTile(
                   groupValue: interval,
                   value: option,
@@ -242,10 +244,11 @@ class ProfileItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                         Text(title,
-                            style: TextStyle(
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.normal,
-                                color: Colors.black)).tr(),
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.black))
+                            .tr(),
                         SizedBox(height: 10.0),
                         child,
                         SizedBox(width: 15.0)
