@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -54,12 +56,14 @@ class FirebaseReceiveService implements PushReceiveService {
   }
 
   @override
-  void subscribe({onMessage, onResume, onLaunch, onBackgroundMessage}) =>
-      firebaseMessaging.configure(
-          onMessage: onMessage,
-          onResume: onResume,
-          onLaunch: onLaunch,
-          onBackgroundMessage: onBackgroundMessage);
+  void subscribe({onMessage, onResume, onLaunch, onBackgroundMessage}) {
+    if (Platform.isIOS) onBackgroundMessage = null;
+    firebaseMessaging.configure(
+        onMessage: onMessage,
+        onResume: onResume,
+        onLaunch: onLaunch,
+        onBackgroundMessage: onBackgroundMessage);
+  }
 
   @override
   void subscribeToTopics(List<String> topics) {

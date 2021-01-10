@@ -1,4 +1,3 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'dart:async';
 
 import 'package:sammel_app/model/PushMessage.dart';
@@ -40,7 +39,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
       FirebaseReceiveService firebaseService, Backend backend) {
     var listener = createPushListener(firebaseService, backend);
     pushToken = listener.then((listener) => listener.token);
-   // initializeLocalNotifications();
+    // initializeLocalNotifications();
   }
 
   Future<PushReceiveService> createPushListener(
@@ -67,7 +66,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
       onMessage: onMessageCallback,
       onResume: onResumeCallback,
       onLaunch: onResumeCallback,
-      /*onBackgroundMessage: backgroundMessageHandler*/
+      onBackgroundMessage: backgroundMessageHandler
     );
 
     return listener;
@@ -82,7 +81,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
 
   void handle_message(Map message) {
     try {
-      var data = decrypt(message['data']);
+      var data = decrypt(message);
       if (data.containsKey('type')) {
         String type = data['type'];
         if (callback_map.containsKey(type)) {
@@ -97,7 +96,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
   Future<dynamic> onResumeCallback(Map<dynamic, dynamic> message) async {
     print('Resume-Nachricht empfangen: $message');
     try {
-      var data = decrypt(message['data']);
+      var data = decrypt(message);
       if (data.containsKey('type')) {
         String type = data['type'];
         if (callback_map.containsKey(type)) {
@@ -128,7 +127,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
 }
 
 Future<dynamic> backgroundMessageHandler(Map<String, dynamic> message) async {
-  var data = decrypt(message['data']);
+  var data = decrypt(message);
   print('Background-Messenger meldet Nachrichten-Ankunft: $data');
   if (data['type'] == "SimpleChatMessage")
     handleBackgroundChatMessage(data);
