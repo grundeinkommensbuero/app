@@ -29,7 +29,7 @@ class UsernameDialogState extends State<UsernameDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       key: Key('create user dialog'),
-      title: Text('Benutzer*in-Name'),
+      title: Text('Benutzer*in-Name').tr(),
       content: SingleChildScrollView(
           child: Column(children: [
         (widget.hideHint
