@@ -1,3 +1,4 @@
+import 'package:easy_localization/src/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_test_ui/flutter_test_ui.dart';
@@ -26,6 +27,10 @@ final _stammdatenService = StammdatenServiceMock();
 final _storageService = StorageServiceMock();
 
 void main() {
+  setUp(() {
+    Localization.load(Locale('en'), translations: TranslationsMock());
+  ***REMOVED***);
+
   group('ui', () {
     setUpUI((WidgetTester tester) async {
       when(_storageService.loadFilter()).thenAnswer((_) async => null);

@@ -1,3 +1,4 @@
+import 'package:easy_localization/src/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong/latlong.dart';
@@ -34,6 +35,7 @@ final _pushManager = PushNotificationManagerMock();
 
 void main() {
   setUp(() {
+    Localization.load(Locale('en'), translations: TranslationsMock());
     when(_storageService.loadFilter()).thenAnswer((_) async => null);
     when(_storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
     when(_storageService.loadMyKiez()).thenAnswer((_) async => []);
@@ -165,7 +167,9 @@ void main() {
       await _openActionCreator(tester);
       ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
-      expect(find.text('Tempelhofer Vorstadt in Friedrichshain-Kreuzberg'),
+      expect(
+          find.text('${tempVorstadt().name***REMOVED*** in ${tempVorstadt().ortsteil***REMOVED***\n'
+              ' ⛒ Treffpunkt: ${actionData.action.terminDetails.treffpunkt***REMOVED***'),
           findsNothing);
       // ignore: invalid_use_of_protected_member
       actionData.setState(() {
@@ -176,9 +180,8 @@ void main() {
       ***REMOVED***);
       await tester.pumpAndSettle();
       expect(
-          find.text(
-              '${actionData.action.ort.name***REMOVED*** in ${actionData.action.ort.region***REMOVED***\n'
-              'Treffpunkt: ${actionData.action.terminDetails.treffpunkt***REMOVED***'),
+          find.text('${tempVorstadt().name***REMOVED*** in ${tempVorstadt().ortsteil***REMOVED***\n'
+              ' ⛒ Treffpunkt: ${actionData.action.terminDetails.treffpunkt***REMOVED***'),
           findsOneWidget);
     ***REMOVED***);
 
@@ -257,7 +260,7 @@ void main() {
           findsOneWidget);
       expect(
           find.text(
-              'Frankfurter Allee Nord in Friedrichshain-Kreuzberg\nTreffpunkt: Weltzeituhr'),
+              'Frankfurter Allee Nord in Friedrichshain\n ⛒ Treffpunkt: Weltzeituhr'),
           findsOneWidget);
       expect(find.text('Beschreibung: Bringe Westen und Klämmbretter mit'),
           findsOneWidget);
@@ -445,8 +448,8 @@ void main() {
 
       expect(ActionEditorState.determineMapCenter(actionData), null);
 
-      actionData = ActionData(
-          null, null, null, Kiez('Kiez', 'Region', 'Ortsteil', []), null, null, null);
+      actionData = ActionData(null, null, null,
+          Kiez('Kiez', 'Region', 'Ortsteil', []), null, null, null);
 
       expect(ActionEditorState.determineMapCenter(actionData), null);
     ***REMOVED***);
