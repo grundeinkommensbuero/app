@@ -4,13 +4,13 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http_server/http_server.dart';
-import 'package:sammel_app/main.dart';
 import 'package:sammel_app/model/ActionListPushData.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
+import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
@@ -42,14 +42,14 @@ abstract class AbstractTermineService extends BackendService {
 
 class TermineService extends AbstractTermineService
     implements PushNotificationListener {
-  GlobalKey<NavigatorState> navigatorKey;
+  GlobalKey<TermineSeiteState> actionPageKey;
 
   TermineService(
       stammdatenService,
       AbstractUserService userService,
       Backend backend,
       PushNotificationManager manager,
-      this.navigatorKey)
+      this.actionPageKey)
       : super(stammdatenService, userService, backend) {
     manager.register_message_callback(PushDataTypes.NewKiezActions, this);
     manager.register_message_callback(PushDataTypes.ActionChanged, this);
@@ -118,7 +118,7 @@ class TermineService extends AbstractTermineService
     print('Type: ${actionData.type***REMOVED***');
     if (actionData.type ==
         PushDataTypes.NewKiezActions) if (actionData.actions.length == 1)
-      actionPageKey.currentState.openTerminDetails(actionData.actions[0]);
+      this.actionPageKey.currentState.openTerminDetails(actionData.actions[0]);
     else {
       actionPageKey.currentState
           .zeigeAktionen('Neue Aktionen', actionData.actions);

@@ -15,10 +15,6 @@ class ChatChannel {
     this.channel_messages = List<Message>();
   ***REMOVED***
 
-  getAllMessages() {
-    return channel_messages;
-  ***REMOVED***
-
   @override
   Future<void> pushChatMessage(ChatMessage message) {
     add_message_or_mark_as_received(message);
@@ -28,13 +24,14 @@ class ChatChannel {
   ***REMOVED***
 
   @override
-  Future<void> pushParticipationMessage(ParticipationMessage message) {
+  pushParticipationMessage(ParticipationMessage message) {
+    if (channel_messages.any((m) => message.isMessageEqual(m))) return;
     channel_messages.add(message);
     ccl?.channelChanged(this);
   ***REMOVED***
 
-  void add_message_or_mark_as_received(ChatMessage message) {
-    ChatMessage ownMessage = channel_messages
+  void add_message_or_mark_as_received(Message message) {
+    Message ownMessage = channel_messages
         .firstWhere((e) => message.isMessageEqual(e), orElse: () => null);
     if (ownMessage == null)
       channel_messages.add(message);
@@ -45,13 +42,12 @@ class ChatChannel {
   void register_channel_change_listener(ChannelChangeListener c) {
     if (ccl == null)
       ccl = c;
-    else if(c != ccl)
-      {
-        print('The Channel is already associated to a widget');
-        ChatListState cls = ccl;
-        Navigator.pop(cls.context);
-        ccl = c;
-      ***REMOVED***
+    else if (c != ccl) {
+      print('The Channel is already associated to a widget');
+      ChatListState cls = ccl;
+      Navigator.pop(cls.context);
+      ccl = c;
+    ***REMOVED***
   ***REMOVED***
 
   void dispose_widget() {

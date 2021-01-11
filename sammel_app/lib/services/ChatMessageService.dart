@@ -27,32 +27,45 @@ class ChatMessageService implements PushNotificationListener {
   StorageService storage_service;
 
   @override
-  Future<void> receive_message(Map<dynamic, dynamic> data) async {
+  receive_message(Map<String, dynamic> data) async {
     try {
-      ChatPushData mpd = ChatPushData.fromJson(data);
-      ChatChannel channel = await getChannel(mpd.channel);
-      if (channel != null) {
+      ChatChannel channel = await storeMessage(data);
+      if (channel == null) return;
+
+      // chat if chat window is open
+      ChatListState cls = channel.ccl;
+      if (cls == null || ModalRoute.of(cls.context)?.isActive == false) {
+        // chat window is not open: push local message
+        print('non active window');
+        var notifier =
+            Provider.of<LocalNotificationService>(navigatorKey.currentContext);
         if (data['type'] == PushDataTypes.SimpleChatMessage)
-          channel.pushChatMessage(ChatMessage.fromJson(data));
+          notifier.sendChatNotification(ChatMessagePushData.fromJson(data));
         if (data['type'] == PushDataTypes.ParticipationMessage)
-          channel.pushParticipationMessage(ParticipationMessage.fromJson(data));
-        this.storage_service.saveChatChannel(channel);
-        //app is open. chat if chat window is open
-        ChatListState cls = channel.ccl;
-        if (cls == null || ModalRoute.of(cls.context)?.isActive == false) {
-          //chat window is not opened. push local message
-          print('non active window');
-          Provider.of<LocalNotificationService>(navigatorKey.currentContext)
-              .sendChatNotification(ChatMessagePushData.fromJson(data));
-        ***REMOVED***
+          notifier.sendParticipationNotification(
+              ParticipationPushData.fromJson(data));
       ***REMOVED***
     ***REMOVED*** on UnreadablePushMessage catch (e, s) {
       ErrorService.handleError(e, s);
     ***REMOVED***
   ***REMOVED***
 
+  Future<ChatChannel> storeMessage(Map<String, dynamic> data) async {
+    ChatPushData mpd = ChatPushData.fromJson(data);
+    ChatChannel channel = await getChannel(mpd.channel);
+    if (channel == null) return null;
+
+    if (data['type'] == PushDataTypes.SimpleChatMessage)
+      channel.pushChatMessage(ChatMessage.fromJson(data));
+    if (data['type'] == PushDataTypes.ParticipationMessage)
+      channel.pushParticipationMessage(ParticipationMessage.fromJson(data));
+    this.storage_service.saveChatChannel(channel);
+    return channel;
+  ***REMOVED***
+
   @override
   Future<void> handleNotificationTap(Map<dynamic, dynamic> data) async {
+    print('handleNotificationTap mit Data: $data');
     final channel = await getChannel(ChatPushData.fromJson(data).channel);
     int termin_id = int.parse(channel.id.split(':')[1]);
     Provider.of<AbstractTermineService>(navigatorKey.currentContext)
@@ -75,7 +88,7 @@ class ChatMessageService implements PushNotificationListener {
     ***REMOVED***
   ***REMOVED***
 
-  Future<ChatChannel> getChatChannel(int idNr) async =>
+  Future<ChatChannel> getActionChannel(int idNr) async =>
       await getChannel('action:$idNr');
 
   Future<ChatChannel> getChannel(String id) async {
@@ -114,4 +127,16 @@ class ChatMessageService implements PushNotificationListener {
       ***REMOVED***
     ***REMOVED***);
   ***REMOVED***
+***REMOVED***
+
+handleBackgroundChatMessage(ChatPushData data) async {
+  var storageService = StorageService();
+  ChatChannel channel = await storageService.loadChatChannel(data.channel) ??
+      ChatChannel(data.channel);
+
+  if (data.type == PushDataTypes.SimpleChatMessage)
+    channel.pushChatMessage(data.message);
+  if (data.type == PushDataTypes.ParticipationMessage)
+    channel.pushParticipationMessage(data.message);
+  storageService.saveChatChannel(channel);
 ***REMOVED***

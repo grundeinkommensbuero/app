@@ -71,7 +71,7 @@ class ChatListState extends State<ChatListWidget>
   ***REMOVED***
 
   List<Widget> buildListMessage() {
-    List<Message> message_list = widget.channel.getAllMessages();
+    List<Message> message_list = widget.channel.channel_messages;
     if (message_list == null) return <Widget>[];
     List<Widget> message_list_widgets = List();
     for (Message message in message_list) {
@@ -151,7 +151,7 @@ class ChatListState extends State<ChatListWidget>
         //   key: Key('Participation Message'),
         textAlign: TextAlign.center,
         text: TextSpan(
-            text: message.username ?? 'Jemand',
+            text: message.username ?? 'Jemand'.tr(),
             style: TextStyle(color: DweTheme.purple),
             children: [
               TextSpan(text: title, style: TextStyle(color: Colors.black)),

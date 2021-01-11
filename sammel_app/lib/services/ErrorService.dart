@@ -25,7 +25,7 @@ class ErrorService {
   static handleError(error, StackTrace stacktrace, {String context***REMOVED***) async {
     print('Fehler aufgetreten: $error\n$stacktrace');
 
-    context = context.tr();
+    if (context != null) context = context.tr();
     final errorMessage = error.message.tr();
     if (error is NoUserAuthException) {
       pushError('Dein Account konnte nicht authentifziert werden.',

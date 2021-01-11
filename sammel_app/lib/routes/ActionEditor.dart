@@ -129,7 +129,7 @@ class ActionEditorState extends State<ActionEditor> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                         Text(
-                          'Wo? ',
+                          'Wo?',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ).tr(),
                         InputButton(
