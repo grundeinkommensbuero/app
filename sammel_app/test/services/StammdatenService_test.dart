@@ -24,16 +24,19 @@ void main() {
   test('reads Kiez main features from files', () async {
     var kieze = await stammdatenService.kieze;
 
-    expect(kieze.length, 138);
+    expect(kieze.length, 141);
 
-    expect(kieze.toList()[0].region, 'Wedding');
-    expect(kieze.toList()[0].name, 'Tiergarten Süd');
+    expect(kieze.toList()[0].ortsteil, 'Mitte');
+    expect(kieze.toList()[0].region, 'Zentrum');
+    expect(kieze.toList()[0].name, 'Brunnenstraße Süd');
 
-    expect(kieze.toList()[1].region, 'Wedding');
-    expect(kieze.toList()[1].name, 'Regierungsviertel');
+    expect(kieze.toList()[1].ortsteil, 'Prenzlauer Berg');
+    expect(kieze.toList()[1].region, 'Nördlicher Prenzlauer Berg');
+    expect(kieze.toList()[1].name, 'Prenzlauer Berg Nordwest');
 
-    expect(kieze.toList()[2].region, 'Wedding');
-    expect(kieze.toList()[2].name, 'Alexanderplatz');
+    expect(kieze.toList()[2].ortsteil, 'Wilmersdorf');
+    expect(kieze.toList()[2].region, 'CW 6');
+    expect(kieze.toList()[2].name, 'Forst Grunewald');
   ***REMOVED***);
 ***REMOVED***
 
