@@ -21,7 +21,7 @@ void main() {
       TerminTestDaten.einTermin(),
       TerminTestDaten.einTermin(),
       TerminTestDaten.einTermin(),
-    ], (_) => false, (_) => false, () => false, (_) {***REMOVED***))));
+    ], (_) => false, (_) => false, (_) => false, (_) {***REMOVED***))));
 
     expect(find.byType(TerminCard), findsNWidgets(3));
   ***REMOVED***);
