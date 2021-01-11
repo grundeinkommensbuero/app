@@ -150,7 +150,7 @@ class InvalidUserException implements Exception {}
 class DemoUserService extends AbstractUserService {
   DemoUserService() : super(DemoBackend()) {
     _userStream = streamController.stream;
-    streamController.add(User(13, null, Colors.red));
+    streamController.add(User(13, 'Ich', Colors.red));
     userHeaders = Future.value({'Authorization': 'userCreds'});
   }
 
