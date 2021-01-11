@@ -26,7 +26,7 @@ class ErrorService {
     print('Fehler aufgetreten: $error\n$stacktrace');
 
     if (context != null) context = context.tr();
-    final errorMessage = error.message.tr();
+    final errorMessage = tr(error.message);
     if (error is NoUserAuthException) {
       pushError('Dein Account konnte nicht authentifziert werden.',
           [context, errorMessage, EMAIL].where((e) => e != null).join(' '));

@@ -189,8 +189,7 @@ class TermineSeiteState extends State<TermineSeite>
         .then((termine) =>
             setState(() => this.termine = termine..sort(Termin.compareByStart)))
         .catchError((e, s) => ErrorService.handleError(e, s,
-                context: 'Aktionen konnten nicht geladen werden.')
-            .tr());
+                context: 'Aktionen konnten nicht geladen werden.'));
   }
 
   void showRestError(RestFehler e) {
