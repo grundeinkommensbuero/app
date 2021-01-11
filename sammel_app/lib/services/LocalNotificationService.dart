@@ -63,7 +63,7 @@ Future<FlutterLocalNotificationsPlugin> initializeLocalNotifications(
 class LocalNotificationService {
   FlutterLocalNotificationsPlugin plugin;
 
-  PushNotificationManager pushManager;
+  AbstractPushNotificationManager pushManager;
   Function(String) onTap;
 
   LocalNotificationService(this.pushManager) {
