@@ -114,7 +114,7 @@ class BackendService {
     var googleCall = backend.callGoogle();
 
     try {
-      var serverHealth = await healthCall.timeout(Duration(seconds: 2),
+      var serverHealth = await healthCall.timeout(Duration(seconds: 5),
           onTimeout: () async =>
               await googleCall.timeout(Duration(seconds: 2), onTimeout: () {
                 // both server and google don't respond
