@@ -14,6 +14,7 @@ import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/AuthFehler.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
+import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
@@ -33,6 +34,7 @@ final _storageService = StorageServiceMock();
 final _pushService = PushSendServiceMock();
 final _userService = ConfiguredUserServiceMock();
 final _chatMessageService = ChatMessageServiceMock();
+final _pushManager = PushNotificationManagerMock();
 
 void main() {
   MultiProvider termineSeiteWidget;
@@ -40,21 +42,23 @@ void main() {
   setUp(() {
     when(_storageService.loadFilter()).thenAnswer((_) async => null);
     when(_storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
+    when(_storageService.loadMyKiez()).thenAnswer((_) async => []);
+    when(_storageService.loadNotificationInterval())
+        .thenAnswer((_) async => 'nie');
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
     when(_termineService.loadActions(any)).thenAnswer((_) async => []);
-    when(_stammdatenService.kieze).thenAnswer(
-        (_) async => [ffAlleeNord(), tempVorstadt(), plaenterwald()]);
+    when(_pushManager.pushToken).thenAnswer((_) => Future.value('Token'));
     ErrorService.displayedTypes = [];
 
     termineSeiteWidget = MultiProvider(
         providers: [
+          Provider<StammdatenService>.value(value: _stammdatenService),
           Provider<AbstractTermineService>.value(value: _termineService),
           Provider<AbstractListLocationService>.value(
               value: _listLocationService),
           Provider<StorageService>.value(value: _storageService),
           Provider<AbstractUserService>.value(value: _userService),
-          Provider<StammdatenService>.value(value: _stammdatenService),
           Provider<ChatMessageService>.value(value: _chatMessageService),
         ],
         child: MaterialApp(home: Builder(builder: (BuildContext context) {
@@ -161,8 +165,10 @@ void main() {
           ]);
 
       await tester.pumpWidget(termineSeiteWidget);
+      await tester.pumpAndSettle(Duration(seconds: 1));
+      // await StammdatenService.kieze;
 
-      expect(find.text('Filter'), findsOneWidget);
+      expect(find.text('Aktualisieren'), findsOneWidget);
     ***REMOVED***);
 
     testWidgets('opens on tap', (WidgetTester tester) async {
@@ -174,7 +180,7 @@ void main() {
 
       await tester.pumpWidget(termineSeiteWidget);
 
-      await tester.tap(find.text('Filter'));
+      await tester.tap(find.byIcon(Icons.filter_alt_sharp));
 
       await tester.pump();
 
@@ -398,10 +404,10 @@ void main() {
           tester.state(find.byKey(Key('action creator')));
 
       editorState.action = ActionData(
+          'Infoveranstaltung',
           TimeOfDay.fromDateTime(today),
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
           tempVorstadt(),
-          'Infoveranstaltung',
           [today],
           TerminDetails('test1', 'test2', 'test3'),
           LatLng(52.49653, 13.43762));
@@ -460,10 +466,10 @@ void main() {
           tester.state(find.byKey(Key('action creator')));
 
       editorState.action = ActionData(
+          'Sammeln',
           TimeOfDay.fromDateTime(today),
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
           tempVorstadt(),
-          'Sammeln',
           [today],
           TerminDetails('test1', 'test2', 'test3'),
           LatLng(52.49653, 13.43762));
@@ -523,10 +529,10 @@ void main() {
           tester.state(find.byKey(Key('action creator')));
 
       editorState.action = ActionData(
+          'Infoveranstaltung',
           TimeOfDay.fromDateTime(today),
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
           tempVorstadt(),
-          'Infoveranstaltung',
           [today],
           TerminDetails('test1', 'test2', 'test3'),
           LatLng(52.49653, 13.43762));
@@ -585,10 +591,10 @@ void main() {
           tester.state(find.byKey(Key('action creator')));
 
       editorState.action = ActionData(
+          'Infoveranstaltung',
           TimeOfDay.fromDateTime(today),
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
           tempVorstadt(),
-          'Infoveranstaltung',
           [today],
           TerminDetails('test1', 'test2', 'test3'),
           LatLng(52.49653, 13.43762));
@@ -1108,8 +1114,8 @@ void main() {
     TermineSeiteState actionPageState;
     setUp(() {
       actionPageState = TermineSeiteState();
-      TermineSeiteState.storageService = _storageService;
-      TermineSeiteState.termineService = _termineService;
+      actionPageState.storageService = _storageService;
+      actionPageState.termineService = _termineService;
     ***REMOVED***);
 
     test('is uniquely generated at action creation and sent to server', () {
@@ -1209,8 +1215,8 @@ void main() {
               .where((action) => action.id == 2)
               .toList()[0]
               .ort
-              .kiez,
-          tempVorstadt().kiez);
+              .name,
+          tempVorstadt().name);
     ***REMOVED***);
 
     test('sorts new list by date', () {
@@ -1316,18 +1322,19 @@ void main() {
 _pumpNavigation(WidgetTester tester) async {
   await tester.pumpWidget(MultiProvider(
       providers: [
+        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<AbstractTermineService>.value(value: _termineService),
         Provider<StorageService>.value(value: _storageService),
         Provider<AbstractListLocationService>(
             create: (context) => _listLocationService),
-        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<PushSendService>.value(value: _pushService),
         Provider<AbstractUserService>.value(value: _userService),
         Provider<AbstractPushSendService>.value(value: _pushService),
         Provider<ChatMessageService>.value(value: _chatMessageService),
+        Provider<AbstractPushNotificationManager>.value(value: _pushManager),
       ],
       child: MaterialApp(
-        home: Navigation(),
+        home: Navigation(GlobalKey(debugLabel: 'action page')),
       )));
   await tester.pumpAndSettle();
 ***REMOVED***

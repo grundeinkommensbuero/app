@@ -8,8 +8,10 @@ import de.kybernetik.database.termine.TerminDetails
 import de.kybernetik.database.termine.TermineDao
 import de.kybernetik.database.termine.Evaluation
 import de.kybernetik.database.termine.Token
+import de.kybernetik.rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithDetails
 import org.jboss.logging.Logger
 import de.kybernetik.rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithoutDetails
+import de.kybernetik.services.NeueAktionenNotification
 import de.kybernetik.services.PushService
 import java.time.LocalDateTime
 import java.time.ZonedDateTime.now
@@ -42,6 +44,9 @@ open class TermineRestResource {
 
     @EJB
     private lateinit var pushService: PushService
+
+    @EJB
+    private lateinit var neueAktionenNotification: NeueAktionenNotification
 
     @Context
     private lateinit var context: SecurityContext
@@ -77,7 +82,7 @@ open class TermineRestResource {
         termin.details
         return Response
             .ok()
-            .entity(TerminDto.convertFromTerminWithDetails(termin))
+            .entity(convertFromTerminWithDetails(termin))
             .build()
     ***REMOVED***
 
@@ -96,12 +101,14 @@ open class TermineRestResource {
         val token = actionAndToken.token
         if (!token.isNullOrEmpty()) dao.storeToken(updatedAction.id, token)
 
-        pushService.pusheNeueAktionNotification(actionAndToken.action!!)
+        val terminDto = convertFromTerminWithoutDetails(updatedAction)
+        pushService.pusheNeueAktionenNotification(
+            listOf(terminDto),
+            "${updatedAction.ort***REMOVED***-sofort"
+        )
+        neueAktionenNotification.merkeNeueAktion(terminDto)
 
-        return Response
-            .ok()
-            .entity(convertFromTerminWithoutDetails(updatedAction))
-            .build()
+        return Response.ok().entity(terminDto).build()
     ***REMOVED***
 
     @POST
@@ -121,7 +128,7 @@ open class TermineRestResource {
             val neuerTermin = actionAndToken.action!!.convertToTermin()
             neuerTermin.teilnehmer = dao.getTermin(actionAndToken.action!!.id!!)!!.teilnehmer
             dao.aktualisiereTermin(neuerTermin)
-            informiereUeberAenderung(neuerTermin)
+            informiereUeberAenderung(actionAndToken.action!!, neuerTermin.teilnehmer)
         ***REMOVED*** catch (e: EJBException) {
             LOG.error("Fehler beim Mergen des Termins: Termin: ${actionAndToken.action***REMOVED***\n", e)
             return Response.status(422).entity(e.message).build()
@@ -152,7 +159,7 @@ open class TermineRestResource {
             dao.loescheAktion(termin)
             if (tokenFromDb != null) dao.deleteToken(Token(actionAndToken.action!!.id!!, actionAndToken.token!!))
             termin.teilnehmer = teilnehmer
-            informiereUeberLoeschung(termin)
+            informiereUeberLoeschung(actionAndToken.action!!, termin.teilnehmer)
         ***REMOVED*** catch (e: DatabaseException) {
             return Response.status(404).entity(e.message).build()
         ***REMOVED***
@@ -421,7 +428,7 @@ open class TermineRestResource {
         pushService.sendePushNachrichtAnEmpfaenger(pushMessage, teilnehmer)
     ***REMOVED***
 
-    open fun informiereUeberAenderung(aktion: Termin) {
+    open fun informiereUeberAenderung(aktion: TerminDto, teilnehmer: List<Benutzer>) {
         val pushMessage = PushMessageDto(
             PushNotificationDto(
                 "Eine Aktion an der du teilnimmst hat sich geändert",
@@ -429,19 +436,19 @@ open class TermineRestResource {
                 "Änderungen an Aktionen",
                 "action:change:${aktion.id***REMOVED***"
             ),
-            mapOf(
+            mapOf<String, Any>(
                 "type" to "ActionChanged",
                 "timestamp" to now().format(ISO_OFFSET_DATE_TIME),
-                "action" to aktion.id
+                "actions" to listOf(aktion)
             )
         )
-        val teilnehmer = aktion.teilnehmer.subList(1, aktion.teilnehmer.size)
+        val restTeilnehmer = teilnehmer.subList(1, teilnehmer.size)
         if (teilnehmer.size > 0)
             LOG.debug("Informiere Teilnehmer ${teilnehmer.map { it.id ***REMOVED******REMOVED*** von Aktion ${aktion.id***REMOVED*** über Änderungen")
-        pushService.sendePushNachrichtAnEmpfaenger(pushMessage, teilnehmer)
+        pushService.sendePushNachrichtAnEmpfaenger(pushMessage, restTeilnehmer)
     ***REMOVED***
 
-    open fun informiereUeberLoeschung(aktion: Termin) {
+    open fun informiereUeberLoeschung(aktion: TerminDto, teilnehmer: List<Benutzer>) {
         val pushMessage = PushMessageDto(
             PushNotificationDto(
                 "Eine Aktion an der du teilnimmst wurde abgesagt",
@@ -449,16 +456,16 @@ open class TermineRestResource {
                 "Änderungen an Aktionen",
                 "action:change:${aktion.id***REMOVED***"
             ),
-            mapOf(
+            mapOf<String, Any>(
                 "type" to "ActionDeleted",
                 "timestamp" to now().format(ISO_OFFSET_DATE_TIME),
-                "action" to aktion.id
+                "actions" to listOf(aktion)
             )
         )
-        val teilnehmer = aktion.teilnehmer.subList(1, aktion.teilnehmer.size)
-        if (teilnehmer.size > 0)
-            LOG.debug("Informiere Teilnehmer ${teilnehmer.map { it.id ***REMOVED******REMOVED*** von Aktion ${aktion.id***REMOVED*** über Löschung")
-        pushService.sendePushNachrichtAnEmpfaenger(pushMessage, teilnehmer)
+        val restTeilnehmer = teilnehmer.subList(1, teilnehmer.size)
+        if (restTeilnehmer.size > 0)
+            LOG.debug("Informiere Teilnehmer ${restTeilnehmer.map { it.id ***REMOVED******REMOVED*** von Aktion ${aktion.id***REMOVED*** über Löschung")
+        pushService.sendePushNachrichtAnEmpfaenger(pushMessage, restTeilnehmer)
     ***REMOVED***
 ***REMOVED***
 

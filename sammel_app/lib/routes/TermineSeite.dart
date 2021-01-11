@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -40,9 +41,9 @@ class TermineSeite extends StatefulWidget {
 class TermineSeiteState extends State<TermineSeite>
     with SingleTickerProviderStateMixin {
   static var filterKey = GlobalKey();
-  static AbstractTermineService termineService;
-  static StorageService storageService;
-  static ChatMessageService chatMessageService;
+  AbstractTermineService termineService;
+  StorageService storageService;
+  ChatMessageService chatMessageService;
   static final TextStyle style = TextStyle(
     color: Color.fromARGB(255, 129, 28, 98),
     fontSize: 15.0,
@@ -95,9 +96,16 @@ class TermineSeiteState extends State<TermineSeite>
       curve: Curves.easeIn,
     ));
 
-    var actionListView = ActionList(
-        termine, isMyAction, isPastAction, iAmParticipant, openTerminDetails,
-        key: Key('action list'));
+    var actionListView = Column(children: [
+      // An erstes Element Abstand nach oben anhängen, damit oberste Aktion nicht von Filter verdeckt wird
+      SizedBox(
+        height: 50.0,
+      ),
+      Expanded(
+          child: ActionList(
+              termine, isMyAction, isPastAction, iAmParticipant, openTerminDetails,
+              key: Key('action list')))
+    ]);
     var actionMapView = ActionMap(
       key: Key('action map'),
       termine: termine,
@@ -124,7 +132,7 @@ class TermineSeiteState extends State<TermineSeite>
                       index: navigation),
                 ),
               ),
-              filterWidget,
+              filterWidget
             ],
           )),
       bottomNavigationBar: BottomNavigationBar(
@@ -135,10 +143,10 @@ class TermineSeiteState extends State<TermineSeite>
           BottomNavigationBarItem(
               icon: Icon(Icons.view_list,
                   key: Key('list view navigation button')),
-              label: 'Liste'),
+              label: 'Liste'.tr()),
           BottomNavigationBarItem(
               icon: Icon(Icons.map, key: Key('map view navigation button')),
-              label: 'Karte')
+              label: 'Karte'.tr())
         ],
       ),
     );
@@ -187,31 +195,32 @@ class TermineSeiteState extends State<TermineSeite>
     _initialized = true;
   ***REMOVED***
 
-  void ladeTermine(TermineFilter filter) {
-    termineService.loadActions(filter).then((termine) {
-      setState(() {
-        this.termine = termine..sort(Termin.compareByStart);
-      ***REMOVED***);
-    ***REMOVED***).catchError((e, s) => ErrorService.handleError(e, s,
-        context: "Aktionen konnten nicht geladen werden."));
+  Future<void> ladeTermine(TermineFilter filter) async {
+    await termineService
+        .loadActions(filter)
+        .then((termine) =>
+            setState(() => this.termine = termine..sort(Termin.compareByStart)))
+        .catchError((e, s) => ErrorService.handleError(e, s,
+                context: 'Aktionen konnten nicht geladen werden.')
+            .tr());
   ***REMOVED***
 
   void showRestError(RestFehler e) {
     showDialog(
         context: context,
         child: AlertDialog(
-          title: Text('Aktion konnte nicht angelegt werden'),
+          title: Text('Aktion konnte nicht angelegt werden').tr(),
           content: SelectableText(e.message),
           actions: <Widget>[
             RaisedButton(
-              child: Text('Okay...'),
+              child: Text('Okay...').tr(),
               onPressed: () => Navigator.pop(context),
             )
           ],
         ));
   ***REMOVED***
 
-  openTerminDetails(BuildContext context, Termin termin) async {
+  openTerminDetails(Termin termin) async {
     try {
       var terminMitDetails =
           await termineService.getActionWithDetails(termin.id);
@@ -247,7 +256,7 @@ class TermineSeiteState extends State<TermineSeite>
                               children: <Widget>[
                                 RaisedButton(
                                     key: Key('open chat window'),
-                                    child: Text('Zum Chat'),
+                                    child: Text('Zum Chat').tr(),
                                     onPressed: () =>
                                         openChatWindow(terminMitDetails)),
                               ],
@@ -269,7 +278,7 @@ class TermineSeiteState extends State<TermineSeite>
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: []..add(RaisedButton(
                                   key: Key('action details close button'),
-                                  child: Text('Schließen'),
+                                  child: Text('Schließen').tr(),
                                   onPressed: () => Navigator.pop(
                                       context, TerminDetailsCommand.CLOSE),
                                 )))
@@ -297,7 +306,7 @@ class TermineSeiteState extends State<TermineSeite>
 
   openChatWindow(Termin termin) async {
     ChatChannel message_channel =
-        await chatMessageService.getChatChannel(termin.id);
+        await chatMessageService.getActionChannel(termin.id);
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -332,6 +341,7 @@ class TermineSeiteState extends State<TermineSeite>
           child: RaisedButton(
               key: Key('action delete button'),
               padding: EdgeInsets.all(5.0),
+              color: DweTheme.red,
               child: Icon(Icons.delete),
               onPressed: () {
                 showDialog<bool>(
@@ -358,7 +368,7 @@ class TermineSeiteState extends State<TermineSeite>
     if (!participant(terminMitDetails))
       return RaisedButton(
           key: Key('join action button'),
-          child: Text('Mitmachen'),
+          child: Text('Mitmachen').tr(),
           onPressed: () {
             joinAction(terminMitDetails);
             setDialogState(() => terminMitDetails.participants.add(me));
@@ -366,7 +376,7 @@ class TermineSeiteState extends State<TermineSeite>
     else
       return RaisedButton(
           key: Key('leave action button'),
-          child: Text('Absagen'),
+          child: Text('Absagen').tr(),
           onPressed: () {
             leaveAction(terminMitDetails);
             setDialogState(() => terminMitDetails.participants.remove(
@@ -401,11 +411,12 @@ class TermineSeiteState extends State<TermineSeite>
                 leading: null,
                 automaticallyImplyLeading: false,
                 title: Text('Deine Aktion bearbeiten',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22.0,
-                        color: Color.fromARGB(255, 129, 28, 98))),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22.0,
+                            color: Color.fromARGB(255, 129, 28, 98)))
+                    .tr(),
               ),
               children: <Widget>[
                 Container(
@@ -422,7 +433,7 @@ class TermineSeiteState extends State<TermineSeite>
 
   afterActionEdit(List<Termin> editedAction) async {
     await saveAction(editedAction[0]);
-    openTerminDetails(context, editedAction[0]); // recursive and I know it
+    openTerminDetails(editedAction[0]); // recursive and I know it
   ***REMOVED***
 
   Future<void> saveAction(Termin editedAction) async {
@@ -558,7 +569,10 @@ class TermineSeiteState extends State<TermineSeite>
   Future<void> joinAction(Termin termin) async {
     await termineService.joinAction(termin.id);
     setState(() {
-      termine.firstWhere((t) => t.id == termin.id).participants.add(me);
+      termine
+          .firstWhere((t) => t.id == termin.id, orElse: () => null)
+          ?.participants
+          ?.add(me);
     ***REMOVED***);
   ***REMOVED***
 
@@ -573,21 +587,31 @@ class TermineSeiteState extends State<TermineSeite>
   participant(Termin termin) {
     return termin.participants.map((e) => e.id).contains(me?.id);
   ***REMOVED***
+
+  void zeigeAktionen(String title, List<Termin> actions) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => Scaffold(
+                appBar: AppBar(title: Text(title)),
+                body: ActionList(
+                    actions, isMyAction, isPastAction, iAmParticipant, openTerminDetails))));
+  ***REMOVED***
 ***REMOVED***
 
 AlertDialog confirmDeleteDialog(BuildContext context) => AlertDialog(
         key: Key('deletion confirmation dialog'),
-        title: Text('Termin Löschen'),
-        content: Text('Möchtest du diesen Termin wirklich löschen?'),
+        title: Text('Aktion Löschen').tr(),
+        content: Text('Möchtest du diese Aktion wirklich löschen?').tr(),
         actions: [
           RaisedButton(
               key: Key('delete confirmation yes button'),
               color: DweTheme.red,
-              child: Text('Ja'),
+              child: Text('Ja').tr(),
               onPressed: () => Navigator.pop(context, true)),
           RaisedButton(
             key: Key('delete confirmation no button'),
-            child: Text('Nein'),
+            child: Text('Nein').tr(),
             onPressed: () => Navigator.pop(context, false),
           ),
         ]);

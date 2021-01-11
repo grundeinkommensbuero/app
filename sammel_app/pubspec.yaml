@@ -11,7 +11,7 @@ description: A new Flutter project.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 0.3.4+14
+version: 0.4.0+18
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
@@ -49,6 +49,8 @@ dependencies:
   poly: ^1.0.5
   connectivity: ^2.0.2
   cryptography: ^1.4.0
+  loading_indicator: ^1.2.0
+  easy_localization: ^2.3.3
 
 dev_dependencies:
   flutter_test:
@@ -84,7 +86,10 @@ flutter:
    - assets/images/housy_problem.png
    - assets/security/sammel-server_local.pem
    - assets/security/root-cert.pem
-   - assets/geodata/lor_berlin.json
+   - assets/geodata/bezirksregion_generalized.geojson
+   - assets/geodata/ortsteil_generalized.geojson
+   - assets/geodata/prognoseraum_generalized.geojson
+   - assets/languages/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -5,21 +5,26 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:http_server/http_server.dart';
 import 'package:sammel_app/model/Evaluation.dart';
+import 'package:sammel_app/model/ActionListPushData.dart';
+import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
+import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/BackendService.dart';
+import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 
 import 'ErrorService.dart';
 import 'UserService.dart';
 
 abstract class AbstractTermineService extends BackendService {
-  AbstractTermineService(
-      AbstractUserService userService, this.stammdatenService, Backend backend)
-      : super(userService, backend);
   StammdatenService stammdatenService;
+
+  AbstractTermineService(
+      this.stammdatenService, AbstractUserService userService, Backend backend)
+      : super(userService, backend);
 
   Future<List<Termin>> loadActions(TermineFilter filter);
 
@@ -38,10 +43,21 @@ abstract class AbstractTermineService extends BackendService {
   Future<void> saveEvaluation(Evaluation evaluation);
 ***REMOVED***
 
-class TermineService extends AbstractTermineService {
+class TermineService extends AbstractTermineService
+    implements PushNotificationListener {
+  GlobalKey<TermineSeiteState> actionPageKey;
+
   TermineService(
-      AbstractUserService userService, stammdatenService, Backend backend)
-      : super(userService, stammdatenService, backend);
+      stammdatenService,
+      AbstractUserService userService,
+      Backend backend,
+      PushNotificationManager manager,
+      this.actionPageKey)
+      : super(stammdatenService, userService, backend) {
+    manager.register_message_callback(PushDataTypes.NewKiezActions, this);
+    manager.register_message_callback(PushDataTypes.ActionChanged, this);
+    manager.register_message_callback(PushDataTypes.ActionDeleted, this);
+  ***REMOVED***
 
   Future<List<Termin>> loadActions(TermineFilter filter) async {
     HttpClientResponseBody response =
@@ -83,8 +99,7 @@ class TermineService extends AbstractTermineService {
       await post('service/termine/teilnahme', jsonEncode(null),
           parameters: {'id': '$id'***REMOVED***);
     ***REMOVED*** catch (e, s) {
-      ErrorService.handleError(e, s,
-          context: 'Teilnahme ist fehlgeschlagen.');
+      ErrorService.handleError(e, s, context: 'Teilnahme ist fehlgeschlagen.');
     ***REMOVED***
   ***REMOVED***
 
@@ -97,6 +112,36 @@ class TermineService extends AbstractTermineService {
     ***REMOVED***
   ***REMOVED***
 
+  @override
+  void handleNotificationTap(Map<dynamic, dynamic> data) async {
+    final actionData =
+        ActionListPushData.fromJson(data, await stammdatenService.kieze);
+    actionData.actions..sort(Termin.compareByStart);
+
+    print('Type: ${actionData.type***REMOVED***');
+    if (actionData.type ==
+        PushDataTypes.NewKiezActions) if (actionData.actions.length == 1)
+      this.actionPageKey.currentState.openTerminDetails(actionData.actions[0]);
+    else {
+      actionPageKey.currentState
+          .zeigeAktionen('Neue Aktionen', actionData.actions);
+    ***REMOVED***
+
+    if (actionData.type == PushDataTypes.ActionChanged) {
+      print('Aktion: ${actionData***REMOVED***');
+      actionPageKey.currentState.openTerminDetails(actionData.actions[0]);
+    ***REMOVED***
+
+    if (actionData.type == PushDataTypes.ActionDeleted) {
+      actionData.actions[0].id = null;
+      actionPageKey.currentState
+          .zeigeAktionen('Gelöschte Aktionen', actionData.actions);
+    ***REMOVED***
+  ***REMOVED***
+
+  @override
+  void receive_message(Map<dynamic, dynamic> data) {***REMOVED***
+
   saveEvaluation(Evaluation evaluation) async {
     try {
       await post('service/termine/evaluation', jsonEncode(evaluation));
@@ -108,61 +153,61 @@ class TermineService extends AbstractTermineService {
 
 class DemoTermineService extends AbstractTermineService {
   DemoTermineService(
-      AbstractUserService userService, StammdatenService stammdatenService)
-      : super(userService, stammdatenService, DemoBackend()) {
-    termine = stammdatenService.kieze.then((kieze) {
-      return [
-        Termin(
-            1,
-            DateTime(heute.year, heute.month - 1, heute.day - 1, 9, 0, 0),
-            DateTime(heute.year, heute.month - 1, heute.day - 1, 12, 0, 0),
-            kieze.firstWhere((kiez) => kiez.kiez == 'Frankfurter Allee Nord'),
-            'Sammeln',
-            52.52116,
-            13.41331,
-            [],
-            TerminDetails('Weltzeituhr', 'Bringe Westen und Klämmbretter mit',
-                'Ruft mich an unter 01234567')),
-        Termin(
-            2,
-            DateTime(heute.year, heute.month, heute.day - 1, 11, 0, 0),
-            DateTime(heute.year, heute.month, heute.day - 1, 13, 0, 0),
-            kieze.firstWhere((kiez) => kiez.kiez == 'Plänterwald'),
-            'Sammeln',
-            52.48756,
-            13.46336,
-            [User(11, "Karl Marx", Colors.red)],
-            TerminDetails('Hinter der 3. Parkbank links',
-                'wir machen die Parkeingänge', 'Schreibt mir unter e@mail.de')),
-        Termin(
-            3,
-            DateTime(heute.year, heute.month, heute.day, 23, 0, 0),
-            DateTime(heute.year, heute.month, heute.day + 1, 2, 0, 0),
-            kieze.firstWhere((kiez) => kiez.kiez == 'Tempelhofer Vorstadt'),
-            'Sammeln',
-            52.49655,
-            13.43759,
-            [
-              User(11, "Karl Marx", Colors.red),
-              User(11, "Karl Marx", Colors.purple),
-            ],
-            TerminDetails('wir telefonieren uns zusammen',
-                'bitte seid pünktlich', 'Meine Handynummer ist 01234567')),
-        Termin(
-            4,
-            DateTime(heute.year, heute.month, heute.day + 1, 18, 0, 0),
-            DateTime(heute.year, heute.month, heute.day + 1, 20, 30, 0),
-            kieze.firstWhere((kiez) => kiez.kiez == 'Plänterwald'),
-            'Infoveranstaltung',
-            52.48612,
-            13.47192,
-            [User(12, "Rosa Luxemburg", Colors.purple)],
-            TerminDetails(
-                'DGB-Haus, Raum 1312',
-                'Ihr seid alle herzlich eingeladen zur Strategiediskussion',
-                'Meldet euch doch bitte an unter info@dwenteignen.de damit wir das Buffet planen können')),
-      ];
-    ***REMOVED***);
+      StammdatenService stammdatenService, AbstractUserService userService)
+      : super(stammdatenService, userService, DemoBackend()) {
+    termine = stammdatenService.kieze.then((kieze) => [
+          Termin(
+              1,
+              DateTime(heute.year, heute.month - 1, heute.day - 1, 9, 0, 0),
+              DateTime(heute.year, heute.month - 1, heute.day - 1, 12, 0, 0),
+              kieze.firstWhere((kiez) => kiez.name == 'Frankfurter Allee Nord'),
+              'Sammeln',
+              52.52116,
+              13.41331,
+              [],
+              TerminDetails('Weltzeituhr', 'Bringe Westen und Klämmbretter mit',
+                  'Ruft mich an unter 01234567')),
+          Termin(
+              2,
+              DateTime(heute.year, heute.month, heute.day - 1, 11, 0, 0),
+              DateTime(heute.year, heute.month, heute.day - 1, 13, 0, 0),
+              kieze.firstWhere((kiez) => kiez.name == 'Plänterwald'),
+              'Sammeln',
+              52.48756,
+              13.46336,
+              [User(11, "Karl Marx", Colors.red)],
+              TerminDetails(
+                  'Hinter der 3. Parkbank links',
+                  'wir machen die Parkeingänge',
+                  'Schreibt mir unter e@mail.de')),
+          Termin(
+              3,
+              DateTime(heute.year, heute.month, heute.day, 23, 0, 0),
+              DateTime(heute.year, heute.month, heute.day + 1, 2, 0, 0),
+              kieze.firstWhere((kiez) => kiez.name == 'Tempelhofer Vorstadt'),
+              'Sammeln',
+              52.49655,
+              13.43759,
+              [
+                User(11, "Karl Marx", Colors.red),
+                User(11, "Karl Marx", Colors.purple),
+              ],
+              TerminDetails('wir telefonieren uns zusammen',
+                  'bitte seid pünktlich', 'Meine Handynummer ist 01234567')),
+          Termin(
+              4,
+              DateTime(heute.year, heute.month, heute.day + 1, 18, 0, 0),
+              DateTime(heute.year, heute.month, heute.day + 1, 20, 30, 0),
+              kieze.firstWhere((kiez) => kiez.name == 'Plänterwald'),
+              'Infoveranstaltung',
+              52.48612,
+              13.47192,
+              [User(12, "Rosa Luxemburg", Colors.purple)],
+              TerminDetails(
+                  'DGB-Haus, Raum 1312',
+                  'Ihr seid alle herzlich eingeladen zur Strategiediskussion',
+                  'Meldet euch doch bitte an unter info@dwenteignen.de damit wir das Buffet planen können')),
+        ]);
   ***REMOVED***
 
   static var heute = DateTime.now();
@@ -187,10 +232,13 @@ class DemoTermineService extends AbstractTermineService {
               : filter.tage.contains(datum)) &&
           (filter.orte == null || filter.orte.isEmpty
               ? true
-              : filter.orte.contains(termin.ort.kiez)) &&
+              : filter.orte.contains(termin.ort.name)) &&
           (filter.typen == null || filter.typen.isEmpty
               ? true
-              : filter.typen.contains(termin.typ));
+              : filter.typen.contains(termin.typ)) &&
+          (filter.ids == null || filter.ids.isEmpty
+              ? true
+              : filter.ids.contains(termin.id));
     ***REMOVED***).toList();
   ***REMOVED***
 

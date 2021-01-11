@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
@@ -28,6 +29,7 @@ class ChatListState extends State<ChatListWidget>
   ChatChannel channel;
   User user;
   bool force_scrolling = false;
+  Timer timer;
 
   ChatListState(ChatChannel channel) {
     this.channel = channel;
@@ -41,14 +43,17 @@ class ChatListState extends State<ChatListWidget>
           .listen((user) => setState(() => this.user = user));
     ***REMOVED***
 
-    this.channel.register_widget(this);
+    this.channel.register_channel_change_listener(this);
     var list_view = Container(
         decoration: DweTheme.happyHouseBackground,
         child: ListView(
             padding: EdgeInsets.all(8.0),
             controller: widget.scroll_controller,
             children: buildListMessage()));
-
+    timer = Timer(
+        Duration(milliseconds: 500),
+            () => widget.scroll_controller
+            .jumpTo(widget.scroll_controller.position.maxScrollExtent));
     return list_view;
   ***REMOVED***
 
@@ -66,10 +71,8 @@ class ChatListState extends State<ChatListWidget>
   ***REMOVED***
 
   List<Widget> buildListMessage() {
-    List<Message> message_list = widget.channel.getAllMessages();
-    if (message_list == null) {
-      return <Widget>[Text('Send the first Message to this Channel')];
-    ***REMOVED***
+    List<Message> message_list = widget.channel.channel_messages;
+    if (message_list == null) return <Widget>[];
     List<Widget> message_list_widgets = List();
     for (Message message in message_list) {
       if (message is ChatMessage)
@@ -107,7 +110,7 @@ class ChatListState extends State<ChatListWidget>
                                 ),
                           Padding(
                               padding: EdgeInsets.only(top: 3.0, bottom: 5.0),
-                              child: Text(
+                              child: SelectableText(
                                 message.text,
                                 textScaleFactor: 1.2,
                               )),
@@ -139,16 +142,16 @@ class ChatListState extends State<ChatListWidget>
 
   Widget createParticipationMessageWidget(ParticipationMessage message) {
     var title = message.joins
-        ? ' ist der Aktion beigetreten'
-        : ' hat die Aktion verlassen';
+        ? tr(' ist der Aktion beigetreten')
+        : tr(' hat die Aktion verlassen');
     var subtitle = message.joins
-        ? '\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen'
+        ? tr('\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen')
         : '';
     return RichText(
-        key: Key('Participation Message'),
+        //   key: Key('Participation Message'),
         textAlign: TextAlign.center,
         text: TextSpan(
-            text: message.username ?? 'Jemand',
+            text: message.username ?? 'Jemand'.tr(),
             style: TextStyle(color: DweTheme.purple),
             children: [
               TextSpan(text: title, style: TextStyle(color: Colors.black)),
@@ -161,26 +164,23 @@ class ChatListState extends State<ChatListWidget>
 
   String formatDateTime(DateTime date) {
     Duration message_sent = DateTime.now().difference(date);
-    if (message_sent < Duration(minutes: 1)) {
-      return 'gerade eben';
-    ***REMOVED*** else if (message_sent < Duration(hours: 1)) {
-      if (message_sent.inMinutes < 2) {
-        return '${message_sent.inMinutes***REMOVED*** Minute';
-      ***REMOVED*** else {
-        return '${message_sent.inMinutes***REMOVED*** Minuten';
-      ***REMOVED***
-    ***REMOVED*** else if (message_sent < Duration(hours: 12)) {
-      if (message_sent.inHours < 2) {
-        return '${message_sent.inHours***REMOVED*** Stunde';
-      ***REMOVED*** else {
-        return '${message_sent.inHours***REMOVED*** Stunden';
-      ***REMOVED***
-    ***REMOVED*** else if (DateTime.now().difference(date) < Duration(days: 1)) {
+    if (message_sent < Duration(minutes: 1))
+      return 'gerade eben'.tr();
+    else if (message_sent < Duration(hours: 1))
+      return '{***REMOVED*** Minuten'.plural(message_sent.inMinutes);
+    else if (message_sent < Duration(hours: 12))
+      return '{***REMOVED*** Stunden'.plural(message_sent.inHours);
+    else if (DateTime.now().difference(date) < Duration(days: 1))
       return ChronoHelfer.dateTimeToStringHHmm(date);
-    ***REMOVED*** else if (DateTime.now().difference(date) < Duration(days: 7)) {
+    else if (DateTime.now().difference(date) < Duration(days: 7)) {
       return DateFormat('EEE, hh:mm').format(date);
     ***REMOVED***
 
     return DateFormat('MMM d, hh:mm').format(date);
+  ***REMOVED***
+
+  dispose() {
+    super.dispose();
+    timer.cancel();
   ***REMOVED***
 ***REMOVED***

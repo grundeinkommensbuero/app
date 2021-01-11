@@ -31,9 +31,10 @@ void main() {
       when(storageService.loadSecret()).thenAnswer((_) async => 'secret');
       when(firebase.token).thenAnswer((_) async => 'firebaseToken');
       when(backendMock.post('service/benutzer/authentifiziere', any, any))
-          .thenAnswer((_) => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(true, 200)));
-      when(backendMock.post('service/benutzer/neu', any, any)).thenAnswer(
-          (_) => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
+          .thenAnswer((_) => Future<HttpClientResponseBody>.value(
+              HttpClientResponseBodyMock(true, 200)));
+      when(backendMock.post('service/benutzer/neu', any, any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
               User(11, '', Colors.red).toJson(), 200)));
     ***REMOVED***);
 
@@ -211,7 +212,8 @@ void main() {
 
       test('registers new user if authentication to server fails', () async {
         when(backendMock.post('service/benutzer/authentifiziere', any, any))
-            .thenAnswer((_) => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(false, 200)));
+            .thenAnswer((_) => Future<HttpClientResponseBody>.value(
+                HttpClientResponseBodyMock(false, 200)));
 
         UserService(storageService, firebase, backendMock);
 
@@ -258,53 +260,6 @@ void main() {
           containsAll([null, 'neuer Name', 'neuerer Name']));
       expect(service.latestUser.name, 'neuerer Name');
     ***REMOVED***);
-  ***REMOVED***);
-
-  test('fun with streams', () async {
-    var latestValue;
-
-    var mainController = StreamController.broadcast();
-
-    mainController.stream.listen((event) {
-      latestValue = event;
-      print('Setze latestValue auf $latestValue');
-    ***REMOVED***);
-
-    Stream getIndividualStream() {
-      StreamController controller = StreamController();
-      if (latestValue != null) controller.add(latestValue);
-      controller.addStream(mainController.stream);
-      mainController.done.then((_) => controller.close());
-      return controller.stream;
-    ***REMOVED***
-
-    mainController.stream.listen((event) => print('Stream feuert $event'));
-
-    getIndividualStream().listen((event) => print('Listener 1 feuert $event'));
-
-    var listener2 = getIndividualStream();
-
-    mainController.add(1);
-
-    listener2.listen((event) => print('Listener 2 feuert $event'));
-    getIndividualStream().listen((event) => print('Listener 3 feuert $event'),
-        onDone: () => print('Listener 3 geschlossen'),
-        onError: (_) => print('Fehler in Listener 3'));
-
-    mainController.add(2);
-
-    getIndividualStream().listen((event) => print('Listener 4 feuert $event'));
-
-    mainController.add(3);
-    // mainController.addError(Error());
-
-    getIndividualStream().listen((event) => print('Listener 5 feuert $event'));
-
-    var listener6 = getIndividualStream();
-
-    mainController.close();
-
-    await listener6.length;
   ***REMOVED***);
 ***REMOVED***
 

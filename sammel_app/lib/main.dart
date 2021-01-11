@@ -1,12 +1,14 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/routes/Navigation.dart';
+import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
-import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
+import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
@@ -14,20 +16,32 @@ import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 
 import 'services/BackendService.dart';
+import 'services/LocalNotificationService.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+  runApp(EasyLocalization(
+      preloaderWidget: Container(
+          color: DweTheme.yellow, child: Image.asset('assets/images/logo.png')),
+      supportedLocales: [Locale('en'), Locale('de')],
+      path: 'assets/languages',
+      fallbackLocale: Locale('en'),
+      child: MyApp()));
 ***REMOVED***
 
 const Mode mode = Mode.DEMO;
-const version = '0.3.4+14';
+const version = '0.4.0+18';
 
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<TermineSeiteState> actionPageKey =
+    GlobalKey<TermineSeiteState>();
 
 class MyApp extends StatelessWidget {
+  static var stammdatenService = StammdatenService();
   static var firebaseService = FirebaseReceiveService();
   static var storageService = StorageService();
   static final backend = Backend(version);
@@ -41,23 +55,25 @@ class MyApp extends StatelessWidget {
       ? DemoPushNotificationManager(pushService)
       : PushNotificationManager(
           storageService, userService, firebaseService, backend);
-  static var stammdatenService = StammdatenService();
   var termineService = demoMode
-      ? DemoTermineService(userService, stammdatenService)
-      : TermineService(userService, stammdatenService, backend);
+      ? DemoTermineService(stammdatenService, userService)
+      : TermineService(stammdatenService, userService, backend,
+          pushNotificationManager, actionPageKey);
   static var listLocationService = demoMode
       ? DemoListLocationService(userService)
       : ListLocationService(userService, backend);
   static var chatMessageService =
-      ChatMessageService(storageService, pushNotificationManager);
+      ChatMessageService(storageService, pushNotificationManager, navigatorKey);
   static var geoService = GeoService();
+  static var localNotificationService =
+      LocalNotificationService(pushNotificationManager);
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          Provider<AbstractTermineService>.value(value: termineService),
           Provider<StammdatenService>.value(value: stammdatenService),
+          Provider<AbstractTermineService>.value(value: termineService),
           Provider<AbstractListLocationService>.value(
               value: listLocationService),
           Provider<StorageService>.value(value: storageService),
@@ -67,11 +83,18 @@ class MyApp extends StatelessWidget {
           Provider<ChatMessageService>.value(value: chatMessageService),
           Provider<AbstractUserService>.value(value: userService),
           Provider<GeoService>.value(value: geoService),
+          Provider<LocalNotificationService>.value(
+              value: localNotificationService),
         ],
         child: MaterialApp(
-            title: 'DW & Co. Enteignen',
-            theme: DweTheme.themeData,
-            home: Navigation(clearButton)));
+          title: 'DW & Co. Enteignen',
+          theme: DweTheme.themeData,
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: context.locale,
+          home: Navigation(actionPageKey, clearButton),
+          navigatorKey: navigatorKey,
+        ));
   ***REMOVED***
 ***REMOVED***
 

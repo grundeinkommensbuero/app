@@ -2,54 +2,53 @@ import 'dart:convert';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sammel_app/model/PushMessage.dart';
+import 'package:sammel_app/services/PushNotificationManager.dart';
 
 // Siehe https://pub.dev/packages/flutter_local_notifications
 
-const AndroidNotificationChannel participationChannel =
-    AndroidNotificationChannel(
+AndroidNotificationChannel participationChannel = AndroidNotificationChannel(
   'Teilnahmen und Absagen', // id
   'Teilnahmen und Absagen', // title
   'Benachrichtigungen über Mitstreiter*innen bei Aktionen an denen du teilnimmst',
 );
 
-const AndroidNotificationChannel changesChannel = AndroidNotificationChannel(
+AndroidNotificationChannel changesChannel = AndroidNotificationChannel(
   'Änderungen an Aktionen', // id
   'Änderungen an Aktionen', // title
   'Benachrichtigungen wenn sich Aktionen geändert haben oder abgesagt wurden an denen du teilnimmst',
 );
 
-const AndroidNotificationChannel actionChatChannel = AndroidNotificationChannel(
+AndroidNotificationChannel actionChatChannel = AndroidNotificationChannel(
   'Aktionen-Chats', // id
   'Aktionen-Chats', // title
   'Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst',
 );
 
-const AndroidNotificationChannel defaultChannel = AndroidNotificationChannel(
+AndroidNotificationChannel defaultChannel = AndroidNotificationChannel(
   'Infos', // id
   'Infos', // title
   'Allgemeine Infos',
 );
 
-Future<FlutterLocalNotificationsPlugin> initializeLocalNotifications() async {
+Future<FlutterLocalNotificationsPlugin> initializeLocalNotifications(
+    onTab) async {
   final FlutterLocalNotificationsPlugin plugin =
       FlutterLocalNotificationsPlugin();
 
   const androidInitializationSettings =
-  AndroidInitializationSettings('push_icon');
+      AndroidInitializationSettings('push_icon');
   const AndroidInitializationSettings initializationSettingsAndroid =
       androidInitializationSettings;
 
   final IOSInitializationSettings initializationSettingsIOS =
-      IOSInitializationSettings(
-          onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+      IOSInitializationSettings();
   final MacOSInitializationSettings initializationSettingsMacOS =
       MacOSInitializationSettings();
   final InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
       macOS: initializationSettingsMacOS);
-  await plugin.initialize(initializationSettings,
-      onSelectNotification: selectNotification);
+  await plugin.initialize(initializationSettings, onSelectNotification: onTab);
 
   final notifications = plugin.resolvePlatformSpecificImplementation<
       AndroidFlutterLocalNotificationsPlugin>();
@@ -61,33 +60,78 @@ Future<FlutterLocalNotificationsPlugin> initializeLocalNotifications() async {
   return plugin;
 ***REMOVED***
 
-Future onDidReceiveLocalNotification(
-    int id, String title, String body, String payload) {
-  // TODO wichtig für ältere iOS-Versionen
-***REMOVED***
+class LocalNotificationService {
+  FlutterLocalNotificationsPlugin plugin;
 
-Future selectNotification(String payload) {
-  print('Nachricht geklickt');
-  var chatMessage = ChatMessagePushData.fromJson(jsonDecode(payload));
-  // TODO on tap
-***REMOVED***
+  PushNotificationManager pushManager;
+  Function(String) onTap;
 
-Future sendChatNotification(ChatMessagePushData chatMessage) async {
-  AndroidNotificationDetails androidPlatformChannelSpecifics =
-      AndroidNotificationDetails('Aktionen-Chats', 'Aktionen-Chats',
-          'Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst',
-          ticker:
-              'Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst');
+  LocalNotificationService(this.pushManager) {
+    assert(pushManager != null);
+    onTap = (String message) => pushManager.onTap({
+          'data': {'payload': jsonDecode(message), 'encrypted': 'Plain'***REMOVED***
+        ***REMOVED***);
+  ***REMOVED***
 
-  var plugin = await initializeLocalNotifications();
-  NotificationDetails platformChannelSpecifics =
-      NotificationDetails(android: androidPlatformChannelSpecifics);
+  // LocalNotificationService.emptyCallback() {
+  //   onTap = (_) {print('### Das war wohl nix... ###'); return Future.value();***REMOVED***
+  // ***REMOVED***
 
-  print('Setze Notification ab');
-  plugin.show(
-      chatMessage.channel.hashCode,
-      'Nachricht von ${chatMessage.message.sender_name***REMOVED***',
-      chatMessage.message.text,
-      platformChannelSpecifics,
-      payload: jsonEncode(chatMessage.toJson()));
+  Future sendChatNotification(ChatMessagePushData chatMessage) async {
+    AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails('Aktionen-Chats', 'Aktionen-Chats',
+            'Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst',
+            ticker:
+                'Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst');
+
+    NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    print('Setze Notification ab');
+    if (plugin == null) plugin = await initializeLocalNotifications(onTap);
+    plugin.show(
+        chatMessage.channel.hashCode,
+        'Nachricht von ${chatMessage.message.sender_name***REMOVED***',
+        chatMessage.message.text,
+        platformChannelSpecifics,
+        payload: jsonEncode(chatMessage.toJson()));
+  ***REMOVED***
+
+  Future<void> sendParticipationNotification(
+      ParticipationPushData partMessage) async {
+    AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+            'Teilnahmen und Absagen',
+            'Teilnahmen und Absagen',
+            'Benachrichtigungen über Mitstreiter*innen bei Aktionen an denen du teilnimmst',
+            ticker:
+                'Benachrichtigungen über Mitstreiter*innen bei Aktionen an denen du teilnimmst');
+
+    NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    print('Setze Notification ab');
+    if (plugin == null) plugin = await initializeLocalNotifications(onTap);
+    plugin.show(
+        partMessage.channel.hashCode,
+        'Verstärkung für deine Aktion',
+        '${partMessage.message.username***REMOVED*** ist deiner Aktion beigetreten',
+        platformChannelSpecifics,
+        payload: jsonEncode(partMessage.toJson()));
+  ***REMOVED***
+
+  Future<void> sendOtherNotification(Map<String, dynamic> data) async {
+    AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails('Infos', 'Infos', 'Allgemeine Infos',
+            ticker: 'Allgemeine Infos');
+
+    NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    print('Setze Notification ab');
+    if (plugin == null) plugin = await initializeLocalNotifications(onTap);
+    plugin.show(0, data['notification']['title'], data['notification']['body'],
+        platformChannelSpecifics,
+        payload: jsonEncode(data['data']));
+  ***REMOVED***
 ***REMOVED***

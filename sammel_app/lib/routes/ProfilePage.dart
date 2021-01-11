@@ -1,9 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/main.dart';
+import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
@@ -22,30 +24,30 @@ class ProfilePageState extends State<ProfilePage> {
   var init = false;
   StorageService storageService;
   AbstractUserService userService;
-  StammdatenService stammdatenService;
   AbstractPushNotificationManager pushNotificationManager;
-  String name = '';
+  User user;
+  String token;
   List<String> myKieze = [];
   String interval;
-  
-  static const intervalOptions = [
-    'sofort',
-    'täglich',
-    'wöchentlich',
-    'nie'
-  ];
+
+  static const intervalOptions = ['sofort', 'täglich', 'wöchentlich', 'nie'];
+  static const languageOptions = ['de', 'en'];
+
+  var languages = {
+    'de': 'deutsch',
+    'en': 'englisch',
+  ***REMOVED***
 
   @override
   Widget build(BuildContext context) {
     if (init == false) {
       storageService = Provider.of<StorageService>(context);
       userService = Provider.of<AbstractUserService>(context);
-      stammdatenService = Provider.of<StammdatenService>(context);
-      pushNotificationManager = Provider.of<AbstractPushNotificationManager>(context);
-      userService.user.listen((user) => setState(() => name = user.name));
-      storageService
-          .loadMyKiez()
-          .then((kieze) => setState(() => myKieze = kieze));
+      pushNotificationManager =
+          Provider.of<AbstractPushNotificationManager>(context);
+      userService.user.listen((user) => setState(() => this.user = user));
+      pushNotificationManager.pushToken
+          .then((token) => setState(() => this.token = token));
       storageService
           .loadNotificationInterval()
           .then((pref) => setState(() => interval = pref));
@@ -60,14 +62,30 @@ class ProfilePageState extends State<ProfilePage> {
             child: ListView(
               children: [
                 ProfileItem(
+                  title: "Sprache",
+                  child: Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        languages[EasyLocalization.of(context)
+                                ?.locale
+                                ?.languageCode] ??
+                            'Keine',
+                        overflow: TextOverflow.fade,
+                        style: TextStyle(
+                            fontSize: (28.0 - ((user?.name ?? '').length) / 4)),
+                      )),
+                  onPressed: showLanguageDialog,
+                ),
+                SizedBox(height: 20.0),
+                ProfileItem(
                   title: "Dein Name",
                   child: Container(
                       alignment: Alignment.center,
                       child: Text(
-                        name ?? '',
+                        user?.name ?? '',
                         overflow: TextOverflow.fade,
                         style: TextStyle(
-                            fontSize: (28.0 - ((name ?? '').length) / 4)),
+                            fontSize: (28.0 - ((user?.name ?? '').length) / 4)),
                       )),
                   onPressed: (context) =>
                       showUsernameDialog(context: context, hideHint: true),
@@ -77,40 +95,42 @@ class ProfilePageState extends State<ProfilePage> {
                     title: "Dein Kiez",
                     child: Container(
                         child: Column(children: [
-                          Text(
-                            kiezeCaption,
-                            maxLines: 20,
-                            style: TextStyle(
-                                fontSize:
+                      Text(
+                        kiezeCaption,
+                        maxLines: 20,
+                        style: TextStyle(
+                            fontSize:
                                 (28.0 - ((kiezeCaption ?? '').length) / 9)),
-                          ),
-                          SizedBox(height: 10.0),
-                          Text(
-                            'Mit deinen Kiezen bestimmst du wo du über neue Aktionen informiert werden willst.',
-                            style: TextStyle(
-                                fontWeight: FontWeight.normal,
-                                color: Colors.black),
-                          )
-                        ])),
+                      ),
+                      SizedBox(height: 10.0),
+                      Text(
+                        'Mit deinen Kiezen bestimmst du wo du über neue Aktionen informiert werden willst.',
+                        style: TextStyle(
+                            fontWeight: FontWeight.normal, color: Colors.black),
+                      ).tr()
+                    ])),
                     onPressed: (_) => showKiezPicker()),
                 SizedBox(height: 20.0),
                 ProfileItem(
-                    title: "Deine Benachtichtigungen",
+                    title: "Deine Benachrichtigungen",
                     child: Container(
                         child: Column(children: [
-                          Text(interval ?? 'nie',
-                              style: TextStyle(fontSize: 28.0)),
-                          SizedBox(height: 10.0),
-                          Text(
-                            'Wie oft und aktuell willst du über neue Sammel-Aktionen in deinem Kiez informiert werden?',
-                            style: TextStyle(
-                                fontWeight: FontWeight.normal,
-                                color: Colors.black),
-                          )
-                        ])),
+                      Text(interval ?? 'nie', style: TextStyle(fontSize: 28.0)),
+                      SizedBox(height: 10.0),
+                      Text(
+                        'Wie oft und aktuell willst du über neue Sammel-Aktionen in deinem Kiez informiert werden?',
+                        style: TextStyle(
+                            fontWeight: FontWeight.normal, color: Colors.black),
+                      ).tr()
+                    ])),
                     onPressed: (context) => showNotificationDialog(context))
               ],
             )),
+        bottomSheet: Row(children: [
+          Expanded(
+              child: SelectableText('User-ID: ${user?.id***REMOVED***, Push-Token: $token',
+                  textAlign: TextAlign.center))
+        ], mainAxisAlignment: MainAxisAlignment.center),
         floatingActionButton: FloatingActionButton(
             child: Icon(Icons.info_outline_rounded,
                 size: 40.0, color: DweTheme.yellow),
@@ -118,101 +138,80 @@ class ProfilePageState extends State<ProfilePage> {
   ***REMOVED***
 
   showKiezPicker() async {
-    var allLocations = await stammdatenService.kieze;
-    var selection = (await KiezPicker(allLocations
-        .where((kiez) => myKieze.contains(kiez.kiez))
-        .toList())
-        .showKiezPicker(context))
-        .map((kiez) => kiez.kiez)
-        .toList();
+    var selection = (await KiezPicker(
+                (await Provider.of<StammdatenService>(context).kieze)
+                    .where((kiez) => myKieze.contains(kiez.name))
+                    .toSet())
+            .showKiezPicker(context))
+        ?.map((kiez) => kiez.name)
+        ?.toList();
 
-    if (!ListEquality().equals(selection, myKieze))
+    if (selection != null && !ListEquality().equals(selection, myKieze)) {
       renewTopicSubscriptions(selection, interval);
+      storageService.saveMyKiez(selection);
+      setState(() => myKieze = selection);
+    ***REMOVED***
+  ***REMOVED***
 
-    storageService.saveMyKiez(selection);
-    setState(() => myKieze = selection);
+  showLanguageDialog(BuildContext context) async {
+    String selection = await showDialog(
+        context: context,
+        builder: (context) => SimpleDialog(
+            key: Key('language selection dialog'),
+            contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
+            titlePadding: EdgeInsets.all(15.0),
+            title: const Text('Sprache').tr(),
+            children: []..addAll(languageOptions.map((option) => RadioListTile(
+                  groupValue: EasyLocalization.of(context).locale.languageCode,
+                  value: option,
+                  title: Text(languages[option]),
+                  onChanged: (selected) => Navigator.pop(context, selected),
+                )))));
+
+    if (selection != null)
+      EasyLocalization.of(context).locale = Locale(selection);
   ***REMOVED***
 
   showNotificationDialog(BuildContext context) async {
     String selection = await showDialog(
         context: context,
-        builder: (context) =>
-            SimpleDialog(
-                key: Key('notification selection dialog'),
-                contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
-                titlePadding: EdgeInsets.all(15.0),
-                title: const Text(
-                    'Wie häufig möchtest du Infos über anstehende Aktionen bekommen?'),
-                children: []
-                  ..addAll(intervalOptions.map((option) =>
-                      RadioListTile(
-                        groupValue: interval,
-                        value: option,
-                        title: Text(option),
-                        onChanged: (selected) =>
-                            Navigator.pop(context, selected),
-                      )))));
+        builder: (context) => SimpleDialog(
+            key: Key('notification selection dialog'),
+            contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
+            titlePadding: EdgeInsets.all(15.0),
+            title: const Text(
+                    'Wie häufig möchtest du Infos über anstehende Aktionen bekommen?')
+                .tr(),
+            children: []..addAll(intervalOptions.map((option) => RadioListTile(
+                  groupValue: interval,
+                  value: option,
+                  title: Text(option).tr(),
+                  onChanged: (selected) => Navigator.pop(context, selected),
+                )))));
 
-    if (selection != interval)
+    if (selection != null && selection != interval) {
       renewTopicSubscriptions(myKieze, selection);
-
-    storageService.saveNotificationInterval(selection);
-    setState(() => interval = selection);
+      storageService.saveNotificationInterval(selection);
+      setState(() => interval = selection);
+    ***REMOVED***
   ***REMOVED***
 
   void renewTopicSubscriptions(List<String> newKieze, String newInterval) {
-    pushNotificationManager.unsubscribeFromKiezActionTopics(myKieze, interval);
-    if(newInterval == "nie") return;
-    pushNotificationManager.subscribeToKiezActionTopics(newKieze, newInterval);
+    if (interval != "nie")
+      pushNotificationManager.unsubscribeFromKiezActionTopics(
+          myKieze, interval);
+    if (newInterval != "nie")
+      pushNotificationManager.subscribeToKiezActionTopics(
+          newKieze, newInterval);
   ***REMOVED***
 ***REMOVED***
 
-showAboutDialog(BuildContext context) {
-  showDialog(
-      context: context,
-      builder: (context) =>
-          AboutDialog(
-            applicationName: 'Deutsche Wohnen & Co. Enteignen',
-            applicationIcon:
-            Image.asset('assets/images/housy_info.png', width: 80.0),
-            applicationVersion: version,
-            children: [
-              SizedBox(height: 15.0),
-              Text(
-                  'Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreibt uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.'),
-              SizedBox(height: 15.0),
-              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                RichText(
-                    text: TextSpan(
-                        text: 'Gitlab-Repository',
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            color: Colors.indigo,
-                            decoration: TextDecoration.underline),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () =>
-                              launch(
-                                  'https://gitlab.com/kybernetik/sammel-app'))),
-                RichText(
-                    text: TextSpan(
-                        text: 'e@mail.com',
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            color: Colors.indigo,
-                            decoration: TextDecoration.underline),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () => launch('e@mail.com')))
-              ])
-            ],
-          ));
-***REMOVED***
-
 class ProfileItem extends StatelessWidget {
-  Widget child;
-  String title;
-  Function(BuildContext) onPressed;
+  final Widget child;
+  final String title;
+  final Function(BuildContext) onPressed;
 
-  ProfileItem({Widget this.child, this.title = '', this.onPressed***REMOVED***) {
+  ProfileItem({this.child, this.title = '', this.onPressed***REMOVED***) {
     assert(child != null);
   ***REMOVED***
 
@@ -244,16 +243,55 @@ class ProfileItem extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(title,
+                        Text(title,
                                 style: TextStyle(
                                     fontSize: 15.0,
                                     fontWeight: FontWeight.normal,
-                                    color: Colors.black)),
-                            SizedBox(height: 10.0),
-                            child,
-                            SizedBox(width: 15.0)
-                          ])),
+                                    color: Colors.black))
+                            .tr(),
+                        SizedBox(height: 10.0),
+                        child,
+                        SizedBox(width: 15.0)
+                      ])),
                   Icon(Icons.edit),
                 ])));
   ***REMOVED***
+***REMOVED***
+
+showAboutDialog(BuildContext context) {
+  showDialog(
+      context: context,
+      builder: (context) => AboutDialog(
+            applicationName: 'Deutsche Wohnen & Co. Enteignen',
+            applicationIcon:
+                Image.asset('assets/images/housy_info.png', width: 80.0),
+            applicationVersion: version,
+            children: [
+              SizedBox(height: 15.0),
+              Text(
+                  'Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.'),
+              SizedBox(height: 15.0),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+                RichText(
+                    text: TextSpan(
+                        text: 'Gitlab-Repository',
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            color: Colors.indigo,
+                            decoration: TextDecoration.underline),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => launch(
+                              'https://gitlab.com/kybernetik/sammel-app'))),
+                RichText(
+                    text: TextSpan(
+                        text: 'e@mail.com',
+                        style: TextStyle(
+                            fontSize: 15.0,
+                            color: Colors.indigo,
+                            decoration: TextDecoration.underline),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => launch('e@mail.com')))
+              ])
+            ],
+          ));
 ***REMOVED***

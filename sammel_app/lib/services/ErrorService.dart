@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:sammel_app/services/AuthFehler.dart';
 import 'package:sammel_app/services/BackendService.dart';
@@ -7,7 +8,7 @@ import 'package:sammel_app/shared/ServerException.dart';
 
 class ErrorService {
   static BuildContext _context;
-  static List<List<String>> messageQueue = List<List<String>>();
+  static List<List<String>> errorQueue = List<List<String>>();
   static List<String> displayedTypes = [];
 
   static const EMAIL =
@@ -15,8 +16,8 @@ class ErrorService {
 
   static void setContext(context) {
     ErrorService._context = context;
-    List<List<String>> queueCopy = List<List<String>>.from(messageQueue);
-    messageQueue.clear();
+    List<List<String>> queueCopy = List<List<String>>.from(errorQueue);
+    errorQueue.clear();
     queueCopy.forEach((error) =>
         showErrorDialog(error[0], error[1], key: Key('error dialog')));
   ***REMOVED***
@@ -24,45 +25,48 @@ class ErrorService {
   static handleError(error, StackTrace stacktrace, {String context***REMOVED***) async {
     print('Fehler aufgetreten: $error\n$stacktrace');
 
+    if (context != null) context = context.tr();
+    final errorMessage = error.message.tr();
     if (error is NoUserAuthException) {
-      pushMessage('Dein Account konnte nicht authentifziert werden.',
-          [context, error.message, EMAIL].where((e) => e != null).join(' '));
+      pushError('Dein Account konnte nicht authentifziert werden.',
+          [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
       return;
     ***REMOVED***
 
     if (error is AuthFehler) {
-      pushMessage('Fehler bei Nutzer-Authentifizierung',
-          [context, error.message, EMAIL].where((e) => e != null).join(' '));
+      pushError('Fehler bei Nutzer-Authentifizierung',
+          [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
       return;
     ***REMOVED***
     if (error is RestFehler) {
-      pushMessage(
+      pushError(
           'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten',
-          [context, error.message, EMAIL].where((e) => e != null).join(' '));
+          [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
       return;
     ***REMOVED***
     if (error is ServerException) {
-      pushMessage(
+      pushError(
           'Bei der Kommunikation mit dem Server ist ein technischer Fehler aufgetreten',
-          [context, error.message, EMAIL].where((e) => e != null).join(' '));
+          [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
       return;
     ***REMOVED***
     if (error is ConnectivityException) {
-      pushMessage('Ein Verbindungs-Problem ist aufgetreten',
-          [context, error.message, EMAIL].where((e) => e != null).join(' '));
+      pushError('Ein Verbindungs-Problem ist aufgetreten',
+          [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
       return;
     ***REMOVED***
     if (error is WarningException) {
-      pushMessage('Warnung',
-          [context, error.message, EMAIL].where((e) => e != null).join(' '));
+      pushError('Warnung',
+          [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
       return;
     ***REMOVED***
-    pushMessage('Ein Fehler ist aufgetreten', [context, EMAIL].where((e) => e != null).join(' '));
+    pushError('Ein Fehler ist aufgetreten',
+        [context, EMAIL].where((e) => e != null).join(' '));
   ***REMOVED***
 
-  static void pushMessage(String titel, String message) {
+  static void pushError(String titel, String message) {
     if (_context == null)
-      messageQueue.add([titel, message]);
+      errorQueue.add([titel, message]);
     else
       showErrorDialog(titel, message, key: Key('error dialog'));
   ***REMOVED***

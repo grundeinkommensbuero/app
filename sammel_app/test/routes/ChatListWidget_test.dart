@@ -1,3 +1,4 @@
+import 'package:easy_localization/src/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_test_ui/flutter_test_ui.dart';
@@ -15,6 +16,7 @@ void main() {
   ChatChannel channel;
 
   setUpUI((tester) async {
+    Localization.load(Locale('en'), translations: TranslationsMock());
     _userService = ConfiguredUserServiceMock();
     channel = ChatChannel('action:1');
     widget = Provider<AbstractUserService>(
@@ -31,7 +33,6 @@ void main() {
           true, DateTime(2020, 12, 13, 11, 22), 'Karl Marx', true));
       await tester.pump(Duration(minutes: 5));
 
-      expect(find.byKey(Key('Participation Message')), findsOneWidget);
       expect(
           find.byWidgetPredicate((widget) =>
               widget is RichText &&
@@ -48,7 +49,6 @@ void main() {
           true, DateTime(2020, 12, 13, 11, 22), null, true));
       await tester.pump(Duration(minutes: 5));
 
-      expect(find.byKey(Key('Participation Message')), findsOneWidget);
       expect(
           find.byWidgetPredicate((widget) =>
               widget is RichText &&
@@ -65,7 +65,6 @@ void main() {
           true, DateTime(2020, 12, 13, 11, 22), 'Karl Marx', false));
       await tester.pump(Duration(minutes: 5));
 
-      expect(find.byKey(Key('Participation Message')), findsOneWidget);
       expect(
           find.byWidgetPredicate((widget) =>
               widget is RichText &&
@@ -82,7 +81,6 @@ void main() {
           true, DateTime(2020, 12, 13, 11, 22), null, false));
       await tester.pump(Duration(minutes: 5));
 
-      expect(find.byKey(Key('Participation Message')), findsOneWidget);
       expect(
           find.byWidgetPredicate((widget) =>
               widget is RichText &&

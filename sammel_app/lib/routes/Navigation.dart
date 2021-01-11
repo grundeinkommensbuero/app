@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
@@ -14,8 +16,10 @@ import 'TermineSeite.dart';
 
 class Navigation extends StatefulWidget {
   var clearButton = false;
+  GlobalKey actionPage;
 
-  Navigation([this.clearButton]) : super(key: Key('navigation'));
+  Navigation(this.actionPage, [this.clearButton])
+      : super(key: Key('navigation'));
 
   @override
   State<StatefulWidget> createState() => NavigationState();
@@ -25,7 +29,6 @@ class NavigationState extends State<Navigation>
     with SingleTickerProviderStateMixin {
   int navigation = 0;
   List<int> history = [];
-  GlobalKey actionPage = GlobalKey(debugLabel: 'action page');
   AnimationController _animationController;
   Animation<Offset> _slide;
   Animation<double> _fade;
@@ -48,24 +51,26 @@ class NavigationState extends State<Navigation>
       parent: _animationController,
       curve: Curves.easeIn,
     ));
+
+    // Error-Service kann am Ende des ersten Builds Dialoge zeigen
+    SchedulerBinding.instance
+        .addPostFrameCallback((_) => ErrorService.setContext(context));
   ***REMOVED***
 
   @override
   Widget build(BuildContext context) {
-    ErrorService.setContext(context);
-
     var pages = [
-      TermineSeite(key: actionPage),
+      TermineSeite(key: widget.actionPage),
       ActionEditor(onFinish: newActionCreated, key: Key('action creator')),
       faq = FAQ(),
       ProfilePage(),
       ChatPage()
     ];
     List<String> titles = [
-      'Aktionen',
-      'Zum Sammeln aufrufen',
-      'Tipps und Argumente',
-      'Profil',
+      'Aktionen'.tr(),
+      'Zum Sammeln aufrufen'.tr(),
+      'Tipps und Argumente'.tr(),
+      'Profil'.tr(),
     ];
 
     _slide = Tween<Offset>(
@@ -100,6 +105,7 @@ class NavigationState extends State<Navigation>
           ),
           floatingActionButton: widget.clearButton == true
               ? FloatingActionButton(
+                  heroTag: 'clearButtonHero',
                   onPressed: () => Provider.of<StorageService>(context)
                       .clearAllPreferences(),
                   child: Icon(Icons.delete_forever),
@@ -132,25 +138,25 @@ class NavigationState extends State<Navigation>
                     ),
                     menuEntry(
                         key: Key('action page navigation button'),
-                        title: 'Aktionen',
+                        title: 'Aktionen'.tr(),
                         subtitle:
-                            'Aktionen in einer Liste oder Karte anschauen',
+                            'Aktionen in einer Liste oder Karte anschauen'.tr(),
                         index: 0),
                     menuEntry(
                         key: Key('action creator navigation button'),
-                        title: 'Zum Sammeln einladen',
-                        subtitle: 'Eine Sammel-Aktion ins Leben rufen',
+                        title: 'Zum Sammeln einladen'.tr(),
+                        subtitle: 'Eine Sammel-Aktion ins Leben rufen'.tr(),
                         index: 1),
                     menuEntry(
                         key: Key('faq navigation button'),
-                        title: 'Fragen und Antworten',
-                        subtitle: 'Tipps, Tricks und Argumentationshilfen',
+                        title: 'Fragen und Antworten'.tr(),
+                        subtitle: 'Tipps, Tricks und Argumentationshilfen'.tr(),
                         index: 2),
                     menuEntry(
                         key: Key('profile navigation button'),
-                        title: 'Dein Profil',
+                        title: 'Dein Profil'.tr(),
                         subtitle:
-                            'Dein Name, dein Kiez und deine Benachrichtigungen',
+                            'Dein Name, dein Kiez und deine Einstellungen'.tr(),
                         index: 3),
                   ],
                 ))));
@@ -202,8 +208,9 @@ class NavigationState extends State<Navigation>
   ***REMOVED***
 
   void addActionsToActionPage(List<Termin> actions) {
-    actions.forEach((action) => (actionPage.currentState as TermineSeiteState)
-        .createAndAddAction(action));
+    actions.forEach((action) =>
+        (widget.actionPage.currentState as TermineSeiteState)
+            .createAndAddAction(action));
   ***REMOVED***
 
   Future<bool> navigateBack() async {

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:sammel_app/shared/ServerException.dart';
 
 import 'Message.dart';
@@ -30,7 +31,10 @@ class PushNotification {
 
 class PushDataTypes {
   static final SimpleChatMessage = 'SimpleChatMessage';
-  static String ParticipationMessage = 'ParticipationMessage';
+  static final ParticipationMessage = 'ParticipationMessage';
+  static final NewKiezActions = 'NewKiezActions';
+  static final ActionChanged = 'ActionChanged';
+  static final ActionDeleted = 'ActionDeleted';
 ***REMOVED***
 
 // Alle Data-Objekte müssen in eine flache Map<String, String> serialisiert werden können
@@ -48,6 +52,8 @@ class ChatPushData extends PushData {
   String channel;
 
   ChatPushData(this.channel);
+
+  Message get message {***REMOVED***
 
   static ChatPushData fromJson(Map<String, dynamic> data) =>
       ChatPushData(data['channel']);
@@ -71,8 +77,9 @@ class ChatMessagePushData extends ChatPushData {
     try {
       this.message = ChatMessage.fromJson(json);
     ***REMOVED*** on AssertionError catch (e) {
-      throw UnreadablePushMessage(
-          'Unlesbare Teilnahme-Push-Nachricht (Teilnahme) empfangen: ${e.message***REMOVED***');
+      throw UnreadablePushMessage(tr(
+          'Unlesbare Push-Nachricht (Teilnahme) empfangen: {message***REMOVED***',
+          namedArgs: {'named': e.message***REMOVED***));
     ***REMOVED***
   ***REMOVED***
 ***REMOVED***
