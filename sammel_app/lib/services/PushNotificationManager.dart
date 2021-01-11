@@ -23,6 +23,8 @@ abstract class AbstractPushNotificationManager {
   void subscribeToKiezActionTopics(List<String> kieze, String interval);
 
   Future<String> get pushToken;
+
+  onTap(Map<String, Map<String, dynamic>> map);
 }
 
 abstract class PushNotificationListener {
@@ -183,4 +185,10 @@ class DemoPushNotificationManager implements AbstractPushNotificationManager {
 
   @override
   Future<String> get pushToken => Future.value('Demo-Modus');
+
+  // Ignore - no Push-Messages in Demo-Mode
+  @override
+  onTap(Map<String, Map<String, dynamic>> map) {
+    throw UnimplementedError();
+  }
 }
