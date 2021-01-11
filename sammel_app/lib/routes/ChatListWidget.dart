@@ -142,10 +142,10 @@ class ChatListState extends State<ChatListWidget>
 
   Widget createParticipationMessageWidget(ParticipationMessage message) {
     var title = message.joins
-        ? tr(' ist der Aktion beigetreten')
-        : tr(' hat die Aktion verlassen');
+        ? ' ist der Aktion beigetreten'.tr()
+        : ' hat die Aktion verlassen'.tr();
     var subtitle = message.joins
-        ? tr('\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen')
+        ? '\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen'.tr()
         : '';
     return RichText(
         //   key: Key('Participation Message'),
