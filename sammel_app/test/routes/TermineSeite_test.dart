@@ -37,6 +37,8 @@ final _chatMessageService = ChatMessageServiceMock();
 final _pushManager = PushNotificationManagerMock();
 
 void main() {
+  mockTranslation();
+
   MultiProvider termineSeiteWidget;
 
   setUp(() {

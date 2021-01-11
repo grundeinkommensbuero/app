@@ -29,6 +29,8 @@ final _chatService = ChatMessageServiceMock();
 final _pushManager = PushNotificationManagerMock();
 
 void main() {
+  mockTranslation();
+
   group('Navigation', () {
     Navigation navigation;
     var actionPage = GlobalKey(debugLabel: 'action page');

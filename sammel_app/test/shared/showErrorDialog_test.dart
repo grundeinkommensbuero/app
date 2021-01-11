@@ -4,7 +4,11 @@ import 'package:flutter_test_ui/flutter_test_ui.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/shared/showErrorDialog.dart';
 
+import 'Mocks.dart';
+
 main() {
+  mockTranslation();
+
   setUpUI((WidgetTester tester) async {
     final error = RestFehler('there is a reason for everything');
     await tester.pumpWidget(MaterialApp(

@@ -18,6 +18,7 @@ void main() {
   StorageService storageService;
   FirebaseReceiveService firebase;
   Backend backendMock;
+  mockTranslation();
 
   group('UserService', () {
     setUp(() {

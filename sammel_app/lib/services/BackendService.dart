@@ -42,7 +42,8 @@ class BackendService {
       if (response.response.statusCode >= 200 &&
           response.response.statusCode < 300) return response;
 
-      if (response.response.statusCode == 403) throw AuthFehler(response.body);
+      if (response.response.statusCode == 403)
+        throw AuthFehler(response.body.toString());
 
       // else
       throw RestFehler(response.body.toString());
