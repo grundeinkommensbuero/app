@@ -136,7 +136,7 @@ class TermineSeiteState extends State<TermineSeite>
           BottomNavigationBarItem(
               icon: Icon(Icons.view_list,
                   key: Key('list view navigation button')),
-              label: tr('Liste'.tr())),
+              label: 'Liste'.tr()),
           BottomNavigationBarItem(
               icon: Icon(Icons.map, key: Key('map view navigation button')),
               label: 'Karte'.tr())
@@ -286,7 +286,7 @@ class TermineSeiteState extends State<TermineSeite>
 
   openChatWindow(Termin termin) async {
     ChatChannel message_channel =
-        await chatMessageService.getChatChannel(termin.id);
+        await chatMessageService.getActionChannel(termin.id);
     Navigator.push(
         context,
         MaterialPageRoute(

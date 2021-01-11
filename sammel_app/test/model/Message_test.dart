@@ -93,5 +93,24 @@ void main() {
         expect(() => ParticipationMessage.fromJson(json), throwsAssertionError);
       });
     });
+    group('isMessageEqual', () {
+      test('idntifies equal values', () {
+        var user1 = ParticipationMessage(
+            false, DateTime(2020, 1, 11, 04, 18), 'Karl Marx', true);
+        var user2 = ParticipationMessage(
+            false, DateTime(2020, 1, 11, 04, 18), 'Karl Marx', true);
+
+        expect(user1.isMessageEqual(user2), isTrue);
+      });
+
+      test('ignores different obtained_from_server values', () {
+        var user1 = ParticipationMessage(
+            true, DateTime(2020, 1, 11, 04, 18), 'Karl Marx', true);
+        var user2 = ParticipationMessage(
+            false, DateTime(2020, 1, 11, 04, 18), 'Karl Marx', true);
+
+        expect(user1.isMessageEqual(user2), isTrue);
+      });
+    });
   });
 }

@@ -53,6 +53,8 @@ class ChatPushData extends PushData {
 
   ChatPushData(this.channel);
 
+  Message get message {}
+
   static ChatPushData fromJson(Map<String, dynamic> data) =>
       ChatPushData(data['channel']);
 }
