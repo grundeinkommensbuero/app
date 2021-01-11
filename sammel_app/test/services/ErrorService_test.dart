@@ -8,18 +8,18 @@ import 'package:sammel_app/services/RestFehler.dart';
 
 void main() {
   setUp(() {
-    ErrorService.messageQueue = List<List<String>>();
+    ErrorService.errorQueue = List<List<String>>();
     ErrorService.setContext(null);
     ErrorService.displayedTypes = [];
   });
 
   group('pushMessage', () {
     test('stores error message when waiting for build context', () {
-      ErrorService.pushMessage('Titel', 'Nachricht');
-      ErrorService.pushMessage('Titel', 'Nachricht');
-      ErrorService.pushMessage('Titel', 'Nachricht');
+      ErrorService.pushError('Titel', 'Nachricht');
+      ErrorService.pushError('Titel', 'Nachricht');
+      ErrorService.pushError('Titel', 'Nachricht');
 
-      expect(ErrorService.messageQueue.length, 3);
+      expect(ErrorService.errorQueue.length, 3);
     });
 
     testUI('shows error message immediately with build context',
@@ -40,11 +40,11 @@ void main() {
         ),
       ));
 
-      ErrorService.pushMessage('Titel', 'Nachricht');
+      ErrorService.pushError('Titel', 'Nachricht');
       await tester.pumpAndSettle();
 
       expect(find.byKey(Key('error dialog')), findsOneWidget);
-      expect(ErrorService.messageQueue, isEmpty);
+      expect(ErrorService.errorQueue, isEmpty);
     });
   });
 
@@ -52,20 +52,20 @@ void main() {
     test('recognizes and handles AuthFehler', () {
       ErrorService.handleError(AuthFehler('Nachricht'), StackTrace.empty);
 
-      expect(ErrorService.messageQueue.length, 1);
-      expect(ErrorService.messageQueue[0][0],
+      expect(ErrorService.errorQueue.length, 1);
+      expect(ErrorService.errorQueue[0][0],
           'Fehler bei Nutzer-Authentifizierung');
-      expect(ErrorService.messageQueue[0][1],
+      expect(ErrorService.errorQueue[0][1],
           'Nachricht \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com');
     });
 
     test('recognizes and handles RestFehler', () {
       ErrorService.handleError(RestFehler('Nachricht'), StackTrace.empty);
 
-      expect(ErrorService.messageQueue.length, 1);
-      expect(ErrorService.messageQueue[0][0],
+      expect(ErrorService.errorQueue.length, 1);
+      expect(ErrorService.errorQueue[0][0],
           'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten');
-      expect(ErrorService.messageQueue[0][1],
+      expect(ErrorService.errorQueue[0][1],
           'Nachricht \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com');
     });
 
@@ -73,10 +73,10 @@ void main() {
       ErrorService.handleError(
           WrongResponseFormatException('Nachricht'), StackTrace.empty);
 
-      expect(ErrorService.messageQueue.length, 1);
-      expect(ErrorService.messageQueue[0][0],
+      expect(ErrorService.errorQueue.length, 1);
+      expect(ErrorService.errorQueue[0][0],
           'Bei der Kommunikation mit dem Server ist ein technischer Fehler aufgetreten');
-      expect(ErrorService.messageQueue[0][1],
+      expect(ErrorService.errorQueue[0][1],
           'Nachricht \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com');
     });
 
@@ -84,9 +84,9 @@ void main() {
       ErrorService.handleError(RestFehler('Nachricht.'), StackTrace.empty,
           context: 'Zusätzliche Info.');
 
-      expect(ErrorService.messageQueue.length, 1);
+      expect(ErrorService.errorQueue.length, 1);
       expect(
-          ErrorService.messageQueue[0][1],
+          ErrorService.errorQueue[0][1],
           'Zusätzliche Info. Nachricht. \n\n'
           'Wenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com');
     });
@@ -141,9 +141,9 @@ void main() {
 
     testUI('shows dialog for every stored message',
         (WidgetTester tester) async {
-      ErrorService.pushMessage('Titel1', 'Nachricht');
-      ErrorService.pushMessage('Titel2', 'Nachricht');
-      ErrorService.pushMessage('Titel3', 'Nachricht');
+      ErrorService.pushError('Titel1', 'Nachricht');
+      ErrorService.pushError('Titel2', 'Nachricht');
+      ErrorService.pushError('Titel3', 'Nachricht');
 
       ErrorService.setContext(context);
       await tester.pumpAndSettle();
@@ -155,9 +155,9 @@ void main() {
 
     testUI('shows only one dialog for every stored message, when called twice',
         (WidgetTester tester) async {
-      ErrorService.pushMessage('Titel1', 'Nachricht');
-      ErrorService.pushMessage('Titel2', 'Nachricht');
-      ErrorService.pushMessage('Titel3', 'Nachricht');
+      ErrorService.pushError('Titel1', 'Nachricht');
+      ErrorService.pushError('Titel2', 'Nachricht');
+      ErrorService.pushError('Titel3', 'Nachricht');
 
       ErrorService.setContext(context);
       ErrorService.setContext(context);

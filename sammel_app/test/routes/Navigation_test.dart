@@ -8,6 +8,7 @@ import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
+import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
@@ -17,7 +18,6 @@ import 'package:sammel_app/services/ChatMessageService.dart';
 
 import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';
-import '../shared/TestdatenVorrat.dart';
 
 final _stammdatenService = StammdatenServiceMock();
 final _termineService = TermineServiceMock();
@@ -26,32 +26,37 @@ final _storageService = StorageServiceMock();
 final _pushService = PushSendServiceMock();
 final _userService = ConfiguredUserServiceMock();
 final _chatService = ChatMessageServiceMock();
+final _pushManager = PushNotificationManagerMock();
 
 void main() {
   group('Navigation', () {
     Navigation navigation;
+    var actionPage = GlobalKey(debugLabel: 'action page');
 
     setUpUI((WidgetTester tester) async {
-      navigation = Navigation();
+      navigation = Navigation(actionPage);
       when(_storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => []);
+      when(_storageService.loadMyKiez()).thenAnswer((_) async => []);
+      when(_storageService.loadNotificationInterval())
+          .thenAnswer((_) async => 'nie');
       when(_listLocationService.getActiveListLocations())
           .thenAnswer((_) async => []);
       when(_storageService.loadFilter())
           .thenAnswer((_) async => TermineFilter.leererFilter());
       when(_termineService.loadActions(any)).thenAnswer((_) async => []);
-      when(_stammdatenService.kieze).thenAnswer(
-          (_) async => [ffAlleeNord(), tempVorstadt(), plaenterwald()]);
+      when(_pushManager.pushToken).thenAnswer((_) async => 'Token');
 
       await tester.pumpWidget(MultiProvider(providers: [
+        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<AbstractTermineService>.value(value: _termineService),
         Provider<AbstractListLocationService>.value(
             value: _listLocationService),
         Provider<StorageService>.value(value: _storageService),
         Provider<AbstractPushSendService>.value(value: _pushService),
         Provider<AbstractUserService>.value(value: _userService),
-        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<ChatMessageService>.value(value: _chatService),
+        Provider<AbstractPushNotificationManager>.value(value: _pushManager),
       ], child: MaterialApp(home: navigation)));
     });
 
@@ -72,12 +77,11 @@ void main() {
     testUI('starts with ActionPage ', (WidgetTester tester) async {
       NavigationState state = tester.state(find.byWidget(navigation));
       expect(state.navigation, 0);
-      expect(find.byKey(state.actionPage), findsOneWidget);
+      expect(find.byKey(actionPage), findsOneWidget);
     });
 
     testUI('creates ActionPage and ActionCreator', (WidgetTester tester) async {
-      NavigationState state = tester.state(find.byWidget(navigation));
-      expect(find.byKey(state.actionPage), findsOneWidget);
+      expect(find.byKey(actionPage), findsOneWidget);
       expect(find.byKey(Key('action creator')), findsOneWidget);
     });
 
@@ -122,7 +126,7 @@ void main() {
       await openActionPage(tester);
 
       expect(state.navigation, 0);
-      expect(find.byKey(state.actionPage), findsOneWidget);
+      expect(find.byKey(actionPage), findsOneWidget);
     });
 
     testUI('stores navigation history', (WidgetTester tester) async {

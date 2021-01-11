@@ -41,12 +41,4 @@ open class PushMessageDao {
         }
         entityManager.flush()
     }
-
-    @Suppress("UNUSED_PARAMETER")
-    fun sendePushNachrichtAnTopic(
-        notification: PushNotificationDto?,
-        verschluesselt: Map<String, String>?,
-        topic: String
-    ): Unit {} /*=
-        throw NotImplementedError()*/
 }

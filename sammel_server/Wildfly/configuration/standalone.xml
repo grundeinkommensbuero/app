@@ -421,7 +421,7 @@
                         <credential-reference clear-text="${KEY_PASSWORD}"/>
                         <implementation type="PKCS12"/>
                         <file path="sammel-app.local-keystore.p12" relative-to="jboss.server.config.dir"/>
-<!--                        <file path="sammel-app.test-keystore.p12" relative-to="jboss.server.config.dir"/>-->
+                        <!--                        <file path="sammel-app.test-keystore.p12" relative-to="jboss.server.config.dir"/>-->
                     </key-store>
                 </key-stores>
                 <key-managers>
@@ -526,45 +526,45 @@
         <subsystem xmlns="urn:jboss:domain:request-controller:1.0"/>
         <subsystem xmlns="urn:jboss:domain:resource-adapters:5.0"/>
         <subsystem xmlns="urn:jboss:domain:sar:1.0"/>
-<!--        <subsystem xmlns="urn:jboss:domain:security:2.0">-->
-            <!--<security-domains>
-                <security-domain name="LegacyApplicationDomain" cache-type="default">
-                    <authentication>
-                        <login-module code="Remoting" flag="optional">
-                            <module-option name="password-stacking" value="useFirstPass"/>
-                        </login-module>
-                        <login-module code="RealmDirect" flag="required">
-                            <module-option name="password-stacking" value="useFirstPass"/>
-                        </login-module>
-                    </authentication>
-                </security-domain>
-                <security-domain name="jboss-web-policy" cache-type="default">
-                    <authorization>
-                        <policy-module code="Delegating" flag="required"/>
-                    </authorization>
-                </security-domain>
-                <security-domain name="jaspitest" cache-type="default">
-                    <authentication-jaspi>
-                        <login-module-stack name="dummy">
-                            <login-module code="Dummy" flag="optional"/>
-                        </login-module-stack>
-                        <auth-module code="Dummy"/>
-                    </authentication-jaspi>
-                </security-domain>
-                <security-domain name="jboss-ejb-policy" cache-type="default">
-                    <authorization>
-                        <policy-module code="Delegating" flag="required"/>
-                    </authorization>
-                </security-domain>
-            </security-domains>-->
-<!--            <security-domains>-->
-<!--                <security-domain name="ApplicationDomain" cache-type="default">-->
-<!--                    <authorization>-->
-<!--                        <policy-module code="Delegating" flag="required"/>-->
-<!--                    </authorization>-->
-<!--                </security-domain>-->
-<!--            </security-domains>-->
-<!--        </subsystem>-->
+        <!--        <subsystem xmlns="urn:jboss:domain:security:2.0">-->
+        <!--<security-domains>
+            <security-domain name="LegacyApplicationDomain" cache-type="default">
+                <authentication>
+                    <login-module code="Remoting" flag="optional">
+                        <module-option name="password-stacking" value="useFirstPass"/>
+                    </login-module>
+                    <login-module code="RealmDirect" flag="required">
+                        <module-option name="password-stacking" value="useFirstPass"/>
+                    </login-module>
+                </authentication>
+            </security-domain>
+            <security-domain name="jboss-web-policy" cache-type="default">
+                <authorization>
+                    <policy-module code="Delegating" flag="required"/>
+                </authorization>
+            </security-domain>
+            <security-domain name="jaspitest" cache-type="default">
+                <authentication-jaspi>
+                    <login-module-stack name="dummy">
+                        <login-module code="Dummy" flag="optional"/>
+                    </login-module-stack>
+                    <auth-module code="Dummy"/>
+                </authentication-jaspi>
+            </security-domain>
+            <security-domain name="jboss-ejb-policy" cache-type="default">
+                <authorization>
+                    <policy-module code="Delegating" flag="required"/>
+                </authorization>
+            </security-domain>
+        </security-domains>-->
+        <!--            <security-domains>-->
+        <!--                <security-domain name="ApplicationDomain" cache-type="default">-->
+        <!--                    <authorization>-->
+        <!--                        <policy-module code="Delegating" flag="required"/>-->
+        <!--                    </authorization>-->
+        <!--                </security-domain>-->
+        <!--            </security-domains>-->
+        <!--        </subsystem>-->
         <subsystem xmlns="urn:jboss:domain:security-manager:1.0">
             <deployment-permissions>
                 <maximum-set>

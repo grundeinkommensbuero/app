@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http_server/http_server.dart';
@@ -15,58 +19,68 @@ abstract class PushReceiveService {
       MessageHandler onLaunch,
       MessageHandler onBackgroundMessage});
 
-  void subscribeToKiezActionTopics(List<String> kieze, String option);
+  void subscribeToTopics(List<String> topics);
 
-  void unsubscribeFromKiezActionTopics(List<String> kieze, String notification);
+  void unsubscribeFromTopics(List<String> topic);
+
+  Future<String> token;
 }
 
 class FirebaseReceiveService implements PushReceiveService {
-  FirebaseMessaging firebaseMessaging;
-
-  Future<String> token;
+  static FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  static StreamController<String> _tokenStreamController =
+      StreamController.broadcast();
+  @override
+  Future<String> token = _tokenStreamController.stream.first;
 
   FirebaseReceiveService([FirebaseMessaging firebaseMock]) {
-    firebaseMessaging =
-        firebaseMock != null ? firebaseMock : FirebaseMessaging();
-    initializeFirebase();
+    if (firebaseMock != null)
+      firebaseMessaging = firebaseMock;
+    else if (pullMode) {
+      // DEBUG
+      _tokenStreamController.add(null);
+    } else
+      initializeFirebase();
   }
 
   initializeFirebase() async {
-    // DEBUG
-    if (pullMode) return;
+    await firebaseMessaging
+        .getToken()
+        .timeout(Duration(seconds: 5), onTimeout: () => null)
+        .then((token) => _tokenStreamController.add(token));
 
     // For iOS request permission first.
-    await firebaseMessaging.requestNotificationPermissions();
+    firebaseMessaging.requestNotificationPermissions();
 
-    token = firebaseMessaging
-        .getToken()
-        .timeout(Duration(seconds: 5), onTimeout: () => null);
+    print('Firebase initialisiert mit Token: ${await token}');
   }
 
   @override
-  void subscribe({onMessage, onResume, onLaunch, onBackgroundMessage}) =>
-      firebaseMessaging.configure(
-          onMessage: onMessage,
-          onResume: onResume,
-          onLaunch: onLaunch,
-          onBackgroundMessage: onBackgroundMessage);
-
-  @override
-  void unsubscribeFromKiezActionTopics(List<String> kieze, String interval) {
-    kieze.forEach((kiez) {
-      var topic = Uri.encodeComponent('$kiez-$interval');
-      print('Unsubscribe zu Topic $topic');
-      firebaseMessaging.unsubscribeFromTopic(topic);
-    });
+  void subscribe({onMessage, onResume, onLaunch, onBackgroundMessage}) {
+    if (Platform.isIOS) onBackgroundMessage = null;
+    firebaseMessaging.configure(
+        onMessage: onMessage,
+        onResume: onResume,
+        onLaunch: onLaunch,
+        onBackgroundMessage: onBackgroundMessage);
   }
 
   @override
-  void subscribeToKiezActionTopics(List<String> kieze, String interval) {
-    kieze.forEach((kiez) {
-      var topic = Uri.encodeComponent('$kiez-$interval');
+  void subscribeToTopics(List<String> topics) {
+    for (String topic in topics) {
       print('Subscribe zu Topic $topic');
-      firebaseMessaging.subscribeToTopic(topic);
-    });
+      var topicEnc = Uri.encodeComponent(topic);
+      firebaseMessaging.subscribeToTopic(topicEnc);
+    }
+  }
+
+  @override
+  void unsubscribeFromTopics(List<String> topics) {
+    for (String topic in topics) {
+      print('Unsubscribe von Topic $topic');
+      var topicEnc = Uri.encodeComponent(topic);
+      firebaseMessaging.unsubscribeFromTopic(topicEnc);
+    }
   }
 }
 
@@ -76,6 +90,7 @@ class PullService extends BackendService implements PushReceiveService {
 
   PullService(AbstractUserService userService, Backend backend)
       : super(userService, backend) {
+    print('Starte Pulling');
     timer = Timer.periodic(Duration(seconds: 10), (_) => pull());
   }
 
@@ -100,13 +115,27 @@ class PullService extends BackendService implements PushReceiveService {
   }
 
   @override
-  void subscribeToKiezActionTopics(List<String> kieze, String option) {
-    // TODO: implement subscribeToKiezActionTopics
+  void subscribeToTopics(List<String> topics) {
+    try {
+      post('service/push/pull/subscribe', jsonEncode(topics));
+    } catch (e, s) {
+      ErrorService.handleError(e, s,
+          context: 'Fehler beim Anmelden der Benachrichtigungen zu {topics}'
+              .tr(namedArgs: {'topics': topics.toString()}));
+    }
   }
 
   @override
-  void unsubscribeFromKiezActionTopics(
-      List<String> kieze, String notification) {
-    // TODO: implement unsubscribeFromKiezActionTopics
+  void unsubscribeFromTopics(List<String> topics) {
+    try {
+      post('service/push/pull/subscribe', jsonEncode(topics));
+    } catch (e, s) {
+      ErrorService.handleError(e, s,
+          context: 'Fehler beim Abmelden der Benachrichtigungen zu {topics}'
+              .tr(namedArgs: {'topics': topics.toString()}));
+    }
   }
+
+  @override
+  Future<String> token = Future.value('Pull-Modus');
 }

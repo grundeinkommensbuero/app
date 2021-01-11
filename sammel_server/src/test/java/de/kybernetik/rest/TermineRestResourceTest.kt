@@ -23,6 +23,7 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import de.kybernetik.rest.TermineRestResource.*
+import de.kybernetik.services.NeueAktionenNotification
 import de.kybernetik.services.PushService
 import java.time.LocalDateTime.now
 import java.time.ZonedDateTime
@@ -46,6 +47,9 @@ class TermineRestResourceTest {
 
     @Mock
     private lateinit var pushService: PushService
+
+    @Mock
+    private lateinit var neueAktionenNotification: NeueAktionenNotification
 
     @Mock
     private lateinit var context: SecurityContext

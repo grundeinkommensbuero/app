@@ -5,7 +5,9 @@ import com.google.gson.JsonSyntaxException
 import de.kybernetik.database.benutzer.Benutzer
 import de.kybernetik.database.benutzer.BenutzerDao
 import de.kybernetik.database.pushmessages.PushMessageDao
+import de.kybernetik.database.subscriptions.SubscriptionDao
 import de.kybernetik.rest.*
+import de.kybernetik.rest.TermineRestResource.TerminDto
 import org.jboss.logging.Logger
 import java.net.URLEncoder
 import java.security.SecureRandom
@@ -30,7 +32,10 @@ open class PushService {
     @EJB
     private lateinit var benutzerDao: BenutzerDao
 
-    private val GSON = GsonBuilder().serializeNulls().create()
+    @EJB
+    private lateinit var subscriptionDao: SubscriptionDao
+
+    private val GSON = GsonBuilder().create()
     private val KEY = SecretKeySpec(Base64.getDecoder().decode("vue8NkTYyN1e2OoHGcapLZWiCTC+13Eqk9gXBSq4azc="), "AES")
     private val secureRandom = SecureRandom()
     private val LOG = Logger.getLogger(PushService::class.java)
@@ -49,7 +54,11 @@ open class PushService {
     open fun sendePushNachrichtAnTopic(nachricht: PushMessageDto, topic: String) {
         val verschluesselt = verschluessele(nachricht.data)
         firebase.sendePushNachrichtAnTopic(nachricht.notification, verschluesselt, topic)
-        pushDao.sendePushNachrichtAnTopic(nachricht.notification, verschluesselt, topic)
+
+        val subscribers = subscriptionDao.getSubscribersForTopic(topic)
+        val benutzerOhneFirebase = benutzerDao.getBenutzerOhneFirebaseViaId(subscribers)
+        if (benutzerOhneFirebase.isNotEmpty())
+            pushDao.speicherePushMessageFuerEmpfaenger(nachricht.notification, verschluesselt, benutzerOhneFirebase)
     }
 
     open fun verschluessele(data: Map<String, Any?>?): Map<String, String>? {
@@ -69,7 +78,7 @@ open class PushService {
 
                 ciphertext = Base64.getEncoder().encodeToString(verschluesselt)
             }
-            LOG.info("Verschlüssele $data zu $ciphertext mit Nonce $nonce")
+            LOG.debug("Verschlüssele $data zu $ciphertext mit Nonce $nonce")
             return mapOf("encrypted" to "AES", "payload" to ciphertext, "nonce" to nonce)
         } catch (e: JsonSyntaxException) {
             LOG.error("Serialisieren von Push-Nachricht gescheitert", e)
@@ -77,23 +86,30 @@ open class PushService {
         }
     }
 
-    fun pusheNeueAktionNotification(aktion: TermineRestResource.TerminDto) {
+    open fun pusheNeueAktionenNotification(aktionen: List<TerminDto>, topic: String) {
+        LOG.debug("Neue Aktionen als Push-Messages zu versenden: ${aktionen.map { it.id }}")
+        if (aktionen.isNullOrEmpty()) return
+
+        if (aktionen.map { it.ort }.distinct().size > 1)
+            LOG.warn("Orte aus unterschiedlichen Aktionen in derselben Push-Nachricht")
+
+        val title = if (aktionen.size == 1) "Neue Aktion in deinem Kiez" else "Neue Aktionen in deinem Kiez"
+        val body = if (aktionen.size == 1)
+            "${aktionen[0].typ} am ${aktionen[0].beginn!!.format(DateTimeFormatter.ofPattern("dd.MM. 'um' HH:mm 'Uhr'"))}, ${aktionen[0].ort}"
+        else
+            "${aktionen.size} neue Aktionen in ${aktionen[0].ort}"
+
         val pushMessage = PushMessageDto(
-            PushNotificationDto(
-                "Eine neue Aktion in deinem Kiez",
-                "${aktion.typ} am ${aktion.beginn!!.format(DateTimeFormatter.ofPattern("dd.MM. 'um' HH:mm 'Uhr'"))}, ${aktion.ort}",
-                "Aktionen im Kiez"
-            ),
-            mapOf(
+            PushNotificationDto(title, body, "Aktionen im Kiez"),
+            mapOf<String, Any>(
                 "type" to "NewKiezActions",
                 "channel" to "kiez:new_action",
                 "timestamp" to ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME),
-                "action" to listOf(aktion.id)
+                "actions" to aktionen
             )
         )
-        val topic = URLEncoder.encode("${aktion.ort}-täglich", Charsets.UTF_8.name()).replace("+", "%20")
-        LOG.debug("Sende Push-Nachrich zu Aktion {${aktion.id}} an Topic $topic")
-        sendePushNachrichtAnTopic(pushMessage, topic)
+        val topicEnc = URLEncoder.encode(topic, Charsets.UTF_8.name()).replace("+", "%20")
+        sendePushNachrichtAnTopic(pushMessage, topicEnc)
     }
 
 }

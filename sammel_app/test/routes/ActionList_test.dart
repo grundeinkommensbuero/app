@@ -1,3 +1,4 @@
+import 'package:easy_localization/src/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sammel_app/model/User.dart';
@@ -5,9 +6,14 @@ import 'package:sammel_app/routes/ActionList.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 
 import '../model/Termin_test.dart';
+import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';
 
 void main() {
+  setUp(() {
+    Localization.load(Locale('en'), translations: TranslationsMock());
+  });
+
   testWidgets('TermineSeite shows all actions', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
@@ -15,7 +21,7 @@ void main() {
       TerminTestDaten.einTermin(),
       TerminTestDaten.einTermin(),
       TerminTestDaten.einTermin(),
-    ], (_) => false, (_) => false, () => false, () {}))));
+    ], (_) => false, (_) => false, () => false, (_) {}))));
 
     expect(find.byType(TerminCard), findsNWidgets(3));
   });
@@ -30,7 +36,7 @@ void main() {
       TerminTestDaten.einTermin()..id = 1,
       TerminTestDaten.einTermin()..id = 2,
       TerminTestDaten.einTermin()..id = 3,
-    ], isMyAction, (_) => false, (_) => true, () {}))));
+    ], isMyAction, (_) => false, (_) => true, (_) {}))));
 
     List<TerminCard> actionCards = tester
         .widgetList(find.byKey(Key('action card')))
@@ -54,7 +60,7 @@ void main() {
       TerminTestDaten.einTermin()..participants = [rosa()],
       TerminTestDaten.einTermin()..participants = [karl()],
       TerminTestDaten.einTermin()..participants = [rosa()],
-    ], (_) => false, (_) => false, participating, () {}))));
+    ], (_) => false, (_) => false, participating, (_) {}))));
 
     List<TerminCard> actionCards = tester
         .widgetList(find.byKey(Key('action card')))

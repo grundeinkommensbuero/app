@@ -7,6 +7,7 @@ import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/BackendService.dart';
+import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
@@ -17,19 +18,17 @@ import '../shared/TestdatenVorrat.dart';
 
 void main() {
   UserService userService;
+  PushNotificationManager pushManager = PushNotificationManagerMock();
   StammdatenService stammdatenService = StammdatenServiceMock();
 
   setUp(() {
     userService = ConfiguredUserServiceMock();
-    reset(stammdatenService);
-    when(stammdatenService.kieze).thenAnswer(
-        (_) async => [ffAlleeNord(), tempVorstadt(), plaenterwald()]);
   });
 
   group('DemoTermineService', () {
     DemoTermineService service;
     setUp(() {
-      service = DemoTermineService(userService, stammdatenService);
+      service = DemoTermineService(stammdatenService, userService);
     });
 
     test('uses DemoBackend', () {
@@ -77,7 +76,7 @@ void main() {
     test('stores new action', () async {
       var termine = await service.termine;
       expect(termine[0].typ, 'Sammeln');
-      expect(termine[0].ort.kiez, 'Frankfurter Allee Nord');
+      expect(termine[0].ort.name, 'Frankfurter Allee Nord');
       expect(termine[0].details.kontakt, 'Ruft mich an unter 01234567');
 
       await service.saveAction(
@@ -90,7 +89,7 @@ void main() {
 
       termine = await service.termine;
       expect(termine[0].typ, 'Infoveranstaltung');
-      expect(termine[0].ort.kiez, 'Plänterwald');
+      expect(termine[0].ort.name, 'Plänterwald');
       expect(termine[0].details.kontakt, 'Test123');
     });
 
@@ -141,14 +140,16 @@ void main() {
 
     setUp(() {
       backend = BackendMock();
-      service = TermineService(userService, stammdatenService, backend);
+      service = TermineService(
+          stammdatenService, userService, backend, pushManager, null);
       service.userService = userService;
     });
 
     test('loadActions calls right path and serializes Filter correctly',
         () async {
-      when(backend.post('service/termine', any, any))
-          .thenAnswer((_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock([], 200)));
+      when(backend.post('service/termine', any, any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(
+              HttpClientResponseBodyMock([], 200)));
 
       await service.loadActions(einFilter());
 
@@ -159,17 +160,18 @@ void main() {
               '"tage":["2020-08-20"],'
               '"von":"15:00:00",'
               '"bis":"18:30:00",'
-              '"orte":["Frankfurter Allee Nord"]'
+              '"orte":["Frankfurter Allee Nord"],'
+              '"ids":[]'
               '}',
           any));
     });
 
     test('loadActions deserializes actions correctly', () async {
-      when(backend.post('service/termine', any, any))
-          .thenAnswer((_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock([
-                TerminTestDaten.einTerminMitTeilisUndDetails().toJson(),
-                TerminTestDaten.einTerminOhneTeilisMitDetails().toJson()
-              ], 200)));
+      when(backend.post('service/termine', any, any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock([
+            TerminTestDaten.einTerminMitTeilisUndDetails().toJson(),
+            TerminTestDaten.einTerminOhneTeilisMitDetails().toJson()
+          ], 200)));
 
       var actions = await service.loadActions(einFilter());
 
@@ -177,10 +179,8 @@ void main() {
       expect(actions[0].id, 0);
       expect(actions[0].beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(actions[0].ende, DateTime(2019, 11, 4, 18, 9, 0));
-      expect(actions[0].ort.bezirk, 'Friedrichshain-Kreuzberg');
-      expect(actions[0].ort.kiez, 'Frankfurter Allee Nord');
-      expect(actions[0].ort.center.latitude, 52.51579);
-      expect(actions[0].ort.center.longitude, 13.45399);
+      expect(actions[0].ort.region, 'Friedrichshain-Kreuzberg');
+      expect(actions[0].ort.name, 'Frankfurter Allee Nord');
       expect(actions[0].typ, 'Sammeln');
       expect(actions[0].latitude, 52.52116);
       expect(actions[0].longitude, 13.41331);
@@ -195,10 +195,8 @@ void main() {
       expect(actions[1].id, 0);
       expect(actions[1].beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(actions[1].ende, DateTime(2019, 11, 4, 18, 9, 0));
-      expect(actions[1].ort.bezirk, 'Friedrichshain-Kreuzberg');
-      expect(actions[1].ort.kiez, 'Frankfurter Allee Nord');
-      expect(actions[1].ort.center.latitude, 52.51579);
-      expect(actions[1].ort.center.longitude, 13.45399);
+      expect(actions[1].ort.region, 'Friedrichshain-Kreuzberg');
+      expect(actions[1].ort.name, 'Frankfurter Allee Nord');
       expect(actions[1].typ, 'Sammeln');
       expect(actions[1].latitude, 52.52116);
       expect(actions[1].longitude, 13.41331);
@@ -212,8 +210,8 @@ void main() {
     test(
         'createTermin calls right path and serializes action and token correctly',
         () async {
-      when(backend.post('service/termine/neu', any, any)).thenAnswer(
-          (_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
+      when(backend.post('service/termine/neu', any, any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
               TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200)));
 
       await service.createAction(
@@ -245,8 +243,8 @@ void main() {
     });
 
     test('createTermin deserializes action correctly', () async {
-      when(backend.post('service/termine/neu', any, any)).thenAnswer(
-          (_) => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
+      when(backend.post('service/termine/neu', any, any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
               TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200)));
 
       var action = await service.createAction(
@@ -255,10 +253,8 @@ void main() {
       expect(action.id, 0);
       expect(action.beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(action.ende, DateTime(2019, 11, 4, 18, 9, 0));
-      expect(action.ort.bezirk, 'Friedrichshain-Kreuzberg');
-      expect(action.ort.kiez, 'Frankfurter Allee Nord');
-      expect(action.ort.center.latitude, 52.51579);
-      expect(action.ort.center.longitude, 13.45399);
+      expect(action.ort.region, 'Friedrichshain-Kreuzberg');
+      expect(action.ort.name, 'Frankfurter Allee Nord');
       expect(action.typ, 'Sammeln');
       expect(action.latitude, 52.52116);
       expect(action.longitude, 13.41331);
@@ -272,8 +268,8 @@ void main() {
     });
 
     test('getActionWithDetails calls right path', () async {
-      when(backend.get('service/termine/termin?id=0', any)).thenAnswer(
-          (_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
+      when(backend.get('service/termine/termin?id=0', any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
               TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200)));
 
       await service.getActionWithDetails(0);
@@ -282,8 +278,8 @@ void main() {
     });
 
     test('getActionWithDetails deserializes action correctly', () async {
-      when(backend.get('service/termine/termin?id=0', any)).thenAnswer(
-          (_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
+      when(backend.get('service/termine/termin?id=0', any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
               TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200)));
 
       var action = await service.getActionWithDetails(0);
@@ -291,10 +287,8 @@ void main() {
       expect(action.id, 0);
       expect(action.beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(action.ende, DateTime(2019, 11, 4, 18, 9, 0));
-      expect(action.ort.bezirk, 'Friedrichshain-Kreuzberg');
-      expect(action.ort.kiez, 'Frankfurter Allee Nord');
-      expect(action.ort.center.latitude, 52.51579);
-      expect(action.ort.center.longitude, 13.45399);
+      expect(action.ort.region, 'Friedrichshain-Kreuzberg');
+      expect(action.ort.name, 'Frankfurter Allee Nord');
       expect(action.typ, 'Sammeln');
       expect(action.latitude, 52.52116);
       expect(action.longitude, 13.41331);
@@ -310,8 +304,9 @@ void main() {
     test(
         'saveAction calls right path and serialises action and token correctly',
         () async {
-      when(backend.post('service/termine/termin', any, any))
-          .thenAnswer((_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock('response', 200)));
+      when(backend.post('service/termine/termin', any, any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(
+              HttpClientResponseBodyMock('response', 200)));
 
       await service.saveAction(
           TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
@@ -344,8 +339,9 @@ void main() {
     test(
         'deleteAction calls right path and serialises action and token correctly',
         () async {
-      when(backend.delete('service/termine/termin', any, any))
-          .thenAnswer((_) => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock('response', 200)));
+      when(backend.delete('service/termine/termin', any, any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(
+              HttpClientResponseBodyMock('response', 200)));
 
       await service.deleteAction(
           TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
@@ -376,8 +372,9 @@ void main() {
     });
 
     test('joinAction calls correct path with parameters', () async {
-      when(backend.post(any, any, any))
-          .thenAnswer((_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(null, 202)));
+      when(backend.post(any, any, any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(
+              HttpClientResponseBodyMock(null, 202)));
 
       await service.joinAction(0);
 
@@ -390,8 +387,9 @@ void main() {
     });
 
     test('leaveAction calls correct path with parameters', () async {
-      when(backend.post(any, any, any))
-          .thenAnswer((_)  => Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(null, 202)));
+      when(backend.post(any, any, any)).thenAnswer((_) =>
+          Future<HttpClientResponseBody>.value(
+              HttpClientResponseBodyMock(null, 202)));
 
       await service.leaveAction(0);
 
@@ -414,6 +412,7 @@ TermineFilter einFilter() {
       [datum],
       TimeOfDay.fromDateTime(start),
       TimeOfDay.fromDateTime(end),
-      [ffAlleeNord().kiez]);
+      [ffAlleeNord().name],
+      []);
   return einFilter;
 }

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/ChatChannel.dart';
@@ -15,12 +14,12 @@ void main() {
 
   setUp(() {
     reset(storageService);
-    service = ChatMessageService(storageService, manager);
+    service = ChatMessageService(storageService, manager, null);
   });
 
   group('getChannel', () {
     test('getChatChannel generates ActionChannel id', () {
-      service.getChatChannel(5);
+      service.getActionChannel(5);
 
       verify(storageService.loadChatChannel('action:5')).called(1);
     });

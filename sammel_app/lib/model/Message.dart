@@ -7,12 +7,14 @@ abstract class Message {
   bool obtained_from_server = false;
   DateTime timestamp;
 
-  Message.fromJson() {}
+  Message.fromJson();
 
   static String determineType(Map<String, dynamic> data) =>
       data['type'] ?? null;
 
-  Map<String, dynamic> toJson() {}
+  Map<String, dynamic> toJson();
+
+  bool isMessageEqual(Message msg);
 }
 
 class ChatMessage implements Message {
@@ -56,14 +58,14 @@ class ChatMessage implements Message {
         'from_server': obtained_from_server
       };
 
+  @override
   bool isMessageEqual(Message msg) {
     return msg is ChatMessage &&
         msg.text == text &&
         msg.sender_name == msg.sender_name &&
         timestamp.isAtSameMomentAs(msg.timestamp) &&
         message_color.value == msg.message_color.value &&
-        user_id == msg.user_id &&
-        obtained_from_server == msg.obtained_from_server;
+        user_id == msg.user_id;
   }
 }
 
@@ -99,4 +101,13 @@ class ParticipationMessage implements Message {
         'username': username,
         'joins': joins
       };
+
+  @override
+  bool isMessageEqual(Message msg) {
+    return msg is ParticipationMessage &&
+        type == msg.type &&
+        timestamp.isAtSameMomentAs(msg.timestamp) &&
+        username == msg.username &&
+        joins == msg.joins;
+  }
 }

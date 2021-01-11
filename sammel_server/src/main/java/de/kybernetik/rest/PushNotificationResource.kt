@@ -1,6 +1,7 @@
 package de.kybernetik.rest
 
 import de.kybernetik.database.pushmessages.PushMessageDao
+import de.kybernetik.database.subscriptions.SubscriptionDao
 import de.kybernetik.database.termine.TermineDao
 import org.jboss.logging.Logger
 import de.kybernetik.services.PushService
@@ -27,6 +28,9 @@ open class PushNotificationResource {
 
     @EJB
     private lateinit var pushMessageDao: PushMessageDao
+
+    @EJB
+    private lateinit var subscriptionDao: SubscriptionDao
 
     @Context
     private lateinit var context: SecurityContext
@@ -77,5 +81,23 @@ open class PushNotificationResource {
             .ok()
             .entity(pushMessages.map { PushMessageDto.convertFromPushMessage(it) })
             .build()
+    }
+
+    @Path("pull/subscribe")
+    @RolesAllowed("user")
+    @POST
+    open fun subscribeToTopics(topics: List<String>): Response? {
+        subscriptionDao.subscribe(context.userPrincipal.name.toLong(), topics)
+
+        return Response.ok().build()
+    }
+
+    @Path("pull/unsubscribe")
+    @RolesAllowed("user")
+    @POST
+    open fun unsubscribeToTopics(topics: List<String>): Response? {
+        subscriptionDao.unsubscribe(context.userPrincipal.name.toLong(), topics)
+
+        return Response.ok().build()
     }
 }

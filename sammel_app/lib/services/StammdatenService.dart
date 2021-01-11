@@ -4,16 +4,35 @@ import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/shared/FileReader.dart';
 
 class StammdatenService {
-  static FileReader fileReader = FileReader();
-  Future<List<Kiez>> kieze = ladeKieze();
+  static var fileReader = FileReader();
+
+  final Future<Set<Kiez>> kieze = loadKieze();
+  final Future<Set<Region>> regionen = loadRegionen();
+  final Future<Set<Ortsteil>> ortsteile = loadOrtsteile();
 
   StammdatenService();
 
-  static Future<List<Kiez>> ladeKieze() async {
-    var json = await fileReader.loadLor();
+  static Future<Set<Kiez>> loadKieze() async {
+    var json = await fileReader.kieze;
 
-    List centroidMaps = jsonDecode(json);
+    return (jsonDecode(json)['features'] as List)
+        .map((json) => Kiez.fromJson(json))
+        .toSet();
+  }
 
-    return centroidMaps.map((json) => Kiez.fromJson(json)).toList();
+  static Future<Set<Region>> loadRegionen() async {
+    final json = await fileReader.regionen;
+
+    return (jsonDecode(json)['features'] as List)
+        .map((json) => Region.fromJson(json))
+        .toSet();
+  }
+
+  static Future<Set<Ortsteil>> loadOrtsteile() async {
+    final json = await fileReader.ortsteile;
+
+    return (jsonDecode(json)['features'] as List)
+        .map((json) => Ortsteil.fromJson(json))
+        .toSet();
   }
 }

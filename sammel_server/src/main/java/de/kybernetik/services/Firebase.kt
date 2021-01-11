@@ -16,7 +16,7 @@ import javax.ejb.Startup
 @Singleton
 open class Firebase {
     private val LOG = Logger.getLogger(Firebase::class.java)
-    var initialized = false
+    private var initialized = false
 
     @PostConstruct
     @Suppress("unused")

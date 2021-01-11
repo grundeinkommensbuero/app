@@ -1,15 +1,17 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:sammel_app/model/Termin.dart';
+import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
 import 'TerminCard.dart';
 
 class ActionList extends StatefulWidget {
   final List<Termin> termine;
-  final Function openActionDetails;
-  final Function isMyAction;
-  final Function isPastAction;
-  final Function iAmParticipant;
+  final Function(Termin) openActionDetails;
+  final Function(int) isMyAction;
+  final Function(List<User>) iAmParticipant;
+  final Function(int) isPastAction;
 
   ActionList(this.termine, this.isMyAction, this.isPastAction, this.iAmParticipant,
       this.openActionDetails,
@@ -36,17 +38,11 @@ class ActionListState extends State<ActionList> {
             widget.isMyAction(widget.termine[index].id),
             widget.iAmParticipant(widget.termine[index].participants),
             Key('action card')),
-        onTap: () => widget.openActionDetails(context, widget.termine[index]),
+        onTap: widget.termine[index].id == null
+            ? null
+            : () => widget.openActionDetails(widget.termine[index]),
         contentPadding: EdgeInsets.only(bottom: 0.1));
     var now = DateTime.now();
-    // An erstes Element Abstand nach oben anhängen, damit oberste Aktion nicht von Filter verdeckt wird
-    if (index == 0)
-      tile = Column(children: [
-        SizedBox(
-          height: 50.0,
-        ),
-        tile
-      ]);
     // Jetzt-Zeile an die zuletzt vergangene Aktion anhängen
     if ((widget.termine[index].beginn.isBefore(now)) &&
         (index == widget.termine.length - 1 ||
@@ -57,7 +53,7 @@ class ActionListState extends State<ActionList> {
           'Jetzt',
           key: Key('action list now line'),
           style: TextStyle(color: DweTheme.purple, fontSize: 16.0),
-        ),
+        ).tr(),
       ]);
     return tile;
   }

@@ -1,0 +1,6 @@
+POST http://127.0.0.1:18080/service/push/pull/subscribe
+Accept: application/json
+Content-Type: application/json
+Authorization: Basic MTE6YWM0MzA5NjAtMDVlYi0xMWViLThhMjYtZmRjNzY4M2E4NGJj
+
+["Plänterwald-daily", "Alexanderplatz-daily", "Regierungsviertel-daily"]

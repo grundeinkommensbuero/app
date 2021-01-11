@@ -1,6 +1,6 @@
+import 'package:easy_localization/src/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/routes/ActionMap.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
@@ -10,14 +10,9 @@ import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';
 
-final terminService = TermineServiceMock();
-final storageService = StorageServiceMock();
-final stammdatenService = StammdatenServiceMock();
-
 void main() {
   setUp(() {
-    reset(stammdatenService);
-    when(stammdatenService.kieze).thenAnswer((_) async => [ffAlleeNord()]);
+    Localization.load(Locale('en'), translations: TranslationsMock());
   });
 
   testWidgets('uses default values', (WidgetTester tester) async {
@@ -43,7 +38,7 @@ void main() {
                   listLocations: [],
                   isMyAction: (_) => false,
                   iAmParticipant: (_) => false,
-                  openActionDetails: () {})));
+                  openActionDetails: (_) {})));
     });
 
     testWidgets('show all actions', (WidgetTester tester) async {
@@ -68,7 +63,7 @@ void main() {
                       listLocations: [],
                       isMyAction: isMyAction,
                       iAmParticipant: (_) => false,
-                      openActionDetails: () {}))));
+                      openActionDetails: (_) {}))));
 
       List<FlatButton> actionMarker = tester
           .widgetList(find.byKey(Key('action marker')))
@@ -99,7 +94,7 @@ void main() {
                       listLocations: [],
                       isMyAction: isMyAction,
                       iAmParticipant: iAmParticipant,
-                      openActionDetails: () {}))));
+                      openActionDetails: (_) {}))));
 
       List<FlatButton> actionMarker = tester
           .widgetList(find.byKey(Key('action marker')))
@@ -130,7 +125,7 @@ void main() {
                       listLocations: [],
                       isMyAction: (_) => false,
                       iAmParticipant: iAmParticipant,
-                      openActionDetails: () {}))));
+                      openActionDetails: (_) {}))));
 
       List<FlatButton> actionMarker = tester
           .widgetList(find.byKey(Key('action marker')))
@@ -158,7 +153,7 @@ void main() {
                       listLocations: [],
                       isMyAction: (_) => false,
                       iAmParticipant: (_) => false,
-                      openActionDetails: (_, __) => iHaveBeenCalled = true))));
+                      openActionDetails: (_) => iHaveBeenCalled = true))));
 
       expect(iHaveBeenCalled, false);
 
@@ -176,7 +171,7 @@ void main() {
                     termine: [],
                     listLocations: [curry36(), cafeKotti(), zukunft()],
                     isMyAction: (_) => false,
-                    openActionDetails: () {}))));
+                    openActionDetails: (_) {}))));
 
     expect(find.byKey(Key('list location marker')), findsNWidgets(3));
   });
@@ -188,7 +183,7 @@ void main() {
                     termine: [],
                     listLocations: [curry36()],
                     isMyAction: (_) => false,
-                    openActionDetails: () {}))));
+                    openActionDetails: (_) {}))));
 
     expect(find.byKey(Key('list location marker')), findsOneWidget);
     await tester.tap(find.byKey(Key('list location marker')));
