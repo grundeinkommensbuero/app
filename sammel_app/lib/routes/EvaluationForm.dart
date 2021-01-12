@@ -73,7 +73,7 @@ class EvaluationFormState extends State<EvaluationForm> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                         Text(
-                          'Ergebnis',
+                          'Anzahl Unterschriften',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         InputButton(
@@ -92,7 +92,7 @@ class EvaluationFormState extends State<EvaluationForm> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                         Text(
-                          'Bewertung',
+                          'Spaßfaktor',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         InputButton(
@@ -128,12 +128,12 @@ class EvaluationFormState extends State<EvaluationForm> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                         Text(
-                          'Anmerkung',
+                          'Situation',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         InputButton(
-                            onTap: kommentarSelection,
-                            child: kommentarButtonCaption(this.evaluation)),
+                            onTap: situationSelection,
+                            child: situationButtonCaption(this.evaluation)),
                       ]))
                 ]),
                 Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -145,14 +145,14 @@ class EvaluationFormState extends State<EvaluationForm> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                        Text(
-                          'Situation',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        InputButton(
-                            onTap: situationSelection,
-                            child: situationButtonCaption(this.evaluation)),
-                      ]))
+                            Text(
+                              'Anmerkungen',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            InputButton(
+                                onTap: kommentarSelection,
+                                child: kommentarButtonCaption(this.evaluation)),
+                          ]))
                 ]),
               ]),
         ),
@@ -369,8 +369,8 @@ class EvaluationFormState extends State<EvaluationForm> {
     var ergebnis = await showNumberInputDialog(
         // should be number input
         this.evaluation.unterschriften.toString(),
-        'Anzahl Unterschriften',
-        'Wie viele Unterschriften hast Du gesammelt?',
+        'Anzahl Deiner Unterschriften',
+        'Wie viele Unterschriften hast Du persönlich gesammelt?',
         Key('unterschriften input dialog'));
     setState(() {
       this.evaluation.unterschriften =
@@ -393,7 +393,7 @@ class EvaluationFormState extends State<EvaluationForm> {
   void bewertungSelection() async {
     var ergebnis = await showRadioInputDialog(
         this.evaluation.bewertung.toString(),
-        'Bewertung',
+        'Spaßfaktor',
         'Wie fandest Du die Aktion?',
         [
           Option('sehr gut', '5'),
@@ -451,7 +451,7 @@ class EvaluationFormState extends State<EvaluationForm> {
         // should be number input
         this.evaluation.kommentar,
         'Kommentar',
-        'Optional: Anmerkung zu den Daten?',
+        'Optional: Sonstige Anmerkungen zu den Daten?',
         Key('kommentar input dialog'));
     setState(() {
       this.evaluation.kommentar = ergebnis;
@@ -462,7 +462,7 @@ class EvaluationFormState extends State<EvaluationForm> {
   Widget kommentarButtonCaption(EvaluationData evaluation) {
     Text text;
     if (this.evaluation.kommentar != '') {
-      text = Text('Anmerkung: ${evaluation.kommentar}');
+      text = Text('Anmerkungen: ${evaluation.kommentar}');
     } else {
       text = Text('Optional: Muss man noch etwas zu den obigen Daten wissen?',
           style: TextStyle(color: DweTheme.purple));
@@ -475,7 +475,7 @@ class EvaluationFormState extends State<EvaluationForm> {
         // should be number input
         this.evaluation.situation.toString(),
         'situation',
-        'Wie war die Situation??',
+        'Wie war die Situation? (Wetter, Veranstaltung in der Nähe, besonderer Anlass, ...)',
         Key('situation input dialog'));
     setState(() {
       this.evaluation.situation = ergebnis;
@@ -518,7 +518,7 @@ class EvaluationFormState extends State<EvaluationForm> {
 
   void validateInt(field, name) {
     this.evaluation.validated[name] =
-        (field != null && field is int && field > 0)
+        (field != null && field is int)
             ? ValidationState.ok
             : ValidationState.error;
   }
