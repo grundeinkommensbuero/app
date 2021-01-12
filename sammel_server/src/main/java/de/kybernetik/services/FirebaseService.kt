@@ -32,6 +32,7 @@ open class FirebaseService {
         val dataMessage = MulticastMessage.builder()
             .putAllData(data ?: emptyMap())
             .addAllTokens(empfaenger.distinct())
+            .setApnsConfig(ApnsConfig.builder().setAps(Aps.builder().setContentAvailable(true).build()).putHeader("content-available", "1").putHeader("contentAvailable", "1").putHeader("content-available", "1").putAllCustomData(mapOf("content-available" to "1", "content-available" to "1", "content_available" to "1")).build())
             .build()
         val dataResponse = firebase.sendMulticast(dataMessage)
 
@@ -50,6 +51,7 @@ open class FirebaseService {
                     .build())
                     .setCollapseKey(notification.collapseId)
                     .build())
+                .setApnsConfig(ApnsConfig.builder().setAps(Aps.builder().setContentAvailable(true).build()).putHeader("content-available", "1").putHeader("contentAvailable", "1").putHeader("content-available", "1").putAllCustomData(mapOf("content-available" to "1", "content-available" to "1", "content_available" to "1")).build())
                 .putAllData(data ?: emptyMap())
                 .addAllTokens(empfaenger.distinct())
                 .build()
@@ -69,6 +71,7 @@ open class FirebaseService {
         val dataMessage: Message = Message.builder()
             .putAllData(data)
             .setTopic(topic)
+            .setApnsConfig(ApnsConfig.builder().setAps(Aps.builder().setContentAvailable(true).build()).putHeader("content-available", "1").putHeader("contentAvailable", "1").putHeader("content-available", "1").putAllCustomData(mapOf("content-available" to "1", "content-available" to "1", "content_available" to "1")).build())
             .build()
         val dataResponse = firebase.send(dataMessage)
 
@@ -87,6 +90,7 @@ open class FirebaseService {
                     .build())
                     .setCollapseKey(notification.collapseId)
                     .build())
+                .setApnsConfig(ApnsConfig.builder().setAps(Aps.builder().setContentAvailable(true).build()).putHeader("content-available", "1").putHeader("contentAvailable", "1").putHeader("content-available", "1").putAllCustomData(mapOf("content-available" to "1", "content-available" to "1", "content_available" to "1")).build())
                 .putAllData(data ?: emptyMap())
                 .setTopic(topic)
                 .build()

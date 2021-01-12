@@ -42,7 +42,8 @@ class BackendService {
       if (response.response.statusCode >= 200 &&
           response.response.statusCode < 300) return response;
 
-      if (response.response.statusCode == 403) throw AuthFehler(response.body);
+      if (response.response.statusCode == 403)
+        throw AuthFehler(response.body.toString());
 
       // else
       throw RestFehler(response.body.toString());
@@ -114,7 +115,7 @@ class BackendService {
     var googleCall = backend.callGoogle();
 
     try {
-      var serverHealth = await healthCall.timeout(Duration(seconds: 2),
+      var serverHealth = await healthCall.timeout(Duration(seconds: 5),
           onTimeout: () async =>
               await googleCall.timeout(Duration(seconds: 2), onTimeout: () {
                 // both server and google don't respond

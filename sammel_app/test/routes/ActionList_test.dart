@@ -60,7 +60,7 @@ void main() {
       TerminTestDaten.einTermin()..participants = [rosa()],
       TerminTestDaten.einTermin()..participants = [karl()],
       TerminTestDaten.einTermin()..participants = [rosa()],
-    ], (_) => false, (_) => false, participating, (_) {}))));
+    ], (_) => false, participating, (_) {}))));
 
     List<TerminCard> actionCards = tester
         .widgetList(find.byKey(Key('action card')))

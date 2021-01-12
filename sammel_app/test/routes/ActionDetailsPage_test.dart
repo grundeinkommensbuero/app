@@ -27,7 +27,7 @@ main() {
 
     expect(
         find.text(
-            'Frankfurter Allee Nord in Friedrichshain-Kreuzberg\n ⛒ Treffpunkt: Weltzeituhr'),
+            'Frankfurter Allee Nord in Friedrichshain\n ⛒ Treffpunkt: Weltzeituhr'),
         findsOneWidget);
     expect(find.text('Bringe Westen und Klämmbretter mit'), findsOneWidget);
     expect(find.text('Ruft an unter 012345678'), findsOneWidget);

@@ -63,12 +63,12 @@ Future<FlutterLocalNotificationsPlugin> initializeLocalNotifications(
 class LocalNotificationService {
   FlutterLocalNotificationsPlugin plugin;
 
-  PushNotificationManager pushManager;
+  AbstractPushNotificationManager pushManager;
   Function(String) onTap;
 
   LocalNotificationService(this.pushManager) {
     assert(pushManager != null);
-    onTap = (String message) => pushManager.onTap({
+    onTap = (String message) async => await pushManager.onTap({
           'data': {'payload': jsonDecode(message), 'encrypted': 'Plain'}
         });
   }

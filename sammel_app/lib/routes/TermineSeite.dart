@@ -201,8 +201,7 @@ class TermineSeiteState extends State<TermineSeite>
         .then((termine) =>
             setState(() => this.termine = termine..sort(Termin.compareByStart)))
         .catchError((e, s) => ErrorService.handleError(e, s,
-                context: 'Aktionen konnten nicht geladen werden.')
-            .tr());
+                context: 'Aktionen konnten nicht geladen werden.'));
   }
 
   void showRestError(RestFehler e) {
@@ -584,9 +583,8 @@ class TermineSeiteState extends State<TermineSeite>
     });
   }
 
-  participant(Termin termin) {
-    return termin.participants.map((e) => e.id).contains(me?.id);
-  }
+  participant(Termin termin) =>
+      termin.participants.map((e) => e.id).contains(me?.id);
 
   void zeigeAktionen(String title, List<Termin> actions) {
     Navigator.push(
