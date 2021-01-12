@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -75,7 +76,7 @@ class EvaluationFormState extends State<EvaluationForm> {
                         Text(
                           'Anzahl Unterschriften',
                           style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
+                        ).tr(),
                         InputButton(
                             onTap: unterschriftenSelection,
                             child:
@@ -94,7 +95,7 @@ class EvaluationFormState extends State<EvaluationForm> {
                         Text(
                           'Spaßfaktor',
                           style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
+                        ).tr(),
                         InputButton(
                             onTap: bewertungSelection,
                             child: bewertungButtonCaption(this.evaluation)),
@@ -112,7 +113,7 @@ class EvaluationFormState extends State<EvaluationForm> {
                         Text(
                           'Dauer',
                           style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
+                        ).tr(),
                         InputButton(
                             onTap: stundenSelection,
                             child: stundenButtonCaption(this.evaluation)),
@@ -130,7 +131,7 @@ class EvaluationFormState extends State<EvaluationForm> {
                         Text(
                           'Situation',
                           style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
+                        ).tr(),
                         InputButton(
                             onTap: situationSelection,
                             child: situationButtonCaption(this.evaluation)),
@@ -145,14 +146,14 @@ class EvaluationFormState extends State<EvaluationForm> {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Anmerkungen',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            InputButton(
-                                onTap: kommentarSelection,
-                                child: kommentarButtonCaption(this.evaluation)),
-                          ]))
+                        Text(
+                          'Anmerkungen',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ).tr(),
+                        InputButton(
+                            onTap: kommentarSelection,
+                            child: kommentarButtonCaption(this.evaluation)),
+                      ]))
                 ]),
               ]),
         ),
@@ -165,14 +166,14 @@ class EvaluationFormState extends State<EvaluationForm> {
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             RaisedButton(
                 key: Key('evaluation editor cancel button'),
-                child: Text('Abbrechen'),
+                child: Text('Abbrechen').tr(),
                 onPressed: () {
                   setState(() => evaluation = EvaluationData());
                   Navigator.maybePop(context);
                 }),
             RaisedButton(
                 key: Key('evaluation editor finish button'),
-                child: Text('Fertig'),
+                child: Text('Fertig').tr(),
                 onPressed: () => finishPressed())
           ]),
         ));
@@ -182,11 +183,11 @@ class EvaluationFormState extends State<EvaluationForm> {
     Text(
       'Erzähl uns, was ihr erreicht habt! \n',
       style: TextStyle(fontWeight: FontWeight.bold),
-    ),
+    ).tr(),
     Text(
-      'Deine Evaluierung hilft Deinem Kiez-Team, die effektivsten Sammelaktionen zu erkennen. Außerdem können andere Teams von euren Erfahrungen lernen.',
+      'Deine Rückmeldung hilft Deinem Kiez-Team, die effektivsten Sammelaktionen zu erkennen. Außerdem können andere Teams von euren Erfahrungen lernen.',
       textScaleFactor: 1.0,
-    )
+    ).tr()
   ]);
 
   Future<String> showTextInputDialog(
@@ -210,7 +211,7 @@ class EvaluationFormState extends State<EvaluationForm> {
     if (description != null) {
       input_widget = SingleChildScrollView(
           child: ListBody(children: [
-        Text(description),
+        Text(description).tr(),
         SizedBox(height: 10),
         input_field
       ]));
@@ -219,13 +220,13 @@ class EvaluationFormState extends State<EvaluationForm> {
     }
 
     Widget cancelButton = FlatButton(
-      child: Text("Abbrechen"),
+      child: Text("Abbrechen").tr(),
       onPressed: () {
         Navigator.pop(context, current_value);
       },
     );
     Widget continueButton = FlatButton(
-      child: Text("Fertig"),
+      child: Text("Fertig").tr(),
       onPressed: () {
         Navigator.pop(context, current_input);
       },
@@ -233,7 +234,7 @@ class EvaluationFormState extends State<EvaluationForm> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       key: key,
-      title: Text(title),
+      title: Text(title).tr(),
       content: input_widget,
       actions: [
         cancelButton,
@@ -269,7 +270,7 @@ class EvaluationFormState extends State<EvaluationForm> {
     if (description != null) {
       input_widget = SingleChildScrollView(
           child: ListBody(children: [
-        Text(description),
+        Text(description).tr(),
         SizedBox(height: 10),
         input_field
       ]));
@@ -284,17 +285,17 @@ class EvaluationFormState extends State<EvaluationForm> {
         context: context,
         builder: (context) => AlertDialog(
               key: key,
-              title: Text(title),
+              title: Text(title).tr(),
               content: input_widget,
               actions: [
                 FlatButton(
-                  child: Text("Abbrechen"),
+                  child: Text("Abbrechen").tr(),
                   onPressed: () {
                     Navigator.pop(context, current_value);
                   },
                 ),
                 FlatButton(
-                  child: Text("Fertig"),
+                  child: Text("Fertig").tr(),
                   onPressed: () {
                     Navigator.pop(context, current_input);
                   },
@@ -325,7 +326,7 @@ class EvaluationFormState extends State<EvaluationForm> {
     if (description != null) {
       input_widget = SingleChildScrollView(
           child: ListBody(children: [
-        Text(description),
+        Text(description).tr(),
         SizedBox(height: 10),
         input_field
       ]));
@@ -334,13 +335,13 @@ class EvaluationFormState extends State<EvaluationForm> {
     }
 
     Widget cancelButton = FlatButton(
-      child: Text("Abbrechen"),
+      child: Text("Abbrechen").tr(),
       onPressed: () {
         Navigator.pop(context, current_value);
       },
     );
     Widget continueButton = FlatButton(
-      child: Text("Fertig"),
+      child: Text("Fertig").tr(),
       onPressed: () {
         Navigator.pop(context, current_input);
       },
@@ -348,7 +349,7 @@ class EvaluationFormState extends State<EvaluationForm> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       key: key,
-      title: Text(title),
+      title: Text(title).tr(),
       content: input_widget,
       actions: [
         cancelButton,
@@ -382,10 +383,11 @@ class EvaluationFormState extends State<EvaluationForm> {
   Widget unterschriftenButtonCaption(EvaluationData evaluation) {
     Text text;
     if (this.evaluation.validated['unterschriften'] == ValidationState.ok) {
-      text = Text('${evaluation.unterschriften} Unterschriften');
+      text = Text('{} Unterschriften').plural(evaluation.unterschriften);
     } else {
       text = Text('Wie viel hast Du gesammelt?',
-          style: TextStyle(color: DweTheme.purple));
+              style: TextStyle(color: DweTheme.purple))
+          .tr();
     }
     return build_text_row(text, this.evaluation.validated['unterschriften']);
   }
@@ -396,11 +398,11 @@ class EvaluationFormState extends State<EvaluationForm> {
         'Spaßfaktor',
         'Wie fandest Du die Aktion?',
         [
-          Option('sehr gut', '5'),
+          Option('sehr cool', '5'),
           Option('gut', '4'),
-          Option('mittelmäßig', '3'),
-          Option('schlecht', '2'),
-          Option('sehr schlecht', '1')
+          Option('ganz okay', '3'),
+          Option('mäßig', '2'),
+          Option('doof', '1')
         ],
         Key('bewertung input dialog'));
     setState(() {
@@ -413,10 +415,11 @@ class EvaluationFormState extends State<EvaluationForm> {
   Widget bewertungButtonCaption(EvaluationData evaluation) {
     Text text;
     if (this.evaluation.validated['bewertung'] == ValidationState.ok) {
-      text = Text('${evaluation.bewertung}');
+      text = Text('${evaluation.bewertung}').tr();
     } else {
       text = Text('Wie fandest Du die Aktion?',
-          style: TextStyle(color: DweTheme.purple));
+              style: TextStyle(color: DweTheme.purple))
+          .tr();
     }
     return build_text_row(text, this.evaluation.validated['bewertung']);
   }
@@ -438,10 +441,11 @@ class EvaluationFormState extends State<EvaluationForm> {
   Widget stundenButtonCaption(EvaluationData evaluation) {
     Text text;
     if (this.evaluation.validated['stunden'] == ValidationState.ok) {
-      text = Text('${evaluation.stunden} Stunden');
+      text = Text('{} Stunden').plural(evaluation.stunden);
     } else {
       text = Text('Wie viele Stunden habt ihr gesammelt?',
-          style: TextStyle(color: DweTheme.purple));
+              style: TextStyle(color: DweTheme.purple))
+          .tr();
     }
     return build_text_row(text, this.evaluation.validated['stunden']);
   }
@@ -462,10 +466,11 @@ class EvaluationFormState extends State<EvaluationForm> {
   Widget kommentarButtonCaption(EvaluationData evaluation) {
     Text text;
     if (this.evaluation.kommentar != '') {
-      text = Text('Anmerkungen: ${evaluation.kommentar}');
+      text = Text('Anmerkungen: ${evaluation.kommentar}').tr();
     } else {
       text = Text('Optional: Muss man noch etwas zu den obigen Daten wissen?',
-          style: TextStyle(color: DweTheme.purple));
+              style: TextStyle(color: DweTheme.purple))
+          .tr();
     }
     return build_text_row(text, this.evaluation.validated['kommentar']);
   }
@@ -474,7 +479,7 @@ class EvaluationFormState extends State<EvaluationForm> {
     var ergebnis = await showTextInputDialog(
         // should be number input
         this.evaluation.situation.toString(),
-        'situation',
+        'Situation',
         'Wie war die Situation? (Wetter, Veranstaltung in der Nähe, besonderer Anlass, ...)',
         Key('situation input dialog'));
     setState(() {
@@ -486,10 +491,11 @@ class EvaluationFormState extends State<EvaluationForm> {
   Widget situationButtonCaption(EvaluationData evaluation) {
     Text text;
     if (this.evaluation.situation != '') {
-      text = Text('Situation: ${evaluation.situation}');
+      text = Text('Situation: ${evaluation.situation}').tr();
     } else {
       text = Text('Optional: Wie war die Situation?',
-          style: TextStyle(color: DweTheme.purple));
+              style: TextStyle(color: DweTheme.purple))
+          .tr();
     }
     return build_text_row(text, this.evaluation.validated['situation']);
   }
@@ -517,10 +523,9 @@ class EvaluationFormState extends State<EvaluationForm> {
   }
 
   void validateInt(field, name) {
-    this.evaluation.validated[name] =
-        (field != null && field is int)
-            ? ValidationState.ok
-            : ValidationState.error;
+    this.evaluation.validated[name] = (field != null && field is int)
+        ? ValidationState.ok
+        : ValidationState.error;
   }
 
   finishPressed() async {
@@ -604,7 +609,7 @@ class MyRadioInputState extends State<MyRadioInput> {
         children: widget.options.map((option) {
       print('building children');
       return RadioListTile<String>(
-        title: Text(option.text),
+        title: Text(option.text).tr(),
         value: option.value,
         groupValue: _selectedValue,
         onChanged: (String value) {
