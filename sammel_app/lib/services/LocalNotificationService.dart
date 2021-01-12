@@ -68,7 +68,7 @@ class LocalNotificationService {
 
   LocalNotificationService(this.pushManager) {
     assert(pushManager != null);
-    onTap = (String message) => pushManager.onTap({
+    onTap = (String message) async => await pushManager.onTap({
           'data': {'payload': jsonDecode(message), 'encrypted': 'Plain'}
         });
   }
