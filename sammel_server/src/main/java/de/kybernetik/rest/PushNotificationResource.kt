@@ -7,6 +7,7 @@ import org.jboss.logging.Logger
 import de.kybernetik.services.PushService
 import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
+import javax.ejb.Stateless
 import javax.ws.rs.*
 import javax.ws.rs.core.Context
 import javax.ws.rs.core.MediaType
@@ -17,6 +18,7 @@ import javax.ws.rs.core.SecurityContext
 @Path("push")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@Stateless
 open class PushNotificationResource {
     private val LOG = Logger.getLogger(PushNotificationResource::class.java)
 
@@ -59,7 +61,7 @@ open class PushNotificationResource {
     ***REMOVED***
 
     @Path("topic/{topic***REMOVED***")
-    @RolesAllowed("named")
+    @RolesAllowed("moderator")
     @POST
     open fun pushToTopic(nachricht: PushMessageDto, @PathParam("topic") topic: String) =
         pushService.sendePushNachrichtAnTopic(nachricht, topic)

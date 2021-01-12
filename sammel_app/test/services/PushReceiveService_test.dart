@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
+import 'package:sammel_app/services/AuthFehler.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/UserService.dart';
@@ -9,6 +10,8 @@ import 'package:test/test.dart';
 import '../shared/Mocks.dart';
 
 main() {
+  mockTranslation();
+
   FirebaseMessaging firebaseMock = FirebaseMessagingMock();
   UserService userService = ConfiguredUserServiceMock();
 
@@ -113,7 +116,9 @@ main() {
             Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
                 [Map<String, dynamic>(), Map<String, dynamic>()], 403)));
 
-        await service.pull();
+        try {
+          service.pull();
+        ***REMOVED*** catch (e) {***REMOVED***
       ***REMOVED***);
 
       test('stops timer on error', () async {
@@ -121,7 +126,9 @@ main() {
 
         expect(service.timer.isActive, true);
 
-        await service.pull();
+        try {
+          await service.pull();
+        ***REMOVED*** on Error catch (_) {***REMOVED***
 
         expect(service.timer.isActive, false);
       ***REMOVED***);

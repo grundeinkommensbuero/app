@@ -2,29 +2,32 @@ import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:test/test.dart';
 
+import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';
 
 void main() {
+  mockTranslation();
+
   group('erzeugeDatumZeile berechnet Dauer', () {
     test('korrekt', () {
       var datumText = TerminCard.erzeugeDatumText(
           DateTime(2019, 10, 30, 20), DateTime(2019, 10, 30, 23));
 
-      expect(datumText.substring(datumText.lastIndexOf(',') + 2), '3 Stunden');
+      expect(datumText.substring(datumText.lastIndexOf(',') + 2), '3 Stunden.other');
     ***REMOVED***);
 
     test('und rundet ab', () {
       var datumText = TerminCard.erzeugeDatumText(
           DateTime(2019, 10, 30, 20, 55), DateTime(2019, 10, 30, 23, 54));
 
-      expect(datumText.substring(datumText.lastIndexOf(',') + 2), '2 Stunden');
+      expect(datumText.substring(datumText.lastIndexOf(',') + 2), '2 Stunden.two');
     ***REMOVED***);
 
     test('und singularisiert bei einer Stunde', () {
       var datumText = TerminCard.erzeugeDatumText(
           DateTime(2019, 10, 30, 20), DateTime(2019, 10, 30, 21));
 
-      expect(datumText.substring(datumText.lastIndexOf(',') + 2), '1 Stunde');
+      expect(datumText.substring(datumText.lastIndexOf(',') + 2), '1 Stunden.one');
     ***REMOVED***);
   ***REMOVED***);
   group('ermittlePrefix', () {
@@ -62,7 +65,7 @@ void main() {
     test('konkateniert Bezirk und Ort', () {
       var text = TerminCard.erzeugeOrtText(ffAlleeNord());
 
-      expect(text, 'Friedrichshain-Kreuzberg, Frankfurter Allee Nord');
+      expect(text, 'Friedrichshain Ost, Frankfurter Allee Nord');
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***

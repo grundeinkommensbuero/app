@@ -1,12 +1,14 @@
 package de.kybernetik.rest
 
 import javax.annotation.security.PermitAll
+import javax.ejb.Stateless
 import javax.ws.rs.GET
 import javax.ws.rs.Path
 import javax.ws.rs.Produces
 import javax.ws.rs.core.Response
 
 @Path("health")
+@Stateless
 open class HealthRestResource {
 
     @GET
@@ -15,7 +17,7 @@ open class HealthRestResource {
     open fun health(): Response {
         return Response
                 .ok()
-                .entity(Health(status = "lebendig", version = "0.4.0", minClient = "0.4.0+18"))
+                .entity(Health(status = "lebendig", version = "0.4.1", minClient = "0.4.0+18"))
                 .build()
 
     ***REMOVED***

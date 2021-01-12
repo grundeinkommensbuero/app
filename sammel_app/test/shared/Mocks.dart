@@ -1,5 +1,7 @@
-import 'dart:io';
+import 'dart:ui';
 
+import 'package:easy_localization/src/localization.dart';
+import 'dart:io';
 
 import 'package:easy_localization/src/translations.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -91,6 +93,9 @@ class GeoServiceMock extends Mock implements GeoService {***REMOVED***
 class TranslationsMock extends Mock implements Translations {
   TranslationsMock([Function(Translations) training]) {
     when(this.get(any)).thenAnswer((inv) => inv.positionalArguments[0]);
-    if(training != null) training(this);
+    if (training != null) training(this);
   ***REMOVED***
 ***REMOVED***
+
+mockTranslation() =>
+    Localization.load(Locale('en'), translations: TranslationsMock());
