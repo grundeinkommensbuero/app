@@ -59,7 +59,8 @@ open class PushNotificationResource {
     ***REMOVED***
 
     @Path("topic/{topic***REMOVED***")
-    @RolesAllowed("named")
+//    @RolesAllowed("moderator")
+    @DenyAll
     @POST
     open fun pushToTopic(nachricht: PushMessageDto, @PathParam("topic") topic: String) =
         pushService.sendePushNachrichtAnTopic(nachricht, topic)

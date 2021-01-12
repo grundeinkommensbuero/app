@@ -1,0 +1,16 @@
+POST http://127.0.0.1:18080/service/push/topic/global
+Accept: application/json
+Content-Type: application/json
+Authorization: Basic MzpmZjdhOGI2Yi1lMTVhLTRmZWUtOWY3OS1kY2EwNmZkNmM4ODM=
+
+{
+    "data":{
+        "type":"SimpleChatMessage",
+        "payload":"suuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuperlanger Inhalt",
+        "encoding": "Plain"
+    ***REMOVED***,
+    "notification":{
+        "title":"Titel",
+        "body":"Meldung"
+    ***REMOVED***
+***REMOVED***
