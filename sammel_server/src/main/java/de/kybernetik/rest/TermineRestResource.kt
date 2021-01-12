@@ -13,6 +13,7 @@ import org.jboss.logging.Logger
 import de.kybernetik.rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithoutDetails
 import de.kybernetik.services.NeueAktionenNotification
 import de.kybernetik.services.PushService
+import org.wildfly.security.http.HttpConstants.FORBIDDEN
 import java.time.LocalDateTime
 import java.time.ZonedDateTime.now
 import java.time.format.DateTimeFormatter.*
@@ -213,8 +214,18 @@ open class TermineRestResource {
         if (evaluation.termin_id == null) return noValidActionResponse
         LOG.debug("Aktualisiere Evaluation für ${evaluation.termin_id***REMOVED***")
 
-
         val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
+
+        val terminAusDb = dao.getTermin(evaluation.termin_id!!)
+        if (terminAusDb == null) return noValidActionResponse
+
+        if (!terminAusDb.teilnehmer.map { it.id.toString() ***REMOVED***.contains(context.userPrincipal.name)) {
+            LOG.warn("Unbefugte Benutzer*in ${context.userPrincipal.name***REMOVED*** versucht Aktion${evaluation.termin_id***REMOVED*** zu evaluieren")
+            return Response
+                .status(FORBIDDEN)
+                .entity("Du bist nicht Teilnehmer*in dieser Aktion")
+                .build()
+        ***REMOVED***
 
         try {
             dao.speichereEvaluation(evaluation.convertToEvaluation(userAusDb!!.id))
@@ -223,8 +234,8 @@ open class TermineRestResource {
             return Response.status(422).entity(e.message).build()
         ***REMOVED***
         return Response
-                .ok()
-                .build()
+            .ok()
+            .build()
     ***REMOVED***
 
     @POST
@@ -237,21 +248,21 @@ open class TermineRestResource {
                 .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
                 .build()
 
-        val AktionAusDb = dao.getTermin(id)
-        if (AktionAusDb == null)
+        val aktionAusDb = dao.getTermin(id)
+        if (aktionAusDb == null)
             return Response.status(422)
                 .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
                 .build()
 
         val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
-        val userAusListe = AktionAusDb.teilnehmer.find { it.id == userAusDb!!.id ***REMOVED***
+        val userAusListe = aktionAusDb.teilnehmer.find { it.id == userAusDb!!.id ***REMOVED***
 
         if (userAusListe == null)
             return Response.accepted().build()
 
-        AktionAusDb.teilnehmer -= userAusListe
-        dao.aktualisiereTermin(AktionAusDb)
-        informiereUeberAbsage(userAusDb!!, AktionAusDb)
+        aktionAusDb.teilnehmer -= userAusListe
+        dao.aktualisiereTermin(aktionAusDb)
+        informiereUeberAbsage(userAusDb!!, aktionAusDb)
 
         return Response.accepted().build()
     ***REMOVED***
@@ -267,14 +278,14 @@ open class TermineRestResource {
     ) {
         fun convertToEvaluation(user_id: Long?): Evaluation {
             return Evaluation(
-                    id = id ?: 0,
-                    termin_id = termin_id,
-                    user_id = user_id,
-                    unterschriften = unterschriften,
-                    bewertung = bewertung,
-                    stunden = stunden,
-                    kommentar = kommentar,
-                    situation = situation
+                id = id ?: 0,
+                termin_id = termin_id,
+                user_id = user_id,
+                unterschriften = unterschriften,
+                bewertung = bewertung,
+                stunden = stunden,
+                kommentar = kommentar,
+                situation = situation
             )
         ***REMOVED***
 
