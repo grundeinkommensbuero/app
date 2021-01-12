@@ -172,7 +172,7 @@
   "Dauer": "Dauer",
   "Situation": "Situation",
   "Spaßfaktor": "Spaßfaktor",
-  "Erzähl uns, was ihr erreicht habt! \\n": "Erzähl uns, was ihr erreicht habt! \\n",
+  "Erzähl uns, was ihr erreicht habt! \n": "Erzähl uns, was ihr erreicht habt! \n",
   "Deine Rückmeldung hilft Deinem Kiez-Team, die effektivsten Sammelaktionen zu erkennen. Außerdem können andere Teams von euren Erfahrungen lernen.": "Deine Rückmeldung hilft Deinem Kiez-Team, die effektivsten Sammelaktionen zu erkennen. Außerdem können andere Teams von euren Erfahrungen lernen.",
   "Anzahl Deiner Unterschriften": "Anzahl Deiner Unterschriften",
   "Wie viele Unterschriften hast Du persönlich gesammelt?": "Wie viele Unterschriften hast Du persönlich gesammelt?",
@@ -195,5 +195,10 @@
   "Situation: ": "Situation: ",
   "Optional: Wie war die Situation?": "Optional: Wie war die Situation?",
   "Erzähl uns, was ihr erreicht habt!\n": "Erzähl uns, was ihr erreicht habt!\n",
-  "{} Unterschriften": "{} Unterschriften"
+  "{} Unterschriften": {
+    "zero": "{} Unterschriften",
+    "one": "{} Unterschrift",
+    "two": "{} Unterschriften",
+    "others": "{} Unterschriften"
+  }
 }
