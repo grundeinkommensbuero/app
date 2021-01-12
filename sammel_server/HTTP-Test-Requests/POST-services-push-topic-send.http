@@ -6,8 +6,13 @@ Authorization: Basic MzpmZjdhOGI2Yi1lMTVhLTRmZWUtOWY3OS1kY2EwNmZkNmM4ODM=
 {
     "data":{
         "type":"SimpleChatMessage",
-        "payload":"suuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuperlanger Inhalt",
-        "encoding": "Plain"
+        "channel":"global",
+        "timestamp":"2020-01-12 03:32:00.000000",
+        "timestamp":"2020-01-12 03:32:00.000000",
+        "text": "text goes here",
+        "color": "2137636880",
+        "sender_name": "Deutsche Wohnen & Co. Enteignen",
+        "user_id": -1
     ***REMOVED***,
     "notification":{
         "title":"Titel",
