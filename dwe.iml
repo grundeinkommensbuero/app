@@ -28,7 +28,6 @@
       <excludeFolder url="file://$MODULE_DIR$/sammel_app/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/sammel_app/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/sammel_app/build" />
-      <excludeFolder url="file://$MODULE_DIR$/target" />
       <excludeFolder url="file://$MODULE_DIR$/sammel_app/ios/.symlinks/plugins/flutter_local_notifications/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/sammel_app/ios/.symlinks/plugins/flutter_local_notifications/build" />
       <excludeFolder url="file://$MODULE_DIR$/sammel_app/ios/.symlinks/plugins/flutter_local_notifications/.pub" />
@@ -116,6 +115,7 @@
       <excludeFolder url="file://$MODULE_DIR$/sammel_app/ios/.symlinks/plugins/user_location/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/sammel_app/ios/.symlinks/plugins/user_location/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/sammel_app/ios/.symlinks/plugins/user_location/build" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
