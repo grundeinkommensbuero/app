@@ -72,8 +72,6 @@ class PushNotificationManager implements AbstractPushNotificationManager {
         onLaunch: onTap,
         onBackgroundMessage: backgroundMessageHandler);
 
-    listener.subscribeToTopics(['global']);
-
     return listener;
   ***REMOVED***
 

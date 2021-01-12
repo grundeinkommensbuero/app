@@ -6,9 +6,10 @@ import java.io.Serializable
 data class PushMessageDto(
     var notification: PushNotificationDto? = null,
     var data: Map<String, Any?>? = null,
-    var recipients: List<String>? = null
+    var recipients: List<String>? = null,
+    val persistent: Boolean = false
 ) {
-    
+
     companion object {
         fun convertFromPushMessage(pushMessage: PushMessage): PushMessageDto =
             PushMessageDto(pushMessage.getBenachrichtigung(), pushMessage.getDaten(), null)

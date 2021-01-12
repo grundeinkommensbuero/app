@@ -29,7 +29,7 @@ open class PushMessageDao {
         data: Map<String, String>?,
         teilnehmer: List<Benutzer>
     ) {
-        LOG.debug("Speichere Nachricht für Empfänger ohne Firebase ${teilnehmer.map { it.id ***REMOVED******REMOVED***")
+        LOG.debug("Speichere Nachricht für Empfänger ${teilnehmer.map { it.id ***REMOVED******REMOVED*** in Datenbank")
         for (teili in teilnehmer) entityManager.persist(PushMessage(teili, data, notification))
         entityManager.flush()
     ***REMOVED***
