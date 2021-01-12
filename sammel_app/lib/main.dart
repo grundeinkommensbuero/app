@@ -29,7 +29,7 @@ void main() {
       child: MyApp()));
 }
 
-const Mode mode = Mode.LOCAL;
+const Mode mode = Mode.DEMO;
 const version = '0.4.0+18';
 
 // Debug
