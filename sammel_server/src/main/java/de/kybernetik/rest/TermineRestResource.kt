@@ -324,7 +324,9 @@ open class TermineRestResource {
                 "action" to aktion.id,
                 "username" to name,
                 "joins" to true
-            )
+            ),
+            null,
+            true
         )
         val ersteller = aktion.teilnehmer[0]
 
@@ -339,7 +341,9 @@ open class TermineRestResource {
                 "$name ist der Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))} beigetreten, an der du teilnimmst",
                 "Teilnahmen und Absagen"
             ),
-            pushMessage.data
+            pushMessage.data,
+            null,
+            true
         )
         val restlicheTeilnehmer = aktion.teilnehmer.minus(ersteller)
 
@@ -360,7 +364,9 @@ open class TermineRestResource {
                 "action" to aktion.id,
                 "username" to name,
                 "joins" to false
-            )
+            ),
+            null,
+            true
         )
         val ersteller = aktion.teilnehmer[0]
 
@@ -372,7 +378,9 @@ open class TermineRestResource {
                 "Absage bei eurer Aktion",
                 "$name hat die Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))} verlassen, an der du teilnimmst",
                 "Teilnahmen und Absagen"
-            ), pushMessage.data
+            ), pushMessage.data,
+            null,
+            true
         )
         val teilnehmer = aktion.teilnehmer.minus(ersteller)
 
