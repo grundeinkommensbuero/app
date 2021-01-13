@@ -10,6 +10,7 @@ import 'package:mockito/mockito.dart';
 import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/BackendService.dart';
+import 'package:sammel_app/services/LocalNotificationService.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
@@ -99,3 +100,6 @@ class TranslationsMock extends Mock implements Translations {
 
 mockTranslation() =>
     Localization.load(Locale('en'), translations: TranslationsMock());
+
+class LocalNotificationServiceMock extends Mock
+    implements LocalNotificationService {}

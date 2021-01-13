@@ -45,9 +45,12 @@ open class PushService {
         val benutzerOhneFirebase = benutzerDao.getBenutzerOhneFirebase(empfaenger)
 
         val verschluesselt = verschluessele(nachricht.data)
-        if (firebaseKeys.isNotEmpty())
+        if (firebaseKeys.isNotEmpty()) {
             firebase.sendePushNachrichtAnEmpfaenger(nachricht.notification, verschluesselt, firebaseKeys)
-        if (benutzerOhneFirebase.isNotEmpty())
+        }
+        if (nachricht.persistent == true) {
+            pushDao.speicherePushMessageFuerEmpfaenger(nachricht.notification, verschluesselt, empfaenger)
+        } else if (benutzerOhneFirebase.isNotEmpty())
             pushDao.speicherePushMessageFuerEmpfaenger(nachricht.notification, verschluesselt, benutzerOhneFirebase)
     }
 

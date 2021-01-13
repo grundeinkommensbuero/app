@@ -54,6 +54,7 @@ open class PushNotificationResource {
 
         nachricht.notification?.channel = "Aktionen-Chats"
         nachricht.notification?.collapseId = "chat:action:${actionId}"
+        nachricht.persistent = true
 
         pushService.sendePushNachrichtAnEmpfaenger(nachricht, teilnehmer)
 

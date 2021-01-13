@@ -16,6 +16,7 @@ import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 
 import 'ErrorService.dart';
+import 'LocalNotificationService.dart';
 import 'UserService.dart';
 
 abstract class AbstractTermineService extends BackendService {
@@ -43,12 +44,14 @@ abstract class AbstractTermineService extends BackendService {
 class TermineService extends AbstractTermineService
     implements PushNotificationListener {
   GlobalKey<TermineSeiteState> actionPageKey;
+  LocalNotificationService localNotificationService;
 
   TermineService(
       stammdatenService,
       AbstractUserService userService,
       Backend backend,
       PushNotificationManager manager,
+      this.localNotificationService,
       this.actionPageKey)
       : super(stammdatenService, userService, backend) {
     manager.register_message_callback(PushDataTypes.NewKiezActions, this);
@@ -137,7 +140,20 @@ class TermineService extends AbstractTermineService
   }
 
   @override
-  void receive_message(Map<dynamic, dynamic> data) {}
+  void receive_message(Map<String, dynamic> data) async {
+    final kieze = await stammdatenService.kieze;
+    final message = ActionListPushData.fromJson(data, kieze);
+
+    if(message.type == PushDataTypes.NewKiezActions)
+      localNotificationService.sendNewActionsNotification(message);
+    if(message.type == PushDataTypes.ActionDeleted)
+      localNotificationService.sendActionDeletedNotification(message);
+    if(message.type == PushDataTypes.ActionChanged)
+      localNotificationService.sendActionChangedNotification(message);
+  }
+
+  @override
+  void updateMessages(List<Map<String, dynamic>> data) {}
 }
 
 class DemoTermineService extends AbstractTermineService {
