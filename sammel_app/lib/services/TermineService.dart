@@ -138,6 +138,9 @@ class TermineService extends AbstractTermineService
 
   @override
   void receive_message(Map<dynamic, dynamic> data) {***REMOVED***
+
+  @override
+  void updateMessages(List<Map<String, dynamic>> data) {***REMOVED***
 ***REMOVED***
 
 class DemoTermineService extends AbstractTermineService {
