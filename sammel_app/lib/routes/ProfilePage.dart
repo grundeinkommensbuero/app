@@ -96,7 +96,8 @@ class ProfilePageState extends State<ProfilePage> {
                       Text(kiezeCaption,
                           maxLines: 20,
                           style: TextStyle(
-                              fontSize: 12 + 16 / (kiezeCaption.length / 20))),
+                              fontSize: 12 +
+                                  16 / ((100 + kiezeCaption.length) / 100))),
                       SizedBox(height: 10.0),
                       Text(
                         'Mit deinen Kiezen bestimmst du wo du über neue Aktionen informiert werden willst.',

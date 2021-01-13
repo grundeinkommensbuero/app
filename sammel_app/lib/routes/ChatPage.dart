@@ -10,7 +10,7 @@ class ChatPage extends StatefulWidget {
 
 class ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   ChatMessageService chatMessageService;
-  PushNotificationManager pushManager;
+  AbstractPushNotificationManager pushManager;
 
   @override
   void initState() {

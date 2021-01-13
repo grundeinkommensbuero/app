@@ -25,6 +25,8 @@ abstract class AbstractPushNotificationManager {
   Future<String> get pushToken;
 
   onTap(Map<String, Map<String, dynamic>> map);
+
+  updateMessages() {}
 }
 
 abstract class PushNotificationListener {
@@ -221,4 +223,8 @@ class DemoPushNotificationManager implements AbstractPushNotificationManager {
   onTap(Map<String, Map<String, dynamic>> map) {
     throw UnimplementedError();
   }
+
+  // Ignore - no Push-Messages in Demo-Mode
+  @override
+  updateMessages() {}
 }
