@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:sammel_app/shared/ServerException.dart';
 
 import 'Message.dart';
@@ -34,6 +35,7 @@ class PushDataTypes {
   static final NewKiezActions = 'NewKiezActions';
   static final ActionChanged = 'ActionChanged';
   static final ActionDeleted = 'ActionDeleted';
+  static final TopicChatMessage = 'TopicChatMessage';
 ***REMOVED***
 
 // Alle Data-Objekte müssen in eine flache Map<String, String> serialisiert werden können
@@ -51,6 +53,8 @@ class ChatPushData extends PushData {
   String channel;
 
   ChatPushData(this.channel);
+
+  Message get message {***REMOVED***
 
   static ChatPushData fromJson(Map<String, dynamic> data) =>
       ChatPushData(data['channel']);
@@ -74,10 +78,37 @@ class ChatMessagePushData extends ChatPushData {
     try {
       this.message = ChatMessage.fromJson(json);
     ***REMOVED*** on AssertionError catch (e) {
-      throw UnreadablePushMessage(
-          'Unlesbare Teilnahme-Push-Nachricht (Teilnahme) empfangen: ${e.message***REMOVED***');
+      throw UnreadablePushMessage(tr(
+          'Unlesbare Push-Nachricht (Teilnahme) empfangen: {message***REMOVED***',
+          namedArgs: {'named': e.message***REMOVED***));
     ***REMOVED***
   ***REMOVED***
+***REMOVED***
+
+class TopicChatMessagePushData extends ChatPushData
+{
+  final String type = PushDataTypes.TopicChatMessage;
+  TopicChatMessage message;
+  TopicChatMessagePushData(this.message, channel) : super(channel);
+
+  TopicChatMessagePushData.fromJson(Map<String, dynamic> json)
+      : super(json['channel']) {
+    try {
+      this.message = TopicChatMessage.fromJson(json);
+    ***REMOVED*** on AssertionError catch (e) {
+      throw UnreadablePushMessage(tr(
+          'Unlesbare Topic Push-Nachricht (Teilnahme) empfangen: {message***REMOVED***',
+          namedArgs: {'named': e.message***REMOVED***));
+    ***REMOVED***
+  ***REMOVED***
+
+  toJson() {
+    var json_message = message.toJson();
+    json_message['type'] = type;
+    json_message['channel'] = this.channel;
+    return json_message;
+  ***REMOVED***
+
 ***REMOVED***
 
 class ParticipationPushData extends ChatPushData {

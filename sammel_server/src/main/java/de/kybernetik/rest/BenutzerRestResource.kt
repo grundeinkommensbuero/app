@@ -7,6 +7,7 @@ import de.kybernetik.shared.Security
 import java.lang.Exception
 import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
+import javax.ejb.Stateless
 import javax.transaction.Transactional
 import javax.ws.rs.*
 import javax.ws.rs.core.Context
@@ -15,6 +16,7 @@ import javax.ws.rs.core.Response
 import javax.ws.rs.core.SecurityContext
 
 @Path("benutzer")
+@Stateless
 open class BenutzerRestResource {
 
     @Context

@@ -131,4 +131,10 @@ class StorageService {
   loadCostumPushToken() => prefs.then((prefs) => prefs.getString(_PUSHTOKEN));
 
   Future<void> reload() async => await _prefs.then((prefs) => prefs.reload());
+
+  Future<TopicChatChannel> loadTopicChatChannel(String id) async => prefs.then((prefs) {
+    var json = prefs.getString('$_CHANNEL:${id***REMOVED***');
+    if (json == null) return null;
+    return TopicChatChannel.fromJSON(jsonDecode(json));
+  ***REMOVED***);
 ***REMOVED***

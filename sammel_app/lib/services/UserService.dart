@@ -55,7 +55,7 @@ class UserService extends AbstractUserService {
       if (user != null)
         await verifyUser(user).catchError((e, s) async {
           ErrorService.handleError(e, s,
-              context: 'Ein neuer Benutzer wird angelegt.');
+              context: 'Eine neue Benutzer*in wird angelegt.');
           user = await createNewUser();
         ***REMOVED***, test: (e) => e is InvalidUserException);
       else
@@ -78,7 +78,7 @@ class UserService extends AbstractUserService {
           appAuth: true);
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
-          context: 'Anlegen eine*r neuen Benutzer*in ist gescheitert.');
+          context: 'Anlegen einer neuen Benutzer*in ist gescheitert.');
       throw e;
     ***REMOVED***
     var userFromServer = User.fromJSON(response.body);
@@ -112,7 +112,6 @@ class UserService extends AbstractUserService {
   Future<String> generateSecret() async {
     String secret = Uuid().v1();
     await storageService.saveSecret(secret);
-    print('Secret gespeichert: $secret');
     return secret;
   ***REMOVED***
 
@@ -151,7 +150,7 @@ class InvalidUserException implements Exception {***REMOVED***
 class DemoUserService extends AbstractUserService {
   DemoUserService() : super(DemoBackend()) {
     _userStream = streamController.stream;
-    streamController.add(User(13, null, Colors.red));
+    streamController.add(User(13, 'Ich', Colors.red));
     userHeaders = Future.value({'Authorization': 'userCreds'***REMOVED***);
   ***REMOVED***
 

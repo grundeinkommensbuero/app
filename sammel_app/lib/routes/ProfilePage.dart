@@ -1,9 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/main.dart';
+import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
@@ -22,26 +24,30 @@ class ProfilePageState extends State<ProfilePage> {
   var init = false;
   StorageService storageService;
   AbstractUserService userService;
-  StammdatenService stammdatenService;
   AbstractPushNotificationManager pushNotificationManager;
-  String name = '';
+  User user;
+  String token;
   List<String> myKieze = [];
   String interval;
 
   static const intervalOptions = ['sofort', 'täglich', 'wöchentlich', 'nie'];
+  static const languageOptions = ['de', 'en'];
+
+  var languages = {
+    'de': 'deutsch',
+    'en': 'englisch',
+  ***REMOVED***
 
   @override
   Widget build(BuildContext context) {
     if (init == false) {
       storageService = Provider.of<StorageService>(context);
       userService = Provider.of<AbstractUserService>(context);
-      stammdatenService = Provider.of<StammdatenService>(context);
       pushNotificationManager =
           Provider.of<AbstractPushNotificationManager>(context);
-      userService.user.listen((user) => setState(() => name = user.name));
-      storageService
-          .loadMyKiez()
-          .then((kieze) => setState(() => myKieze = kieze));
+      userService.user.listen((user) => setState(() => this.user = user));
+      pushNotificationManager.pushToken
+          .then((token) => setState(() => this.token = token));
       storageService
           .loadNotificationInterval()
           .then((pref) => setState(() => interval = pref));
@@ -56,14 +62,30 @@ class ProfilePageState extends State<ProfilePage> {
             child: ListView(
               children: [
                 ProfileItem(
+                  title: "Sprache",
+                  child: Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        languages[EasyLocalization.of(context)
+                                ?.locale
+                                ?.languageCode] ??
+                            'Keine',
+                        overflow: TextOverflow.fade,
+                        style: TextStyle(
+                            fontSize: (28.0 - ((user?.name ?? '').length) / 4)),
+                      )),
+                  onPressed: showLanguageDialog,
+                ),
+                SizedBox(height: 20.0),
+                ProfileItem(
                   title: "Dein Name",
                   child: Container(
                       alignment: Alignment.center,
                       child: Text(
-                        name ?? '',
+                        user?.name ?? '',
                         overflow: TextOverflow.fade,
                         style: TextStyle(
-                            fontSize: (28.0 - ((name ?? '').length) / 4)),
+                            fontSize: (28.0 - ((user?.name ?? '').length) / 4)),
                       )),
                   onPressed: (context) =>
                       showUsernameDialog(context: context, hideHint: true),
@@ -85,7 +107,7 @@ class ProfilePageState extends State<ProfilePage> {
                         'Mit deinen Kiezen bestimmst du wo du über neue Aktionen informiert werden willst.',
                         style: TextStyle(
                             fontWeight: FontWeight.normal, color: Colors.black),
-                      )
+                      ).tr()
                     ])),
                     onPressed: (_) => showKiezPicker()),
                 SizedBox(height: 20.0),
@@ -99,11 +121,16 @@ class ProfilePageState extends State<ProfilePage> {
                         'Wie oft und aktuell willst du über neue Sammel-Aktionen in deinem Kiez informiert werden?',
                         style: TextStyle(
                             fontWeight: FontWeight.normal, color: Colors.black),
-                      )
+                      ).tr()
                     ])),
                     onPressed: (context) => showNotificationDialog(context))
               ],
             )),
+        bottomSheet: Row(children: [
+          Expanded(
+              child: SelectableText('User-ID: ${user?.id***REMOVED***, Push-Token: $token',
+                  textAlign: TextAlign.center))
+        ], mainAxisAlignment: MainAxisAlignment.center),
         floatingActionButton: FloatingActionButton(
             child: Icon(Icons.info_outline_rounded,
                 size: 40.0, color: DweTheme.yellow),
@@ -111,12 +138,12 @@ class ProfilePageState extends State<ProfilePage> {
   ***REMOVED***
 
   showKiezPicker() async {
-    var allLocations = await stammdatenService.kieze;
-    var selection = (await KiezPicker(allLocations
-                .where((kiez) => myKieze.contains(kiez.kiez))
-                .toList())
+    var selection = (await KiezPicker(
+                (await Provider.of<StammdatenService>(context).kieze)
+                    .where((kiez) => myKieze.contains(kiez.name))
+                    .toSet())
             .showKiezPicker(context))
-        ?.map((kiez) => kiez.kiez)
+        ?.map((kiez) => kiez.name)
         ?.toList();
 
     if (selection != null && !ListEquality().equals(selection, myKieze)) {
@@ -124,6 +151,25 @@ class ProfilePageState extends State<ProfilePage> {
       storageService.saveMyKiez(selection);
       setState(() => myKieze = selection);
     ***REMOVED***
+  ***REMOVED***
+
+  showLanguageDialog(BuildContext context) async {
+    String selection = await showDialog(
+        context: context,
+        builder: (context) => SimpleDialog(
+            key: Key('language selection dialog'),
+            contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
+            titlePadding: EdgeInsets.all(15.0),
+            title: const Text('Sprache').tr(),
+            children: []..addAll(languageOptions.map((option) => RadioListTile(
+                  groupValue: EasyLocalization.of(context).locale.languageCode,
+                  value: option,
+                  title: Text(languages[option]),
+                  onChanged: (selected) => Navigator.pop(context, selected),
+                )))));
+
+    if (selection != null)
+      EasyLocalization.of(context).locale = Locale(selection);
   ***REMOVED***
 
   showNotificationDialog(BuildContext context) async {
@@ -134,11 +180,12 @@ class ProfilePageState extends State<ProfilePage> {
             contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
             titlePadding: EdgeInsets.all(15.0),
             title: const Text(
-                'Wie häufig möchtest du Infos über anstehende Aktionen bekommen?'),
+                    'Wie häufig möchtest du Infos über anstehende Aktionen bekommen?')
+                .tr(),
             children: []..addAll(intervalOptions.map((option) => RadioListTile(
                   groupValue: interval,
                   value: option,
-                  title: Text(option),
+                  title: Text(option).tr(),
                   onChanged: (selected) => Navigator.pop(context, selected),
                 )))));
 
@@ -156,6 +203,58 @@ class ProfilePageState extends State<ProfilePage> {
     if (newInterval != "nie")
       pushNotificationManager.subscribeToKiezActionTopics(
           newKieze, newInterval);
+  ***REMOVED***
+***REMOVED***
+
+class ProfileItem extends StatelessWidget {
+  final Widget child;
+  final String title;
+  final Function(BuildContext) onPressed;
+
+  ProfileItem({this.child, this.title = '', this.onPressed***REMOVED***) {
+    assert(child != null);
+  ***REMOVED***
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+        padding: EdgeInsets.all(1.0),
+        onPressed: () => onPressed(context),
+        child: Container(
+            padding: EdgeInsets.only(
+                top: 5.0, left: 10.0, right: 10.0, bottom: 20.0),
+            decoration: BoxDecoration(
+                border: Border.all(color: DweTheme.purple),
+                borderRadius: BorderRadius.circular(10.0),
+                color: DweTheme.yellowLight,
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey,
+                      offset: Offset(1.0, 1.0),
+                      blurRadius: 3.0,
+                      spreadRadius: 1.0)
+                ]),
+            child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                      child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                        Text(title,
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.black))
+                            .tr(),
+                        SizedBox(height: 10.0),
+                        child,
+                        SizedBox(width: 15.0)
+                      ])),
+                  Icon(Icons.edit),
+                ])));
   ***REMOVED***
 ***REMOVED***
 
@@ -195,55 +294,4 @@ showAboutDialog(BuildContext context) {
               ])
             ],
           ));
-***REMOVED***
-
-class ProfileItem extends StatelessWidget {
-  Widget child;
-  String title;
-  Function(BuildContext) onPressed;
-
-  ProfileItem({Widget this.child, this.title = '', this.onPressed***REMOVED***) {
-    assert(child != null);
-  ***REMOVED***
-
-  @override
-  Widget build(BuildContext context) {
-    return FlatButton(
-        padding: EdgeInsets.all(1.0),
-        onPressed: () => onPressed(context),
-        child: Container(
-            padding: EdgeInsets.only(
-                top: 5.0, left: 10.0, right: 10.0, bottom: 20.0),
-            decoration: BoxDecoration(
-                border: Border.all(color: DweTheme.purple),
-                borderRadius: BorderRadius.circular(10.0),
-                color: DweTheme.yellowLight,
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey,
-                      offset: Offset(1.0, 1.0),
-                      blurRadius: 3.0,
-                      spreadRadius: 1.0)
-                ]),
-            child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                      child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                        Text(title,
-                            style: TextStyle(
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.normal,
-                                color: Colors.black)),
-                        SizedBox(height: 10.0),
-                        child,
-                        SizedBox(width: 15.0)
-                      ])),
-                  Icon(Icons.edit),
-                ])));
-  ***REMOVED***
 ***REMOVED***

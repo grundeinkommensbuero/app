@@ -6,6 +6,8 @@ import 'package:jiffy/jiffy.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/showMultipleDatePicker.dart';
 
+import 'Mocks.dart';
+
 MaterialApp createWidgetWithMultipleDatePicker(
     List<DateTime> previousSelection, Function result) {
   return MaterialApp(
@@ -26,6 +28,8 @@ MaterialApp createWidgetWithMultipleDatePicker(
 ***REMOVED***
 
 void main() {
+  mockTranslation();
+
   testWidgets('Days Selection selects initially days from filter',
       (WidgetTester tester) async {
     var widget = createWidgetWithMultipleDatePicker([DateTime.now()], () {***REMOVED***);

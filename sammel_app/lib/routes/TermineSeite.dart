@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -135,10 +136,10 @@ class TermineSeiteState extends State<TermineSeite>
           BottomNavigationBarItem(
               icon: Icon(Icons.view_list,
                   key: Key('list view navigation button')),
-              label: 'Liste'),
+              label: 'Liste'.tr()),
           BottomNavigationBarItem(
               icon: Icon(Icons.map, key: Key('map view navigation button')),
-              label: 'Karte')
+              label: 'Karte'.tr())
         ],
       ),
     );
@@ -182,24 +183,24 @@ class TermineSeiteState extends State<TermineSeite>
     _initialized = true;
   ***REMOVED***
 
-  Future<void >ladeTermine(TermineFilter filter) async {
-    await termineService.loadActions(filter).then((termine) {
-      setState(() {
-        this.termine = termine..sort(Termin.compareByStart);
-      ***REMOVED***);
-    ***REMOVED***).catchError((e, s) => ErrorService.handleError(e, s,
-        context: "Aktionen konnten nicht geladen werden."));
+  Future<void> ladeTermine(TermineFilter filter) async {
+    await termineService
+        .loadActions(filter)
+        .then((termine) =>
+            setState(() => this.termine = termine..sort(Termin.compareByStart)))
+        .catchError((e, s) => ErrorService.handleError(e, s,
+                context: 'Aktionen konnten nicht geladen werden.'));
   ***REMOVED***
 
   void showRestError(RestFehler e) {
     showDialog(
         context: context,
         child: AlertDialog(
-          title: Text('Aktion konnte nicht angelegt werden'),
+          title: Text('Aktion konnte nicht angelegt werden').tr(),
           content: SelectableText(e.message),
           actions: <Widget>[
             RaisedButton(
-              child: Text('Okay...'),
+              child: Text('Okay...').tr(),
               onPressed: () => Navigator.pop(context),
             )
           ],
@@ -242,7 +243,7 @@ class TermineSeiteState extends State<TermineSeite>
                               children: <Widget>[
                                 RaisedButton(
                                     key: Key('open chat window'),
-                                    child: Text('Zum Chat'),
+                                    child: Text('Zum Chat').tr(),
                                     onPressed: () =>
                                         openChatWindow(terminMitDetails)),
                               ],
@@ -259,7 +260,7 @@ class TermineSeiteState extends State<TermineSeite>
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: []..add(RaisedButton(
                                   key: Key('action details close button'),
-                                  child: Text('Schließen'),
+                                  child: Text('Schließen').tr(),
                                   onPressed: () => Navigator.pop(
                                       context, TerminDetailsCommand.CLOSE),
                                 )))
@@ -284,11 +285,11 @@ class TermineSeiteState extends State<TermineSeite>
 
   openChatWindow(Termin termin) async {
     ChatChannel message_channel =
-        await chatMessageService.getChatChannel(termin.id);
+        await chatMessageService.getActionChannel(termin.id);
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => ChatWindow(message_channel, termin)));
+            builder: (context) => ChatWindow(message_channel, termin, true)));
   ***REMOVED***
 
   Color determineColor(Termin action) {
@@ -331,7 +332,7 @@ class TermineSeiteState extends State<TermineSeite>
     if (!participant(terminMitDetails))
       return RaisedButton(
           key: Key('join action button'),
-          child: Text('Mitmachen'),
+          child: Text('Mitmachen').tr(),
           onPressed: () {
             joinAction(terminMitDetails);
             setDialogState(() => terminMitDetails.participants.add(me));
@@ -339,7 +340,7 @@ class TermineSeiteState extends State<TermineSeite>
     else
       return RaisedButton(
           key: Key('leave action button'),
-          child: Text('Absagen'),
+          child: Text('Absagen').tr(),
           onPressed: () {
             leaveAction(terminMitDetails);
             setDialogState(() => terminMitDetails.participants.remove(
@@ -366,11 +367,12 @@ class TermineSeiteState extends State<TermineSeite>
                 leading: null,
                 automaticallyImplyLeading: false,
                 title: Text('Deine Aktion bearbeiten',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22.0,
-                        color: Color.fromARGB(255, 129, 28, 98))),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22.0,
+                            color: Color.fromARGB(255, 129, 28, 98)))
+                    .tr(),
               ),
               children: <Widget>[
                 Container(
@@ -491,17 +493,17 @@ class TermineSeiteState extends State<TermineSeite>
 
 AlertDialog confirmDeleteDialog(BuildContext context) => AlertDialog(
         key: Key('deletion confirmation dialog'),
-        title: Text('Termin Löschen'),
-        content: Text('Möchtest du diesen Termin wirklich löschen?'),
+        title: Text('Aktion Löschen').tr(),
+        content: Text('Möchtest du diese Aktion wirklich löschen?').tr(),
         actions: [
           RaisedButton(
               key: Key('delete confirmation yes button'),
               color: DweTheme.red,
-              child: Text('Ja'),
+              child: Text('Ja').tr(),
               onPressed: () => Navigator.pop(context, true)),
           RaisedButton(
             key: Key('delete confirmation no button'),
-            child: Text('Nein'),
+            child: Text('Nein').tr(),
             onPressed: () => Navigator.pop(context, false),
           ),
         ]);

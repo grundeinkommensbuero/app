@@ -23,6 +23,16 @@ Map<dynamic, dynamic> decrypt(dynamic data) {
   if (data['encrypted'] == 'Plain') {
     if (data['payload'] == null) return {***REMOVED***
     print('Uncodierte Push-Nachricht: ${data['payload']***REMOVED***');
+    try {
+      print(jsonDecode(data['payload']));
+    ***REMOVED***catch (e,s)
+  {
+    print("decoding error ${e***REMOVED***");
+  ***REMOVED***
+
+    print("success on decoding");
+    print(data["payload"]);
+
     return data['payload'];
   ***REMOVED***
   print('Push-Nachricht nicht entschlüsselt: ${data***REMOVED***');

@@ -7,12 +7,14 @@ abstract class Message {
   bool obtained_from_server = false;
   DateTime timestamp;
 
-  Message.fromJson() {***REMOVED***
+  Message.fromJson();
 
   static String determineType(Map<String, dynamic> data) =>
       data['type'] ?? null;
 
-  Map<String, dynamic> toJson() {***REMOVED***
+  Map<String, dynamic> toJson();
+
+  bool isMessageEqual(Message msg);
 ***REMOVED***
 
 class ChatMessage implements Message {
@@ -26,6 +28,7 @@ class ChatMessage implements Message {
   String sender_name;
   Color message_color;
   int user_id = -1;
+  int termin_id = -1;
 
   ChatMessage(
       {this.text,
@@ -33,7 +36,8 @@ class ChatMessage implements Message {
       this.timestamp,
       this.message_color,
       this.obtained_from_server = false,
-      this.user_id***REMOVED***);
+      this.user_id,
+      this.termin_id***REMOVED***);
 
   @override
   ChatMessage.fromJson(Map<dynamic, dynamic> json_message_data) {
@@ -43,6 +47,7 @@ class ChatMessage implements Message {
     message_color = Color(int.parse(json_message_data['color'].toString()));
     obtained_from_server = json_message_data['from_server'];
     user_id = int.parse(json_message_data['user_id'].toString());
+    termin_id = int.parse(json_message_data['termin_id']);
   ***REMOVED***
 
   @override
@@ -53,16 +58,19 @@ class ChatMessage implements Message {
         'user_id': user_id,
         'timestamp': timestamp.toString(),
         'color': message_color.value,
-        'from_server': obtained_from_server
+        'from_server': obtained_from_server,
+        'termin_id': termin_id.toString()
       ***REMOVED***
 
+  @override
   bool isMessageEqual(Message msg) {
     return msg is ChatMessage &&
         msg.text == text &&
         msg.sender_name == msg.sender_name &&
         timestamp.isAtSameMomentAs(msg.timestamp) &&
         message_color.value == msg.message_color.value &&
-        user_id == msg.user_id;// &&
+        user_id == msg.user_id;
+    // &&
        // obtained_from_server == msg.obtained_from_server;
   ***REMOVED***
 ***REMOVED***
@@ -99,4 +107,64 @@ class ParticipationMessage implements Message {
         'username': username,
         'joins': joins
       ***REMOVED***
+
+  @override
+  bool isMessageEqual(Message msg) {
+    return msg is ParticipationMessage &&
+        type == msg.type &&
+        timestamp.isAtSameMomentAs(msg.timestamp) &&
+        username == msg.username &&
+        joins == msg.joins;
+  ***REMOVED***
+***REMOVED***
+
+
+class TopicChatMessage implements Message {
+  @override
+  String type = PushDataTypes.TopicChatMessage;
+  @override
+  DateTime timestamp;
+  String text;
+  String sender_name;
+  Color message_color;
+  @override
+  bool obtained_from_server;
+
+  TopicChatMessage(
+      {this.text,
+        this.sender_name,
+        this.timestamp,
+        this.message_color,
+        this.obtained_from_server=true***REMOVED***);
+
+  @override
+  TopicChatMessage.fromJson(Map<dynamic, dynamic> json_message_data) {
+    text = json_message_data['text'];
+    sender_name = json_message_data['sender_name'];
+    timestamp = DateTime.parse(json_message_data['timestamp']);
+    message_color = Color(int.parse(json_message_data['color'].toString()));
+    obtained_from_server = json_message_data['from_server'] ?? true;
+  ***REMOVED***
+
+  @override
+  Map<String, dynamic> toJson()
+  {
+    print("obtained from server $obtained_from_server");
+    return {
+    'type': type,
+    'text': text,
+    'sender_name': sender_name,
+    'timestamp': timestamp.toString(),
+    'color': message_color.value,
+    'from_server': obtained_from_server***REMOVED***
+  ***REMOVED***
+
+  @override
+  bool isMessageEqual(Message msg) {
+    return msg is TopicChatMessage &&
+        msg.text == text &&
+        msg.sender_name == msg.sender_name &&
+        timestamp.isAtSameMomentAs(msg.timestamp) &&
+        message_color.value == msg.message_color.value;
+  ***REMOVED***
 ***REMOVED***

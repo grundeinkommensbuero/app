@@ -1,3 +1,4 @@
+import 'package:easy_localization/src/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_test_ui/flutter_test_ui.dart';
@@ -5,10 +6,12 @@ import 'package:sammel_app/routes/FAQ.dart';
 import 'package:sammel_app/services/FAQService.dart';
 
 import '../services/FAQService_test.dart';
+import '../shared/Mocks.dart';
 
 main() {
   var faq = FAQ();
   setUpUI((WidgetTester tester) async {
+    Localization.load(Locale('en'), translations: TranslationsMock());
     FAQService.items = testItems;
     await tester.pumpWidget(MaterialApp(home: faq));
   ***REMOVED***);

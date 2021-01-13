@@ -1,3 +1,4 @@
+import 'package:easy_localization/src/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_test_ui/flutter_test_ui.dart';
@@ -15,6 +16,7 @@ void main() {
   ChatChannel channel;
 
   setUpUI((tester) async {
+    Localization.load(Locale('en'), translations: TranslationsMock());
     _userService = ConfiguredUserServiceMock();
     channel = ChatChannel('action:1');
     widget = Provider<AbstractUserService>(
