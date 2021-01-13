@@ -135,6 +135,28 @@ class PushServiceTest {
     }
 
     @Test
+    fun `sendePushNachrichtAnEmpfaenger speichert persistent Nachricht fuer alle User`() {
+        val teilnehmer = listOf(karl(), rosa())
+        whenever(benutzerDao.getFirebaseKeys(teilnehmer)).thenReturn(listOf("key1"))
+        whenever(benutzerDao.getBenutzerOhneFirebase(teilnehmer)).thenReturn(listOf(karl()))
+
+        val nachricht = PushMessageDto(
+            PushNotificationDto(
+                channel = "Allgemein",
+                collapseId = null
+            ),
+            persistent = true
+        )
+        service.sendePushNachrichtAnEmpfaenger(
+            nachricht, teilnehmer
+        )
+
+        @Suppress("UNCHECKED_CAST")
+        verify(pushDao, times(1))
+            .speicherePushMessageFuerEmpfaenger(nachricht.notification, emptyMap(), teilnehmer)
+    }
+
+    @Test
     fun `verschluesselt() reicht verschluesselte Daten heraus`() {
         val dto = PushMessageDto.convertFromPushMessage(
             PushMessage(
@@ -185,10 +207,13 @@ class PushServiceTest {
     fun test() {
         val GSON = GsonBuilder().create()
 
-        val json = GSON.toJson(mapOf<String, Any>(
-            "type" to "ActionChanged",
-            "timestamp" to ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME),
-            "action" to  listOf(terminOhneTeilnehmerMitDetails())))
+        val json = GSON.toJson(
+            mapOf<String, Any>(
+                "type" to "ActionChanged",
+                "timestamp" to ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME),
+                "action" to listOf(terminOhneTeilnehmerMitDetails())
+            )
+        )
 
         println(json)
     }

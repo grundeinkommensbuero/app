@@ -50,16 +50,20 @@ class PushData {
 
 class ChatPushData extends PushData {
   String channel;
+  String type;
 
   ChatPushData(this.channel);
 
-  Message get message {}
+  Message get message =>
+      throw UnimplementedError("Das hier soll abstrakt sein");
 
-  static ChatPushData fromJson(Map<String, dynamic> data) =>
-      ChatPushData(data['channel']);
+  ChatPushData.fromJson(Map<String, dynamic> json)
+      : type = json['type'],
+        channel = json['channel'];
 }
 
 class ChatMessagePushData extends ChatPushData {
+  @override
   ChatMessage message;
   final String type = PushDataTypes.SimpleChatMessage;
 
@@ -85,6 +89,7 @@ class ChatMessagePushData extends ChatPushData {
 }
 
 class ParticipationPushData extends ChatPushData {
+  @override
   ParticipationMessage message;
   final String type = PushDataTypes.ParticipationMessage;
 
@@ -139,4 +144,13 @@ class UnreadablePushMessage implements ServerException {
   String message;
 
   UnreadablePushMessage([this.message = 'Unlesbare Push-Nachricht empfangen']);
+}
+
+ChatPushData chatPushDataFromJson(Map<String, dynamic> data) {
+  var pushData = ChatPushData.fromJson(data);
+  if (pushData.type == PushDataTypes.SimpleChatMessage)
+    pushData = ChatMessagePushData.fromJson(data);
+  if (pushData.type == PushDataTypes.ParticipationMessage)
+    pushData = ParticipationPushData.fromJson(data);
+  return pushData;
 }
