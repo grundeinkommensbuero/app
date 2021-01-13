@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
+import 'package:sammel_app/services/PushNotificationManager.dart';
 
 class ChatPage extends StatefulWidget {
   @override
@@ -9,6 +10,7 @@ class ChatPage extends StatefulWidget {
 
 class ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   ChatMessageService chatMessageService;
+  PushNotificationManager pushManager;
 
   @override
   void initState() {
@@ -17,8 +19,10 @@ class ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    if (chatMessageService == null)
+    if (chatMessageService == null) {
       chatMessageService = Provider.of<ChatMessageService>(context);
+      pushManager = Provider.of<AbstractPushNotificationManager>(context);
+    }
     return Container();
   }
 
@@ -32,6 +36,9 @@ class ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   // Lädt Speicher neu nach, falls sich im Schlaf etwas geändert hat
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) chatMessageService.reload();
+    if (state == AppLifecycleState.resumed) {
+      chatMessageService.reload();
+      pushManager.updateMessages();
+    }
   }
 }
