@@ -1,4 +1,3 @@
-import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/UserService.dart';
@@ -9,8 +8,8 @@ class PushUpdateService extends BackendService {
 
   Future<List<Map<String, dynamic>>> getLatestPushMessages() async {
     try {
-      return get('service/push/pull').then(
-              (response) => response.body as List<Map<String, dynamic>>) ??
+      return get('service/push/pull').then((response) =>
+              (response.body as List).cast<Map<String, dynamic>>()) ??
           [];
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
