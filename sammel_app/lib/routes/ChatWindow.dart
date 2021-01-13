@@ -10,6 +10,7 @@ import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/PushSendService.dart';
+import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
@@ -189,7 +190,8 @@ class ChatWindowState extends State<ChatWindow> {
         mpd,
         PushNotification(
             'Neue Chat-Nachricht'.tr(), "Öffne die App um sie zu lesen".tr()));
-    channel.pushChatMessage(message);
+    channel.pushMessages([message]);
+    Provider.of<StorageService>(context).saveChatChannel(channel);
     controller.clear();
   ***REMOVED***
 

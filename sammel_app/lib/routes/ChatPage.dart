@@ -3,12 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/ChatChannel.dart';
-import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/routes/ChatWindow.dart';
 import 'package:sammel_app/routes/TopicChatWindow.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
-import 'package:sammel_app/services/TermineService.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/services/PushNotificationManager.dart';
 
 class ChatPage extends StatefulWidget {
 
@@ -19,6 +16,7 @@ class ChatPage extends StatefulWidget {
 ***REMOVED***
 
 class ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
+  AbstractPushNotificationManager pushManager;
   ChatMessageService chatMessageService;
   TopicChatWindow chat_window = null;
   bool isActive;
@@ -39,7 +37,11 @@ class ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    if (chatMessageService == null) {
     chatMessageService = Provider.of<ChatMessageService>(context);
+      pushManager = Provider.of<AbstractPushNotificationManager>(context);
+    ***REMOVED***
+
     if(chat_window == null && parentPage.isActive) {
       print("triggering future");
       Future<ChatChannel> globalChatChannel = Provider.of<ChatMessageService>(
@@ -68,6 +70,9 @@ class ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   // Lädt Speicher neu nach, falls sich im Schlaf etwas geändert hat
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) chatMessageService.reload();
+    if (state == AppLifecycleState.resumed) {
+      chatMessageService.reload();
+      pushManager.updateMessages();
+    ***REMOVED***
   ***REMOVED***
 ***REMOVED***

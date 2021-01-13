@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/model/Termin.dart';
@@ -29,10 +28,11 @@ class ChatMessageService implements PushNotificationListener {
   StorageService storage_service;
 
   @override
-  receive_message(Map<String, dynamic> data) async {
+  receive_message(Map<String, dynamic> json) async {
     try {
-      print("receive_message called $data");
-      ChatChannel channel = await storeMessage(data);
+      var pushData = chatPushDataFromJson(json);
+
+      ChatChannel channel = await storeMessage(pushData);
       if (channel == null) return;
 
       // check if chat window is open
@@ -42,38 +42,42 @@ class ChatMessageService implements PushNotificationListener {
         print('non active window');
         var notifier =
             Provider.of<LocalNotificationService>(navigatorKey.currentContext);
-        if (data['type'] == PushDataTypes.SimpleChatMessage)
-          notifier.sendChatNotification(ChatMessagePushData.fromJson(data));
-        if (data['type'] == PushDataTypes.TopicChatMessage) {
+        if (json['type'] == PushDataTypes.SimpleChatMessage)
+          notifier.sendChatNotification(ChatMessagePushData.fromJson(json));
+        if (json['type'] == PushDataTypes.ParticipationMessage)
+          notifier.sendParticipationNotification(
+              ParticipationPushData.fromJson(json));
+        if (json['type'] == PushDataTypes.TopicChatMessage) {
           print('topicchatmessage ${TopicChatMessagePushData.fromJson(data)***REMOVED***');
           notifier.sendTopicChatNotification(
-              TopicChatMessagePushData.fromJson(data));
+              TopicChatMessagePushData.fromJson(json));
         ***REMOVED***
-        if (data['type'] == PushDataTypes.ParticipationMessage)
-          notifier.sendChatNotification(
-              ChatMessagePushData.fromJson(data));
+
       ***REMOVED***
     ***REMOVED*** on UnreadablePushMessage catch (e, s) {
       ErrorService.handleError(e, s);
     ***REMOVED***
   ***REMOVED***
 
-  Future<ChatChannel> storeMessage(Map<String, dynamic> data) async {
-    ChatPushData mpd = ChatPushData.fromJson(data);
-    ChatChannel channel = await getChannel(mpd.channel);
-    if (channel == null) return null;
+  Future<ChatChannel> storeMessage(ChatPushData pushData) async =>
+      storeMessages([pushData]).then((list) => list.first);
 
-    if (data['type'] == PushDataTypes.SimpleChatMessage)
-      channel.pushChatMessage(ChatMessage.fromJson(data));
-    if (data['type'] == PushDataTypes.ParticipationMessage)
-      channel.pushParticipationMessage(ParticipationMessage.fromJson(data));
-    if (data['type'] == PushDataTypes.TopicChatMessage) {
-      print("pushing msg to topic channel");
-      channel.pushChatMessage(TopicChatMessage.fromJson(data));
+  Future<List<ChatChannel>> storeMessages(List<ChatPushData> pushData) async {
+    final channelIds = pushData.map((data) => data.channel).toSet();
+    List<ChatChannel> channels = [];
+    for (var channelId in channelIds) {
+      ChatChannel channel = await getChannel(channelId);
+      final messages = pushData
+          .where((data) => data.channel == channelId)
+          .map((data) => data.message)
+          .toList();
 
+      channel.pushMessages(messages);
+
+      this.storage_service.saveChatChannel(channel);
+      channels.add(channel);
     ***REMOVED***
-    this.storage_service.saveChatChannel(channel);
-    return channel;
+    return channels;
   ***REMOVED***
 
   @override
@@ -123,18 +127,16 @@ class ChatMessageService implements PushNotificationListener {
       await getChannel('action:$idNr');
 
   Future<ChatChannel> getChannel(String id) async {
-    if (!channels.containsKey(id)) {
-      ChatChannel storedChannel =
-          await this.storage_service.loadChatChannel(id);
-      if (storedChannel != null)
-        channels[id] = storedChannel;
-      else {
-        final newChannel = ChatChannel(id);
-        await this.storage_service.saveChatChannel(newChannel);
-        channels[newChannel.id] = newChannel;
-      ***REMOVED***
+    if (channels.containsKey(id)) return channels[id];
+
+    ChatChannel channel = await this.storage_service.loadChatChannel(id);
+
+    if (channel == null) {
+      channel = ChatChannel(id);
+      await this.storage_service.saveChatChannel(channel);
     ***REMOVED***
-    return channels[id];
+    channels[channel.id] = channel;
+    return channel;
   ***REMOVED***
 
   void createChannel(String id) {
@@ -167,6 +169,10 @@ class ChatMessageService implements PushNotificationListener {
     ***REMOVED***);
   ***REMOVED***
 
+  @override
+  updateMessages(List<Map<String, dynamic>> messages) =>
+      storeMessages(messages.map((m) => chatPushDataFromJson(m)).toList());
+
   Future<TopicChatChannel> getTopicChannel(String id) async{
     if (!channels.containsKey(id)) {
       ChatChannel storedChannel =
@@ -184,13 +190,8 @@ class ChatMessageService implements PushNotificationListener {
   ***REMOVED***
 
 handleBackgroundChatMessage(ChatPushData data) async {
-  var storageService = StorageService();
-  ChatChannel channel = await storageService.loadChatChannel(data.channel) ??
-      ChatChannel(data.channel);
-
-  if (data.type == PushDataTypes.SimpleChatMessage)
-    channel.pushChatMessage(data.message);
-  if (data.type == PushDataTypes.ParticipationMessage)
-    channel.pushParticipationMessage(data.message);
-  storageService.saveChatChannel(channel);
+  ChatChannel channel = await StorageService().loadChatChannel(data.channel);
+  if (channel == null) channel = ChatChannel(data.channel);
+  channel.pushMessages([data.message]);
+  StorageService().saveChatChannel(channel);
 ***REMOVED***
