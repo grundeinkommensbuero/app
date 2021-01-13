@@ -64,7 +64,6 @@ class ChatMessageService implements PushNotificationListener {
           .map((data) => data.message)
           .toList();
 
-      print('ChatMessageService: Pushe Nachricht: ${pushData[0].message.toJson()***REMOVED***');
       channel.pushMessages(messages);
 
       this.storage_service.saveChatChannel(channel);

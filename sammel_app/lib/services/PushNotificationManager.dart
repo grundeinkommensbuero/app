@@ -49,6 +49,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     var listener = createPushListener(firebaseService, backend);
     pushToken = listener.then((listener) => listener.token);
     updateService = PushUpdateService(userService, backend);
+    updateMessages();
   ***REMOVED***
 
   Future<PushReceiveService> createPushListener(
@@ -141,8 +142,11 @@ class PushNotificationManager implements AbstractPushNotificationManager {
   Future<void> updateMessages() async {
     final messages = await updateService.getLatestPushMessages();
     if (messages == null) return;
-    final messageMap = sortMessagesByType(messages);
+    final decrypted =
+        messages.map((message) => decrypt(message['data'])).toList();
+    final messageMap = sortMessagesByType(decrypted);
 
+    print('${messageMap.keys.length***REMOVED*** Push-Nachrichten vom Server geupdated');
     try {
       messageMap.forEach((type, messages) {
         callback_map[type]?.updateMessages(messages);
@@ -151,19 +155,18 @@ class PushNotificationManager implements AbstractPushNotificationManager {
       ErrorService.handleError(e, s);
     ***REMOVED***
   ***REMOVED***
-
-  Map<String, List<Map<String, dynamic>>> sortMessagesByType(
-          List<Map<String, dynamic>> messages) =>
-      messages
-          .where((message) => message != null)
-          .map((message) => message['data'])
-          .where((data) => data != null && data['type'] != null)
-          .fold(Map<String, List<Map<String, dynamic>>>(), (typeMap, data) {
-        if (typeMap[data['type']] == null) typeMap[data['type']] = [];
-        typeMap[data['type']].add(data);
-        return typeMap;
-      ***REMOVED***);
 ***REMOVED***
+
+Map<String, List<Map<String, dynamic>>> sortMessagesByType(
+        List<Map<String, dynamic>> messages) =>
+    messages
+        .where((message) => message != null)
+        .where((data) => data != null && data['type'] != null)
+        .fold(Map<String, List<Map<String, dynamic>>>(), (typeMap, data) {
+      if (typeMap[data['type']] == null) typeMap[data['type']] = [];
+      typeMap[data['type']].add(data);
+      return typeMap;
+    ***REMOVED***);
 
 // funktioniert nur unter Android
 Future<dynamic> backgroundMessageHandler(Map<String, dynamic> message) async {
