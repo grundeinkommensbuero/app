@@ -96,7 +96,7 @@ class ProfilePageState extends State<ProfilePage> {
                       Text(kiezeCaption,
                           maxLines: 20,
                           style: TextStyle(
-                              fontSize: 12 + 200 / (kiezeCaption ?? '').length)),
+                              fontSize: 12 + 16 / (kiezeCaption.length / 20))),
                       SizedBox(height: 10.0),
                       Text(
                         'Mit deinen Kiezen bestimmst du wo du über neue Aktionen informiert werden willst.',
@@ -121,7 +121,8 @@ class ProfilePageState extends State<ProfilePage> {
                     onPressed: (context) => showNotificationDialog(context)),
                 SizedBox(height: 20.0),
                 SelectableText('User-ID: ${user?.id}, Push-Token: $token',
-                    textAlign: TextAlign.center)
+                    textAlign: TextAlign.center),
+                SizedBox(height: 20.0),
               ],
             )),
         floatingActionButton: FloatingActionButton(
