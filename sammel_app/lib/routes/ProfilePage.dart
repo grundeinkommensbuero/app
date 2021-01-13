@@ -124,11 +124,6 @@ class ProfilePageState extends State<ProfilePage> {
                     textAlign: TextAlign.center)
               ],
             )),
-        // bottomSheet: Row(children: [
-        //   Expanded(
-        //       child: SelectableText('User-ID: ${user?.id}, Push-Token: $token',
-        //           textAlign: TextAlign.center))
-        // ], mainAxisAlignment: MainAxisAlignment.center),
         floatingActionButton: FloatingActionButton(
             child: Icon(Icons.info_outline_rounded,
                 size: 40.0, color: DweTheme.yellow),
