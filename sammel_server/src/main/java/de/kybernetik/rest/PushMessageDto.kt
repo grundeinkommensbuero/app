@@ -7,7 +7,7 @@ data class PushMessageDto(
     var notification: PushNotificationDto? = null,
     var data: Map<String, Any?>? = null,
     var recipients: List<String>? = null,
-    var persistent: Boolean = false
+    var persistent: Boolean? = false
 ) {
 
     companion object {

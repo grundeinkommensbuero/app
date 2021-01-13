@@ -48,7 +48,7 @@ open class PushService {
         if (firebaseKeys.isNotEmpty()) {
             firebase.sendePushNachrichtAnEmpfaenger(nachricht.notification, verschluesselt, firebaseKeys)
         }
-        if (nachricht.persistent) {
+        if (nachricht.persistent == true) {
             pushDao.speicherePushMessageFuerEmpfaenger(nachricht.notification, verschluesselt, empfaenger)
         } else if (benutzerOhneFirebase.isNotEmpty())
             pushDao.speicherePushMessageFuerEmpfaenger(nachricht.notification, verschluesselt, benutzerOhneFirebase)

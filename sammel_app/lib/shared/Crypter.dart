@@ -4,7 +4,7 @@ import 'package:cryptography/cryptography.dart';
 final SecretKey key =
     SecretKey(base64.decode('vue8NkTYyN1e2OoHGcapLZWiCTC+13Eqk9gXBSq4azc='));
 
-Map<dynamic, dynamic> decrypt(dynamic data) {
+Map<String, dynamic> decrypt(dynamic data) {
   if (data['encrypted'] == 'Base64') {
     if (data['payload'] == null) return {};
     var decodiert = jsonDecode(utf8.decode(base64Decode(data['payload'])));

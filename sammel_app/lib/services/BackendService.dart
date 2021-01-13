@@ -130,7 +130,7 @@ class BackendService {
       if (serverHealth.alive)
         throw ConnectivityException(
             'Ein Verbindungsproblem ist aufgetreten: '.tr() +
-                originalError?.message);
+                '${originalError?.message}');
       else
         // Server responds but has issues
         throw throw ConnectivityException(
