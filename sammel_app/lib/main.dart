@@ -12,6 +12,7 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
+import 'package:sammel_app/shared/ConstJsonAssetLoader.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 
@@ -24,7 +25,8 @@ void main() {
       preloaderWidget: Container(
           color: DweTheme.yellow, child: Image.asset('assets/images/logo.png')),
       supportedLocales: [Locale('en'), Locale('de')],
-      path: 'assets/languages',
+      path: 'none',
+      assetLoader: ConstJsonAssetLoader(),
       fallbackLocale: Locale('en'),
       child: MyApp()));
 }
