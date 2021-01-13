@@ -157,7 +157,6 @@ class TermineService extends AbstractTermineService
 
   @override
   void updateMessages(List<Map<String, dynamic>> data) {***REMOVED***
-  void receive_message(Map<dynamic, dynamic> data) {***REMOVED***
 
   saveEvaluation(Evaluation evaluation) async {
     try {
