@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:async';
 import 'dart:io';
 
@@ -41,7 +42,8 @@ class BackendService {
       if (response.response.statusCode >= 200 &&
           response.response.statusCode < 300) return response;
 
-      if (response.response.statusCode == 403) throw AuthFehler(response.body);
+      if (response.response.statusCode == 403)
+        throw AuthFehler(response.body.toString());
 
       // else
       throw RestFehler(response.body.toString());
@@ -113,7 +115,7 @@ class BackendService {
     var googleCall = backend.callGoogle();
 
     try {
-      var serverHealth = await healthCall.timeout(Duration(seconds: 2),
+      var serverHealth = await healthCall.timeout(Duration(seconds: 5),
           onTimeout: () async =>
               await googleCall.timeout(Duration(seconds: 2), onTimeout: () {
                 // both server and google don't respond
@@ -127,11 +129,13 @@ class BackendService {
       // Server responds and is healthy
       if (serverHealth.alive)
         throw ConnectivityException(
-            'Ein Verbindungsproblem ist aufgetreten: ${originalError?.message}');
+            'Ein Verbindungsproblem ist aufgetreten: '.tr() +
+                originalError?.message);
       else
         // Server responds but has issues
         throw throw ConnectivityException(
-            'Der Server hat leider gerade technische Probleme: ${serverHealth.status}');
+            'Der Server hat leider gerade technische Probleme: '.tr() +
+                serverHealth.status);
     } on SocketException catch (e) {
       try {
         await googleCall;
@@ -141,7 +145,7 @@ class BackendService {
       } on SocketException catch (e) {
         // both server and google refuse
         throw ConnectivityException(
-            'Das Internet scheint nicht erreichbar zu sein: ${e.message}');
+            'Das Internet scheint nicht erreichbar zu sein: '.tr() + e.message);
       }
     }
   }
@@ -157,6 +161,11 @@ class Backend {
   static final port = testMode ? 443 : 18443;
   final String version;
 
+  final Future<void> zertifikatGeladen = ladeZertifikat().timeout(
+      Duration(seconds: 10),
+      onTimeout: () =>
+          throw TimeoutException('SSL-Zertifikat konnte nicht geladen werden'));
+
   static final clientContext = SecurityContext();
   static HttpClient client = HttpClient(context: clientContext);
 
@@ -166,7 +175,6 @@ class Backend {
   };
 
   Backend(this.version) {
-    ladeZertifikat();
     var serverHealth = getServerHealth();
     serverHealth.then((health) {
       if (!health.alive)
@@ -177,7 +185,11 @@ class Backend {
           int.parse(health.minClient.substring(this.version.indexOf('+') + 1)))
         ErrorService.handleError(
             WarningException(
-                'Deine App-Version ist veraltet. Dies ist die Version $version, du musst aber mindestens Version ${health.minClient} benutzen, damit die App richtig funktioniert.'),
+                'Deine App-Version ist veraltet. Dies ist die Version {version}, du musst aber mindestens Version {minClient} benutzen, damit die App richtig funktioniert.'
+                    .tr(namedArgs: {
+              'version': version,
+              'minClient': health.minClient
+            })),
             StackTrace.current);
     });
   }
@@ -200,6 +212,7 @@ class Backend {
 
   Future<HttpClientResponseBody> get(
       String url, Map<String, String> headers) async {
+    await zertifikatGeladen;
     var uri = Uri.parse(url);
     uri = Uri.https('$host:$port', uri.path, uri.queryParameters);
     return await client
@@ -225,6 +238,7 @@ class Backend {
   Future<HttpClientResponseBody> post(
       String url, String data, Map<String, String> headers,
       [Map<String, String> parameters]) async {
+    await zertifikatGeladen;
     return await client
         .postUrl(Uri.https('$host:$port', url, parameters))
         .then((HttpClientRequest request) {
@@ -250,6 +264,7 @@ class Backend {
 
   Future<HttpClientResponseBody> delete(
       String url, String data, Map<String, String> headers) async {
+    await zertifikatGeladen;
     return await client
         .deleteUrl(Uri.https('$host:$port', url))
         .then((HttpClientRequest request) {
@@ -325,6 +340,9 @@ class DemoBackend implements Backend {
 
   @override
   String get version => throw UnimplementedError();
+
+  @override
+  Future<void> get zertifikatGeladen => throw UnimplementedError();
 }
 
 class DemoBackendShouldNeverBeUsedError {}

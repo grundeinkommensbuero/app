@@ -1,13 +1,18 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
+// import 'package:sammel_app/services/LocalNotificationService.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/Crypter.dart';
+import 'package:validators/validators.dart';
 
 import 'BackendService.dart';
+import 'ChatMessageService.dart';
 import 'ErrorService.dart';
 
 abstract class AbstractPushNotificationManager {
@@ -16,10 +21,14 @@ abstract class AbstractPushNotificationManager {
   void unsubscribeFromKiezActionTopics(List<String> kieze, String interval);
 
   void subscribeToKiezActionTopics(List<String> kieze, String interval);
+
+  Future<String> get pushToken;
+
+  onTap(Map<String, Map<String, dynamic>> map);
 }
 
 abstract class PushNotificationListener {
-  void receive_message(Map<dynamic, dynamic> data) {}
+  void receive_message(Map<String, dynamic> data) {}
 
   void handleNotificationTap(Map<dynamic, dynamic> data) {}
 }
@@ -29,70 +38,52 @@ class PushNotificationManager implements AbstractPushNotificationManager {
   StorageService storageService;
   AbstractUserService userService;
 
-  PushNotificationManager(
-      this.storageService, this.userService, firebaseService, Backend backend) {
-    createPushListener(firebaseService, backend);
-   // initializeLocalNotifications();
+  @override
+  Future<String> pushToken;
+
+  PushNotificationManager(this.storageService, this.userService,
+      FirebaseReceiveService firebaseService, Backend backend) {
+    var listener = createPushListener(firebaseService, backend);
+    pushToken = listener.then((listener) => listener.token);
   }
 
-  createPushListener(
+  Future<PushReceiveService> createPushListener(
       FirebaseReceiveService firebaseService, Backend backend) async {
     if (await storageService.isPullMode())
       listener = PullService(userService, backend);
     else {
-      var token = await firebaseService.token;
-      if (token == null || token.isEmpty) {
-        ErrorService.pushMessage(
-            'Problem beim Einrichten von Push-Nachrichten',
-            'Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. '
-                'Das kann der Fall sein, wenn etwa ein Google-freies Betriebssystem genutzt wird. '
-                'Darum kann die App nur Benachrichtigungen empfangen während sie geöffnet ist.');
+      pushToken = firebaseService.token;
+      if (isNull(await pushToken) || (await pushToken).isEmpty) {
+        ErrorService.pushError('Problem beim Einrichten von Push-Nachrichten',
+            '''Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. 
+                'Das kann der Fall sein, wenn etwa ein Google-freies Betriebssystem genutzt wird. 
+                'Darum kann die App nur Benachrichtigungen empfangen während sie geöffnet ist.''');
 
         storageService.markPullMode();
         listener = PullService(userService, backend);
       } else {
         listener = firebaseService;
-        // For testing purposes print the Firebase Messaging token
-        print("Firebase token: $token");
       }
     }
 
     listener.subscribe(
-        onMessage: onMessageCallback,
-        onResume: onResumeCallback,
-        onLaunch: onResumeCallback,
+        onMessage: onReceived,
+        onResume: onTap,
+        onLaunch: onTap,
         onBackgroundMessage: backgroundMessageHandler);
+
+    listener.subscribeToTopics(['global']);
+
+    return listener;
   }
 
   Map<String, PushNotificationListener> callback_map = Map();
 
-  Future<String> pushToken;
+  Future<dynamic> onReceived(Map<dynamic, dynamic> message) async {
+    print('onReceived: Push-Nachricht empfangen: $message');
+    final data = extractData(message);
 
-  Future<dynamic> onMessageCallback(Map<dynamic, dynamic> message) async {
-    print('Push-Nachricht empfangen: $message');
-    handle_message(message, true);
-  }
-
-  Future<dynamic> onLocalMessageCallback(Map<dynamic, dynamic> message) async {
-    print('Local-Nachricht empfangen: $message');
-    String type = message['type'];
-    if (callback_map.containsKey(type)) {
-      callback_map[type].handleNotificationTap(message);
-    }
-  }
-
-  void handle_message(Map message, bool is_encrypted) {
     try {
-      var data = null;
-      if (is_encrypted)
-      {
-        data = decrypt(message['data']);
-      }
-      else
-        {
-          data = message;
-        }
-
       if (data.containsKey('type')) {
         String type = data['type'];
         if (callback_map.containsKey(type)) {
@@ -104,13 +95,17 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     }
   }
 
-  Future<dynamic> onResumeCallback(Map<dynamic, dynamic> message) async {
-    print('Resume-Nachricht empfangen: $message');
+  Future<dynamic> onTap(Map<dynamic, dynamic> message) async {
+    print(
+        'onTap: Push-Nachricht empfangen: $message \nund Callback-Map für: ${callback_map.keys}');
+    final data = extractData(message);
+
     try {
-      var data = decrypt(message['data']);
       if (data.containsKey('type')) {
         String type = data['type'];
+        print("contains type ${callback_map.containsKey(type)}");
         if (callback_map.containsKey(type)) {
+          print('Callback gefunden!');
           callback_map[type].handleNotificationTap(data);
         }
       }
@@ -119,8 +114,17 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     }
   }
 
+  Map<String, dynamic> extractData(Map message) {
+    // iOS sendet nur Data, Android verpackt es
+    if (Platform.isAndroid)
+      return decrypt(message['data']);
+    else
+      return decrypt(message);
+  }
+
   @override
   void register_message_callback(String id, PushNotificationListener callback) {
+    print('Registriere Callback für $id');
     this.callback_map[id] = callback;
   }
 
@@ -137,24 +141,27 @@ class PushNotificationManager implements AbstractPushNotificationManager {
   }
 }
 
+// funktioniert nur unter Android
 Future<dynamic> backgroundMessageHandler(Map<String, dynamic> message) async {
+  print('Background-Messenger meldet Nachrichten-Ankunft: $message');
   var data = decrypt(message['data']);
-  print('Background-Messenger meldet Nachrichten-Ankunft: $data');
-  if (data['type'] == "SimpleChatMessage")
-    handleBackgroundChatMessage(data);
-  else
-    print('Unbekannter Nachrichtentyp: ${data['type']}');
-}
 
-Future<void> handleBackgroundChatMessage(Map<String, dynamic> data) async {
-  var chatMessage = ChatMessagePushData.fromJson(data);
+  if (data['type'] == PushDataTypes.SimpleChatMessage) {
+    var pushData =
+        ChatMessagePushData(ChatMessage.fromJson(data), data['channel']);
+    handleBackgroundChatMessage(pushData);
+    // LocalNotificationService.emptyCallback().sendChatNotification(pushData);
 
-  //sendChatNotification(chatMessage);
+  } else if (data['type'] == PushDataTypes.ParticipationMessage) {
+    var pushData = ParticipationPushData(
+        ParticipationMessage.fromJson(data), data['channel']);
+    handleBackgroundChatMessage(pushData);
+    // LocalNotificationService.emptyCallback()
+    //     .sendParticipationNotification(pushData);
 
-  var storageService = StorageService();
-  var chatChannel = await storageService.loadChatChannel(data['channel']);
-  chatChannel.add_message_or_mark_as_received(chatMessage.message);
-  await storageService.saveChatChannel(chatChannel);
+    // } else
+    //   LocalNotificationService.emptyCallback().sendOtherNotification(message);
+  }
 }
 
 class DemoPushNotificationManager implements AbstractPushNotificationManager {
@@ -178,4 +185,13 @@ class DemoPushNotificationManager implements AbstractPushNotificationManager {
   // Ignore
   @override
   void unsubscribeFromKiezActionTopics(List<String> kieze, String interval) {}
+
+  @override
+  Future<String> get pushToken => Future.value('Demo-Modus');
+
+  // Ignore - no Push-Messages in Demo-Mode
+  @override
+  onTap(Map<String, Map<String, dynamic>> map) {
+    throw UnimplementedError();
+  }
 }

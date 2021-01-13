@@ -18,6 +18,7 @@ import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import de.kybernetik.rest.TermineFilter
 import de.kybernetik.shared.toDate
+import org.junit.Ignore
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -67,6 +68,7 @@ class TermineDaoTest {
         assertEquals(termine[1].longitude, 13.47192)
     }
 
+    @Ignore("Funktion bis zum Release auskommentiert")
     @Test
     fun erzeugeGetTermineQueryFragtNurAktionenBisVor7Tagen() {
         whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)

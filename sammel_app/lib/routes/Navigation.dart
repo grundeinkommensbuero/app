@@ -1,22 +1,29 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
+import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/ProfilePage.dart';
+import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
 import 'ChatPage.dart';
+import 'ChatWindow.dart';
 import 'FAQ.dart';
 import 'TermineSeite.dart';
 
 class Navigation extends StatefulWidget {
   var clearButton = false;
   GlobalKey actionPage;
+  var globalChat = null;
 
-  Navigation(this.actionPage, [this.clearButton]) : super(key: Key('navigation'));
+  Navigation(this.actionPage, [this.clearButton])
+      : super(key: Key('navigation'));
 
   @override
   State<StatefulWidget> createState() => NavigationState();
@@ -31,7 +38,8 @@ class NavigationState extends State<Navigation>
   Animation<double> _fade;
   bool swipeUp = false;
   FAQ faq;
-
+  ChatPage chatPage;
+  final int chatPageIndex = 3;
   AbstractPushSendService pushService;
 
   @override
@@ -48,24 +56,27 @@ class NavigationState extends State<Navigation>
       parent: _animationController,
       curve: Curves.easeIn,
     ));
+
+    // Error-Service kann am Ende des ersten Builds Dialoge zeigen
+    SchedulerBinding.instance
+        .addPostFrameCallback((_) => ErrorService.setContext(context));
   }
 
   @override
   Widget build(BuildContext context) {
-    ErrorService.setContext(context);
-
     var pages = [
       TermineSeite(key: widget.actionPage),
       ActionEditor(onFinish: newActionCreated, key: Key('action creator')),
       faq = FAQ(),
-      ProfilePage(),
-      ChatPage()
+      chatPage = ChatPage(),
+      ProfilePage()
     ];
     List<String> titles = [
-      'Aktionen',
-      'Zum Sammeln aufrufen',
-      'Tipps und Argumente',
-      'Profil',
+      'Aktionen'.tr(),
+      'Zum Sammeln aufrufen'.tr(),
+      'Tipps und Argumente'.tr(),
+      'News'.tr(),
+      'Profil'.tr(),
     ];
 
     _slide = Tween<Offset>(
@@ -99,7 +110,8 @@ class NavigationState extends State<Navigation>
             ),
           ),
           floatingActionButton: widget.clearButton == true
-              ? FloatingActionButton(heroTag: 'clearButtonHero',
+              ? FloatingActionButton(
+                  heroTag: 'clearButtonHero',
                   onPressed: () => Provider.of<StorageService>(context)
                       .clearAllPreferences(),
                   child: Icon(Icons.delete_forever),
@@ -132,26 +144,32 @@ class NavigationState extends State<Navigation>
                     ),
                     menuEntry(
                         key: Key('action page navigation button'),
-                        title: 'Aktionen',
+                        title: 'Aktionen'.tr(),
                         subtitle:
-                            'Aktionen in einer Liste oder Karte anschauen',
+                            'Aktionen in einer Liste oder Karte anschauen'.tr(),
                         index: 0),
                     menuEntry(
                         key: Key('action creator navigation button'),
-                        title: 'Zum Sammeln einladen',
-                        subtitle: 'Eine Sammel-Aktion ins Leben rufen',
+                        title: 'Zum Sammeln einladen'.tr(),
+                        subtitle: 'Eine Sammel-Aktion ins Leben rufen'.tr(),
                         index: 1),
                     menuEntry(
                         key: Key('faq navigation button'),
-                        title: 'Fragen und Antworten',
-                        subtitle: 'Tipps, Tricks und Argumentationshilfen',
+                        title: 'Fragen und Antworten'.tr(),
+                        subtitle: 'Tipps, Tricks und Argumentationshilfen'.tr(),
                         index: 2),
                     menuEntry(
-                        key: Key('profile navigation button'),
-                        title: 'Dein Profil',
-                        subtitle:
-                            'Dein Name, dein Kiez und deine Benachrichtigungen',
+                        key: Key('global chat button'),
+                        title: 'News'.tr(),
+                        subtitle: "Neues vom Volksbegehren und der Kampagne".tr(),
                         index: 3),
+                    menuEntry(
+                        key: Key('profile navigation button'),
+                        title: 'Dein Profil'.tr(),
+                        subtitle:
+                        'Dein Name, dein Kiez und deine Einstellungen'.tr(),
+                        index: 4),
+
                   ],
                 ))));
   }
@@ -185,9 +203,17 @@ class NavigationState extends State<Navigation>
   }
 
   void switchPage(int index) async {
+    print("setting state ${index} ${chatPageIndex} ${index == chatPageIndex}");
+    chatPage.isActive = index == chatPageIndex;
+    print(chatPage);
+    print("chatpage is active ${chatPage.isActive}");
     setState(() => swipeUp = index > navigation);
     await _animationController.forward();
     setState(() {
+      if (navigation == chatPageIndex && index != chatPageIndex)
+      {
+        Provider.of<ChatMessageService>(context).getTopicChannel("global").then((value) => maybeDispose(value));
+      }
       navigation = index;
       swipeUp = !swipeUp;
     });
@@ -202,8 +228,9 @@ class NavigationState extends State<Navigation>
   }
 
   void addActionsToActionPage(List<Termin> actions) {
-    actions.forEach((action) => (widget.actionPage.currentState as TermineSeiteState)
-        .createAndAddAction(action));
+    actions.forEach((action) =>
+        (widget.actionPage.currentState as TermineSeiteState)
+            .createAndAddAction(action));
   }
 
   Future<bool> navigateBack() async {
@@ -220,5 +247,16 @@ class NavigationState extends State<Navigation>
   void navigateToActionPage() {
     switchPage(0);
     history.removeLast();
+  }
+
+  maybeDispose(TopicChatChannel value) {
+    var cls = value.ccl as State<StatefulWidget>;
+    if (cls == null)
+      {
+        return;
+      }
+    if(ModalRoute.of(cls?.context)?.settings.name == "/"){
+      value.dispose_widget();
+    }
   }
 }

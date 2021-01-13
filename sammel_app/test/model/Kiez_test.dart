@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-import 'package:quiver/collection.dart';
 import 'package:sammel_app/model/Kiez.dart';
 import 'package:test/test.dart';
 
@@ -10,8 +8,7 @@ import '../shared/TestdatenVorrat.dart';
 void main() {
   group('serialisere', () {
     test('serialisiert nur Kiez', () {
-      expect(jsonEncode(Kiez('bezirk1', 'kiez1', 52.49653, 13.43762, [[]])),
-          '"kiez1"');
+      expect(jsonEncode(Kiez('kiez1', 'bezirk1', 'ortsteil1', [])), '"kiez1"');
     });
   });
   group('equals', () {
@@ -23,65 +20,44 @@ void main() {
 
     test('returns true for null locations', () {
       expect(
-          Kiez(null, null, null, null, [[]])
-              .equals(Kiez(null, null, null, null, [[]])),
-          true);
+          Kiez(null, null, null, []).equals(Kiez(null, null, null, [])), true);
     });
 
     test('returns false for different location', () {
       expect(
-          Kiez('Bezirk 1', 'Kiez', 52.48993, 13.46839, [[]])
-              .equals(Kiez('Bezirk 2', 'Kiez', 52.48993, 13.46839, [[]])),
+          Kiez('Kiez', 'Region 1', 'Ortsteil', [])
+              .equals(Kiez('Kiez', 'Region 2', 'Ortsteil', [])),
           false);
     });
-    test('returns false for null location', () {
+    test('returns false for null name', () {
       expect(
-          Kiez(null, 'Kiez', 52.48993, 13.46839, [[]])
-              .equals(Kiez('Bezirk', 'Kiez', 52.48993, 13.46839, [[]])),
+          Kiez(null, 'Kiez', 'Ortsteil', [])
+              .equals(Kiez('Kiez', 'Region', 'Ortsteil', [])),
           false);
     });
-    test('returns false for location and null', () {
+    test('returns false for name and null', () {
       expect(
-          Kiez('Bezirk', 'Kiez', 52.48993, 13.46839, [[]])
-              .equals(Kiez(null, 'Kiez', 52.48993, 13.46839, [[]])),
+          Kiez('Kiez', 'Region', 'Ortsteil', [])
+              .equals(Kiez(null, 'Region', 'Ortsteil', [])),
           false);
     });
 
     test('returns false for different place', () {
       expect(
-          Kiez('Bezirk', 'Ort 1', 52.48993, 13.46839, [[]])
-              .equals(Kiez('Bezirk', 'Ort 2', 52.48993, 13.46839, [[]])),
+          Kiez('Kiez', 'Region 1', 'Ortsteil', [])
+              .equals(Kiez('Kiez', 'Region 2', 'Ortsteil', [])),
           false);
     });
     test('returns false for null place', () {
       expect(
-          Kiez('Bezirk', null, 52.48993, 13.46839, [[]])
-              .equals(Kiez('Bezirk', 'Kiez', 52.48993, 13.46839, [[]])),
+          Kiez(null, 'Region', 'Ortsteil', [])
+              .equals(Kiez('Kiez', 'Region', 'Ortsteil', [])),
           false);
     });
     test('returns false for place and null', () {
       expect(
-          Kiez('Bezirk', 'Kiez', 52.48993, 13.46839, [[]])
-              .equals(Kiez('Bezirk', null, 52.48993, 13.46839, [[]])),
-          false);
-    });
-
-    test('returns false for different coordinates', () {
-      expect(
-          Kiez('Bezirk', 'Kiez', 52.48993, 13.46839, [[]])
-              .equals(Kiez('Bezirk', 'Kiez', 53.48993, 14.46839, [[]])),
-          false);
-    });
-    test('returns false for null coordinates', () {
-      expect(
-          Kiez('Bezirk', 'Kiez', null, null, [[]])
-              .equals(Kiez('Bezirk', 'Kiez', 52.48993, 13.46839, [[]])),
-          false);
-    });
-    test('returns false for coordinates and null', () {
-      expect(
-          Kiez('Bezirk', 'Kiez', 52.48993, 13.46839, [[]])
-              .equals(Kiez('Bezirk', 'Kiez', null, null, [[]])),
+          Kiez('Kiez', 'Region', 'Ortsteil', [])
+              .equals(Kiez(null, 'Region', 'Ortsteil', [])),
           false);
     });
   });

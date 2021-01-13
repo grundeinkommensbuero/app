@@ -1,59 +1,70 @@
-import 'package:latlong/latlong.dart';
 import 'package:collection/collection.dart';
+import 'package:latlong/latlong.dart';
+
+class Ortsteil {
+  String name;
+  List<LatLng> polygon;
+
+  Ortsteil(this.name, this.polygon);
+
+  Ortsteil.fromJson(json)
+      : name = json['properties']['ORTSTEIL'],
+        polygon = json['geometry']['type'] == 'MultiPolygon'
+            ? (json['geometry']['coordinates'][0][0] as List)
+                .map((e) => LatLng(e[1], e[0]))
+                .toList()
+            : (json['geometry']['coordinates'][0] as List)
+                .map((e) => LatLng(e[1], e[0]))
+                .toList();
+}
+
+class Region {
+  String name;
+  List<LatLng> polygon;
+
+  Region(this.name, this.polygon);
+
+  Region.fromJson(json)
+      : name = json['properties']['PROGNOSERA'],
+        polygon = json['geometry']['type'] == 'MultiPolygon'
+            ? (json['geometry']['coordinates'][0][0] as List)
+                .map((e) => LatLng(e[1], e[0]))
+                .toList()
+            : (json['geometry']['coordinates'][0] as List)
+                .map((e) => LatLng(e[1], e[0]))
+                .toList();
+}
 
 class Kiez {
-  String kiez;
-  String bezirk;
-  LatLng center;
-  List<List<double>> polygon;
-  double xBoundMin;
-  double xBoundMax;
-  double yBoundMin;
-  double yBoundMax;
+  String name;
+  String region;
+  String ortsteil;
+  List<LatLng> polygon;
 
-  Kiez(
-    bezirk,
-    kiez,
-    latitude,
-    longitude,
-    List<List<double>> polygon, [
-    double xBoundMin,
-    double xBoundMax,
-    double yBoundMin,
-    double yBoundMax,
-  ]) {
-    this.kiez = kiez;
-    this.bezirk = bezirk;
-    this.center = latitude == null || longitude == null
-        ? null
-        : LatLng(latitude, longitude);
+  Kiez(String name, String region, String ortsteil, List<LatLng> polygon) {
+    this.name = name;
+    this.region = region;
+    this.ortsteil = ortsteil;
     this.polygon = polygon;
-    this.xBoundMin = xBoundMin;
-    this.xBoundMax = xBoundMax;
-    this.yBoundMin = yBoundMin;
-    this.yBoundMax = yBoundMax;
   }
 
   Kiez.fromJson(Map<String, dynamic> json)
-      : bezirk = json['bezirk'],
-        kiez = json['kiez'],
-        center = json['latitude'] == null || json['longitude'] == null
-            ? null
-            : LatLng(json['latitude'], json['longitude']),
-        polygon = (json['polygon'] as List)
-            .map((e) => (e as List).map((e) => e as double).toList())
-            .toList(),
-        xBoundMin = json['xBoundMin'],
-        xBoundMax = json['xBoundMax'],
-        yBoundMin = json['yBoundMin'],
-        yBoundMax = json['yBoundMax'];
+      : name = json['properties']['BEZIRKSREG'],
+        region = json['properties']['PROGNOSERA'],
+        ortsteil = json['properties']['ORTSTEIL'],
+        polygon = json['geometry']['type'] == 'MultiPolygon'
+            ? (json['geometry']['coordinates'][0][0] as List)
+                .map((e) => LatLng(e[1], e[0]))
+                .toList()
+            : (json['geometry']['coordinates'][0] as List)
+                .map((e) => LatLng(e[1], e[0]))
+                .toList();
 
-  String toJson() => kiez;
+  String toJson() => name;
 
   bool equals(Kiez that) =>
-      this.bezirk == that.bezirk &&
-      this.kiez == that.kiez &&
-      this.center?.latitude == that.center?.latitude &&
-      this.center?.longitude == that.center?.longitude &&
+      this.name == that.name &&
+      this.region == that.region &&
+      this.ortsteil == that.ortsteil &&
       DeepCollectionEquality().equals(this.polygon, that.polygon); //TODO Testen
 }

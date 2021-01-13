@@ -15,12 +15,8 @@ class ChatChannel {
     this.channel_messages = List<Message>();
   }
 
-  getAllMessages() {
-    return channel_messages;
-  }
-
   @override
-  Future<void> pushChatMessage(ChatMessage message) {
+  Future<void> pushChatMessage(Message message) {
     add_message_or_mark_as_received(message);
     channel_messages.sort((a, b) => a.timestamp.compareTo(b.timestamp));
 
@@ -28,14 +24,16 @@ class ChatChannel {
   }
 
   @override
-  Future<void> pushParticipationMessage(ParticipationMessage message) {
+  pushParticipationMessage(ParticipationMessage message) {
+    if (channel_messages.any((m) => message.isMessageEqual(m))) return;
     channel_messages.add(message);
     ccl?.channelChanged(this);
   }
 
-  void add_message_or_mark_as_received(ChatMessage message) {
-    ChatMessage ownMessage = channel_messages
+  void add_message_or_mark_as_received(Message message) {
+    Message ownMessage = channel_messages
         .firstWhere((e) => message.isMessageEqual(e), orElse: () => null);
+    print(ownMessage);
     if (ownMessage == null)
       channel_messages.add(message);
     else
@@ -45,12 +43,11 @@ class ChatChannel {
   void register_channel_change_listener(ChannelChangeListener c) {
     if (ccl == null) {
       ccl = c;
-    }
-    else if(c != ccl)
+    } else if(c != ccl)
       {
-        print('The Channel is already associated to a widget');
-        ccl = c;
-      }
+      print('The Channel is already associated to a widget');
+      ccl = c;
+    }
   }
 
   void dispose_widget() {
@@ -73,9 +70,19 @@ class ChatChannel {
         return ChatMessage.fromJson(jsonMsg);
       ErrorService.handleError(
           throw UnkownMessageTypeError(
-              "Unbekannter Nachrichtentyp abgespeichert"),
+              'Unbekannter Nachrichtentyp abgespeichert'),
           StackTrace.current);
     }).toList();
+    this.channel_messages?.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+  }
+}
+
+class TopicChatChannel extends ChatChannel {
+
+  TopicChatChannel(String id) : super(id);
+
+  TopicChatChannel.fromJSON(Map<dynamic, dynamic> json) : super(json["id"]){
+    channel_messages = json['messages'].map<Message>((jsonMsg) => TopicChatMessage.fromJson(jsonMsg)).toList();
     this.channel_messages?.sort((a, b) => a.timestamp.compareTo(b.timestamp));
   }
 }

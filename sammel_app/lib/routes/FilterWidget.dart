@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:intl/intl.dart';
@@ -25,84 +26,108 @@ class FilterWidget extends StatefulWidget {
 class FilterWidgetState extends State<FilterWidget>
     with TickerProviderStateMixin {
   TermineFilter filter = TermineFilter.leererFilter();
+
   var _initialized = false;
 
   var _zeroPadding = MaterialTapTargetSize.shrinkWrap;
 
-  var buttonText = "Filter";
+  var buttonText = '';
   var expanded = false;
   var loading = true;
 
   StorageService storageService;
-  List<Kiez> allLocations;
+  Set<Kiez> allLocations;
 
   @override
   Widget build(BuildContext context) {
     if (!_initialized) initialize(context);
 
-    return Column(
-      children: [
-        !expanded
-            ? Container(color: Color.fromARGB(255, 149, 48, 118))
-            : Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            FilterElement(
-              key: Key("type button"),
-              child: Text(artButtonBeschriftung()),
-              selectionFunction: typeSelection,
-              resetFunction: resetType,
-            ),
-            FilterElement(
-              key: Key("days button"),
-              child: tageButtonBeschriftung(),
-              selectionFunction: daysSelection,
-              resetFunction: resetDays,
-            ),
-            FilterElement(
-                key: Key("time button"),
-                child: Text(uhrzeitButtonBeschriftung(filter)),
-                selectionFunction: timeSelection,
-                resetFunction: resetTime),
-            FilterElement(
-              key: Key("locations button"),
-              child: Text(ortButtonBeschriftung(filter)),
-              selectionFunction:
-              allLocations != null ? locationSelection : null,
-              resetFunction: resetLocations,
-            ),
-          ],
-        ),
-        SizedBox(
-            width: double.infinity,
-            height: 50.0,
-            child: RaisedButton(
-              key: Key("filter button"),
-              color: Color.fromARGB(255, 129, 28, 98),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                      top: Radius.zero, bottom: Radius.elliptical(15.0, 20.0))),
-              textColor: Colors.amberAccent,
-              materialTapTargetSize: _zeroPadding,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Icon(Icons.playlist_add_check),
-                  loading
-                      ? Container(
-                      width: 30,
-                      height: 30,
-                      child: LoadingIndicator(
-                          indicatorType: Indicator.ballRotateChase,
-                          color: DweTheme.yellow)) : Text(buttonText,
-                      key: Key('filter button text'), textScaleFactor: 1.2),
-                  Icon(expanded ? Icons.done : Icons.arrow_drop_down),
-                ],
-              ),
+    return Stack(alignment: Alignment.topCenter, children: [
+      Column(
+        children: [
+          !expanded
+              ? Container(color: Color.fromARGB(255, 149, 48, 118))
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    FilterElement(
+                      key: Key('type button'),
+                      child: Text(artButtonBeschriftung()),
+                      selectionFunction: typeSelection,
+                      resetFunction: resetType,
+                    ),
+                    FilterElement(
+                      key: Key('days button'),
+                      child: tageButtonBeschriftung(),
+                      selectionFunction: daysSelection,
+                      resetFunction: resetDays,
+                    ),
+                    FilterElement(
+                        key: Key('time button'),
+                        child: Text(uhrzeitButtonBeschriftung(filter)),
+                        selectionFunction: timeSelection,
+                        resetFunction: resetTime),
+                    FilterElement(
+                      key: Key('locations button'),
+                      child: Text(ortButtonBeschriftung(filter)),
+                      selectionFunction:
+                          allLocations != null ? locationSelection : null,
+                      resetFunction: resetLocations,
+                    ),
+                  ],
+                ),
+          SizedBox(
+              width: double.infinity,
+              height: 50.0,
+              child: RaisedButton(
+                key: Key('filter button'),
+                color: Color.fromARGB(255, 129, 28, 98),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                        top: Radius.zero,
+                        bottom: Radius.elliptical(15.0, 20.0))),
+                textColor: Colors.amberAccent,
+                materialTapTargetSize: _zeroPadding,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(width: 50),
+                    loading
+                        ? Container(
+                            width: 30,
+                            height: 30,
+                            child: LoadingIndicator(
+                                indicatorType: Indicator.ballRotateChase,
+                                color: DweTheme.yellow))
+                        : Text(buttonText,
+                            key: Key('filter button text'),
+                            textScaleFactor: 1.2),
+                    Icon(expanded ? Icons.done : Icons.filter_alt_sharp),
+                  ],
+                ),
+                onPressed: () {
+                  if (expanded) {
+                    setState(() => buttonText = '');
+                    expanded = false;
+                    onApply();
+                    storageService.saveFilter(filter);
+                  } else {
+                    setState(() => buttonText = 'Anwenden'.tr());
+                    expanded = true;
+                  }
+                },
+              )),
+        ],
+      ),
+      !expanded
+          ? FlatButton(
+              splashColor: Colors.transparent,
+              textColor: DweTheme.yellow,
               onPressed: onApply,
-            )),
-      ],
-    );
+              child: Text(loading ? '' : 'Aktualisieren'.tr(),
+                  textScaleFactor: 1.2))
+          : SizedBox()
+    ]);
   }
 
   // Kann nicht im Konstruktor ausgeführt werden, weil der Provider den context braucht, der ins build reingereicht wird
@@ -112,11 +137,9 @@ class FilterWidgetState extends State<FilterWidget>
       setState(() {
         this.filter = filter != null ? filter : TermineFilter.leererFilter();
       });
-      widget.onApply(filter).whenComplete(() =>
-          setState(() => loading = false)); //lade initial Termine
+      onApply();
     });
-    Provider
-        .of<StammdatenService>(context)
+    Provider.of<StammdatenService>(context)
         .kieze
         .then((locations) => setState(() => allLocations = locations));
     _initialized = true;
@@ -124,26 +147,26 @@ class FilterWidgetState extends State<FilterWidget>
 
   Text tageButtonBeschriftung() {
     if (filter.tage == null || filter.tage.isEmpty) {
-      return Text("alle Tage,");
+      return Text('alle Tage,').tr();
     } else {
-      return Text("am " +
-          filter.tage
-              .map((tag) => DateFormat("dd.MM.").format(tag))
-              .join(", ") +
-          ",");
+      return Text('am {tage},').tr(namedArgs: {
+        'tage': filter.tage
+            .map((tag) => DateFormat("dd.MM.").format(tag))
+            .join(", ")
+      });
     }
   }
 
   String artButtonBeschriftung() {
     return filter.typen != null && filter.typen.isNotEmpty
-        ? filter.typen.join(", ")
-        : "Alle Aktions-Arten,";
+        ? filter.typen.join(', ')
+        : 'Alle Aktions-Arten,'.tr();
   }
 
   static String uhrzeitButtonBeschriftung(TermineFilter filter) {
     String beschriftung = '';
     if (filter.von != null)
-      beschriftung += 'von ' + ChronoHelfer.timeToStringHHmm(filter.von);
+      beschriftung += 'von '.tr() + ChronoHelfer.timeToStringHHmm(filter.von);
     if (filter.bis != null)
       beschriftung += ' bis ' + ChronoHelfer.timeToStringHHmm(filter.bis);
     if (beschriftung.isEmpty) beschriftung = 'jederzeit';
@@ -152,25 +175,14 @@ class FilterWidgetState extends State<FilterWidget>
   }
 
   String ortButtonBeschriftung(TermineFilter filter) {
-    if (filter?.orte == null || filter.orte.isEmpty) return "überall";
+    if (filter?.orte == null || filter.orte.isEmpty) return 'überall';
     return "in " + filter.orte.map((ort) => ort).toList().join(", ");
   }
 
-  void onApply() {
+  Future<void> onApply() async {
     setState(() => loading = true);
-    setState(() {
-      if (expanded) {
-        buttonText = "Filter";
-        expanded = false;
-        widget.onApply(filter).whenComplete(() =>
-            setState(() => loading = false));
-        storageService.saveFilter(filter);
-      } else {
-        buttonText = "Anwenden";
-        expanded = true;
-        loading = false;
-      }
-    });
+    await widget.onApply(filter);
+    setState(() => loading = false);
   }
 
   typeSelection() async {
@@ -188,27 +200,26 @@ class FilterWidgetState extends State<FilterWidget>
                   title: AppBar(
                       leading: null,
                       automaticallyImplyLeading: false,
-                      title: const Text('Wähle Aktions-Arten')),
+                      title: const Text('Wähle Aktions-Arten').tr()),
                   children:
-                  List.of(moeglicheTypen.map((typ) =>
-                      CheckboxListTile(
-                        checkColor: Colors.black,
-                        activeColor: DweTheme.yellowLight,
-                        value: ausgewTypen.contains(typ),
-                        title: Text(typ),
-                        onChanged: (neuerWert) {
-                          setDialogState(() {
-                            if (neuerWert) {
-                              ausgewTypen.add(typ);
-                            } else {
-                              ausgewTypen.remove(typ);
-                            }
-                          });
-                        },
-                      )))
-                    ..add(RaisedButton(
-                        child: Text('Fertig'),
-                        onPressed: () => Navigator.pop(context))));
+                      List.of(moeglicheTypen.map((typ) => CheckboxListTile(
+                            checkColor: Colors.black,
+                            activeColor: DweTheme.yellowLight,
+                            value: ausgewTypen.contains(typ),
+                            title: Text(typ).tr(),
+                            onChanged: (neuerWert) {
+                              setDialogState(() {
+                                if (neuerWert) {
+                                  ausgewTypen.add(typ);
+                                } else {
+                                  ausgewTypen.remove(typ);
+                                }
+                              });
+                            },
+                          )))
+                        ..add(RaisedButton(
+                            child: Text('Fertig').tr(),
+                            onPressed: () => Navigator.pop(context))));
             }));
 
     setState(() => filter.typen = ausgewTypen);
@@ -229,27 +240,26 @@ class FilterWidgetState extends State<FilterWidget>
 
   timeSelection() async {
     TimeRange timeRange =
-    await showTimeRangePicker(context, filter.von, filter.bis);
+        await showTimeRangePicker(context, filter.von, filter.bis);
     setState(() {
       filter.von = timeRange.from;
       filter.bis = timeRange.to;
     });
   }
 
-  resetTime() =>
-      setState(() {
+  resetTime() => setState(() {
         filter.von = null;
         filter.bis = null;
       });
 
   locationSelection() async {
     var selectedLocations = await KiezPicker(allLocations
-        .where((kiez) => filter.orte.contains(kiez.kiez))
-        .toList())
+            .where((kiez) => filter.orte.contains(kiez.name))
+            .toSet())
         .showKiezPicker(context);
 
     if (selectedLocations == null) return;
-    setState(() => filter.orte = selectedLocations.map((k) => k.kiez).toList());
+    setState(() => filter.orte = selectedLocations.map((k) => k.name).toList());
   }
 
   resetLocations() => setState(() => filter.orte = []);
@@ -285,7 +295,7 @@ class FilterElement extends StatelessWidget {
                             padding: EdgeInsets.symmetric(horizontal: 20.0),
                             child: Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Flexible(child: child),
                                   Icon(

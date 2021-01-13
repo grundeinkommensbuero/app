@@ -8,6 +8,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter.ofPattern
 import javax.annotation.security.PermitAll
 import javax.ejb.EJB
+import javax.ejb.Stateless
 import javax.ws.rs.GET
 import javax.ws.rs.Path
 import javax.ws.rs.Produces
@@ -16,6 +17,7 @@ import javax.ws.rs.core.Response
 
 @Path("action-export")
 @PermitAll
+@Stateless
 open class ActionExportRestResource {
     private val LOG = Logger.getLogger(TermineRestResource::class.java)
     open val next7days = (0L..7L).map { days -> LocalDate.now().plusDays(days) }

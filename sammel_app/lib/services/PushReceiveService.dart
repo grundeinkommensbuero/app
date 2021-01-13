@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -19,39 +22,48 @@ abstract class PushReceiveService {
   void subscribeToTopics(List<String> topics);
 
   void unsubscribeFromTopics(List<String> topic);
+
+  Future<String> token;
 }
 
 class FirebaseReceiveService implements PushReceiveService {
-  FirebaseMessaging firebaseMessaging;
-
-  Future<String> token;
+  static FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+  static StreamController<String> _tokenStreamController =
+      StreamController.broadcast();
+  @override
+  Future<String> token = _tokenStreamController.stream.first;
 
   FirebaseReceiveService([FirebaseMessaging firebaseMock]) {
-    print('init firebase');
-    firebaseMessaging =
-        firebaseMock != null ? firebaseMock : FirebaseMessaging();
-    initializeFirebase();
+    if (firebaseMock != null)
+      firebaseMessaging = firebaseMock;
+    else if (pullMode) {
+      // DEBUG
+      _tokenStreamController.add(null);
+    } else
+      initializeFirebase();
   }
 
   initializeFirebase() async {
-    // DEBUG
-    if (pullMode) return;
+    await firebaseMessaging
+        .getToken()
+        .timeout(Duration(seconds: 5), onTimeout: () => null)
+        .then((token) => _tokenStreamController.add(token));
 
     // For iOS request permission first.
-    await firebaseMessaging.requestNotificationPermissions();
+    firebaseMessaging.requestNotificationPermissions();
 
-    token = firebaseMessaging
-        .getToken()
-        .timeout(Duration(seconds: 5), onTimeout: () => null);
+    print('Firebase initialisiert mit Token: ${await token}');
   }
 
   @override
-  void subscribe({onMessage, onResume, onLaunch, onBackgroundMessage}) =>
-      firebaseMessaging.configure(
-          onMessage: onMessage,
-          onResume: onResume,
-          onLaunch: onLaunch,
-          onBackgroundMessage: onBackgroundMessage);
+  void subscribe({onMessage, onResume, onLaunch, onBackgroundMessage}) {
+    if (Platform.isIOS) onBackgroundMessage = null;
+    firebaseMessaging.configure(
+        onMessage: onMessage,
+        onResume: onResume,
+        onLaunch: onLaunch,
+        onBackgroundMessage: onBackgroundMessage);
+  }
 
   @override
   void subscribeToTopics(List<String> topics) {
@@ -78,6 +90,7 @@ class PullService extends BackendService implements PushReceiveService {
 
   PullService(AbstractUserService userService, Backend backend)
       : super(userService, backend) {
+    print('Starte Pulling');
     timer = Timer.periodic(Duration(seconds: 10), (_) => pull());
   }
 
@@ -107,7 +120,8 @@ class PullService extends BackendService implements PushReceiveService {
       post('service/push/pull/subscribe', jsonEncode(topics));
     } catch (e, s) {
       ErrorService.handleError(e, s,
-          context: 'Fehler beim Anmelden der Benachrichtigungen zu $topics');
+          context: 'Fehler beim Anmelden der Benachrichtigungen zu {topics}'
+              .tr(namedArgs: {'topics': topics.toString()}));
     }
   }
 
@@ -117,7 +131,11 @@ class PullService extends BackendService implements PushReceiveService {
       post('service/push/pull/subscribe', jsonEncode(topics));
     } catch (e, s) {
       ErrorService.handleError(e, s,
-          context: 'Fehler beim Abmelden der Benachrichtigungen zu $topics');
+          context: 'Fehler beim Abmelden der Benachrichtigungen zu {topics}'
+              .tr(namedArgs: {'topics': topics.toString()}));
     }
   }
+
+  @override
+  Future<String> token = Future.value('Pull-Modus');
 }

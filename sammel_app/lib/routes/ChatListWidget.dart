@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Message.dart';
@@ -15,12 +17,11 @@ import 'ChatWindow.dart';
 
 class ChatListWidget extends StatefulWidget {
   ChatChannel channel;
-  ScrollController scroll_controller = null;
-  double position = 0;
+
 
   ChatListWidget(this.channel, {Key key}) : super(key: key)
   {
-    scroll_controller = ScrollController(keepScrollOffset: false);
+
   }
 
   @override
@@ -48,14 +49,11 @@ class ChatListState extends State<ChatListWidget>
           .listen((user) => setState(() => this.user = user));
     }
 
+    var item_list = buildListMessage();
     var list_view = Container(
         decoration: DweTheme.happyHouseBackground,
-        child: ListView(
-            padding: EdgeInsets.all(8.0),
-            controller: widget.scroll_controller,
-            children:  buildListMessage().reversed.toList(), reverse: true));//widget.position == 0 ? buildListMessage().reversed.toList() : buildListMessage() , reverse: widget.position == 0,  ));
-     //   if(widget.position>0)
-     //     widget.scroll_controller.jumpTo(widget.position);
+        child: ListView(children: item_list.reversed.toList(),reverse: true,));
+
     /*
     Timer(
         Duration(milliseconds: 500),
@@ -79,10 +77,8 @@ class ChatListState extends State<ChatListWidget>
   }
 
   List<Widget> buildListMessage() {
-    List<Message> message_list = widget.channel.getAllMessages();
-    if (message_list == null) {
-      return <Widget>[Text('Send the first Message to this Channel')];
-    }
+    List<Message> message_list = widget.channel.channel_messages;
+    if (message_list == null) return <Widget>[];
     List<Widget> message_list_widgets = List();
     for (Message message in message_list) {
       if (message is ChatMessage)
@@ -120,7 +116,7 @@ class ChatListState extends State<ChatListWidget>
                                 ),
                           Padding(
                               padding: EdgeInsets.only(top: 3.0, bottom: 5.0),
-                              child: Text(
+                              child: SelectableText(
                                 message.text,
                                 textScaleFactor: 1.2,
                               )),
@@ -129,7 +125,7 @@ class ChatListState extends State<ChatListWidget>
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 Text(
-                                  formatDateTime(message.timestamp),
+                                  ChronoHelfer.formatDateTime(message.timestamp),
                                   textScaleFactor: 0.8,
                                 ),
                                 SizedBox(
@@ -152,16 +148,16 @@ class ChatListState extends State<ChatListWidget>
 
   Widget createParticipationMessageWidget(ParticipationMessage message) {
     var title = message.joins
-        ? ' ist der Aktion beigetreten'
-        : ' hat die Aktion verlassen';
+        ? ' ist der Aktion beigetreten'.tr()
+        : ' hat die Aktion verlassen'.tr();
     var subtitle = message.joins
-        ? '\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen'
+        ? '\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen'.tr()
         : '';
     return RichText(
-     //   key: Key('Participation Message'),
+        //   key: Key('Participation Message'),
         textAlign: TextAlign.center,
         text: TextSpan(
-            text: message.username ?? 'Jemand',
+            text: message.username ?? 'Jemand'.tr(),
             style: TextStyle(color: DweTheme.purple),
             children: [
               TextSpan(text: title, style: TextStyle(color: Colors.black)),
@@ -172,28 +168,7 @@ class ChatListState extends State<ChatListWidget>
             ]));
   }
 
-  String formatDateTime(DateTime date) {
-    Duration message_sent = DateTime.now().difference(date);
-    if (message_sent < Duration(minutes: 1)) {
-      return 'gerade eben';
-    } else if (message_sent < Duration(hours: 1)) {
-      if (message_sent.inMinutes < 2) {
-        return '${message_sent.inMinutes} Minute';
-      } else {
-        return '${message_sent.inMinutes} Minuten';
-      }
-    } else if (message_sent < Duration(hours: 12)) {
-      if (message_sent.inHours < 2) {
-        return '${message_sent.inHours} Stunde';
-      } else {
-        return '${message_sent.inHours} Stunden';
-      }
-    } else if (DateTime.now().difference(date) < Duration(days: 1)) {
-      return ChronoHelfer.dateTimeToStringHHmm(date);
-    } else if (DateTime.now().difference(date) < Duration(days: 7)) {
-      return DateFormat('EEE, hh:mm').format(date);
-    }
-
-    return DateFormat('MMM d, hh:mm').format(date);
+  dispose() {
+    super.dispose();
   }
 }

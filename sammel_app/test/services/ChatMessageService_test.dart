@@ -19,7 +19,7 @@ void main() {
 
   group('getChannel', () {
     test('getChatChannel generates ActionChannel id', () {
-      service.getChatChannel(5);
+      service.getActionChannel(5);
 
       verify(storageService.loadChatChannel('action:5')).called(1);
     });

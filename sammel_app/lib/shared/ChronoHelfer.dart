@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ChronoHelfer {
   static String wochentag(DateTime datetime) {
@@ -109,4 +110,22 @@ class ChronoHelfer {
         json['time']['minute'],
         json['time']['second']);
   }
+
+  static String formatDateTime(DateTime date) {
+    Duration message_sent = DateTime.now().difference(date);
+    if (message_sent < Duration(minutes: 1))
+      return 'gerade eben'.tr();
+    else if (message_sent < Duration(hours: 1))
+      return '{} Minuten'.plural(message_sent.inMinutes);
+    else if (message_sent < Duration(hours: 12))
+      return '{} Stunden'.plural(message_sent.inHours);
+    else if (DateTime.now().difference(date) < Duration(days: 1))
+      return ChronoHelfer.dateTimeToStringHHmm(date);
+    else if (DateTime.now().difference(date) < Duration(days: 7)) {
+      return DateFormat('EEE, hh:mm').format(date);
+    }
+
+    return DateFormat('MMM d, hh:mm').format(date);
+  }
+
 }

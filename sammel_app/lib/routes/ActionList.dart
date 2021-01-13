@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/User.dart';
@@ -51,7 +52,7 @@ class ActionListState extends State<ActionList> {
           'Jetzt',
           key: Key('action list now line'),
           style: TextStyle(color: DweTheme.purple, fontSize: 16.0),
-        ),
+        ).tr(),
       ]);
     return tile;
   }

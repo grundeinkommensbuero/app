@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
+import 'package:sammel_app/services/AuthFehler.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/UserService.dart';
@@ -9,6 +10,8 @@ import 'package:test/test.dart';
 import '../shared/Mocks.dart';
 
 main() {
+  mockTranslation();
+
   FirebaseMessaging firebaseMock = FirebaseMessagingMock();
   UserService userService = ConfiguredUserServiceMock();
 
@@ -21,10 +24,11 @@ main() {
     when(firebaseMock.getToken()).thenAnswer((_) async => '123');
 
     test('takes Mock if given', () {
-      var firebaseListener = FirebaseReceiveService(firebaseMock);
+      FirebaseReceiveService(firebaseMock);
 
-      expect(firebaseListener.firebaseMessaging, firebaseMock);
-      expect(firebaseListener.firebaseMessaging is FirebaseMessagingMock, true);
+      expect(FirebaseReceiveService.firebaseMessaging, firebaseMock);
+      expect(FirebaseReceiveService.firebaseMessaging is FirebaseMessagingMock,
+          true);
     });
 
     test('registers onMessage listener', () {
@@ -112,7 +116,9 @@ main() {
             Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
                 [Map<String, dynamic>(), Map<String, dynamic>()], 403)));
 
-        await service.pull();
+        try {
+          service.pull();
+        } catch (e) {}
       });
 
       test('stops timer on error', () async {
@@ -120,7 +126,9 @@ main() {
 
         expect(service.timer.isActive, true);
 
-        await service.pull();
+        try {
+          await service.pull();
+        } on Error catch (_) {}
 
         expect(service.timer.isActive, false);
       });

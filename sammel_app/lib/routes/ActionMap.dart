@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -36,8 +37,6 @@ class ActionMap extends StatefulWidget {
 }
 
 class ActionMapState extends State<ActionMap> {
-  List<String> selected = ['10317'];
-
   ActionMapState();
 
   var locationPermissionGranted = false;
@@ -131,14 +130,14 @@ class ActionMarker extends Marker {
               ], shape: BoxShape.circle),
               child: FlatButton(
                   key: Key('action marker'),
-                  onPressed:
-                      onTap != null ? () => onTap(action) : null,
+                  onPressed: onTap != null ? () => onTap(action) : null,
                   color:
                       DweTheme.actionColor(action.ende, ownAction, participant),
                   shape: CircleBorder(
                       side: BorderSide(color: DweTheme.purple, width: 1.0)),
                   padding: EdgeInsets.all(0),
-                  child: Image.asset(action.getAsset(centered: true)))),
+                  child: Image.asset(action.getAsset(centered: true),
+                      alignment: Alignment.center))),
         );
 }
 
@@ -179,23 +178,21 @@ class ListLocationMarker extends Marker {
                       'Du kannst selbst Unterschriften-Listen an öffentlichen Orten auslegen, z.B. in Cafés, Bars oder Läden. '
                       'Wichtig ist, dass du die ausgefüllten Listen regelmäßig abholst.\n'
                       'Frage doch mal die Betreiber*innen deines Lieblings-Spätis!\n',
-                    ),
+                    ).tr(),
                     RichText(
+                        textAlign: TextAlign.center,
                         text: TextSpan(children: [
-                      TextSpan(
-                          text: 'Du kannst den Ort auf ',
-                          style: TextStyle(color: Colors.black)),
-                      TextSpan(
-                          text: 'www.dwenteignen.de',
-                          style: TextStyle(
-                              color: Colors.indigo,
-                              decoration: TextDecoration.underline),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap =
-                                () => launch('https://www.dwenteignen.de')),
-                      TextSpan(
-                          text: ' eintragen.',
-                          style: TextStyle(color: Colors.black))
-                    ]))
+                          TextSpan(
+                              text: tr('Du kannst den Ort eintragen auf:\n'),
+                              style: TextStyle(color: Colors.black)),
+                          TextSpan(
+                              text: 'www.dwenteignen.de/mitmachen',
+                              style: TextStyle(
+                                  color: Colors.indigo,
+                                  decoration: TextDecoration.underline),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () => launch(
+                                    'https://www.dwenteignen.de/mitmachen'))
+                        ]))
                   ]));
 }

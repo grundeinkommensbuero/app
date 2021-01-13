@@ -37,6 +37,8 @@ final _chatMessageService = ChatMessageServiceMock();
 final _pushManager = PushNotificationManagerMock();
 
 void main() {
+  mockTranslation();
+
   MultiProvider termineSeiteWidget;
 
   setUp(() {
@@ -48,18 +50,17 @@ void main() {
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
     when(_termineService.loadActions(any)).thenAnswer((_) async => []);
-    when(_stammdatenService.kieze).thenAnswer(
-        (_) async => [ffAlleeNord(), tempVorstadt(), plaenterwald()]);
+    when(_pushManager.pushToken).thenAnswer((_) => Future.value('Token'));
     ErrorService.displayedTypes = [];
 
     termineSeiteWidget = MultiProvider(
         providers: [
+          Provider<StammdatenService>.value(value: _stammdatenService),
           Provider<AbstractTermineService>.value(value: _termineService),
           Provider<AbstractListLocationService>.value(
               value: _listLocationService),
           Provider<StorageService>.value(value: _storageService),
           Provider<AbstractUserService>.value(value: _userService),
-          Provider<StammdatenService>.value(value: _stammdatenService),
           Provider<ChatMessageService>.value(value: _chatMessageService),
         ],
         child: MaterialApp(home: Builder(builder: (BuildContext context) {
@@ -166,8 +167,10 @@ void main() {
           ]);
 
       await tester.pumpWidget(termineSeiteWidget);
+      await tester.pumpAndSettle(Duration(seconds: 1));
+      // await StammdatenService.kieze;
 
-      expect(find.text('Filter'), findsOneWidget);
+      expect(find.text('Aktualisieren'), findsOneWidget);
     });
 
     testWidgets('opens on tap', (WidgetTester tester) async {
@@ -179,7 +182,7 @@ void main() {
 
       await tester.pumpWidget(termineSeiteWidget);
 
-      await tester.tap(find.text('Filter'));
+      await tester.tap(find.byIcon(Icons.filter_alt_sharp));
 
       await tester.pump();
 
@@ -1214,8 +1217,8 @@ void main() {
               .where((action) => action.id == 2)
               .toList()[0]
               .ort
-              .kiez,
-          tempVorstadt().kiez);
+              .name,
+          tempVorstadt().name);
     });
 
     test('sorts new list by date', () {
@@ -1321,11 +1324,11 @@ void main() {
 _pumpNavigation(WidgetTester tester) async {
   await tester.pumpWidget(MultiProvider(
       providers: [
+        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<AbstractTermineService>.value(value: _termineService),
         Provider<StorageService>.value(value: _storageService),
         Provider<AbstractListLocationService>(
             create: (context) => _listLocationService),
-        Provider<StammdatenService>.value(value: _stammdatenService),
         Provider<PushSendService>.value(value: _pushService),
         Provider<AbstractUserService>.value(value: _userService),
         Provider<AbstractPushSendService>.value(value: _pushService),

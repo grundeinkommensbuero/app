@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 
@@ -12,7 +13,7 @@ Future showErrorDialog(BuildContext context, String title, RestFehler error,
             actions: <Widget>[
               RaisedButton(
                 key: Key('error dialog close button'),
-                child: Text('Okay...'),
+                child: Text('Okay...').tr(),
                 onPressed: () => Navigator.pop(context),
               )
             ],
