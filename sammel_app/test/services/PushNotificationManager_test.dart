@@ -112,6 +112,9 @@ class TestListener implements PushNotificationListener {
   @override
   void handleNotificationTap(Map<dynamic, dynamic> data) {
   ***REMOVED***
+
+  @override
+  void updateMessages(List<Map<String, dynamic>> data) {***REMOVED***
 ***REMOVED***
 
 class TestPushData extends PushData {

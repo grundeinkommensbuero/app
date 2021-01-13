@@ -12,6 +12,7 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
+import 'package:sammel_app/shared/ConstJsonAssetLoader.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 
@@ -24,7 +25,8 @@ void main() {
       preloaderWidget: Container(
           color: DweTheme.yellow, child: Image.asset('assets/images/logo.png')),
       supportedLocales: [Locale('en'), Locale('de')],
-      path: 'assets/languages',
+      path: 'none',
+      assetLoader: ConstJsonAssetLoader(),
       fallbackLocale: Locale('en'),
       child: MyApp()));
 ***REMOVED***
@@ -55,18 +57,18 @@ class MyApp extends StatelessWidget {
       ? DemoPushNotificationManager(pushService)
       : PushNotificationManager(
           storageService, userService, firebaseService, backend);
+  static var localNotificationService =
+  LocalNotificationService(pushNotificationManager);
   var termineService = demoMode
       ? DemoTermineService(stammdatenService, userService)
       : TermineService(stammdatenService, userService, backend,
-          pushNotificationManager, actionPageKey);
+          pushNotificationManager, localNotificationService, actionPageKey);
   static var listLocationService = demoMode
       ? DemoListLocationService(userService)
       : ListLocationService(userService, backend);
   static var chatMessageService =
       ChatMessageService(storageService, pushNotificationManager, navigatorKey);
   static var geoService = GeoService();
-  static var localNotificationService =
-      LocalNotificationService(pushNotificationManager);
 
   @override
   Widget build(BuildContext context) {

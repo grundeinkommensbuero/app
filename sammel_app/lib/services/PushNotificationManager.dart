@@ -3,9 +3,9 @@ import 'dart:io';
 
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
-// import 'package:sammel_app/services/LocalNotificationService.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
+import 'package:sammel_app/services/PushUpdateService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/Crypter.dart';
@@ -31,12 +31,15 @@ abstract class PushNotificationListener {
   void receive_message(Map<String, dynamic> data) {***REMOVED***
 
   void handleNotificationTap(Map<dynamic, dynamic> data) {***REMOVED***
+
+  void updateMessages(List<Map<String, dynamic>> data) {***REMOVED***
 ***REMOVED***
 
 class PushNotificationManager implements AbstractPushNotificationManager {
   PushReceiveService listener;
   StorageService storageService;
   AbstractUserService userService;
+  PushUpdateService updateService;
 
   @override
   Future<String> pushToken;
@@ -45,6 +48,8 @@ class PushNotificationManager implements AbstractPushNotificationManager {
       FirebaseReceiveService firebaseService, Backend backend) {
     var listener = createPushListener(firebaseService, backend);
     pushToken = listener.then((listener) => listener.token);
+    updateService = PushUpdateService(userService, backend);
+    updateMessages();
   ***REMOVED***
 
   Future<PushReceiveService> createPushListener(
@@ -72,8 +77,6 @@ class PushNotificationManager implements AbstractPushNotificationManager {
         onLaunch: onTap,
         onBackgroundMessage: backgroundMessageHandler);
 
-    listener.subscribeToTopics(['global']);
-
     return listener;
   ***REMOVED***
 
@@ -84,12 +87,8 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     final data = extractData(message);
 
     try {
-      if (data.containsKey('type')) {
-        String type = data['type'];
-        if (callback_map.containsKey(type)) {
-          callback_map[type].receive_message(data);
-        ***REMOVED***
-      ***REMOVED***
+      if (data.containsKey('type'))
+        callback_map[data['type']]?.receive_message(data);
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s);
     ***REMOVED***
@@ -138,7 +137,36 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     var topics = kieze.map((kiez) => '$kiez-$interval').toList();
     listener.unsubscribeFromTopics(topics);
   ***REMOVED***
+
+  @override
+  Future<void> updateMessages() async {
+    final messages = await updateService.getLatestPushMessages();
+    if (messages == null) return;
+    final decrypted =
+        messages.map((message) => decrypt(message['data'])).toList();
+    final messageMap = sortMessagesByType(decrypted);
+
+    print('${messageMap.keys.length***REMOVED*** Push-Nachrichten vom Server geupdated');
+    try {
+      messageMap.forEach((type, messages) {
+        callback_map[type]?.updateMessages(messages);
+      ***REMOVED***);
+    ***REMOVED*** catch (e, s) {
+      ErrorService.handleError(e, s);
+    ***REMOVED***
+  ***REMOVED***
 ***REMOVED***
+
+Map<String, List<Map<String, dynamic>>> sortMessagesByType(
+        List<Map<String, dynamic>> messages) =>
+    messages
+        .where((message) => message != null)
+        .where((data) => data != null && data['type'] != null)
+        .fold(Map<String, List<Map<String, dynamic>>>(), (typeMap, data) {
+      if (typeMap[data['type']] == null) typeMap[data['type']] = [];
+      typeMap[data['type']].add(data);
+      return typeMap;
+    ***REMOVED***);
 
 // funktioniert nur unter Android
 Future<dynamic> backgroundMessageHandler(Map<String, dynamic> message) async {

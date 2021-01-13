@@ -103,9 +103,7 @@ class PullService extends BackendService implements PushReceiveService {
   Future<void> pull() async {
     try {
       HttpClientResponseBody reponse = await get('service/push/pull');
-      List content = reponse.body;
-      if (content != null && content.isNotEmpty)
-        content.forEach((message) => onMessage(message));
+      reponse.body?.forEach((message) => onMessage(message));
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
           context:

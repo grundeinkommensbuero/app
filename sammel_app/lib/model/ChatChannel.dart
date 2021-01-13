@@ -15,28 +15,29 @@ class ChatChannel {
     this.channel_messages = List<Message>();
   ***REMOVED***
 
-  @override
-  Future<void> pushChatMessage(ChatMessage message) {
-    add_message_or_mark_as_received(message);
+  pushMessages(List<Message> messages) {
+    messages
+        .where((message) => message is ChatMessage)
+        .forEach((message) => pushChatMessage(message));
+    messages.where((message) => message is ParticipationMessage).forEach(
+        (message) => pushParticipationMessage(message));
+
     channel_messages.sort((a, b) => a.timestamp.compareTo(b.timestamp));
-
     ccl?.channelChanged(this);
   ***REMOVED***
 
-  @override
-  pushParticipationMessage(ParticipationMessage message) {
-    if (channel_messages.any((m) => message.isMessageEqual(m))) return;
-    channel_messages.add(message);
-    ccl?.channelChanged(this);
-  ***REMOVED***
-
-  void add_message_or_mark_as_received(Message message) {
+  Future<void> pushChatMessage(ChatMessage message) {
     Message ownMessage = channel_messages
         .firstWhere((e) => message.isMessageEqual(e), orElse: () => null);
     if (ownMessage == null)
       channel_messages.add(message);
     else
       ownMessage.obtained_from_server = true;
+  ***REMOVED***
+
+  pushParticipationMessage(ParticipationMessage message) {
+    if (channel_messages.any((m) => message.isMessageEqual(m))) return;
+    channel_messages.add(message);
   ***REMOVED***
 
   void register_channel_change_listener(ChannelChangeListener c) {

@@ -20,6 +20,7 @@ void main() {
   UserService userService;
   PushNotificationManager pushManager = PushNotificationManagerMock();
   StammdatenService stammdatenService = StammdatenServiceMock();
+  final localNotificationService = LocalNotificationServiceMock();
 
   setUp(() {
     userService = ConfiguredUserServiceMock();
@@ -140,8 +141,8 @@ void main() {
 
     setUp(() {
       backend = BackendMock();
-      service = TermineService(
-          stammdatenService, userService, backend, pushManager, null);
+      service = TermineService(stammdatenService, userService, backend,
+          pushManager, localNotificationService, null);
       service.userService = userService;
     ***REMOVED***);
 

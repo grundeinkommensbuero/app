@@ -66,14 +66,12 @@ class ProfilePageState extends State<ProfilePage> {
                   child: Container(
                       alignment: Alignment.center,
                       child: Text(
-                        languages[EasyLocalization.of(context)
-                                ?.locale
-                                ?.languageCode] ??
-                            'Keine',
-                        overflow: TextOverflow.fade,
-                        style: TextStyle(
-                            fontSize: (28.0 - ((user?.name ?? '').length) / 4)),
-                      )),
+                          languages[EasyLocalization.of(context)
+                                  ?.locale
+                                  ?.languageCode] ??
+                              'Keine',
+                          overflow: TextOverflow.fade,
+                          style: TextStyle(fontSize: 28))),
                   onPressed: showLanguageDialog,
                 ),
                 SizedBox(height: 20.0),
@@ -95,13 +93,10 @@ class ProfilePageState extends State<ProfilePage> {
                     title: "Dein Kiez",
                     child: Container(
                         child: Column(children: [
-                      Text(
-                        kiezeCaption,
-                        maxLines: 20,
-                        style: TextStyle(
-                            fontSize:
-                                (28.0 - ((kiezeCaption ?? '').length) / 9)),
-                      ),
+                      Text(kiezeCaption,
+                          maxLines: 20,
+                          style: TextStyle(
+                              fontSize: 12 + 200 / (kiezeCaption ?? '').length)),
                       SizedBox(height: 10.0),
                       Text(
                         'Mit deinen Kiezen bestimmst du wo du über neue Aktionen informiert werden willst.',
@@ -123,14 +118,12 @@ class ProfilePageState extends State<ProfilePage> {
                             fontWeight: FontWeight.normal, color: Colors.black),
                       ).tr()
                     ])),
-                    onPressed: (context) => showNotificationDialog(context))
+                    onPressed: (context) => showNotificationDialog(context)),
+                SizedBox(height: 20.0),
+                SelectableText('User-ID: ${user?.id***REMOVED***, Push-Token: $token',
+                    textAlign: TextAlign.center)
               ],
             )),
-        bottomSheet: Row(children: [
-          Expanded(
-              child: SelectableText('User-ID: ${user?.id***REMOVED***, Push-Token: $token',
-                  textAlign: TextAlign.center))
-        ], mainAxisAlignment: MainAxisAlignment.center),
         floatingActionButton: FloatingActionButton(
             child: Icon(Icons.info_outline_rounded,
                 size: 40.0, color: DweTheme.yellow),
