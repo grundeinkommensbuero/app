@@ -418,7 +418,7 @@ class TermineSeiteState extends State<TermineSeite>
   bool iAmParticipant(List<User> participants) =>
       participants.map((e) => e.id).contains(me?.id);
 
-  Future editAction(BuildContext context, Termin termin) async {
+  Future<List<Termin>> editAction(BuildContext context, Termin termin) async {
     await showDialog(
         context: context,
         barrierDismissible: false,
