@@ -114,7 +114,7 @@ const Map<String, dynamic> en = {
   "Schließen": "Close",
   "Aktion konnte nicht geladen werden.": "Event could not be loaded.",
   "Mitmachen": "Participate",
-  "Absagen": "Cancel",
+  "Verlassen": "Cancel",
   "Deine Aktion bearbeiten": "Work on your action",
   "Aktion konnte nicht gespeichert werden.": "Event could not be saved.",
   "Aktion konnte nicht gelöscht werden.": "Event could not be deleted.",
@@ -335,7 +335,7 @@ const Map<String, dynamic> de = {
   "Schließen": "Schließen",
   "Aktion konnte nicht geladen werden.": "Aktion konnte nicht geladen werden.",
   "Mitmachen": "Mitmachen",
-  "Absagen": "Absagen",
+  "Verlassen": "Verlassen",
   "Deine Aktion bearbeiten": "Deine Aktion bearbeiten",
   "Aktion konnte nicht gespeichert werden.":
       "Aktion konnte nicht gespeichert werden.",

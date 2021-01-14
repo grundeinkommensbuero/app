@@ -59,7 +59,8 @@ class TermineSeiteState extends State<TermineSeite>
   List<int> myActions = [];
   User me;
 
-  List<int> myEvaluations = []; // Liste von Termin Ids, die der Nutzer bereits evaluiert hat
+  List<int> myEvaluations =
+      []; // Liste von Termin Ids, die der Nutzer bereits evaluiert hat
 
   int navigation = 0;
   AnimationController _animationController;
@@ -102,8 +103,8 @@ class TermineSeiteState extends State<TermineSeite>
         height: 50.0,
       ),
       Expanded(
-          child: ActionList(
-              termine, isMyAction, isPastAction, iAmParticipant, openTerminDetails,
+          child: ActionList(termine, isMyAction, isPastAction, iAmParticipant,
+              openTerminDetails,
               key: Key('action list')))
     ]);
     var actionMapView = ActionMap(
@@ -180,7 +181,6 @@ class TermineSeiteState extends State<TermineSeite>
         .loadAllStoredEvaluations()
         .then((ids) => setState(() => myEvaluations = ids));
 
-
     var listLocationService = Provider.of<AbstractListLocationService>(context);
     listLocationService.getActiveListLocations().then((listLocations) {
       setState(() {
@@ -201,7 +201,7 @@ class TermineSeiteState extends State<TermineSeite>
         .then((termine) =>
             setState(() => this.termine = termine..sort(Termin.compareByStart)))
         .catchError((e, s) => ErrorService.handleError(e, s,
-                context: 'Aktionen konnten nicht geladen werden.'));
+            context: 'Aktionen konnten nicht geladen werden.'));
   ***REMOVED***
 
   void showRestError(RestFehler e) {
@@ -249,30 +249,16 @@ class TermineSeiteState extends State<TermineSeite>
                     contentPadding: EdgeInsets.all(10.0),
                     children: <Widget>[
                       ActionDetailsPage(terminMitDetails),
-                      participant(terminMitDetails)
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                RaisedButton(
-                                    key: Key('open chat window'),
-                                    child: Text('Zum Chat').tr(),
-                                    onPressed: () =>
-                                        openChatWindow(terminMitDetails)),
-                              ],
-                            )
-                          : null,
+                      SizedBox(height: 5),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          isPastAction(termin)
-                            ? participant(termin)
-                              ? evaluateButton(termin, context)
-                              : joinOrLeaveButton(
-                              terminMitDetails, setDialogState) // TODO Was soll bei vergangenen Aktionen, bei denen man nicht teilgenommen hat, angezeigt werden?
-                            : isMyAction(termin.id)
-                                ? editAndDeleteButtons(termin, context)
-                                : joinOrLeaveButton(
-                                    terminMitDetails, setDialogState),
+                          Expanded(
+                              child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: determineButtons(termin, context,
+                                      terminMitDetails, setDialogState))),
+                          SizedBox(width: 5),
                           Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: []..add(RaisedButton(
@@ -303,6 +289,49 @@ class TermineSeiteState extends State<TermineSeite>
     ***REMOVED***
   ***REMOVED***
 
+  SizedBox chatButton(Termin terminMitDetails) {
+    return SizedBox(
+        width: 50.0,
+        child: RaisedButton(
+            textColor: DweTheme.yellow,
+            padding: EdgeInsets.all(5.0),
+            key: Key('open chat window'),
+            child: Icon(Icons.message),
+            onPressed: () => openChatWindow(terminMitDetails)));
+  ***REMOVED***
+
+  Widget determineButtons(Termin termin, BuildContext context,
+          Termin terminMitDetails, StateSetter setDialogState) =>
+      isMyAction(termin.id)
+          ? haveEvaluated(termin.id) || !isPastAction(termin)
+              ? ButtonRow([
+                  deleteButton(context),
+                  editButton(context),
+                  chatButton(terminMitDetails)
+                ])
+              : ButtonRow([
+                  evaluateButton(termin, context),
+                  chatButton(terminMitDetails)
+                ])
+          : isPastAction(termin)
+              ? participant(termin)
+                  ? haveEvaluated(termin.id)
+                      ? ButtonRow([
+                          leaveButton(terminMitDetails, setDialogState),
+                          chatButton(terminMitDetails)
+                        ])
+                      : ButtonRow([
+                          evaluateButton(termin, context),
+                          chatButton(terminMitDetails)
+                        ])
+                  : SizedBox()
+              : participant(terminMitDetails)
+                  ? ButtonRow([
+                      leaveButton(terminMitDetails, setDialogState),
+                      chatButton(terminMitDetails)
+                    ])
+                  : joinButton(terminMitDetails, setDialogState);
+
   openChatWindow(Termin termin) async {
     ChatChannel message_channel =
         await chatMessageService.getActionChannel(termin.id);
@@ -319,70 +348,62 @@ class TermineSeiteState extends State<TermineSeite>
     return DweTheme.actionColor(action.ende, owner, participant);
   ***REMOVED***
 
-  Widget evaluateButton(Termin termin, BuildContext context) {
+  Widget evaluateButton(Termin termin, BuildContext context) => RaisedButton(
+      key: Key('action evaluate button'),
+      padding: EdgeInsets.all(5.0),
+      color: DweTheme.purple,
+      child: Text('Feedback'),
+      onPressed: () => Navigator.pop(context, TerminDetailsCommand.EVALUATE));
+
+  SizedBox editButton(BuildContext context) {
     return SizedBox(
-        width: 100.0,
-        child: haveEvaluated(termin.id)
-            ? Text('Danke!')
-            : RaisedButton(
-                key: Key('action evaluate button'),
-                padding: EdgeInsets.all(5.0),
-                color: DweTheme.purple,
-                child: Text('Feedback'),
-                onPressed: () =>
-                    Navigator.pop(context, TerminDetailsCommand.EVALUATE)));
+        width: 50.0,
+        child: RaisedButton(
+          key: Key('action edit button'),
+          padding: EdgeInsets.all(5.0),
+          child: Icon(Icons.edit),
+          onPressed: () => Navigator.pop(context, TerminDetailsCommand.EDIT),
+        ));
   ***REMOVED***
 
-  Widget editAndDeleteButtons(Termin termin, BuildContext context) {
-    return Row(children: [
-      SizedBox(
-          width: 50.0,
-          child: RaisedButton(
-              key: Key('action delete button'),
-              padding: EdgeInsets.all(5.0),
-              color: DweTheme.red,
-              child: Icon(Icons.delete),
-              onPressed: () {
-                showDialog<bool>(
-                        context: context,
-                        builder: (context) => confirmDeleteDialog(context))
-                    .then((confirmed) {
-                  if (confirmed)
-                    Navigator.pop(context, TerminDetailsCommand.DELETE);
-                ***REMOVED***);
-              ***REMOVED***)),
-      SizedBox(width: 5.0),
-      SizedBox(
-          width: 50.0,
-          child: RaisedButton(
-            key: Key('action edit button'),
+  SizedBox deleteButton(BuildContext context) {
+    return SizedBox(
+        width: 50.0,
+        child: RaisedButton(
+            key: Key('action delete button'),
             padding: EdgeInsets.all(5.0),
-            child: Icon(Icons.edit),
-            onPressed: () => Navigator.pop(context, TerminDetailsCommand.EDIT),
-          ))
-    ]);
+            color: DweTheme.red,
+            child: Icon(Icons.delete),
+            onPressed: () {
+              showDialog<bool>(
+                      context: context,
+                      builder: (context) => confirmDeleteDialog(context))
+                  .then((confirmed) {
+                if (confirmed)
+                  Navigator.pop(context, TerminDetailsCommand.DELETE);
+              ***REMOVED***);
+            ***REMOVED***));
   ***REMOVED***
 
-  Widget joinOrLeaveButton(Termin terminMitDetails, Function setDialogState) {
-    if (!participant(terminMitDetails))
-      return RaisedButton(
-          key: Key('join action button'),
-          child: Text('Mitmachen').tr(),
-          onPressed: () {
-            joinAction(terminMitDetails);
-            setDialogState(() => terminMitDetails.participants.add(me));
-          ***REMOVED***);
-    else
-      return RaisedButton(
+  Widget leaveButton(Termin terminMitDetails, Function setDialogState) =>
+      RaisedButton(
           key: Key('leave action button'),
-          child: Text('Absagen').tr(),
+          child: Text('Verlassen').tr(),
           onPressed: () {
             leaveAction(terminMitDetails);
             setDialogState(() => terminMitDetails.participants.remove(
                 terminMitDetails.participants
                     .firstWhere((u) => u.id == me.id)));
           ***REMOVED***);
-  ***REMOVED***
+
+  Widget joinButton(Termin terminMitDetails, Function setDialogState) =>
+      RaisedButton(
+          key: Key('join action button'),
+          child: Text('Mitmachen').tr(),
+          onPressed: () {
+            joinAction(terminMitDetails);
+            setDialogState(() => terminMitDetails.participants.add(me));
+          ***REMOVED***);
 
   bool isMyAction(int id) {
     return myActions?.contains(id);
@@ -392,9 +413,7 @@ class TermineSeiteState extends State<TermineSeite>
     return myEvaluations?.contains(id);
   ***REMOVED***
 
-  bool isPastAction(Termin action) {
-    return action.ende.isBefore(DateTime.now());
-  ***REMOVED***
+  bool isPastAction(Termin action) => action.ende.isBefore(DateTime.now());
 
   bool iAmParticipant(List<User> participants) =>
       participants.map((e) => e.id).contains(me?.id);
@@ -456,7 +475,7 @@ class TermineSeiteState extends State<TermineSeite>
               title: AppBar(
                 leading: null,
                 automaticallyImplyLeading: false,
-                title: Text('Deine Aktion evaluieren',
+                title: Text('Über Aktion berichten',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -467,10 +486,9 @@ class TermineSeiteState extends State<TermineSeite>
                 Container(
                     width: MediaQuery.of(context).size.width * 0.8,
                     height: MediaQuery.of(context).size.height * 0.8,
-                    child: EvaluationForm(
+                    child: EvaluationForm(termin,
                         onFinish: afterActionEvaluation,
-                        key: Key('evaluation editor'),
-                        terminId: termin.id))
+                        key: Key('evaluation editor')))
               ]);
         ***REMOVED***);
   ***REMOVED***
@@ -497,9 +515,7 @@ class TermineSeiteState extends State<TermineSeite>
   Future<void> saveEvaluation(Evaluation evaluation) async {
     print('saveEvaluation');
     try {
-      await termineService.saveEvaluation(
-        evaluation
-      );
+      await termineService.saveEvaluation(evaluation);
       setState(() => myEvaluations = myEvaluations..add(evaluation.terminId));
       await storageService.markActionIdAsEvaluated(evaluation.terminId);
     ***REMOVED*** catch (e, s) {
@@ -592,8 +608,23 @@ class TermineSeiteState extends State<TermineSeite>
         MaterialPageRoute(
             builder: (context) => Scaffold(
                 appBar: AppBar(title: Text(title)),
-                body: ActionList(
-                    actions, isMyAction, isPastAction, iAmParticipant, openTerminDetails))));
+                body: ActionList(actions, isMyAction, isPastAction,
+                    iAmParticipant, openTerminDetails))));
+  ***REMOVED***
+***REMOVED***
+
+class ButtonRow extends StatelessWidget {
+  List<Widget> widgets;
+
+  ButtonRow(List<Widget> this.widgets);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+        children: widgets
+            .expand((widget) => [SizedBox(width: 5.0), widget])
+            .skip(1)
+            .toList());
   ***REMOVED***
 ***REMOVED***
 
