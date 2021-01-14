@@ -2,6 +2,7 @@ package de.kybernetik.rest
 
 import TestdatenVorrat.Companion.karl
 import TestdatenVorrat.Companion.rosa
+import TestdatenVorrat.Companion.bini
 import TestdatenVorrat.Companion.terminDto
 import TestdatenVorrat.Companion.terminMitTeilnehmerMitDetails
 import TestdatenVorrat.Companion.terminOhneTeilnehmerMitDetails
@@ -416,16 +417,33 @@ class TermineRestResourceTest {
 
     @Test
     fun `meldeTeilnahmeAn ergaenzt TerminTeilnehmer um Benutzer`() {
-        whenever(dao.getTermin(1L)).thenReturn(terminOhneTeilnehmerMitDetails())
-        whenever(benutzerDao.getBenutzer(11L)).thenReturn(karl())
+        whenever(dao.getTermin(1L)).thenReturn(terminMitTeilnehmerMitDetails())
+        whenever(benutzerDao.getBenutzer(11L)).thenReturn(bini())
 
         val response = resource.meldeTeilnahmeAn(1)
 
         val captor = argumentCaptor<Termin>()
         verify(dao, times(1)).aktualisiereTermin(captor.capture())
-        assertEquals(captor.firstValue.teilnehmer.size, 1)
-        assertEquals(captor.firstValue.teilnehmer[0].id, 11L)
+        assertEquals(captor.firstValue.teilnehmer.size, 3)
+        assertEquals(captor.firstValue.teilnehmer[2].id, bini().id)
         assertEquals(response.status, 202)
+    }
+
+    @Test
+    fun `meldeTeilnahmeAn informiert genau Ersteller und restliche Teilnehmer`() {
+        val bini = bini()
+        whenever(dao.getTermin(1L)).thenReturn(terminMitTeilnehmerMitDetails())
+        whenever(benutzerDao.getBenutzer(11L)).thenReturn(bini)
+        resource.meldeTeilnahmeAn(1)
+
+        val empfaengerCaptor = argumentCaptor<List<Benutzer>>()
+        val nachricht = argumentCaptor<PushMessageDto>()
+        verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(
+                nachricht.capture(),
+                empfaengerCaptor.capture()
+        )
+        assertEquals(empfaengerCaptor.secondValue[0].name, rosa().name)
+        assertEquals(empfaengerCaptor.secondValue.size, 1)
     }
 
     @Test
@@ -469,7 +487,6 @@ class TermineRestResourceTest {
         val bini = Benutzer(13, "Bini Adamczak", 3L)
 
         resource.informiereUeberTeilnahme(bini, aktion)
-
         val empfaengerCaptor = argumentCaptor<List<Benutzer>>()
         val nachricht = argumentCaptor<PushMessageDto>()
         verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(
