@@ -198,9 +198,10 @@ open class TermineRestResource {
             return Response.accepted().build()
         }
 
+        informiereUeberTeilnahme(userAusDb, aktion)
         aktion.teilnehmer = aktion.teilnehmer.plus(userAusDb)
         dao.aktualisiereTermin(aktion)
-        informiereUeberTeilnahme(userAusDb, aktion)
+
 
         return Response.accepted().build()
     }
@@ -373,6 +374,10 @@ open class TermineRestResource {
     }
 
     open fun informiereUeberTeilnahme(benutzer: Benutzer, aktion: Termin) {
+        if(aktion.teilnehmer.isEmpty()) {
+            LOG.debug("Aktion ${aktion.id} hat keine Teilnehmer, deswgen kann niemand informiert werden")
+            return
+        }
         val name = if (benutzer.name.isNullOrBlank()) "Jemand" else benutzer.name!!
         var pushMessage = PushMessageDto(
             PushNotificationDto(
