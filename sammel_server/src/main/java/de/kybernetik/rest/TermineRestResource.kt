@@ -270,22 +270,26 @@ open class TermineRestResource {
     data class EvaluationDto(
         var id: Long? = null,
         var termin_id: Long? = null,
+        var teilnehmer: Long? = null,
         var unterschriften: Long? = null,
         var bewertung: Long? = null,
         var stunden: Double? = null,
         var kommentar: String? = null,
-        var situation: String? = null
+        var situation: String? = null,
+        var ausgefallen: Boolean? = null
     ) {
         fun convertToEvaluation(user_id: Long?): Evaluation {
             return Evaluation(
                 id = id ?: 0,
                 termin_id = termin_id,
                 user_id = user_id,
+                teilnehmer = teilnehmer,
                 unterschriften = unterschriften,
                 bewertung = bewertung,
                 stunden = stunden,
                 kommentar = kommentar,
-                situation = situation
+                situation = situation,
+                ausgefallen = ausgefallen
             )
         ***REMOVED***
 
@@ -462,7 +466,7 @@ open class TermineRestResource {
             )
         )
         val restTeilnehmer = teilnehmer.subList(1, teilnehmer.size)
-        if (teilnehmer.size > 0)
+        if (teilnehmer.isNotEmpty())
             LOG.debug("Informiere Teilnehmer ${teilnehmer.map { it.id ***REMOVED******REMOVED*** von Aktion ${aktion.id***REMOVED*** über Änderungen")
         pushService.sendePushNachrichtAnEmpfaenger(pushMessage, restTeilnehmer)
     ***REMOVED***

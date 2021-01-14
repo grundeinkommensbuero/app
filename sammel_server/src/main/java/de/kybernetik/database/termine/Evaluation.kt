@@ -1,11 +1,6 @@
 package de.kybernetik.database.termine
 
-import de.kybernetik.database.benutzer.Benutzer
-import java.time.LocalDateTime
 import javax.persistence.*
-import javax.persistence.CascadeType.*
-import javax.persistence.FetchType.EAGER
-import javax.persistence.FetchType.LAZY
 
 @Entity
 @Table(name = "Evaluationen")
@@ -22,6 +17,9 @@ class Evaluation {
     var user_id: Long? = null
 
     @Column
+    var teilnehmer: Long? = null
+
+    @Column
     var unterschriften: Long? = null
 
     @Column
@@ -36,24 +34,31 @@ class Evaluation {
     @Column
     var situation: String? = null
 
+    @Column
+    var ausgefallen: Boolean? = null
+
     @Suppress("unused")
     constructor()
 
     constructor(id: Long,
                 termin_id: Long?,
                 user_id: Long?,
+                teilnehmer: Long?,
                 unterschriften: Long?,
                 bewertung: Long?,
                 stunden: Double?,
                 kommentar: String?,
-                situation: String?) {
+                situation: String?,
+                ausgefallen: Boolean?) {
         this.id = id
         this.termin_id = termin_id
         this.user_id = user_id
         this.unterschriften = unterschriften
+        this.teilnehmer = teilnehmer
         this.stunden = stunden
         this.bewertung = bewertung
         this.kommentar = kommentar
         this.situation = situation
+        this.ausgefallen = ausgefallen
     ***REMOVED***
 ***REMOVED***

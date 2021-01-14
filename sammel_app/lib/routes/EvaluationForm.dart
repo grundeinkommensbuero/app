@@ -101,24 +101,6 @@ class EvaluationFormState extends State<EvaluationForm> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                         Text(
-                          'Anzahl Teilnehmer*innen',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ).tr(),
-                        InputButton(
-                            onTap: teilnehmerSelection,
-                            child: teilnehmerButtonCaption(this.evaluation)),
-                      ]))
-                ]),
-                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Icon(Icons.info_outline, size: 40.0),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  Expanded(
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                        Text(
                           'Anzahl Unterschriften',
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ).tr(),
