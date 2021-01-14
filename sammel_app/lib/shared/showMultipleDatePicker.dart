@@ -10,11 +10,10 @@ import 'package:sammel_app/shared/DweTheme.dart';
 import 'ChronoHelfer.dart';
 
 Future<List<DateTime>> showMultipleDatePicker(
-    List<DateTime> previousSelectedDates, BuildContext context,
+    List<DateTime> initDates, BuildContext context,
     {key: Key, multiMode = true***REMOVED***) async {
   DateTime currentMonth = DateTime.now();
-  List<DateTime> selectedDatesFromFilter = []..addAll(previousSelectedDates);
-  if (selectedDatesFromFilter == null) selectedDatesFromFilter = [];
+  List<DateTime> dates = []..addAll(initDates ?? []);
   var selectedDatesFromDialog = await showDialog<List<DateTime>>(
       context: context,
       builder: (context) => StatefulBuilder(builder: (context, setDialogState) {
@@ -43,7 +42,7 @@ Future<List<DateTime>> showMultipleDatePicker(
                           style: TextStyle(fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
                           textWidthBasis: TextWidthBasis.parent,
-                        ),
+                        ).tr(),
                         RaisedButton(
                           key: Key('next month button'),
                           shape: CircleBorder(),
@@ -60,7 +59,7 @@ Future<List<DateTime>> showMultipleDatePicker(
                       child: Calendarro(
                         startDate: Jiffy(currentMonth).startOf("month"),
                         endDate: Jiffy(currentMonth).endOf("month"),
-                        selectedDates: selectedDatesFromFilter,
+                        selectedDates: dates,
                         weekdayLabelsRow: GerCalendarroWeekdayLabelsView(),
                         selectionMode: multiMode
                             ? SelectionMode.MULTI
@@ -73,13 +72,13 @@ Future<List<DateTime>> showMultipleDatePicker(
                       key: Key('days dialog cancel button'),
                       child: Text("Abbrechen").tr(),
                       onPressed: () =>
-                          Navigator.pop(context, previousSelectedDates),
+                          Navigator.pop(context, initDates),
                     ),
                     RaisedButton(
                       key: Key('days dialog accept button'),
                       child: Text("Auswählen").tr(),
                       onPressed: () =>
-                          Navigator.pop(context, selectedDatesFromFilter),
+                          Navigator.pop(context, dates),
                     )
                   ])
                 ]);
