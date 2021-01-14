@@ -14,6 +14,7 @@ Future<List<DateTime>> showMultipleDatePicker(
     {key: Key, multiMode = true}) async {
   DateTime currentMonth = DateTime.now();
   List<DateTime> dates = []..addAll(initDates ?? []);
+  DateTime date = initDates.isNotEmpty ? initDates[0] :null;
   var selectedDatesFromDialog = await showDialog<List<DateTime>>(
       context: context,
       builder: (context) => StatefulBuilder(builder: (context, setDialogState) {
@@ -60,6 +61,7 @@ Future<List<DateTime>> showMultipleDatePicker(
                         startDate: Jiffy(currentMonth).startOf("month"),
                         endDate: Jiffy(currentMonth).endOf("month"),
                         selectedDates: dates,
+                        selectedSingleDate: date,
                         weekdayLabelsRow: GerCalendarroWeekdayLabelsView(),
                         selectionMode: multiMode
                             ? SelectionMode.MULTI
@@ -78,7 +80,7 @@ Future<List<DateTime>> showMultipleDatePicker(
                       key: Key('days dialog accept button'),
                       child: Text("Auswählen").tr(),
                       onPressed: () =>
-                          Navigator.pop(context, dates),
+                          Navigator.pop(context, multiMode ? dates : [date]),
                     )
                   ])
                 ]);
