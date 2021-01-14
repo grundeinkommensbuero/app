@@ -356,6 +356,10 @@ open class TermineRestResource {
     ***REMOVED***
 
     open fun informiereUeberAbsage(benutzer: Benutzer, aktion: Termin) {
+        if(aktion.teilnehmer.isEmpty()) {
+            LOG.debug("Aktion ${aktion.id***REMOVED*** hat keine Teilnehmer, deswgen kann niemand informiert werden")
+            return
+        ***REMOVED***
         val name = if (benutzer.name.isNullOrBlank()) "Jemand" else benutzer.name!!
         var pushMessage = PushMessageDto(
             PushNotificationDto(
