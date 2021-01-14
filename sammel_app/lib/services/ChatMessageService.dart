@@ -110,7 +110,6 @@ class ChatMessageService implements PushNotificationListener {
 
 
   void create_or_recreate_topic_chat_page(State<StatefulWidget> cls, ChatChannel channel) {
-    //print("is active ${ModalRoute.of(cls?.context)?.settings.name***REMOVED***");
     if (cls == null || ModalRoute.of(cls?.context)?.isActive == false ) {
       if (cls != null) {
         Navigator.pop(cls.context);
@@ -142,10 +141,6 @@ class ChatMessageService implements PushNotificationListener {
     var newChannel = ChatChannel(id);
     this.storage_service.saveChatChannel(newChannel);
     channels[newChannel.id] = newChannel;
-  ***REMOVED***
-
-  void register_channel(ChatChannel channel) {
-    channels[channel.id] = channel;
   ***REMOVED***
 
   Future<void> reload() async {

@@ -204,7 +204,7 @@ class ChatWindowState extends State<ChatWindow> {
 
   @override
   void dispose() {
-    this.channel.dispose_widget();
+    this.channel.disposeListener();
     myFocusNode.dispose();
     super.dispose();
   ***REMOVED***
@@ -220,7 +220,7 @@ class ChatWindowState extends State<ChatWindow> {
       textFieldHasFocus = false;
       FocusScope.of(context).requestFocus(FocusNode());
     ***REMOVED*** else {
-      this.channel.dispose_widget();
+      this.channel.disposeListener();
       myFocusNode.dispose();
       Navigator.pop(context);
     ***REMOVED***

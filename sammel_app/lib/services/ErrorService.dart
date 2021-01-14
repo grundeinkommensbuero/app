@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sammel_app/services/AuthFehler.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
+import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/MessageException.dart';
 import 'package:sammel_app/shared/ServerException.dart';
 
@@ -32,6 +33,12 @@ class ErrorService {
       errorMessage = tr(error.message);
     ***REMOVED*** catch (_) {***REMOVED***
     if (error is NoUserAuthException) {
+      pushError('Dein Account konnte nicht authentifziert werden.',
+          [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
+      return;
+    ***REMOVED***
+
+    if (error is InvalidUserException) {
       pushError('Dein Account konnte nicht authentifziert werden.',
           [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
       return;

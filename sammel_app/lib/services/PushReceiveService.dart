@@ -51,6 +51,7 @@ class FirebaseReceiveService implements PushReceiveService {
 
     // For iOS request permission first.
     firebaseMessaging.requestNotificationPermissions();
+    firebaseMessaging.subscribeToTopic('global');
 
     print('Firebase initialisiert mit Token: ${await token***REMOVED***');
   ***REMOVED***

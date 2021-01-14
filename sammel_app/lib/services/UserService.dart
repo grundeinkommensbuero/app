@@ -145,7 +145,9 @@ Color _randomColor() {
   return Color.fromRGBO(values[0], values[1], values[2], 0.5);
 ***REMOVED***
 
-class InvalidUserException implements Exception {***REMOVED***
+class InvalidUserException implements Exception {
+  static String message = 'Der hinterlegte Benutzer*in-Account ist ungültig.';
+***REMOVED***
 
 class DemoUserService extends AbstractUserService {
   DemoUserService() : super(DemoBackend()) {

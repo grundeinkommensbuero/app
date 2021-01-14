@@ -6,58 +6,60 @@ import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/routes/TopicChatWindow.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
+import 'package:sammel_app/shared/DweTheme.dart';
 
 class ChatPage extends StatefulWidget {
+  bool active = false;
 
-  bool isActive = false;
+  ChatPage({this.active***REMOVED***);
 
   @override
-  State<StatefulWidget> createState() => ChatPageState(this, isActive);
+  State<StatefulWidget> createState() => ChatPageState();
 ***REMOVED***
 
 class ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   AbstractPushNotificationManager pushManager;
   ChatMessageService chatMessageService;
-  TopicChatWindow chat_window = null;
-  bool isActive;
-  ChatPage parentPage;
+  TopicChatWindow chat_window;
+  ChatChannel topicChannel;
 
-  ChatPageState(parentPage, isActive)
-  {
-    print("isActive $isActive");
-    this.isActive = isActive;
-    this.parentPage = parentPage;
+  ChatPageState();
+
+  @override
+  Widget build(BuildContext context) {
+    if (topicChannel == null) {
+      pushManager = Provider.of<AbstractPushNotificationManager>(context);
+      chatMessageService = Provider.of<ChatMessageService>(context);
+      Provider.of<ChatMessageService>(context)
+          .getTopicChannel("global")
+          .then((channel) => setState(() => topicChannel = channel));
+    ***REMOVED***
+    print('ChatPage: widget.isActive=${widget.active***REMOVED***');
+    if (!widget.active) {
+      // navigiert weg
+      chat_window = null;
+      topicChannel?.disposeListener();
+    ***REMOVED*** else if (topicChannel != null) {
+      print('topicChannel=$topicChannel');
+      // ist bereit
+      if (chat_window == null)
+        chat_window = TopicChatWindow(topicChannel, false);
+      return chat_window;
+    ***REMOVED***
+    // navigiert hin, ist aber noch nicht bereit
+    return Center(
+        child: Container(
+            decoration: DweTheme.happyHouseBackground,
+            height: 100,
+            width: 100,
+            child: LoadingIndicator(
+                indicatorType: Indicator.ballRotateChase,
+                color: Color.fromARGB(100, 128, 128, 128))));
   ***REMOVED***
 
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this); // for didChangeAppLifecycleState
-
-  ***REMOVED***
-
-  @override
-  Widget build(BuildContext context) {
-    if (chatMessageService == null) {
-      chatMessageService = Provider.of<ChatMessageService>(context);
-      pushManager = Provider.of<AbstractPushNotificationManager>(context);
-    ***REMOVED***
-
-    if(chat_window == null && parentPage.isActive) {
-      print("triggering future");
-      Future<ChatChannel> globalChatChannel = Provider.of<ChatMessageService>(
-          context).getTopicChannel("global");
-      globalChatChannel.then((value) => setState(() => chat_window = TopicChatWindow(value, false)));
-      return Center(child: Container(height: 100, width: 100,child: LoadingIndicator(
-          indicatorType: Indicator.ballRotateChase, color: Color.fromARGB(100, 128, 128, 128))));
-    ***REMOVED***
-    else if(!parentPage.isActive)
-      {
-        print("returning sized box");
-        return SizedBox(width: 10, height: 10);
-      ***REMOVED***
-    else{
-      return chat_window;
-    ***REMOVED***
   ***REMOVED***
 
   @override
@@ -67,7 +69,7 @@ class ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
     super.dispose();
   ***REMOVED***
 
-  // Lädt Speicher neu nach, falls sich im Schlaf etwas geändert hat
+// Lädt Speicher neu nach, falls sich im Schlaf etwas geändert hat
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
