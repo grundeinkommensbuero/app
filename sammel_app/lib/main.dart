@@ -32,7 +32,7 @@ void main() {
 ***REMOVED***
 
 const Mode mode = Mode.DEMO;
-const version = '0.4.0+18';
+const version = '0.4.1+20';
 
 ***REMOVED***
 ***REMOVED***
