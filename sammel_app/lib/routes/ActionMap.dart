@@ -15,6 +15,7 @@ class ActionMap extends StatefulWidget {
   final List<Termin> termine;
   final List<ListLocation> listLocations;
   final Function isMyAction;
+  final Function isPastAction;
   final Function iAmParticipant;
   final Function(Termin) openActionDetails;
   final MapController mapController;
@@ -27,6 +28,7 @@ class ActionMap extends StatefulWidget {
     this.termine = const [],
     this.listLocations = const [],
     this.isMyAction = falseFunction,
+    this.isPastAction,
     this.openActionDetails,
     this.mapController,
     this.iAmParticipant,

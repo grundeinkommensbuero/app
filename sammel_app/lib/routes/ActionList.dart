@@ -11,8 +11,9 @@ class ActionList extends StatefulWidget {
   final Function(Termin) openActionDetails;
   final Function(int) isMyAction;
   final Function(List<User>) iAmParticipant;
+  final Function(Termin) isPastAction;
 
-  ActionList(this.termine, this.isMyAction, this.iAmParticipant,
+  ActionList(this.termine, this.isMyAction, this.isPastAction, this.iAmParticipant,
       this.openActionDetails,
       {Key key})
       : super(key: key);
