@@ -18,5 +18,8 @@ class ActionListPushData implements PushData {
   }
 
   @override
-  toJson() => throw UnimplementedError();
+  toJson() => {
+    'type': type,
+    'actions': actions.map((action) => action.toJson()).toList()
+  };
 }

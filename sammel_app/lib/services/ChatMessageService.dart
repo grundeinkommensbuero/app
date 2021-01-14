@@ -54,7 +54,7 @@ class ChatMessageService implements PushNotificationListener {
 
       }
     } on UnreadablePushMessage catch (e, s) {
-      ErrorService.handleError(e, s);
+      ErrorService.handleError(e, s, context: 'Fehler beim Empfang von Push-Nachricht');
     }
   }
 

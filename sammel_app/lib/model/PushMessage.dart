@@ -83,7 +83,7 @@ class ChatMessagePushData extends ChatPushData {
       this.message = ChatMessage.fromJson(json);
     } on AssertionError catch (e) {
       throw UnreadablePushMessage(tr(
-          'Unlesbare Push-Nachricht (Teilnahme) empfangen: {message}',
+          'Unlesbare Chat-Nachricht empfangen: {message}',
           namedArgs: {'named': e.message}));
     }
   }
@@ -101,7 +101,7 @@ class TopicChatMessagePushData extends ChatPushData
       this.message = TopicChatMessage.fromJson(json);
     } on AssertionError catch (e) {
       throw UnreadablePushMessage(tr(
-          'Unlesbare Topic Push-Nachricht (Teilnahme) empfangen: {message}',
+          'Unlesbare Topic-Nachricht empfangen: {message}',
           namedArgs: {'named': e.message}));
     }
   }
@@ -135,7 +135,7 @@ class ParticipationPushData extends ChatPushData {
       this.message = ParticipationMessage.fromJson(json);
     } on AssertionError catch (e) {
       throw UnreadablePushMessage(
-          'Unlesbare Push-Nachricht (Teilnahme) empfangen: ${e.message}');
+          'Unlesbare Teilnahme-Nachricht empfangen: ${e.message}');
     }
   }
 }
