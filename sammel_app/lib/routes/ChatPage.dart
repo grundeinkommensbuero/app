@@ -38,7 +38,7 @@ class ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     if (chatMessageService == null) {
-    chatMessageService = Provider.of<ChatMessageService>(context);
+      chatMessageService = Provider.of<ChatMessageService>(context);
       pushManager = Provider.of<AbstractPushNotificationManager>(context);
     }
 

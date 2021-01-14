@@ -14,6 +14,7 @@ class ConstJsonAssetLoader extends AssetLoader {
 const Map<String, Map<String, dynamic>> languages = {'en': en, 'de': de};
 
 const Map<String, dynamic> en = {
+  "Neues vom Volksbegehren und der Kampagne" : "News from the referendum and the campaign",
   "Liste": "List",
   "Karte": "Map",
   "Sammeln": "Collection",
@@ -230,7 +231,8 @@ const Map<String, dynamic> en = {
 };
 
 const Map<String, dynamic> de = {
-  "Liste": "Liste",
+"Neues vom Volksbegehren und der Kampagne" : "News from the referendum and the campaign",
+"Liste": "Liste",
   "Karte": "Karte",
   "Sammeln": "Sammeln",
   "Infoveranstaltung": "Infoveranstaltung",

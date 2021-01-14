@@ -17,7 +17,7 @@ class ChatChannel {
 
   pushMessages(List<Message> messages) {
     messages
-        .where((message) => message is ChatMessage)
+        .where((message) => message is ChatMessage || message is TopicChatMessage)
         .forEach((message) => pushChatMessage(message));
     messages.where((message) => message is ParticipationMessage).forEach(
         (message) => pushParticipationMessage(message));
@@ -26,7 +26,7 @@ class ChatChannel {
     ccl?.channelChanged(this);
   }
 
-  Future<void> pushChatMessage(ChatMessage message) {
+  Future<void> pushChatMessage(Message message) {
     Message ownMessage = channel_messages
         .firstWhere((e) => message.isMessageEqual(e), orElse: () => null);
     print(ownMessage);
@@ -69,6 +69,8 @@ class ChatChannel {
         return ParticipationMessage.fromJson(jsonMsg);
       if (type == PushDataTypes.SimpleChatMessage)
         return ChatMessage.fromJson(jsonMsg);
+      if (type == PushDataTypes.TopicChatMessage)
+        return TopicChatMessage.fromJson(jsonMsg);
       ErrorService.handleError(
           throw UnkownMessageTypeError(
               'Unbekannter Nachrichtentyp abgespeichert'),
