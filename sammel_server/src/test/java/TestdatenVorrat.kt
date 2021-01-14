@@ -23,6 +23,10 @@ class TestdatenVorrat {
             return Benutzer(12, "Rosa Luxemburg", 0)
         ***REMOVED***
 
+        fun bini(): Benutzer {
+            return Benutzer(13, "Bini Adamczak", 3L)
+        ***REMOVED***
+
         fun terminOhneTeilnehmerOhneDetails(): Termin {
             return Termin(1L,
                     LocalDateTime.of(2019, 10, 22, 16, 30, 0),
