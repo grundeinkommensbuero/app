@@ -179,5 +179,8 @@ ChatPushData chatPushDataFromJson(Map<String, dynamic> data) {
     pushData = ChatMessagePushData.fromJson(data);
   if (pushData.type == PushDataTypes.ParticipationMessage)
     pushData = ParticipationPushData.fromJson(data);
+  if (pushData.type == PushDataTypes.TopicChatMessage)
+    pushData = TopicChatMessagePushData.fromJson(data);
+
   return pushData;
 ***REMOVED***

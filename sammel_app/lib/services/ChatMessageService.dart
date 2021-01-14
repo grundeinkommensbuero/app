@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/model/ChatChannel.dart';
-import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/routes/ChatListWidget.dart';
 import 'package:sammel_app/routes/ChatWindow.dart';
 import 'package:sammel_app/routes/TopicChatWindow.dart';
 import 'package:sammel_app/services/ErrorService.dart';
@@ -48,7 +47,7 @@ class ChatMessageService implements PushNotificationListener {
           notifier.sendParticipationNotification(
               ParticipationPushData.fromJson(json));
         if (json['type'] == PushDataTypes.TopicChatMessage) {
-          print('topicchatmessage ${TopicChatMessagePushData.fromJson(data)***REMOVED***');
+          print('topicchatmessage ${TopicChatMessagePushData.fromJson(json)***REMOVED***');
           notifier.sendTopicChatNotification(
               TopicChatMessagePushData.fromJson(json));
         ***REMOVED***
