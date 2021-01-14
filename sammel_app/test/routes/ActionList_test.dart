@@ -21,7 +21,7 @@ void main() {
       TerminTestDaten.einTermin(),
       TerminTestDaten.einTermin(),
       TerminTestDaten.einTermin(),
-    ], (_) => false, (_) => false, (_) {***REMOVED***))));
+    ], (_) => false, (_) => false, (_) => false, (_) {***REMOVED***))));
 
     expect(find.byType(TerminCard), findsNWidgets(3));
   ***REMOVED***);
@@ -36,7 +36,7 @@ void main() {
       TerminTestDaten.einTermin()..id = 1,
       TerminTestDaten.einTermin()..id = 2,
       TerminTestDaten.einTermin()..id = 3,
-    ], isMyAction, (_) => true, (_) {***REMOVED***))));
+    ], isMyAction, (_) => false, (_) => true, (_) {***REMOVED***))));
 
     List<TerminCard> actionCards = tester
         .widgetList(find.byKey(Key('action card')))
@@ -60,7 +60,7 @@ void main() {
       TerminTestDaten.einTermin()..participants = [rosa()],
       TerminTestDaten.einTermin()..participants = [karl()],
       TerminTestDaten.einTermin()..participants = [rosa()],
-    ], (_) => false, participating, (_) {***REMOVED***))));
+    ], (_) => false, (_) {***REMOVED***, participating, (_) {***REMOVED***))));
 
     List<TerminCard> actionCards = tester
         .widgetList(find.byKey(Key('action card')))

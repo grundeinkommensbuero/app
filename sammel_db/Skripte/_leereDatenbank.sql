@@ -9,3 +9,4 @@ drop table Stamm_Orte;
 drop table Token;
 drop table points; # nicht in DWE-DB!
 drop table Subscriptions;
+drop table Evaluationen;

@@ -6,12 +6,14 @@ import de.kybernetik.database.benutzer.BenutzerDao
 import de.kybernetik.database.termine.Termin
 import de.kybernetik.database.termine.TerminDetails
 import de.kybernetik.database.termine.TermineDao
+import de.kybernetik.database.termine.Evaluation
 import de.kybernetik.database.termine.Token
 import de.kybernetik.rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithDetails
 import org.jboss.logging.Logger
 import de.kybernetik.rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithoutDetails
 import de.kybernetik.services.NeueAktionenNotification
 import de.kybernetik.services.PushService
+import org.wildfly.security.http.HttpConstants.FORBIDDEN
 import java.time.LocalDateTime
 import java.time.ZonedDateTime.now
 import java.time.format.DateTimeFormatter.*
@@ -204,6 +206,39 @@ open class TermineRestResource {
     ***REMOVED***
 
     @POST
+    @Path("evaluation")
+    @RolesAllowed("user")
+    @Consumes(APPLICATION_JSON)
+    @Produces(APPLICATION_JSON)
+    open fun aktualisiereEvaluation(evaluation: EvaluationDto): Response {
+        if (evaluation.termin_id == null) return noValidActionResponse
+        LOG.debug("Aktualisiere Evaluation für ${evaluation.termin_id***REMOVED***")
+
+        val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
+
+        val terminAusDb = dao.getTermin(evaluation.termin_id!!)
+        if (terminAusDb == null) return noValidActionResponse
+
+        if (!terminAusDb.teilnehmer.map { it.id.toString() ***REMOVED***.contains(context.userPrincipal.name)) {
+            LOG.warn("Unbefugte Benutzer*in ${context.userPrincipal.name***REMOVED*** versucht Aktion${evaluation.termin_id***REMOVED*** zu evaluieren")
+            return Response
+                .status(FORBIDDEN)
+                .entity("Du bist nicht Teilnehmer*in dieser Aktion")
+                .build()
+        ***REMOVED***
+
+        try {
+            dao.speichereEvaluation(evaluation.convertToEvaluation(userAusDb!!.id))
+        ***REMOVED*** catch (e: EJBException) {
+            LOG.error("Fehler beim Mergen der Evaluation: Evaluation: ${evaluation***REMOVED***\n", e)
+            return Response.status(422).entity(e.message).build()
+        ***REMOVED***
+        return Response
+            .ok()
+            .build()
+    ***REMOVED***
+
+    @POST
     @Path("absage")
     @RolesAllowed("user")
     @Produces(APPLICATION_JSON)
@@ -213,23 +248,51 @@ open class TermineRestResource {
                 .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
                 .build()
 
-        val AktionAusDb = dao.getTermin(id)
-        if (AktionAusDb == null)
+        val aktionAusDb = dao.getTermin(id)
+        if (aktionAusDb == null)
             return Response.status(422)
                 .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
                 .build()
 
         val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
-        val userAusListe = AktionAusDb.teilnehmer.find { it.id == userAusDb!!.id ***REMOVED***
+        val userAusListe = aktionAusDb.teilnehmer.find { it.id == userAusDb!!.id ***REMOVED***
 
         if (userAusListe == null)
             return Response.accepted().build()
 
-        AktionAusDb.teilnehmer -= userAusListe
-        dao.aktualisiereTermin(AktionAusDb)
-        informiereUeberAbsage(userAusDb!!, AktionAusDb)
+        aktionAusDb.teilnehmer -= userAusListe
+        dao.aktualisiereTermin(aktionAusDb)
+        informiereUeberAbsage(userAusDb!!, aktionAusDb)
 
         return Response.accepted().build()
+    ***REMOVED***
+
+    data class EvaluationDto(
+        var id: Long? = null,
+        var termin_id: Long? = null,
+        var teilnehmer: Long? = null,
+        var unterschriften: Long? = null,
+        var bewertung: Long? = null,
+        var stunden: Double? = null,
+        var kommentar: String? = null,
+        var situation: String? = null,
+        var ausgefallen: Boolean? = null
+    ) {
+        fun convertToEvaluation(user_id: Long?): Evaluation {
+            return Evaluation(
+                id = id ?: 0,
+                termin_id = termin_id,
+                user_id = user_id,
+                teilnehmer = teilnehmer,
+                unterschriften = unterschriften,
+                bewertung = bewertung,
+                stunden = stunden,
+                kommentar = kommentar,
+                situation = situation,
+                ausgefallen = ausgefallen
+            )
+        ***REMOVED***
+
     ***REMOVED***
 
     data class TerminDto(
@@ -403,7 +466,7 @@ open class TermineRestResource {
             )
         )
         val restTeilnehmer = teilnehmer.subList(1, teilnehmer.size)
-        if (teilnehmer.size > 0)
+        if (teilnehmer.isNotEmpty())
             LOG.debug("Informiere Teilnehmer ${teilnehmer.map { it.id ***REMOVED******REMOVED*** von Aktion ${aktion.id***REMOVED*** über Änderungen")
         pushService.sendePushNachrichtAnEmpfaenger(pushMessage, restTeilnehmer)
     ***REMOVED***

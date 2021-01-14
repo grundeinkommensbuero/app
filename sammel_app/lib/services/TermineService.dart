@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http_server/http_server.dart';
+import 'package:sammel_app/model/Evaluation.dart';
 import 'package:sammel_app/model/ActionListPushData.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/model/Termin.dart';
@@ -39,6 +40,8 @@ abstract class AbstractTermineService extends BackendService {
   joinAction(int id);
 
   leaveAction(int id);
+
+  Future<void> saveEvaluation(Evaluation evaluation);
 ***REMOVED***
 
 class TermineService extends AbstractTermineService
@@ -154,6 +157,14 @@ class TermineService extends AbstractTermineService
 
   @override
   void updateMessages(List<Map<String, dynamic>> data) {***REMOVED***
+
+  saveEvaluation(Evaluation evaluation) async {
+    try {
+      await post('service/termine/evaluation', jsonEncode(evaluation));
+    ***REMOVED*** catch (e, s) {
+      ErrorService.handleError(e, s, context: 'Evaluation ist fehlgeschlagen.');
+    ***REMOVED***
+  ***REMOVED***
 ***REMOVED***
 
 class DemoTermineService extends AbstractTermineService {
@@ -283,5 +294,11 @@ class DemoTermineService extends AbstractTermineService {
     var stored = (await termine).firstWhere((a) => a.id == id);
     if (stored.participants.map((e) => e.id).contains(1))
       stored.participants.remove(User(11, 'Ich', Colors.red));
+  ***REMOVED***
+
+  @override
+  Future<void> saveEvaluation(Evaluation evaluation) async {
+    // hier muss man nix machen, es wird sowieso lokal gespeichert, dass man eine Evaluation abgegeben hat
+    return;
   ***REMOVED***
 ***REMOVED***

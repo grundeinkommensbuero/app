@@ -125,8 +125,7 @@ class LocalNotificationService {
         payload: jsonEncode(chatMessage.toJson()));
   ***REMOVED***
 
-  Future<void> sendParticipationNotification(
-      ParticipationPushData partMessage) async {
+  Future<void> sendParticipationNotification(ParticipationPushData data) async {
     AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
             'Teilnahmen und Absagen',
@@ -143,11 +142,15 @@ class LocalNotificationService {
     print('Setze Notification ab');
     if (plugin == null) plugin = await initializeLocalNotifications(onTap);
     plugin.show(
-        partMessage.channel.hashCode,
-        'Verstärkung für deine Aktion',
-        '${partMessage.message.username***REMOVED*** ist deiner Aktion beigetreten',
+        data.channel.hashCode,
+        data.message.joins
+            ? 'Verstärkung für deine Aktion'
+            : 'Absage bei deiner Aktion',
+        data.message.joins
+            ? '${data.message.username***REMOVED*** ist deiner Aktion beigetreten'
+            : '${data.message.username***REMOVED*** hat deine Aktion verlassen',
         platformChannelSpecifics,
-        payload: jsonEncode(partMessage.toJson()));
+        payload: jsonEncode(data.toJson()));
   ***REMOVED***
 
   Future<void> sendNewActionsNotification(
