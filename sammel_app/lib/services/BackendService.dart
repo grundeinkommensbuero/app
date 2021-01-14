@@ -36,7 +36,7 @@ class BackendService {
   Future<HttpClientResponseBody> get(String url, {bool appAuth}) async {
     try {
       var response = await backend.get(url, await authHeaders(appAuth)).timeout(
-          Duration(seconds: 2),
+          Duration(seconds: 5),
           onTimeout: () async => await checkConnectivity());
 
       if (response.response.statusCode >= 200 &&
@@ -99,7 +99,7 @@ class BackendService {
     if (appAuth != null && appAuth)
       return Future.value(appHeaders);
     else
-      return userService.userHeaders.timeout(Duration(seconds: 10),
+      return userService.userHeaders.timeout(Duration(seconds: 20),
           onTimeout: () => throw NoUserAuthException);
   }
 

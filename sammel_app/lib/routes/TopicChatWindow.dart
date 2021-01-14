@@ -1,25 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:provider/provider.dart';
-import 'package:quiver/strings.dart';
 import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/model/Message.dart';
-import 'package:sammel_app/model/PushMessage.dart';
-import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/routes/ChatWindow.dart';
 import 'package:sammel_app/services/PushSendService.dart';
-import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
-import 'package:sammel_app/shared/showUsernameDialog.dart';
 import 'package:easy_localization/easy_localization.dart';
 
-import 'ChatListWidget.dart';
-import 'ChatInput.dart';
-
-class TopicChatWindow extends StatefulWidget{
+class TopicChatWindow extends StatefulWidget {
   ChatChannel channel;
   bool build_header = false;
 
@@ -29,35 +19,35 @@ class TopicChatWindow extends StatefulWidget{
   TopicChatWindowState createState() => TopicChatWindowState(channel);
 }
 
-class TopicChatWindowState extends State<TopicChatWindow>  implements ChannelChangeListener{
-
+class TopicChatWindowState extends State<TopicChatWindow>
+    implements ChannelChangeListener {
   String title = "News".tr();
-  TopicChatWindowState(this.channel);
+  List<Message> messages;
 
-  ChatChannel channel;
+  TopicChatWindowState(ChatChannel channel) {
+    channel.register_channel_change_listener(this);
+    messages = channel.channel_messages;
+  }
 
   AbstractPushSendService pushService;
-  
+
   @override
   Widget build(BuildContext context) {
-    this.channel.register_channel_change_listener(this);
-    print("global message count ${channel.channel_messages.length}");
-    var messages_window = ListView(children: channel.channel_messages.reversed.map((message) => buildMessageWidget(message)).toList(),reverse: true,);
-    var header_widget = buildHeader(title);
-    Scaffold page = Scaffold(
-        appBar: widget.build_header ? header_widget : null,
-        body: Container(decoration: DweTheme.happyHouseBackground, child: Padding(
-            child: messages_window, padding: EdgeInsets.only(bottom: 40))));
-    return page;
+    return Scaffold(
+        appBar: widget.build_header ? AppBar(title: Text(title)) : null,
+        body: Container(
+            decoration: DweTheme.happyHouseBackground,
+            child: Padding(
+                child: ListView(
+                  children: messages.reversed
+                      .map((message) => buildMessageWidget(message))
+                      .toList(),
+                  reverse: true,
+                ),
+                padding: EdgeInsets.only(bottom: 40))));
   }
 
-  buildHeader(String title) {
-    return AppBar(
-        title: Text(title));
-  }
-
-  Widget buildMessageWidget(TopicChatMessage message)
-  {
+  Widget buildMessageWidget(TopicChatMessage message) {
     return Align(
         alignment: Alignment.topLeft,
         child: Container(
@@ -70,35 +60,31 @@ class TopicChatWindowState extends State<TopicChatWindow>  implements ChannelCha
                     child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [Text(
+                        children: [
+                          Text(
                             message.sender_name,
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                           Padding(
                               padding: EdgeInsets.only(top: 3.0, bottom: 5.0),
-                              child: Text(
+                              child: SelectableText(
                                 message.text,
                                 textScaleFactor: 1.2,
                               )),
-                                Text(
-                                  ChronoHelfer.formatDateTime(message.timestamp),
-                                  textScaleFactor: 0.8,
-                                ),
+                          Text(
+                            ChronoHelfer.formatDateTime(message.timestamp),
+                            textScaleFactor: 0.8,
+                          ),
                         ])))));
   }
 
   @override
-  void channelChanged(ChatChannel channel) {
-    // TODO: implement channelChanged
-    setState(() {
-      widget.channel = channel;
-    });
-  }
+  void channelChanged(ChatChannel channel) =>
+      setState(() => messages = channel.channel_messages);
 
   @override
   void dispose() {
-    this.channel.dispose_widget();
+    widget.channel.disposeListener();
     super.dispose();
   }
-
 }

@@ -1,7 +1,5 @@
-import 'package:flutter/widgets.dart';
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
-import 'package:sammel_app/routes/ChatListWidget.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/routes/ChatWindow.dart';
 
@@ -51,10 +49,7 @@ class ChatChannel {
     }
   }
 
-  void dispose_widget() {
-    print('disposing widget');
-    ccl = null;
-  }
+  void disposeListener() => ccl = null;
 
   Map<String, dynamic> toJson() => {
         'id': this.id,

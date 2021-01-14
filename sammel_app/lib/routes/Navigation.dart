@@ -13,7 +13,6 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
 import 'ChatPage.dart';
-import 'ChatWindow.dart';
 import 'FAQ.dart';
 import 'TermineSeite.dart';
 
@@ -68,7 +67,7 @@ class NavigationState extends State<Navigation>
       TermineSeite(key: widget.actionPage),
       ActionEditor(onFinish: newActionCreated, key: Key('action creator')),
       faq = FAQ(),
-      chatPage = ChatPage(),
+      chatPage = ChatPage(active: navigation == chatPageIndex),
       ProfilePage()
     ];
     List<String> titles = [
@@ -204,9 +203,9 @@ class NavigationState extends State<Navigation>
 
   void switchPage(int index) async {
     print("setting state ${index} ${chatPageIndex} ${index == chatPageIndex}");
-    chatPage.isActive = index == chatPageIndex;
-    print(chatPage);
-    print("chatpage is active ${chatPage.isActive}");
+    // setState(() => chatPage.active = index == chatPageIndex);
+    // print(chatPage);
+    // print("chatpage is active ${chatPage.active}");
     setState(() => swipeUp = index > navigation);
     await _animationController.forward();
     setState(() {
@@ -256,7 +255,7 @@ class NavigationState extends State<Navigation>
         return;
       }
     if(ModalRoute.of(cls?.context)?.settings.name == "/"){
-      value.dispose_widget();
+      value.disposeListener();
     }
   }
 }
