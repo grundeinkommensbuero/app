@@ -32,7 +32,7 @@ void main() {
 }
 
 const Mode mode = Mode.DEMO;
-const version = '0.4.1+20';
+const version = '0.5.0+21';
 
 // Debug
 const bool pullMode = false;
