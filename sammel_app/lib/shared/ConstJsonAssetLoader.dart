@@ -20,8 +20,10 @@ const Map<String, dynamic> en = {
   "Infoveranstaltung": "Information event",
   "Workshop": "Workshop",
   "Unbekannter Nachrichtentyp abgespeichert": "Unknown message type saved",
-  "{kiez***REMOVED*** in {bezirk***REMOVED***\n ⛒ Treffpunkt: {treffpunkt***REMOVED***": "{kiez***REMOVED*** in {bezirk***REMOVED***\n ⛒ meeting point: {treffpunkt***REMOVED***",
-  "Unlesbare Push-Nachricht (Teilnahme) empfangen: {message***REMOVED***": "Unreadable push notification (participation) received: {message***REMOVED***",
+  "{kiez***REMOVED*** in {bezirk***REMOVED***\n ⛒ Treffpunkt: {treffpunkt***REMOVED***":
+      "{kiez***REMOVED*** in {bezirk***REMOVED***\n ⛒ meeting point: {treffpunkt***REMOVED***",
+  "Unlesbare Push-Nachricht (Teilnahme) empfangen: {message***REMOVED***":
+      "Unreadable push notification (participation) received: {message***REMOVED***",
   "Ein paar Worte über dich": "A few words about yourself",
   "Beschreibung: {beschreibung***REMOVED***": "Description: {***REMOVED***",
   "Beschreibe die Aktion kurz": "Briefly describe the event",
@@ -30,13 +32,15 @@ const Map<String, dynamic> en = {
   " bis ": " to ",
   "Wähle eine Uhrzeit": "Choose a time",
   "Jetzt": "Now",
-  "Hier liegen öffentliche Unterschriften-Listen aus. Du kannst selbst Unterschriften-Listen an öffentlichen Orten auslegen, z.B. in Cafés, Bars oder Läden. Wichtig ist, dass du die ausgefüllten Listen regelmäßig abholst.\nFrage doch mal die Betreiber*innen deines Lieblings-Spätis!\n": "Public signature lists are displayed here. You can place signature lists in public places like cafes, bars, or shops. It’s important, however, that you regularly pick up the filled-out lists.\nAsk the owners of your favourite Spätis if you can leave one there!\n",
+  "Hier liegen öffentliche Unterschriften-Listen aus. Du kannst selbst Unterschriften-Listen an öffentlichen Orten auslegen, z.B. in Cafés, Bars oder Läden. Wichtig ist, dass du die ausgefüllten Listen regelmäßig abholst.\nFrage doch mal die Betreiber*innen deines Lieblings-Spätis!\n":
+      "Public signature lists are displayed here. You can place signature lists in public places like cafes, bars, or shops. It’s important, however, that you regularly pick up the filled-out lists.\nAsk the owners of your favourite Spätis if you can leave one there!\n",
   "Du kannst den Ort eintragen auf:\n": "You can record the place at:\n",
   "Nachricht eingeben...": "Enter message…",
   "Jemand": "Someone",
   " ist der Aktion beigetreten": " has joined the event",
   " hat die Aktion verlassen": " has left the event",
-  "\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen": "\nNew participants can’t read older messages",
+  "\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen":
+      "\nNew participants can’t read older messages",
   "gerade eben": "just now",
   "{***REMOVED*** Minuten": {
     "zero": "{***REMOVED*** Minutes",
@@ -66,11 +70,14 @@ const Map<String, dynamic> en = {
   "Wähle Aktions-Arten": "Choose the event type",
   "Fertig": "Finish",
   "Treffpunkt": "Meeting point",
-  "Wähle auf der Karte einen Treffpunkt aus.": "Choose a meeting point on the map.",
-  "Du kannst eine eigene Beschreibung angeben, z.B. \"Unter der Weltzeituhr\" oder \"Tempelhofer Feld, Eingang Kienitzstraße\":": "You can provde your own description, e.g. \"Under the Weltzeituhr\" or \"Tempelhofer Feld, 'Kienitzstraße entrance\"",
+  "Wähle auf der Karte einen Treffpunkt aus.":
+      "Choose a meeting point on the map.",
+  "Du kannst eine eigene Beschreibung angeben, z.B. \"Unter der Weltzeituhr\" oder \"Tempelhofer Feld, Eingang Kienitzstraße\":":
+      "You can provde your own description, e.g. \"Under the Weltzeituhr\" or \"Tempelhofer Feld, 'Kienitzstraße entrance\"",
   "Abbrechen": "Cancel",
   "Aktionen": "Events",
-  "Aktionen in einer Liste oder Karte anschauen": "See the events in a list or on the map",
+  "Aktionen in einer Liste oder Karte anschauen":
+      "See the events in a list or on the map",
   "Zum Sammeln aufrufen": "Call people to a collection event",
   "Zum Sammeln einladen": "Invite people to a collection event",
   "Fragen und Antworten": "Questions and Answers",
@@ -79,7 +86,8 @@ const Map<String, dynamic> en = {
   "Tipps und Argumente": "Tips and arguments",
   "Tipps, Tricks und Argumentationshilfen": "Argument tips and tricks",
   "Profil": "Profile",
-  "Dein Name, dein Kiez und deine Einstellungen": "Your name, your area and your preferences",
+  "Dein Name, dein Kiez und deine Einstellungen":
+      "Your name, your area and your preferences",
   "sofort": "immediately",
   "täglich": "daily",
   "wöchentlich": "weekly",
@@ -87,11 +95,15 @@ const Map<String, dynamic> en = {
   "Sprache": "Language",
   "Dein Name": "Your name",
   "Dein Kiez": "Your area",
-  "Mit deinen Kiezen bestimmst du wo du über neue Aktionen informiert werden willst.": "By choosing areas you decide which new events you want to be notified about.",
+  "Mit deinen Kiezen bestimmst du wo du über neue Aktionen informiert werden willst.":
+      "By choosing areas you decide which new events you want to be notified about.",
   "Deine Benachrichtigungen": "Your notifications",
-  "Wie oft und aktuell willst du über neue Sammel-Aktionen in deinem Kiez informiert werden?": "How often do you want to be notified about new collection events events in your area?",
-  "Wie häufig möchtest du Infos über anstehende Aktionen bekommen?": "How often do you want to be told about upcoming events?",
-  "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\\n\\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.": "This app was developed by a small team of enthusiastic IT activists for Deutsche Wohnen & Co Enteignen and is under free license.\\n\\nIf you are interested in using the app for your own campaign, just write us an email or visit our website. You can also let us know about problems or errors with the app",
+  "Wie oft und aktuell willst du über neue Sammel-Aktionen in deinem Kiez informiert werden?":
+      "How often do you want to be notified about new collection events events in your area?",
+  "Wie häufig möchtest du Infos über anstehende Aktionen bekommen?":
+      "How often do you want to be told about upcoming events?",
+  "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\\n\\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.":
+      "This app was developed by a small team of enthusiastic IT activists for Deutsche Wohnen & Co Enteignen and is under free license.\\n\\nIf you are interested in using the app for your own campaign, just write us an email or visit our website. You can also let us know about problems or errors with the app",
   "Heute, ": "Today, ",
   "Morgen, ": "Tomorrow, ",
   "{prefix***REMOVED***{date***REMOVED*** um {zeit***REMOVED*** Uhr, ": "{prefix***REMOVED***{date***REMOVED*** at {zeit***REMOVED*** o’clock, ",
@@ -108,49 +120,78 @@ const Map<String, dynamic> en = {
   "Aktion konnte nicht gelöscht werden.": "Event could not be deleted.",
   "Aktion konnte nicht erzeugt werden.": "Event could not be generated.",
   "Aktion Löschen": "Delete event",
-  "Möchtest du diese Aktion wirklich löschen?": "Do you really want to delete this event?",
+  "Möchtest du diese Aktion wirklich löschen?":
+      "Do you really want to delete this event?",
   "Ja": "Yes",
   "Nein": "No",
-  "Es scheint keine Internet-Verbindung zu bestehen.": "It looks like you’re not connected to the internet.",
-  "Die Internet-Verbindung scheint sehr langsam zu sein.": "Your internet connection seems pretty slow.",
-  "Der Server antwortet leider nicht. Möglicherweise ist er überlastet, versuch es doch später nochmal": "The server isn’t answering. It could be overloaded, so please try again later.",
-  "Ein Verbindungsproblem ist aufgetreten: ": "A connection problem has occurred: ",
-  "Der Server hat leider gerade technische Probleme: ": "Unfortunately the server is having technical problems: ",
-  "Der Server reagiert nicht, obwohl eine Internet-Verbindung besteht. Vielleicht gibt es ein technisches Problem, bitte versuch es später nochmal. ": "The serving isn’t responding, even though there is an internet connection. There may be a technical problem. Please try again later. ",
-  "Das Internet scheint nicht erreichbar zu sein: ": "It looks like the internet isn’t available ",
-  "Es ist ein Fehler aufgetreten beim Verifizieren deines Benutzer*in-Accounts. Probiere es eventuell zu einem späteren Zeitpunkt noch einmal oder versuche die App nochmal neu zu installieren, wenn du keine eigenen Aktionen betreust.": "An error has occurred while verifying your user account. Please try again later or reinstall the app if you don’t have any events of your own saved.",
-  "SSL-Zertifikat konnte nicht geladen werden": "SSL-certificate could not be loaded",
-  "Deine App-Version ist veraltet. Dies ist die Version {version***REMOVED***, du musst aber mindestens Version {minClient***REMOVED*** benutzen, damit die App richtig funktioniert.": "Your version of the app is out-of-date. This is version {version***REMOVED***. You need to use at {minClient***REMOVED*** or later, for the app to work properly.",
+  "Es scheint keine Internet-Verbindung zu bestehen.":
+      "It looks like you’re not connected to the internet.",
+  "Die Internet-Verbindung scheint sehr langsam zu sein.":
+      "Your internet connection seems pretty slow.",
+  "Der Server antwortet leider nicht. Möglicherweise ist er überlastet, versuch es doch später nochmal":
+      "The server isn’t answering. It could be overloaded, so please try again later.",
+  "Ein Verbindungsproblem ist aufgetreten: ":
+      "A connection problem has occurred: ",
+  "Der Server hat leider gerade technische Probleme: ":
+      "Unfortunately the server is having technical problems: ",
+  "Der Server reagiert nicht, obwohl eine Internet-Verbindung besteht. Vielleicht gibt es ein technisches Problem, bitte versuch es später nochmal. ":
+      "The serving isn’t responding, even though there is an internet connection. There may be a technical problem. Please try again later. ",
+  "Das Internet scheint nicht erreichbar zu sein: ":
+      "It looks like the internet isn’t available ",
+  "Es ist ein Fehler aufgetreten beim Verifizieren deines Benutzer*in-Accounts. Probiere es eventuell zu einem späteren Zeitpunkt noch einmal oder versuche die App nochmal neu zu installieren, wenn du keine eigenen Aktionen betreust.":
+      "An error has occurred while verifying your user account. Please try again later or reinstall the app if you don’t have any events of your own saved.",
+  "SSL-Zertifikat konnte nicht geladen werden":
+      "SSL-certificate could not be loaded",
+  "Deine App-Version ist veraltet. Dies ist die Version {version***REMOVED***, du musst aber mindestens Version {minClient***REMOVED*** benutzen, damit die App richtig funktioniert.":
+      "Your version of the app is out-of-date. This is version {version***REMOVED***. You need to use at {minClient***REMOVED*** or later, for the app to work properly.",
   "Falsches Format": "Wrong format",
-  "Listen-Orte konnten nicht geladen werden.": "List of locations could not be loaded.",
+  "Listen-Orte konnten nicht geladen werden.":
+      "List of locations could not be loaded.",
   "Teilnahmen und Absagen": "Participation and cancelation",
-  "Benachrichtigungen über Mitstreiter*innen bei Aktionen an denen du teilnimmst": "Notifications about other participants at events you’re taking part in",
+  "Benachrichtigungen über Mitstreiter*innen bei Aktionen an denen du teilnimmst":
+      "Notifications about other participants at events you’re taking part in",
   "Änderungen an Aktionen": "Changes to an event",
-  "Änderungen an Benachrichtigungen wenn sich Aktionen geändert haben oder abgesagt wurden an denen du teilnimmst": "Changes to notifications when events you’re participating in have changed or been canceled.",
+  "Änderungen an Benachrichtigungen wenn sich Aktionen geändert haben oder abgesagt wurden an denen du teilnimmst":
+      "Changes to notifications when events you’re participating in have changed or been canceled.",
   "Aktionen-Chats": "Event chats",
-  "Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst": "Notifications about new chat messages about events you’re taking part in",
+  "Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst":
+      "Notifications about new chat messages about events you’re taking part in",
   "Infos": "Info",
   "Allgemeine Infos": "General info",
   "Nachricht von {name***REMOVED***": "Message from {name***REMOVED***",
-  "Problem beim Einrichten von Push-Nachrichten": "Error when opening a push message",
-  "Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. Das kann der Fall sein, wenn etwa ein Google-freies Betriebssystem genutzt wird. Darum kann die App nur Benachrichtigungen empfangen während sie geöffnet ist.": "A connection to the Google Push service could not be established. That can happen if, for example, a Google-free operating system is being used, in which case the app can only receive notifications while it’s open.",
-  "Beim Abrufen von Nachrichten ist ein Fehler aufgetreten. Das regelmäßige Abrufen von Nachrichten wird deshalb deaktiviert": "An error occurred when retrieving messages. Regular message retrieval has been disabled",
-  "Fehler beim Anmelden der Benachrichtigungen zu {topics***REMOVED***": "Error logging in to notifications about {topics***REMOVED***",
-  "Fehler beim Abmelden der Benachrichtigungen zu {topics***REMOVED***": "Error logging out from notifications about {topics***REMOVED***",
-  "Für Push-Nachrichten an Geräte muss mindestens ein Empfänger angegeben werden.": "At least one recipient needs to be chosen for push messages to another device.",
-  "Push-Nachricht an Geräte konnte nicht versandt werden": "Push notifications could not be sent to the device",
-  "Für Push-Nachrichten an Topics muss ein Topic angegeben werden.": "For push notifications about topics, you need to enter a topic",
-  "Push-Nachricht an Thema konnte nicht versandt werden": "Push notification about a theme could not be sent",
-  "Für Push-Nachrichten an Aktionen muss die Aktions-ID angegeben werden.": "For push notifications about events, you need to enter the Event ID.",
-  "Push-Nachricht an Aktion konnte nicht versandt werden.": "Push notification about event could not be sent.",
+  "Problem beim Einrichten von Push-Nachrichten":
+      "Error when opening a push message",
+  "Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. Das kann der Fall sein, wenn etwa ein Google-freies Betriebssystem genutzt wird. Darum kann die App nur Benachrichtigungen empfangen während sie geöffnet ist.":
+      "A connection to the Google Push service could not be established. That can happen if, for example, a Google-free operating system is being used, in which case the app can only receive notifications while it’s open.",
+  "Beim Abrufen von Nachrichten ist ein Fehler aufgetreten. Das regelmäßige Abrufen von Nachrichten wird deshalb deaktiviert":
+      "An error occurred when retrieving messages. Regular message retrieval has been disabled",
+  "Fehler beim Anmelden der Benachrichtigungen zu {topics***REMOVED***":
+      "Error logging in to notifications about {topics***REMOVED***",
+  "Fehler beim Abmelden der Benachrichtigungen zu {topics***REMOVED***":
+      "Error logging out from notifications about {topics***REMOVED***",
+  "Für Push-Nachrichten an Geräte muss mindestens ein Empfänger angegeben werden.":
+      "At least one recipient needs to be chosen for push messages to another device.",
+  "Push-Nachricht an Geräte konnte nicht versandt werden":
+      "Push notifications could not be sent to the device",
+  "Für Push-Nachrichten an Topics muss ein Topic angegeben werden.":
+      "For push notifications about topics, you need to enter a topic",
+  "Push-Nachricht an Thema konnte nicht versandt werden":
+      "Push notification about a theme could not be sent",
+  "Für Push-Nachrichten an Aktionen muss die Aktions-ID angegeben werden.":
+      "For push notifications about events, you need to enter the Event ID.",
+  "Push-Nachricht an Aktion konnte nicht versandt werden.":
+      "Push notification about event could not be sent.",
   "Teilnahme ist fehlgeschlagen.": "Participation failed.",
   "Absage ist fehlgeschlagen.": "Cancelation failed.",
   "Neue Aktionen": "New events",
   "Gelöschte Aktionen": "Deleted events",
   "Eine neue Benutzer*in wird angelegt.": "A new user has been created.",
-  "Anlegen einer neuen Benutzer*in ist gescheitert.": "Creation of a new user has failed.",
-  "Benutzer*indaten konnte nicht überprüft werden.": "User data could not be checked.",
-  "Benutzer*in-Name konnte nicht geändert werden.": "Username could not be changed.",
+  "Anlegen einer neuen Benutzer*in ist gescheitert.":
+      "Creation of a new user has failed.",
+  "Benutzer*indaten konnte nicht überprüft werden.":
+      "User data could not be checked.",
+  "Benutzer*in-Name konnte nicht geändert werden.":
+      "Username could not be changed.",
   "Bezirke oder Kieze auswählen": "Choose the area or hood",
   "Mo": "Mon",
   "Di": "Tue",
@@ -163,16 +204,21 @@ const Map<String, dynamic> en = {
   "Endzeit": "End time",
   "Weiter": "Next",
   "Keine Auswahl": "No selection",
-  "Um diese Aktion auszuführen musst du dir einen Benutzer*in-Name geben": "To perform this action you need to give yourself a username",
+  "Um diese Aktion auszuführen musst du dir einen Benutzer*in-Name geben":
+      "To perform this action you need to give yourself a username",
   "am {tage***REMOVED***,": "on {tage***REMOVED***,",
   "Auswählen": "Select",
   "Auswahl übernehmen": "Apply selection",
-  "Das Volksbegehren lebt von deiner Beteiligung! \n": "The referendum thrives on your participation! \n",
-  "Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.": "If you can't find a suitable collection event, invite others to collect signatures together. Others can see your call to collect and join in. You can edit or delete the event at any time.",
+  "Das Volksbegehren lebt von deiner Beteiligung! \n":
+      "The referendum thrives on your participation! \n",
+  "Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.":
+      "If you can't find a suitable collection event, invite others to collect signatures together. Others can see your call to collect and join in. You can edit or delete the event at any time.",
   "Kontakt": "Contact",
-  "Hier kannst du ein paar Worte über dich verlieren, \nvor allem, wie man dich kontaktieren kann, damit andere sich mit dir zum Sammeln verabreden können. \nBeachte dass alle Sammler*innen deine Angaben lesen können.": "You can say a few words about yourself here, \nespecially how to contact you so that others can arrange to collect signatures with you. \nMake sure that all collectors can read your information.",
+  "Hier kannst du ein paar Worte über dich verlieren, \nvor allem, wie man dich kontaktieren kann, damit andere sich mit dir zum Sammeln verabreden können. \nBeachte dass alle Sammler*innen deine Angaben lesen können.":
+      "You can say a few words about yourself here, \nespecially how to contact you so that others can arrange to collect signatures with you. \nMake sure that all collectors can read your information.",
   "Beschreibung": "Description",
-  "Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammlerinnen und Sammler mitbringen? Kann man auch später dazustoßen, usw": "Briefly describe the event. Where do you want to collect signatures? What should the other collectors bring along? Can they join you later? etc.",
+  "Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammlerinnen und Sammler mitbringen? Kann man auch später dazustoßen, usw":
+      "Briefly describe the event. Where do you want to collect signatures? What should the other collectors bring along? Can they join you later? etc.",
   "Wähle einen Tag": "Choose a day",
   "am ": "on ",
   "Gib einen Treffpunkt an": "Specify a meeting point",
@@ -186,25 +232,32 @@ const Map<String, dynamic> en = {
   "Situation": "Situation",
   "Spaßfaktor": "Fun factor",
   "Erzähl uns, was ihr erreicht habt! \n": "Tell us what you accomplished! \n",
-  "Deine Rückmeldung hilft Deinem Kiez-Team, die effektivsten Sammelaktionen zu erkennen. Außerdem können andere Teams von euren Erfahrungen lernen.": "Your feedback helps your Kiez Team identify the most effective collection events. Other Teams can also learn from your experiences.",
+  "Deine Rückmeldung hilft Deinem Kiez-Team, die effektivsten Sammelaktionen zu erkennen. Außerdem können andere Teams von euren Erfahrungen lernen.":
+      "Your feedback helps your Kiez Team identify the most effective collection events. Other Teams can also learn from your experiences.",
   "Anzahl Deiner Unterschriften": "Number of signatures",
-  "Wie viele Unterschriften hast Du persönlich gesammelt?": "How many signatures did you personally collect?",
+  "Wie viele Unterschriften hast Du persönlich gesammelt?":
+      "How many signatures did you personally collect?",
   "Wie fandest Du die Aktion?": "How did you like the event?",
   "sehr cool": "very cool",
   "gut": "good",
   "ganz okay": "okay",
   "mäßig": "mediocre",
   "doof": "dumb",
-  "Wie viele Stunden habt ihr gesammelt?": "How many hours did you spend collecting?",
-  "Wie viele Stunden warst Du sammeln?": "How many hours did you personally spend collecting?",
+  "Wie viele Stunden habt ihr gesammelt?":
+      "How many hours did you spend collecting?",
+  "Wie viele Stunden warst Du sammeln?":
+      "How many hours did you personally spend collecting?",
   "Auf die nächste halbe Stunde gerundet": "Round to the next half hour",
   "Wie viel hast Du gesammelt?": "How many did you collect?",
   "Anmerkungen": "Notes",
   "Kommentar": "Comments",
-  "Optional: Sonstige Anmerkungen zu den Daten?": "Optional: Other notes on the information?",
+  "Optional: Sonstige Anmerkungen zu den Daten?":
+      "Optional: Other notes on the information?",
   "Anmerkungen: ": "Notes: ",
-  "Optional: Muss man noch etwas zu den obigen Daten wissen?": "Optional: Is there anything else you should share about the above data?",
-  "Wie war die Situation? (Wetter, Veranstaltung in der Nähe, besonderer Anlass, ...)": "How was the situation? (weather, events in the area, a special occasion, ...)",
+  "Optional: Muss man noch etwas zu den obigen Daten wissen?":
+      "Optional: Is there anything else you should share about the above data?",
+  "Wie war die Situation? (Wetter, Veranstaltung in der Nähe, besonderer Anlass, ...)":
+      "How was the situation? (weather, events in the area, a special occasion, ...)",
   "Situation: ": "Situation: ",
   "Optional: Wie war die Situation?": "Optional: How was the situation?",
   "Erzähl uns, was ihr erreicht habt!\n": " Tell us what you accomplished!\n",
@@ -215,12 +268,15 @@ const Map<String, dynamic> en = {
     "others": "{***REMOVED*** signatures"
   ***REMOVED***,
   "News": "News",
-  "Neues vom Volksbegehren und der Kampagne" : "News from the referendum and the campaign"
+  "Neues vom Volksbegehren und der Kampagne":
+      "News from the referendum and the campaign"
 ***REMOVED***
 
 const Map<String, dynamic> de = {
-"Neues vom Volksbegehren und der Kampagne" : "News from the referendum and the campaign",
-"Liste": "Liste",
+  "News": "News",
+  "Neues vom Volksbegehren und der Kampagne":
+      "Neues vom Volksbegehren und der Kampagne",
+  "Liste": "Liste",
   "Karte": "Karte",
   "Sammeln": "Sammeln",
   "Infoveranstaltung": "Infoveranstaltung",
@@ -424,7 +480,7 @@ const Map<String, dynamic> de = {
   "Auswählen": "Auswählen",
   "Auswahl übernehmen": "Auswahl übernehmen",
   "Das Volksbegehren lebt von deiner Beteiligung! \n":
-      "Das Volksbegehren lebt von deiner Beteiligung! \\n",
+      "Das Volksbegehren lebt von deiner Beteiligung! \n",
   "Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.":
       "Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.",
   "Kontakt": "Kontakt",
