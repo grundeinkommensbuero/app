@@ -96,7 +96,7 @@ const Map<String, dynamic> en = {
   "Dein Name": "Your name",
   "Dein Kiez": "Your area",
   "Mit deinen Kiezen bestimmst du wo du über neue Aktionen informiert werden willst.":
-      "By choosing areas you decide which new events you want to be notified about.",
+      "By choosing areas you decide which new events you’ll be notified about.",
   "Deine Benachrichtigungen": "Your notifications",
   "Wie oft und aktuell willst du über neue Sammel-Aktionen in deinem Kiez informiert werden?":
       "How often do you want to be notified about new collection events events in your area?",
@@ -192,7 +192,7 @@ const Map<String, dynamic> en = {
       "User data could not be checked.",
   "Benutzer*in-Name konnte nicht geändert werden.":
       "Username could not be changed.",
-  "Bezirke oder Kieze auswählen": "Choose the area or hood",
+  "Bezirke oder Kieze auswählen": "Choose the area or borough",
   "Mo": "Mon",
   "Di": "Tue",
   "Mi": "Wed",
@@ -269,13 +269,14 @@ const Map<String, dynamic> en = {
   ***REMOVED***,
   "News": "News",
   "Neues vom Volksbegehren und der Kampagne":
-      "News from the referendum and the campaign"
+      "News from the referendum and the campaign",
+  "Datenschutz": "Privacy",
+  "Deine Daten": "Your Data",
+  "Alle Daten, die du in die App eingibst werden ausschließlich auf Systemen der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht. \nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an e@mail.com.":
+      "All the data you put into the app will be stored exclusively at system of the Deutsche Wohnen & Co. Enteignen campaign and will only be used for the purpose of this app and the campaign. Please take into account that many of the data that you input can be read by other users of this app. Chat messages can only be viewed by participants of the chat at message time. \nFor push notification functionality we depend on Google and Appla delivering infrastructure. Data that are transported this way are being encrypted. If you want us to remove all personal data you input please mail us at e@mail.com."
 ***REMOVED***
 
 const Map<String, dynamic> de = {
-  "News": "News",
-  "Neues vom Volksbegehren und der Kampagne":
-      "Neues vom Volksbegehren und der Kampagne",
   "Liste": "Liste",
   "Karte": "Karte",
   "Sammeln": "Sammeln",
@@ -480,7 +481,7 @@ const Map<String, dynamic> de = {
   "Auswählen": "Auswählen",
   "Auswahl übernehmen": "Auswahl übernehmen",
   "Das Volksbegehren lebt von deiner Beteiligung! \n":
-      "Das Volksbegehren lebt von deiner Beteiligung! \n",
+      "Das Volksbegehren lebt von deiner Beteiligung! \\n",
   "Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.":
       "Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.",
   "Kontakt": "Kontakt",
@@ -496,5 +497,54 @@ const Map<String, dynamic> de = {
   "Wo?": "Wo?",
   "Was?": "Was?",
   "Wer?": "Wer?",
-  "Benutzer*in-Name": "Benutzer*in-Name"
+  "News": "Neuigkeiten",
+  "Neues vom Volksbegehren und der Kampagne":
+      "Neues vom Volksbegehren und der Kampagne",
+  "Benutzer*in-Name": "Benutzer*in-Name",
+  "Anzahl Unterschriften": "Anzahl Unterschriften",
+  "Dauer": "Dauer",
+  "Situation": "Situation",
+  "Spaßfaktor": "Spaßfaktor",
+  "Erzähl uns, was ihr erreicht habt! \n":
+      "Erzähl uns, was ihr erreicht habt! \n",
+  "Deine Rückmeldung hilft Deinem Kiez-Team, die effektivsten Sammelaktionen zu erkennen. Außerdem können andere Teams von euren Erfahrungen lernen.":
+      "Deine Rückmeldung hilft Deinem Kiez-Team, die effektivsten Sammelaktionen zu erkennen. Außerdem können andere Teams von euren Erfahrungen lernen.",
+  "Anzahl Deiner Unterschriften": "Anzahl Deiner Unterschriften",
+  "Wie viele Unterschriften hast Du persönlich gesammelt?":
+      "Wie viele Unterschriften hast Du persönlich gesammelt?",
+  "Wie fandest Du die Aktion?": "Wie fandest Du die Aktion?",
+  "sehr cool": "sehr cool",
+  "gut": "gut",
+  "ganz okay": "ganz okay",
+  "mäßig": "mäßig",
+  "doof": "doof",
+  "Wie viele Stunden habt ihr gesammelt?":
+      "Wie viele Stunden habt ihr gesammelt?",
+  "Wie viele Stunden warst Du sammeln?": "Wie viele Stunden warst Du sammeln?",
+  "Auf die nächste halbe Stunde gerundet":
+      "Auf die nächste halbe Stunde gerundet",
+  "Wie viel hast Du gesammelt?": "Wie viel hast Du gesammelt?",
+  "Anmerkungen": "Anmerkungen",
+  "Kommentar": "Kommentar",
+  "Optional: Sonstige Anmerkungen zu den Daten?":
+      "Optional: Sonstige Anmerkungen zu den Daten?",
+  "Anmerkungen: ": "Anmerkungen: ",
+  "Optional: Muss man noch etwas zu den Angaben wissen?":
+      "Optional: Muss man noch etwas zu den Angaben wissen?",
+  "Wie war die Situation? (Wetter, Veranstaltung in der Nähe, besonderer Anlass, ...)":
+      "Wie war die Situation? (Wetter, Veranstaltung in der Nähe, besonderer Anlass, ...)",
+  "Situation: ": "Situation: ",
+  "Optional: Wie war die Situation?": "Optional: Wie war die Situation?",
+  "Erzähl uns, was ihr erreicht habt!\n":
+      "Erzähl uns, was ihr erreicht habt!\n",
+  "{***REMOVED*** Unterschriften": {
+    "zero": "{***REMOVED*** Unterschriften",
+    "one": "{***REMOVED*** Unterschrift",
+    "two": "{***REMOVED*** Unterschriften",
+    "others": "{***REMOVED*** Unterschriften"
+  ***REMOVED***,
+  "Datenschutz": "Datenschutz",
+  "Deine Daten": "Deine Daten",
+  "Alle Daten, die du in die App eingibst werden ausschließlich auf Systemen der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht. \nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an e@mail.com.":
+      "Alle Daten, die du in die App eingibst werden ausschließlich auf Systemen der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht. \nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an e@mail.com."
 ***REMOVED***
