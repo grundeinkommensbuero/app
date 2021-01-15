@@ -66,12 +66,13 @@ class ProfilePageState extends State<ProfilePage> {
                   child: Container(
                       alignment: Alignment.center,
                       child: Text(
-                          languages[EasyLocalization.of(context)
-                                  ?.locale
-                                  ?.languageCode] ??
-                              'Keine',
-                          overflow: TextOverflow.fade,
-                          style: TextStyle(fontSize: 28))),
+                              languages[EasyLocalization.of(context)
+                                      ?.locale
+                                      ?.languageCode] ??
+                                  'Keine',
+                              overflow: TextOverflow.fade,
+                              style: TextStyle(fontSize: 28))
+                          .tr()),
                   onPressed: showLanguageDialog,
                 ),
                 SizedBox(height: 20.0),
@@ -94,10 +95,11 @@ class ProfilePageState extends State<ProfilePage> {
                     child: Container(
                         child: Column(children: [
                       Text(kiezeCaption,
-                          maxLines: 20,
-                          style: TextStyle(
-                              fontSize: 12 +
-                                  16 / ((100 + kiezeCaption.length) / 100))),
+                              maxLines: 20,
+                              style: TextStyle(
+                                  fontSize: 12 +
+                                      16 / ((100 + kiezeCaption.length) / 100)))
+                          .tr(),
                       SizedBox(height: 10.0),
                       Text(
                         'Mit deinen Kiezen bestimmst du wo du über neue Aktionen informiert werden willst.',
@@ -111,7 +113,8 @@ class ProfilePageState extends State<ProfilePage> {
                     title: "Deine Benachrichtigungen",
                     child: Container(
                         child: Column(children: [
-                      Text(interval ?? 'nie', style: TextStyle(fontSize: 28.0)),
+                      Text(interval ?? 'nie', style: TextStyle(fontSize: 28.0))
+                          .tr(),
                       SizedBox(height: 10.0),
                       Text(
                         'Wie oft und aktuell willst du über neue Sammel-Aktionen in deinem Kiez informiert werden?',
@@ -120,6 +123,20 @@ class ProfilePageState extends State<ProfilePage> {
                       ).tr()
                     ])),
                     onPressed: (context) => showNotificationDialog(context)),
+                SizedBox(height: 20.0),
+                ProfileItem(
+                    title: "Deine Daten",
+                    child: Container(
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                          Text('Datenschutz',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: 28.0)),
+                        ])),
+                    onPressed: (context) => showPrivacyDialog(context),
+                    editable: false),
                 SizedBox(height: 20.0),
                 SelectableText('User-ID: ${user?.id***REMOVED***, Push-Token: $token',
                     textAlign: TextAlign.center),
@@ -174,8 +191,9 @@ class ProfilePageState extends State<ProfilePage> {
             key: Key('notification selection dialog'),
             contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
             titlePadding: EdgeInsets.all(15.0),
-            title: const Text(
+            title: Text(
                     'Wie häufig möchtest du Infos über anstehende Aktionen bekommen?')
+                .tr()
                 .tr(),
             children: []..addAll(intervalOptions.map((option) => RadioListTile(
                   groupValue: interval,
@@ -201,12 +219,38 @@ class ProfilePageState extends State<ProfilePage> {
   ***REMOVED***
 ***REMOVED***
 
+showPrivacyDialog(BuildContext context) {
+  showDialog(
+      context: context,
+      child: SimpleDialog(
+          key: Key('privacy selection dialog'),
+          contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
+          titlePadding: EdgeInsets.all(15.0),
+          title: Text('Datenschutz').tr(),
+          children: [
+            Image.asset(
+              'assets/images/housy_info.png',
+              height: 250,
+            ),
+            Container(
+                padding: EdgeInsets.all(10),
+                child: Text(
+                        'Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an e@mail.com.')
+                    .tr()),
+            FlatButton(
+                child: Text('Okay', textAlign: TextAlign.end).tr(),
+                onPressed: () => Navigator.pop(context))
+          ]));
+***REMOVED***
+
 class ProfileItem extends StatelessWidget {
   final Widget child;
   final String title;
   final Function(BuildContext) onPressed;
+  var editable;
 
-  ProfileItem({this.child, this.title = '', this.onPressed***REMOVED***) {
+  ProfileItem(
+      {this.child, this.title = '', this.onPressed, this.editable = true***REMOVED***) {
     assert(child != null);
   ***REMOVED***
 
@@ -248,7 +292,7 @@ class ProfileItem extends StatelessWidget {
                         child,
                         SizedBox(width: 15.0)
                       ])),
-                  Icon(Icons.edit),
+                  editable ? Icon(Icons.edit) : SizedBox(),
                 ])));
   ***REMOVED***
 ***REMOVED***
