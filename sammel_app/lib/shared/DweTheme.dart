@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 class DweTheme {
-  static final Color yellow = Color.fromARGB(255, 255, 216, 0);
+  static final Color yellow = Color.fromARGB(255, 253, 216, 22);
+  //                                              253 /216/22
   static final Color yellowLight = Color.fromARGB(255, 255, 230, 40);
   static final Color yellowBright = Color.fromARGB(255, 255, 255, 130);
-  static final Color purple = Color.fromARGB(255, 129, 28, 98);
+  static final Color purple = Color.fromARGB(255, 128, 28, 98);
+  //                                              128 /28 /98
   static final Color red = Color.fromARGB(255, 204, 36, 36);
   static final Color greenLight = Color.fromARGB(255, 213, 252, 207);
   static final Color green = Color.fromARGB(255, 125, 244, 107);
@@ -34,6 +36,7 @@ class DweTheme {
         buttonColor: purple,
         textTheme: ButtonTextTheme.primary),
     iconTheme: IconThemeData(color: purple),
+    fontFamily: 'Raleway',
   );
 
   static var menuCaption = TextStyle(fontSize: 20.0, color: DweTheme.purple);

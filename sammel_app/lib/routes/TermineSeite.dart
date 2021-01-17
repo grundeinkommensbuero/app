@@ -261,12 +261,15 @@ class TermineSeiteState extends State<TermineSeite>
                           SizedBox(width: 5),
                           Row(
                               mainAxisAlignment: MainAxisAlignment.end,
-                              children: []..add(RaisedButton(
-                                  key: Key('action details close button'),
-                                  child: Text('Schließen').tr(),
-                                  onPressed: () => Navigator.pop(
-                                      context, TerminDetailsCommand.CLOSE),
-                                )))
+                              children: []..add(SizedBox(
+                                  width: 50.0,
+                                  child: RaisedButton(
+                                    key: Key('action details close button'),
+                                    padding: EdgeInsets.all(5.0),
+                                    child: Icon(Icons.close),
+                                    onPressed: () => Navigator.pop(
+                                        context, TerminDetailsCommand.CLOSE),
+                                  ))))
                         ],
                       ),
                     ].where((element) => element != null).toList(),

@@ -51,10 +51,10 @@ class ChatMessageService implements PushNotificationListener {
           notifier.sendTopicChatNotification(
               TopicChatMessagePushData.fromJson(json));
         }
-
       }
     } on UnreadablePushMessage catch (e, s) {
-      ErrorService.handleError(e, s, context: 'Fehler beim Empfang von Push-Nachricht');
+      ErrorService.handleError(e, s,
+          context: 'Fehler beim Empfang von Push-Nachricht');
     }
   }
 
@@ -85,18 +85,17 @@ class ChatMessageService implements PushNotificationListener {
     var chat_push_data = ChatPushData.fromJson(data);
     final channel = await getChannel(chat_push_data.channel);
     State<StatefulWidget> cls = channel.ccl as State<StatefulWidget>;
-    if(Message.determineType(data) == PushDataTypes.TopicChatMessage)
-      {
-        print("create or recreate topic chat channel");
-        create_or_recreate_topic_chat_page(cls, channel);
-      }else if(Message.determineType(data) == PushDataTypes.SimpleChatMessage)
-        {
-          ChatMessage msg = chat_push_data.message as ChatMessage;
-          create_or_recreat_chat_page(cls, channel, msg.termin_id);
-        }
+    if (Message.determineType(data) == PushDataTypes.TopicChatMessage) {
+      print("create or recreate topic chat channel");
+      create_or_recreate_topic_chat_page(cls, channel);
+    } else if (Message.determineType(data) == PushDataTypes.SimpleChatMessage) {
+      ChatMessage msg = chat_push_data.message as ChatMessage;
+      create_or_recreat_chat_page(cls, channel, msg.termin_id);
+    }
   }
 
-  void create_or_recreat_chat_page(State<StatefulWidget> cls, ChatChannel channel, int termin_id) {
+  void create_or_recreat_chat_page(
+      State<StatefulWidget> cls, ChatChannel channel, int termin_id) {
     if (cls == null || ModalRoute.of(cls?.context)?.isActive == false) {
       if (cls != null) {
         Navigator.pop(cls.context);
@@ -104,13 +103,13 @@ class ChatMessageService implements PushNotificationListener {
       Provider.of<AbstractTermineService>(navigatorKey.currentContext)
           .getActionWithDetails(termin_id)
           .then((value) => navigatorKey.currentState.push(MaterialPageRoute(
-          builder: (context) => ChatWindow(channel, value, true))));
+              builder: (context) => ChatWindow(channel, value, true))));
     }
   }
 
-
-  void create_or_recreate_topic_chat_page(State<StatefulWidget> cls, ChatChannel channel) {
-    if (cls == null || ModalRoute.of(cls?.context)?.isActive == false ) {
+  void create_or_recreate_topic_chat_page(
+      State<StatefulWidget> cls, ChatChannel channel) {
+    if (cls == null || ModalRoute.of(cls?.context)?.isActive == false) {
       if (cls != null) {
         Navigator.pop(cls.context);
       }
@@ -119,7 +118,6 @@ class ChatMessageService implements PushNotificationListener {
           builder: (context) => TopicChatWindow(channel, true)));
     }
   }
-
 
   Future<ChatChannel> getActionChannel(int idNr) async =>
       await getChannel('action:$idNr');
@@ -148,13 +146,11 @@ class ChatMessageService implements PushNotificationListener {
     channels.keys.toList().forEach((id) async {
       print("reloading channels");
       ChatChannel currentChannel = null;
-      if(channels[id] is TopicChatChannel) {
+      if (channels[id] is TopicChatChannel) {
         currentChannel = await storage_service.loadTopicChatChannel(id);
+      } else {
+        currentChannel = await storage_service.loadChatChannel(id);
       }
-      else
-        {
-          currentChannel = await storage_service.loadChatChannel(id);
-        }
       if (channels[id].channel_messages.length !=
           currentChannel.channel_messages.length) {
         channels[id].channel_messages = currentChannel.channel_messages;
@@ -167,7 +163,7 @@ class ChatMessageService implements PushNotificationListener {
   updateMessages(List<Map<String, dynamic>> messages) =>
       storeMessages(messages.map((m) => chatPushDataFromJson(m)).toList());
 
-  Future<TopicChatChannel> getTopicChannel(String id) async{
+  Future<TopicChatChannel> getTopicChannel(String id) async {
     if (!channels.containsKey(id)) {
       ChatChannel storedChannel =
           await this.storage_service.loadTopicChatChannel(id);
@@ -181,7 +177,7 @@ class ChatMessageService implements PushNotificationListener {
     }
     return channels[id];
   }
-  }
+}
 
 handleBackgroundChatMessage(ChatPushData data) async {
   ChatChannel channel = await StorageService().loadChatChannel(data.channel);
