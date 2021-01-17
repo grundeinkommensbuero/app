@@ -4,11 +4,8 @@ import 'package:easy_localization/easy_localization.dart';
 
 class ConstJsonAssetLoader extends AssetLoader {
   @override
-  Future<Map<String, dynamic>> load(String _, Locale locale) async {
-    print('Lade Sprache für ${locale.languageCode***REMOVED***');
-    var translation = languages[locale.languageCode];
-    return translation;
-  ***REMOVED***
+  Future<Map<String, dynamic>> load(String _, Locale locale) async =>
+      languages[locale.languageCode];
 ***REMOVED***
 
 const Map<String, Map<String, dynamic>> languages = {'en': en, 'de': de***REMOVED***
@@ -482,7 +479,7 @@ const Map<String, dynamic> de = {
   "Auswählen": "Auswählen",
   "Auswahl übernehmen": "Auswahl übernehmen",
   "Das Volksbegehren lebt von deiner Beteiligung! \n":
-      "Das Volksbegehren lebt von deiner Beteiligung! \\n",
+      "Das Volksbegehren lebt von deiner Beteiligung! \n",
   "Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.":
       "Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.",
   "Kontakt": "Kontakt",
