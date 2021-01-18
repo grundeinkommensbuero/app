@@ -177,13 +177,16 @@ Future<dynamic> backgroundMessageHandler(Map<String, dynamic> message) async {
   var data = decrypt(message['data']);
 
   if (data['type'] == PushDataTypes.SimpleChatMessage) {
-    var pushData =
-        ActionChatMessagePushData(ChatMessage.fromJson(data), data["action_id"], data['channel']);
+    var pushData = ActionChatMessagePushData(
+        ChatMessage.fromJson(data), data["action_id"], data['channel']);
     handleBackgroundChatMessage(pushData);
-
   ***REMOVED*** else if (data['type'] == PushDataTypes.ParticipationMessage) {
-    var pushData = ParticipationPushData(
-        ParticipationMessage.fromJson(data), data["action_id"], data['channel']);
+    var pushData = ParticipationPushData(ParticipationMessage.fromJson(data),
+        data["action_id"], data['channel']);
+    handleBackgroundChatMessage(pushData);
+  ***REMOVED*** else if (data['type'] == PushDataTypes.TopicChatMessage) {
+    var pushData =
+        TopicChatMessagePushData(ChatMessage.fromJson(data), data['channel']);
     handleBackgroundChatMessage(pushData);
   ***REMOVED***
 ***REMOVED***
