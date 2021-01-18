@@ -396,7 +396,7 @@ class ActionEditorState extends State<ActionEditor> {
     var ergebnis = await showTextInputDialog(
         this.action.terminDetails.beschreibung,
         'Beschreibung',
-        'Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammlerinnen und Sammler mitbringen? Kann man auch später dazustoßen, usw',
+        'Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammler*innen mitbringen? Kann man auch später dazustoßen, usw',
         Key('description input dialog'));
     setState(() {
       this.action.terminDetails.beschreibung = ergebnis;

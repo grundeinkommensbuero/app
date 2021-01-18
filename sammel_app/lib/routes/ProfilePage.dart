@@ -102,7 +102,7 @@ class ProfilePageState extends State<ProfilePage> {
                           .tr(),
                       SizedBox(height: 10.0),
                       Text(
-                        'Mit deinen Kiezen bestimmst du wo du über neue Aktionen informiert werden willst.',
+                        'Mit deiner Kiez-Auswahl bestimmst du für welche Gegenden du über neue Aktionen informiert werden willst.',
                         style: TextStyle(
                             fontWeight: FontWeight.normal, color: Colors.black),
                       ).tr()
