@@ -83,13 +83,12 @@ class ChatMessageService implements PushNotificationListener {
   Future<void> handleNotificationTap(Map<dynamic, dynamic> data) async {
     print('handleNotificationTap mit Data: $data');
     if (Message.determineType(data) == PushDataTypes.TopicChatMessage) {
-      var chat_push_data = ChatPushData.fromJson(data);
+      var chat_push_data = TopicChatMessagePushData.fromJson(data);
       final channel = await getChannel(chat_push_data.channel);
       State<StatefulWidget> cls = channel.ccl as State<StatefulWidget>;
-      print("create or recreate topic chat channel");
       create_or_recreate_topic_chat_page(cls, channel);
     } else if (Message.determineType(data) == PushDataTypes.SimpleChatMessage) {
-      var chat_push_data = ChatMessagePushData.fromJson(data);
+      var chat_push_data = ActionChatMessagePushData.fromJson(data);
       final channel = await getChannel(chat_push_data.channel);
       State<StatefulWidget> cls = channel.ccl as State<StatefulWidget>;
       create_or_recreat_chat_page(cls, channel, chat_push_data.action);

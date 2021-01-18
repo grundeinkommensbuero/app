@@ -11,13 +11,13 @@ void main() {
   group('ParticipationPushData', () {
     group('toJson', () {
       test('serializes correctly', () {
-        var pushData = ParticipationPushData(message(), 'my channel');
+        var pushData = ParticipationPushData(message(), 1, 'my channel');
         var json = pushData.toJson();
         expect(json['channel'], 'my channel');
       });
 
       test('serializes with missing channel', () {
-        var pushData = ParticipationPushData(message(), null);
+        var pushData = ParticipationPushData(message(), 1, null);
         var json = pushData.toJson();
         expect(json['channel'], null);
       });
