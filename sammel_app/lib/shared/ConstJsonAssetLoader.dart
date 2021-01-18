@@ -92,7 +92,7 @@ const Map<String, dynamic> en = {
   "Sprache": "Language",
   "Dein Name": "Your name",
   "Dein Kiez": "Your area",
-  "Mit deinen Kiezen bestimmst du wo du über neue Aktionen informiert werden willst.":
+  "Mit deiner Kiez-Auswahl bestimmst du für welche Gegenden du über neue Aktionen informiert werden willst.":
       "By choosing areas you decide which new events you’ll be notified about.",
   "Deine Benachrichtigungen": "Your notifications",
   "Wie oft und aktuell willst du über neue Sammel-Aktionen in deinem Kiez informiert werden?":
@@ -360,8 +360,8 @@ const Map<String, dynamic> de = {
   "Sprache": "Sprache",
   "Dein Name": "Dein Name",
   "Dein Kiez": "Dein Kiez",
-  "Mit deinen Kiezen bestimmst du wo du über neue Aktionen informiert werden willst.":
-      "Mit deinen Kiezen bestimmst du wo du über neue Aktionen informiert werden willst.",
+  "Mit deiner Kiez-Auswahl bestimmst du für welche Gegenden du über neue Aktionen informiert werden willst.":
+      "Mit deiner Kiez-Auswahl bestimmst du für welche Gegenden du über neue Aktionen informiert werden willst.",
   "Deine Benachrichtigungen": "Deine Benachrichtigungen",
   "Wie oft und aktuell willst du über neue Sammel-Aktionen in deinem Kiez informiert werden?":
       "Wie oft und aktuell willst du über neue Sammel-Aktionen in deinem Kiez informiert werden?",
