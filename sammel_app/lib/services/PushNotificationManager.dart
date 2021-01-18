@@ -178,13 +178,13 @@ Future<dynamic> backgroundMessageHandler(Map<String, dynamic> message) async {
 
   if (data['type'] == PushDataTypes.SimpleChatMessage) {
     var pushData =
-        ChatMessagePushData(ChatMessage.fromJson(data), data['channel']);
+        ChatMessagePushData(ChatMessage.fromJson(data), data["action_id"], data['channel']);
     handleBackgroundChatMessage(pushData);
     // LocalNotificationService.emptyCallback().sendChatNotification(pushData);
 
   } else if (data['type'] == PushDataTypes.ParticipationMessage) {
     var pushData = ParticipationPushData(
-        ParticipationMessage.fromJson(data), data['channel']);
+        ParticipationMessage.fromJson(data), data["action_id"], data['channel']);
     handleBackgroundChatMessage(pushData);
     // LocalNotificationService.emptyCallback()
     //     .sendParticipationNotification(pushData);

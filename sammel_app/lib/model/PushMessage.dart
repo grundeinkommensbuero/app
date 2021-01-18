@@ -66,13 +66,15 @@ class ChatPushData extends PushData {
 class ChatMessagePushData extends ChatPushData {
   @override
   ChatMessage message;
+  int action;
   final String type = PushDataTypes.SimpleChatMessage;
 
-  ChatMessagePushData(this.message, channel) : super(channel);
+  ChatMessagePushData(this.message, this.action, channel) : super(channel);
 
   toJson() {
     var json_message = message.toJson();
     json_message['type'] = type;
+    json_message['action'] = action;
     json_message['channel'] = this.channel;
     return json_message;
   }
@@ -80,6 +82,8 @@ class ChatMessagePushData extends ChatPushData {
   ChatMessagePushData.fromJson(Map<String, dynamic> json)
       : super(json['channel']) {
     try {
+      var action = json['action'] ?? null;
+      this.action = action == null ? -1 : int.parse("$action");
       this.message = ChatMessage.fromJson(json);
     } on AssertionError catch (e) {
       throw UnreadablePushMessage(tr(
@@ -118,13 +122,15 @@ class TopicChatMessagePushData extends ChatPushData
 class ParticipationPushData extends ChatPushData {
   @override
   ParticipationMessage message;
+  int action;
   final String type = PushDataTypes.ParticipationMessage;
 
-  ParticipationPushData(this.message, channel) : super(channel);
+  ParticipationPushData(this.message, this.action, channel) : super(channel);
 
   toJson() {
     var json_message = message.toJson();
     json_message['type'] = type;
+    json_message["action"] = action;
     json_message['channel'] = this.channel;
     return json_message;
   }
@@ -132,6 +138,8 @@ class ParticipationPushData extends ChatPushData {
   ParticipationPushData.fromJson(Map<String, dynamic> json)
       : super(json['channel']) {
     try {
+      var action = json['action'] ?? null;
+      this.action = action == null ? -1 : action;
       this.message = ParticipationMessage.fromJson(json);
     } on AssertionError catch (e) {
       throw UnreadablePushMessage(
