@@ -15,10 +15,11 @@ class ChatChannel {
 
   pushMessages(List<Message> messages) {
     messages
-        .where((message) => message is ChatMessage || message is TopicChatMessage)
+        .where((message) => message is ChatMessage)
         .forEach((message) => pushChatMessage(message));
-    messages.where((message) => message is ParticipationMessage).forEach(
-        (message) => pushParticipationMessage(message));
+    messages
+        .where((message) => message is ParticipationMessage)
+        .forEach((message) => pushParticipationMessage(message));
 
     channel_messages.sort((a, b) => a.timestamp.compareTo(b.timestamp));
     ccl?.channelChanged(this);
@@ -42,8 +43,7 @@ class ChatChannel {
   void register_channel_change_listener(ChannelChangeListener c) {
     if (ccl == null) {
       ccl = c;
-    } else if(c != ccl)
-      {
+    } else if (c != ccl) {
       print('The Channel is already associated to a widget');
       ccl = c;
     }
@@ -64,23 +64,11 @@ class ChatChannel {
         return ParticipationMessage.fromJson(jsonMsg);
       if (type == PushDataTypes.SimpleChatMessage)
         return ChatMessage.fromJson(jsonMsg);
-      if (type == PushDataTypes.TopicChatMessage)
-        return TopicChatMessage.fromJson(jsonMsg);
       ErrorService.handleError(
           throw UnkownMessageTypeError(
               'Unbekannter Nachrichtentyp abgespeichert'),
           StackTrace.current);
     }).toList();
-    this.channel_messages?.sort((a, b) => a.timestamp.compareTo(b.timestamp));
-  }
-}
-
-class TopicChatChannel extends ChatChannel {
-
-  TopicChatChannel(String id) : super(id);
-
-  TopicChatChannel.fromJSON(Map<dynamic, dynamic> json) : super(json["id"]){
-    channel_messages = json['messages'].map<Message>((jsonMsg) => TopicChatMessage.fromJson(jsonMsg)).toList();
     this.channel_messages?.sort((a, b) => a.timestamp.compareTo(b.timestamp));
   }
 }

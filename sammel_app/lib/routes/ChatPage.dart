@@ -40,7 +40,7 @@ class ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
       chat_window = null;
       topicChannel?.disposeListener();
     } else if (topicChannel != null) {
-      print('topicChannel=$topicChannel');
+      print('chatpage topicChannel: ${topicChannel.toJson()}');
       // ist bereit
       if (chat_window == null)
         chat_window = TopicChatWindow(topicChannel, false);

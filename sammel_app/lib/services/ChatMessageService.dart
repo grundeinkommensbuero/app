@@ -42,7 +42,7 @@ class ChatMessageService implements PushNotificationListener {
         var notifier =
             Provider.of<LocalNotificationService>(navigatorKey.currentContext);
         if (json['type'] == PushDataTypes.SimpleChatMessage)
-          notifier.sendChatNotification(ChatMessagePushData.fromJson(json));
+          notifier.sendChatNotification(ActionChatMessagePushData.fromJson(json));
         if (json['type'] == PushDataTypes.ParticipationMessage)
           notifier.sendParticipationNotification(
               ParticipationPushData.fromJson(json));
@@ -126,6 +126,9 @@ class ChatMessageService implements PushNotificationListener {
     }
   }
 
+  Future<ChatChannel> getTopicChannel(String topic) async =>
+      await getChannel('topic:$topic');
+
   Future<ChatChannel> getActionChannel(int idNr) async =>
       await getChannel('action:$idNr');
 
@@ -151,13 +154,7 @@ class ChatMessageService implements PushNotificationListener {
   Future<void> reload() async {
     await storage_service.reload();
     channels.keys.toList().forEach((id) async {
-      print("reloading channels");
-      ChatChannel currentChannel = null;
-      if (channels[id] is TopicChatChannel) {
-        currentChannel = await storage_service.loadTopicChatChannel(id);
-      } else {
-        currentChannel = await storage_service.loadChatChannel(id);
-      }
+      ChatChannel currentChannel = await storage_service.loadChatChannel(id);
       if (channels[id].channel_messages.length !=
           currentChannel.channel_messages.length) {
         channels[id].channel_messages = currentChannel.channel_messages;
@@ -169,21 +166,6 @@ class ChatMessageService implements PushNotificationListener {
   @override
   updateMessages(List<Map<String, dynamic>> messages) =>
       storeMessages(messages.map((m) => chatPushDataFromJson(m)).toList());
-
-  Future<TopicChatChannel> getTopicChannel(String id) async {
-    if (!channels.containsKey(id)) {
-      ChatChannel storedChannel =
-          await this.storage_service.loadTopicChatChannel(id);
-      if (storedChannel != null)
-        channels[id] = storedChannel;
-      else {
-        final newChannel = TopicChatChannel(id);
-        await this.storage_service.saveChatChannel(newChannel);
-        channels[newChannel.id] = newChannel;
-      }
-    }
-    return channels[id];
-  }
 }
 
 handleBackgroundChatMessage(ChatPushData data) async {

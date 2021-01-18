@@ -99,11 +99,7 @@ class LocalNotificationService {
         });
   }
 
-  // LocalNotificationService.emptyCallback() {
-  //   onTap = (_) {print('### Das war wohl nix... ###'); return Future.value();};
-  // }
-
-  Future sendChatNotification(ChatMessagePushData chatMessage) async {
+  Future sendChatNotification(ActionChatMessagePushData chatMessage) async {
     AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails('Aktionen-Chats', 'Aktionen-Chats',
             'Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst',
