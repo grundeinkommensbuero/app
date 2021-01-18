@@ -178,19 +178,13 @@ Future<dynamic> backgroundMessageHandler(Map<String, dynamic> message) async {
 
   if (data['type'] == PushDataTypes.SimpleChatMessage) {
     var pushData =
-        ChatMessagePushData(ChatMessage.fromJson(data), data["action_id"], data['channel']);
+        ActionChatMessagePushData(ChatMessage.fromJson(data), data["action_id"], data['channel']);
     handleBackgroundChatMessage(pushData);
-    // LocalNotificationService.emptyCallback().sendChatNotification(pushData);
 
   ***REMOVED*** else if (data['type'] == PushDataTypes.ParticipationMessage) {
     var pushData = ParticipationPushData(
         ParticipationMessage.fromJson(data), data["action_id"], data['channel']);
     handleBackgroundChatMessage(pushData);
-    // LocalNotificationService.emptyCallback()
-    //     .sendParticipationNotification(pushData);
-
-    // ***REMOVED*** else
-    //   LocalNotificationService.emptyCallback().sendOtherNotification(message);
   ***REMOVED***
 ***REMOVED***
 

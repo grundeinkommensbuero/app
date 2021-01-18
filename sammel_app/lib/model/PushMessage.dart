@@ -63,13 +63,13 @@ class ChatPushData extends PushData {
         channel = json['channel'];
 ***REMOVED***
 
-class ChatMessagePushData extends ChatPushData {
+class ActionChatMessagePushData extends ChatPushData {
   @override
   ChatMessage message;
   int action;
   final String type = PushDataTypes.SimpleChatMessage;
 
-  ChatMessagePushData(this.message, this.action, channel) : super(channel);
+  ActionChatMessagePushData(this.message, this.action, channel) : super(channel);
 
   toJson() {
     var json_message = message.toJson();
@@ -79,7 +79,7 @@ class ChatMessagePushData extends ChatPushData {
     return json_message;
   ***REMOVED***
 
-  ChatMessagePushData.fromJson(Map<String, dynamic> json)
+  ActionChatMessagePushData.fromJson(Map<String, dynamic> json)
       : super(json['channel']) {
     try {
       var action = json['action'] ?? null;
@@ -96,13 +96,13 @@ class ChatMessagePushData extends ChatPushData {
 class TopicChatMessagePushData extends ChatPushData
 {
   final String type = PushDataTypes.TopicChatMessage;
-  TopicChatMessage message;
+  ChatMessage message;
   TopicChatMessagePushData(this.message, channel) : super(channel);
 
   TopicChatMessagePushData.fromJson(Map<String, dynamic> json)
       : super(json['channel']) {
     try {
-      this.message = TopicChatMessage.fromJson(json);
+      this.message = ChatMessage.fromJson(json);
     ***REMOVED*** on AssertionError catch (e) {
       throw UnreadablePushMessage(tr(
           'Unlesbare Topic-Nachricht empfangen: {message***REMOVED***',
@@ -184,7 +184,7 @@ class UnreadablePushMessage implements ServerException {
 ChatPushData chatPushDataFromJson(Map<String, dynamic> data) {
   var pushData = ChatPushData.fromJson(data);
   if (pushData.type == PushDataTypes.SimpleChatMessage)
-    pushData = ChatMessagePushData.fromJson(data);
+    pushData = ActionChatMessagePushData.fromJson(data);
   if (pushData.type == PushDataTypes.ParticipationMessage)
     pushData = ParticipationPushData.fromJson(data);
   if (pushData.type == PushDataTypes.TopicChatMessage)

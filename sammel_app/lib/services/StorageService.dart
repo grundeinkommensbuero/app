@@ -53,8 +53,9 @@ class StorageService {
   unmarkActionIdAsStored(int id) => prefs.then((prefs) => _getActionList().then(
       (list) => prefs.setStringList(_ACTIONLIST, list..remove(id.toString()))));
 
-  markActionIdAsEvaluated(int id) => prefs.then((prefs) => _getEvaluationList().then(
-          (list) => prefs.setStringList(_EVALUATIONLIST, list..add(id.toString()))));
+  markActionIdAsEvaluated(int id) =>
+      prefs.then((prefs) => _getEvaluationList().then((list) =>
+          prefs.setStringList(_EVALUATIONLIST, list..add(id.toString()))));
 
   Future<List<int>> loadAllStoredActionIds() => prefs.then((prefs) async {
         List<String> stringList = prefs.getStringList(_ACTIONLIST);
@@ -64,11 +65,11 @@ class StorageService {
       ***REMOVED***);
 
   Future<List<int>> loadAllStoredEvaluations() => prefs.then((prefs) async {
-    List<String> stringList = prefs.getStringList(_EVALUATIONLIST);
-    if (stringList == null) return [];
-    List<int> intList = stringList.map((id) => int.parse(id)).toList();
-    return intList;
-  ***REMOVED***);
+        List<String> stringList = prefs.getStringList(_EVALUATIONLIST);
+        if (stringList == null) return [];
+        List<int> intList = stringList.map((id) => int.parse(id)).toList();
+        return intList;
+      ***REMOVED***);
 
   Future<List<String>> _getActionList() => _prefs.then((prefs) async {
         var list = prefs.getStringList(_ACTIONLIST);
@@ -76,9 +77,9 @@ class StorageService {
       ***REMOVED***);
 
   Future<List<String>> _getEvaluationList() => _prefs.then((prefs) async {
-    var list = prefs.getStringList(_EVALUATIONLIST);
-    return list != null ? list : [];
-  ***REMOVED***);
+        var list = prefs.getStringList(_EVALUATIONLIST);
+        return list != null ? list : [];
+      ***REMOVED***);
 
   // Filter Properties
 
@@ -147,10 +148,4 @@ class StorageService {
   loadCostumPushToken() => prefs.then((prefs) => prefs.getString(_PUSHTOKEN));
 
   Future<void> reload() async => await _prefs.then((prefs) => prefs.reload());
-
-  Future<TopicChatChannel> loadTopicChatChannel(String id) async => prefs.then((prefs) {
-    var json = prefs.getString('$_CHANNEL:${id***REMOVED***');
-    if (json == null) return null;
-    return TopicChatChannel.fromJSON(jsonDecode(json));
-  ***REMOVED***);
 ***REMOVED***

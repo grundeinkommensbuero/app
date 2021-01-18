@@ -42,9 +42,11 @@ class ChatMessage implements Message {
     text = json_message_data['text'];
     sender_name = json_message_data['sender_name'];
     timestamp = DateTime.parse(json_message_data['timestamp']);
-    message_color = Color(int.parse(json_message_data['color'].toString()));
+    message_color = Color(int.tryParse(json_message_data['color'].toString()));
     obtained_from_server = json_message_data['from_server'];
-    user_id = int.parse(json_message_data['user_id'].toString());
+    user_id = json_message_data['user_id'] == null
+        ? null
+        : int.tryParse(json_message_data['user_id'].toString());
   ***REMOVED***
 
   @override
@@ -66,7 +68,7 @@ class ChatMessage implements Message {
         timestamp.isAtSameMomentAs(msg.timestamp) &&
         message_color.value == msg.message_color.value;
     // &&
-       // obtained_from_server == msg.obtained_from_server;
+    // obtained_from_server == msg.obtained_from_server;
   ***REMOVED***
 ***REMOVED***
 
@@ -110,56 +112,5 @@ class ParticipationMessage implements Message {
         timestamp.isAtSameMomentAs(msg.timestamp) &&
         username == msg.username &&
         joins == msg.joins;
-  ***REMOVED***
-***REMOVED***
-
-
-class TopicChatMessage implements Message {
-  @override
-  String type = PushDataTypes.TopicChatMessage;
-  @override
-  DateTime timestamp;
-  String text;
-  String sender_name;
-  Color message_color;
-  @override
-  bool obtained_from_server;
-
-  TopicChatMessage(
-      {this.text,
-        this.sender_name,
-        this.timestamp,
-        this.message_color,
-        this.obtained_from_server=true***REMOVED***);
-
-  @override
-  TopicChatMessage.fromJson(Map<dynamic, dynamic> json_message_data) {
-    text = json_message_data['text'];
-    sender_name = json_message_data['sender_name'];
-    timestamp = DateTime.parse(json_message_data['timestamp']);
-    message_color = Color(int.parse(json_message_data['color'].toString()));
-    obtained_from_server = json_message_data['from_server'] ?? true;
-  ***REMOVED***
-
-  @override
-  Map<String, dynamic> toJson()
-  {
-    print("obtained from server $obtained_from_server");
-    return {
-    'type': type,
-    'text': text,
-    'sender_name': sender_name,
-    'timestamp': timestamp.toString(),
-    'color': message_color.value,
-    'from_server': obtained_from_server***REMOVED***
-  ***REMOVED***
-
-  @override
-  bool isMessageEqual(Message msg) {
-    return msg is TopicChatMessage &&
-        msg.text == text &&
-        msg.sender_name == msg.sender_name &&
-        timestamp.isAtSameMomentAs(msg.timestamp) &&
-        message_color.value == msg.message_color.value;
   ***REMOVED***
 ***REMOVED***

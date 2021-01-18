@@ -47,7 +47,7 @@ class TopicChatWindowState extends State<TopicChatWindow>
                 padding: EdgeInsets.only(bottom: 40))));
   ***REMOVED***
 
-  Widget buildMessageWidget(TopicChatMessage message) {
+  Widget buildMessageWidget(ChatMessage message) {
     return Align(
         alignment: Alignment.topLeft,
         child: Container(

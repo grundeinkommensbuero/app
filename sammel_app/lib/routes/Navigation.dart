@@ -248,7 +248,7 @@ class NavigationState extends State<Navigation>
     history.removeLast();
   ***REMOVED***
 
-  maybeDispose(TopicChatChannel value) {
+  maybeDispose(ChatChannel value) {
     var cls = value.ccl as State<StatefulWidget>;
     if (cls == null)
       {
