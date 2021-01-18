@@ -30,7 +30,7 @@ class ChatMessageService implements PushNotificationListener {
   receive_message(Map<String, dynamic> json) async {
     try {
       var pushData = chatPushDataFromJson(json);
-
+      print("receive message $json");
       ChatChannel channel = await storeMessage(pushData);
       if (channel == null) return;
 
@@ -82,15 +82,22 @@ class ChatMessageService implements PushNotificationListener {
   @override
   Future<void> handleNotificationTap(Map<dynamic, dynamic> data) async {
     print('handleNotificationTap mit Data: $data');
-    var chat_push_data = ChatPushData.fromJson(data);
-    final channel = await getChannel(chat_push_data.channel);
-    State<StatefulWidget> cls = channel.ccl as State<StatefulWidget>;
     if (Message.determineType(data) == PushDataTypes.TopicChatMessage) {
+      var chat_push_data = ChatPushData.fromJson(data);
+      final channel = await getChannel(chat_push_data.channel);
+      State<StatefulWidget> cls = channel.ccl as State<StatefulWidget>;
       print("create or recreate topic chat channel");
       create_or_recreate_topic_chat_page(cls, channel);
     ***REMOVED*** else if (Message.determineType(data) == PushDataTypes.SimpleChatMessage) {
-      ChatMessage msg = chat_push_data.message as ChatMessage;
-      create_or_recreat_chat_page(cls, channel, msg.termin_id);
+      var chat_push_data = ChatMessagePushData.fromJson(data);
+      final channel = await getChannel(chat_push_data.channel);
+      State<StatefulWidget> cls = channel.ccl as State<StatefulWidget>;
+      create_or_recreat_chat_page(cls, channel, chat_push_data.action);
+    ***REMOVED*** else if (Message.determineType(data) == PushDataTypes.ParticipationMessage) {
+      var participation_push_data = ParticipationPushData.fromJson(data);
+      final channel = await getChannel(participation_push_data.channel);
+      State<StatefulWidget> cls = channel.ccl as State<StatefulWidget>;
+      create_or_recreat_chat_page(cls, channel, participation_push_data.action);
     ***REMOVED***
   ***REMOVED***
 

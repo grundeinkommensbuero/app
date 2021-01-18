@@ -28,7 +28,6 @@ class ChatMessage implements Message {
   String sender_name;
   Color message_color;
   int user_id = -1;
-  int termin_id = -1;
 
   ChatMessage(
       {this.text,
@@ -36,8 +35,7 @@ class ChatMessage implements Message {
       this.timestamp,
       this.message_color,
       this.obtained_from_server = false,
-      this.user_id,
-      this.termin_id***REMOVED***);
+      this.user_id***REMOVED***);
 
   @override
   ChatMessage.fromJson(Map<dynamic, dynamic> json_message_data) {
@@ -47,7 +45,6 @@ class ChatMessage implements Message {
     message_color = Color(int.parse(json_message_data['color'].toString()));
     obtained_from_server = json_message_data['from_server'];
     user_id = int.parse(json_message_data['user_id'].toString());
-    termin_id = int.parse(json_message_data['termin_id']);
   ***REMOVED***
 
   @override
@@ -59,7 +56,6 @@ class ChatMessage implements Message {
         'timestamp': timestamp.toString(),
         'color': message_color.value,
         'from_server': obtained_from_server,
-        'termin_id': termin_id.toString()
       ***REMOVED***
 
   @override
@@ -68,8 +64,7 @@ class ChatMessage implements Message {
         msg.text == text &&
         msg.sender_name == msg.sender_name &&
         timestamp.isAtSameMomentAs(msg.timestamp) &&
-        message_color.value == msg.message_color.value &&
-        user_id == msg.user_id;
+        message_color.value == msg.message_color.value;
     // &&
        // obtained_from_server == msg.obtained_from_server;
   ***REMOVED***

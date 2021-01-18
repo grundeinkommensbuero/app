@@ -182,9 +182,8 @@ class ChatWindowState extends State<ChatWindow> {
         timestamp: DateTime.now(),
         message_color: user.color,
         sender_name: name,
-        user_id: user.id,
-        termin_id: termin.id);
-    ChatPushData mpd = ChatMessagePushData(message, channel.id);
+        user_id: user.id);
+    ChatPushData mpd = ChatMessagePushData(message, termin.id, channel.id);
     pushService.pushToAction(
         widget.termin.id,
         mpd,
