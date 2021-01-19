@@ -51,6 +51,9 @@ class ProfilePageState extends State<ProfilePage> {
       storageService
           .loadNotificationInterval()
           .then((pref) => setState(() => interval = pref));
+      storageService
+          .loadMyKiez()
+          .then((kieze) => setState(() => myKieze = kieze));
       init = true;
     ***REMOVED***
     var kiezeCaption = (myKieze ?? []).join(', ');
