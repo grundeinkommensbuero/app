@@ -35,7 +35,10 @@ class ChatInputState extends State<ChatInputWidget> {
                   style: TextStyle(color: DweTheme.purple, fontSize: 15.0),
                   controller: widget.textEditingController,
                   //     focusNode: myFocusNode,
-                  decoration: InputDecoration.collapsed(
+                  decoration: InputDecoration(
+                    isDense: true,
+                    contentPadding: Platform.isIOS ? EdgeInsets.only(left: 10.0) : EdgeInsets.zero,
+                    border: InputBorder.none,
                     hintText: 'Nachricht eingeben...'.tr(),
                     hintStyle: TextStyle(color: Colors.grey),
                   ),
