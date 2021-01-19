@@ -373,7 +373,9 @@ class ActionEditorState extends State<ActionEditor> {
   daysSelection() async {
     var selectedDates = await showMultipleDatePicker(this.action.tage, context,
         key: Key('days selection dialog'),
-        multiMode: isNewAction ? true : false);
+        multiMode: isNewAction ? true : false,
+        maxTage: 5,
+    );
     setState(() {
       if (selectedDates != null)
         this.action.tage = selectedDates

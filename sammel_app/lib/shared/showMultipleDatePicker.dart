@@ -11,10 +11,10 @@ import 'ChronoHelfer.dart';
 
 Future<List<DateTime>> showMultipleDatePicker(
     List<DateTime> initDates, BuildContext context,
-    {key: Key, multiMode = true}) async {
+    {key: Key, multiMode = true, maxTage = 0}) async {
   DateTime currentMonth = DateTime.now();
   List<DateTime> dates = []..addAll(initDates ?? []);
-  DateTime date = initDates.isNotEmpty ? initDates[0] :null;
+  DateTime date = initDates.isNotEmpty ? initDates[0] : null;
   var selectedDatesFromDialog = await showDialog<List<DateTime>>(
       context: context,
       builder: (context) => StatefulBuilder(builder: (context, setDialogState) {
@@ -73,14 +73,14 @@ Future<List<DateTime>> showMultipleDatePicker(
                     RaisedButton(
                       key: Key('days dialog cancel button'),
                       child: Text("Abbrechen").tr(),
-                      onPressed: () =>
-                          Navigator.pop(context, initDates),
+                      onPressed: () => Navigator.pop(context, initDates),
                     ),
                     RaisedButton(
                       key: Key('days dialog accept button'),
                       child: Text("Auswählen").tr(),
-                      onPressed: () =>
-                          Navigator.pop(context, multiMode ? dates : [date]),
+                      onPressed: () => (maxTage > 0 && multiMode && dates.length > maxTage)
+                          ? showTooManyDatesDialog(context, maxTage)
+                          : Navigator.pop(context, multiMode ? dates : [date]),
                     )
                   ])
                 ]);
@@ -167,4 +167,20 @@ class GerCalendarroWeekdayLabelsView extends CalendarroWeekdayLabelsView {
       ],
     );
   }
+}
+
+showTooManyDatesDialog(context, maxTage) {
+  showDialog(
+      context: context,
+      child: AlertDialog(
+        title: Text('Zu viele Tage'.tr()),
+        content: SelectableText(
+            'Bitte wähle {maxTage} Tage oder weniger aus.'.tr(namedArgs: {'maxTage': maxTage.toString()})),
+        actions: <Widget>[
+          RaisedButton(
+            child: Text('Schließen').tr(),
+            onPressed: () => Navigator.pop(context),
+          )
+        ],
+      ));
 }
