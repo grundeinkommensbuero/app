@@ -175,8 +175,12 @@ class FilterWidgetState extends State<FilterWidget>
   ***REMOVED***
 
   String ortButtonBeschriftung(TermineFilter filter) {
-    if (filter?.orte == null || filter.orte.isEmpty) return 'überall';
-    return "in " + filter.orte.map((ort) => ort).toList().join(", ");
+    const maxLength = 100;
+    return (filter?.orte == null || filter.orte.isEmpty)
+        ? 'überall'
+        : filter.orte.map((ort) => ort).toList().join(", ").length < maxLength
+          ? 'in ${filter.orte.map((ort) => ort).toList().join(", ")***REMOVED***'
+          : 'in ${filter.orte.length***REMOVED*** Kiezen';
   ***REMOVED***
 
   Future<void> onApply() async {
