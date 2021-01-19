@@ -124,8 +124,8 @@ class FilterWidgetState extends State<FilterWidget>
               splashColor: Colors.transparent,
               textColor: DweTheme.yellow,
               onPressed: onApply,
-              child: Text(loading ? '' : 'Aktualisieren'.tr(),
-                  textScaleFactor: 1.2))
+              child: Text(loading ? '' : 'Aktualisieren',
+                  textScaleFactor: 1.2).tr())
           : SizedBox()
     ]);
   }
@@ -177,7 +177,7 @@ class FilterWidgetState extends State<FilterWidget>
   String ortButtonBeschriftung(TermineFilter filter) {
     const maxLength = 100;
     return (filter?.orte == null || filter.orte.isEmpty)
-        ? 'überall'
+        ? 'überall'.tr()
         : filter.orte.map((ort) => ort).toList().join(", ").length < maxLength
           ? 'in ${filter.orte.map((ort) => ort).toList().join(", ")}'
           : 'in ${filter.orte.length} Kiezen';

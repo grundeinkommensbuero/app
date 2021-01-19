@@ -195,7 +195,7 @@ class DemoTermineService extends AbstractTermineService {
               TerminDetails(
                   'Hinter der 3. Parkbank links',
                   'wir machen die Parkeingänge',
-                  'Schreibt mir unter e@mail.de')),
+                  'Schreibt mir unter app@dwenteignen.de')),
           Termin(
               3,
               DateTime(heute.year, heute.month, heute.day, 23, 0, 0),
