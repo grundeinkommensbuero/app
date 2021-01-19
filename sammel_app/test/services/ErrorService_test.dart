@@ -60,7 +60,7 @@ void main() {
       expect(ErrorService.errorQueue[0][0],
           'Fehler bei Nutzer-Authentifizierung');
       expect(ErrorService.errorQueue[0][1],
-          'Nachricht \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com');
+          'Nachricht \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an app@dwenteignen.de');
     });
 
     test('recognizes and handles RestFehler', () {
@@ -70,7 +70,7 @@ void main() {
       expect(ErrorService.errorQueue[0][0],
           'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten');
       expect(ErrorService.errorQueue[0][1],
-          'Nachricht \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com');
+          'Nachricht \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an app@dwenteignen.de');
     });
 
     test('recognizes and handles WrongResponseFormatException', () {
@@ -81,7 +81,7 @@ void main() {
       expect(ErrorService.errorQueue[0][0],
           'Bei der Kommunikation mit dem Server ist ein technischer Fehler aufgetreten');
       expect(ErrorService.errorQueue[0][1],
-          'Nachricht \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com');
+          'Nachricht \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an app@dwenteignen.de');
     });
 
     test('adds optional message to Error text', () {
@@ -92,7 +92,7 @@ void main() {
       expect(
           ErrorService.errorQueue[0][1],
           'Zusätzliche Info. Nachricht. \n\n'
-          'Wenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com');
+          'Wenn du Hilfe brauchst, schreib uns doch einfach per Mail an app@dwenteignen.de');
     });
   });
 

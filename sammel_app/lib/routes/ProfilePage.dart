@@ -133,7 +133,7 @@ class ProfilePageState extends State<ProfilePage> {
                           Text('Datenschutz',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  color: Colors.black, fontSize: 28.0)),
+                                  color: Colors.black, fontSize: 28.0)).tr(),
                         ])),
                     onPressed: (context) => showPrivacyDialog(context),
                     editable: false),
@@ -193,7 +193,6 @@ class ProfilePageState extends State<ProfilePage> {
             titlePadding: EdgeInsets.all(15.0),
             title: Text(
                     'Wie häufig möchtest du Infos über anstehende Aktionen bekommen?')
-                .tr()
                 .tr(),
             children: []..addAll(intervalOptions.map((option) => RadioListTile(
                   groupValue: interval,
@@ -235,7 +234,7 @@ showPrivacyDialog(BuildContext context) {
             Container(
                 padding: EdgeInsets.all(10),
                 child: Text(
-                        'Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an e@mail.com.')
+                        'Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an app@dwenteignen.de.')
                     .tr()),
             FlatButton(
                 child: Text('Okay', textAlign: TextAlign.end).tr(),
@@ -323,13 +322,13 @@ showAboutDialog(BuildContext context) {
                               'https://gitlab.com/kybernetik/sammel-app'))),
                 RichText(
                     text: TextSpan(
-                        text: 'e@mail.com',
+                        text: 'app@dwenteignen.de',
                         style: TextStyle(
                             fontSize: 15.0,
                             color: Colors.indigo,
                             decoration: TextDecoration.underline),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () => launch('e@mail.com')))
+                          ..onTap = () => launch('app@dwenteignen.de')))
               ])
             ],
           ));
