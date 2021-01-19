@@ -282,8 +282,8 @@ const Map<String, dynamic> de = {
   "Workshop": "Workshop",
   "Unbekannter Nachrichtentyp abgespeichert":
       "Unbekannter Nachrichtentyp abgespeichert",
-  "{kiez} in {bezirk}\n ⛒ Treffpunkt: {treffpunkt}":
-      "{kiez} in {bezirk}\n ⛒ Treffpunkt: {treffpunkt}",
+  "{kiez} in {bezirk}\n Treffpunkt: {treffpunkt}":
+      "{kiez} in {bezirk}\n Treffpunkt: {treffpunkt}",
   "Unlesbare Push-Nachricht (Teilnahme) empfangen: {message}":
       "Unlesbare Push-Nachricht (Teilnahme) empfangen: {message}",
   "Ein paar Worte über dich": "Ein paar Worte über dich",
