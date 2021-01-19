@@ -374,7 +374,9 @@ class ActionEditorState extends State<ActionEditor> {
   daysSelection() async {
     var selectedDates = await showMultipleDatePicker(this.action.tage, context,
         key: Key('days selection dialog'),
-        multiMode: isNewAction ? true : false);
+        multiMode: isNewAction ? true : false,
+        maxTage: 5,
+    );
     setState(() {
       if (selectedDates != null)
         this.action.tage = selectedDates
@@ -431,7 +433,7 @@ class ActionEditorState extends State<ActionEditor> {
         style: TextStyle(color: DweTheme.purple),
       ).tr();
     ***REMOVED*** else {
-      text = Text('{kiez***REMOVED*** in {bezirk***REMOVED***\n ⛒ Treffpunkt: {treffpunkt***REMOVED***')
+      text = Text('{kiez***REMOVED*** in {bezirk***REMOVED***\n Treffpunkt: {treffpunkt***REMOVED***')
           .tr(namedArgs: {
         'kiez': termin.ort.name,
         'bezirk': termin.ort.ortsteil,
