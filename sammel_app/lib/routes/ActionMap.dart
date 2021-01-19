@@ -7,6 +7,7 @@ import 'package:latlong/latlong.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Termin.dart';
+import 'package:sammel_app/shared/AttributionPlugin.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:user_location/user_location.dart';
@@ -53,13 +54,15 @@ class ActionMapState extends State<ActionMap> {
   @override
   Widget build(BuildContext context) {
     var markers = generateMarkers();
-    var plugins = List<UserLocationPlugin>();
+    var plugins = List<MapPlugin>();
+    plugins.add(AttributionPlugin());
     var layers = [
       TileLayerOptions(
           urlTemplate: "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
           subdomains: ['a', 'b', 'c']),
       MarkerLayerOptions(markers: markers),
     ];
+    layers.add(AttributionOptions());
 
     if (locationPermissionGranted) {
       addUserLocationSettings(markers, plugins, layers);
@@ -99,7 +102,7 @@ class ActionMapState extends State<ActionMap> {
     ..addAll(generateActionMarkers());
 
   void addUserLocationSettings(List<Marker> markers,
-      List<UserLocationPlugin> plugins, List<LayerOptions> layers) {
+      List<MapPlugin> plugins, List<LayerOptions> layers) {
     plugins.add(UserLocationPlugin());
     layers.add(UserLocationOptions(
       context: context,
