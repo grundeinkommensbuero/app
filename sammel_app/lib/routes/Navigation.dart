@@ -95,7 +95,7 @@ class NavigationState extends State<Navigation>
               title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text(titles[navigation]),
+              Flexible(child: Text(titles[navigation], overflow: TextOverflow.fade)),
               Image.asset('assets/images/logo.png', width: 50.0)
             ],
           )),
