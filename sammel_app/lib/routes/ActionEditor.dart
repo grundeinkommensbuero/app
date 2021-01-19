@@ -430,7 +430,7 @@ class ActionEditorState extends State<ActionEditor> {
         style: TextStyle(color: DweTheme.purple),
       );
     ***REMOVED*** else {
-      text = Text('{kiez***REMOVED*** in {bezirk***REMOVED***\n ⛒ Treffpunkt: {treffpunkt***REMOVED***')
+      text = Text('{kiez***REMOVED*** in {bezirk***REMOVED***\n Treffpunkt: {treffpunkt***REMOVED***')
           .tr(namedArgs: {
         'kiez': termin.ort.name,
         'bezirk': termin.ort.ortsteil,
