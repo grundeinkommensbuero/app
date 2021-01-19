@@ -117,7 +117,7 @@ class ActionEditorState extends State<ActionEditor> {
               padding: EdgeInsets.only(
                   left: 20.0, right: 20.0, top: 15.0, bottom: 50.0),
               children: <Widget>[
-                isNewAction ? motivationText : Container(),
+                isNewAction ? motivationText() : Container(),
                 SizedBox(height: 15),
                 Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Icon(Icons.my_location, size: 40.0),
@@ -224,17 +224,18 @@ class ActionEditorState extends State<ActionEditor> {
         ));
   ***REMOVED***
 
-  static Widget motivationText = Column(key: Key('motivation text'), children: [
-    Text(
-      'Das Volksbegehren lebt von deiner Beteiligung! \n',
-      style: TextStyle(fontWeight: FontWeight.bold),
-    ).tr(),
-    Text(
-      'Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. '
-      'Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.',
-      textScaleFactor: 1.0,
-    ).tr()
-  ]);
+ static Widget motivationText() =>
+   Column(key: Key('motivation text'), children: [
+     Text(
+       'Das Volksbegehren lebt von deiner Beteiligung! \n',
+       style: TextStyle(fontWeight: FontWeight.bold),
+     ).tr(),
+     Text(
+       'Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. '
+           'Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.',
+       textScaleFactor: 1.0,
+     ).tr()
+   ]);
 
   void locationSelection() async {
     Location ergebnis = await showLocationDialog(
@@ -296,7 +297,7 @@ class ActionEditorState extends State<ActionEditor> {
     if (description != null) {
       input_widget = SingleChildScrollView(
           child: ListBody(children: [
-        Text(description),
+        Text(description).tr(),
         SizedBox(height: 10),
         input_field
       ]));
@@ -347,7 +348,7 @@ class ActionEditorState extends State<ActionEditor> {
                   key: Key('type selection dialog'),
                   contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
                   titlePadding: EdgeInsets.all(15.0),
-                  title: const Text('Wähle Aktions-Arten'),
+                  title: const Text('Wähle Aktions-Arten').tr(),
                   children: []
                     ..addAll(moeglicheTypen.map((typ) => RadioListTile(
                           groupValue: ausgewTyp,
@@ -398,7 +399,7 @@ class ActionEditorState extends State<ActionEditor> {
     var ergebnis = await showTextInputDialog(
         this.action.terminDetails.beschreibung,
         'Beschreibung',
-        'Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammler*innen mitbringen? Kann man auch später dazustoßen, usw',
+        'Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammler*innen mitbringen? Kann man auch später dazustoßen?',
         Key('description input dialog'));
     setState(() {
       this.action.terminDetails.beschreibung = ergebnis;
@@ -410,9 +411,9 @@ class ActionEditorState extends State<ActionEditor> {
     Text text;
     if (this.action.validated['tage'] == ValidationState.error ||
         this.action.validated['tage'] == ValidationState.not_validated) {
-      text = Text("Wähle einen Tag", style: TextStyle(color: DweTheme.purple));
+      text = Text("Wähle einen Tag", style: TextStyle(color: DweTheme.purple)).tr();
     ***REMOVED*** else {
-      text = Text("am " +
+      text = Text("am ".tr() +
           this
               .action
               .tage
@@ -430,7 +431,7 @@ class ActionEditorState extends State<ActionEditor> {
       text = Text(
         'Gib einen Treffpunkt an',
         style: TextStyle(color: DweTheme.purple),
-      );
+      ).tr();
     ***REMOVED*** else {
       text = Text('{kiez***REMOVED*** in {bezirk***REMOVED***\n Treffpunkt: {treffpunkt***REMOVED***')
           .tr(namedArgs: {
@@ -473,7 +474,7 @@ class ActionEditorState extends State<ActionEditor> {
   Widget typeButtonCaption() {
     Text text;
     if (this.action.validated['typ'] == ValidationState.ok) {
-      text = Text(this.action.typ);
+      text = Text(this.action.typ).tr();
     ***REMOVED*** else {
       text = Text('Wähle die Art der Aktion',
               style: TextStyle(color: DweTheme.purple))

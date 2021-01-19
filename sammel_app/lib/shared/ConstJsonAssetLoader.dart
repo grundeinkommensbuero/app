@@ -22,7 +22,7 @@ const Map<String, dynamic> en = {
   "Unlesbare Push-Nachricht (Teilnahme) empfangen: {message***REMOVED***":
       "Unreadable push notification (participation) received: {message***REMOVED***",
   "Ein paar Worte über dich": "A few words about yourself",
-  "Beschreibung: {beschreibung***REMOVED***": "Description: {***REMOVED***",
+  "Beschreibung: {beschreibung***REMOVED***": "Description: {beschreibung***REMOVED***",
   "Beschreibe die Aktion kurz": "Briefly describe the event",
   "Wähle die Art der Aktion": "Choose the event type",
   "von ": "from ",
@@ -30,7 +30,7 @@ const Map<String, dynamic> en = {
   "Wähle eine Uhrzeit": "Choose a time",
   "Jetzt": "Now",
   "Hier liegen öffentliche Unterschriften-Listen aus. Du kannst selbst Unterschriften-Listen an öffentlichen Orten auslegen, z.B. in Cafés, Bars oder Läden. Wichtig ist, dass du die ausgefüllten Listen regelmäßig abholst.\nFrage doch mal die Betreiber*innen deines Lieblings-Spätis!\n":
-      "Public signature lists are displayed here. You can place signature lists in public places like cafes, bars, or shops. It’s important, however, that you regularly pick up the filled-out lists.\nAsk the owners of your favourite Spätis if you can leave one there!\n",
+      "Public signature lists are displayed here. You can place signature lists in public places like cafes, bars, or shops. It’s important, however, that you regularly pick up the filled-in lists.\nAsk the owners of your favourite Spätis if you can leave one there!\n",
   "Du kannst den Ort eintragen auf:\n": "You can record the place at:\n",
   "Nachricht eingeben...": "Enter message…",
   "Jemand": "Someone",
@@ -75,11 +75,10 @@ const Map<String, dynamic> en = {
   "Aktionen": "Events",
   "Aktionen in einer Liste oder Karte anschauen":
       "See the events in a list or on the map",
-  "Zum Sammeln aufrufen": "Call people to a collection event",
-  "Zum Sammeln einladen": "Invite people to a collection event",
+  "Zum Sammeln einladen": "Set up a signature drive",
   "Fragen und Antworten": "Questions and Answers",
   "Dein Profil": "Your profile",
-  "Eine Sammel-Aktion ins Leben rufen": "Create a collection event",
+  "Eine Sammel-Aktion ins Leben rufen": "Invite others to go collecting with you",
   "Tipps und Argumente": "Tips and arguments",
   "Tipps, Tricks und Argumentationshilfen": "Argument tips and tricks",
   "Profil": "Profile",
@@ -96,18 +95,18 @@ const Map<String, dynamic> en = {
       "By choosing areas you decide which new events you’ll be notified about.",
   "Deine Benachrichtigungen": "Your notifications",
   "Wie oft und aktuell willst du über neue Sammel-Aktionen in deinem Kiez informiert werden?":
-      "How often do you want to be notified about new collection events events in your area?",
+      "How often do you want to be notified about new collection events in your area?",
   "Wie häufig möchtest du Infos über anstehende Aktionen bekommen?":
       "How often do you want to be told about upcoming events?",
   "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\\n\\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.":
-      "This app was developed by a small team of enthusiastic IT activists for Deutsche Wohnen & Co Enteignen and is under free license.\\n\\nIf you are interested in using the app for your own campaign, just write us an email or visit our website. You can also let us know about problems or errors with the app",
+      "This app was developed by a small team of enthusiastic IT activists for Deutsche Wohnen & Co Enteignen and is under free license.\\n\\nIf you are interested in using the app for your own campaign, just write us an email or visit our website. You can also let us know about problems or errors with the app.",
   "Heute, ": "Today, ",
   "Morgen, ": "Tomorrow, ",
   "{prefix***REMOVED***{date***REMOVED*** um {zeit***REMOVED*** Uhr, ": "{prefix***REMOVED***{date***REMOVED*** at {zeit***REMOVED*** o’clock, ",
   "Aktionen konnten nicht geladen werden.": "Event could not be loaded.",
   "Aktion konnte nicht angelegt werden": "Event could not be displayed",
   "Okay...": "Okay...",
-  "Zum Chat": "To chat",
+  "Zum Chat": "Go to chat",
   "Schließen": "Close",
   "Aktion konnte nicht geladen werden.": "Event could not be loaded.",
   "Mitmachen": "Participate",
@@ -144,7 +143,7 @@ const Map<String, dynamic> en = {
   "Falsches Format": "Wrong format",
   "Listen-Orte konnten nicht geladen werden.":
       "List of locations could not be loaded.",
-  "Teilnahmen und Absagen": "Participation and cancelation",
+  "Teilnahmen und Absagen": "Participations and cancellations",
   "Benachrichtigungen über Mitstreiter*innen bei Aktionen an denen du teilnimmst":
       "Notifications about other participants at events you’re taking part in",
   "Änderungen an Aktionen": "Changes to an event",
@@ -269,11 +268,20 @@ const Map<String, dynamic> en = {
       "News from the referendum and the campaign",
   "Datenschutz": "Privacy",
   "Deine Daten": "Your Data",
+  "Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an app@dwenteignen.de.":
+      "All the data you put into the app will be stored exclusively at system of the Deutsche Wohnen & Co. Enteignen campaign and will only be used for the purpose of this app and the campaign. Please take into account that many of the data that you input can be read by other users of this app. Chat messages can only be viewed by participants of the chat at message time. \nFor push notification functionality we depend on Google and Apple delivering infrastructure. Data that are transported this way are being encrypted. If you want us to remove all personal data you input please mail us at app@dwenteignen.de.",
+  "Okay": "Okay",
+  "deutsch": "deutsch",
+  "englisch": "English",
+  "": "",
+  "Hier kannst du ein paar Worte über dich verlieren, vor allem, wie man dich kontaktieren kann, damit andere sich mit dir zum Sammeln verabreden können. Beachte dass alle Sammler*innen deine Angaben lesen können." :
+"You can say a few things about yourself here. It's especially helpful to say how to contact you. Please be aware that all users can read this information.",
+  "Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammler*innen mitbringen? Kann man auch später dazustoßen?":
+      "Add a short description of the drive. Where will you go collect, what should others bring, is it possible to join later?",
   "Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an e@mail.com.":
       "All the data you put into the app will be stored exclusively at system of the Deutsche Wohnen & Co. Enteignen campaign and will only be used for the purpose of this app and the campaign. Please take into account that many of the data that you input can be read by other users of this app. Chat messages can only be viewed by participants of the chat at message time. \nFor push notification functionality we depend on Google and Appla delivering infrastructure. Data that are transported this way are being encrypted. If you want us to remove all personal data you input please mail us at e@mail.com.",
-  "Okay": "Okay",
   "Zu viele Tage": "Too many dates",
-  "Bitte wähle {maxTage***REMOVED*** Tage oder weniger aus.": "Please select {maxTage***REMOVED*** days or fewer."
+  "Bitte wähle {maxTage***REMOVED*** Tage oder weniger aus.": "Please select {maxTage***REMOVED*** days or fewer.",
 ***REMOVED***
 
 const Map<String, dynamic> de = {
@@ -289,7 +297,7 @@ const Map<String, dynamic> de = {
   "Unlesbare Push-Nachricht (Teilnahme) empfangen: {message***REMOVED***":
       "Unlesbare Push-Nachricht (Teilnahme) empfangen: {message***REMOVED***",
   "Ein paar Worte über dich": "Ein paar Worte über dich",
-  "Beschreibung: {beschreibung***REMOVED***": "Beschreibung: {***REMOVED***",
+  "Beschreibung: {beschreibung***REMOVED***": "Beschreibung: {beschreibung***REMOVED***",
   "Beschreibe die Aktion kurz": "Beschreibe die Aktion kurz",
   "Wähle die Art der Aktion": "Wähle die Art der Aktion",
   "von ": "von ",
@@ -344,7 +352,6 @@ const Map<String, dynamic> de = {
   "Aktionen": "Aktionen",
   "Aktionen in einer Liste oder Karte anschauen":
       "Aktionen in einer Liste oder Karte anschauen",
-  "Zum Sammeln aufrufen": "Zum Sammeln aufrufen",
   "Zum Sammeln einladen": "Zum Sammeln einladen",
   "Fragen und Antworten": "Fragen und Antworten",
   "Dein Profil": "Dein Profil",
@@ -541,7 +548,7 @@ const Map<String, dynamic> de = {
     "zero": "{***REMOVED*** Unterschriften",
     "one": "{***REMOVED*** Unterschrift",
     "two": "{***REMOVED*** Unterschriften",
-    "others": "{***REMOVED*** Unterschriften"
+    "others": "{***REMOVED*** Unterschriften",
   ***REMOVED***,
   "Datenschutz": "Datenschutz",
   "Deine Daten": "Deine Daten",
@@ -549,5 +556,14 @@ const Map<String, dynamic> de = {
       "Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an e@mail.com.",
   "Okay": "Okay",
   "Zu viele Tage": "Zu viele Tage",
-  "Bitte wähle {maxTage***REMOVED*** Tage oder weniger aus.": "Bitte wähle {maxTage***REMOVED*** Tage oder weniger aus."
+  "Bitte wähle {maxTage***REMOVED*** Tage oder weniger aus.": "Bitte wähle {maxTage***REMOVED*** Tage oder weniger aus.",
+  "Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an app@dwenteignen.de.":
+      "Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an app@dwenteignen.de.",
+  "deutsch": "deutsch",
+  "englisch": "English",
+  "": "",
+  "Hier kannst du ein paar Worte über dich verlieren, vor allem, wie man dich kontaktieren kann, damit andere sich mit dir zum Sammeln verabreden können. Beachte dass alle Sammler*innen deine Angaben lesen können.":
+  "Hier kannst du ein paar Worte über dich verlieren, vor allem, wie man dich kontaktieren kann, damit andere sich mit dir zum Sammeln verabreden können. Beachte dass alle Sammler*innen deine Angaben lesen können.",
+"Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammler*innen mitbringen? Kann man auch später dazustoßen?":
+"Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammler*innen mitbringen? Kann man auch später dazustoßen?",
 ***REMOVED***

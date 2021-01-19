@@ -99,7 +99,7 @@ void main() {
 
       expect(state.navigation, 1);
       expect(find.byKey(Key('action creator')), findsOneWidget);
-      expect(find.text('Zum Sammeln aufrufen'), findsOneWidget);
+      expect(find.text('Zum Sammeln einladen'), findsOneWidget);
     ***REMOVED***);
 
     testUI('switches to FAQ page with tap on FAQ Button',

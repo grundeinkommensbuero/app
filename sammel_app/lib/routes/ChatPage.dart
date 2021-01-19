@@ -34,7 +34,6 @@ class ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
           .getTopicChannel("global")
           .then((channel) => setState(() => topicChannel = channel));
     ***REMOVED***
-    print('ChatPage: widget.isActive=${widget.active***REMOVED***');
     if (!widget.active) {
       // navigiert weg
       chat_window = null;
