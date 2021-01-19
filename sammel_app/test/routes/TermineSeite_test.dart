@@ -610,7 +610,7 @@ void main() {
       expect(find.byKey(Key('error dialog')), findsOneWidget);
       expect(
           find.text(
-              'Aktion konnte nicht erzeugt werden. Fehlerbeschreibung. \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com'),
+              'Aktion konnte nicht erzeugt werden. Fehlerbeschreibung. \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an app@dwenteignen.de'),
           findsOneWidget);
     ***REMOVED***);
   ***REMOVED***);
@@ -1081,7 +1081,7 @@ void main() {
         await tester.pumpAndSettle(Duration(seconds: 10));
 
         expect(find.byKey(Key('error dialog')), findsOneWidget);
-        expect(find.text('Aktion konnte nicht gelöscht werden. message \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com'),
+        expect(find.text('Aktion konnte nicht gelöscht werden. message \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an app@dwenteignen.de'),
             findsOneWidget);
       ***REMOVED***);
 
@@ -1107,7 +1107,7 @@ void main() {
 
         expect(find.byKey(Key('error dialog')), findsOneWidget);
         expect(
-            find.text('Aktion konnte nicht gelöscht werden. message \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an e@mail.com'), findsOneWidget);
+            find.text('Aktion konnte nicht gelöscht werden. message \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an app@dwenteignen.de'), findsOneWidget);
       ***REMOVED***);
     ***REMOVED***);
   ***REMOVED***);
