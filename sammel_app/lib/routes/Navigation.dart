@@ -72,7 +72,7 @@ class NavigationState extends State<Navigation>
     ];
     List<String> titles = [
       'Aktionen'.tr(),
-      'Zum Sammeln aufrufen'.tr(),
+      'Zum Sammeln einladen'.tr(),
       'Tipps und Argumente'.tr(),
       'News'.tr(),
       'Profil'.tr(),
@@ -202,7 +202,6 @@ class NavigationState extends State<Navigation>
   ***REMOVED***
 
   void switchPage(int index) async {
-    print("setting state ${index***REMOVED*** ${chatPageIndex***REMOVED*** ${index == chatPageIndex***REMOVED***");
     // setState(() => chatPage.active = index == chatPageIndex);
     // print(chatPage);
     // print("chatpage is active ${chatPage.active***REMOVED***");
