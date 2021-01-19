@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:sammel_app/model/Termin.dart';
+import 'package:sammel_app/shared/AttributionPlugin.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/ExpandableConstrainedBox.dart';
@@ -157,7 +158,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
             options: MapOptions(
                 center: LatLng(widget.action.latitude, widget.action.longitude),
                 zoom: 15,
-                interactive: false),
+                interactive: false,),
             layers: [
               TileLayerOptions(
                   urlTemplate:
@@ -165,6 +166,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                   subdomains: ['a', 'b', 'c']),
               MarkerLayerOptions(markers: [widget.marker]),
             ],
+
           ),
         ),
         onTap: () => Navigator.pop(context, TerminDetailsCommand.FOCUS),
