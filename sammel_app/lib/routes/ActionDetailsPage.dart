@@ -52,7 +52,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           Text(
             'Wann?',
             style: TextStyle(fontWeight: FontWeight.bold),
-          ),
+          ).tr(),
           SelectableText(ChronoHelfer.formatDateOfDateTimeMitWochentag(
               widget.action.beginn)),
           SelectableText(ChronoHelfer.formatFromToTimeOfDateTimes(
@@ -75,7 +75,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           Text(
             'Was?',
             style: TextStyle(fontWeight: FontWeight.bold),
-          ),
+          ).tr(),
           ExpandableConstrainedBox(
             child: SelectableText(
               widget.action.details.beschreibung,
@@ -105,7 +105,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           Text(
             'Wer?',
             style: TextStyle(fontWeight: FontWeight.bold),
-          ),
+          ).tr(),
           ExpandableConstrainedBox(
             child: SelectableText(
               widget.action.details.kontakt,
@@ -126,9 +126,9 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
-            'Wo? ',
+            'Wo?',
             style: TextStyle(fontWeight: FontWeight.bold),
-          ),
+          ).tr(),
           ExpandableConstrainedBox(
             child: SelectableText(
                 tr('{kiez} in {bezirk}\n ⛒ Treffpunkt: {treffpunkt}',

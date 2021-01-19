@@ -274,6 +274,10 @@ const Map<String, dynamic> en = {
   "deutsch": "deutsch",
   "englisch": "English",
   "": "",
+  "Hier kannst du ein paar Worte über dich verlieren, vor allem, wie man dich kontaktieren kann, damit andere sich mit dir zum Sammeln verabreden können. Beachte dass alle Sammler*innen deine Angaben lesen können." :
+"You can say a few things about yourself here. It's especially helpful to say how to contact you. Please be aware that all users can read this information.",
+  "Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammler*innen mitbringen? Kann man auch später dazustoßen?":
+      "Add a short description of the drive. Where will you go collect, what should others bring, is it possible to join later?",
 };
 
 const Map<String, dynamic> de = {
@@ -550,4 +554,8 @@ const Map<String, dynamic> de = {
   "deutsch": "deutsch",
   "englisch": "English",
   "": "",
+  "Hier kannst du ein paar Worte über dich verlieren, vor allem, wie man dich kontaktieren kann, damit andere sich mit dir zum Sammeln verabreden können. Beachte dass alle Sammler*innen deine Angaben lesen können.":
+  "Hier kannst du ein paar Worte über dich verlieren, vor allem, wie man dich kontaktieren kann, damit andere sich mit dir zum Sammeln verabreden können. Beachte dass alle Sammler*innen deine Angaben lesen können.",
+"Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammler*innen mitbringen? Kann man auch später dazustoßen?":
+"Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammler*innen mitbringen? Kann man auch später dazustoßen?",
 };

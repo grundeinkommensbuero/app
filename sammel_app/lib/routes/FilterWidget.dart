@@ -124,8 +124,8 @@ class FilterWidgetState extends State<FilterWidget>
               splashColor: Colors.transparent,
               textColor: DweTheme.yellow,
               onPressed: onApply,
-              child: Text(loading ? '' : 'Aktualisieren'.tr(),
-                  textScaleFactor: 1.2))
+              child: Text(loading ? '' : 'Aktualisieren',
+                  textScaleFactor: 1.2).tr())
           : SizedBox()
     ]);
   }
