@@ -22,7 +22,7 @@ const Map<String, dynamic> en = {
   "Unlesbare Push-Nachricht (Teilnahme) empfangen: {message}":
       "Unreadable push notification (participation) received: {message}",
   "Ein paar Worte über dich": "A few words about yourself",
-  "Beschreibung: {beschreibung}": "Description: {}",
+  "Beschreibung: {beschreibung}": "Description: {beschreibung}",
   "Beschreibe die Aktion kurz": "Briefly describe the event",
   "Wähle die Art der Aktion": "Choose the event type",
   "von ": "from ",
@@ -289,7 +289,7 @@ const Map<String, dynamic> de = {
   "Unlesbare Push-Nachricht (Teilnahme) empfangen: {message}":
       "Unlesbare Push-Nachricht (Teilnahme) empfangen: {message}",
   "Ein paar Worte über dich": "Ein paar Worte über dich",
-  "Beschreibung: {beschreibung}": "Beschreibung: {}",
+  "Beschreibung: {beschreibung}": "Beschreibung: {beschreibung}",
   "Beschreibe die Aktion kurz": "Beschreibe die Aktion kurz",
   "Wähle die Art der Aktion": "Wähle die Art der Aktion",
   "von ": "von ",
