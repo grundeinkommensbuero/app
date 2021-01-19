@@ -8,6 +8,7 @@ import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
+import 'package:sammel_app/shared/AttributionPlugin.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
 Future showLocationDialog(
@@ -77,14 +78,16 @@ class LocationDialogState extends State<LocationDialog> {
                         center: widget.center ?? LatLng(52.5170365, 13.3888599),
                         zoom: widget.center != null ? 14.0 : 10.0,
                         maxZoom: 19.0,
-                        onTap: locationSelected),
+                        onTap: locationSelected,
+                        plugins: [AttributionPlugin()]),
                     layers: [
                       TileLayerOptions(
                           urlTemplate:
                               "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
                           subdomains: ['a', 'b', 'c']),
                       MarkerLayerOptions(
-                          markers: marker == null ? [] : [marker])
+                          markers: marker == null ? [] : [marker]),
+                      AttributionOptions(),
                     ]))),
         SizedBox(
           height: 5.0,
