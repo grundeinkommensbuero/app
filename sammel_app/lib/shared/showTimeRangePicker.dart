@@ -31,7 +31,6 @@ Future<TimeOfDay> showSingleTimePicker(
                 hourMinuteTextColor: DweTheme.purple,
                 helpTextStyle: TextStyle(
                     color: DweTheme.purple,
-                    fontSize: 30.0,
                     fontWeight: FontWeight.bold)),
             child: Theme(
                 data: Theme.of(context).copyWith(
