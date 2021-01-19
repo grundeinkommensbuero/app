@@ -28,14 +28,14 @@ Future<List<DateTime>> showMultipleDatePicker(
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        RaisedButton(
+                        Flexible(child: RaisedButton(
                           key: Key('previous month button'),
                           shape: CircleBorder(),
                           child: Icon(Icons.arrow_left),
                           onPressed: () => setDialogState(() => currentMonth =
                               Jiffy(currentMonth).subtract(months: 1)),
-                        ),
-                        Text(
+                        )),
+                        Flexible(child: Text(
                           ChronoHelfer.monthName(currentMonth.month) +
                               '\n' +
                               currentMonth.year.toString(),
@@ -43,14 +43,14 @@ Future<List<DateTime>> showMultipleDatePicker(
                           style: TextStyle(fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
                           textWidthBasis: TextWidthBasis.parent,
-                        ).tr(),
-                        RaisedButton(
+                        ).tr()),
+                        Flexible(child: RaisedButton(
                           key: Key('next month button'),
                           shape: CircleBorder(),
                           child: Icon(Icons.arrow_right),
                           onPressed: () => setDialogState(() => currentMonth =
                               Jiffy(currentMonth).add(months: 1)),
-                        ),
+                        )),
                       ],
                     )),
                 children: <Widget>[
