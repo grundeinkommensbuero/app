@@ -24,7 +24,8 @@ class ChatWindow extends StatefulWidget {
   Termin termin;
   bool writable = true;
 
-  ChatWindow(this.channel, this.termin, this.writable, {Key key}) : super(key: key);
+  ChatWindow(this.channel, this.termin, this.writable, {Key key})
+      : super(key: key);
 
   @override
   ChatWindowState createState() => ChatWindowState(channel, termin);
@@ -63,17 +64,18 @@ class ChatWindowState extends State<ChatWindow> {
 
     var inputWidget = null;
 
-    if(widget.writable) {
+    if (widget.writable) {
       inputWidget = ChatInputWidget(onSendMessage);
     }
     this.widget_list = ChatListWidget(this.channel);
     var header_widget = buildHeader(widget.termin);
     Scaffold page = Scaffold(
         appBar: header_widget,
-        body: Container(decoration: DweTheme.happyHouseBackground,
-         child: Padding(
-            child: this.widget_list, padding: EdgeInsets.only(bottom: 40))),
-        bottomSheet: widget.writable ? inputWidget : null);
+        body:
+            Column(children: [
+              Expanded(child: this.widget_list),
+              widget.writable ? inputWidget : null
+            ]));
     return page;
   }
 
@@ -183,7 +185,8 @@ class ChatWindowState extends State<ChatWindow> {
         message_color: user.color,
         sender_name: name,
         user_id: user.id);
-    ChatPushData mpd = ActionChatMessagePushData(message, termin.id, channel.id);
+    ChatPushData mpd =
+        ActionChatMessagePushData(message, termin.id, channel.id);
     pushService.pushToAction(
         widget.termin.id,
         mpd,
