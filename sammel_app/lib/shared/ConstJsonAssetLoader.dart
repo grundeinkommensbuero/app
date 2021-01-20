@@ -231,6 +231,8 @@ const Map<String, dynamic> en = {
   "Deine Rückmeldung hilft Deinem Kiez-Team, die effektivsten Sammelaktionen zu erkennen. Außerdem können andere Teams von euren Erfahrungen lernen.":
       "Your feedback helps your Kiez Team identify the most effective collection events. Other Teams can also learn from your experiences.",
   "Anzahl Deiner Unterschriften": "Number of signatures",
+  "Wie viele Leute waren bei der Aktion dabei?":
+    "How many people participated in the event?",
   "Wie viele Unterschriften hast Du persönlich gesammelt?":
       "How many signatures did you personally collect?",
   "Wie fandest Du die Aktion?": "How did you like the event?",
@@ -245,12 +247,13 @@ const Map<String, dynamic> en = {
       "How many hours did you personally spend collecting?",
   "Auf die nächste halbe Stunde gerundet": "Round to the next half hour",
   "Wie viel hast Du gesammelt?": "How many did you collect?",
+  "Anzahl Teilnehmer*innen": "Number of participants",
   "Anmerkungen": "Notes",
   "Kommentar": "Comments",
   "Optional: Sonstige Anmerkungen zu den Daten?":
       "Optional: Other notes on the information?",
   "Anmerkungen: ": "Notes: ",
-  "Optional: Muss man noch etwas zu den obigen Daten wissen?":
+  "Optional: Muss man noch etwas zu den Angaben wissen?":
       "Optional: Is there anything else you should share about the above data?",
   "Wie war die Situation? (Wetter, Veranstaltung in der Nähe, besonderer Anlass, ...)":
       "How was the situation? (weather, events in the area, a special occasion, ...)",
@@ -261,7 +264,13 @@ const Map<String, dynamic> en = {
     "zero": "{***REMOVED*** signatures",
     "one": "{***REMOVED*** signature",
     "two": "{***REMOVED*** signatures",
-    "others": "{***REMOVED*** signatures"
+    "other": "{***REMOVED*** signatures"
+  ***REMOVED***,
+  "{***REMOVED*** Teilnehmer": {
+    "zero": "{***REMOVED*** participants",
+    "one": "{***REMOVED*** participants",
+    "two": "{***REMOVED*** participants",
+    "other": "{***REMOVED*** participants"
   ***REMOVED***,
   "News": "News",
   "Neues vom Volksbegehren und der Kampagne":
@@ -517,6 +526,8 @@ const Map<String, dynamic> de = {
   "Deine Rückmeldung hilft Deinem Kiez-Team, die effektivsten Sammelaktionen zu erkennen. Außerdem können andere Teams von euren Erfahrungen lernen.":
       "Deine Rückmeldung hilft Deinem Kiez-Team, die effektivsten Sammelaktionen zu erkennen. Außerdem können andere Teams von euren Erfahrungen lernen.",
   "Anzahl Deiner Unterschriften": "Anzahl Deiner Unterschriften",
+  "Wie viele Leute waren bei der Aktion dabei?":
+  "Wie viele Leute waren bei der Aktion dabei?",
   "Wie viele Unterschriften hast Du persönlich gesammelt?":
       "Wie viele Unterschriften hast Du persönlich gesammelt?",
   "Wie fandest Du die Aktion?": "Wie fandest Du die Aktion?",
@@ -531,6 +542,7 @@ const Map<String, dynamic> de = {
   "Auf die nächste halbe Stunde gerundet":
       "Auf die nächste halbe Stunde gerundet",
   "Wie viel hast Du gesammelt?": "Wie viel hast Du gesammelt?",
+  "Anzahl Teilnehmer*innen": "Anzahl Teilnehmer*innen",
   "Anmerkungen": "Anmerkungen",
   "Kommentar": "Kommentar",
   "Optional: Sonstige Anmerkungen zu den Daten?":
@@ -549,6 +561,12 @@ const Map<String, dynamic> de = {
     "one": "{***REMOVED*** Unterschrift",
     "two": "{***REMOVED*** Unterschriften",
     "others": "{***REMOVED*** Unterschriften",
+  ***REMOVED***,
+  "{***REMOVED*** Teilnehmer": {
+    "zero": "{***REMOVED*** Teilnehmer*innen",
+    "one": "{***REMOVED*** Teilnehmer*in",
+    "two": "{***REMOVED*** Teilnehmer*innen",
+    "other": "{***REMOVED*** Teilnehmer*innen"
   ***REMOVED***,
   "Datenschutz": "Datenschutz",
   "Deine Daten": "Deine Daten",

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:sammel_app/model/Evaluation.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
@@ -71,7 +72,7 @@ class EvaluationFormState extends State<EvaluationForm> {
               padding: EdgeInsets.only(
                   left: 20.0, right: 20.0, top: 15.0, bottom: 50.0),
               children: <Widget>[
-                motivationText,
+                motivationText(),
                 SizedBox(height: 15),
                 Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Icon(Icons.info_outline, size: 40.0),
@@ -206,16 +207,18 @@ class EvaluationFormState extends State<EvaluationForm> {
         ));
   ***REMOVED***
 
-  static Widget motivationText = Column(key: Key('motivation text'), children: [
-    Text(
-      'Erzähl uns, was ihr erreicht habt! \n',
-      style: TextStyle(fontWeight: FontWeight.bold),
-    ).tr(),
-    Text(
-      'Deine Rückmeldung hilft Deinem Kiez-Team, die effektivsten Sammelaktionen zu erkennen. Außerdem können andere Teams von euren Erfahrungen lernen.',
-      textScaleFactor: 1.0,
-    ).tr()
-  ]);
+  static Widget motivationText() {
+    return Column(key: Key('motivation text'), children: [
+      Text(
+        'Erzähl uns, was ihr erreicht habt! \n',
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ).tr(),
+      Text(
+        'Deine Rückmeldung hilft Deinem Kiez-Team, die effektivsten Sammelaktionen zu erkennen. Außerdem können andere Teams von euren Erfahrungen lernen.',
+        textScaleFactor: 1.0,
+      ).tr()
+    ]);
+  ***REMOVED***
 
   Future<String> showTextInputDialog(
       String current_value, String title, String description, Key key) {
@@ -326,15 +329,15 @@ class EvaluationFormState extends State<EvaluationForm> {
   ***REMOVED***
 
   void teilnehmerSelection() async {
-    var ergebnis = await showNumberInputDialog(
+    var ergebnis = await showIntegerInputDialog(
         context,
         // should be number input
-        this.evaluation.teilnehmer?.toDouble(),
+        this.evaluation.teilnehmer,
         'Anzahl Teilnehmer*innen',
         'Wie viele Leute waren bei der Aktion dabei?',
         Key('teilnehmer input dialog'));
     setState(() {
-      if (ergebnis != null) this.evaluation.teilnehmer = ergebnis.round();
+      this.evaluation.teilnehmer = ergebnis ?? this.evaluation.teilnehmer;
       validateAllInput();
     ***REMOVED***);
   ***REMOVED***
@@ -352,14 +355,14 @@ class EvaluationFormState extends State<EvaluationForm> {
   ***REMOVED***
 
   void unterschriftenSelection() async {
-    var ergebnis = await showNumberInputDialog(
+    var ergebnis = await showIntegerInputDialog(
         context,
-        this.evaluation.unterschriften?.toDouble(),
+        this.evaluation.unterschriften,
         'Anzahl Deiner Unterschriften',
         'Wie viele Unterschriften hast Du persönlich gesammelt?',
         Key('unterschriften input dialog'));
     setState(() {
-      if (ergebnis != null) this.evaluation.unterschriften = ergebnis?.round();
+      this.evaluation.unterschriften = ergebnis ?? this.evaluation.unterschriften;
       validateAllInput();
     ***REMOVED***);
   ***REMOVED***
@@ -401,15 +404,15 @@ class EvaluationFormState extends State<EvaluationForm> {
   ***REMOVED***
 
   void stundenSelection() async {
-    var ergebnis = await showNumberInputDialog(
+    var ergebnis = await showIntegerInputDialog(
         context,
         // should be number input
-        this.evaluation.stunden,
+        this.evaluation.stunden.round(),
         'Wie viele Stunden warst Du sammeln?',
-        'Auf die nächste halbe Stunde gerundet',
+        'Auf die nächste Stunde gerundet',
         Key('stunden input dialog'));
     setState(() {
-      this.evaluation.stunden = ergebnis ?? this.evaluation.stunden;
+      this.evaluation.stunden = ergebnis?.toDouble() ?? this.evaluation.stunden;
       validateAllInput();
     ***REMOVED***);
   ***REMOVED***
@@ -417,7 +420,7 @@ class EvaluationFormState extends State<EvaluationForm> {
   Widget stundenButtonCaption(EvaluationData evaluation) {
     Text text;
     if (this.evaluation.validated['stunden'] == ValidationState.ok) {
-      text = Text('{***REMOVED*** Stunden').plural(evaluation.stunden ?? 0);
+      text = Text('{***REMOVED*** Stunden').plural(evaluation.stunden.round() ?? 0);
     ***REMOVED*** else {
       text = Text('Wie viele Stunden habt ihr gesammelt?',
               style: TextStyle(color: DweTheme.purple))
@@ -428,13 +431,12 @@ class EvaluationFormState extends State<EvaluationForm> {
 
   void kommentarSelection() async {
     var ergebnis = await showTextInputDialog(
-        // should be number input
         this.evaluation.kommentar,
         'Kommentar',
         'Optional: Sonstige Anmerkungen zu den Daten?',
         Key('kommentar input dialog'));
     setState(() {
-      this.evaluation.kommentar = ergebnis;
+      this.evaluation.kommentar = ergebnis ?? this.evaluation.kommentar;
       validateAllInput();
     ***REMOVED***);
   ***REMOVED***
@@ -453,13 +455,12 @@ class EvaluationFormState extends State<EvaluationForm> {
 
   void situationSelection() async {
     var ergebnis = await showTextInputDialog(
-        // should be number input
-        this.evaluation.situation.toString(),
+        this.evaluation.situation,
         'Situation',
         'Wie war die Situation? (Wetter, Veranstaltung in der Nähe, besonderer Anlass, ...)',
         Key('situation input dialog'));
     setState(() {
-      this.evaluation.situation = ergebnis;
+      this.evaluation.situation = ergebnis ?? this.evaluation.situation;
       validateAllInput();
     ***REMOVED***);
   ***REMOVED***
@@ -565,44 +566,46 @@ class InputButton extends StatelessWidget {
   ***REMOVED***
 ***REMOVED***
 
-Future<double> showNumberInputDialog(BuildContext context, double init,
-    String title, String description, Key key) {
-  var controller = TextEditingController(text: cleanString(init));
+Future<int> showIntegerInputDialog(
+    BuildContext context, int init, String title, String description, Key key) {
+  var controller = TextEditingController(text: init?.toString() ?? '');
   Widget content = Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-    FlatButton(
-        child: Icon(Icons.remove_circle_outline),
-        shape: CircleBorder(),
-        onPressed: () {
-          final number = double.tryParse(controller.text);
-          if (number == null) return;
-          if (number < 1)
-            return;
-          else
-            controller.text = cleanString(double.parse(controller.text) - 1);
-        ***REMOVED***),
-    SizedBox(
-        width: 50,
-        child: TextFormField(
-          textAlign: TextAlign.center,
-          controller: controller,
-          onTap: () => controller.selection = TextSelection(
-              baseOffset: 0, extentOffset: controller.text.length),
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-          ),
-          onChanged: (newValue) => controller.text = newValue,
-        )),
-    FlatButton(
-        child: Icon(Icons.add_circle_outline),
-        shape: CircleBorder(),
-        onPressed: () {
-          final number = double.tryParse(controller.text);
-          if (number == null)
-            controller.text = '1';
-          else
-            controller.text = cleanString(number + 1);
-        ***REMOVED***),
+    Flexible(
+        child: TextButton(
+            child: Icon(Icons.remove_circle_outline),
+            onPressed: () {
+              final number = int.tryParse(controller.text);
+              if (number == null) return;
+              if (number < 1)
+                return;
+              else
+                controller.text = (number - 1).toString();
+            ***REMOVED***)),
+    Flexible(
+        child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: 100.0, minWidth: 50.0),
+            child: TextFormField(
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              textAlign: TextAlign.center,
+              controller: controller,
+              onTap: () => controller.selection = TextSelection(
+                  baseOffset: 0, extentOffset: controller.text.length),
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+              ),
+              // onChanged: (newValue) => controller.text = newValue,
+            ))),
+    Flexible(
+        child: TextButton(
+            child: Icon(Icons.add_circle_outline),
+            onPressed: () {
+              final number = int.tryParse(controller.text);
+              if (number == null)
+                controller.text = '1';
+              else
+                controller.text = (number + 1).toString();
+            ***REMOVED***)),
   ]);
 
   if (description != null) {
@@ -628,18 +631,9 @@ Future<double> showNumberInputDialog(BuildContext context, double init,
               FlatButton(
                 child: Text("Fertig").tr(),
                 onPressed: () {
-                  Navigator.pop(context, double.tryParse(controller.text));
+                  Navigator.pop(context, int.tryParse(controller.text));
                 ***REMOVED***,
               ),
             ],
           ));
-***REMOVED***
-
-cleanString(double number) {
-  if (number == null) return '';
-  int asInt = number.truncate();
-  if (number == asInt)
-    return asInt.toString();
-  else
-    return number.toString();
 ***REMOVED***
