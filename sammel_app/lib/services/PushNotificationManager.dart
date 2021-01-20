@@ -61,10 +61,11 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     else {
       pushToken = firebaseService.token;
       if (isNull(await pushToken) || (await pushToken).isEmpty) {
-        ErrorService.pushError('Problem beim Einrichten von Push-Nachrichten',
-            '''Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. 
-                'Das kann der Fall sein, wenn etwa ein Google-freies Betriebssystem genutzt wird. 
-                'Darum kann die App nur Benachrichtigungen empfangen während sie geöffnet ist.''');
+        ErrorService.pushError(
+            'Problem beim Einrichten von Push-Nachrichten',
+            'Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. '
+                'Das kann der Fall sein, wenn etwa ein Google-freies Betriebssystem genutzt wird. '
+                'Darum kann die App nur Benachrichtigungen empfangen während sie geöffnet ist.');
 
         storageService.markPullMode();
         listener = PullService(userService, backend);
@@ -149,6 +150,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
         messages.map((message) => decrypt(message['data'])).toList();
     final messageMap = sortMessagesByType(decrypted);
 
+    if(listener is PullService) return; // im Pull-Modus sollen Push-Nachrichten regulär vom Timer geladen werden
     print('${messageMap.keys.length***REMOVED*** Push-Nachrichten vom Server geupdated');
     try {
       messageMap.forEach((type, messages) {

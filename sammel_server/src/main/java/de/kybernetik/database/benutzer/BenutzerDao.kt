@@ -19,6 +19,19 @@ open class BenutzerDao {
         return entityManager.find(Benutzer::class.java, id)
     ***REMOVED***
 
+    open fun getBenutzer(ids: List<Long>): List<Benutzer> {
+        if (ids.isEmpty()) return emptyList()
+        _log.debug("Sammle Benutzer für ids $ids")
+        return entityManager
+            .createQuery(
+                "select benutzer from Benutzer benutzer " +
+                        "where benutzer.id in (:ids)", Benutzer::class.java
+            )
+            .setParameter("ids", ids)
+            .resultList
+
+    ***REMOVED***
+
     open fun getCredentials(id: Long): Credentials? {
         _log.debug("Lade Credentials für Nutzer-ID $id")
         return entityManager.find(Credentials::class.java, id)

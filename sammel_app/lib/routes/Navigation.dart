@@ -95,7 +95,8 @@ class NavigationState extends State<Navigation>
               title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Flexible(child: Text(titles[navigation], overflow: TextOverflow.fade)),
+              Flexible(
+                  child: Text(titles[navigation], overflow: TextOverflow.fade)),
               Image.asset('assets/images/logo.png', width: 50.0)
             ],
           )),
@@ -160,15 +161,15 @@ class NavigationState extends State<Navigation>
                     menuEntry(
                         key: Key('global chat button'),
                         title: 'News'.tr(),
-                        subtitle: "Neues vom Volksbegehren und der Kampagne".tr(),
+                        subtitle:
+                            "Neues vom Volksbegehren und der Kampagne".tr(),
                         index: 3),
                     menuEntry(
                         key: Key('profile navigation button'),
                         title: 'Dein Profil'.tr(),
                         subtitle:
-                        'Dein Name, dein Kiez und deine Einstellungen'.tr(),
+                            'Dein Name, dein Kiez und deine Einstellungen'.tr(),
                         index: 4),
-
                   ],
                 ))));
   ***REMOVED***
@@ -208,9 +209,10 @@ class NavigationState extends State<Navigation>
     setState(() => swipeUp = index > navigation);
     await _animationController.forward();
     setState(() {
-      if (navigation == chatPageIndex && index != chatPageIndex)
-      {
-        Provider.of<ChatMessageService>(context).getTopicChannel("global").then((value) => maybeDispose(value));
+      if (navigation == chatPageIndex && index != chatPageIndex) {
+        Provider.of<ChatMessageService>(context)
+            .getTopicChannel("global")
+            .then((value) => maybeDispose(value));
       ***REMOVED***
       navigation = index;
       swipeUp = !swipeUp;
@@ -249,11 +251,8 @@ class NavigationState extends State<Navigation>
 
   maybeDispose(ChatChannel value) {
     var cls = value.ccl as State<StatefulWidget>;
-    if (cls == null)
-      {
-        return;
-      ***REMOVED***
-    if(ModalRoute.of(cls?.context)?.settings.name == "/"){
+    if (cls == null) return;
+    if (ModalRoute.of(cls?.context)?.settings.name == "/") {
       value.disposeListener();
     ***REMOVED***
   ***REMOVED***
