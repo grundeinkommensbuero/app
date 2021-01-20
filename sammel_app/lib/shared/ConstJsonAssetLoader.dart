@@ -282,7 +282,6 @@ const Map<String, dynamic> en = {
       "All the data you put into the app will be stored exclusively at system of the Deutsche Wohnen & Co. Enteignen campaign and will only be used for the purpose of this app and the campaign. Please take into account that many of the data that you input can be read by other users of this app. Chat messages can only be viewed by participants of the chat at message time. \nFor push notification functionality we depend on Google and Appla delivering infrastructure. Data that are transported this way are being encrypted. If you want us to remove all personal data you input please mail us at e@mail.com.",
   "Zu viele Tage": "Too many dates",
   "Bitte wähle {maxTage} Tage oder weniger aus.": "Please select {maxTage} days or fewer.",
-  "Name {username} ist bereits vergeben.": "Name {username} is already taken.",
 };
 
 const Map<String, dynamic> de = {
@@ -567,5 +566,4 @@ const Map<String, dynamic> de = {
   "Hier kannst du ein paar Worte über dich verlieren, vor allem, wie man dich kontaktieren kann, damit andere sich mit dir zum Sammeln verabreden können. Beachte dass alle Sammler*innen deine Angaben lesen können.",
 "Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammler*innen mitbringen? Kann man auch später dazustoßen?":
 "Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammler*innen mitbringen? Kann man auch später dazustoßen?",
-  "Name {username} ist bereits vergeben.": "Name {username} ist bereits vergeben.",
 };
