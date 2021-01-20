@@ -59,9 +59,9 @@ open class PushService {
         firebase.sendePushNachrichtAnTopic(nachricht.notification, verschluesselt, topic)
 
         val subscribers = subscriptionDao.getSubscribersForTopic(topic)
-        val benutzerOhneFirebase = benutzerDao.getBenutzerOhneFirebaseViaId(subscribers)
-        if (benutzerOhneFirebase.isNotEmpty())
-            pushDao.speicherePushMessageFuerEmpfaenger(nachricht.notification, verschluesselt, benutzerOhneFirebase)
+        val subscribedBenutzer = benutzerDao.getBenutzer(subscribers)
+        if (subscribedBenutzer.isNotEmpty())
+            pushDao.speicherePushMessageFuerEmpfaenger(nachricht.notification, verschluesselt, subscribedBenutzer)
     }
 
     open fun verschluessele(data: Map<String, Any?>?): Map<String, String>? {

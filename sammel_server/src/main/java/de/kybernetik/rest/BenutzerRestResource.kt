@@ -2,6 +2,7 @@ package de.kybernetik.rest
 
 import de.kybernetik.database.benutzer.BenutzerDao
 import de.kybernetik.database.benutzer.Credentials
+import de.kybernetik.database.subscriptions.SubscriptionDao
 import org.jboss.logging.Logger
 import de.kybernetik.shared.Security
 import java.lang.Exception
@@ -24,6 +25,9 @@ open class BenutzerRestResource {
 
     @EJB
     private lateinit var dao: BenutzerDao
+
+    @EJB
+    private lateinit var subscriptinDao: SubscriptionDao
 
     @EJB
     private lateinit var security: Security
@@ -73,6 +77,8 @@ open class BenutzerRestResource {
                     login.firebaseKey!!,
                     isFirebase,
                     listOf("app", "user")))
+
+            subscriptinDao.subscribe(benutzerAusDb.id, listOf("global"))
 
             return Response.ok().entity(benutzerAusDb).build()
         } catch (e: Exception) {

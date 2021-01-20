@@ -44,7 +44,7 @@ final GlobalKey<TermineSeiteState> actionPageKey =
 
 class MyApp extends StatelessWidget {
   static var stammdatenService = StammdatenService();
-  static var firebaseService = FirebaseReceiveService();
+  static var firebaseService = FirebaseReceiveService(pullMode);
   static var storageService = StorageService();
   static final backend = Backend(version);
   static final userService = demoMode
