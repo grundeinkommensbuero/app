@@ -64,8 +64,25 @@ class UsernameDialogState extends State<UsernameDialog> {
       await Provider.of<AbstractUserService>(context).updateUsername(username);
       Navigator.pop(context, username);
     } catch (e) {
+      showUsernameUnavailableDialog(context, username)
       Navigator.pop(context, null);
     }
+  }
+
+  showUsernameUnavailableDialog(context, username) {
+    showDialog(
+        context: context,
+        child: AlertDialog(
+          title: Text('Zu viele Tage'.tr()),
+          content: SelectableText(
+              'Name {username} ist bereits vergeben.'.tr(namedArgs: {'username': username})),
+          actions: <Widget>[
+            RaisedButton(
+              child: Text('Schließen').tr(),
+              onPressed: () => Navigator.pop(context),
+            )
+          ],
+        ));
   }
 
   isValid() => isNotBlank(username);
