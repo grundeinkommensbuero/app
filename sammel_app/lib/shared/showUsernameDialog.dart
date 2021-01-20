@@ -64,7 +64,7 @@ class UsernameDialogState extends State<UsernameDialog> {
       await Provider.of<AbstractUserService>(context).updateUsername(username);
       Navigator.pop(context, username);
     ***REMOVED*** catch (e) {
-      Navigator.pop(context, null)
+      Navigator.pop(context, null);
     ***REMOVED***
   ***REMOVED***
 
