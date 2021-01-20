@@ -21,7 +21,7 @@ class ChatInputState extends State<ChatInputWidget> {
   Widget build(context) {
     print(widget.textEditingController);
     return Column(mainAxisSize: MainAxisSize.min ,children: [
-      SizedBox(
+      Container(
           child: Container(
         key: Key('InputWidgetContainer'),
         child: Row(
@@ -34,10 +34,14 @@ class ChatInputState extends State<ChatInputWidget> {
                   // key: _formKey,
                   style: TextStyle(color: DweTheme.purple, fontSize: 15.0),
                   controller: widget.textEditingController,
+                  minLines: 1,
+                  maxLines: 5,
+                  autocorrect: true,
+                  keyboardType: TextInputType.multiline,
                   //     focusNode: myFocusNode,
                   decoration: InputDecoration(
                     isDense: true,
-                    contentPadding: Platform.isIOS ? EdgeInsets.only(left: 10.0) : EdgeInsets.zero,
+                    contentPadding: EdgeInsets.fromLTRB(Platform.isIOS ? 10.0 : 5.0, 5.0, 5.0, 5.0),
                     border: InputBorder.none,
                     hintText: 'Nachricht eingeben...'.tr(),
                     hintStyle: TextStyle(color: Colors.grey),
@@ -63,7 +67,6 @@ class ChatInputState extends State<ChatInputWidget> {
           ],
         ),
         width: double.infinity,
-        height: 40.0,
         decoration: BoxDecoration(
             border: Border(top: BorderSide(color: Colors.blueGrey, width: 0.5)),
             color: Colors.white),
