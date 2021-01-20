@@ -6,7 +6,6 @@ import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http_server/http_server.dart';
-import 'package:sammel_app/main.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
@@ -33,7 +32,10 @@ class FirebaseReceiveService implements PushReceiveService {
   @override
   Future<String> token = _tokenStreamController.stream.first;
 
-  FirebaseReceiveService([FirebaseMessaging firebaseMock]) {
+  final bool pullMode;
+
+  FirebaseReceiveService(
+      [this.pullMode = false, FirebaseMessaging firebaseMock]) {
     if (firebaseMock != null)
       firebaseMessaging = firebaseMock;
     else if (pullMode) {
@@ -50,8 +52,8 @@ class FirebaseReceiveService implements PushReceiveService {
         .then((token) => _tokenStreamController.add(token));
 
     // For iOS request permission first.
-    await firebaseMessaging.requestNotificationPermissions();
-    firebaseMessaging.subscribeToTopic('global');
+    firebaseMessaging.requestNotificationPermissions();
+    if (await token != null) firebaseMessaging.subscribeToTopic('global');
 
     print('Firebase initialisiert mit Token: ${await token***REMOVED***');
   ***REMOVED***
