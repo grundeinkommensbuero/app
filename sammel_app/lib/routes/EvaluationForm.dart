@@ -337,7 +337,7 @@ class EvaluationFormState extends State<EvaluationForm> {
         'Wie viele Leute waren bei der Aktion dabei?',
         Key('teilnehmer input dialog'));
     setState(() {
-      if (ergebnis != null) this.evaluation.teilnehmer = ergebnis.round();
+      this.evaluation.teilnehmer = ergebnis ?? this.evaluation.teilnehmer;
       validateAllInput();
     });
   }
@@ -362,7 +362,7 @@ class EvaluationFormState extends State<EvaluationForm> {
         'Wie viele Unterschriften hast Du persönlich gesammelt?',
         Key('unterschriften input dialog'));
     setState(() {
-      if (ergebnis != null) this.evaluation.unterschriften = ergebnis?.round();
+      this.evaluation.unterschriften = ergebnis ?? this.evaluation.unterschriften;
       validateAllInput();
     });
   }
@@ -404,15 +404,15 @@ class EvaluationFormState extends State<EvaluationForm> {
   }
 
   void stundenSelection() async {
-    var ergebnis = await showDoubleInputDialog(
+    var ergebnis = await showIntegerInputDialog(
         context,
         // should be number input
-        this.evaluation.stunden,
+        this.evaluation.stunden.round(),
         'Wie viele Stunden warst Du sammeln?',
-        'Auf die nächste halbe Stunde gerundet',
+        'Auf die nächste Stunde gerundet',
         Key('stunden input dialog'));
     setState(() {
-      this.evaluation.stunden = ergebnis ?? this.evaluation.stunden;
+      this.evaluation.stunden = ergebnis?.toDouble() ?? this.evaluation.stunden;
       validateAllInput();
     });
   }
@@ -420,7 +420,7 @@ class EvaluationFormState extends State<EvaluationForm> {
   Widget stundenButtonCaption(EvaluationData evaluation) {
     Text text;
     if (this.evaluation.validated['stunden'] == ValidationState.ok) {
-      text = Text('{} Stunden').plural(evaluation.stunden ?? 0);
+      text = Text('{} Stunden').plural(evaluation.stunden.round() ?? 0);
     } else {
       text = Text('Wie viele Stunden habt ihr gesammelt?',
               style: TextStyle(color: DweTheme.purple))
@@ -566,7 +566,7 @@ class InputButton extends StatelessWidget {
   }
 }
 
-Future<double> showIntegerInputDialog(
+Future<int> showIntegerInputDialog(
     BuildContext context, int init, String title, String description, Key key) {
   var controller = TextEditingController(text: init?.toString() ?? '');
   Widget content = Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -631,82 +631,9 @@ Future<double> showIntegerInputDialog(
               FlatButton(
                 child: Text("Fertig").tr(),
                 onPressed: () {
-                  Navigator.pop(context, double.tryParse(controller.text));
+                  Navigator.pop(context, int.tryParse(controller.text));
                 },
               ),
             ],
           ));
-}
-
-Future<double> showDoubleInputDialog(
-    BuildContext context, double init, String title, String description, Key key) {
-  final numberFormat = NumberFormat('#.#', context.locale.toLanguageTag());
-  var controller = TextEditingController(text: numberFormat.format(init) ?? '');
-  Widget content = Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-    Flexible(
-        child: TextButton(
-            child: Icon(Icons.remove_circle_outline),
-            onPressed: () {
-              final number = double.tryParse(controller.text);
-              if (number == null) return;
-              if (number < 1)
-                return;
-              else
-                controller.text = numberFormat.format(number - 1);
-            })),
-    Flexible(
-        child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: 100.0, minWidth: 50.0),
-            child: TextFormField(
-              inputFormatters: [],
-              textAlign: TextAlign.center,
-              controller: controller,
-              onTap: () => controller.selection = TextSelection(
-                  baseOffset: 0, extentOffset: controller.text.length),
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-              ),
-              // onChanged: (newValue) => controller.text = newValue,
-            ))),
-    Flexible(
-        child: TextButton(
-            child: Icon(Icons.add_circle_outline),
-            onPressed: () {
-              final number = double.tryParse(controller.text);
-              if (number == null)
-              controller.text = numberFormat.format(1);
-              else
-                controller.text = numberFormat.format(number + 1);
-            })),
-  ]);
-
-  if (description != null) {
-    content = SingleChildScrollView(
-        child: ListBody(
-            children: [Text(description).tr(), SizedBox(height: 10), content]));
-  }
-
-  // show the dialog
-  return showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        key: key,
-        title: Text(title).tr(),
-        content: content,
-        actions: [
-          FlatButton(
-            child: Text("Abbrechen").tr(),
-            onPressed: () {
-              Navigator.pop(context, init);
-            },
-          ),
-          FlatButton(
-            child: Text("Fertig").tr(),
-            onPressed: () {
-              Navigator.pop(context, double.tryParse(controller.text));
-            },
-          ),
-        ],
-      ));
 }
