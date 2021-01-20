@@ -97,14 +97,23 @@ open class BenutzerRestResource {
     open fun aktualisiereBenutzername(name: String?): Response {
         val id = context.userPrincipal.name
         _log.debug("Aktualisiere Benutzernamen von $id mit $name")
-        if(name.isNullOrBlank()) {
+        val trimmedName = name?.trim()
+        if(trimmedName.isNullOrBlank()) {
             _log.debug("Fehlender Benutzer-Name")
             return Response
                     .status(412)
                     .entity(RestFehlermeldung("Benutzername darf nicht leer sein"))
                     .build()
         ***REMOVED***
-        val aktualisierterBenutzer = dao.aktualisiereBenutzername(id.toLong(), name)
+
+        if (dao.benutzernameExistiert(trimmedName!!)) {
+            return Response
+                    .status(412)
+                    .entity(RestFehlermeldung("Benutzername ist bereits vergeben"))
+                    .build()
+        ***REMOVED***
+
+        val aktualisierterBenutzer = dao.aktualisiereBenutzername(id.toLong(), trimmedName)
         dao.gibNutzerNamedRolle(aktualisierterBenutzer)
         return Response
                 .status(200)
