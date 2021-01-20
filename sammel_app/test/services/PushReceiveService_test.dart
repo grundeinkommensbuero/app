@@ -1,7 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
-import 'package:sammel_app/services/AuthFehler.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/UserService.dart';
@@ -24,7 +23,7 @@ main() {
     when(firebaseMock.getToken()).thenAnswer((_) async => '123');
 
     test('takes Mock if given', () {
-      FirebaseReceiveService(firebaseMock);
+      FirebaseReceiveService(false, firebaseMock);
 
       expect(FirebaseReceiveService.firebaseMessaging, firebaseMock);
       expect(FirebaseReceiveService.firebaseMessaging is FirebaseMessagingMock,
@@ -32,7 +31,7 @@ main() {
     });
 
     test('registers onMessage listener', () {
-      var firebaseListener = FirebaseReceiveService(firebaseMock);
+      var firebaseListener = FirebaseReceiveService(false, firebaseMock);
       var onMessage = (_) async => null;
 
       firebaseListener.subscribe(onMessage: onMessage);

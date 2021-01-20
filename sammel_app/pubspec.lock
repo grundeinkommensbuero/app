@@ -320,7 +320,7 @@ packages:
       name: flutter_cache_manager
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   flutter_compass:
     dependency: transitive
     description:
@@ -503,7 +503,7 @@ packages:
       name: location
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.2.1"
+    version: "3.2.4"
   location_platform_interface:
     dependency: transitive
     description:
