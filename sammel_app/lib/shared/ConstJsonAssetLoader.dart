@@ -78,7 +78,8 @@ const Map<String, dynamic> en = {
   "Zum Sammeln einladen": "Set up a signature drive",
   "Fragen und Antworten": "Questions and Answers",
   "Dein Profil": "Your profile",
-  "Eine Sammel-Aktion ins Leben rufen": "Invite others to go collecting with you",
+  "Eine Sammel-Aktion ins Leben rufen":
+      "Invite others to go collecting with you",
   "Tipps und Argumente": "Tips and arguments",
   "Tipps, Tricks und Argumentationshilfen": "Argument tips and tricks",
   "Profil": "Profile",
@@ -232,7 +233,7 @@ const Map<String, dynamic> en = {
       "Your feedback helps your Kiez Team identify the most effective collection events. Other Teams can also learn from your experiences.",
   "Anzahl Deiner Unterschriften": "Number of signatures",
   "Wie viele Leute waren bei der Aktion dabei?":
-    "How many people participated in the event?",
+      "How many people participated in the event?",
   "Wie viele Unterschriften hast Du persönlich gesammelt?":
       "How many signatures did you personally collect?",
   "Wie fandest Du die Aktion?": "How did you like the event?",
@@ -283,14 +284,19 @@ const Map<String, dynamic> en = {
   "deutsch": "deutsch",
   "englisch": "english",
   "": "",
-  "Hier kannst du ein paar Worte über dich verlieren, vor allem, wie man dich kontaktieren kann, damit andere sich mit dir zum Sammeln verabreden können. Beachte dass alle Sammler*innen deine Angaben lesen können." :
-"You can say a few things about yourself here. It's especially helpful to say how to contact you. Please be aware that all users can read this information.",
+  "Hier kannst du ein paar Worte über dich verlieren, vor allem, wie man dich kontaktieren kann, damit andere sich mit dir zum Sammeln verabreden können. Beachte dass alle Sammler*innen deine Angaben lesen können.":
+      "You can say a few things about yourself here. It's especially helpful to say how to contact you. Please be aware that all users can read this information.",
   "Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammler*innen mitbringen? Kann man auch später dazustoßen?":
       "Add a short description of the drive. Where will you go collect, what should others bring, is it possible to join later?",
   "Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an e@mail.com.":
       "All the data you put into the app will be stored exclusively at system of the Deutsche Wohnen & Co. Enteignen campaign and will only be used for the purpose of this app and the campaign. Please take into account that many of the data that you input can be read by other users of this app. Chat messages can only be viewed by participants of the chat at message time. \nFor push notification functionality we depend on Google and Appla delivering infrastructure. Data that are transported this way are being encrypted. If you want us to remove all personal data you input please mail us at e@mail.com.",
   "Zu viele Tage": "Too many dates",
-  "Bitte wähle {maxTage***REMOVED*** Tage oder weniger aus.": "Please select {maxTage***REMOVED*** days or fewer.",
+  "Bitte wähle {maxTage***REMOVED*** Tage oder weniger aus.":
+      "Please select {maxTage***REMOVED*** days or fewer.",
+  "Benachrichtigungs-Einstellungen": "Notification Configurations",
+  "Benachrichtigungen einstellen": "Configure Notifications",
+  "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtiungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.":
+      "If you want to change Notifications to silent or disable certain notification categories, just long press a notification. You will then be guided to the notification preferences for this app.",
 ***REMOVED***
 
 const Map<String, dynamic> de = {
@@ -527,7 +533,7 @@ const Map<String, dynamic> de = {
       "Deine Rückmeldung hilft Deinem Kiez-Team, die effektivsten Sammelaktionen zu erkennen. Außerdem können andere Teams von euren Erfahrungen lernen.",
   "Anzahl Deiner Unterschriften": "Anzahl Deiner Unterschriften",
   "Wie viele Leute waren bei der Aktion dabei?":
-  "Wie viele Leute waren bei der Aktion dabei?",
+      "Wie viele Leute waren bei der Aktion dabei?",
   "Wie viele Unterschriften hast Du persönlich gesammelt?":
       "Wie viele Unterschriften hast Du persönlich gesammelt?",
   "Wie fandest Du die Aktion?": "Wie fandest Du die Aktion?",
@@ -574,14 +580,19 @@ const Map<String, dynamic> de = {
       "Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an e@mail.com.",
   "Okay": "Okay",
   "Zu viele Tage": "Zu viele Tage",
-  "Bitte wähle {maxTage***REMOVED*** Tage oder weniger aus.": "Bitte wähle {maxTage***REMOVED*** Tage oder weniger aus.",
+  "Bitte wähle {maxTage***REMOVED*** Tage oder weniger aus.":
+      "Bitte wähle {maxTage***REMOVED*** Tage oder weniger aus.",
   "Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an app@dwenteignen.de.":
       "Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an app@dwenteignen.de.",
   "deutsch": "deutsch",
   "englisch": "english",
   "": "",
   "Hier kannst du ein paar Worte über dich verlieren, vor allem, wie man dich kontaktieren kann, damit andere sich mit dir zum Sammeln verabreden können. Beachte dass alle Sammler*innen deine Angaben lesen können.":
-  "Hier kannst du ein paar Worte über dich verlieren, vor allem, wie man dich kontaktieren kann, damit andere sich mit dir zum Sammeln verabreden können. Beachte dass alle Sammler*innen deine Angaben lesen können.",
-"Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammler*innen mitbringen? Kann man auch später dazustoßen?":
-"Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammler*innen mitbringen? Kann man auch später dazustoßen?",
+      "Hier kannst du ein paar Worte über dich verlieren, vor allem, wie man dich kontaktieren kann, damit andere sich mit dir zum Sammeln verabreden können. Beachte dass alle Sammler*innen deine Angaben lesen können.",
+  "Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammler*innen mitbringen? Kann man auch später dazustoßen?":
+      "Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammler*innen mitbringen? Kann man auch später dazustoßen?",
+  "Benachrichtigungs-Einstellungen": "Benachrichtigungs-Einstellungen",
+  "Benachrichtigungen einstellen": "Benachrichtigungen einstellen",
+  "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtiungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.":
+      "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtiungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.",
 ***REMOVED***

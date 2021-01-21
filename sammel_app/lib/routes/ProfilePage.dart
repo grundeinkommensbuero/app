@@ -128,6 +128,20 @@ class ProfilePageState extends State<ProfilePage> {
                     onPressed: (context) => showNotificationDialog(context)),
                 SizedBox(height: 20.0),
                 ProfileItem(
+                    title: "Benachrichtigungs-Einstellungen",
+                    child: Container(
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                          Text('Benachrichtigungen einstellen',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.black, fontSize: 20.0)).tr(),
+                        ])),
+                    onPressed: (context) => showNotificationInfoDialog(context),
+                    editable: false),
+                SizedBox(height: 20.0),
+                ProfileItem(
                     title: "Deine Daten",
                     child: Container(
                         child: Row(
@@ -219,6 +233,30 @@ class ProfilePageState extends State<ProfilePage> {
       pushNotificationManager.subscribeToKiezActionTopics(
           newKieze, newInterval);
   ***REMOVED***
+***REMOVED***
+
+showNotificationInfoDialog(BuildContext context) {
+  showDialog(
+      context: context,
+      child: SimpleDialog(
+          key: Key('privacy selection dialog'),
+          contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
+          titlePadding: EdgeInsets.all(15.0),
+          title: Text('Datenschutz').tr(),
+          children: [
+            Image.asset(
+              'assets/images/housy_info.png',
+              height: 250,
+            ),
+            Container(
+                padding: EdgeInsets.all(10),
+                child: Text(
+                        'Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtiungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.')
+                    .tr()),
+            FlatButton(
+                child: Text('Okay', textAlign: TextAlign.end).tr(),
+                onPressed: () => Navigator.pop(context))
+          ]));
 ***REMOVED***
 
 showPrivacyDialog(BuildContext context) {
