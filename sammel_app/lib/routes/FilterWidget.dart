@@ -175,7 +175,7 @@ class FilterWidgetState extends State<FilterWidget>
   }
 
   String ortButtonBeschriftung(TermineFilter filter) {
-    const maxLength = 100;
+    const maxLength = 500;
     return (filter?.orte == null || filter.orte.isEmpty)
         ? 'überall'.tr()
         : filter.orte.map((ort) => ort).toList().join(", ").length < maxLength
