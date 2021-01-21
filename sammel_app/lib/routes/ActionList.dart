@@ -13,8 +13,8 @@ class ActionList extends StatefulWidget {
   final Function(List<User>) iAmParticipant;
   final Function(Termin) isPastAction;
 
-  ActionList(this.termine, this.isMyAction, this.isPastAction, this.iAmParticipant,
-      this.openActionDetails,
+  ActionList(this.termine, this.isMyAction, this.isPastAction,
+      this.iAmParticipant, this.openActionDetails,
       {Key key***REMOVED***)
       : super(key: key);
 
@@ -53,6 +53,16 @@ class ActionListState extends State<ActionList> {
           'Jetzt',
           key: Key('action list now line'),
           style: TextStyle(color: DweTheme.purple, fontSize: 16.0),
+        ).tr(),
+      ]);
+    if (index == 99)
+      tile = Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+        tile,
+        Text(
+          'In der Liste und auf der Karte werden höchstens 100 Aktionen angezeigt. Du kannst die Filterfunktion benutzen um konkreter nach Aktionen zu suchen.',
+          key: Key('action list end line'),
+          style: TextStyle(fontSize: 14.0),
+          textAlign: TextAlign.center,
         ).tr(),
       ]);
     return tile;
