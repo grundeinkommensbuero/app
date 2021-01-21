@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -134,9 +136,10 @@ class ProfilePageState extends State<ProfilePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                           Text('Benachrichtigungen einstellen',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.black, fontSize: 20.0)).tr(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 20.0))
+                              .tr(),
                         ])),
                     onPressed: (context) => showNotificationInfoDialog(context),
                     editable: false),
@@ -148,9 +151,10 @@ class ProfilePageState extends State<ProfilePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                           Text('Datenschutz',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.black, fontSize: 28.0)).tr(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 28.0))
+                              .tr(),
                         ])),
                     onPressed: (context) => showPrivacyDialog(context),
                     editable: false),
@@ -250,8 +254,9 @@ showNotificationInfoDialog(BuildContext context) {
             ),
             Container(
                 padding: EdgeInsets.all(10),
-                child: Text(
-                        'Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtiungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.')
+                child: Text(Platform.isIOS
+                        ? 'Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtiungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.'
+                        : 'Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtiungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.')
                     .tr()),
             FlatButton(
                 child: Text('Okay', textAlign: TextAlign.end).tr(),
