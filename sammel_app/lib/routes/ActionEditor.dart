@@ -413,13 +413,13 @@ class ActionEditorState extends State<ActionEditor> {
         this.action.validated['tage'] == ValidationState.not_validated) {
       text = Text("Wähle einen Tag", style: TextStyle(color: DweTheme.purple)).tr();
     ***REMOVED*** else {
-      text = Text("am ".tr() +
+      text = Text('am '.tr() +
           this
               .action
               .tage
-              .map((tag) => DateFormat("dd.MM.").format(tag))
-              .join(", ") +
-          ",");
+              .map((tag) => DateFormat('dd.MM.').format(tag))
+              .join(', ') +
+          ',');
     ***REMOVED***
     return build_text_row(text, this.action.validated['tage']);
   ***REMOVED***
