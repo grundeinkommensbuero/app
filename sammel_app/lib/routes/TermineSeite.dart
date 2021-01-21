@@ -394,9 +394,8 @@ class TermineSeiteState extends State<TermineSeite>
           child: Text('Verlassen').tr(),
           onPressed: () {
             leaveAction(terminMitDetails);
-            setDialogState(() => terminMitDetails.participants.remove(
-                terminMitDetails.participants
-                    .firstWhere((u) => u.id == me.id)));
+            setDialogState(() => terminMitDetails.participants.remove(terminMitDetails.participants
+                    .firstWhere((u) => u == me)));
           });
 
   Widget joinButton(Termin terminMitDetails, Function setDialogState) =>
@@ -595,6 +594,7 @@ class TermineSeiteState extends State<TermineSeite>
   }
 
   Future<void> leaveAction(Termin termin) async {
+    print("leaving action");
     await termineService.leaveAction(termin.id);
     setState(() {
       var actionFromList = termine.firstWhere((t) => t.id == termin.id);
