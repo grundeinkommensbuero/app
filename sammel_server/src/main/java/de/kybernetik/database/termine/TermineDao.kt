@@ -47,7 +47,9 @@ open class TermineDao {
 
         var sql = "select termine from Termin termine"
         if (filterKlausel.isNotEmpty()) sql += " where " + filterKlausel.joinToString(" and ")
+        sql += " order by termine.beginn"
         val query = entityManager.createQuery(sql, Termin::class.java)
+        query.setMaxResults(100)
 
 //        query.setParameter("vor7Tagen", now().minusDays(7).toDate())
         if (filterKlausel.contains(typenKlausel)) query.setParameter("typen", filter.typen)
