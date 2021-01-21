@@ -222,9 +222,9 @@ class LocalNotificationService {
     plugin.show(
         'action:change:${partMessage.actions[0].id***REMOVED***'.hashCode,
         'Eine Aktion an der du teilnimmst hat sich geändert',
-        '''${partMessage.actions[0].typ***REMOVED*** 
-        am ${ChronoHelfer.formatDateOfDateTime(partMessage.actions[0].beginn)***REMOVED*** 
-        in ${partMessage.actions[0].ort.name***REMOVED*** (${partMessage.actions[0].details.treffpunkt***REMOVED***)''',
+        '${partMessage.actions[0].typ***REMOVED*** '
+            'am ${ChronoHelfer.formatDateOfDateTime(partMessage.actions[0].beginn)***REMOVED*** '
+            'in ${partMessage.actions[0].ort.name***REMOVED*** (${partMessage.actions[0].details.treffpunkt***REMOVED***)',
         platformChannelSpecifics,
         payload: jsonEncode(partMessage.toJson()));
   ***REMOVED***
@@ -246,16 +246,16 @@ class LocalNotificationService {
         payload: jsonEncode(data['data']));
   ***REMOVED***
 
-  void sendTopicChatNotification(TopicChatMessagePushData topicChatMessagePushData) async{
-
+  void sendTopicChatNotification(
+      TopicChatMessagePushData topicChatMessagePushData) async {
     AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails('Topic-Chats', 'Topic-Chats',
-        'Benachrichtigungen über neue Topic-Nachrichten',
-        ticker:
-        'Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst');
+        AndroidNotificationDetails('Topic-Chats', 'Topic-Chats',
+            'Benachrichtigungen über neue Topic-Nachrichten',
+            ticker:
+                'Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst');
 
     NotificationDetails platformChannelSpecifics =
-    NotificationDetails(android: androidPlatformChannelSpecifics);
+        NotificationDetails(android: androidPlatformChannelSpecifics);
 
     print('Setze Topic Notification ab');
     print('${topicChatMessagePushData.toJson()***REMOVED***');
