@@ -32,33 +32,41 @@ open class FirebaseService {
         val dataMessage = MulticastMessage.builder()
             .putAllData(data ?: emptyMap())
             .addAllTokens(empfaenger.distinct())
-            .setApnsConfig(ApnsConfig.builder().setAps(Aps.builder().setContentAvailable(true).build()).putHeader("content-available", "1").putHeader("contentAvailable", "1").putHeader("content-available", "1").putAllCustomData(mapOf("content-available" to "1", "content-available" to "1", "content_available" to "1")).build())
+            .setApnsConfig(ApnsConfig.builder().setAps(Aps.builder().setContentAvailable(true).build()).build())
             .build()
         val dataResponse = firebase.sendMulticast(dataMessage)
 
         var pushResponse: BatchResponse? = null
-        if(notification != null) {
+        if (notification != null) {
             val pushMessage = MulticastMessage.builder()
-                .setNotification(Notification.builder()
-                    .setTitle(notification.title)
-                    .setBody(notification.body)
-                    .build())
-                .setAndroidConfig(AndroidConfig.builder().setNotification(AndroidNotification.builder()
-                    .setTitle(notification.title)
-                    .setBody(notification.body)
-                    .setClickAction("FLUTTER_NOTIFICATION_CLICK")
-                    .setChannelId(notification.channel)
-                    .build())
-                    .setCollapseKey(notification.collapseId)
-                    .build())
-                .setApnsConfig(ApnsConfig.builder().setAps(Aps.builder().setContentAvailable(true).build()).putHeader("content-available", "1").putHeader("contentAvailable", "1").putHeader("content-available", "1").putAllCustomData(mapOf("content-available" to "1", "content-available" to "1", "content_available" to "1")).build())
+                .setNotification(
+                    Notification.builder()
+                        .setTitle(notification.title)
+                        .setBody(notification.body)
+                        .build())
+                .setAndroidConfig(
+                    AndroidConfig.builder().setNotification(
+                        AndroidNotification.builder()
+                            .setTitle(notification.title)
+                            .setBody(notification.body)
+                            .setClickAction("FLUTTER_NOTIFICATION_CLICK")
+                            .setChannelId(notification.channel)
+                            .build())
+                        .setCollapseKey(notification.collapseId)
+                        .build())
+                .setApnsConfig(
+                    ApnsConfig.builder()
+                        .setAps(Aps.builder().setThreadId(notification.collapseId).build())
+                        .build())
                 .putAllData(data ?: emptyMap())
                 .addAllTokens(empfaenger.distinct())
                 .build()
             pushResponse = firebase.sendMulticast(pushMessage)
         }
-        LOG.debug("${dataResponse?.successCount} Data-Nachrichten und ${pushResponse?.successCount} Push-Nachrichten  " +
-                "wurden erfolgreich an Firebase versendet")
+        LOG.debug(
+            "${dataResponse?.successCount} Data-Nachrichten und ${pushResponse?.successCount} Push-Nachrichten  " +
+                    "wurden erfolgreich an Firebase versendet"
+        )
     }
 
     open fun sendePushNachrichtAnTopic(notification: PushNotificationDto?, data: Map<String, String>?, topic: String) {
@@ -71,26 +79,32 @@ open class FirebaseService {
         val dataMessage: Message = Message.builder()
             .putAllData(data)
             .setTopic(topic)
-            .setApnsConfig(ApnsConfig.builder().setAps(Aps.builder().setContentAvailable(true).build()).putHeader("content-available", "1").putHeader("contentAvailable", "1").putHeader("content-available", "1").putAllCustomData(mapOf("content-available" to "1", "content-available" to "1", "content_available" to "1")).build())
+            .setApnsConfig(ApnsConfig.builder().setAps(Aps.builder().setContentAvailable(true).build()).build())
             .build()
         val dataResponse = firebase.send(dataMessage)
 
         var pushResponse = "ohne Notification"
-        if(notification != null) {
+        if (notification != null) {
             val pushMessage = Message.builder()
-                .setNotification(Notification.builder()
-                    .setTitle(notification.title)
-                    .setBody(notification.body)
-                    .build())
-                .setAndroidConfig(AndroidConfig.builder().setNotification(AndroidNotification.builder()
-                    .setTitle(notification.title)
-                    .setBody(notification.body)
-                    .setClickAction("FLUTTER_NOTIFICATION_CLICK")
-                    .setChannelId(notification.channel)
-                    .build())
-                    .setCollapseKey(notification.collapseId)
-                    .build())
-                .setApnsConfig(ApnsConfig.builder().setAps(Aps.builder().setContentAvailable(true).build()).putHeader("content-available", "1").putHeader("contentAvailable", "1").putHeader("content-available", "1").putAllCustomData(mapOf("content-available" to "1", "content-available" to "1", "content_available" to "1")).build())
+                .setNotification(
+                    Notification.builder()
+                        .setTitle(notification.title)
+                        .setBody(notification.body)
+                        .build())
+                .setAndroidConfig(
+                    AndroidConfig.builder().setNotification(
+                        AndroidNotification.builder()
+                            .setTitle(notification.title)
+                            .setBody(notification.body)
+                            .setClickAction("FLUTTER_NOTIFICATION_CLICK")
+                            .setChannelId(notification.channel)
+                            .build())
+                        .setCollapseKey(notification.collapseId)
+                        .build())
+                .setApnsConfig(
+                    ApnsConfig.builder()
+                        .setAps(Aps.builder().setThreadId(notification.collapseId).build())
+                        .build())
                 .putAllData(data ?: emptyMap())
                 .setTopic(topic)
                 .build()
