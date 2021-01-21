@@ -394,8 +394,10 @@ class TermineSeiteState extends State<TermineSeite>
           child: Text('Verlassen').tr(),
           onPressed: () {
             leaveAction(terminMitDetails);
-            setDialogState(() => terminMitDetails.participants.remove(terminMitDetails.participants
-                    .firstWhere((u) => u == me)));
+            setDialogState(() => terminMitDetails.participants.remove(
+                terminMitDetails.participants
+                    .firstWhere((u) => u.id == me.id)));
+
           ***REMOVED***);
 
   Widget joinButton(Termin terminMitDetails, Function setDialogState) =>
