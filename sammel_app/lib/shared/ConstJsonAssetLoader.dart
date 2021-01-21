@@ -281,7 +281,7 @@ const Map<String, dynamic> en = {
       "All the data you put into the app will be stored exclusively at system of the Deutsche Wohnen & Co. Enteignen campaign and will only be used for the purpose of this app and the campaign. Please take into account that many of the data that you input can be read by other users of this app. Chat messages can only be viewed by participants of the chat at message time. \nFor push notification functionality we depend on Google and Apple delivering infrastructure. Data that are transported this way are being encrypted. If you want us to remove all personal data you input please mail us at app@dwenteignen.de.",
   "Okay": "Okay",
   "deutsch": "deutsch",
-  "englisch": "English",
+  "englisch": "english",
   "": "",
   "Hier kannst du ein paar Worte über dich verlieren, vor allem, wie man dich kontaktieren kann, damit andere sich mit dir zum Sammeln verabreden können. Beachte dass alle Sammler*innen deine Angaben lesen können." :
 "You can say a few things about yourself here. It's especially helpful to say how to contact you. Please be aware that all users can read this information.",
@@ -578,7 +578,7 @@ const Map<String, dynamic> de = {
   "Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an app@dwenteignen.de.":
       "Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an app@dwenteignen.de.",
   "deutsch": "deutsch",
-  "englisch": "English",
+  "englisch": "english",
   "": "",
   "Hier kannst du ein paar Worte über dich verlieren, vor allem, wie man dich kontaktieren kann, damit andere sich mit dir zum Sammeln verabreden können. Beachte dass alle Sammler*innen deine Angaben lesen können.":
   "Hier kannst du ein paar Worte über dich verlieren, vor allem, wie man dich kontaktieren kann, damit andere sich mit dir zum Sammeln verabreden können. Beachte dass alle Sammler*innen deine Angaben lesen können.",
