@@ -163,10 +163,10 @@ class LocalNotificationService {
 
     String body;
     if (partMessage.actions.length == 1)
-      body = '''${partMessage.actions[0].typ***REMOVED*** 
-          am ${ChronoHelfer.formatDateOfDateTime(partMessage.actions[0].beginn)***REMOVED*** 
-          um ${ChronoHelfer.dateTimeToStringHHmm(partMessage.actions[0].beginn)***REMOVED***
-          , ${partMessage.actions[0].ort.ortsteil***REMOVED***''';
+      body = '${partMessage.actions[0].typ***REMOVED*** '
+          'am ${ChronoHelfer.formatDateOfDateTime(partMessage.actions[0].beginn)***REMOVED*** '
+          'um ${ChronoHelfer.dateTimeToStringHHmm(partMessage.actions[0].beginn)***REMOVED*** '
+          ', ${partMessage.actions[0].ort.ortsteil***REMOVED***';
     else
       body =
           '${partMessage.actions.length***REMOVED*** neue Aktionen in ${partMessage.actions[0].ort.name***REMOVED***';
@@ -196,10 +196,10 @@ class LocalNotificationService {
     plugin.show(
         'action:change:${partMessage.actions[0].id***REMOVED***'.hashCode,
         'Eine Aktion an der du teilnimmst wurde abgesagt',
-        '''${partMessage.actions[0].typ***REMOVED*** 
-        am ${ChronoHelfer.formatDateOfDateTime(partMessage.actions[0].beginn)***REMOVED*** 
-        in ${partMessage.actions[0].ort.name***REMOVED*** (${partMessage.actions[0].details.treffpunkt***REMOVED***) 
-        wurde von der Ersteller*in gelöscht''',
+        '${partMessage.actions[0].typ***REMOVED*** '
+            'am ${ChronoHelfer.formatDateOfDateTime(partMessage.actions[0].beginn)***REMOVED*** '
+            'in ${partMessage.actions[0].ort.name***REMOVED*** (${partMessage.actions[0].details.treffpunkt***REMOVED***) '
+            ' wurde von der Ersteller*in gelöscht',
         platformChannelSpecifics,
         payload: jsonEncode(partMessage.toJson()));
   ***REMOVED***
