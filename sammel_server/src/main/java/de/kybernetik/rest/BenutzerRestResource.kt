@@ -106,13 +106,6 @@ open class BenutzerRestResource {
                     .build()
         }
 
-        if (dao.benutzernameExistiert(trimmedName!!)) {
-            return Response
-                    .status(412)
-                    .entity(RestFehlermeldung("Benutzername ist bereits vergeben"))
-                    .build()
-        }
-
         val aktualisierterBenutzer = dao.aktualisiereBenutzername(id.toLong(), trimmedName)
         dao.gibNutzerNamedRolle(aktualisierterBenutzer)
         return Response
