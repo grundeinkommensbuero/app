@@ -1,6 +1,6 @@
 create table PushMessages
 (
-    id                  int auto_increment not null,
+    id                  int unsigned auto_increment not null,
     empfaenger          int not null,
     daten               blob(1000) null default null,
     benachrichtigung    blob(400) null default null,
