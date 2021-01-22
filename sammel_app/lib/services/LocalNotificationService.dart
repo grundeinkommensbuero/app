@@ -35,7 +35,7 @@ AndroidNotificationChannel actionChatChannel = AndroidNotificationChannel(
 AndroidNotificationChannel newActionsChannel = AndroidNotificationChannel(
   'Aktionen im Kiez', // id
   'Aktionen im Kiez', // title
-  'Benachrichtigungen über neue Aktonen in deinem Kiez',
+  'Benachrichtigungen über neue Aktionen in deinem Kiez',
   playSound: true,
   ledColor: DweTheme.purple,
 );
@@ -153,8 +153,8 @@ class LocalNotificationService {
       ActionListPushData partMessage) async {
     AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails('Aktionen im Kiez', 'Aktionen im Kiez',
-            'Benachrichtigungen über neue Aktonen in deinem Kiez',
-            ticker: 'Benachrichtigungen über neue Aktonen in deinem Kiez',
+            'Benachrichtigungen über neue Aktionen in deinem Kiez',
+            ticker: 'Benachrichtigungen über neue Aktionen in deinem Kiez',
             color: DweTheme.purple,
             playSound: true);
 
