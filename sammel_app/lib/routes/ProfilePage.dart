@@ -243,10 +243,10 @@ showNotificationInfoDialog(BuildContext context) {
   showDialog(
       context: context,
       child: SimpleDialog(
-          key: Key('privacy selection dialog'),
+          key: Key('notification info dialog'),
           contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
           titlePadding: EdgeInsets.all(15.0),
-          title: Text('Datenschutz').tr(),
+          title: Text('Benachrichtiungs-Einstellungen').tr(),
           children: [
             Image.asset(
               'assets/images/housy_info.png',
@@ -268,7 +268,7 @@ showPrivacyDialog(BuildContext context) {
   showDialog(
       context: context,
       child: SimpleDialog(
-          key: Key('privacy selection dialog'),
+          key: Key('privacy dialog'),
           contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
           titlePadding: EdgeInsets.all(15.0),
           title: Text('Datenschutz').tr(),
