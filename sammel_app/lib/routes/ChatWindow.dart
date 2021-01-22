@@ -71,11 +71,10 @@ class ChatWindowState extends State<ChatWindow> {
     var header_widget = buildHeader(widget.termin);
     Scaffold page = Scaffold(
         appBar: header_widget,
-        body:
-            Column(children: [
-              Expanded(child: this.widget_list),
-              widget.writable ? inputWidget : null
-            ]));
+        body: Column(children: [
+          Expanded(child: this.widget_list),
+          widget.writable ? inputWidget : null
+        ]));
     return page;
   ***REMOVED***
 
@@ -191,7 +190,11 @@ class ChatWindowState extends State<ChatWindow> {
         widget.termin.id,
         mpd,
         PushNotification(
-            'Neue Chat-Nachricht'.tr(), "Öffne die App um sie zu lesen".tr()));
+            'Neue Chat-Nachricht',
+            "Zu ${termin.typ***REMOVED*** "
+                'am ${ChronoHelfer.formatDateOfDateTime(termin.beginn)***REMOVED***, '
+                'um ${ChronoHelfer.dateTimeToStringHHmm(termin.beginn)***REMOVED*** '
+                ', ${termin.ort.ortsteil***REMOVED***'));
     channel.pushMessages([message]);
     Provider.of<StorageService>(context).saveChatChannel(channel);
     controller.clear();
