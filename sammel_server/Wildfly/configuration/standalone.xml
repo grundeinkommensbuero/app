@@ -41,10 +41,8 @@
             <security-realm name="ManagementRealm">
                 <server-identities>
                     <ssl>
-                        <!-- selbes Zertifikat wie in ApplicationDomain -->
-                        <keystore path="application.keystore" relative-to="jboss.server.config.dir"
-                                  keystore-password="${KEY_PASSWORD***REMOVED***" alias="server" key-password="${KEY_PASSWORD***REMOVED***"
-                                  generate-self-signed-certificate-host="localhost"/>
+                        <keystore path="${STORE_NAME***REMOVED***" relative-to="jboss.server.config.dir"
+                                  keystore-password="${STORE_PASSWORD***REMOVED***" alias="server" key-password="${STORE_PASSWORD***REMOVED***"/>
                     </ssl>
                 </server-identities>
                 <authentication>
@@ -56,13 +54,13 @@
                 </authorization>
             </security-realm>
             <security-realm name="ApplicationRealm">
-                <server-identities>
-                    <ssl>
-                        <keystore path="application.keystore" relative-to="jboss.server.config.dir"
-                                  keystore-password="${KEY_PASSWORD***REMOVED***" alias="server" key-password="${KEY_PASSWORD***REMOVED***"
-                                  generate-self-signed-certificate-host="localhost"/>
-                    </ssl>
-                </server-identities>
+<!--                <server-identities>-->
+<!--                    <ssl>-->
+<!--                        <keystore path="application.keystore" relative-to="jboss.server.config.dir"-->
+<!--                                  keystore-password="${STORE_PASSWORD***REMOVED***" alias="server" key-password="${STORE_PASSWORD***REMOVED***"-->
+<!--                                  generate-self-signed-certificate-host="localhost"/>-->
+<!--                    </ssl>-->
+<!--                </server-identities>-->
                 <authentication>
                     <local default-user="$local" allowed-users="*" skip-group-loading="true"/>
                     <properties path="application-users.properties" relative-to="jboss.server.config.dir"/>
@@ -418,16 +416,14 @@
             <tls>
                 <key-stores>
                     <key-store name="dweKeyStore">
-                        <credential-reference clear-text="${KEY_PASSWORD***REMOVED***"/>
+                        <credential-reference clear-text="${STORE_PASSWORD***REMOVED***"/>
                         <implementation type="PKCS12"/>
-                        <file path="sammel-app.local-keystore.p12" relative-to="jboss.server.config.dir"/>
-                        <!--                        <file path="sammel-app.test-keystore.p12" relative-to="jboss.server.config.dir"/>-->
-                        <!--                        <file path="sammel-app.prod-keystore.p12" relative-to="jboss.server.config.dir"/>-->
+                        <file path="${STORE_NAME***REMOVED***" relative-to="jboss.server.config.dir"/>
                     </key-store>
                 </key-stores>
                 <key-managers>
                     <key-manager name="dweKeyManager" key-store="dweKeyStore">
-                        <credential-reference clear-text="${KEY_PASSWORD***REMOVED***"/>
+                        <credential-reference clear-text="${STORE_PASSWORD***REMOVED***"/>
                     </key-manager>
                 </key-managers>
                 <server-ssl-contexts>
