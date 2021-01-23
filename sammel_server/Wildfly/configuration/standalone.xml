@@ -39,6 +39,14 @@
     <management>
         <security-realms>
             <security-realm name="ManagementRealm">
+                <server-identities>
+                    <ssl>
+                        <!-- selbes Zertifikat wie in ApplicationDomain -->
+                        <keystore path="application.keystore" relative-to="jboss.server.config.dir"
+                                  keystore-password="${KEY_PASSWORD}" alias="server" key-password="${KEY_PASSWORD}"
+                                  generate-self-signed-certificate-host="localhost"/>
+                    </ssl>
+                </server-identities>
                 <authentication>
                     <local default-user="$local" skip-group-loading="true"/>
                     <properties path="mgmt-users.properties" relative-to="jboss.server.config.dir"/>
@@ -81,7 +89,7 @@
         <management-interfaces>
             <http-interface security-realm="ManagementRealm">
                 <http-upgrade enabled="true"/>
-                <socket-binding http="management-http"/>
+                <socket-binding https="management-https"/>
             </http-interface>
         </management-interfaces>
         <access-control provider="simple">
@@ -374,14 +382,6 @@
                         </mechanism>
                     </mechanism-configuration>
                 </http-authentication-factory>
-                <http-authentication-factory name="example-http-auth" security-domain="ApplicationDomain"
-                                             http-server-mechanism-factory="global">
-                    <mechanism-configuration>
-                        <mechanism mechanism-name="BASIC">
-                            <mechanism-realm realm-name="ApplicationDomain"/>
-                        </mechanism>
-                    </mechanism-configuration>
-                </http-authentication-factory>
                 <provider-http-server-mechanism-factory name="global"/>
             </http>
             <sasl>
@@ -422,6 +422,7 @@
                         <implementation type="PKCS12"/>
                         <file path="sammel-app.local-keystore.p12" relative-to="jboss.server.config.dir"/>
                         <!--                        <file path="sammel-app.test-keystore.p12" relative-to="jboss.server.config.dir"/>-->
+                        <!--                        <file path="sammel-app.prod-keystore.p12" relative-to="jboss.server.config.dir"/>-->
                     </key-store>
                 </key-stores>
                 <key-managers>
@@ -603,10 +604,6 @@
             <handlers>
                 <file name="welcome-content" path="${jboss.home.dir}/welcome-content"/>
             </handlers>
-            <application-security-domains>
-                <application-security-domain name="ApplicationDomain"
-                                             http-authentication-factory="example-http-auth"/>
-            </application-security-domains>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:webservices:2.0"
                    statistics-enabled="${wildfly.webservices.statistics-enabled:${wildfly.statistics-enabled:false}}">
