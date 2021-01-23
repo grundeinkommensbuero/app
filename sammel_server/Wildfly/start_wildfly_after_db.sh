@@ -1,10 +1,12 @@
+
 #!/bin/sh
 db_url=$1
 db_port=$2
 db_schema=$3
 db_user=$4
 db_password=$5
-key_password=$6
+store_name=$6
+store_password=$7
 printf "%s" "waiting for database $1:$2/$3 to run ..."
 i=1
 while ! (echo >/dev/tcp/$db_url/$db_port) &> /dev/null
@@ -27,5 +29,6 @@ printf "\n%s\n"  "Database responded, starting server..."
   -DDB_SCHEMA=$db_schema \
   -DDB_USER=$db_user \
   -DDB_PASSWORD=$db_password \
-  -DKEY_PASSWORD=$key_password \
+  -DSTORE_NAME=$store_name \
+  -DSTORE_PASSWORD=$store_password \
   --debug
