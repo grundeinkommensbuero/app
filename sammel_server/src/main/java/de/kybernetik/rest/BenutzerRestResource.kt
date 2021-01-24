@@ -50,14 +50,14 @@ open class BenutzerRestResource {
         ***REMOVED***
 
          // Zum Vermeiden optisch ähnlicher Namen
-        login.user.name = login.user.name?.trim()
-
-        if (benutzer.name != null && dao.benutzernameExistiert(benutzer.name!!)) {
-            return Response
-                    .status(412)
-                    .entity(RestFehlermeldung("Benutzername ist bereits vergeben"))
-                    .build()
-        ***REMOVED***
+//        login.user.name = login.user.name?.trim()
+//
+//        if (benutzer.name != null && dao.benutzernameExistiert(benutzer.name!!)) {
+//            return Response
+//                    .status(412)
+//                    .entity(RestFehlermeldung("Benutzername ist bereits vergeben"))
+//                    .build()
+//        ***REMOVED***
 
         try {
             val benutzerAusDb = dao.legeNeuenBenutzerAn(benutzer.convertToBenutzer())
