@@ -162,13 +162,23 @@ class FAQService {
     FAQItem(
         17,
         '„Durch Enteignung entsteht keine einzige neue Wohnung.“',
-        Text(
-            '''- DW & Co Unternehmen bauen selbst fast keine neuen Wohnungen, sondern kaufen Wohnungen auf.
-- Konkreter: Eine Studie von 2019 zeigt, dass private Konzerne nur einen Bruchteil ihrer Ausgaben (ca. 1-5%) in Neubau investieren, die Gewobag hingegen (als Beispiel einer landeseigenen Wohnungsunternehmens) 27%.  Einige der privaten Konzerne bauen schlicht gar keine neuen Wohnungen.
-- Genossenschaften und landeseigene Wohnungsunternehmen bauen hingegen mehr und günstigere Wohnungen.
-- Langfristig sichern Enteignung & Vergesellschaftung Wohnungsneubau also ab.'''),
-        Text('''- DW & Co Unternehmen bauen selbst fast keine neuen Wohnungen, sondern kaufen Wohnungen auf.
-- Konkreter: Eine Studie von 2019 zeigt, dass private Konzerne nur einen Bruchteil ihrer Ausgaben (ca. 1-5%) in Neubau investieren...'''),
+        Column(children: [
+          Text(
+              '- DW & Co Unternehmen bauen selbst fast keine neuen Wohnungen, sondern kaufen Wohnungen auf.'),
+          Text(
+              '- Konkreter: Eine Studie von 2019 zeigt, dass private Konzerne nur einen Bruchteil ihrer Ausgaben (ca. 1-5%) in Neubau investieren, die Gewobag hingegen (als Beispiel einer landeseigenen Wohnungsunternehmens) 27%.  Einige der privaten Konzerne bauen schlicht gar keine neuen Wohnungen.'),
+          Text(
+              '- Genossenschaften und landeseigene Wohnungsunternehmen bauen hingegen mehr und günstigere Wohnungen.'),
+          Text(
+              '- Langfristig sichern Enteignung & Vergesellschaftung Wohnungsneubau also ab.')
+        ]),
+        Column(children: [
+          Text(
+              '- DW & Co Unternehmen bauen selbst fast keine neuen Wohnungen, sondern kaufen Wohnungen auf.'),
+          Text(
+              '- Konkreter: Eine Studie von 2019 zeigt, dass private Konzerne nur einen Bruchteil ihrer Ausgaben (ca. 1-5%) in Neubau investieren...'
+              '')
+        ]),
         '''- DW & Co Unternehmen bauen selbst fast keine neuen Wohnungen, sondern kaufen Wohnungen auf.
 - Konkreter: Eine Studie von 2019 zeigt, dass private Konzerne nur einen Bruchteil ihrer Ausgaben (ca. 1-5%) in Neubau investieren, die Gewobag hingegen (als Beispiel einer landeseigenen Wohnungsunternehmens) 27%.  Einige der privaten Konzerne bauen schlicht gar keine neuen Wohnungen.
 - Genossenschaften und landeseigene Wohnungsunternehmen bauen hingegen mehr und günstigere Wohnungen.
@@ -177,9 +187,9 @@ class FAQService {
     FAQItem(
         18,
         '„Es muss einfach mehr gebaut werden!“',
-        Text('- Das funktioniert nicht, solange Wohnraum als Kapitalanlage gilt. Beim aktuellen Wohnungsmarkt ist das Ziel nicht günstige Wohnraumversorgung für alle, sondern hoher Profit & Rendite der wenigen Aktionäre und Unternehmenseigentümer. \n- Die Immobilienunternehmen nutzen die Wohnungsbestände als Kapitalanlage. Je höher also die Miete, desto höher deren Wert und damit der Wert der ganzen Unternehmen – höhere Mieten sind also der Kern ihres Geschäfts.\n- Der Neubau von privaten Immobilienunternehmen ist zumeist teuer, luxuriös oder Eigentumswohnungen, die sich ein Großteil der Bevölkerung nicht leisten können.\n- Die Mieten bleiben stabil bei Wohnungen in gemeinwirtschaftlicher und öffentlicher Hand.'),
         Text(
-            '- Das funktioniert nicht, solange Wohnraum als Kapitalanlage gilt. Beim aktuellen Wohnungsmarkt ist das Ziel nicht günstige Wohnraumversorgung für alle, sondern hoher Profit & Rendite der wenigen Aktionäre und Unternehmenseigentümer. \n- Die Immobilienunternehmen nutzen die Wohnungsbestände als...'),
+            '- Das funktioniert nicht, solange Wohnraum als Kapitalanlage gilt. Beim aktuellen Wohnungsmarkt ist das Ziel nicht günstige Wohnraumversorgung für alle, sondern hoher Profit & Rendite der wenigen Aktionäre und Unternehmenseigentümer. \n- Die Immobilienunternehmen nutzen die Wohnungsbestände als Kapitalanlage. Je höher also die Miete, desto höher deren Wert und damit der Wert der ganzen Unternehmen – höhere Mieten sind also der Kern ihres Geschäfts.\n- Der Neubau von privaten Immobilienunternehmen ist zumeist teuer, luxuriös oder Eigentumswohnungen, die sich ein Großteil der Bevölkerung nicht leisten können.\n- Die Mieten bleiben stabil bei Wohnungen in gemeinwirtschaftlicher und öffentlicher Hand.'),
+        Text('- Das funktioniert nicht, solange Wohnraum als Kapitalanlage gilt. Beim aktuellen Wohnungsmarkt ist das Ziel nicht günstige Wohnraumversorgung für alle, sondern hoher Profit & Rendite der wenigen Aktionäre und Unternehmenseigentümer. \n- Die Immobilienunternehmen nutzen die Wohnungsbestände als...'),
         'Das funktioniert nicht, solange Wohnraum als Kapitalanlage gilt. Beim aktuellen Wohnungsmarkt ist das Ziel nicht günstige Wohnraumversorgung für alle, sondern hoher Profit & Rendite der wenigen Aktionäre und Unternehmenseigentümer. Die Immobilienunternehmen nutzen die Wohnungsbestände als Kapitalanlage. Je höher also die Miete, desto höher deren Wert und damit der Wert der ganzen Unternehmen – höhere Mieten sind also der Kern ihres Geschäfts.\n- Der Neubau von privaten Immobilienunternehmen ist zumeist teuer, luxuriös oder Eigentumswohnungen, die sich ein Großteil der Bevölkerung nicht leisten können. Die Mieten bleiben stabil bei Wohnungen in gemeinwirtschaftlicher und öffentlicher Hand.',
         [
           'Gemeinwohl',
