@@ -5,3 +5,5 @@
 /sammel_server/Wildfly/configuration/sammel-app.test-keystore.p12
 /sammel_server/Wildfly/configuration/sammel-app-firebase-adminsdk.json
 /sammel_server/Wildfly/configuration/sammel-app.prod-keystore.p12
+/server-work-dir/secrets/*
+/server-work-dir/logs/*
