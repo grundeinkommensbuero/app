@@ -15,6 +15,7 @@ import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/shared/ConstJsonAssetLoader.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
+import 'package:sammel_app/Provisioning.dart';
 
 import 'services/BackendService.dart';
 import 'services/LocalNotificationService.dart';
@@ -29,13 +30,6 @@ void main() {
       assetLoader: ConstJsonAssetLoader(),
       fallbackLocale: Locale('en'),
       child: MyApp()));
-***REMOVED***
-
-const Mode mode = Mode.DEMO;
-const version = '0.5.3+25';
-
-***REMOVED***
-***REMOVED***
 ***REMOVED***
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -99,9 +93,3 @@ class MyApp extends StatelessWidget {
         ));
   ***REMOVED***
 ***REMOVED***
-
-enum Mode { LOCAL, DEMO, TEST ***REMOVED***
-
-***REMOVED***
-
-get testMode => mode == Mode.TEST;

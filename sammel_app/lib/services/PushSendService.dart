@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:sammel_app/Provisioning.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
@@ -48,7 +49,7 @@ class PushSendService extends AbstractPushSendService {
     ***REMOVED***
 
     try {
-      post('service/push/topic/$topic',
+      post('service/push/topic/$topicPrefix$topic',
           jsonEncode(PushMessage(data, notification).toJson()));
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,

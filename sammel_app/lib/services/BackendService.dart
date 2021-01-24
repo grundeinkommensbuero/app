@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
 import 'package:http_server/http_server.dart';
-import 'package:sammel_app/main.dart';
+import 'package:sammel_app/Provisioning.dart';
 import 'package:sammel_app/model/Health.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/UserService.dart';
@@ -157,8 +157,6 @@ class NoUserAuthException implements Exception {
 ***REMOVED***
 
 class Backend {
-  static final host = testMode ? 'dwe.idash.org' : '10.0.2.2';
-  static final port = testMode ? 443 : 18443;
   final String version;
 
   final Future<void> zertifikatGeladen = ladeZertifikat().timeout(
