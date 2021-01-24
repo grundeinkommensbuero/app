@@ -4,7 +4,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/shared/AttributionPlugin.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/ExpandableConstrainedBox.dart';
