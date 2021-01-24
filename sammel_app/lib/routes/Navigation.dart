@@ -97,7 +97,7 @@ class NavigationState extends State<Navigation>
             children: <Widget>[
               Flexible(
                   child: Text(titles[navigation], overflow: TextOverflow.fade)),
-              Image.asset('assets/images/logo.png', width: 50.0)
+              Image.asset('assets/images/logo_transparent.png', width: 50.0)
             ],
           )),
           body: Container(

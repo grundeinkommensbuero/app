@@ -350,9 +350,12 @@ showAboutDialog(BuildContext context) {
       builder: (context) => AboutDialog(
             applicationName: 'Deutsche Wohnen & Co. Enteignen',
             applicationIcon:
-                Image.asset('assets/images/housy_info.png', width: 80.0),
+                Image.asset('assets/images/logo_transparent.png', width: 40.0),
             applicationVersion: version,
             children: [
+              SizedBox(
+                  height: 230,
+                  child: Image.asset('assets/images/housy_info.png')),
               SizedBox(height: 15.0),
               Text(
                   'Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.'),
