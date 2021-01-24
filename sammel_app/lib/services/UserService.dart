@@ -13,8 +13,6 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:uuid/uuid.dart';
 
 abstract class AbstractUserService extends BackendService {
-  static String appAuth =
-      'MTpiOTdjNzU5Ny1mNjY5LTRmZWItOWJhMi0zMjE0YzE4MjIzMzk=';
   final streamController = StreamController<User>.broadcast();
   Stream<User> _userStream;
   User latestUser;
