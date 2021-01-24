@@ -23,7 +23,7 @@ open class Firebase {
     open fun initializeFirebase() {
         try {
         val creds =
-            FileInputStream("${System.getenv("JBOSS_HOME")***REMOVED***/standalone/configuration/sammel-app-firebase-adminsdk.json")
+            FileInputStream("/opt/shared/secrets/sammel-app-firebase-adminsdk.json")
 
             FirebaseApp.initializeApp(
                 FirebaseOptions.Builder()
