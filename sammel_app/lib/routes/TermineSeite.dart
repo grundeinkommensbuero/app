@@ -397,7 +397,6 @@ class TermineSeiteState extends State<TermineSeite>
             setDialogState(() => terminMitDetails.participants.remove(
                 terminMitDetails.participants
                     .firstWhere((u) => u.id == me.id)));
-
           });
 
   Widget joinButton(Termin terminMitDetails, Function setDialogState) =>
@@ -503,9 +502,9 @@ class TermineSeiteState extends State<TermineSeite>
     showDialog(
         context: context,
         child: AlertDialog(
-          title: Text('Danke!'),
+          title: Text('Danke!').tr(),
           content: SelectableText(
-              'Vielen Dank, dass Du Eure Erfahrungen geteilt hast'),
+              'Vielen Dank, dass Du Eure Erfahrungen geteilt hast.'.tr()),
           actions: <Widget>[
             RaisedButton(
               child: Text('Schließen'),

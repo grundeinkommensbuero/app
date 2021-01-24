@@ -299,6 +299,9 @@ const Map<String, dynamic> en = {
       "If you want to change Notifications to silent or disable certain notification categories, just long press a received notification. You will then be guided to the notification preferences for this app.",
   "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
       "If you want to change Notifications to silent or disable certain notification categories, just press the three dots on a received notification. You will then be guided to the notification preferences for this app.",
+  "Danke!": "Thanks!",
+  "Vielen Dank, dass Du Eure Erfahrungen geteilt hast.":
+      "Thanks for sharing your experiences.",
 };
 
 const Map<String, dynamic> de = {
@@ -599,4 +602,7 @@ const Map<String, dynamic> de = {
       "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.",
   "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
       "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.",
+  "Danke!": "Danke!",
+  "Vielen Dank, dass Du Eure Erfahrungen geteilt hast.":
+      "Vielen Dank, dass Du Eure Erfahrungen geteilt hast."
 };
