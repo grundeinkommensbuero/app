@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sammel_app/main.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
@@ -16,6 +15,8 @@ import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/KiezPicker.dart';
 import 'package:sammel_app/shared/showUsernameDialog.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../Provisioning.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -52,10 +53,10 @@ class ProfilePageState extends State<ProfilePage> {
           .then((token) => setState(() => this.token = token));
       storageService
           .loadNotificationInterval()
-          .then((pref) => setState(() => interval = pref));
+          .then((pref) => setState(() => interval = pref ?? 'sofort'));
       storageService
           .loadMyKiez()
-          .then((kieze) => setState(() => myKieze = kieze));
+          .then((kieze) => setState(() => myKieze = kieze ?? []));
       init = true;
     }
     var kiezeCaption = (myKieze ?? []).join(', ');
@@ -118,7 +119,8 @@ class ProfilePageState extends State<ProfilePage> {
                     title: "Deine Benachrichtigungen",
                     child: Container(
                         child: Column(children: [
-                      Text(interval ?? 'nie', style: TextStyle(fontSize: 28.0))
+                      Text(interval ?? 'lade...',
+                              style: TextStyle(fontSize: 28.0))
                           .tr(),
                       SizedBox(height: 10.0),
                       Text(
@@ -159,7 +161,7 @@ class ProfilePageState extends State<ProfilePage> {
                     onPressed: (context) => showPrivacyDialog(context),
                     editable: false),
                 SizedBox(height: 20.0),
-                SelectableText('User-ID: ${user?.id}, Push-Token: $token',
+                SelectableText('User-ID: ${user?.id}',
                     textAlign: TextAlign.center),
                 SizedBox(height: 20.0),
               ],
@@ -246,7 +248,7 @@ showNotificationInfoDialog(BuildContext context) {
           key: Key('notification info dialog'),
           contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
           titlePadding: EdgeInsets.all(15.0),
-          title: Text('Benachrichtiungs-Einstellungen').tr(),
+          title: Text('Benachrichtigungs-Einstellungen').tr(),
           children: [
             Image.asset(
               'assets/images/housy_info.png',
@@ -255,8 +257,8 @@ showNotificationInfoDialog(BuildContext context) {
             Container(
                 padding: EdgeInsets.all(10),
                 child: Text(Platform.isIOS
-                        ? 'Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtiungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.'
-                        : 'Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtiungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.')
+                        ? 'Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.'
+                        : 'Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.')
                     .tr()),
             FlatButton(
                 child: Text('Okay', textAlign: TextAlign.end).tr(),

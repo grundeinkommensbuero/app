@@ -15,6 +15,7 @@ import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/shared/ConstJsonAssetLoader.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
+import 'package:sammel_app/Provisioning.dart';
 
 import 'services/BackendService.dart';
 import 'services/LocalNotificationService.dart';
@@ -30,13 +31,6 @@ void main() {
       fallbackLocale: Locale('en'),
       child: MyApp()));
 }
-
-const Mode mode = Mode.DEMO;
-const version = '0.5.3+25';
-
-// Debug
-const bool pullMode = false;
-const bool clearButton = false;
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<TermineSeiteState> actionPageKey =
@@ -99,9 +93,3 @@ class MyApp extends StatelessWidget {
         ));
   }
 }
-
-enum Mode { LOCAL, DEMO, TEST }
-
-get demoMode => mode == Mode.DEMO;
-
-get testMode => mode == Mode.TEST;

@@ -6,6 +6,7 @@ import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http_server/http_server.dart';
+import 'package:sammel_app/Provisioning.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
@@ -53,7 +54,11 @@ class FirebaseReceiveService implements PushReceiveService {
 
     // For iOS request permission first.
     firebaseMessaging.requestNotificationPermissions();
-    if (await token != null) firebaseMessaging.subscribeToTopic('global');
+
+    if (await token != null) {
+      var topicEnc = Uri.encodeComponent('${topicPrefix}global');
+      firebaseMessaging.subscribeToTopic(topicEnc);
+    }
 
     print('Firebase initialisiert mit Token: ${await token}');
   }
@@ -71,8 +76,7 @@ class FirebaseReceiveService implements PushReceiveService {
   @override
   void subscribeToTopics(List<String> topics) {
     for (String topic in topics) {
-      print('Subscribe zu Topic $topic');
-      var topicEnc = Uri.encodeComponent(topic);
+      var topicEnc = Uri.encodeComponent('$topicPrefix$topic');
       firebaseMessaging.subscribeToTopic(topicEnc);
     }
   }
@@ -80,8 +84,7 @@ class FirebaseReceiveService implements PushReceiveService {
   @override
   void unsubscribeFromTopics(List<String> topics) {
     for (String topic in topics) {
-      print('Unsubscribe von Topic $topic');
-      var topicEnc = Uri.encodeComponent(topic);
+      var topicEnc = Uri.encodeComponent('$topicPrefix$topic');
       firebaseMessaging.unsubscribeFromTopic(topicEnc);
     }
   }
