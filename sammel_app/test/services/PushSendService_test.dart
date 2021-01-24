@@ -44,32 +44,6 @@ main() {
           any,
           any));
     ***REMOVED***);
-
-    test('pushToTopic erwartet Thema', () {
-      expect(
-          () => service.pushToTopic(
-              null, PushData(), PushNotification('Titel', "Inhalt")),
-          throwsA((e) => e is MissingTargetError));
-
-      expect(
-          () => service.pushToTopic(
-              '', PushData(), PushNotification('Titel', "Inhalt")),
-          throwsA((e) => e is MissingTargetError));
-    ***REMOVED***);
-
-    test('pushToTopic sendet Push-Nachricht an Server', () async {
-      when(backendMock.post(any, any, any)).thenAnswer((_) =>
-          Future<HttpClientResponseBody>.value(
-              HttpClientResponseBodyMock(null, 200)));
-      await service.pushToTopic(
-          'Thema', PushData(), PushNotification('Titel', 'Inhalt'));
-
-      verify(backendMock.post(
-          'service/push/topic/Thema',
-          '{"recipients":null,"data":{"type":null***REMOVED***,"notification":{"title":"Titel","body":"Inhalt"***REMOVED******REMOVED***',
-          any,
-          any));
-    ***REMOVED***);
   ***REMOVED***);
 
   group('DemoPushService', () {
@@ -102,34 +76,6 @@ main() {
           ['Empfänger'], pushData1, PushNotification('Titel', "Inhalt"));
       await service.pushToDevices(
           ['Empfänger'], pushData2, PushNotification('Titel', "Inhalt"));
-
-      expect(gesendeteNachrichten.length, 2);
-      expect(true, gesendeteNachrichten.contains(pushData1));
-      expect(true, gesendeteNachrichten.contains(pushData2));
-    ***REMOVED***);
-
-    test('pushToTopic erwartet Thema', () {
-      expect(
-          () => service.pushToTopic(
-              null, PushData(), PushNotification('Titel', "Inhalt")),
-          throwsA((e) => e is MissingTargetError));
-
-      expect(
-          () => service.pushToTopic(
-              '', PushData(), PushNotification('Titel', "Inhalt")),
-          throwsA((e) => e is MissingTargetError));
-    ***REMOVED***);
-
-    test('pushToTopic legt Nachricht in Stream', () async {
-      List<PushData> gesendeteNachrichten = [];
-      service.stream.listen((data) => gesendeteNachrichten.add(data));
-
-      var pushData1 = PushData();
-      var pushData2 = PushData();
-      await service.pushToTopic(
-          'Thema', pushData1, PushNotification('Titel', "Inhalt"));
-      await service.pushToTopic(
-          'Thema', pushData2, PushNotification('Titel', "Inhalt"));
 
       expect(gesendeteNachrichten.length, 2);
       expect(true, gesendeteNachrichten.contains(pushData1));

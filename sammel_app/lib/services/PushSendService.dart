@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:sammel_app/Provisioning.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
@@ -14,8 +13,6 @@ abstract class AbstractPushSendService extends BackendService {
 
   pushToDevices(
       List<String> recipients, PushData data, PushNotification notification);
-
-  pushToTopic(String topic, PushData data, PushNotification notification);
 
   pushToAction(int actionId, PushData data, PushNotification notification);
 ***REMOVED***
@@ -39,21 +36,6 @@ class PushSendService extends AbstractPushSendService {
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
           context: 'Push-Nachricht an Geräte konnte nicht versandt werden');
-    ***REMOVED***
-  ***REMOVED***
-
-  pushToTopic(String topic, PushData data, PushNotification notification) {
-    if (topic == null || topic.isEmpty) {
-      throw MissingTargetError(
-          'Für Push-Nachrichten an Topics muss ein Topic angegeben werden.');
-    ***REMOVED***
-
-    try {
-      post('service/push/topic/$topicPrefix$topic',
-          jsonEncode(PushMessage(data, notification).toJson()));
-    ***REMOVED*** catch (e, s) {
-      ErrorService.handleError(e, s,
-          context: 'Push-Nachricht an Thema konnte nicht versandt werden');
     ***REMOVED***
   ***REMOVED***
 
@@ -90,15 +72,6 @@ class DemoPushSendService extends AbstractPushSendService {
     if (recipients == null || recipients.isEmpty) {
       throw MissingTargetError(
           "Für Push-Nachrichten an Geräte muss mindestens ein Empfänger angegeben werden.");
-    ***REMOVED***
-    controller.add(data);
-  ***REMOVED***
-
-  @override
-  pushToTopic(String topic, PushData data, PushNotification notification) {
-    if (topic == null || topic.isEmpty) {
-      throw MissingTargetError(
-          'Für Push-Nachrichten an Topics muss ein Topic angegeben werden.');
     ***REMOVED***
     controller.add(data);
   ***REMOVED***
