@@ -42,6 +42,8 @@ services:
      - db
     depends_on:
      - db
+    volumes:
+      - ./server-work-dir:/opt/shared
 
 volumes:
   my-db: {***REMOVED***
