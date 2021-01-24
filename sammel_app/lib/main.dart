@@ -24,7 +24,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(EasyLocalization(
       preloaderWidget: Container(
-          color: DweTheme.yellow, child: Image.asset('assets/images/logo.png')),
+          color: DweTheme.yellow, child: Image.asset('assets/images/logo_transparent.png')),
       supportedLocales: [Locale('en'), Locale('de')],
       path: 'none',
       assetLoader: ConstJsonAssetLoader(),

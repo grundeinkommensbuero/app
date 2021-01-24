@@ -76,6 +76,7 @@ flutter:
    - assets/images/dwe.png
    - assets/images/logo.png
    - assets/images/logo_ios.png
+   - assets/images/logo_transparent.png
    - assets/images/Sammeln.png
    - assets/images/Sammeln_centered.png
    - assets/images/Workshop.png
