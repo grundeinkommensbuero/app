@@ -36,8 +36,7 @@ open class TermineDao {
     @Suppress("JpaQueryApiInspection") // IDEA kriegt die Query nicht zusammen
     open fun erzeugeGetTermineQuery(filter: TermineFilter): TypedQuery<Termin> {
         val filterKlausel = mutableListOf<String>()
-        // TODO vor Release einkommentieren
-//        filterKlausel.add(aktuellKlausel)
+        filterKlausel.add(aktuellKlausel)
         if (!filter.typen.isNullOrEmpty()) filterKlausel.add(typenKlausel)
         if (!filter.tage.isNullOrEmpty()) filterKlausel.add(tageKlausel)
         if (filter.von != null) filterKlausel.add(vonKlausel)
@@ -51,7 +50,7 @@ open class TermineDao {
         val query = entityManager.createQuery(sql, Termin::class.java)
         query.setMaxResults(100)
 
-//        query.setParameter("vor7Tagen", now().minusDays(7).toDate())
+        query.setParameter("vor7Tagen", now().minusDays(7).toDate())
         if (filterKlausel.contains(typenKlausel)) query.setParameter("typen", filter.typen)
         if (filterKlausel.contains(tageKlausel)) query.setParameter("tage", filter.tage!!.map { it.toDate() })
         if (filterKlausel.contains(vonKlausel)) query.setParameter("von", filter.von!!.atDate(now()))
