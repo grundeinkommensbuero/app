@@ -17,8 +17,8 @@ const Map<String, dynamic> en = {
   "Infoveranstaltung": "Information event",
   "Workshop": "Workshop",
   "Unbekannter Nachrichtentyp abgespeichert": "Unknown message type saved",
-  "{kiez***REMOVED*** in {bezirk***REMOVED***\n ⛒ Treffpunkt: {treffpunkt***REMOVED***":
-      "{kiez***REMOVED*** in {bezirk***REMOVED***\n ⛒ meeting point: {treffpunkt***REMOVED***",
+  "{kiez***REMOVED*** in {bezirk***REMOVED***\n Treffpunkt: {treffpunkt***REMOVED***":
+      "{kiez***REMOVED*** in {bezirk***REMOVED***\n meeting point: {treffpunkt***REMOVED***",
   "Unlesbare Push-Nachricht (Teilnahme) empfangen: {message***REMOVED***":
       "Unreadable push notification (participation) received: {message***REMOVED***",
   "Ein paar Worte über dich": "A few words about yourself",
@@ -253,12 +253,12 @@ const Map<String, dynamic> en = {
   "Kommentar": "Comments",
   "Optional: Sonstige Anmerkungen zu den Daten?":
       "Optional: Other notes on the information?",
-  "Anmerkungen: ": "Notes: ",
+  "Anmerkungen:": "Notes:",
   "Optional: Muss man noch etwas zu den Angaben wissen?":
       "Optional: Is there anything else you should share about the above data?",
   "Wie war die Situation? (Wetter, Veranstaltung in der Nähe, besonderer Anlass, ...)":
       "How was the situation? (weather, events in the area, a special occasion, ...)",
-  "Situation: ": "Situation: ",
+  "Situation:": "Situation:",
   "Optional: Wie war die Situation?": "Optional: How was the situation?",
   "Erzähl uns, was ihr erreicht habt!\n": " Tell us what you accomplished!\n",
   "{***REMOVED*** Unterschriften": {

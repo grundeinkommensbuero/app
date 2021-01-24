@@ -131,7 +131,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           ).tr(),
           ExpandableConstrainedBox(
             child: SelectableText(
-                tr('{kiez***REMOVED*** in {bezirk***REMOVED***\n ⛒ Treffpunkt: {treffpunkt***REMOVED***',
+                tr('{kiez***REMOVED*** in {bezirk***REMOVED***\n Treffpunkt: {treffpunkt***REMOVED***',
                     namedArgs: {
                       'kiez': widget.action.ort.name,
                       'bezirk': widget.action.ort.ortsteil,

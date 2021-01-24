@@ -420,7 +420,7 @@ class EvaluationFormState extends State<EvaluationForm> {
   Widget stundenButtonCaption(EvaluationData evaluation) {
     Text text;
     if (this.evaluation.validated['stunden'] == ValidationState.ok) {
-      text = Text('{***REMOVED*** Stunden').plural(evaluation.stunden.round() ?? 0);
+      text = Text('{***REMOVED*** Stunden').plural(evaluation.stunden ?? 0);
     ***REMOVED*** else {
       text = Text('Wie viele Stunden habt ihr gesammelt?',
               style: TextStyle(color: DweTheme.purple))
@@ -444,7 +444,7 @@ class EvaluationFormState extends State<EvaluationForm> {
   Widget kommentarButtonCaption(EvaluationData evaluation) {
     Text text;
     if (this.evaluation.kommentar != '') {
-      text = Text('Anmerkungen: ${evaluation.kommentar***REMOVED***').tr();
+      text = Text(evaluation.kommentar);
     ***REMOVED*** else {
       text = Text('Optional: Muss man noch etwas zu den Angaben wissen?',
               style: TextStyle(color: DweTheme.purple))
@@ -468,7 +468,7 @@ class EvaluationFormState extends State<EvaluationForm> {
   Widget situationButtonCaption(EvaluationData evaluation) {
     Text text;
     if (this.evaluation.situation != '') {
-      text = Text('Situation: ${evaluation.situation***REMOVED***').tr();
+      text = Text(evaluation.situation);
     ***REMOVED*** else {
       text = Text('Optional: Wie war die Situation?',
               style: TextStyle(color: DweTheme.purple))
