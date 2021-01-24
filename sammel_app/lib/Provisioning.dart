@@ -9,13 +9,15 @@ enum Mode { LOCAL, DEMO, TEST, PROD }
 
 get demoMode => mode == Mode.DEMO;
 
-get testMode => mode == Mode.TEST;
+get localMode => mode == Mode.LOCAL;
 
 String get host => hostMap[mode];
 
 int get port => portMap[mode];
 
 String get topicPrefix => topicPrefixMap[mode];
+
+const String appAuth = 'MTpiOTdjNzU5Ny1mNjY5LTRmZWItOWJhMi0zMjE0YzE4MjIzMzk=';
 
 const hostMap = {
   Mode.DEMO: 'none',
