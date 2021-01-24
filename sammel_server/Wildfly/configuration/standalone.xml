@@ -54,13 +54,7 @@
                 </authorization>
             </security-realm>
             <security-realm name="ApplicationRealm">
-<!--                <server-identities>-->
-<!--                    <ssl>-->
-<!--                        <keystore path="application.keystore" relative-to="jboss.server.config.dir"-->
-<!--                                  keystore-password="${STORE_PASSWORD}" alias="server" key-password="${STORE_PASSWORD}"-->
-<!--                                  generate-self-signed-certificate-host="localhost"/>-->
-<!--                    </ssl>-->
-<!--                </server-identities>-->
+                <!-- TLS für AppliconRealm wird im elytron-Abschnitt konfiguriert -->
                 <authentication>
                     <local default-user="$local" allowed-users="*" skip-group-loading="true"/>
                     <properties path="application-users.properties" relative-to="jboss.server.config.dir"/>
@@ -380,6 +374,14 @@
                         </mechanism>
                     </mechanism-configuration>
                 </http-authentication-factory>
+                <http-authentication-factory name="application-http-auth" security-domain="ApplicationDomain"
+                                             http-server-mechanism-factory="global">
+                    <mechanism-configuration>
+                        <mechanism mechanism-name="BASIC">
+                            <mechanism-realm realm-name="ApplicationDomain"/>
+                        </mechanism>
+                    </mechanism-configuration>
+                </http-authentication-factory>
                 <provider-http-server-mechanism-factory name="global"/>
             </http>
             <sasl>
@@ -600,6 +602,10 @@
             <handlers>
                 <file name="welcome-content" path="${jboss.home.dir}/welcome-content"/>
             </handlers>
+            <application-security-domains>
+                <application-security-domain name="ApplicationDomain"
+                                             http-authentication-factory="application-http-auth"/>
+            </application-security-domains>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:webservices:2.0"
                    statistics-enabled="${wildfly.webservices.statistics-enabled:${wildfly.statistics-enabled:false}}">
