@@ -98,7 +98,6 @@ class ActionListState extends State<ActionList> {
           textAlign: TextAlign.center,
         ).tr(),
       ]);
-    print("${MediaQuery.of(context).size.height}");
     return tile;
   }
 }

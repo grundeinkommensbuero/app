@@ -25,13 +25,9 @@ Map<String, dynamic> decrypt(dynamic data) {
     print('Uncodierte Push-Nachricht: ${data['payload']}');
     try {
       print(jsonDecode(data['payload']));
-    }catch (e,s)
-  {
-    print("decoding error ${e}");
-  }
-
-    print("success on decoding");
-    print(data["payload"]);
+    } catch (e) {
+      print("decoding error ${e}");
+    }
 
     return data['payload'];
   }

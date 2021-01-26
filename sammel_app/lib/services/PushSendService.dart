@@ -46,8 +46,6 @@ class PushSendService extends AbstractPushSendService {
           'Für Push-Nachrichten an Aktionen muss die Aktions-ID angegeben werden.');
     }
 
-    print(
-        'Sende Push-Message: ${jsonEncode(PushMessage(data, notification).toJson())}');
     try {
       await post('service/push/action/$actionId',
           jsonEncode(PushMessage(data, notification).toJson()));

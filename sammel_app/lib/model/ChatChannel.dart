@@ -28,7 +28,6 @@ class ChatChannel {
   Future<void> pushChatMessage(Message message) {
     Message ownMessage = channel_messages
         .firstWhere((e) => message.isMessageEqual(e), orElse: () => null);
-    print(ownMessage);
     if (ownMessage == null)
       channel_messages.add(message);
     else
@@ -44,7 +43,6 @@ class ChatChannel {
     if (ccl == null) {
       ccl = c;
     } else if (c != ccl) {
-      print('The Channel is already associated to a widget');
       ccl = c;
     }
   }

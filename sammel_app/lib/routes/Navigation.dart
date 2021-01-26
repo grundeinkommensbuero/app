@@ -203,9 +203,6 @@ class NavigationState extends State<Navigation>
   }
 
   void switchPage(int index) async {
-    // setState(() => chatPage.active = index == chatPageIndex);
-    // print(chatPage);
-    // print("chatpage is active ${chatPage.active}");
     setState(() => swipeUp = index > navigation);
     await _animationController.forward();
     setState(() {

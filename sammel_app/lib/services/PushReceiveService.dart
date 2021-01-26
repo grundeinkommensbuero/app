@@ -96,7 +96,6 @@ class PullService extends BackendService implements PushReceiveService {
 
   PullService(AbstractUserService userService, Backend backend)
       : super(userService, backend) {
-    print('Starte Pulling');
     timer = Timer.periodic(Duration(seconds: 10), (_) => pull());
   }
 

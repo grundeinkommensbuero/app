@@ -86,7 +86,6 @@ class PushNotificationManager implements AbstractPushNotificationManager {
   Map<String, PushNotificationListener> callback_map = Map();
 
   Future<dynamic> onReceived(Map<dynamic, dynamic> message) async {
-    print('onReceived: Push-Nachricht empfangen: $message');
     final data = extractData(message);
 
     try {
@@ -105,9 +104,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     try {
       if (data.containsKey('type')) {
         String type = data['type'];
-        print("contains type ${callback_map.containsKey(type)}");
         if (callback_map.containsKey(type)) {
-          print('Callback gefunden!');
           callback_map[type].handleNotificationTap(data);
         }
       }
@@ -126,7 +123,6 @@ class PushNotificationManager implements AbstractPushNotificationManager {
 
   @override
   void register_message_callback(String id, PushNotificationListener callback) {
-    print('Registriere Callback für $id');
     this.callback_map[id] = callback;
   }
 
@@ -151,7 +147,6 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     final messageMap = sortMessagesByType(decrypted);
 
     if(listener is PullService) return; // im Pull-Modus sollen Push-Nachrichten regulär vom Timer geladen werden
-    print('${messageMap.keys.length} Push-Nachrichten vom Server geupdated');
     try {
       messageMap.forEach((type, messages) {
         callback_map[type]?.updateMessages(messages);

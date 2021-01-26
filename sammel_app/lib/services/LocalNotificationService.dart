@@ -111,7 +111,6 @@ class LocalNotificationService {
     NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
 
-    print('Setze Notification ab');
     if (plugin == null) plugin = await initializeLocalNotifications(onTap);
     plugin.show(
         chatMessage.channel.hashCode,
@@ -135,7 +134,6 @@ class LocalNotificationService {
     NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
 
-    print('Setze Notification ab');
     if (plugin == null) plugin = await initializeLocalNotifications(onTap);
     plugin.show(
         data.channel.hashCode,
@@ -171,7 +169,6 @@ class LocalNotificationService {
       body =
           '${partMessage.actions.length} neue Aktionen in ${partMessage.actions[0].ort.name}';
 
-    print('Setze Notification ab');
     if (plugin == null) plugin = await initializeLocalNotifications(onTap);
     plugin.show('newactions:${partMessage.actions[0].ort.name}'.hashCode,
         'Neue Aktionen in deinem Kiez', body, platformChannelSpecifics,
@@ -191,7 +188,6 @@ class LocalNotificationService {
     NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
 
-    print('Setze Notification ab');
     if (plugin == null) plugin = await initializeLocalNotifications(onTap);
     plugin.show(
         'action:change:${partMessage.actions[0].id}'.hashCode,
@@ -217,7 +213,6 @@ class LocalNotificationService {
     NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
 
-    print('Setze Notification ab');
     if (plugin == null) plugin = await initializeLocalNotifications(onTap);
     plugin.show(
         'action:change:${partMessage.actions[0].id}'.hashCode,
@@ -239,7 +234,6 @@ class LocalNotificationService {
     NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
 
-    print('Setze Notification ab');
     if (plugin == null) plugin = await initializeLocalNotifications(onTap);
     plugin.show(0, data['notification']['title'], data['notification']['body'],
         platformChannelSpecifics,
@@ -256,9 +250,6 @@ class LocalNotificationService {
 
     NotificationDetails platformChannelSpecifics =
         NotificationDetails(android: androidPlatformChannelSpecifics);
-
-    print('Setze Topic Notification ab');
-    print('${topicChatMessagePushData.toJson()}');
 
     if (plugin == null) plugin = await initializeLocalNotifications(onTap);
     plugin.show(

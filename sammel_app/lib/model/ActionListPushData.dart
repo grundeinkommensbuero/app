@@ -10,7 +10,6 @@ class ActionListPushData implements PushData {
   List<Termin> actions;
 
   ActionListPushData.fromJson(Map<String, dynamic> json, Set<Kiez> kieze) {
-    print(json['actions']);
     type = json['type'] as String;
     actions = (json['actions'] as List)
         .map((json) => Termin.fromJson(json, kieze))
