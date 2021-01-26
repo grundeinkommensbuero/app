@@ -30,7 +30,6 @@ class ChatMessageService implements PushNotificationListener {
   receive_message(Map<String, dynamic> json) async {
     try {
       var pushData = chatPushDataFromJson(json);
-      print("receive message $json");
       ChatChannel channel = await storeMessage(pushData);
       if (channel == null) return;
 
@@ -38,7 +37,6 @@ class ChatMessageService implements PushNotificationListener {
       State<StatefulWidget> cls = channel.ccl as State<StatefulWidget>;
       if (cls == null || ModalRoute.of(cls.context)?.isActive == false) {
         // chat window is not open: push local message
-        print('non active window');
         var notifier =
             Provider.of<LocalNotificationService>(navigatorKey.currentContext);
         if (json['type'] == PushDataTypes.SimpleChatMessage)
@@ -47,7 +45,6 @@ class ChatMessageService implements PushNotificationListener {
           notifier.sendParticipationNotification(
               ParticipationPushData.fromJson(json));
         if (json['type'] == PushDataTypes.TopicChatMessage) {
-          print('topicchatmessage ${TopicChatMessagePushData.fromJson(json)***REMOVED***');
           notifier.sendTopicChatNotification(
               TopicChatMessagePushData.fromJson(json));
         ***REMOVED***
@@ -81,7 +78,6 @@ class ChatMessageService implements PushNotificationListener {
 
   @override
   Future<void> handleNotificationTap(Map<dynamic, dynamic> data) async {
-    print('handleNotificationTap mit Data: $data');
     if (Message.determineType(data) == PushDataTypes.TopicChatMessage) {
       var chat_push_data = TopicChatMessagePushData.fromJson(data);
       final channel = await getChannel(chat_push_data.channel);
@@ -119,7 +115,6 @@ class ChatMessageService implements PushNotificationListener {
       if (cls != null) {
         Navigator.pop(cls.context);
       ***REMOVED***
-      print("pushing new topic window");
       navigatorKey.currentState.push(MaterialPageRoute(
           builder: (context) => TopicChatWindow(channel, true)));
     ***REMOVED***

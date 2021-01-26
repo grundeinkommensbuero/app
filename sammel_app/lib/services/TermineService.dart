@@ -121,7 +121,6 @@ class TermineService extends AbstractTermineService
         ActionListPushData.fromJson(data, await stammdatenService.kieze);
     actionData.actions..sort(Termin.compareByStart);
 
-    print('Type: ${actionData.type***REMOVED***');
     if (actionData.type ==
         PushDataTypes.NewKiezActions) if (actionData.actions.length == 1)
       this.actionPageKey.currentState.openTerminDetails(actionData.actions[0]);
@@ -131,7 +130,6 @@ class TermineService extends AbstractTermineService
     ***REMOVED***
 
     if (actionData.type == PushDataTypes.ActionChanged) {
-      print('Aktion: ${actionData***REMOVED***');
       actionPageKey.currentState.openTerminDetails(actionData.actions[0]);
     ***REMOVED***
 

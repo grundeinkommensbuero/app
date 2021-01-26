@@ -19,7 +19,6 @@ class ChatInputWidget extends StatefulWidget {
 
 class ChatInputState extends State<ChatInputWidget> {
   Widget build(context) {
-    print(widget.textEditingController);
     return Column(mainAxisSize: MainAxisSize.min ,children: [
       Container(
           child: Container(

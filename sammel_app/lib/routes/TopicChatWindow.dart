@@ -25,7 +25,6 @@ class TopicChatWindowState extends State<TopicChatWindow>
   List<Message> messages;
 
   TopicChatWindowState(ChatChannel channel) {
-    print('chatpage topicChannel: ${channel.toJson()***REMOVED***');
     channel.register_channel_change_listener(this);
     messages = channel.channel_messages;
   ***REMOVED***

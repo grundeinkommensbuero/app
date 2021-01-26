@@ -516,7 +516,6 @@ class TermineSeiteState extends State<TermineSeite>
   ***REMOVED***
 
   Future<void> saveEvaluation(Evaluation evaluation) async {
-    print('saveEvaluation');
     try {
       await termineService.saveEvaluation(evaluation);
       setState(() => myEvaluations = myEvaluations..add(evaluation.terminId));
@@ -595,7 +594,6 @@ class TermineSeiteState extends State<TermineSeite>
   ***REMOVED***
 
   Future<void> leaveAction(Termin termin) async {
-    print("leaving action");
     await termineService.leaveAction(termin.id);
     setState(() {
       var actionFromList = termine.firstWhere((t) => t.id == termin.id);
