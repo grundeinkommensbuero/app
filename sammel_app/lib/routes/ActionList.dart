@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:quiver/iterables.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
@@ -27,39 +26,45 @@ class ActionList extends StatefulWidget {
 }
 
 class ActionListState extends State<ActionList> {
-  ActionListState();
   ItemScrollController _scrollController = ItemScrollController();
 
   @override
   Widget build(BuildContext context) {
     var index_of_now = getIndexOfNow();
 
-    var scrollableList =  ScrollablePositionedList.builder(
+    var scrollableList = ScrollablePositionedList.builder(
         itemScrollController: _scrollController,
-        itemCount: widget.termine.length, itemBuilder: cardListBuilder, initialScrollIndex: index_of_now);
-    if(index_of_now > 0 && _scrollController.isAttached)
-      {
-        Timer(Duration(milliseconds: 100), () =>_scrollController.scrollTo(index: index_of_now, alignment: 0, duration: Duration(milliseconds: 100)));
-      }
+        itemCount: widget.termine.length,
+        itemBuilder: cardListBuilder,
+        initialScrollIndex: index_of_now);
+    if (index_of_now > 0 && _scrollController.isAttached) {
+      Timer(
+          Duration(milliseconds: 100),
+          () => _scrollController.scrollTo(
+              index: index_of_now,
+              alignment: 0,
+              curve: Curves.easeOutCubic,
+              duration: Duration(milliseconds: index_of_now * 75)));
+    }
     return scrollableList;
   }
 
-  int getIndexOfNow()
-  {
+  int getIndexOfNow() {
     var now = DateTime.now();
-    int index = 0;
-    for(index = 0; index < widget.termine.length; index++)
-      {
-        if ((widget.termine[index].beginn.isBefore(now)) &&
-            (index == widget.termine.length - 1 ||
-                widget.termine[index + 1].beginn.isAfter(now)))
-          break;
+    for (int index = 0; index < widget.termine.length; index++) {
+      if ((widget.termine[index].beginn.isBefore(now)) &&
+          (index == widget.termine.length - 1 ||
+              widget.termine[index + 1].beginn.isAfter(now))) {
+        if(index > widget.termine.length - 5)
+          return (widget.termine.length > 5 ? widget.termine.length - 5 : 0);
+        else
+          return index;
       }
-    return index > widget.termine.length-5 ? (widget.termine.length>5 ? widget.termine.length-5 : 0) : index;
+    }
+    return 0;
   }
 
   Widget cardListBuilder(context, index) {
-
     Widget tile = ListTile(
         title: TerminCard(
             widget.termine[index],
