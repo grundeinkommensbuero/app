@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:quiver/iterables.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import 'TerminCard.dart';
 
@@ -24,14 +28,38 @@ class ActionList extends StatefulWidget {
 
 class ActionListState extends State<ActionList> {
   ActionListState();
+  ItemScrollController _scrollController = ItemScrollController();
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: widget.termine.length, itemBuilder: cardListBuilder);
+    var index_of_now = getIndexOfNow();
+
+    var scrollableList =  ScrollablePositionedList.builder(
+        itemScrollController: _scrollController,
+        itemCount: widget.termine.length, itemBuilder: cardListBuilder, initialScrollIndex: index_of_now);
+    if(index_of_now > 0 && _scrollController.isAttached)
+      {
+        Timer(Duration(milliseconds: 100), () =>_scrollController.scrollTo(index: index_of_now, alignment: 0, duration: Duration(milliseconds: 100)));
+      }
+    return scrollableList;
+  }
+
+  int getIndexOfNow()
+  {
+    var now = DateTime.now();
+    int index = 0;
+    for(index = 0; index < widget.termine.length; index++)
+      {
+        if ((widget.termine[index].beginn.isBefore(now)) &&
+            (index == widget.termine.length - 1 ||
+                widget.termine[index + 1].beginn.isAfter(now)))
+          break;
+      }
+    return index > widget.termine.length-5 ? (widget.termine.length>5 ? widget.termine.length-5 : 0) : index;
   }
 
   Widget cardListBuilder(context, index) {
+
     Widget tile = ListTile(
         title: TerminCard(
             widget.termine[index],
@@ -65,6 +93,7 @@ class ActionListState extends State<ActionList> {
           textAlign: TextAlign.center,
         ).tr(),
       ]);
+    print("${MediaQuery.of(context).size.height}");
     return tile;
   }
 }

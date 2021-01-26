@@ -51,6 +51,7 @@ dependencies:
   cryptography: ^1.4.0
   loading_indicator: ^1.2.0
   easy_localization: ^2.3.3
+  scrollable_positioned_list: ^0.1.9
 
 dev_dependencies:
   flutter_test:
