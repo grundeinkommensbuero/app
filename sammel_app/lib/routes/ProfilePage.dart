@@ -34,11 +34,12 @@ class ProfilePageState extends State<ProfilePage> {
   String interval;
 
   static const intervalOptions = ['sofort', 'täglich', 'wöchentlich', 'nie'];
-  static const languageOptions = ['de', 'en'];
+  static const languageOptions = ['de', 'en', 'ru'];
 
   var languages = {
     'de': 'deutsch',
     'en': 'englisch',
+    'ru': 'русский',
   ***REMOVED***
 
   @override

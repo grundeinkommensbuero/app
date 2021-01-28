@@ -8,7 +8,11 @@ class ConstJsonAssetLoader extends AssetLoader {
       languages[locale.languageCode];
 ***REMOVED***
 
-const Map<String, Map<String, dynamic>> languages = {'en': en, 'de': de***REMOVED***
+const Map<String, Map<String, dynamic>> languages = {
+  'en': en,
+  'de': de,
+  'ru': ru,
+***REMOVED***
 
 const Map<String, dynamic> en = {
   "Liste": "List",
@@ -302,6 +306,296 @@ const Map<String, dynamic> en = {
   "Danke!": "Thanks!",
   "Vielen Dank, dass Du Eure Erfahrungen geteilt hast.":
       "Thanks for sharing your experiences.",
+***REMOVED***
+
+const Map<String, dynamic> ru = {
+  "Liste": "Список",
+  "Karte": "Карта",
+  "Sammeln": "Собрать подписи",
+  "Infoveranstaltung": "Информационное мероприятие",
+  "Workshop": "Семинар",
+  "Unbekannter Nachrichtentyp abgespeichert":
+      "Сохранено сообщение неизвестного типа",
+  "{kiez***REMOVED*** in {bezirk***REMOVED***\n Treffpunkt: {treffpunkt***REMOVED***":
+      "{kiez***REMOVED*** в {bezirk***REMOVED***\n место встречи: {treffpunkt***REMOVED***",
+  "Unlesbare Push-Nachricht (Teilnahme) empfangen: {message***REMOVED***":
+      "Принято нечитаемое Push-сообщение (участие): {message***REMOVED***",
+  "Ein paar Worte über dich": "Несколько слов о тебе",
+  "Beschreibung: {beschreibung***REMOVED***": "Описание: {beschreibung***REMOVED***",
+  "Beschreibe die Aktion kurz": "Кратко опиши акцию",
+  "Wähle die Art der Aktion": "Выбери вид акции",
+  "von ": "с ",
+  " bis ": " по ",
+  "Wähle eine Uhrzeit": "Выбери время",
+  "Jetzt": "Сейчас",
+  "Hier liegen öffentliche Unterschriften-Listen aus. Du kannst selbst Unterschriften-Listen an öffentlichen Orten auslegen, z.B. in Cafés, Bars oder Läden. Wichtig ist, dass du die ausgefüllten Listen regelmäßig abholst.\nFrage doch mal die Betreiber*innen deines Lieblings-Spätis!\n":
+      "Здесь выложены публичные списки подписей. Ты сам(а) можешь выкладывать списки подписей в общественных местах, например, в кафе, барах или магазинах. Важно, чтобы ты регулярно забирал(а) заполненные списки.\nНо сначала спроси разрешение у владельцев твоих любых ночных магазинов!\n",
+  "Du kannst den Ort auf ": "Ты можешь место в ",
+  " eintragen.": " записать.",
+  "Du kannst den Ort eintragen auf:\n": "Ты можешь записать место в:\n",
+  "Nachricht eingeben...": "Ввести сообщение...",
+  "Jemand": "Кто-то",
+  " ist der Aktion beigetreten": " присоединился к акции",
+  " hat die Aktion verlassen": " покинул акцию",
+  "\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen":
+      "\nНовые участники не могут читать старые сообщения",
+  "gerade eben": "только что",
+  "{***REMOVED*** Minuten": {
+    "zero": "{***REMOVED*** минут",
+    "one": "{***REMOVED*** минута",
+    "two": "{***REMOVED*** минуты",
+    "other": "{***REMOVED*** мин. "
+  ***REMOVED***,
+  "{***REMOVED*** Stunden": {
+    "zero": "{***REMOVED*** часов",
+    "one": "{***REMOVED*** час",
+    "two": "{***REMOVED*** часа",
+    "other": "{***REMOVED*** час."
+  ***REMOVED***,
+  "Teilnehmer*innen": "Участники",
+  "Keine Teilnehmer*innen": "Участников нет",
+  "{count***REMOVED*** Teilnehmer*innen im Chat": "{count***REMOVED*** участников в чате",
+  "+ {count***REMOVED*** weitere Teilnehmer*innen": "+ еще {count***REMOVED*** участников",
+  "Neue Chat-Nachricht": "Новое сообщение в чате",
+  "Öffne die App um sie zu lesen": "Открой приложение, чтобы прочитать",
+  "Durchsuchen": "Просмотреть",
+  "Anwenden": "Применить",
+  "Aktualisieren": "Обновить",
+  "alle Tage,": "все дни,",
+  "Alle Aktions-Arten,": "Все виды акций,",
+  "jederzeit": "в любое время",
+  "überall": "везде",
+  "Wähle Aktions-Arten": "Выбери виды акций",
+  "Fertig": "Готово",
+  "Treffpunkt": "Место встречи",
+  "Wähle auf der Karte einen Treffpunkt aus.": "Выбери на карте место встречи.",
+  "Du kannst eine eigene Beschreibung angeben, z.B. \"Unter der Weltzeituhr\" oder \"Tempelhofer Feld, Eingang Kienitzstraße\":":
+      "Ты можешь дать собственное описание, например \"Под часами мира\" или \"Темпельхофер Фельд, 'Выход на Киницштрассе\"",
+  "Abbrechen": "Отменить",
+  "Aktionen": "Акции",
+  "Aktionen in einer Liste oder Karte anschauen":
+      "Посмотреть акции в списке или на карте",
+  "Zum Sammeln einladen": "Пригласить на сбор подписей",
+  "Fragen und Antworten": "Вопросы и ответы",
+  "Dein Profil": "Твой профиль",
+  "Eine Sammel-Aktion ins Leben rufen": "Создать акцию по сбору подписей",
+  "Tipps und Argumente": "Советы и аргументы",
+  "Tipps, Tricks und Argumentationshilfen":
+      "Советы, приемы и подсказки по аргументации",
+  "Profil": "Профиль",
+  "Dein Name, dein Kiez und deine Einstellungen":
+      "Твое имя, твой район и твои настройки",
+  "sofort": "немедленно",
+  "täglich": "ежедневно",
+  "wöchentlich": "еженедельно",
+  "nie": "никогда",
+  "Sprache": "Язык",
+  "Dein Name": "Твое имя",
+  "Dein Kiez": "Твой район",
+  "Mit deiner Kiez-Auswahl bestimmst du für welche Gegenden du über neue Aktionen informiert werden willst.":
+      "Указывая свой район, ты выбираешь местности, о новых акциях в которых ты хочешь получать информацию.",
+  "Deine Benachrichtigungen": "Твои уведомления",
+  "Wie oft und aktuell willst du über neue Sammel-Aktionen in deinem Kiez informiert werden?":
+      "Как часто ты хочешь получать информацию о новых акциях по сбору подписей, которые проводятся в твоем районе, и насколько актуальными должны быть акции?",
+  "Wie häufig möchtest du Infos über anstehende Aktionen bekommen?":
+      "Как часто ты хочешь получать информацию о предстоящих акциях?",
+  "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\\n\\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.":
+      "Данное приложение было разработано небольшой командой энтузиастов из ИТ-индустрии для кампании «Национализируем Deutsche Wohnen & Co («Дойче Вонен унд Ко»)» и распространяется по свободной лицензии.\\n\\nЕсли ты заинтересован в использовании данного приложения для целей твоей народной инициативы, то просто напиши нам на электронную почту или посети наш сайт. По этим же каналам ты можешь сообщать нам об ошибках в приложении и о связанных с ним проблемах.",
+  "Heute, ": "Сегодня, ",
+  "Morgen, ": "Завтра, ",
+  "{prefix***REMOVED***{date***REMOVED*** um {zeit***REMOVED*** Uhr, ": "{prefix***REMOVED***{date***REMOVED*** в {zeit***REMOVED***, ",
+  "Aktionen konnten nicht geladen werden.": "Не удалось загрузить акции.",
+  "Aktion konnte nicht angelegt werden": "Не удалось создать акцию",
+  "Okay...": "Хорошо...",
+  "Zum Chat": "В чат",
+  "Schließen": "Закрыть",
+  "Aktion konnte nicht geladen werden.": "Не удалось загрузить акцию.",
+  "Mitmachen": "Участвовать",
+  "Verlassen": "Уйти",
+  "Deine Aktion bearbeiten": "Править твою акцию",
+  "Aktion konnte nicht gespeichert werden.": "Не удалось сохранить акцию.",
+  "Aktion konnte nicht gelöscht werden.": "Не удалось удалить акцию.",
+  "Aktion konnte nicht erzeugt werden.": "Не удалось сформировать акцию.",
+  "Aktion Löschen": "Удалить акцию",
+  "Möchtest du diese Aktion wirklich löschen?":
+      "Ты действительно хочешь удалить эту акцию?",
+  "Ja": "Да",
+  "Nein": "Нет",
+  "Es scheint keine Internet-Verbindung zu bestehen.":
+      "Кажется, пропало соединение с интернетом.",
+  "Die Internet-Verbindung scheint sehr langsam zu sein.":
+      "Кажется, соединение с интернетом слишком медленное.",
+  "Der Server antwortet leider nicht. Möglicherweise ist er überlastet, versuch es doch später nochmal":
+      "К сожалению, сервер не отвечает. Возможно, он перегружен, повтори попытку позднее",
+  "Ein Verbindungsproblem ist aufgetreten: ":
+      "Возникла проблема с соединением: ",
+  "Der Server hat leider gerade technische Probleme: ":
+      "К сожалению, на сервере сейчас технические проблемы: ",
+  "Der Server reagiert nicht, obwohl eine Internet-Verbindung besteht. Vielleicht gibt es ein technisches Problem, bitte versuch es später nochmal. ":
+      "Сервер не реагирует, хотя соединение с интернетом установлено. Возможно, возникла техническая проблема, повтори попытку позднее. ",
+  "Das Internet scheint nicht erreichbar zu sein: ":
+      "Кажется, отсутствует доступ к интернету: ",
+  "Es ist ein Fehler aufgetreten beim Verifizieren deines Benutzer*in-Accounts. Probiere es eventuell zu einem späteren Zeitpunkt noch einmal oder versuche die App nochmal neu zu installieren, wenn du keine eigenen Aktionen betreust.":
+      "При проверке подлинности твоей учетной записи пользователя возникла проблема. Повтори попытку позднее или переустанови приложение, если ты не курируешь собственные акции.",
+  "SSL-Zertifikat konnte nicht geladen werden":
+      "Не удалось загрузить SSL-сертификат",
+  "Deine App-Version ist veraltet. Dies ist die Version {version***REMOVED***, du musst aber mindestens Version {minClient***REMOVED*** benutzen, damit die App richtig funktioniert.":
+      "Используемая тобой версия приложения устарела. Это версия {version***REMOVED***, но для правильной работы приложения необходимо использовать как минимум версию {minClient***REMOVED***.",
+  "Falsches Format": "Неверный формат",
+  "Listen-Orte konnten nicht geladen werden.":
+      "Не удалось загрузить внесенные в списки места.",
+  "Teilnahmen und Absagen": "Участия и отказы",
+  "Benachrichtigungen über Mitstreiter*innen bei Aktionen an denen du teilnimmst":
+      "Уведомления о сторонниках акций, в которых ты участвуешь",
+  "Änderungen an Aktionen": "Изменения акций",
+  "Änderungen an Benachrichtigungen wenn sich Aktionen geändert haben oder abgesagt wurden an denen du teilnimmst":
+      "Уведомления в случае изменения акций либо отказа от акций, в которых ты участвуешь",
+  "Aktionen-Chats": "Чаты акций",
+  "Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst":
+      "Уведомления о новых сообщениях в чатах акций, в которых ты участвуешь",
+  "Infos": "Информация",
+  "Allgemeine Infos": "Общие сведения",
+  "Nachricht von {name***REMOVED***": "Сообщение от {name***REMOVED***",
+  "Problem beim Einrichten von Push-Nachrichten":
+      "Проблема с настройкой Push-сообщений",
+  "Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. Das kann der Fall sein, wenn etwa ein Google-freies Betriebssystem genutzt wird. Darum kann die App nur Benachrichtigungen empfangen während sie geöffnet ist.":
+      "Не удалось установить соединения со службой Push-уведомлений Google. Так бывает в случае использования операционной системы, не привязанной к Google. Поэтому приложение может принимать уведомления, только когда оно открыто.",
+  "Beim Abrufen von Nachrichten ist ein Fehler aufgetreten. Das regelmäßige Abrufen von Nachrichten wird deshalb deaktiviert":
+      "При извлечении сообщений произошла ошибка. В связи с этим регулярное извлечение сообщений отключено",
+  "Fehler beim Anmelden der Benachrichtigungen zu {topics***REMOVED***":
+      "Ошибка при подписке на уведомления по {topics***REMOVED***",
+  "Fehler beim Abmelden der Benachrichtigungen zu {topics***REMOVED***":
+      "Ошибка при отписке от уведомлений по {topics***REMOVED***",
+  "Für Push-Nachrichten an Geräte muss mindestens ein Empfänger angegeben werden.":
+      "Для отправки Push-сообщений на устройства должен быть указан хотя бы один получатель.",
+  "Push-Nachricht an Geräte konnte nicht versandt werden":
+      "Не удалось отправить Push-сообщение на устройства",
+  "Für Push-Nachrichten an Topics muss ein Topic angegeben werden.":
+      "Для отправки Push-сообщений в темы должна быть указана тема.",
+  "Push-Nachricht an Thema konnte nicht versandt werden":
+      "Не удалось отправить Push-сообщение в тему",
+  "Für Push-Nachrichten an Aktionen muss die Aktions-ID angegeben werden.":
+      "Для отправки Push-сообщений в акции должен быть указан идентификатор акции.",
+  "Push-Nachricht an Aktion konnte nicht versandt werden.":
+      "Не удалось отправить Push-сообщение в акцию.",
+  "Teilnahme ist fehlgeschlagen.": "Произошел сбой участия.",
+  "Absage ist fehlgeschlagen.": "Произошел сбой отказа.",
+  "Neue Aktionen": "Новые акции ",
+  "Gelöschte Aktionen": "Удаленные акции",
+  "Eine neue Benutzer*in wird angelegt.": "Создается новый пользователь.",
+  "Anlegen einer neuen Benutzer*in ist gescheitert.":
+      "Не удалось создать нового пользователя.",
+  "Benutzer*indaten konnte nicht überprüft werden.":
+      "Не удалось проверить данные пользователя.",
+  "Benutzer*in-Name konnte nicht geändert werden.":
+      "Не удалось изменить имя пользователя.",
+  "Bezirke oder Kieze auswählen": "Выбрать районы или кварталы",
+  "Mo": "пн.",
+  "Di": "вт.",
+  "Mi": "ср.",
+  "Do": "чт.",
+  "Fr": "пт.",
+  "Sa": "сб.",
+  "So": "вс.",
+  "Startzeit": "Время начала",
+  "Endzeit": "Время окончания",
+  "Weiter": "Дальше",
+  "Keine Auswahl": "Выбор отсутствует",
+  "Um diese Aktion auszuführen musst du dir einen Benutzer*in-Name geben":
+      "Для выполнения данной акции ты должен завести себе имя пользователя",
+  "am {tage***REMOVED***,": " {tage***REMOVED***,",
+  "Auswählen": "Выбрать",
+  "Auswahl übernehmen": "Применить выбор",
+  "Das Volksbegehren lebt von deiner Beteiligung! \n":
+      "Народная инициатива невозможна без твоего участия! \n",
+  "Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.":
+      "Если ты не можешь найти подходящую акцию по сбору подписей, то пригласи других на совместный сбор подписей. Другие могут видеть твой призыв к сбору подписей и принимать участие. Ты можешь в любой момент редактировать акцию или удалить её.",
+  "Kontakt": "Контакт",
+  "Hier kannst du ein paar Worte über dich verlieren, \nvor allem, wie man dich kontaktieren kann, damit andere sich mit dir zum Sammeln verabreden können. \nBeachte dass alle Sammler*innen deine Angaben lesen können.":
+      "Здесь ты можешь кратко рассказать о себе, \nв первую очередь, как с тобой можно связаться, чтобы другие могли договориться с тобой о сборе подписей. \nОбрати внимание, что все сборщики могут ознакомиться с твоими данными.",
+  "Beschreibung": "Описание",
+  "Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammlerinnen und Sammler mitbringen? Kann man auch später dazustoßen, usw":
+      "Приведи краткое описание акции. Куда ты хочешь отправиться за подписями, что должны принести с собой другие сборщики? Можно ли присоединиться позднее и т.п.",
+  "Wähle einen Tag": "Выбери день",
+  "am ": " ",
+  "Gib einen Treffpunkt an": "Укажи место встречи",
+  "Wann?": "Когда?",
+  "Wo?": "Где?",
+  "Was?": "Что?",
+  "Wer?": "Кто?",
+  "News": "Новости",
+  "Neues vom Volksbegehren und der Kampagne":
+      "Новое о народной инициативе и кампании",
+  "Benutzer*in-Name": "Имя пользователя",
+  "Anzahl Unterschriften": "Количество подписей",
+  "Dauer": "Длительность",
+  "Situation": "Обстановка",
+  "Spaßfaktor": "Фактор развлечения",
+  "Erzähl uns, was ihr erreicht habt! \n":
+      "Расскажи нам о вашем результате! \n",
+  "Deine Rückmeldung hilft Deinem Kiez-Team, die effektivsten Sammelaktionen zu erkennen. Außerdem können andere Teams von euren Erfahrungen lernen.":
+      "Твой отклик поможет команде твоего квартала выявлять наиболее эффективные акции по сбору подписей. Кроме того, вы поделитесь опытом с другими командами.",
+  "Anzahl Deiner Unterschriften": "Количество твоих подписей",
+  "Wie viele Leute waren bei der Aktion dabei?": "Сколько людей было на акции?",
+  "Wie viele Unterschriften hast Du persönlich gesammelt?":
+      "Сколько подписей ты лично собрал?",
+  "Wie fandest Du die Aktion?": "Как, по-твоему, прошла акция?",
+  "sehr cool": "очень круто",
+  "gut": "хорошо",
+  "ganz okay": "вполне нормально",
+  "mäßig": "посредственно",
+  "doof": "по-дурацки",
+  "Wie viele Stunden habt ihr gesammelt?": "Сколько часов вы собирали подписи?",
+  "Wie viele Stunden warst Du sammeln?": "Сколько часов ты собирал(а) подписи?",
+  "Auf die nächste halbe Stunde gerundet":
+      "Если округлить до ближайшего получаса",
+  "Wie viel hast Du gesammelt?": "Сколько ты собрал(а)?",
+  "Anzahl Teilnehmer*innen": "Количество участников ",
+  "Anmerkungen": "Примечания",
+  "Kommentar": "Комментарий",
+  "Optional: Sonstige Anmerkungen zu den Daten?":
+      "Опционально: Прочие примечания по данным?",
+  "Anmerkungen: ": "Примечания: ",
+  "Optional: Muss man noch etwas zu den Angaben wissen?":
+      "Опционально: По данным нужно что-то ещё знать?",
+  "Wie war die Situation? (Wetter, Veranstaltung in der Nähe, besonderer Anlass, ...)":
+      "Какой была обстановка? (погода, мероприятие поблизости, особый повод, ...)",
+  "Situation: ": "Обстановка: ",
+  "Optional: Wie war die Situation?": "Опционально: Какой была обстановка?",
+  "Erzähl uns, was ihr erreicht habt!\n": "Расскажи нам о вашем результате!\n",
+  "{***REMOVED*** Unterschriften": {
+    "zero": "{***REMOVED*** подписей",
+    "one": "{***REMOVED*** подпись",
+    "two": "{***REMOVED*** подписи",
+    "others": "{***REMOVED*** другое",
+  ***REMOVED***,
+  "{***REMOVED*** Teilnehmer": {
+    "zero": "{***REMOVED*** участников",
+    "one": "{***REMOVED*** участник",
+    "two": "{***REMOVED*** участника",
+    "other": "{***REMOVED*** другое"
+  ***REMOVED***,
+  "Datenschutz": "Защита данных",
+  "Deine Daten": "Твои данные",
+  "Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an e@mail.com.":
+      "Все данные, которые ты вводишь в приложение, хранятся исключительно на системах кампании «Национализируем Deutsche Wohnen & Co («Дойче Вонен унд Ко»)» и используются только в целях, связанных с приложением и кампанией. Но обращаем твое внимание на то, что другие пользователи могут читать многие из тех данных, которые ты вводишь в приложение. Сообщения в чате могут быть прочитаны только всеми участниками чата в момент появления сообщения.\n\nДля того чтобы была доступна функция Push-сообщений, мы вынуждены использовать инфраструктуру доставки сообщений, предоставляемую компанией Google и, в соответствующих случаях, компанией Apple. Передаваемые при этом данные передаются в зашифрованном виде. Если ты хочешь, чтобы все введенные тобой персональные данные были удалены, сообщи нам об этом по адресу: e@mail.com.",
+  "Okay": "Хорошо",
+  "Zu viele Tage": "Слишком большое количество дней",
+  "Bitte wähle {maxTage***REMOVED*** Tage oder weniger aus.":
+      "Выбери не больше {maxTage***REMOVED*** дней или меньшее количество дней.",
+  "Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an app@dwenteignen.de.":
+      "Все данные, которые ты вводишь в приложение, хранятся исключительно на системах кампании «Национализируем Deutsche Wohnen & Co («Дойче Вонен унд Ко»)» и используются только в целях, связанных с приложением и кампанией. Но обращаем твое внимание на то, что другие пользователи могут читать многие из тех данных, которые ты вводишь в приложение. Сообщения в чате могут быть прочитаны только всеми участниками чата в момент появления сообщения.\n\nДля того чтобы была доступна функция Push-сообщений, мы вынуждены использовать инфраструктуру доставки сообщений, предоставляемую компанией Google и, в соответствующих случаях, компанией Apple. Передаваемые при этом данные передаются в зашифрованном виде. Если ты хочешь, чтобы все введенные тобой персональные данные были удалены, сообщи нам об этом по адресу: app@dwenteignen.de.",
+  "deutsch": "немецкий язык",
+  "englisch": "английский язык",
+  "": "",
+  "Hier kannst du ein paar Worte über dich verlieren, vor allem, wie man dich kontaktieren kann, damit andere sich mit dir zum Sammeln verabreden können. Beachte dass alle Sammler*innen deine Angaben lesen können.":
+      "Здесь ты можешь кратко рассказать о себе, в первую очередь, как с тобой можно связаться, чтобы другие могли договориться с тобой о сборе подписей. Обрати внимание, что все сборщики подписей могут ознакомиться с твоими данными.",
+  "Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammler*innen mitbringen? Kann man auch später dazustoßen?":
+      "Приведи краткое описание акции. Куда ты хочешь отправиться за подписями, что должны принести с собой другие сборщики? Можно ли присоединиться позднее?",
+  "Benachrichtigungs-Einstellungen": "Настройки уведомлений",
+  "Benachrichtigungen einstellen": "Настроить уведомления",
+  "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtiungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.":
+      "Если ты хочешь выключить звук уведомлений или полностью отключить уведомления определенных видов, то просто долго нажимай на полученное уведомление, и ты перейдешь в настройки уведомлений в данном приложении.",
 ***REMOVED***
 
 const Map<String, dynamic> de = {
