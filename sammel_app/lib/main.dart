@@ -24,8 +24,9 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(EasyLocalization(
       preloaderWidget: Container(
-          color: DweTheme.yellow, child: Image.asset('assets/images/logo_transparent.png')),
-      supportedLocales: [Locale('en'), Locale('de')],
+          color: DweTheme.yellow,
+          child: Image.asset('assets/images/logo_transparent.png')),
+      supportedLocales: [Locale('en'), Locale('de'), Locale('ru')],
       path: 'none',
       assetLoader: ConstJsonAssetLoader(),
       fallbackLocale: Locale('en'),
@@ -52,7 +53,7 @@ class MyApp extends StatelessWidget {
       : PushNotificationManager(
           storageService, userService, firebaseService, backend);
   static var localNotificationService =
-  LocalNotificationService(pushNotificationManager);
+      LocalNotificationService(pushNotificationManager);
   var termineService = demoMode
       ? DemoTermineService(stammdatenService, userService)
       : TermineService(stammdatenService, userService, backend,

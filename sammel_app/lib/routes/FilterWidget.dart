@@ -169,7 +169,7 @@ class FilterWidgetState extends State<FilterWidget>
       beschriftung += 'von '.tr() + ChronoHelfer.timeToStringHHmm(filter.von);
     if (filter.bis != null)
       beschriftung += ' bis ' + ChronoHelfer.timeToStringHHmm(filter.bis);
-    if (beschriftung.isEmpty) beschriftung = 'jederzeit';
+    if (beschriftung.isEmpty) beschriftung = 'jederzeit'.tr();
     beschriftung += ',';
     return beschriftung;
   }
