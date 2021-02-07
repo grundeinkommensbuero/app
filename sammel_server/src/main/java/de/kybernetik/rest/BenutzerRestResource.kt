@@ -32,7 +32,7 @@ open class BenutzerRestResource {
     @EJB
     private lateinit var security: Security
 
-    private val _log = Logger.getLogger(this::class.java)
+    private val LOG = Logger.getLogger(this::class.java)
 
     @POST
     @Path("neu")
@@ -80,9 +80,10 @@ open class BenutzerRestResource {
 
             subscriptinDao.subscribe(benutzerAusDb.id, listOf("global"))
 
+            LOG.info("Neuen Benutzer ${benutzerAusDb.id} angelegt")
             return Response.ok().entity(benutzerAusDb).build()
         } catch (e: Exception) {
-            _log.error("Fehler beim Anlegen eines Benutzers: $benutzer", e)
+            LOG.error("Fehler beim Anlegen eines Benutzers: $benutzer", e)
             return Response
                     .status(500)
                     .entity(RestFehlermeldung("Ein technisches Problem ist aufgetreten"))
@@ -96,10 +97,10 @@ open class BenutzerRestResource {
     @Produces(APPLICATION_JSON)
     open fun aktualisiereBenutzername(name: String?): Response {
         val id = context.userPrincipal.name
-        _log.debug("Aktualisiere Benutzernamen von $id mit $name")
+        LOG.info("Aktualisiere Benutzernamen von $id mit $name")
         val trimmedName = name?.trim()
         if(trimmedName.isNullOrBlank()) {
-            _log.debug("Fehlender Benutzer-Name")
+            LOG.debug("Fehlender Benutzer-Name")
             return Response
                     .status(412)
                     .entity(RestFehlermeldung("Benutzername darf nicht leer sein"))
@@ -119,6 +120,7 @@ open class BenutzerRestResource {
     @RolesAllowed("app")
     @Produces(APPLICATION_JSON)
     open fun authentifiziereBenutzer(login: Login): Response {
+        LOG.debug("authentifiziere Benutzer ${login.user.id}")
         val benutzer = login.user
         if (benutzer.id == null) {
             return Response
@@ -142,24 +144,24 @@ open class BenutzerRestResource {
                     .build()
         }
         if (credentials == null) {
-            _log.info("Login mit unbekanntem Benutzer ${login.user.id}")
+            LOG.info("Login mit unbekanntem Benutzer ${login.user.id}")
             return Response
                     .ok()
                     .entity(false)
                     .build()
         }
-        _log.trace(credentials.roles)
+        LOG.trace(credentials.roles)
         val verifiziert: Boolean?
         try {
             verifiziert = security.verifiziereSecretMitHash(login.secret!!, Security.HashMitSalt(credentials.secret, credentials.salt))
         } catch (e: Exception) {
             val meldung = "Technischer Fehler beim Verifizieren: ${e.localizedMessage}"
-            _log.info(meldung)
+            LOG.info(meldung)
             return Response.status(500).entity(RestFehlermeldung(meldung)).build()
         }
 
         if (!verifiziert) {
-            _log.info("Falscher Login mit Benutzer ${login.user.id}")
+            LOG.info("Falscher Login mit Benutzer ${login.user.id}")
             return Response
                     .ok()
                     .entity(false)
