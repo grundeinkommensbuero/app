@@ -124,8 +124,8 @@ class FilterWidgetState extends State<FilterWidget>
               splashColor: Colors.transparent,
               textColor: DweTheme.yellow,
               onPressed: onApply,
-              child: Text(loading ? '' : 'Aktualisieren',
-                  textScaleFactor: 1.2).tr())
+              child: Text(loading ? '' : 'Aktualisieren', textScaleFactor: 1.2)
+                  .tr())
           : SizedBox()
     ]);
   }
@@ -179,8 +179,8 @@ class FilterWidgetState extends State<FilterWidget>
     return (filter?.orte == null || filter.orte.isEmpty)
         ? 'überall'.tr()
         : filter.orte.map((ort) => ort).toList().join(", ").length < maxLength
-          ? 'in ${filter.orte.map((ort) => ort).toList().join(", ")}'
-          : 'in ${filter.orte.length} Kiezen';
+            ? 'in ${filter.orte.map((ort) => ort).toList().join(", ")}'
+            : 'in ${filter.orte.length} Kiezen';
   }
 
   Future<void> onApply() async {
@@ -190,7 +190,12 @@ class FilterWidgetState extends State<FilterWidget>
   }
 
   typeSelection() async {
-    List<String> moeglicheTypen = ['Sammeln', 'Infoveranstaltung', 'Workshop'];
+    List<String> moeglicheTypen = [
+      'Sammeln',
+      'Infoveranstaltung',
+      'Workshop',
+      'Plakatieren'
+    ];
     List<String> ausgewTypen = List<String>()
       ..addAll(filter.typen == null ? [] : filter.typen);
     await showDialog<List<String>>(

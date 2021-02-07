@@ -224,18 +224,18 @@ class ActionEditorState extends State<ActionEditor> {
         ));
   }
 
- static Widget motivationText() =>
-   Column(key: Key('motivation text'), children: [
-     Text(
-       'Das Volksbegehren lebt von deiner Beteiligung! \n',
-       style: TextStyle(fontWeight: FontWeight.bold),
-     ).tr(),
-     Text(
-       'Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. '
-           'Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.',
-       textScaleFactor: 1.0,
-     ).tr()
-   ]);
+  static Widget motivationText() =>
+      Column(key: Key('motivation text'), children: [
+        Text(
+          'Das Volksbegehren lebt von deiner Beteiligung! \n',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ).tr(),
+        Text(
+          'Wenn du keine passende Sammel-Aktion findest, dann lade doch andere zum gemeinsamen Sammeln ein. '
+          'Andere können deinen Sammel-Aufruf sehen und teilnehmen. Du kannst die Aktion jederzeit bearbeiten oder wieder löschen.',
+          textScaleFactor: 1.0,
+        ).tr()
+      ]);
 
   void locationSelection() async {
     Location ergebnis = await showLocationDialog(
@@ -338,7 +338,12 @@ class ActionEditorState extends State<ActionEditor> {
   }
 
   typeSelection() async {
-    List<String> moeglicheTypen = ['Sammeln', 'Infoveranstaltung', 'Workshop'];
+    List<String> moeglicheTypen = [
+      'Sammeln',
+      'Infoveranstaltung',
+      'Workshop',
+      'Plakatieren'
+    ];
     var ausgewTyp = action.typ;
     await showDialog<String>(
         context: context,
@@ -372,10 +377,12 @@ class ActionEditorState extends State<ActionEditor> {
   }
 
   daysSelection() async {
-    var selectedDates = await showMultipleDatePicker(this.action.tage, context,
-        key: Key('days selection dialog'),
-        multiMode: isNewAction ? true : false,
-        maxTage: 5,
+    var selectedDates = await showMultipleDatePicker(
+      this.action.tage,
+      context,
+      key: Key('days selection dialog'),
+      multiMode: isNewAction ? true : false,
+      maxTage: 5,
     );
     setState(() {
       if (selectedDates != null)
@@ -411,7 +418,8 @@ class ActionEditorState extends State<ActionEditor> {
     Text text;
     if (this.action.validated['tage'] == ValidationState.error ||
         this.action.validated['tage'] == ValidationState.not_validated) {
-      text = Text("Wähle einen Tag", style: TextStyle(color: DweTheme.purple)).tr();
+      text = Text("Wähle einen Tag", style: TextStyle(color: DweTheme.purple))
+          .tr();
     } else {
       text = Text('am '.tr() +
           this
@@ -433,8 +441,8 @@ class ActionEditorState extends State<ActionEditor> {
         style: TextStyle(color: DweTheme.purple),
       ).tr();
     } else {
-      text = Text('{kiez} in {bezirk}\n Treffpunkt: {treffpunkt}')
-          .tr(namedArgs: {
+      text =
+          Text('{kiez} in {bezirk}\n Treffpunkt: {treffpunkt}').tr(namedArgs: {
         'kiez': termin.ort.name,
         'bezirk': termin.ort.ortsteil,
         'treffpunkt': termin.terminDetails.treffpunkt,
