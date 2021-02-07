@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:sammel_app/model/Message.dart';
-import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/PushUpdateService.dart';
@@ -12,7 +10,6 @@ import 'package:sammel_app/shared/Crypter.dart';
 import 'package:validators/validators.dart';
 
 import 'BackendService.dart';
-import 'ChatMessageService.dart';
 import 'ErrorService.dart';
 
 abstract class AbstractPushNotificationManager {
@@ -74,11 +71,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
       }
     }
 
-    listener.subscribe(
-        onMessage: onReceived,
-        onResume: onTap,
-        onLaunch: onTap,
-        onBackgroundMessage: backgroundMessageHandler);
+    listener.subscribe(onMessage: onReceived, onResume: onTap, onLaunch: onTap);
 
     return listener;
   }
@@ -146,7 +139,8 @@ class PushNotificationManager implements AbstractPushNotificationManager {
         messages.map((message) => decrypt(message['data'])).toList();
     final messageMap = sortMessagesByType(decrypted);
 
-    if(listener is PullService) return; // im Pull-Modus sollen Push-Nachrichten regulär vom Timer geladen werden
+    if (listener is PullService)
+      return; // im Pull-Modus sollen Push-Nachrichten regulär vom Timer geladen werden
     try {
       messageMap.forEach((type, messages) {
         callback_map[type]?.updateMessages(messages);
@@ -167,26 +161,6 @@ Map<String, List<Map<String, dynamic>>> sortMessagesByType(
       typeMap[data['type']].add(data);
       return typeMap;
     });
-
-// funktioniert nur unter Android
-Future<dynamic> backgroundMessageHandler(Map<String, dynamic> message) async {
-  print('Background-Messenger meldet Nachrichten-Ankunft: $message');
-  var data = decrypt(message['data']);
-
-  if (data['type'] == PushDataTypes.SimpleChatMessage) {
-    var pushData = ActionChatMessagePushData(
-        ChatMessage.fromJson(data), data["action_id"], data['channel']);
-    handleBackgroundChatMessage(pushData);
-  } else if (data['type'] == PushDataTypes.ParticipationMessage) {
-    var pushData = ParticipationPushData(ParticipationMessage.fromJson(data),
-        data["action_id"], data['channel']);
-    handleBackgroundChatMessage(pushData);
-  } else if (data['type'] == PushDataTypes.TopicChatMessage) {
-    var pushData =
-        TopicChatMessagePushData(ChatMessage.fromJson(data), data['channel']);
-    handleBackgroundChatMessage(pushData);
-  }
-}
 
 class DemoPushNotificationManager implements AbstractPushNotificationManager {
   DemoPushSendService pushService;

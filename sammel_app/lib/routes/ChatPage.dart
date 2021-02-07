@@ -67,12 +67,9 @@ class ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
     super.dispose();
   }
 
-// Lädt Speicher neu nach, falls sich im Schlaf etwas geändert hat
+// Lade verpasste Push-Nachrichten vom Server nach
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      chatMessageService.reload();
-      pushManager.updateMessages();
-    }
+    if (state == AppLifecycleState.resumed) pushManager.updateMessages();
   }
 }
