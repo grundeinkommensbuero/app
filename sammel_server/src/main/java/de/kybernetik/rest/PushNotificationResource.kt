@@ -41,7 +41,7 @@ open class PushNotificationResource {
     @RolesAllowed("named")
     @POST
     open fun pushToParticipants(nachricht: PushMessageDto, @PathParam("actionId") actionId: Long): Response? {
-        LOG.debug("Pushe Nachricht für Aktion $actionId")
+        LOG.info("Pushe Nachricht für Aktion $actionId")
         val teilnehmer = termineDao.getTermin(actionId)?.teilnehmer
 
         if ((teilnehmer == null || !(teilnehmer.map { it.id ***REMOVED***.contains(context.userPrincipal.name.toLong())))) {
@@ -90,6 +90,7 @@ open class PushNotificationResource {
     @RolesAllowed("user")
     @POST
     open fun subscribeToTopics(topics: List<String>): Response? {
+        LOG.info("Benutzer ${context.userPrincipal.name***REMOVED*** abboniert Topics $topics")
         subscriptionDao.subscribe(context.userPrincipal.name.toLong(), topics)
 
         return Response.ok().build()
@@ -99,6 +100,7 @@ open class PushNotificationResource {
     @RolesAllowed("user")
     @POST
     open fun unsubscribeToTopics(topics: List<String>): Response? {
+        LOG.info("Benutzer ${context.userPrincipal.name***REMOVED*** deabboniert Topics $topics")
         subscriptionDao.unsubscribe(context.userPrincipal.name.toLong(), topics)
 
         return Response.ok().build()

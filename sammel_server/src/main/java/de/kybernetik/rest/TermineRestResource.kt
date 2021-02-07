@@ -69,6 +69,7 @@ open class TermineRestResource {
     @RolesAllowed("user")
     @Produces(APPLICATION_JSON)
     open fun getTermin(@QueryParam("id") id: Long?): Response {
+        LOG.info("Lade Aktion $id")
         if (id == null)
             return Response
                 .status(422)
@@ -93,6 +94,7 @@ open class TermineRestResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun legeNeuenTerminAn(actionAndToken: ActionWithTokenDto): Response {
+        LOG.info("Lege neue Aktion an in ${actionAndToken.action?.ort***REMOVED*** durch ${context.userPrincipal.name***REMOVED***")
         if (actionAndToken.action == null)
             return Response
                 .status(422)
@@ -118,6 +120,7 @@ open class TermineRestResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun aktualisiereTermin(actionAndToken: ActionWithTokenDto): Response {
+        LOG.info("Aktualisiere Aktion ${actionAndToken.action?.id***REMOVED*** durch ${context.userPrincipal.name***REMOVED***")
         if (actionAndToken.action?.id == null) return noValidActionResponse
 
         val tokenFromDb = dao.loadToken(actionAndToken.action!!.id!!)?.token
@@ -145,6 +148,7 @@ open class TermineRestResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun loescheAktion(actionAndToken: ActionWithTokenDto): Response {
+        LOG.info("Lösche Aktion ${actionAndToken.action?.id***REMOVED*** durch ${context.userPrincipal.name***REMOVED***")
         if (actionAndToken.action?.id == null)
             return noValidActionResponse
 
@@ -173,7 +177,7 @@ open class TermineRestResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun meldeTeilnahmeAn(@QueryParam("id") id: Long?): Response {
-        LOG.debug("Empfange Teilnahme an Aktion $id")
+        LOG.debug("Teilnahme an Aktion $id durch ${context.userPrincipal.name***REMOVED***")
 
         val ungueltigeAktion = "Die angegebene Aktion ist ungültig"
         if (id == null) {
@@ -207,13 +211,43 @@ open class TermineRestResource {
     ***REMOVED***
 
     @POST
+    @Path("absage")
+    @RolesAllowed("user")
+    @Produces(APPLICATION_JSON)
+    open fun sageTeilnahmeAb(@QueryParam("id") id: Long?): Response {
+        LOG.debug("Absage an Aktion $id durch ${context.userPrincipal.name***REMOVED***")
+        if (id == null)
+            return Response.status(422)
+                .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
+                .build()
+
+        val aktionAusDb = dao.getTermin(id)
+        if (aktionAusDb == null)
+            return Response.status(422)
+                .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
+                .build()
+
+        val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
+        val userAusListe = aktionAusDb.teilnehmer.find { it.id == userAusDb!!.id ***REMOVED***
+
+        if (userAusListe == null)
+            return Response.accepted().build()
+
+        aktionAusDb.teilnehmer -= userAusListe
+        dao.aktualisiereTermin(aktionAusDb)
+        informiereUeberAbsage(userAusDb!!, aktionAusDb)
+
+        return Response.accepted().build()
+    ***REMOVED***
+
+    @POST
     @Path("evaluation")
     @RolesAllowed("user")
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun aktualisiereEvaluation(evaluation: EvaluationDto): Response {
         if (evaluation.termin_id == null) return noValidActionResponse
-        LOG.debug("Aktualisiere Evaluation für ${evaluation.termin_id***REMOVED***")
+        LOG.debug("Aktualisiere Evaluation für ${evaluation.termin_id***REMOVED*** durch ${context.userPrincipal.name***REMOVED***")
 
         val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
 
@@ -237,35 +271,6 @@ open class TermineRestResource {
         return Response
             .ok()
             .build()
-    ***REMOVED***
-
-    @POST
-    @Path("absage")
-    @RolesAllowed("user")
-    @Produces(APPLICATION_JSON)
-    open fun sageTeilnahmeAb(@QueryParam("id") id: Long?): Response {
-        if (id == null)
-            return Response.status(422)
-                .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
-                .build()
-
-        val aktionAusDb = dao.getTermin(id)
-        if (aktionAusDb == null)
-            return Response.status(422)
-                .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
-                .build()
-
-        val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
-        val userAusListe = aktionAusDb.teilnehmer.find { it.id == userAusDb!!.id ***REMOVED***
-
-        if (userAusListe == null)
-            return Response.accepted().build()
-
-        aktionAusDb.teilnehmer -= userAusListe
-        dao.aktualisiereTermin(aktionAusDb)
-        informiereUeberAbsage(userAusDb!!, aktionAusDb)
-
-        return Response.accepted().build()
     ***REMOVED***
 
     data class EvaluationDto(

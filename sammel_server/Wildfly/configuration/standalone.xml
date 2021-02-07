@@ -125,6 +125,25 @@
             <logger category="de.kybernetik">
                 <level name="DEBUG"/>
             </logger>
+            <!-- Produktiv-Konfiguration -->
+<!--            <logger category="de.kybernetik.database.benutzer.BenutzerDao">-->
+<!--                <level name="INFO"/>-->
+<!--            </logger>-->
+<!--            <logger category="de.kybernetik.database.listlocations.ListLocationDao">-->
+<!--                <level name="INFO"/>-->
+<!--            </logger>-->
+<!--            <logger category="de.kybernetik.rest.PushNotificationResource">-->
+<!--                <level name="INFO"/>-->
+<!--            </logger>-->
+<!--            <logger category="de.kybernetik.services.FirebaseService">-->
+<!--                <level name="INFO"/>-->
+<!--            </logger>-->
+<!--            <logger category="de.kybernetik.services.PushService">-->
+<!--                <level name="INFO"/>-->
+<!--            </logger>-->
+<!--            <logger category="de.kybernetik.shared.Security">-->
+<!--                <level name="INFO"/>-->
+<!--            </logger>-->
             <root-logger>
                 <level name="INFO"/>
                 <handlers>
