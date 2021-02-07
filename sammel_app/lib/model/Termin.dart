@@ -1,4 +1,3 @@
-import 'package:sammel_app/model/Evaluation.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 
@@ -58,6 +57,8 @@ class Termin {
         return centered
             ? 'assets/images/Workshop_centered.png'
             : 'assets/images/Workshop.png';
+      case 'Plakatieren':
+        return 'assets/images/Infoveranstaltung.png';
     ***REMOVED***
     throw UnknownActionTypeException(
         'Logo für Aktionstyp "$typ" fehlt');

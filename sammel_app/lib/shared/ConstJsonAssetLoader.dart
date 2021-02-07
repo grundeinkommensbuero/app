@@ -306,6 +306,7 @@ const Map<String, dynamic> en = {
   "Danke!": "Thanks!",
   "Vielen Dank, dass Du Eure Erfahrungen geteilt hast.":
       "Thanks for sharing your experiences.",
+  "Plakatieren": "Plakatieren",
 ***REMOVED***
 
 const Map<String, dynamic> ru = {
@@ -596,6 +597,7 @@ const Map<String, dynamic> ru = {
   "Benachrichtigungen einstellen": "Настроить уведомления",
   "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtiungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.":
       "Если ты хочешь выключить звук уведомлений или полностью отключить уведомления определенных видов, то просто долго нажимай на полученное уведомление, и ты перейдешь в настройки уведомлений в данном приложении.",
+  "Plakatieren": "Plakatieren",
 ***REMOVED***
 
 const Map<String, dynamic> de = {
@@ -896,5 +898,6 @@ const Map<String, dynamic> de = {
       "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.",
   "Danke!": "Danke!",
   "Vielen Dank, dass Du Eure Erfahrungen geteilt hast.":
-      "Vielen Dank, dass Du Eure Erfahrungen geteilt hast."
+      "Vielen Dank, dass Du Eure Erfahrungen geteilt hast.",
+  "Plakatieren": "Plakatieren",
 ***REMOVED***
