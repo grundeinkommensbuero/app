@@ -145,26 +145,7 @@ class ChatMessageService implements PushNotificationListener {
     channels[newChannel.id] = newChannel;
   ***REMOVED***
 
-  Future<void> reload() async {
-    await storage_service.reload();
-    channels.keys.toList().forEach((id) async {
-      ChatChannel currentChannel = await storage_service.loadChatChannel(id);
-      if (channels[id].channel_messages.length !=
-          currentChannel.channel_messages.length) {
-        channels[id].channel_messages = currentChannel.channel_messages;
-        channels[id].ccl?.channelChanged(channels[id]);
-      ***REMOVED***
-    ***REMOVED***);
-  ***REMOVED***
-
   @override
   updateMessages(List<Map<String, dynamic>> messages) =>
       storeMessages(messages.map((m) => chatPushDataFromJson(m)).toList());
-***REMOVED***
-
-handleBackgroundChatMessage(ChatPushData data) async {
-  ChatChannel channel = await StorageService().loadChatChannel(data.channel);
-  if (channel == null) channel = ChatChannel(data.channel);
-  channel.pushMessages([data.message]);
-  StorageService().saveChatChannel(channel);
 ***REMOVED***

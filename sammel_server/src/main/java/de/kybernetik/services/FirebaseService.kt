@@ -29,13 +29,6 @@ open class FirebaseService {
         if (empfaenger.size > 500) throw TooManyRecipientsError()
 
         // Quelle: https://firebase.google.com/docs/cloud-messaging/send-message#send-messages-to-multiple-devices
-        val dataMessage = MulticastMessage.builder()
-            .putAllData(data ?: emptyMap())
-            .addAllTokens(empfaenger.distinct())
-            .setApnsConfig(ApnsConfig.builder().setAps(Aps.builder().setContentAvailable(true).build()).build())
-            .build()
-        val dataResponse = firebase.sendMulticast(dataMessage)
-
         var pushResponse: BatchResponse? = null
         if (notification != null) {
             val pushMessage = MulticastMessage.builder()
@@ -65,8 +58,7 @@ open class FirebaseService {
             pushResponse = firebase.sendMulticast(pushMessage)
         ***REMOVED***
         LOG.debug(
-            "${dataResponse?.successCount***REMOVED*** Data-Nachrichten und ${pushResponse?.successCount***REMOVED*** Push-Nachrichten  " +
-                    "wurden erfolgreich an Firebase versendet"
+            "${pushResponse?.successCount***REMOVED*** Push-Nachrichten  wurden erfolgreich an Firebase versendet"
         )
     ***REMOVED***
 
@@ -77,13 +69,6 @@ open class FirebaseService {
             throw MissingMessageTarget("Die Nachricht enthält kein Topic")
 
         // Quelle: https://firebase.google.com/docs/cloud-messaging/send-message#send-messages-to-topics
-        val dataMessage: Message = Message.builder()
-            .putAllData(data)
-            .setTopic(topic)
-            .setApnsConfig(ApnsConfig.builder().setAps(Aps.builder().setContentAvailable(true).build()).build())
-            .build()
-        val dataResponse = firebase.send(dataMessage)
-
         var pushResponse = "ohne Notification"
         if (notification != null) {
             val pushMessage = Message.builder()
@@ -112,7 +97,7 @@ open class FirebaseService {
                 .build()
             pushResponse = firebase.send(pushMessage)
         ***REMOVED***
-        LOG.debug("Erfolgreich Nachricht an Topic $topic gesendet: $dataResponse, $pushResponse")
+        LOG.debug("Erfolgreich Nachricht an Topic $topic gesendet: $pushResponse")
     ***REMOVED***
 
     open fun sendeNachrichtAnAlle(notification: PushNotificationDto?, data: Map<String, String>?) =
