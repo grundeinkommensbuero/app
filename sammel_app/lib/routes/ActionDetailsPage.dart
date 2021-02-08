@@ -84,238 +84,270 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
       chatMessageService = Provider.of<ChatMessageService>(context);
       Provider.of<StorageService>(context)
           .loadAllStoredEvaluations()
-          .then((evaluations) => myEvaluations = evaluations);
+          .then((evaluations) => setState(() => myEvaluations = evaluations));
       Provider.of<AbstractUserService>(context)
           .user
-          .listen((user) => me = user);
+          .listen((user) => setState(() => me = user));
+      initialized = true;
     ***REMOVED***
 
     final color = DweTheme.actionColor(
         widget.action.ende, isMyAction, this.iAmParticipant);
 
+    PopupMenuButton menu =
+        menuButton(widget.action, isMyAction, iAmParticipant);
+
     return Scaffold(
-      backgroundColor: color,
-      appBar: AppBar(
-          leading: null,
-          automaticallyImplyLeading: false,
-          title: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-            Image.asset(widget.action.getAsset(), width: 30.0),
-            Container(width: 10.0),
-            Text(widget.action.typ,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 22.0,
-                    color: Color.fromARGB(255, 129, 28, 98))),
-          ])),
-      body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-          child: Column(key: Key('action details page'), children: [
-            // Time
-            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Icon(Icons.access_time, size: 40.0),
-              SizedBox(
-                width: 10.0,
-              ),
-              Expanded(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                    Text(
-                      'Wann?',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ).tr(),
-                    SelectableText(
-                        ChronoHelfer.formatDateOfDateTimeMitWochentag(
-                            widget.action.beginn)),
-                    SelectableText(ChronoHelfer.formatFromToTimeOfDateTimes(
-                        widget.action.beginn, widget.action.ende))
-                  ]))
+        backgroundColor: color,
+        appBar: AppBar(
+            leading: null,
+            automaticallyImplyLeading: false,
+            title: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+              Image.asset(widget.action.getAsset(), width: 30.0),
+              Container(width: 10.0),
+              Text(widget.action.typ,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22.0,
+                      color: Color.fromARGB(255, 129, 28, 98))),
             ]),
-            SizedBox(
-              height: 10.0,
-            ),
-
-            // Description
-            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Icon(Icons.info_outline, size: 40.0),
-              SizedBox(
-                width: 10.0,
-              ),
-              Expanded(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                    Text(
-                      'Was?',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ).tr(),
-                    ExpandableConstrainedBox(
-                      child: SelectableText(
-                        widget.action.details.beschreibung,
-                        // onTap: () => {***REMOVED***,
-                        // TODO: SelectableText stiehlt ExpandableContraintBox den onTap
-                        style: TextStyle(fontWeight: FontWeight.normal),
-                      ),
-                      maxHeight: 105.0,
-                      expandableCondition:
-                          widget.action.details.beschreibung.length > 200,
-                    )
-                  ]))
-            ]),
-            SizedBox(
-              height: 10.0,
-            ),
-
-            // Contact
-            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Icon(Icons.face, size: 40.0),
-              SizedBox(
-                width: 10.0,
-              ),
-              Expanded(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                    Text(
-                      'Wer?',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ).tr(),
-                    ExpandableConstrainedBox(
-                      child: SelectableText(
-                        widget.action.details.kontakt,
-                        style: TextStyle(fontWeight: FontWeight.normal),
-                      ),
-                      maxHeight: 105.0,
-                      expandableCondition:
-                          widget.action.details.kontakt.length > 200,
-                    )
-                  ]))
-            ]),
-
-            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Icon(Icons.my_location, size: 40.0),
-              SizedBox(
-                width: 10.0,
-              ),
-              Expanded(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                    Text(
-                      'Wo?',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ).tr(),
-                    ExpandableConstrainedBox(
-                      child: SelectableText(
-                          tr('{kiez***REMOVED*** in {bezirk***REMOVED***\n Treffpunkt: {treffpunkt***REMOVED***',
-                              namedArgs: {
-                                'kiez': widget.action.ort.name,
-                                'bezirk': widget.action.ort.ortsteil,
-                                'treffpunkt': widget.action.details.treffpunkt,
-                              ***REMOVED***),
-                          style: TextStyle(fontWeight: FontWeight.normal)),
-                      maxHeight: 80,
-                      expandableCondition:
-                          widget.action.details.treffpunkt.length > 70,
-                    ),
-                  ]))
-            ]),
-            SizedBox(
-              height: 10.0,
-            ),
-            InkWell(
-              child: Container(
-                height: 150.0,
-                width: 250.0,
-                decoration: BoxDecoration(
-                    border: Border.all(color: DweTheme.purple, width: 1.0)),
-                child: FlutterMap(
-                  key: Key('action details map'),
-                  options: MapOptions(
-                    center:
-                        LatLng(widget.action.latitude, widget.action.longitude),
-                    zoom: 15,
-                    interactive: false,
-                  ),
-                  layers: [
-                    TileLayerOptions(
-                        urlTemplate:
-                            "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
-                        subdomains: ['a', 'b', 'c']),
-                    MarkerLayerOptions(markers: [widget.marker]),
-                  ],
+            actions: [menu]),
+        body: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            child: Column(key: Key('action details page'), children: [
+              // Time
+              Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Icon(Icons.access_time, size: 40.0),
+                SizedBox(
+                  width: 10.0,
                 ),
+                Expanded(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                      Text(
+                        'Wann?',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ).tr(),
+                      SelectableText(
+                          ChronoHelfer.formatDateOfDateTimeMitWochentag(
+                              widget.action.beginn)),
+                      SelectableText(ChronoHelfer.formatFromToTimeOfDateTimes(
+                          widget.action.beginn, widget.action.ende))
+                    ]))
+              ]),
+              SizedBox(
+                height: 10.0,
               ),
-              onTap: () => Navigator.pop(context, TerminDetailsCommand.FOCUS),
-            ),
-          ])),
-      persistentFooterButtons: [
-        SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: determineButtons(widget.action, isMyAction, iAmParticipant)),
-        SizedBox(width: 5),
-        Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: []..add(SizedBox(
-                width: 50.0,
-                child: RaisedButton(
-                  key: Key('action details close button'),
-                  padding: EdgeInsets.all(5.0),
-                  child: Icon(Icons.close),
-                  onPressed: () =>
-                      Navigator.pop(context, TerminDetailsCommand.CLOSE),
-                ))))
-      ].where((element) => element != null).toList(),
-    );
+
+              // Description
+              Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Icon(Icons.info_outline, size: 40.0),
+                SizedBox(
+                  width: 10.0,
+                ),
+                Expanded(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                      Text(
+                        'Was?',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ).tr(),
+                      ExpandableConstrainedBox(
+                        child: SelectableText(
+                          widget.action.details.beschreibung,
+                          // onTap: () => {***REMOVED***,
+                          // TODO: SelectableText stiehlt ExpandableContraintBox den onTap
+                          style: TextStyle(fontWeight: FontWeight.normal),
+                        ),
+                        maxHeight: 105.0,
+                        expandableCondition:
+                            widget.action.details.beschreibung.length > 200,
+                      )
+                    ]))
+              ]),
+              SizedBox(
+                height: 10.0,
+              ),
+
+              // Contact
+              Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Icon(Icons.face, size: 40.0),
+                SizedBox(
+                  width: 10.0,
+                ),
+                Expanded(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                      Text(
+                        'Wer?',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ).tr(),
+                      ExpandableConstrainedBox(
+                        child: SelectableText(
+                          widget.action.details.kontakt,
+                          style: TextStyle(fontWeight: FontWeight.normal),
+                        ),
+                        maxHeight: 105.0,
+                        expandableCondition:
+                            widget.action.details.kontakt.length > 200,
+                      )
+                    ]))
+              ]),
+
+              Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Icon(Icons.my_location, size: 40.0),
+                SizedBox(
+                  width: 10.0,
+                ),
+                Expanded(
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                      Text(
+                        'Wo?',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ).tr(),
+                      ExpandableConstrainedBox(
+                        child: SelectableText(
+                            tr('{kiez***REMOVED*** in {bezirk***REMOVED***\n Treffpunkt: {treffpunkt***REMOVED***',
+                                namedArgs: {
+                                  'kiez': widget.action.ort.name,
+                                  'bezirk': widget.action.ort.ortsteil,
+                                  'treffpunkt':
+                                      widget.action.details.treffpunkt,
+                                ***REMOVED***),
+                            style: TextStyle(fontWeight: FontWeight.normal)),
+                        maxHeight: 80,
+                        expandableCondition:
+                            widget.action.details.treffpunkt.length > 70,
+                      ),
+                    ]))
+              ]),
+              SizedBox(
+                height: 10.0,
+              ),
+              InkWell(
+                child: Container(
+                  height: 150.0,
+                  width: 250.0,
+                  decoration: BoxDecoration(
+                      border: Border.all(color: DweTheme.purple, width: 1.0)),
+                  child: FlutterMap(
+                    key: Key('action details map'),
+                    options: MapOptions(
+                      center: LatLng(
+                          widget.action.latitude, widget.action.longitude),
+                      zoom: 15,
+                      interactive: false,
+                    ),
+                    layers: [
+                      TileLayerOptions(
+                          urlTemplate:
+                              "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
+                          subdomains: ['a', 'b', 'c']),
+                      MarkerLayerOptions(markers: [widget.marker]),
+                    ],
+                  ),
+                ),
+                onTap: () => Navigator.pop(context, TerminDetailsCommand.FOCUS),
+              ),
+            ])),
+        persistentFooterButtons: [
+          determineActionButton(),
+          SizedBox(
+              child: RaisedButton(
+            key: Key('action details close button'),
+            padding: EdgeInsets.all(8.0),
+            child: Text('Schließen').tr(),
+            onPressed: () => Navigator.pop(context, TerminDetailsCommand.CLOSE),
+          ))
+        ]);
   ***REMOVED***
 
-  Widget determineButtons(
-          Termin action, bool isMyAction, bool iAmParticipant) =>
-      isMyAction
-          ? isEvaluated(action) || !isPastAction(action)
-              ? ButtonRow([deleteButton(), editButton(), chatButton(action)])
-              : ButtonRow([evaluateButton(action, context), chatButton(action)])
-          : isPastAction(action)
-              ? iAmParticipant
-                  ? isEvaluated(action)
-                      ? ButtonRow([leaveButton(action), chatButton(action)])
-                      : ButtonRow(
-                          [evaluateButton(action, context), chatButton(action)])
-                  : SizedBox()
-              : iAmParticipant
-                  ? ButtonRow([leaveButton(action), chatButton(action)])
-                  : joinButton(action);
+  PopupMenuButton menuButton(
+      Termin action, bool isMyAction, bool iAmParticipant) {
+    final List<PopupMenuItem> items = [];
 
-  bool isEvaluated(Termin action) {
-    return myEvaluations?.contains(action.id);
+    if (!isMyAction && !iAmParticipant && !isPastAction(action))
+      items.add(PopupMenuItem(
+          child: Row(children: [
+            Icon(Icons.assignment_turned_in_outlined),
+            SizedBox(width: 8),
+            Text('Mitmachen').tr()
+          ]),
+          value: 'Mitmachen'));
+
+    if (!isMyAction && iAmParticipant)
+      items.add(PopupMenuItem(
+          child: Row(children: [
+            Icon(Icons.assignment_return_outlined),
+            SizedBox(width: 8),
+            Text('Absagen').tr()
+          ]),
+          value: 'Absagen'));
+
+    if (iAmParticipant)
+      items.add(PopupMenuItem(
+          child: Row(children: [
+            Icon(Icons.message_outlined),
+            SizedBox(width: 8),
+            Text('Zum Chat').tr()
+          ]),
+          value: 'Zum Chat'));
+
+    if (isPastAction(action) && iAmParticipant && !isEvaluated(action))
+      items.add(PopupMenuItem(
+          child: Row(children: [
+            Icon(Icons.rss_feed_outlined),
+            SizedBox(width: 8),
+            Text('Feedback').tr()
+          ]),
+          value: 'Feedback'));
+
+    if (isMyAction) {
+      items.add(PopupMenuItem(
+          child: Row(children: [
+            Icon(Icons.edit),
+            SizedBox(width: 8),
+            Text('Bearbeiten').tr()
+          ]),
+          value: 'Bearbeiten'));
+      items.add(PopupMenuItem(
+          child: Row(children: [
+            Icon(Icons.delete, color: Colors.red),
+            SizedBox(width: 8),
+            Text('Löschen', style: TextStyle(color: Colors.red)).tr()
+          ]),
+          value: 'Löschen'));
+    ***REMOVED***
+
+    return PopupMenuButton(
+        color: DweTheme.yellowLight,
+        itemBuilder: (BuildContext context) => items,
+        onSelected: (command) {
+          if (command == 'Mitmachen') joinAction();
+          if (command == 'Absagen') leaveAction();
+          if (command == 'Zum Chat') openChatWindow()();
+          if (command == 'Feedback') evaluateAction();
+          if (command == 'Bearbeiten') editAction();
+          if (command == 'Löschen') deleteAction();
+        ***REMOVED***);
   ***REMOVED***
 
-  Widget evaluateButton(Termin termin, BuildContext context) => RaisedButton(
-      key: Key('action evaluate button'),
-      padding: EdgeInsets.all(5.0),
-      color: DweTheme.purple,
-      child: Text('Feedback'),
-      onPressed: () => Navigator.pop(context, TerminDetailsCommand.EVALUATE));
+  bool isEvaluated(Termin action) => myEvaluations?.contains(action.id);
 
-  SizedBox chatButton(Termin terminMitDetails) {
-    return SizedBox(
-        width: 50.0,
-        child: RaisedButton(
-            textColor: DweTheme.yellow,
-            padding: EdgeInsets.all(5.0),
-            key: Key('open chat window'),
-            child: Icon(Icons.message),
-            onPressed: () => openChatWindow(terminMitDetails)));
-  ***REMOVED***
-
-  openChatWindow(Termin termin) async {
+  openChatWindow() async {
     ChatChannel message_channel =
-        await chatMessageService.getActionChannel(termin.id);
+        await chatMessageService.getActionChannel(widget.action.id);
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => ChatWindow(message_channel, termin, true)));
+            builder: (context) =>
+                ChatWindow(message_channel, widget.action, true)));
   ***REMOVED***
 
   SizedBox editButton() {
@@ -325,7 +357,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           key: Key('action edit button'),
           padding: EdgeInsets.all(5.0),
           child: Icon(Icons.edit),
-          onPressed: () => Navigator.pop(context, TerminDetailsCommand.EDIT),
+          onPressed: () => editAction(),
         ));
   ***REMOVED***
 
@@ -337,37 +369,73 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
             padding: EdgeInsets.all(5.0),
             color: DweTheme.red,
             child: Icon(Icons.delete),
-            onPressed: () {
-              showDialog<bool>(
-                      context: context,
-                      builder: (context) => confirmDeleteDialog(context))
-                  .then((confirmed) {
-                if (confirmed)
-                  Navigator.pop(context, TerminDetailsCommand.DELETE);
-              ***REMOVED***);
-            ***REMOVED***));
+            onPressed: () => deleteAction()));
   ***REMOVED***
 
   Widget leaveButton(Termin terminMitDetails) => RaisedButton(
       key: Key('leave action button'),
       child: Text('Verlassen').tr(),
-      onPressed: () {
-        widget.leaveAction(terminMitDetails);
-        setState(() {
-          terminMitDetails.participants.remove(
-              terminMitDetails.participants.firstWhere((u) => u.id == me.id));
-          iAmParticipant = false;
-        ***REMOVED***);
-      ***REMOVED***);
+      onPressed: () => leaveAction());
 
-  Widget joinButton(Termin terminMitDetails) => RaisedButton(
-      key: Key('join action button'),
-      child: Text('Mitmachen').tr(),
-      onPressed: () {
-        widget.joinAction(terminMitDetails);
-        setState(() {
-          terminMitDetails.participants.add(me);
-          iAmParticipant = true;
-        ***REMOVED***);
+  Widget determineActionButton() {
+    if (isPastAction(widget.action) &&
+        iAmParticipant &&
+        !isEvaluated(widget.action))
+      return SizedBox(
+          width: 50.0,
+          child: RaisedButton(
+              key: Key('action evaluate button'),
+              padding: EdgeInsets.all(8.0),
+              color: DweTheme.purple,
+              child: Text('Feedback'),
+              onPressed: () => evaluateAction()));
+
+    if (iAmParticipant)
+      return SizedBox(
+          child: RaisedButton(
+              textColor: DweTheme.yellow,
+              padding: EdgeInsets.all(8.0),
+              key: Key('open chat window'),
+              child: Row(children: [
+                Icon(Icons.message, size: 20),
+                SizedBox(width: 10),
+                Text('Zum Chat').tr()
+              ]),
+              onPressed: () => openChatWindow()));
+
+    if (!isPastAction(widget.action))
+      return RaisedButton(
+          key: Key('join action button'),
+          padding: EdgeInsets.all(8.0),
+          child: Text('Mitmachen').tr(),
+          onPressed: () => joinAction());
+  ***REMOVED***
+
+  void joinAction() {
+    widget.joinAction(widget.action);
+    setState(() {
+      widget.action.participants.add(me);
+      iAmParticipant = true;
+    ***REMOVED***);
+  ***REMOVED***
+
+  void leaveAction() {
+    widget.leaveAction(widget.action);
+    setState(() {
+      widget.action.participants
+          .remove(widget.action.participants.firstWhere((u) => u.id == me.id));
+      iAmParticipant = false;
+    ***REMOVED***);
+  ***REMOVED***
+
+  void evaluateAction() =>
+      Navigator.pop(context, TerminDetailsCommand.EVALUATE);
+
+  void editAction() => Navigator.pop(context, TerminDetailsCommand.EDIT);
+
+  void deleteAction() => showDialog<bool>(
+          context: context,
+          builder: (context) => confirmDeleteDialog(context)).then((confirmed) {
+        if (confirmed) Navigator.pop(context, TerminDetailsCommand.DELETE);
       ***REMOVED***);
 ***REMOVED***

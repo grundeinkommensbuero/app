@@ -1,7 +1,7 @@
 import 'package:easy_localization/src/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sammel_app/model/User.dart';
+import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/routes/ActionMap.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
@@ -21,7 +21,6 @@ void main() {
     ActionMap actionMap = tester.widget(find.byType(ActionMap));
     expect(actionMap.termine, []);
     expect(actionMap.listLocations, []);
-    expect(actionMap.isMyAction(), isFalse);
   ***REMOVED***);
 
   group('action marker', () {
@@ -49,7 +48,7 @@ void main() {
 
     testWidgets('are hightlighted for own actions',
         (WidgetTester tester) async {
-      var isMyAction = (id) => id == 2;
+      var isMyAction = (Termin action) => action.id == 2;
 
       var morgen = DateTime.now()..add(Duration(days: 1));
       await tester.pumpWidget(MaterialApp(
@@ -78,8 +77,8 @@ void main() {
     ***REMOVED***);
 
     testWidgets('are higlighted for past actions', (WidgetTester tester) async {
-      var isMyAction = (id) => id == 2;
-      var iAmParticipant = (List<User> users) => users.isNotEmpty;
+      var isMyAction = (Termin action) => action.id == 2;
+      var iAmParticipant = (Termin action) => action.participants.isNotEmpty;
 
       await tester.pumpWidget(MaterialApp(
               home: Scaffold(
@@ -110,7 +109,7 @@ void main() {
 
     testWidgets('are higlighted for joined actions',
         (WidgetTester tester) async {
-      var iAmParticipant = (List<User> users) => users.isNotEmpty;
+      var iAmParticipant = (Termin action) => action.participants.isNotEmpty;
 
       await tester.pumpWidget(MaterialApp(
               home: Scaffold(

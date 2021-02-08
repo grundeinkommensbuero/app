@@ -169,7 +169,7 @@ void main() {
           tester.state(find.byKey(Key('action creator')));
       expect(
           find.text('${tempVorstadt().name***REMOVED*** in ${tempVorstadt().ortsteil***REMOVED***\n'
-              ' ⛒ Treffpunkt: ${actionData.action.terminDetails.treffpunkt***REMOVED***'),
+              ' Treffpunkt: ${actionData.action.terminDetails.treffpunkt***REMOVED***'),
           findsNothing);
       // ignore: invalid_use_of_protected_member
       actionData.setState(() {
@@ -181,7 +181,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(
           find.text('${tempVorstadt().name***REMOVED*** in ${tempVorstadt().ortsteil***REMOVED***\n'
-              ' ⛒ Treffpunkt: ${actionData.action.terminDetails.treffpunkt***REMOVED***'),
+              ' Treffpunkt: ${actionData.action.terminDetails.treffpunkt***REMOVED***'),
           findsOneWidget);
     ***REMOVED***);
 
@@ -260,7 +260,7 @@ void main() {
           findsOneWidget);
       expect(
           find.text(
-              'Frankfurter Allee Nord in Friedrichshain\n ⛒ Treffpunkt: Weltzeituhr'),
+              'Frankfurter Allee Nord in Friedrichshain\n Treffpunkt: Weltzeituhr'),
           findsOneWidget);
       expect(find.text('Beschreibung: Bringe Westen und Klämmbretter mit'),
           findsOneWidget);
