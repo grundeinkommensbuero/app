@@ -309,6 +309,7 @@ const Map<String, dynamic> en = {
   "Plakatieren": "Placard",
   "Löschen": "Delete",
   "Bearbeiten": "Edit",
+  "diese Aktion ist beendet": "this event has been finished",
 };
 
 const Map<String, dynamic> ru = {
@@ -602,6 +603,7 @@ const Map<String, dynamic> ru = {
   "Plakatieren": "Plakatieren",
   "Löschen": "Löschen",
   "Bearbeiten": "Bearbeiten",
+  "diese Aktion ist beendet": "diese Aktion ist beendet",
 };
 
 const Map<String, dynamic> de = {
@@ -906,4 +908,5 @@ const Map<String, dynamic> de = {
   "Plakatieren": "Plakatieren",
   "Löschen": "Löschen",
   "Bearbeiten": "Bearbeiten",
+  "diese Aktion ist beendet": "diese Aktion ist beendet",
 };
