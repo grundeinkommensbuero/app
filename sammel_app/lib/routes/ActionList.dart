@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
@@ -12,8 +11,8 @@ import 'TerminCard.dart';
 class ActionList extends StatefulWidget {
   final List<Termin> termine;
   final Function(Termin) openActionDetails;
-  final Function(int) isMyAction;
-  final Function(List<User>) iAmParticipant;
+  final Function(Termin) isMyAction;
+  final Function(Termin) iAmParticipant;
   final Function(Termin) isPastAction;
 
   ActionList(this.termine, this.isMyAction, this.isPastAction,
@@ -68,8 +67,8 @@ class ActionListState extends State<ActionList> {
     Widget tile = ListTile(
         title: TerminCard(
             widget.termine[index],
-            widget.isMyAction(widget.termine[index].id),
-            widget.iAmParticipant(widget.termine[index].participants),
+            widget.isMyAction(widget.termine[index]),
+            widget.iAmParticipant(widget.termine[index]),
             Key('action card')),
         onTap: widget.termine[index].id == null
             ? null

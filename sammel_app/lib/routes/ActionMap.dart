@@ -15,14 +15,14 @@ import 'package:user_location/user_location.dart';
 class ActionMap extends StatefulWidget {
   final List<Termin> termine;
   final List<ListLocation> listLocations;
-  final Function isMyAction;
-  final Function isPastAction;
-  final Function iAmParticipant;
+  final Function(Termin) isMyAction;
+  final Function(Termin) isPastAction;
+  final Function(Termin) iAmParticipant;
   final Function(Termin) openActionDetails;
   final MapController mapController;
 
   // no better way yet: https://github.com/dart-lang/sdk/issues/4596
-  static falseFunction() => false;
+  static falseFunction(Termin _) => false;
 
   ActionMap({
     Key key,
@@ -85,8 +85,8 @@ class ActionMapState extends State<ActionMap> {
     return widget.termine
         .where((action) => action.latitude != null && action.longitude != null)
         .map((action) => ActionMarker(action,
-            ownAction: widget.isMyAction(action.id),
-            participant: widget.iAmParticipant(action.participants),
+            ownAction: widget.isMyAction(action),
+            participant: widget.iAmParticipant(action),
             onTap: widget.openActionDetails))
         .toList();
   }
