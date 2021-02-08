@@ -14,7 +14,6 @@ import 'package:sammel_app/routes/EvaluationForm.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/Evaluation.dart';
 import 'package:sammel_app/routes/ActionMap.dart';
-import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
@@ -29,7 +28,6 @@ import 'ActionMap.dart';
 import 'ActionList.dart';
 import 'FilterWidget.dart';
 import 'ActionDetailsPage.dart';
-import 'ChatWindow.dart';
 
 class TermineSeite extends StatefulWidget {
   TermineSeite({Key key***REMOVED***) : super(key: key ?? Key('action page'));
@@ -58,9 +56,6 @@ class TermineSeiteState extends State<TermineSeite>
 
   List<int> myActions = [];
   User me;
-
-  List<int> myEvaluations =
-      []; // Liste von Termin Ids, die der Nutzer bereits evaluiert hat
 
   int navigation = 0;
   AnimationController _animationController;
@@ -177,10 +172,6 @@ class TermineSeiteState extends State<TermineSeite>
         .loadAllStoredActionIds()
         .then((ids) => setState(() => myActions = ids));
 
-    storageService
-        .loadAllStoredEvaluations()
-        .then((ids) => setState(() => myEvaluations = ids));
-
     var listLocationService = Provider.of<AbstractListLocationService>(context);
     listLocationService.getActiveListLocations().then((listLocations) {
       setState(() {
@@ -223,57 +214,13 @@ class TermineSeiteState extends State<TermineSeite>
     try {
       var terminMitDetails =
           await termineService.getActionWithDetails(termin.id);
-      TerminDetailsCommand command = await showDialog(
-          context: context,
-          builder: (context) => StatefulBuilder(
-              builder: (BuildContext context, setDialogState) => SimpleDialog(
-                    titlePadding: EdgeInsets.zero,
-                    backgroundColor: determineColor(terminMitDetails),
-                    title: AppBar(
-                        leading: null,
-                        automaticallyImplyLeading: false,
-                        title: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Image.asset(terminMitDetails.getAsset(),
-                                  width: 30.0),
-                              Container(width: 10.0),
-                              Text(terminMitDetails.typ,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 22.0,
-                                      color: Color.fromARGB(255, 129, 28, 98))),
-                            ])),
-                    key: Key('termin details dialog'),
-                    contentPadding: EdgeInsets.all(10.0),
-                    children: <Widget>[
-                      ActionDetailsPage(terminMitDetails),
-                      SizedBox(height: 5),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Expanded(
-                              child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: determineButtons(termin, context,
-                                      terminMitDetails, setDialogState))),
-                          SizedBox(width: 5),
-                          Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: []..add(SizedBox(
-                                  width: 50.0,
-                                  child: RaisedButton(
-                                    key: Key('action details close button'),
-                                    padding: EdgeInsets.all(5.0),
-                                    child: Icon(Icons.close),
-                                    onPressed: () => Navigator.pop(
-                                        context, TerminDetailsCommand.CLOSE),
-                                  ))))
-                        ],
-                      ),
-                    ].where((element) => element != null).toList(),
-                  )));
+      TerminDetailsCommand command = await showActionDetailsPage(
+          context,
+          terminMitDetails,
+          isMyAction(termin),
+          participant(termin),
+          joinAction,
+          leaveAction);
 
       if (command == TerminDetailsCommand.DELETE)
         deleteAction(terminMitDetails);
@@ -292,134 +239,10 @@ class TermineSeiteState extends State<TermineSeite>
     ***REMOVED***
   ***REMOVED***
 
-  SizedBox chatButton(Termin terminMitDetails) {
-    return SizedBox(
-        width: 50.0,
-        child: RaisedButton(
-            textColor: DweTheme.yellow,
-            padding: EdgeInsets.all(5.0),
-            key: Key('open chat window'),
-            child: Icon(Icons.message),
-            onPressed: () => openChatWindow(terminMitDetails)));
-  ***REMOVED***
+  bool isMyAction(Termin action) => myActions?.contains(action.id);
 
-  Widget determineButtons(Termin termin, BuildContext context,
-          Termin terminMitDetails, StateSetter setDialogState) =>
-      isMyAction(termin.id)
-          ? haveEvaluated(termin.id) || !isPastAction(termin)
-              ? ButtonRow([
-                  deleteButton(context),
-                  editButton(context),
-                  chatButton(terminMitDetails)
-                ])
-              : ButtonRow([
-                  evaluateButton(termin, context),
-                  chatButton(terminMitDetails)
-                ])
-          : isPastAction(termin)
-              ? participant(termin)
-                  ? haveEvaluated(termin.id)
-                      ? ButtonRow([
-                          leaveButton(terminMitDetails, setDialogState),
-                          chatButton(terminMitDetails)
-                        ])
-                      : ButtonRow([
-                          evaluateButton(termin, context),
-                          chatButton(terminMitDetails)
-                        ])
-                  : SizedBox()
-              : participant(terminMitDetails)
-                  ? ButtonRow([
-                      leaveButton(terminMitDetails, setDialogState),
-                      chatButton(terminMitDetails)
-                    ])
-                  : joinButton(terminMitDetails, setDialogState);
-
-  openChatWindow(Termin termin) async {
-    ChatChannel message_channel =
-        await chatMessageService.getActionChannel(termin.id);
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ChatWindow(message_channel, termin, true)));
-  ***REMOVED***
-
-  Color determineColor(Termin action) {
-    bool participant = action.participants.map((e) => e.id).contains(me?.id);
-    bool owner = isMyAction(action.id);
-    // maybe change color for past actions here too
-    return DweTheme.actionColor(action.ende, owner, participant);
-  ***REMOVED***
-
-  Widget evaluateButton(Termin termin, BuildContext context) => RaisedButton(
-      key: Key('action evaluate button'),
-      padding: EdgeInsets.all(5.0),
-      color: DweTheme.purple,
-      child: Text('Feedback'),
-      onPressed: () => Navigator.pop(context, TerminDetailsCommand.EVALUATE));
-
-  SizedBox editButton(BuildContext context) {
-    return SizedBox(
-        width: 50.0,
-        child: RaisedButton(
-          key: Key('action edit button'),
-          padding: EdgeInsets.all(5.0),
-          child: Icon(Icons.edit),
-          onPressed: () => Navigator.pop(context, TerminDetailsCommand.EDIT),
-        ));
-  ***REMOVED***
-
-  SizedBox deleteButton(BuildContext context) {
-    return SizedBox(
-        width: 50.0,
-        child: RaisedButton(
-            key: Key('action delete button'),
-            padding: EdgeInsets.all(5.0),
-            color: DweTheme.red,
-            child: Icon(Icons.delete),
-            onPressed: () {
-              showDialog<bool>(
-                      context: context,
-                      builder: (context) => confirmDeleteDialog(context))
-                  .then((confirmed) {
-                if (confirmed)
-                  Navigator.pop(context, TerminDetailsCommand.DELETE);
-              ***REMOVED***);
-            ***REMOVED***));
-  ***REMOVED***
-
-  Widget leaveButton(Termin terminMitDetails, Function setDialogState) =>
-      RaisedButton(
-          key: Key('leave action button'),
-          child: Text('Verlassen').tr(),
-          onPressed: () {
-            leaveAction(terminMitDetails);
-            setDialogState(() => terminMitDetails.participants.remove(
-                terminMitDetails.participants
-                    .firstWhere((u) => u.id == me.id)));
-          ***REMOVED***);
-
-  Widget joinButton(Termin terminMitDetails, Function setDialogState) =>
-      RaisedButton(
-          key: Key('join action button'),
-          child: Text('Mitmachen').tr(),
-          onPressed: () {
-            joinAction(terminMitDetails);
-            setDialogState(() => terminMitDetails.participants.add(me));
-          ***REMOVED***);
-
-  bool isMyAction(int id) {
-    return myActions?.contains(id);
-  ***REMOVED***
-
-  bool haveEvaluated(int id) {
-    return myEvaluations?.contains(id);
-  ***REMOVED***
-
-  bool isPastAction(Termin action) => action.ende.isBefore(DateTime.now());
-
-  bool iAmParticipant(List<User> participants) =>
-      participants.map((e) => e.id).contains(me?.id);
+  bool iAmParticipant(Termin action) =>
+      action.participants.map((e) => e.id).contains(me?.id);
 
   Future<List<Termin>> editAction(BuildContext context, Termin termin) async {
     await showDialog(
@@ -518,7 +341,6 @@ class TermineSeiteState extends State<TermineSeite>
   Future<void> saveEvaluation(Evaluation evaluation) async {
     try {
       await termineService.saveEvaluation(evaluation);
-      setState(() => myEvaluations = myEvaluations..add(evaluation.terminId));
       await storageService.markActionIdAsEvaluated(evaluation.terminId);
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
@@ -646,3 +468,5 @@ AlertDialog confirmDeleteDialog(BuildContext context) => AlertDialog(
             onPressed: () => Navigator.pop(context, false),
           ),
         ]);
+
+bool isPastAction(Termin action) => action.ende.isBefore(DateTime.now());
