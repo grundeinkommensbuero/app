@@ -1,7 +1,7 @@
 import 'package:easy_localization/src/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sammel_app/model/User.dart';
+import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/routes/ActionList.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 
@@ -28,7 +28,7 @@ void main() {
 
   testWidgets('marks own actions for highlighting',
       (WidgetTester tester) async {
-    var isMyAction = (id) => id == 2;
+    var isMyAction = (Termin action) => action.id == 2;
 
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
@@ -52,7 +52,7 @@ void main() {
 
   testWidgets('marks participating actions for highlighting',
       (WidgetTester tester) async {
-    var participating = (List<User> user) => user[0].id == 11;
+    var participating = (Termin action) => action.participants[0].id == 11;
 
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(
