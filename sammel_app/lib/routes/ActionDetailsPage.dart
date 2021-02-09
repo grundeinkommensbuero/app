@@ -388,27 +388,24 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
     if (isPastAction(widget.action) &&
         iAmParticipant &&
         !isEvaluated(widget.action))
-      return SizedBox(
-          width: 50.0,
-          child: RaisedButton(
-              key: Key('action evaluate button'),
-              padding: EdgeInsets.all(8.0),
-              color: DweTheme.purple,
-              child: Text('Feedback'),
-              onPressed: () => evaluateAction()));
+      return RaisedButton(
+          key: Key('action evaluate button'),
+          padding: EdgeInsets.all(8.0),
+          color: DweTheme.purple,
+          child: Text('Feedback'),
+          onPressed: () => evaluateAction());
 
     if (iAmParticipant)
-      return SizedBox(
-          child: RaisedButton(
-              textColor: DweTheme.yellow,
-              padding: EdgeInsets.all(8.0),
-              key: Key('open chat window'),
-              child: Row(children: [
-                Icon(Icons.message, size: 20),
-                SizedBox(width: 10),
-                Text('Zum Chat').tr()
-              ]),
-              onPressed: () => openChatWindow()));
+      return RaisedButton(
+          textColor: DweTheme.yellow,
+          padding: EdgeInsets.all(8.0),
+          key: Key('open chat window'),
+          child: Row(children: [
+            Icon(Icons.message, size: 20),
+            SizedBox(width: 10),
+            Text('Zum Chat').tr()
+          ]),
+          onPressed: () => openChatWindow());
 
     if (!isPastAction(widget.action))
       return RaisedButton(
