@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class FAQService {
   static List<FAQItem> items = [
+    anleitung,
     FAQItem(
         1,
         'Wann geht\'s los?',
@@ -289,6 +290,119 @@ class FAQService {
           'Mietenstopp',
         ]),
   ];
+
+  static var anleitung = FAQItem(
+      0,
+      'Bedienungsanleitung',
+      Column(children: [
+        Text(
+            'Mit dieser App, kannst du dich mit anderen Sammler*innen vernetzen, '
+            'austauschen und zu Aktionen verabreden. Du kannst dich über den neusten'
+            'Stand der Kampagne informieren, sowie Argumentationstipps und Hintergrund-'
+            'Infos bekommen.\n\nWie das funktioniert kannst du hier nachlesen.\n'),
+        Image.asset('assets/images/aktionen-seite.png', width: 250),
+        Text(
+            '\nIn der Startansicht werden dir alle anstehenden Aktionen aufgelistet. '
+            'Über der "Jetzt"-Zeile stehen Aktionen, die bereits in der Vergangenheit liegen.\n'
+            'Aktionen an denen du teilnimmst werden grün dargestellt, Aktionen, die '
+            'du selbst erstellt hast blau.\nMithilfe der Filter-Funktion kannst '
+            'du die Anzeige einschränken auf Ort, Zeit, Datum und Art der Aktion.\n'
+            'Der Aktualisieren-Knopf lädt alle Aktionen erneut.\n'
+            'Die Aktionen kannst du dir außerdem noch einmal in einer '
+            'Karten-Ansicht anschauen. Dort siehst du auch die "Solidarischen Orte", '
+            'an denen Unterschriftenlisten ausliegen.\n\n'
+            'Wenn du auf eine Aktion tippst, öffnet sich ein Fenster, das die '
+            'Details der Aktion anzeigt.\n'),
+        Image.asset('assets/images/aktionen-details-seite.png', width: 250),
+        Text('\nHier kannst du:\n'),
+        Text('• deine Teilnahme an Aktionen ankündigen\n'
+            '• Zum Aktions-Chat gelangen\n'
+            '• deine Teilnahme an Aktionen absagen\n'
+            '• Feedback zu vergangenen AKtionen abgeben (mit wichtigen Infos für die Kiezteams)\n'
+            '• und eigene Aktionen bearbeiten\n'
+            '• oder löschen\n'),
+        Image.asset('assets/images/chat-seite.png', width: 250),
+        Text(
+            '\nTippst du auf den Chat-Knopf, gelangst du in den Aktions-Chat der '
+            'Aktion und kannst dich mit den anderen Teilnehmer*innen austauschen. '
+            'Beachte, dass du keine Nachrichten sehen kannst, von bevor du der '
+            'Aktion beigetreten bist. Informiere also neue Teilnehmer*innen immer '
+            'über Absprachen, die ihr getroffen habt.\n'
+            'In der Chat-Ansicht kannst du auch die Liste der Aktions-Teilnehmer*innen'
+            'sehen, mithilfe des Teilnehmer*innen-Knopfs oben rechts.\n'),
+        Text(
+            'Wenn du in der Startansicht auf den Menü-Knopf in der oberen rechten '
+            'Ecke tippst, gelangst du zum Menü. Dort kannst du die weiteren Seiten:\n'
+            '• Zum Sammeln aufrufen\n'
+            '• Fragen und Antworten\n'
+            '• Neuigkeiten und\n'
+            '• Dein Profil\n'
+            'besuchen.\n'),
+        Text('Zum Sammeln aufrufen',
+            style: TextStyle(fontWeight: FontWeight.bold)),
+        Text(
+            'Hier kannst du eigene Aktionen ins Leben rufen. Und das ist wichtig,'
+            'denn wenn niemand Aktionen ausruft, kommen sie auch nicht zustande. \n'
+            'Warte also am Besten nicht darauf dass andere Aktionen erzeugen, sondern'
+            'rufe auch selbst zum Sammeln in deinem Kiez auf.'
+            'Fülle dazu die Felder "Wo", "Wann", "Was" und "Wer" aus und tippe den "Fertig"-Button an.\n'
+            'Andere Nutzer*innen werden dann ggf. über die neue Aktion informiert.\n'),
+        Text('Fragen und Antworten',
+            style: TextStyle(fontWeight: FontWeight.bold)),
+        Text(
+            'Hier bist du gerade ;)\nHier kannst du Argumentationshilfen und Tipps '
+            'bekommen. Manche Beiträge lassens sich durch tippen erweitern. Mit '
+            'der "Durchsuchen"-Funktion kannst du die Beiträge sortieren, um '
+            'schneller die Antwort auf deine Frage zu finden.\n'),
+        Text('Neuigkeiten', style: TextStyle(fontWeight: FontWeight.bold)),
+        Text('Hier wirst du gelegentlich Nachrichten der Kampagne über neue'
+            'Entwicklungen zu lesen bekommen. Also schau regelmäßig rein!\n'),
+        Text('Dein Profil', style: TextStyle(fontWeight: FontWeight.bold)),
+        Text('Hier kannst du verschiedene Einstellungen vornehmen. Zum Beispiel'
+            'kannst du die Sprache der App ändern oder dir einen Namen geben.\n\n'
+            'Eine Besonderheit ist die Benachrichtigungsfunktion: Mit "Mein Kiez" '
+            'kannst du auswählen zu welche Orten du über neue Aktionen informiert'
+            'werden willst. Du kannst die Orte noch genauer auswählen, wenn du '
+            'weiter heinein-zoomst.\n'
+            'Mit dem Benachrichtigungs-Intervall kannst du einstellen, wir oft du '
+            'informiert werden willst:\n'
+            '• "sofort" bedeutet, du wirst in dem Moment informiert, in dem eine '
+            'neue Aktion in deinem Kiez erstellt wurde\n'
+            '• "täglich" bedeutet du bekommst jeden Abend eine Zusammenfassung neuer'
+            'Aktionen in dienem Kiez\n'
+            '• "wöchentlich" bedeutet du bekommst einmal pro Woche eine Zusammenfassung '
+            'anstehenden Aktionen in deinem Kiez\n\n'),
+        Text(
+            'Wenn immer noch Fragen offen sind oder diese Anleitung unverständlich '
+            'oder falsch ist, dann schreib uns doch an:'),
+      RichText(
+          text: TextSpan(
+              text: 'app@dwenteignen.de',
+              style: TextStyle(
+                  fontSize: 15.0,
+                  color: Colors.indigo,
+                  decoration: TextDecoration.underline),
+              recognizer: TapGestureRecognizer()
+                ..onTap =
+                    () => launch('mailto:app@dwenteignen.de'))),
+      Text('und mache Verbesserungsvorschläge. Viel Erfolg und Spaß!')
+      ]),
+      Text(
+          'Mit dieser App, kannst du dich mit anderen Sammler*innen vernetzen, '
+          'austauschen und zu Aktionen verabreden. Du kannst dich über den neusten'
+          'Stand der Kampagne informieren, sowie Argumentationstipps und Hintergrund-'
+          'Infos bekommen.\nWie das funktioniert kannst du hier nachlesen.\n\n'
+          'Tippe auf diesen Eintrag um mehr zu lesen.'),
+      'plainText',
+      [
+        'Funktionen',
+        'Hilfe',
+        'Fehler',
+        'erstellen',
+        'löschen',
+        'feedback',
+        'filter'
+      ]);
 
   static List<FAQItem> loadItems(String search) {
     if (search == null) search = '';

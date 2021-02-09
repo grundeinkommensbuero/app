@@ -87,6 +87,9 @@ flutter:
    - assets/images/housy_happy.png
    - assets/images/housy_info.png
    - assets/images/housy_problem.png
+   - assets/images/aktionen-seite.png
+   - assets/images/aktionen-details-seite.png
+   - assets/images/chat-seite.png
    - assets/security/sammel-server_local.pem
    - assets/security/root-cert.pem
    - assets/geodata/bezirksregion_generalized.geojson
