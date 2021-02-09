@@ -63,12 +63,14 @@ class ActionListState extends State<ActionList>
         .loadAllStoredEvaluations()
         .then((evaluations) {
       for (Termin termin in widget.termine) {
-        if (widget.isPastAction(termin) && widget.iAmParticipant(termin) && !evaluations.contains(termin.id)) {
+        if (widget.isPastAction(termin) &&
+            widget.iAmParticipant(termin) &&
+            !evaluations.contains(termin.id)) {
           final snackBar = SnackBar(
               content: Text('Dein Feedback zu einer Aktion fehlt noch'.tr(),
                   style: TextStyle(color: Colors.black87)),
               behavior: SnackBarBehavior.floating,
-              duration: Duration(milliseconds: 5 * 1000),
+              duration: Duration(seconds: 7),
               backgroundColor: Color.fromARGB(220, 255, 255, 250),
               action: SnackBarAction(
                   label: 'Zur Aktion'.tr(),
