@@ -606,6 +606,8 @@ const Map<String, dynamic> ru = {
   "Löschen": "Löschen",
   "Bearbeiten": "Bearbeiten",
   "diese Aktion ist beendet": "diese Aktion ist beendet",
+  "Dein Feedback zu einer Aktion fehlt noch": "Dein Feedback zu einer Aktion fehlt noch",
+  "Zur Aktion": "Zur Aktion",
 };
 
 const Map<String, dynamic> de = {
@@ -911,4 +913,6 @@ const Map<String, dynamic> de = {
   "Löschen": "Löschen",
   "Bearbeiten": "Bearbeiten",
   "diese Aktion ist beendet": "diese Aktion ist beendet",
+  "Dein Feedback zu einer Aktion fehlt noch": "Dein Feedback zu einer Aktion fehlt noch",
+  "Zur Aktion": "Zur Aktion",
 };
