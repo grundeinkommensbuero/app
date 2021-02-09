@@ -310,6 +310,8 @@ const Map<String, dynamic> en = {
   "Löschen": "Delete",
   "Bearbeiten": "Edit",
   "diese Aktion ist beendet": "this event has been finished",
+  "Dein Feedback zu einer Aktion fehlt noch": "We're missing your feedback for an action",
+  "Zur Aktion": "Go to action"
 };
 
 const Map<String, dynamic> ru = {
