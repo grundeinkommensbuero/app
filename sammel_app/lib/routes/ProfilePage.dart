@@ -380,7 +380,7 @@ showAboutDialog(BuildContext context) {
                             color: Colors.indigo,
                             decoration: TextDecoration.underline),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () => launch('app@dwenteignen.de')))
+                          ..onTap = () => launch('mailto:app@dwenteignen.de')))
               ])
             ],
           ));
