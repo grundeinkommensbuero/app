@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Termin.dart';
+import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-
+import 'package:after_layout/after_layout.dart';
 import 'TerminCard.dart';
 
 class ActionList extends StatefulWidget {
@@ -24,7 +26,8 @@ class ActionList extends StatefulWidget {
   ActionListState createState() => ActionListState();
 ***REMOVED***
 
-class ActionListState extends State<ActionList> {
+class ActionListState extends State<ActionList>
+    with AfterLayoutMixin<ActionList> {
   ItemScrollController _scrollController = ItemScrollController();
 
   @override
@@ -48,13 +51,42 @@ class ActionListState extends State<ActionList> {
     return scrollableList;
   ***REMOVED***
 
+  @override
+  void afterFirstLayout(BuildContext context) {
+    Future.delayed(const Duration(milliseconds: (4 * 1000)), () {
+      maybeShowEvaluationSnackBar(context);
+    ***REMOVED***);
+  ***REMOVED***
+
+  void maybeShowEvaluationSnackBar(BuildContext context) {
+    Provider.of<StorageService>(context)
+        .loadAllStoredEvaluations()
+        .then((evaluations) {
+      for (Termin termin in widget.termine) {
+        if (widget.isPastAction(termin) && widget.iAmParticipant(termin) && !evaluations.contains(termin.id)) {
+          final snackBar = SnackBar(
+              content: Text('Dein Feedback zu einer Aktion fehlt noch'.tr(),
+                  style: TextStyle(color: Colors.black87)),
+              behavior: SnackBarBehavior.floating,
+              duration: Duration(milliseconds: 5 * 1000),
+              backgroundColor: Color.fromARGB(220, 255, 255, 250),
+              action: SnackBarAction(
+                  label: 'Zur Aktion'.tr(),
+                  onPressed: () => widget.openActionDetails(termin)));
+          Scaffold.of(context).showSnackBar(snackBar);
+          break;
+        ***REMOVED***
+      ***REMOVED***
+    ***REMOVED***);
+  ***REMOVED***
+
   int getIndexOfNow() {
     var now = DateTime.now();
     for (int index = 0; index < widget.termine.length; index++) {
       if ((widget.termine[index].beginn.isBefore(now)) &&
           (index == widget.termine.length - 1 ||
               widget.termine[index + 1].beginn.isAfter(now))) {
-        if(index > widget.termine.length - 5)
+        if (index > widget.termine.length - 5)
           return (widget.termine.length > 5 ? widget.termine.length - 5 : 0);
         else
           return index;
