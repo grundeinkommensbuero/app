@@ -26,7 +26,12 @@ void main() {
       preloaderWidget: Container(
           color: DweTheme.yellow,
           child: Image.asset('assets/images/logo_transparent.png')),
-      supportedLocales: [Locale('en'), Locale('de'), Locale('ru')],
+      supportedLocales: [
+        Locale('en'),
+        Locale('de'),
+        Locale('ru'),
+        Locale('fr')
+      ],
       path: 'none',
       assetLoader: ConstJsonAssetLoader(),
       fallbackLocale: Locale('en'),
