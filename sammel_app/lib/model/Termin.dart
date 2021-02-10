@@ -58,7 +58,7 @@ class Termin {
             ? 'assets/images/Workshop_centered.png'
             : 'assets/images/Workshop.png';
       case 'Plakatieren':
-        return 'assets/images/Infoveranstaltung.png';
+        return 'assets/images/Plakatieren.png';
     ***REMOVED***
     throw UnknownActionTypeException(
         'Logo für Aktionstyp "$typ" fehlt');
