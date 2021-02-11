@@ -609,6 +609,7 @@ const Map<String, dynamic> ru = {
   "diese Aktion ist beendet": "diese Aktion ist beendet",
   "Dein Feedback zu einer Aktion fehlt noch": "Dein Feedback zu einer Aktion fehlt noch",
   "Zur Aktion": "Zur Aktion",
+  "Feedback": "Feedback",
 ***REMOVED***
 
 const Map<String, dynamic> fr = {
@@ -838,6 +839,16 @@ const Map<String, dynamic> fr = {
   "Benachrichtigungs-Einstellungen": "Réglage de la messagerie",
   "Benachrichtigungen einstellen": "Régler la messagerie",
   "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtiungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.": "Si tu souhaites régler la messagerie en mode discret ou désactiver certains types de messages, il te suffit d’appuyer longuement sur un message reçu afin d’accéder aux réglages de la messagerie pour l’appli.",
+  "Danke!": "Danke!",
+  "Vielen Dank, dass Du Eure Erfahrungen geteilt hast.":
+  "Vielen Dank, dass Du Eure Erfahrungen geteilt hast.",
+  "Plakatieren": "Plakatieren",
+  "Löschen": "Löschen",
+  "Bearbeiten": "Bearbeiten",
+  "diese Aktion ist beendet": "diese Aktion ist beendet",
+  "Dein Feedback zu einer Aktion fehlt noch": "Dein Feedback zu einer Aktion fehlt noch",
+  "Zur Aktion": "Zur Aktion",
+  "Feedback": "Feedback",
 ***REMOVED***
 
 const Map<String, dynamic> de = {
@@ -1145,4 +1156,5 @@ const Map<String, dynamic> de = {
   "diese Aktion ist beendet": "diese Aktion ist beendet",
   "Dein Feedback zu einer Aktion fehlt noch": "Dein Feedback zu einer Aktion fehlt noch",
   "Zur Aktion": "Zur Aktion",
+  "Feedback": "Feedback",
 ***REMOVED***
