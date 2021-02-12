@@ -110,7 +110,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 22.0,
-                      color: Color.fromARGB(255, 129, 28, 98))),
+                      color: Color.fromARGB(255, 129, 28, 98))).tr(),
             ]),
             actions: [menu]),
         body: SingleChildScrollView(

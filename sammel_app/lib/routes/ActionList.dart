@@ -7,7 +7,6 @@ import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:after_layout/after_layout.dart';
 import 'TerminCard.dart';
 
 class ActionList extends StatefulWidget {
@@ -26,14 +25,16 @@ class ActionList extends StatefulWidget {
   ActionListState createState() => ActionListState();
 ***REMOVED***
 
-class ActionListState extends State<ActionList>
-    with AfterLayoutMixin<ActionList> {
+class ActionListState extends State<ActionList> {
   ItemScrollController _scrollController = ItemScrollController();
 
   Timer snackbarTimer;
 
+  List<int> evaluations;
+
   @override
   Widget build(BuildContext context) {
+    if (snackbarTimer == null) maybeShowEvaluationSnackBar(context);
     var index_of_now = getIndexOfNow();
 
     var scrollableList = ScrollablePositionedList.builder(
@@ -53,35 +54,29 @@ class ActionListState extends State<ActionList>
     return scrollableList;
   ***REMOVED***
 
-  @override
-  void afterFirstLayout(BuildContext context) {
-    snackbarTimer = Timer(Duration(seconds: 4), () {
-      maybeShowEvaluationSnackBar(context);
-    ***REMOVED***);
-  ***REMOVED***
+  void maybeShowEvaluationSnackBar(BuildContext context) async {
+    evaluations ??=
+        await Provider.of<StorageService>(context).loadAllStoredEvaluations();
 
-  void maybeShowEvaluationSnackBar(BuildContext context) {
-    Provider.of<StorageService>(context)
-        .loadAllStoredEvaluations()
-        .then((evaluations) {
-      for (Termin termin in widget.termine) {
-        if (widget.isPastAction(termin) &&
-            widget.iAmParticipant(termin) &&
-            !evaluations.contains(termin.id)) {
-          final snackBar = SnackBar(
-              content: Text('Dein Feedback zu einer Aktion fehlt noch'.tr(),
-                  style: TextStyle(color: Colors.black87)),
-              behavior: SnackBarBehavior.floating,
-              duration: Duration(seconds: 7),
-              backgroundColor: Color.fromARGB(220, 255, 255, 250),
-              action: SnackBarAction(
-                  label: 'Zur Aktion'.tr(),
-                  onPressed: () => widget.openActionDetails(termin)));
-          Scaffold.of(context).showSnackBar(snackBar);
-          break;
-        ***REMOVED***
+    for (Termin termin in widget.termine) {
+      if (widget.isPastAction(termin) &&
+          widget.iAmParticipant(termin) &&
+          !termin.isEvaluated(evaluations)) {
+        snackbarTimer = Timer(
+            Duration(seconds: 2),
+            () => Scaffold.of(context).showSnackBar(SnackBar(
+                content: Text('Dein Feedback zu einer Aktion fehlt noch'.tr(),
+                    style: TextStyle(color: Colors.black87)),
+                behavior: SnackBarBehavior.floating,
+                duration: Duration(seconds: 7),
+                backgroundColor: Color.fromARGB(220, 255, 255, 250),
+                action: SnackBarAction(
+                    label: 'Zur Aktion'.tr(),
+                    onPressed: () => widget.openActionDetails(termin)))));
+
+        break;
       ***REMOVED***
-    ***REMOVED***);
+    ***REMOVED***
   ***REMOVED***
 
   int getIndexOfNow() {

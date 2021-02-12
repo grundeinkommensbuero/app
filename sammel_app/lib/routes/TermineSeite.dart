@@ -306,7 +306,7 @@ class TermineSeiteState extends State<TermineSeite>
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 22.0,
-                        color: Color.fromARGB(255, 129, 28, 98))),
+                        color: Color.fromARGB(255, 129, 28, 98))).tr(),
               ),
               children: <Widget>[
                 Container(
@@ -322,19 +322,13 @@ class TermineSeiteState extends State<TermineSeite>
   afterActionEvaluation(Evaluation evaluation) async {
     Navigator.pop(context, false);
 
-    showDialog(
-        context: context,
-        child: AlertDialog(
-          title: Text('Danke!').tr(),
-          content: SelectableText(
-              'Vielen Dank, dass Du Eure Erfahrungen geteilt hast.'.tr()),
-          actions: <Widget>[
-            RaisedButton(
-              child: Text('Schließen'),
-              onPressed: () => Navigator.pop(context),
-            )
-          ],
-        ));
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text('Vielen Dank, dass Du Eure Erfahrungen geteilt hast.'.tr(),
+          style: TextStyle(color: Colors.black87)),
+      behavior: SnackBarBehavior.floating,
+      duration: Duration(seconds: 4),
+      backgroundColor: Color.fromARGB(220, 255, 255, 250),
+    ));
     await saveEvaluation(evaluation);
   ***REMOVED***
 
