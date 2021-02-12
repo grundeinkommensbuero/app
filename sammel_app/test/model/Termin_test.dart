@@ -202,6 +202,37 @@ void main() {
     expect(Termin.compareByStart(action4, action1), -1);
   ***REMOVED***);
 
+  group('isEvaluated', () {
+    test('returns true if action is in list and of type Sammeln', () {
+      final sammeln = TerminTestDaten.einTermin()..typ = 'Sammeln';
+      expect(sammeln.isEvaluated([0]), true);
+    ***REMOVED***);
+
+    test('returns false if list is Empty', () {
+      final sammeln1 = TerminTestDaten.einTermin()..typ = 'Sammeln';
+      expect(sammeln1.isEvaluated(null), false);
+
+      final sammeln2 = TerminTestDaten.einTermin()..typ = 'Sammeln';
+      expect(sammeln2.isEvaluated([]), false);
+    ***REMOVED***);
+
+    test('returns true for any Action that is not Sammeln', () {
+      final infova = TerminTestDaten.einTermin()..typ = 'Infoveranstaltung';
+      expect(infova.isEvaluated([infova.id]), true);
+
+      final ws = TerminTestDaten.einTermin()..typ = 'Workshop';
+      expect(ws.isEvaluated([ws.id]), true);
+
+      final plakatieren = TerminTestDaten.einTermin()..typ = 'Plakatieren';
+      expect(plakatieren.isEvaluated([plakatieren.id]), true);
+    ***REMOVED***);
+
+    test('returns false if action is not in list', () {
+      final sammeln = TerminTestDaten.einTermin()..typ = 'Sammeln';
+      expect(sammeln.isEvaluated([1, 2, 3]), false);
+    ***REMOVED***);
+  ***REMOVED***);
+
   group('getAsset', () {
     var infoveranstaltung = TerminTestDaten.einTermin();
 
