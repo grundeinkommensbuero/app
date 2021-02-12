@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong/latlong.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
+import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
@@ -36,20 +37,49 @@ final _pushManager = PushNotificationManagerMock();
 void main() {
   setUp(() {
     Localization.load(Locale('en'), translations: TranslationsMock());
+    reset(_storageService);
+    reset(_listLocationService);
+    reset(_terminService);
+    reset(_pushManager);
+    reset(_chatService);
     when(_storageService.loadFilter()).thenAnswer((_) async => null);
     when(_storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
     when(_storageService.loadMyKiez()).thenAnswer((_) async => []);
     when(_storageService.loadNotificationInterval())
         .thenAnswer((_) async => 'nie');
+    when(_storageService.loadContact()).thenAnswer((_) => Future.value());
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
     when(_terminService.loadActions(any)).thenAnswer((_) async => []);
     when(_pushManager.pushToken).thenAnswer((_) async => 'Token');
+    when(_chatService.getTopicChannel('global'))
+        .thenAnswer((_) async => ChatChannel('channel:global'));
+    when(_storageService.loadAllStoredEvaluations())
+        .thenAnswer((_) async => []);
   });
 
-  testWidgets('TermineSeite opens CreateTerminDialog on click at menu button',
+  testWidgets('Navigation opens CreateTerminDialog',
       (WidgetTester tester) async {
-    await _pumpNavigation(tester);
+    await (WidgetTester tester) async {
+      await tester.pumpWidget(MultiProvider(
+          providers: [
+            Provider<StammdatenService>.value(value: _stammdatenService),
+            Provider<AbstractTermineService>.value(value: _terminService),
+            Provider<StorageService>.value(value: _storageService),
+            Provider<AbstractListLocationService>(
+                create: (context) => _listLocationService),
+            Provider<AbstractPushSendService>.value(value: _pushService),
+            Provider<AbstractUserService>.value(value: _userService),
+            Provider<ChatMessageService>.value(value: _chatService),
+            Provider<AbstractPushNotificationManager>.value(
+                value: _pushManager),
+            Provider<ChatMessageService>.value(value: _chatService),
+          ],
+          child: MaterialApp(
+            home: Navigation(GlobalKey(debugLabel: 'action page')),
+          )));
+      await tester.pumpAndSettle();
+    }(tester);
 
     var nav = tester.state<NavigationState>(find.byKey(Key('navigation')));
 
@@ -77,7 +107,7 @@ void main() {
     });
 
     testWidgets('Type dialog opens correctly', (WidgetTester tester) async {
-      await _openActionCreator(tester);
+      await _pumpActionCreator(tester);
 
       expect(find.byKey(Key('type selection dialog')), findsNothing);
 
@@ -88,7 +118,7 @@ void main() {
     });
 
     testWidgets('Type dialog shows correct typ', (WidgetTester tester) async {
-      await _openActionCreator(tester);
+      await _pumpActionCreator(tester);
       ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
       // ignore: invalid_use_of_protected_member
@@ -105,7 +135,7 @@ void main() {
 
     testWidgets('Type dialog shows Sammeln as default',
         (WidgetTester tester) async {
-      await _openActionCreator(tester);
+      await _pumpActionCreator(tester);
 
       expect(find.byKey(Key('action creator')), findsOneWidget);
       expect(
@@ -116,7 +146,7 @@ void main() {
     });
 
     testWidgets('Zeitraum dialog opens correctly', (WidgetTester tester) async {
-      await _openActionCreator(tester);
+      await _pumpActionCreator(tester);
       expect(find.byKey(Key('from time picker')), findsNothing);
       await tester.tap(find.byKey(Key('open time span dialog')));
       await tester.pump();
@@ -124,7 +154,7 @@ void main() {
     });
 
     testWidgets('Zeitraum is correctly shown', (WidgetTester tester) async {
-      await _openActionCreator(tester);
+      await _pumpActionCreator(tester);
       ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
       expect(find.text('von 12:05 bis 13:09'), findsNothing);
@@ -141,7 +171,7 @@ void main() {
     });
 
     testWidgets('No Zeitraum is correctly shown', (WidgetTester tester) async {
-      await _openActionCreator(tester);
+      await _pumpActionCreator(tester);
       ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
       // ignore: invalid_use_of_protected_member
@@ -155,7 +185,7 @@ void main() {
     });
 
     testWidgets('Location dialog opens correctly', (WidgetTester tester) async {
-      await _openActionCreator(tester);
+      await _pumpActionCreator(tester);
       expect(find.byKey(Key('Location Picker')), findsNothing);
       await tester.tap(find.byKey(Key('Open location dialog')));
       await tester.pump();
@@ -164,7 +194,7 @@ void main() {
 
     testWidgets('location caption is correctly shown',
         (WidgetTester tester) async {
-      await _openActionCreator(tester);
+      await _pumpActionCreator(tester);
       ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
       expect(
@@ -187,7 +217,7 @@ void main() {
 
     testWidgets('changing kontakt is correctly shown',
         (WidgetTester tester) async {
-      await _openActionCreator(tester);
+      await _pumpActionCreator(tester);
       ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
       // ignore: invalid_use_of_protected_member
@@ -201,7 +231,7 @@ void main() {
 
     testWidgets('venue decription w/o coordinates is not displayed',
         (WidgetTester tester) async {
-      await _openActionCreator(tester);
+      await _pumpActionCreator(tester);
       ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
       // ignore: invalid_use_of_protected_member
@@ -215,7 +245,7 @@ void main() {
 
     testWidgets('changing beschreibung is correctly shown',
         (WidgetTester tester) async {
-      await _openActionCreator(tester);
+      await _pumpActionCreator(tester);
       ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
       // ignore: invalid_use_of_protected_member
@@ -229,7 +259,7 @@ void main() {
 
     testWidgets('changing tage is correctly shown',
         (WidgetTester tester) async {
-      await _openActionCreator(tester);
+      await _pumpActionCreator(tester);
       ActionEditorState actionData =
           tester.state(find.byKey(Key('action creator')));
       // ignore: invalid_use_of_protected_member
@@ -243,7 +273,7 @@ void main() {
 
     testWidgets('no tage selection is correctly shown',
         (WidgetTester tester) async {
-      await _openActionCreator(tester);
+      await _pumpActionCreator(tester);
 
       expect(find.text("Wähle einen Tag"), findsOneWidget);
     });
@@ -268,7 +298,7 @@ void main() {
     });
 
     testWidgets('Cancel button closes correctly', (WidgetTester tester) async {
-      await _openActionCreator(tester);
+      await _pumpActionCreator(tester);
       await tester.tap(find.byKey(Key('action editor cancel button')));
       await tester.pumpAndSettle();
       verifyNever(_terminService.createAction(any, any));
@@ -288,7 +318,7 @@ void main() {
 
     testWidgets('shows motivation text in ActionCreator',
         (WidgetTester tester) async {
-      await _openActionCreator(tester);
+      await _pumpActionCreator(tester);
 
       expect(find.byKey(Key('motivation text')), findsOneWidget);
     });
@@ -405,21 +435,11 @@ void main() {
 
     testWidgets('triggers validation on Fertig button',
         (WidgetTester tester) async {
-      var actionEditor = ActionEditor(
-          initAction: TerminTestDaten.einTerminMitTeilisUndDetails());
-      await tester.pumpWidget(MaterialApp(home: actionEditor));
-      ActionEditorState state = tester.state(find.byWidget(actionEditor));
+      ActionEditorState state = await _pumpActionEditor(tester);
 
       expect(state.action.validated['all'], ValidationState.ok);
 
-      state.action = ActionData(
-          '',
-          TimeOfDay.now(),
-          TimeOfDay.now(),
-          ffAlleeNord(),
-          [DateTime.now()],
-          TerminDetails('treffpunkt', 'beschreibung', 'kontakt'),
-          LatLng(52.48993, 13.46839));
+      state.action = testActionData()..tage = null;
 
       when(_terminService.createAction(any, any))
           .thenAnswer((_) async => TerminTestDaten.einTermin());
@@ -428,19 +448,13 @@ void main() {
       expect(state.action.validated['all'], ValidationState.error);
     });
   });
+
   group('determineMapCenter', () {
     test('returns coordinates, if given', () {
-      var actionData = ActionData(
-          null,
-          null,
-          null,
-          Kiez('Kiez', 'Region', 'Ortsteil', []),
-          null,
-          null,
-          LatLng(52.2, 43.2));
+      var actionData = testActionData();
 
-      expect(
-          ActionEditorState.determineMapCenter(actionData), LatLng(52.2, 43.2));
+      expect(ActionEditorState.determineMapCenter(actionData),
+          LatLng(52.51579, 13.45399));
     });
 
     test('returns null, if no coordinates given', () {
@@ -656,35 +670,9 @@ void main() {
     });
   });
   group('finish button', () {
-    Future<ActionEditorState> pumpActionEditor(
-        WidgetTester tester, UserService userServiceMock,
-        {Function onFinish}) async {
-      onFinish = onFinish ?? (_) {};
-
-      var actionEditor = ActionEditor(onFinish: onFinish);
-      await tester.pumpWidget(MultiProvider(providers: [
-        Provider<AbstractUserService>.value(value: userServiceMock),
-      ], child: MaterialApp(home: actionEditor)));
-
-      ActionEditorState state = tester.state(find.byWidget(actionEditor));
-      state.action = ActionData.testDaten();
-      await tester.pumpAndSettle();
-      return state;
-    }
-
-    Future<ActionEditorState> pumpActionEditorConfigured(WidgetTester tester,
-            {Function onFinish}) async =>
-        pumpActionEditor(tester, ConfiguredUserServiceMock(),
-            onFinish: onFinish);
-
-    Future<ActionEditorState> pumpActionEditorUnconfigured(
-            WidgetTester tester, UserServiceMock userServiceMock,
-            {Function onFinish}) async =>
-        pumpActionEditor(tester, userServiceMock, onFinish: onFinish);
-
     testWidgets('fires onFinish', (WidgetTester tester) async {
       bool fired = false;
-      await pumpActionEditorConfigured(tester, onFinish: (_) => fired = true);
+      await _pumpActionEditor(tester, onFinish: (_) => fired = true);
 
       expect(fired, isFalse);
 
@@ -695,7 +683,8 @@ void main() {
     });
 
     testWidgets('clears data', (WidgetTester tester) async {
-      var state = await pumpActionEditorConfigured(tester);
+      var state = await _pumpActionCreator(tester);
+      state.action = testActionData();
 
       expect(state.action.von, isNotNull);
       expect(state.action.bis, isNotNull);
@@ -708,7 +697,7 @@ void main() {
       expect(state.action.coordinates, isNotNull);
 
       await tester.tap(find.byKey(Key('action editor finish button')));
-      await tester.pumpAndSettle();
+      await tester.pump();
 
       expect(state.action.von, isNull);
       expect(state.action.bis, isNull);
@@ -716,13 +705,14 @@ void main() {
       expect(state.action.typ, 'Sammeln');
       expect(state.action.tage, isEmpty);
       expect(state.action.terminDetails.beschreibung, isEmpty);
-      expect(state.action.terminDetails.kontakt, isEmpty);
+      expect(state.action.terminDetails.kontakt, 'Ich bin ich');
       expect(state.action.terminDetails.treffpunkt, isEmpty);
       expect(state.action.coordinates, isNull);
     });
 
     testWidgets('cancel clears data', (WidgetTester tester) async {
-      var state = await pumpActionEditorConfigured(tester);
+      var state = await _pumpActionCreator(tester);
+      state.action = testActionData();
 
       expect(state.action.von, isNotNull);
       expect(state.action.bis, isNotNull);
@@ -743,7 +733,7 @@ void main() {
       expect(state.action.typ, 'Sammeln');
       expect(state.action.tage, isEmpty);
       expect(state.action.terminDetails.beschreibung, isEmpty);
-      expect(state.action.terminDetails.kontakt, isEmpty);
+      expect(state.action.terminDetails.kontakt, 'Ich bin ich');
       expect(state.action.terminDetails.treffpunkt, isEmpty);
       expect(state.action.coordinates, isNull);
     });
@@ -752,7 +742,7 @@ void main() {
       var userService = UserServiceMock();
       when(userService.user)
           .thenAnswer((_) => Stream.value(User(13, null, Colors.red)));
-      await pumpActionEditorUnconfigured(tester, userService);
+      await _pumpActionEditor(tester, userService: userService);
 
       await tester.tap(find.byKey(Key('action editor finish button')));
       await tester.pumpAndSettle();
@@ -761,7 +751,7 @@ void main() {
     });
 
     testWidgets('opens name dialog not if username exists', (tester) async {
-      await pumpActionEditorConfigured(tester);
+      await _pumpActionEditor(tester);
 
       await tester.tap(find.byKey(Key('action editor finish button')));
       await tester.pumpAndSettle();
@@ -774,8 +764,8 @@ void main() {
       when(userService.user)
           .thenAnswer((_) => Stream.value(User(13, null, Colors.red)));
       var fired = false;
-      await pumpActionEditorUnconfigured(tester, userService,
-          onFinish: (_) => fired = true);
+      await _pumpActionEditor(tester,
+          onFinish: (_) => fired = true, userService: userService);
 
       await tester.tap(find.byKey(Key('action editor finish button')));
       await tester.pumpAndSettle();
@@ -801,8 +791,8 @@ void main() {
       when(userService.user)
           .thenAnswer((_) => Stream.value(User(13, null, Colors.red)));
       bool fired = false;
-      await pumpActionEditorUnconfigured(tester, userService,
-          onFinish: (_) => fired = true);
+      await _pumpActionEditor(tester,
+          onFinish: (_) => fired = true, userService: userService);
 
       await tester.tap(find.byKey(Key('action editor finish button')));
       await tester.pumpAndSettle();
@@ -816,30 +806,91 @@ void main() {
       expect(fired, isFalse);
       expect(find.byKey(Key('username dialog')), findsNothing);
       expect(find.byKey(Key('action creator')), findsNothing);
-      expect(find.text(ActionData.testDaten().terminDetails.kontakt),
-          findsOneWidget);
+      expect(find.text('Ruft an unter 012345678'), findsOneWidget);
+    });
+  });
+
+  group('contact persistence', () {
+    testWidgets('loads contact from storage with new action', (tester) async {
+      when(_storageService.loadContact())
+          .thenAnswer((_) async => 'Ick bin ein Berliner');
+      await _pumpActionCreator(tester);
+
+      verify(_storageService.loadContact());
+      expect(find.text('Ick bin ein Berliner'), findsOneWidget);
+    });
+
+    testWidgets('loads null contact from storage with new action',
+        (tester) async {
+      await _pumpActionCreator(tester);
+
+      verify(_storageService.loadContact());
+      expect(find.text('Ein paar Worte über dich'), findsOneWidget);
+    });
+
+    testWidgets('loads no contact from storage with initial action',
+        (tester) async {
+      await _pumpActionEditor(tester);
+
+      verifyNever(_storageService.loadContact());
+      expect(find.text('Ruft an unter 012345678'), findsOneWidget);
+    });
+
+    testWidgets('keeps contact on Abbrechen with new action', (tester) async {
+      await _pumpActionCreator(tester);
+
+      await tester.tap(find.byKey(Key('action editor contact button')));
+      await tester.pump();
+      await tester.enterText(
+          find.byKey(Key('text input dialog field')), 'Ick bin ein Berliner');
+      await tester.pump();
+      await tester
+          .tap(find.byKey(Key('action editor text input accept button')));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(Key('action editor cancel button')));
+      await tester.pump();
+
+      expect(find.text('Ick bin ein Berliner'), findsOneWidget);
+    });
+
+    testWidgets('saves contact to storage on finish with new action',
+        (tester) async {
+      final state = await _pumpActionCreator(tester);
+      state.action = testActionData();
+
+      await tester.tap(find.byKey(Key('action editor finish button')));
+      await tester.pump();
+
+      verify(_storageService.saveContact('Ich bin ich'));
+    });
+
+    testWidgets('saves contact to storage on finish with initial action',
+        (tester) async {
+      final state = await _pumpActionEditor(tester);
+      state.action.terminDetails.kontakt = 'Ick bin ein Berliner';
+
+      await tester.tap(find.byKey(Key('action editor finish button')));
+      await tester.pump();
+
+      verify(_storageService.saveContact('Ick bin ein Berliner'));
     });
   });
 }
 
-_pumpNavigation(WidgetTester tester) async {
+Future<ActionEditorState> _pumpActionCreator(WidgetTester tester) async {
   await tester.pumpWidget(MultiProvider(
       providers: [
-        Provider<StammdatenService>.value(value: _stammdatenService),
-        Provider<AbstractTermineService>.value(value: _terminService),
         Provider<StorageService>.value(value: _storageService),
-        Provider<AbstractListLocationService>(
-            create: (context) => _listLocationService),
-        Provider<AbstractPushSendService>.value(value: _pushService),
         Provider<AbstractUserService>.value(value: _userService),
-        Provider<ChatMessageService>.value(value: _chatService),
-        Provider<AbstractPushNotificationManager>.value(value: _pushManager),
-        Provider<ChatMessageService>.value(value: _chatService),
       ],
       child: MaterialApp(
-        home: Navigation(GlobalKey(debugLabel: 'action page')),
-      )));
+          home: WillPopScope(
+        onWillPop: () => Future.value(false),
+        child: ActionEditor(key: Key('action creator')),
+      ))));
   await tester.pumpAndSettle();
+  return tester.state(find.byType(ActionEditor));
 }
 
 _pumpActionPage(WidgetTester tester) async {
@@ -860,16 +911,6 @@ _pumpActionPage(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
-Future _openActionCreator(WidgetTester tester) async {
-  await _pumpNavigation(tester);
-  await tester.pumpAndSettle();
-
-  await tester.tap(find.byIcon(Icons.menu));
-  await tester.pumpAndSettle();
-  await tester.tap(find.byKey(Key('action creator navigation button')));
-  await tester.pumpAndSettle();
-}
-
 Future _openActionEditor(WidgetTester tester) async {
   await _pumpActionPage(tester);
   // Warten bis asynchron Termine geladen wurden
@@ -877,6 +918,34 @@ Future _openActionEditor(WidgetTester tester) async {
 
   await tester.tap(find.byKey(Key('action card')).first);
   await tester.pump();
-  await tester.tap(find.byKey(Key('action edit button')));
-  await tester.pump();
+  await tester.tap(find.byKey(Key('action details menu button')));
+  await tester.pumpAndSettle();
+  await tester.tap(find.byKey(Key('action details edit menu item')));
+  await Future.value(); // nötig für irgendein kryptisches Asynchronitätsproblem
+  await tester.pumpAndSettle();
 }
+
+Future<ActionEditorState> _pumpActionEditor(WidgetTester tester,
+    {Function onFinish, UserServiceMock userService}) async {
+  onFinish = onFinish ?? (_) {};
+
+  final action = TerminTestDaten.einTerminMitTeilisUndDetails();
+  var actionEditor = ActionEditor(initAction: action, onFinish: onFinish);
+  await tester.pumpWidget(MultiProvider(providers: [
+    Provider<StorageService>.value(value: _storageService),
+    Provider<AbstractUserService>.value(value: userService ?? _userService),
+  ], child: MaterialApp(home: actionEditor)));
+
+  ActionEditorState state = tester.state(find.byWidget(actionEditor));
+  await tester.pumpAndSettle();
+  return state;
+}
+
+ActionData testActionData() => ActionData(
+    'Sammeln',
+    TimeOfDay.fromDateTime(DateTime.now()),
+    TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 1))),
+    ffAlleeNord(),
+        [DateTime.now()],
+        TerminDetails('Weltzeituhr', 'Es gibt Kuchen', 'Ich bin ich'),
+        LatLng(52.51579, 13.45399));

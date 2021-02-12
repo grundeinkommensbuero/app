@@ -53,7 +53,7 @@ class ActionListState extends State<ActionList>
 
   @override
   void afterFirstLayout(BuildContext context) {
-    Future.delayed(const Duration(milliseconds: (4 * 1000)), () {
+    Future.delayed(const Duration(seconds: 4), () {
       maybeShowEvaluationSnackBar(context);
     });
   }

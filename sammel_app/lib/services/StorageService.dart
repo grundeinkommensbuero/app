@@ -22,6 +22,7 @@ class StorageService {
   static const String _CHANNEL = 'channel';
   static const String _MYKIEZ = 'mykiez';
   static const String _NOTIF_INTERVAL = 'notifInterval';
+  static const String _CONTACT = 'contact';
 
   StorageService() {
     _prefs = SharedPreferences.getInstance();
@@ -143,6 +144,12 @@ class StorageService {
 
   Future<String> loadNotificationInterval() =>
       prefs.then((prefs) => prefs.getString(_NOTIF_INTERVAL));
+
+  Future<bool> saveContact(String interval) =>
+      prefs.then((prefs) => prefs.setString(_CONTACT, interval));
+
+  Future<String> loadContact() =>
+      prefs.then((prefs) => prefs.getString(_CONTACT));
 
   // for Debugging only
   loadCostumPushToken() => prefs.then((prefs) => prefs.getString(_PUSHTOKEN));

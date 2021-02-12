@@ -31,7 +31,7 @@ class ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
       pushManager = Provider.of<AbstractPushNotificationManager>(context);
       chatMessageService = Provider.of<ChatMessageService>(context);
       Provider.of<ChatMessageService>(context)
-          .getTopicChannel("global")
+          .getTopicChannel('global')
           .then((channel) => setState(() => topicChannel = channel));
     }
     if (!widget.active) {
