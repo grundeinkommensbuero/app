@@ -611,6 +611,7 @@
                 <https-listener name="https" socket-binding="https" ssl-context="dweSSLContext" enable-http2="true"/>
                 <host name="default-host" alias="localhost">
                     <location name="/" handler="welcome-content"/>
+                    <access-log pattern="%h %t &quot;%r&quot; %s &quot;%{i,User-Agent}&quot;" use-server-log="false"/>
                     <http-invoker security-realm="ApplicationRealm"/>
                 </host>
             </server>
