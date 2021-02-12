@@ -30,6 +30,8 @@ class ActionListState extends State<ActionList>
     with AfterLayoutMixin<ActionList> {
   ItemScrollController _scrollController = ItemScrollController();
 
+  Timer snackbarTimer;
+
   @override
   Widget build(BuildContext context) {
     var index_of_now = getIndexOfNow();
@@ -53,7 +55,7 @@ class ActionListState extends State<ActionList>
 
   @override
   void afterFirstLayout(BuildContext context) {
-    Future.delayed(const Duration(seconds: 4), () {
+    snackbarTimer = Timer(Duration(seconds: 4), () {
       maybeShowEvaluationSnackBar(context);
     ***REMOVED***);
   ***REMOVED***
@@ -132,5 +134,11 @@ class ActionListState extends State<ActionList>
         ).tr(),
       ]);
     return tile;
+  ***REMOVED***
+
+  @override
+  void dispose() {
+    snackbarTimer?.cancel();
+    super.dispose();
   ***REMOVED***
 ***REMOVED***
