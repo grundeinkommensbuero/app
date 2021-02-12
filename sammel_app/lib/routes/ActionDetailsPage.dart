@@ -6,6 +6,7 @@ import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/model/Termin.dart';
+import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/StorageService.dart';
@@ -39,8 +40,8 @@ Future<TerminDetailsCommand> showActionDetailsPage(
 class ActionDetailsPage extends StatefulWidget {
   final Termin action;
   Marker marker;
-  bool isMyAction;
-  bool iAmParticipant;
+  final bool isMyAction;
+  final bool iAmParticipant;
 
   final Function(Termin) joinAction;
   final Function(Termin) leaveAction;
@@ -69,9 +70,8 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
 
   ActionDetailsPageState(this.isMyAction, this.iAmParticipant);
 
-  var participator;
-  var myEvaluations = [];
-  var me;
+  List<int> myEvaluations = [];
+  User me;
 
   AbstractTermineService termineService;
   ChatMessageService chatMessageService;
@@ -309,7 +309,9 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           ]),
           value: 'Zum Chat'));
 
-    if (isPastAction(action) && iAmParticipant && !isEvaluated(action))
+    if (isPastAction(action) &&
+        iAmParticipant &&
+        !action.isEvaluated(myEvaluations))
       items.add(PopupMenuItem(
           key: Key('action details feedback menu item'),
           child: Row(children: [
@@ -352,8 +354,6 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
         });
   }
 
-  bool isEvaluated(Termin action) => myEvaluations?.contains(action.id);
-
   openChatWindow() async {
     ChatChannel message_channel =
         await chatMessageService.getActionChannel(widget.action.id);
@@ -394,7 +394,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
   Widget determineActionButton() {
     if (isPastAction(widget.action) &&
         iAmParticipant &&
-        !isEvaluated(widget.action))
+        !widget.action.isEvaluated(myEvaluations))
       return RaisedButton(
           key: Key('action evaluate button'),
           padding: EdgeInsets.all(8.0),
@@ -434,7 +434,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
     widget.leaveAction(widget.action);
     setState(() {
       widget.action.participants
-          .remove(widget.action.participants.firstWhere((u) => u.id == me.id));
+          .remove(widget.action.participants.firstWhere((u) => u.id == me?.id));
       iAmParticipant = false;
     });
   }

@@ -45,6 +45,13 @@ class Termin {
         'details': details == null ? null : details.toJson(),
       };
 
+  bool isEvaluated(List<int> evaluatedActionIds) {
+    if (this.typ != 'Sammeln') return true;
+    if (evaluatedActionIds == null) return false;
+    if (evaluatedActionIds.contains(this.id)) return true;
+    return false;
+  }
+
   String getAsset({bool centered = false}) {
     switch (typ) {
       case 'Sammeln':
@@ -60,8 +67,7 @@ class Termin {
       case 'Plakatieren':
         return 'assets/images/Plakatieren.png';
     }
-    throw UnknownActionTypeException(
-        'Logo für Aktionstyp "$typ" fehlt');
+    throw UnknownActionTypeException('Logo für Aktionstyp "$typ" fehlt');
   }
 
   static final int Function(Termin a, Termin b) compareByStart =
