@@ -16,6 +16,8 @@ void main() async {
 
   var service = StorageService();
 
+  setUp(() => _prefs.clear());
+
   group('action tokens', () {
     test('are stored correctly', () async {
       var result = await service.saveActionToken(1, "123789456");
@@ -238,6 +240,25 @@ void main() async {
       var result = await service.isPullMode();
 
       expect(result, true);
+    ***REMOVED***);
+  ***REMOVED***);
+
+  group('contact', () {
+    test('is stored correctly', () async {
+      expect(_prefs.containsKey('contact'), false);
+
+      await service.saveContact("Ick bin ein Berliner");
+
+      expect(_prefs.containsKey('contact'), true);
+      expect(_prefs.getString("contact"), "Ick bin ein Berliner");
+    ***REMOVED***);
+
+    test('is read correctly', () async {
+      await _prefs.setString('contact', 'Ick bin ein Berliner');
+
+      var secret = await service.loadContact();
+
+      expect(secret, 'Ick bin ein Berliner');
     ***REMOVED***);
   ***REMOVED***);
 

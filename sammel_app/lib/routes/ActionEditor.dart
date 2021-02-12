@@ -1,3 +1,4 @@
+import 'package:after_layout/after_layout.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -9,6 +10,7 @@ import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/User.dart';
+import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
@@ -29,18 +31,6 @@ class ActionData {
   TerminDetails terminDetails;
   LatLng coordinates;
 
-  ActionData.testDaten() {
-    this.von = TimeOfDay.fromDateTime(DateTime.now());
-    this.bis = TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 1)));
-    this.ort = Kiez(
-        'Plänterwald', 'Friedrichshain-Kreuzberg', 'Treptow-Köpenick 1', []);
-    this.coordinates = LatLng(52.51579, 13.45399);
-    this.typ = 'Sammeln';
-    this.tage = [DateTime.now()];
-    this.terminDetails =
-        TerminDetails('Weltzeituhr', 'Es gibt Kuchen', 'Ich bin ich');
-  ***REMOVED***
-
   ActionData(
       [this.typ,
       this.von,
@@ -58,7 +48,7 @@ class ActionData {
     'von': ValidationState.not_validated,
     'bis': ValidationState.not_validated,
     'ort': ValidationState.not_validated,
-    'typ': ValidationState.not_validated,
+    'typ': ValidationState.ok,
     'tage': ValidationState.not_validated,
     'all': ValidationState.not_validated,
     'venue': ValidationState.not_validated,
@@ -81,7 +71,8 @@ class ActionEditor extends StatefulWidget {
   ActionEditorState createState() => ActionEditorState(this.initAction);
 ***REMOVED***
 
-class ActionEditorState extends State<ActionEditor> {
+class ActionEditorState extends State<ActionEditor>
+    with AfterLayoutMixin<ActionEditor> {
   ActionData action = ActionData();
 
   ActionEditorState(Termin initAction) : super() {
@@ -106,6 +97,15 @@ class ActionEditorState extends State<ActionEditor> {
   ***REMOVED***
 
   get isNewAction => widget.initAction == null;
+
+  @override
+  void afterFirstLayout(BuildContext context) {
+    if (isNewAction)
+      Provider.of<StorageService>(context).loadContact().then((stored) {
+        setState(() => action.terminDetails.kontakt = stored);
+        validateContact();
+      ***REMOVED***);
+  ***REMOVED***
 
   @override
   Widget build(BuildContext context) {
@@ -196,6 +196,7 @@ class ActionEditorState extends State<ActionEditor> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ).tr(),
                         InputButton(
+                            key: Key('action editor contact button'),
                             onTap: contactSelection,
                             child: contactButtonCaption(this.action)),
                       ]))
@@ -213,7 +214,7 @@ class ActionEditorState extends State<ActionEditor> {
                 key: Key('action editor cancel button'),
                 child: Text('Abbrechen').tr(),
                 onPressed: () {
-                  setState(() => action = ActionData());
+                  resetAction();
                   Navigator.maybePop(context);
                 ***REMOVED***),
             RaisedButton(
@@ -266,9 +267,9 @@ class ActionEditorState extends State<ActionEditor> {
     var ergebnis = await showTextInputDialog(
         this.action.terminDetails.kontakt,
         'Kontakt',
-        'Hier kannst du ein paar Worte über dich verlieren, '
-            'vor allem, wie man dich kontaktieren kann, damit andere sich mit dir zum Sammeln verabreden können. '
-            'Beachte dass alle Sammler*innen deine Angaben lesen können.',
+        'Hier kannst du ein paar Worte über dich verlieren. Wer bist du, woran '
+            'erkennt man dich vor Ort, wie kann man dich vorher kontaktieren, usw.\n'
+            'Beachte dass alle Sammler*innen deine Angaben lesen können!',
         Key('contact input dialog'));
     setState(() {
       this.action.terminDetails.kontakt = ergebnis;
@@ -279,7 +280,9 @@ class ActionEditorState extends State<ActionEditor> {
   Future<String> showTextInputDialog(
       String current_value, String title, String description, Key key) {
     String current_input = current_value;
+
     TextFormField input_field = TextFormField(
+      key: Key('text input dialog field'),
       minLines: 3,
       initialValue: current_value,
       keyboardType: TextInputType.multiline,
@@ -292,48 +295,33 @@ class ActionEditorState extends State<ActionEditor> {
       ***REMOVED***,
     );
 
-    Widget input_widget;
-
-    if (description != null) {
-      input_widget = SingleChildScrollView(
-          child: ListBody(children: [
-        Text(description).tr(),
-        SizedBox(height: 10),
-        input_field
-      ]));
-    ***REMOVED*** else {
-      input_widget = input_field;
-    ***REMOVED***
-
-    Widget cancelButton = FlatButton(
-      child: Text("Abbrechen").tr(),
-      onPressed: () {
-        Navigator.pop(context, current_value);
-      ***REMOVED***,
-    );
-    Widget continueButton = FlatButton(
-      child: Text("Fertig").tr(),
-      onPressed: () {
-        Navigator.pop(context, current_input);
-      ***REMOVED***,
-    );
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      key: key,
-      title: Text(title).tr(),
-      content: input_widget,
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
-
-    // show the dialog
     return showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return alert;
-      ***REMOVED***,
+      builder: (BuildContext context) => AlertDialog(
+        key: key,
+        title: Text(title).tr(),
+        content: description != null
+            ? SingleChildScrollView(
+                child: ListBody(children: [
+                Text(description).tr(),
+                SizedBox(height: 10),
+                input_field
+              ]))
+            : input_field,
+        actions: [
+          FlatButton(
+            child: Text("Abbrechen").tr(),
+            onPressed: () {
+              Navigator.pop(context, current_value);
+            ***REMOVED***,
+          ),
+          FlatButton(
+            key: Key('action editor text input accept button'),
+            child: Text("Fertig").tr(),
+            onPressed: () => Navigator.pop(context, current_input),
+          ),
+        ],
+      ),
     );
   ***REMOVED***
 
@@ -634,11 +622,19 @@ class ActionEditorState extends State<ActionEditor> {
       if (termine != null) {
         widget.onFinish(termine);
         if (isNewAction)
-          setState(() => action = ActionData()); // reset Form for next use
+          resetAction();
         else
           Navigator.maybePop(context);
+        Provider.of<StorageService>(context)
+            .saveContact(action.terminDetails.kontakt);
       ***REMOVED***
     ***REMOVED***
+  ***REMOVED***
+
+  void resetAction() {
+    final contact = action.terminDetails.kontakt;
+    setState(() => action = ActionData()..terminDetails.kontakt = contact);
+    validateContact();
   ***REMOVED***
 
   Row build_text_row(Text text, ValidationState valState) {

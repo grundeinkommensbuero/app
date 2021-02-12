@@ -281,6 +281,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
 
     if (!isMyAction && !iAmParticipant && !isPastAction(action))
       items.add(PopupMenuItem(
+          key: Key('action details join menu item'),
           child: Row(children: [
             Icon(Icons.assignment_turned_in_outlined),
             SizedBox(width: 8),
@@ -290,6 +291,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
 
     if (!isMyAction && iAmParticipant)
       items.add(PopupMenuItem(
+          key: Key('action details menu leave item'),
           child: Row(children: [
             Icon(Icons.assignment_return_outlined),
             SizedBox(width: 8),
@@ -299,6 +301,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
 
     if (iAmParticipant)
       items.add(PopupMenuItem(
+          key: Key('action details chat menu item'),
           child: Row(children: [
             Icon(Icons.message_outlined),
             SizedBox(width: 8),
@@ -308,6 +311,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
 
     if (isPastAction(action) && iAmParticipant && !isEvaluated(action))
       items.add(PopupMenuItem(
+          key: Key('action details feedback menu item'),
           child: Row(children: [
             Icon(Icons.rss_feed_outlined),
             SizedBox(width: 8),
@@ -317,6 +321,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
 
     if (isMyAction) {
       items.add(PopupMenuItem(
+          key: Key('action details edit menu item'),
           child: Row(children: [
             Icon(Icons.edit),
             SizedBox(width: 8),
@@ -324,6 +329,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           ]),
           value: 'Bearbeiten'));
       items.add(PopupMenuItem(
+          key: Key('action details delete menu item'),
           child: Row(children: [
             Icon(Icons.delete, color: Colors.red),
             SizedBox(width: 8),
@@ -333,6 +339,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
     ***REMOVED***
 
     return PopupMenuButton(
+        key: Key('action details menu button'),
         color: DweTheme.yellowLight,
         itemBuilder: (BuildContext context) => items,
         onSelected: (command) {
