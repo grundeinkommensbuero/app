@@ -912,18 +912,18 @@ const Map<String, dynamic> fr = {
   "Benachrichtigungen einstellen": "Régler la messagerie",
   "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtiungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.":
       "Si tu souhaites régler la messagerie en mode discret ou désactiver certains types de messages, il te suffit d’appuyer longuement sur un message reçu afin d’accéder aux réglages de la messagerie pour l’appli.",
-  "Danke!": "Danke!",
+  "Danke!": "Merci!",
   "Vielen Dank, dass Du Eure Erfahrungen geteilt hast.":
-      "Vielen Dank, dass Du Eure Erfahrungen geteilt hast.",
-  "Plakatieren": "Plakatieren",
-  "Löschen": "Löschen",
-  "Bearbeiten": "Bearbeiten",
-  "diese Aktion ist beendet": "diese Aktion ist beendet",
+      "Merci d’avoir partagé vos expériences.",
+  "Plakatieren": "Coller des affiches",
+  "Löschen": "Supprimer",
+  "Bearbeiten": "Configurer",
+  "diese Aktion ist beendet": "cette action est terminée",
   "Dein Feedback zu einer Aktion fehlt noch":
-      "Dein Feedback zu einer Aktion fehlt noch",
-  "Zur Aktion": "Zur Aktion",
-  "Feedback": "Feedback",
-  "Über Aktion berichten": "Über Aktion berichten",
+      "Ton commentaire pour une action est encore manquant",
+  "Zur Aktion": "Vers l’action",
+  "Feedback": "Commentaire",
+  "Über Aktion berichten": "Commentaire",
 };
 
 const Map<String, dynamic> de = {
