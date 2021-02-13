@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 
 void main() {
+  initializeDateFormatting('de');
   group('timeToString', () {
     test('ergaenzt 00 Sekunden', () {
       var string =
@@ -31,7 +33,7 @@ void main() {
     test('formats regular date', () {
       expect(
           ChronoHelfer.formatDateOfDateTimeMitWochentag(
-              DateTime(2019, 12, 21, 22, 23, 24)),
+              DateTime(2019, 12, 21, 22, 23, 24), Locale('de')),
           'Samstag, 21. Dezember 2019');
     ***REMOVED***);
 
