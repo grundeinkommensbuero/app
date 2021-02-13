@@ -106,6 +106,15 @@ class ActionListState extends State<ActionList> {
             : () => widget.openActionDetails(widget.termine[index]),
         contentPadding: EdgeInsets.only(bottom: 0.1));
     var now = DateTime.now();
+    // An erstes Element Abstand nach oben anhängen, damit oberste Aktion nicht von Filter verdeckt wird
+    if (index == 0) {
+      tile = Column(children: [
+        SizedBox(
+          height: 50.0,
+        ),
+        tile
+      ]);
+    ***REMOVED***
     // Jetzt-Zeile an die zuletzt vergangene Aktion anhängen
     if ((widget.termine[index].beginn.isBefore(now)) &&
         (index == widget.termine.length - 1 ||

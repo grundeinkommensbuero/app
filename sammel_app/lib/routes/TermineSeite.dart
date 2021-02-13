@@ -93,10 +93,6 @@ class TermineSeiteState extends State<TermineSeite>
     ));
 
     var actionListView = Column(children: [
-      // An erstes Element Abstand nach oben anhängen, damit oberste Aktion nicht von Filter verdeckt wird
-      SizedBox(
-        height: 50.0,
-      ),
       Expanded(
           child: ActionList(termine, isMyAction, isPastAction, iAmParticipant,
               openTerminDetails,
