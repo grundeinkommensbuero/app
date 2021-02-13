@@ -23,19 +23,22 @@ void main() {
     });
   });
   group('formatDateOfDateTime', () {
-
     test('formats null', () {
-      expect(ChronoHelfer.formatDateOfDateTimeMitWochentag(null), '');
+      expect(ChronoHelfer.formatDateOfDateTimeMitWochentag(null, Locale('de')),
+          '');
     });
 
     test('formats regular date', () {
       expect(
-          ChronoHelfer.formatDateOfDateTimeMitWochentag(DateTime(2019, 12, 21, 22, 23, 24)),
+          ChronoHelfer.formatDateOfDateTimeMitWochentag(
+              DateTime(2019, 12, 21, 22, 23, 24)),
           'Samstag, 21. Dezember 2019');
     });
 
     test('formats date w/o time', () {
-      expect(ChronoHelfer.formatDateOfDateTimeMitWochentag(DateTime(2019, 12, 21)),
+      expect(
+          ChronoHelfer.formatDateOfDateTimeMitWochentag(
+              DateTime(2019, 12, 21), Locale('de')),
           'Samstag, 21. Dezember 2019');
     });
   });
@@ -51,19 +54,13 @@ void main() {
     test('formats null times', () {
       expect(
           ChronoHelfer.formatFromToTimeOfDateTimes(
-              null,
-              DateTime(2019, 12, 21, 23, 59, 12)),
+              null, DateTime(2019, 12, 21, 23, 59, 12)),
           '');
-    expect(
+      expect(
           ChronoHelfer.formatFromToTimeOfDateTimes(
-              DateTime(2019, 12, 21, 22, 26, 00),
-              null),
+              DateTime(2019, 12, 21, 22, 26, 00), null),
           '');
-    expect(
-          ChronoHelfer.formatFromToTimeOfDateTimes(
-              null,
-              null),
-          '');
+      expect(ChronoHelfer.formatFromToTimeOfDateTimes(null, null), '');
     });
   });
 }

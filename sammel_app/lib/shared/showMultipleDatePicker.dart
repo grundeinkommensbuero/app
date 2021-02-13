@@ -7,14 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
-import 'ChronoHelfer.dart';
-
 Future<List<DateTime>> showMultipleDatePicker(
     List<DateTime> initDates, BuildContext context,
     {key: Key, multiMode = true, maxTage = 0}) async {
-  DateTime currentMonth = DateTime.now();
+  initDates ??= [];
+  DateTime displayedMonth =
+      initDates.isNotEmpty ? initDates.first : DateTime.now();
   List<DateTime> dates = []..addAll(initDates ?? []);
-  DateTime date = initDates.isNotEmpty ? initDates[0] : null;
+
   var selectedDatesFromDialog = await showDialog<List<DateTime>>(
       context: context,
       builder: (context) => StatefulBuilder(builder: (context, setDialogState) {
@@ -28,28 +28,33 @@ Future<List<DateTime>> showMultipleDatePicker(
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Flexible(child: RaisedButton(
+                        Flexible(
+                            child: RaisedButton(
                           key: Key('previous month button'),
                           shape: CircleBorder(),
                           child: Icon(Icons.arrow_left),
-                          onPressed: () => setDialogState(() => currentMonth =
-                              Jiffy(currentMonth).subtract(months: 1)),
+                          onPressed: () => setDialogState(() => displayedMonth =
+                              Jiffy(displayedMonth).subtract(months: 1)),
                         )),
-                        Flexible(child: Text(
-                          ChronoHelfer.monthName(currentMonth.month) +
-                              '\n' +
-                              currentMonth.year.toString(),
-                          key: Key('current month'),
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                          textAlign: TextAlign.center,
-                          textWidthBasis: TextWidthBasis.parent,
-                        ).tr()),
-                        Flexible(child: RaisedButton(
+                        Flexible(
+                          child: Column(children: [
+                            Text(
+                                DateFormat.MMMM(Localizations.localeOf(context)
+                                        ?.languageCode)
+                                    .format(displayedMonth),
+                                key: Key('current month'),
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            Text(displayedMonth.year.toString(),
+                                style: TextStyle(fontWeight: FontWeight.bold))
+                          ]),
+                        ),
+                        Flexible(
+                            child: RaisedButton(
                           key: Key('next month button'),
                           shape: CircleBorder(),
                           child: Icon(Icons.arrow_right),
-                          onPressed: () => setDialogState(() => currentMonth =
-                              Jiffy(currentMonth).add(months: 1)),
+                          onPressed: () => setDialogState(() => displayedMonth =
+                              Jiffy(displayedMonth).add(months: 1)),
                         )),
                       ],
                     )),
@@ -58,16 +63,21 @@ Future<List<DateTime>> showMultipleDatePicker(
                       height: 260.0,
                       width: 1.0,
                       child: Calendarro(
-                        startDate: Jiffy(currentMonth).startOf("month"),
-                        endDate: Jiffy(currentMonth).endOf("month"),
+                        startDate: Jiffy(displayedMonth).startOf("month"),
+                        endDate: Jiffy(displayedMonth).endOf("month"),
                         selectedDates: dates,
-                        selectedSingleDate: date,
+                        selectedSingleDate:
+                            initDates.isNotEmpty ? initDates[0] : null,
                         weekdayLabelsRow: GerCalendarroWeekdayLabelsView(),
                         selectionMode: multiMode
                             ? SelectionMode.MULTI
                             : SelectionMode.SINGLE,
                         displayMode: DisplayMode.MONTHS,
                         dayTileBuilder: DweDayTileBuilder(),
+                        onTap: (DateTime date) {
+                          // bei Multi-Select manipuliert Calendarro die Liste selbst
+                          if (!multiMode) dates = [date];
+                        },
                       )),
                   ButtonBar(alignment: MainAxisAlignment.center, children: [
                     RaisedButton(
@@ -78,9 +88,15 @@ Future<List<DateTime>> showMultipleDatePicker(
                     RaisedButton(
                       key: Key('days dialog accept button'),
                       child: Text("Auswählen").tr(),
-                      onPressed: () => (maxTage > 0 && multiMode && dates.length > maxTage)
-                          ? showTooManyDatesDialog(context, maxTage)
-                          : Navigator.pop(context, multiMode ? dates : [date]),
+                      onPressed: () {
+                        if (maxTage > 0 &&
+                            multiMode &&
+                            dates.length > maxTage) {
+                          showTooManyDatesDialog(context, maxTage);
+                          return;
+                        }
+                        Navigator.pop(context, dates);
+                      },
                     )
                   ])
                 ]);
@@ -174,8 +190,8 @@ showTooManyDatesDialog(context, maxTage) {
       context: context,
       child: AlertDialog(
         title: Text('Zu viele Tage'.tr()),
-        content: SelectableText(
-            'Bitte wähle {maxTage} Tage oder weniger aus.'.tr(namedArgs: {'maxTage': maxTage.toString()})),
+        content: SelectableText('Bitte wähle {maxTage} Tage oder weniger aus.'
+            .tr(namedArgs: {'maxTage': maxTage.toString()})),
         actions: <Widget>[
           RaisedButton(
             child: Text('Schließen').tr(),
