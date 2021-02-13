@@ -88,6 +88,8 @@ class ActionMapState extends State<ActionMap> {
             ownAction: widget.isMyAction(action),
             participant: widget.iAmParticipant(action),
             onTap: widget.openActionDetails))
+        .toList()
+        .reversed
         .toList();
   ***REMOVED***
 
@@ -101,8 +103,8 @@ class ActionMapState extends State<ActionMap> {
     ..addAll(generateListLocationMarkers())
     ..addAll(generateActionMarkers());
 
-  void addUserLocationSettings(List<Marker> markers,
-      List<MapPlugin> plugins, List<LayerOptions> layers) {
+  void addUserLocationSettings(List<Marker> markers, List<MapPlugin> plugins,
+      List<LayerOptions> layers) {
     plugins.add(UserLocationPlugin());
     layers.add(UserLocationOptions(
       context: context,
