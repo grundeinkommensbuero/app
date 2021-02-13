@@ -576,6 +576,27 @@ class ActionEditorState extends State<ActionEditor>
     ***REMOVED***
   ***REMOVED***
 
+  Future<bool> showMultipleActionsQuestion(int anzahl) async =>
+      await showDialog(
+          context: context,
+          child: AlertDialog(
+            key: Key('multiple actions question dialog'),
+            title: Text('Mehrere Aktionen erstellen?'.tr()),
+            content: SelectableText(
+                'Du hast ${anzahl***REMOVED*** Tage ausgewählt. Soll für jeden eine Aktion erstellt werden?'
+                    .tr(namedArgs: {'anzahl': anzahl.toString()***REMOVED***)),
+            actions: <Widget>[
+              RaisedButton(
+                child: Text('Zurück').tr(),
+                onPressed: () => Navigator.pop(context, false),
+              ),
+              RaisedButton(
+                child: Text('Ja').tr(),
+                onPressed: () => Navigator.pop(context, true),
+              ),
+            ],
+          ));
+
   Future<List<Termin>> generateActions() async {
     validateAllInput();
     if (action.validated['all'] == ValidationState.ok) {
@@ -617,6 +638,10 @@ class ActionEditorState extends State<ActionEditor>
       if (isBlank(name)) {
         var name = await showUsernameDialog(context: context);
         if (name == null) return;
+      ***REMOVED***
+      if (action.tage.length > 1) {
+        final resume = await showMultipleActionsQuestion(action.tage.length);
+        if (!resume) return;
       ***REMOVED***
       List<Termin> termine = await generateActions();
       if (termine != null) {

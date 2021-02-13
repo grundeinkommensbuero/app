@@ -1,5 +1,8 @@
+import 'dart:ui';
+
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
-import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:test/test.dart';
 
 import '../shared/Mocks.dart';
@@ -7,33 +10,39 @@ import '../shared/TestdatenVorrat.dart';
 
 void main() {
   mockTranslation();
+  initializeDateFormatting('en');
 
   group('erzeugeDatumZeile berechnet Dauer', () {
     test('korrekt', () {
       var datumText = TerminCard.erzeugeDatumText(
-          DateTime(2019, 10, 30, 20), DateTime(2019, 10, 30, 23));
+          DateTime(2019, 10, 30, 20), DateTime(2019, 10, 30, 23), Locale('de'));
 
-      expect(datumText.substring(datumText.lastIndexOf(',') + 2), '3 Stunden.other');
+      expect(datumText.substring(datumText.lastIndexOf(',') + 2),
+          '3 Stunden.other');
     ***REMOVED***);
 
     test('und rundet ab', () {
       var datumText = TerminCard.erzeugeDatumText(
-          DateTime(2019, 10, 30, 20, 55), DateTime(2019, 10, 30, 23, 54));
+          DateTime(2019, 10, 30, 20, 55),
+          DateTime(2019, 10, 30, 23, 54),
+          Locale('de'));
 
-      expect(datumText.substring(datumText.lastIndexOf(',') + 2), '2 Stunden.two');
+      expect(
+          datumText.substring(datumText.lastIndexOf(',') + 2), '2 Stunden.two');
     ***REMOVED***);
 
     test('und singularisiert bei einer Stunde', () {
       var datumText = TerminCard.erzeugeDatumText(
-          DateTime(2019, 10, 30, 20), DateTime(2019, 10, 30, 21));
+          DateTime(2019, 10, 30, 20), DateTime(2019, 10, 30, 21), Locale('de'));
 
-      expect(datumText.substring(datumText.lastIndexOf(',') + 2), '1 Stunden.one');
+      expect(
+          datumText.substring(datumText.lastIndexOf(',') + 2), '1 Stunden.one');
     ***REMOVED***);
   ***REMOVED***);
   group('ermittlePrefix', () {
     test('ermittelt Heute richtig', () {
       var heute = DateTime(now().year, now().month, now().day, 20);
-      var datumText = TerminCard.ermittlePrefix(heute);
+      var datumText = TerminCard.ermittlePrefix(heute, Locale('de'));
 
       expect(datumText.substring(0, datumText.indexOf(',')), 'Heute');
     ***REMOVED***);
@@ -41,7 +50,7 @@ void main() {
     test('ermittelt Morgen richtig', () {
       var morgen = DateTime(now().year, now().month, now().day, 20)
           .add(Duration(days: 1));
-      var datumText = TerminCard.ermittlePrefix(morgen);
+      var datumText = TerminCard.ermittlePrefix(morgen, Locale('de'));
 
       expect(datumText.substring(0, datumText.indexOf(',')), 'Morgen');
     ***REMOVED***);
@@ -49,16 +58,16 @@ void main() {
     test('gibt Wochentag an für übermorgen bis in 7 Tagen', () {
       var spaeter = DateTime(now().year, now().month, now().day, 20)
           .add(Duration(days: 2));
-      var datumText = TerminCard.ermittlePrefix(spaeter);
+      var datumText = TerminCard.ermittlePrefix(spaeter, Locale('de'));
 
       expect(datumText.substring(0, datumText.indexOf(',')),
-          ChronoHelfer.wochentag(spaeter));
+          DateFormat.EEEE('de').format(spaeter));
       spaeter = DateTime(now().year, now().month, now().day, 20)
           .add(Duration(days: 7));
-      datumText = TerminCard.ermittlePrefix(spaeter);
+      datumText = TerminCard.ermittlePrefix(spaeter, Locale('de'));
 
       expect(datumText.substring(0, datumText.indexOf(',')),
-          ChronoHelfer.wochentag(spaeter));
+          DateFormat.EEEE('de').format(spaeter));
     ***REMOVED***);
   ***REMOVED***);
   group('erzeugeOrtText', () {

@@ -16,7 +16,9 @@ void main() {
 
     expect(find.text(termin.typ), findsOneWidget);
     expect(find.text(TerminCard.erzeugeOrtText(termin.ort)), findsOneWidget);
-    expect(find.text(TerminCard.erzeugeDatumText(termin.beginn, termin.ende)),
+    expect(
+        find.text(TerminCard.erzeugeDatumText(
+            termin.beginn, termin.ende, Locale('de'))),
         findsOneWidget);
   ***REMOVED***);
 ***REMOVED***

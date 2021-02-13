@@ -132,7 +132,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                       ).tr(),
                       SelectableText(
                           ChronoHelfer.formatDateOfDateTimeMitWochentag(
-                              widget.action.beginn)),
+                              widget.action.beginn, context.locale)),
                       SelectableText(ChronoHelfer.formatFromToTimeOfDateTimes(
                           widget.action.beginn, widget.action.ende)),
                       isPastAction(widget.action)

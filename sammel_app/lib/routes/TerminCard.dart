@@ -1,9 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
 class TerminCard extends StatelessWidget {
@@ -65,7 +64,8 @@ class TerminCard extends StatelessWidget {
                     style: style,
                   ),
                   Text(
-                    erzeugeDatumText(termin.beginn, termin.ende),
+                    erzeugeDatumText(termin.beginn, termin.ende,
+                        Localizations.localeOf(context)),
                     textAlign: TextAlign.start,
                   ),
                 ])),
@@ -77,16 +77,17 @@ class TerminCard extends StatelessWidget {
     return '${ort.region***REMOVED***, ${ort.name***REMOVED***';
   ***REMOVED***
 
-  static String erzeugeDatumText(DateTime beginn, DateTime ende) {
+  static String erzeugeDatumText(
+      DateTime beginn, DateTime ende, Locale locale) {
     return '{prefix***REMOVED***{date***REMOVED*** um {zeit***REMOVED*** Uhr, '.tr(namedArgs: {
-          'prefix': ermittlePrefix(beginn),
-          'date': formatDate(beginn, [dd, '.', mm, '.']),
-          'zeit': formatDate(beginn, [HH, ':', nn])
+          'prefix': ermittlePrefix(beginn, locale),
+          'date': DateFormat.MMMd(locale?.languageCode).format(beginn),
+          'zeit': DateFormat.Hm(locale?.languageCode).format(beginn),
         ***REMOVED***) +
         '{***REMOVED*** Stunden'.plural(ende.difference(beginn).inHours);
   ***REMOVED***
 
-  static String ermittlePrefix(DateTime beginn) {
+  static String ermittlePrefix(DateTime beginn, Locale locale) {
     DateTime heuteNacht = DateTime(DateTime.now().year, DateTime.now().month,
         DateTime.now().day, 23, 59, 59);
     String prefix = '';
@@ -97,7 +98,7 @@ class TerminCard extends StatelessWidget {
         prefix = 'Morgen, '.tr();
       ***REMOVED*** else {
         if (beginn.isBefore(heuteNacht.add(Duration(days: 7)))) {
-          prefix = '${ChronoHelfer.wochentag(beginn)***REMOVED***, ';
+          prefix = '${DateFormat.EEEE(locale.languageCode).format(beginn)***REMOVED***, ';
         ***REMOVED***
       ***REMOVED***
     ***REMOVED***
