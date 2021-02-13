@@ -295,9 +295,9 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           child: Row(children: [
             Icon(Icons.assignment_return_outlined),
             SizedBox(width: 8),
-            Text('Absagen').tr()
+            Text('Verlassen').tr()
           ]),
-          value: 'Absagen'));
+          value: 'Verlassen'));
 
     if (iAmParticipant)
       items.add(PopupMenuItem(
@@ -346,7 +346,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
         itemBuilder: (BuildContext context) => items,
         onSelected: (command) {
           if (command == 'Mitmachen') joinAction();
-          if (command == 'Absagen') leaveAction();
+          if (command == 'Verlassen') leaveAction();
           if (command == 'Zum Chat') openChatWindow()();
           if (command == 'Feedback') evaluateAction();
           if (command == 'Bearbeiten') editAction();
