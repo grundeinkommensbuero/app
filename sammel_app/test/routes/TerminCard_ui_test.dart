@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import '../shared/Mocks.dart';
@@ -7,6 +8,7 @@ import '../shared/TestdatenVorrat.dart';
 
 void main() {
   mockTranslation();
+  initializeDateFormatting('de');
 
   testWidgets('TerminCard startet fehlerfrei', (WidgetTester tester) async {
     var termin = Termin(0, DateTime.now(), DateTime.now(), ffAlleeNord(),
@@ -16,9 +18,5 @@ void main() {
 
     expect(find.text(termin.typ), findsOneWidget);
     expect(find.text(TerminCard.erzeugeOrtText(termin.ort)), findsOneWidget);
-    expect(
-        find.text(TerminCard.erzeugeDatumText(
-            termin.beginn, termin.ende, Locale('de'))),
-        findsOneWidget);
   ***REMOVED***);
 ***REMOVED***
