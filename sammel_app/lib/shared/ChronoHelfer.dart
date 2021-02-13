@@ -6,12 +6,11 @@ class ChronoHelfer {
   static DateFormat _dateFormatHHmmss = DateFormat("HH:mm:ss");
   static DateFormat _dateFormatHHmm = DateFormat("HH:mm");
 
-  static bool isTimeOfDayBefore(TimeOfDay timeofday1, TimeOfDay timeofday2)
-  {
-    if(timeofday1.hour<timeofday2.hour){
+  static bool isTimeOfDayBefore(TimeOfDay timeofday1, TimeOfDay timeofday2) {
+    if (timeofday1.hour < timeofday2.hour) {
       return true;
     }
-    if(timeofday1.hour == timeofday2.hour) {
+    if (timeofday1.hour == timeofday2.hour) {
       return timeofday1.minute < timeofday2.minute;
     }
     return false;
@@ -34,9 +33,10 @@ class ChronoHelfer {
     return _dateFormatHHmm.format(DateTime(0, 1, 1, time.hour, time.minute, 0));
   }
 
-  static String formatDateOfDateTimeMitWochentag(DateTime date, [Locale locale]) {
+  static String formatDateOfDateTimeMitWochentag(DateTime date,
+      [Locale locale]) {
     if (date == null) return '';
-    return DateFormat('E, d. MMMM yyyy', locale.languageCode).format(date);
+    return DateFormat('EEEE, d. MMMM yyyy', locale?.languageCode).format(date);
   }
 
   static String formatDateOfDateTime(DateTime date) {
@@ -77,5 +77,4 @@ class ChronoHelfer {
 
     return DateFormat('MMM d, hh:mm').format(date);
   }
-
 }
