@@ -105,12 +105,15 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
             title: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
               Image.asset(widget.action.getAsset(), width: 30.0),
               Container(width: 10.0),
-              Text(widget.action.typ,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22.0,
-                      color: Color.fromARGB(255, 129, 28, 98))).tr(),
+              Expanded(
+                  child: Text(widget.action.typ,
+                          overflow: TextOverflow.fade,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22.0,
+                              color: Color.fromARGB(255, 129, 28, 98)))
+                      .tr()),
             ]),
             actions: [menu]),
         body: SingleChildScrollView(
