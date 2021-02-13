@@ -48,14 +48,17 @@ class TerminCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    Text(
+                    Expanded(
+                        child: Text(
                       '${termin.typ}',
+                      softWrap: false,
+                      overflow: TextOverflow.fade,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
                           color: Color.fromARGB(255, 129, 28, 98)),
-                    ).tr(),
+                    ).tr()),
                     SizedBox(width: 45.0)
                   ]),
                   Text(
