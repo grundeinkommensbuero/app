@@ -84,7 +84,9 @@ class TerminCard extends StatelessWidget {
           'date': DateFormat.MMMd(locale?.languageCode).format(beginn),
           'zeit': DateFormat.Hm(locale?.languageCode).format(beginn),
         }) +
-        '{} Stunden'.plural(ende.difference(beginn).inHours);
+        (ende.difference(beginn).inHours < 1
+            ? '< ' + '{} Stunden'.plural(1)
+            : '{} Stunden'.plural(ende.difference(beginn).inHours));
   }
 
   static String ermittlePrefix(DateTime beginn, Locale locale) {

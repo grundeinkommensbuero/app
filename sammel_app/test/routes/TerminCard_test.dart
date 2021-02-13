@@ -38,6 +38,14 @@ void main() {
       expect(
           datumText.substring(datumText.lastIndexOf(',') + 2), '1 Stunden.one');
     });
+
+    test('und markiert Teiträume kleiner als 1 Stunde', () {
+      var datumText = TerminCard.erzeugeDatumText(DateTime(2019, 10, 30, 20),
+          DateTime(2019, 10, 30, 20, 30), Locale('de'));
+
+      expect(datumText.substring(datumText.lastIndexOf(',') + 2),
+          '< 1 Stunden.one');
+    });
   });
   group('ermittlePrefix', () {
     test('ermittelt Heute richtig', () {
