@@ -315,6 +315,7 @@ const Map<String, dynamic> en = {
       "We're missing your feedback for an action",
   "Zur Aktion": "Go to action",
   "Über Aktion berichten": "Report on the action",
+  "Kundgebung": "Manifestation",
 };
 
 const Map<String, dynamic> ru = {
@@ -618,6 +619,7 @@ const Map<String, dynamic> ru = {
   //     "If you want to change Notifications to silent or disable certain notification categories, just long press a received notification. You will then be guided to the notification preferences for this app.",
   // "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
   //     "If you want to change Notifications to silent or disable certain notification categories, just press the three dots on a received notification. You will then be guided to the notification preferences for this app.",
+  // "Kundgebung": "Manifestation",
 };
 
 const Map<String, dynamic> fr = {
@@ -928,6 +930,7 @@ const Map<String, dynamic> fr = {
   "Zur Aktion": "Vers l’action",
   "Feedback": "Commentaire",
   "Über Aktion berichten": "Commentaire",
+  "Kundgebung": "Manifestation",
   // "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
   //     "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.",
 };
@@ -1240,4 +1243,5 @@ const Map<String, dynamic> de = {
   "Zur Aktion": "Zur Aktion",
   "Feedback": "Feedback",
   "Über Aktion berichten": "Über Aktion berichten",
+  "Kundgebung": "Kundgebung",
 };

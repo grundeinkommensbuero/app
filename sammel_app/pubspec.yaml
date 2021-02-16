@@ -85,6 +85,8 @@ flutter:
    - assets/images/Workshop_centered.png
    - assets/images/Infoveranstaltung.png
    - assets/images/Plakatieren.png
+   - assets/images/Kundgebung.png
+   - assets/images/Kundgebung_centered.png
    - assets/images/housy_happy.png
    - assets/images/housy_info.png
    - assets/images/housy_problem.png

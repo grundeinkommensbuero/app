@@ -66,6 +66,10 @@ class Termin {
             : 'assets/images/Workshop.png';
       case 'Plakatieren':
         return 'assets/images/Plakatieren.png';
+      case 'Kundgebung':
+        return centered
+            ? 'assets/images/Kundgebung_centered.png'
+            : 'assets/images/Kundgebung.png';
     }
     throw UnknownActionTypeException('Logo für Aktionstyp "$typ" fehlt');
   }

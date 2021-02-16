@@ -194,7 +194,8 @@ class FilterWidgetState extends State<FilterWidget>
       'Sammeln',
       'Infoveranstaltung',
       'Workshop',
-      'Plakatieren'
+      'Plakatieren',
+      'Kundgebung'
     ];
     List<String> ausgewTypen = List<String>()
       ..addAll(filter.typen == null ? [] : filter.typen);

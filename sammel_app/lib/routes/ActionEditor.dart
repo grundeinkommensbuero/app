@@ -330,7 +330,8 @@ class ActionEditorState extends State<ActionEditor>
       'Sammeln',
       'Infoveranstaltung',
       'Workshop',
-      'Plakatieren'
+      'Plakatieren',
+      'Kundgebung'
     ];
     var ausgewTyp = action.typ;
     await showDialog<String>(
