@@ -104,7 +104,7 @@ const Map<String, dynamic> en = {
       "How often do you want to be notified about new collection events in your area?",
   "Wie häufig möchtest du Infos über anstehende Aktionen bekommen?":
       "How often do you want to be told about upcoming events?",
-  "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\\n\\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.":
+  "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.":
       "This app was developed by a small team of enthusiastic IT activists for Deutsche Wohnen & Co Enteignen and is under free license.\\n\\nIf you are interested in using the app for your own campaign, just write us an email or visit our website. You can also let us know about problems or errors with the app.",
   "Heute, ": "Today, ",
   "Morgen, ": "Tomorrow, ",
@@ -408,7 +408,7 @@ const Map<String, dynamic> ru = {
       "Как часто ты хочешь получать информацию о новых акциях по сбору подписей, которые проводятся в твоем районе, и насколько актуальными должны быть акции?",
   "Wie häufig möchtest du Infos über anstehende Aktionen bekommen?":
       "Как часто ты хочешь получать информацию о предстоящих акциях?",
-  "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\\n\\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.":
+  "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.":
       "Данное приложение было разработано небольшой командой энтузиастов из ИТ-индустрии для кампании «Национализируем Deutsche Wohnen & Co («Дойче Вонен унд Ко»)» и распространяется по свободной лицензии.\\n\\nЕсли ты заинтересован в использовании данного приложения для целей твоей народной инициативы, то просто напиши нам на электронную почту или посети наш сайт. По этим же каналам ты можешь сообщать нам об ошибках в приложении и о связанных с ним проблемах.",
   "Heute, ": "Сегодня, ",
   "Morgen, ": "Завтра, ",
@@ -603,17 +603,17 @@ const Map<String, dynamic> ru = {
       "Приведи краткое описание акции. Куда ты хочешь отправиться за подписями, что должны принести с собой другие сборщики? Можно ли присоединиться позднее?",
   "Benachrichtigungs-Einstellungen": "Настройки уведомлений",
   "Benachrichtigungen einstellen": "Настроить уведомления",
-  "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtiungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.":
+  "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.":
       "Если ты хочешь выключить звук уведомлений или полностью отключить уведомления определенных видов, то просто долго нажимай на полученное уведомление, и ты перейдешь в настройки уведомлений в данном приложении.",
-  "Plakatieren": "Plakatieren",
-  "Löschen": "Löschen",
-  "Bearbeiten": "Bearbeiten",
-  "diese Aktion ist beendet": "diese Aktion ist beendet",
+  "Plakatieren": "расклеивать плакаты",
+  "Löschen": "удалить",
+  "Bearbeiten": "править",
+  "diese Aktion ist beendet": "эта акция закончилась",
   "Dein Feedback zu einer Aktion fehlt noch":
-      "Dein Feedback zu einer Aktion fehlt noch",
-  "Zur Aktion": "Zur Aktion",
-  "Feedback": "Feedback",
-  "Über Aktion berichten": "Über Aktion berichten",
+      "твой отзыв о акции еще отсутствует",
+  "Zur Aktion": "к акции",
+  "Feedback": "отзыв",
+  "Über Aktion berichten": "отзыв",
 ***REMOVED***
 
 const Map<String, dynamic> fr = {
@@ -708,7 +708,7 @@ const Map<String, dynamic> fr = {
       "Avec quelle régularité souhaites-tu être tenu informé des nouvelles actions de collectes dans ton quartier?",
   "Wie häufig möchtest du Infos über anstehende Aktionen bekommen?":
       "Avec quelle régularité souhaites-tu recevoir des Infos sur les futures actions?",
-  "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\\n\\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.":
+  "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.":
       "Cette appli a été développée par un petit groupe d'informaticien.ne.s activistes pour la campagne Deutsche Wohnen & Co. Enteignen - et se trouve sous licence libre.\\n\\n  Si tu es intéressé.e à utiliser cette appli pour un vote populaire, contactes nous simplement par email ou visite notre site web. Ainsi tu peux nous indiquer des erreurs ou dysfonctionnements encontrés avec l'appli.",
   "Heute, ": "Aujourd'hui, ",
   "Morgen, ": "Demain, ",
@@ -1018,8 +1018,8 @@ const Map<String, dynamic> de = {
       "Wie oft und aktuell willst du über neue Sammel-Aktionen in deinem Kiez informiert werden?",
   "Wie häufig möchtest du Infos über anstehende Aktionen bekommen?":
       "Wie häufig möchtest du Infos über anstehende Aktionen bekommen?",
-  "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\\n\\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.":
-      "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\\n\\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.",
+  "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.":
+      "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.",
   "Heute, ": "Heute, ",
   "Morgen, ": "Morgen, ",
   "{prefix***REMOVED***{date***REMOVED*** um {zeit***REMOVED*** Uhr, ": "{prefix***REMOVED***{date***REMOVED*** um {zeit***REMOVED*** Uhr, ",

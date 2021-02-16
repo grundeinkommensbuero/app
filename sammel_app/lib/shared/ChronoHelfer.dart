@@ -46,7 +46,10 @@ class ChronoHelfer {
 
   static String formatFromToTimeOfDateTimes(DateTime start, DateTime end) {
     if (start == null || end == null) return '';
-    return 'von ${dateTimeToStringHHmm(start)***REMOVED*** bis ${dateTimeToStringHHmm(end)***REMOVED*** Uhr';
+    return 'von '.tr() +
+        '${dateTimeToStringHHmm(start)***REMOVED***' +
+        ' bis '.tr() +
+        '${dateTimeToStringHHmm(end)***REMOVED***';
   ***REMOVED***
 
   // Unterstützt DateTime-String-Repräsentationen und Objekte

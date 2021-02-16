@@ -137,7 +137,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                           ChronoHelfer.formatDateOfDateTimeMitWochentag(
                               widget.action.beginn, context.locale)),
                       SelectableText(ChronoHelfer.formatFromToTimeOfDateTimes(
-                          widget.action.beginn, widget.action.ende)),
+                              widget.action.beginn, widget.action.ende)),
                       isPastAction(widget.action)
                           ? Text('diese Aktion ist beendet',
                                   style: TextStyle(
