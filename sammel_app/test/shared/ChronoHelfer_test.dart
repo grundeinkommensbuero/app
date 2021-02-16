@@ -3,9 +3,15 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 
+import 'Mocks.dart';
+
 void main() {
   initializeDateFormatting('de');
   group('timeToString', () {
+    setUp(() {
+      mockTranslation();
+    });
+
     test('ergaenzt 00 Sekunden', () {
       var string =
           ChronoHelfer.timeToStringHHmmss(TimeOfDay(hour: 1, minute: 2));
@@ -50,7 +56,7 @@ void main() {
           ChronoHelfer.formatFromToTimeOfDateTimes(
               DateTime(2019, 12, 21, 22, 26, 00),
               DateTime(2019, 12, 21, 23, 59, 12)),
-          'von 22:26 bis 23:59 Uhr');
+          'von 22:26 bis 23:59');
     });
 
     test('formats null times', () {
