@@ -614,6 +614,10 @@ const Map<String, dynamic> ru = {
   "Zur Aktion": "к акции",
   "Feedback": "отзыв",
   "Über Aktion berichten": "отзыв",
+  // "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
+  //     "If you want to change Notifications to silent or disable certain notification categories, just long press a received notification. You will then be guided to the notification preferences for this app.",
+  // "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
+  //     "If you want to change Notifications to silent or disable certain notification categories, just press the three dots on a received notification. You will then be guided to the notification preferences for this app.",
 };
 
 const Map<String, dynamic> fr = {
@@ -910,7 +914,7 @@ const Map<String, dynamic> fr = {
       "Décris brièvement l’action. Où souhaites-tu collecter, que doivent apporter les autres collect.eur.rice.s? Peut-on joindre l’action plus tard?",
   "Benachrichtigungs-Einstellungen": "Réglage de la messagerie",
   "Benachrichtigungen einstellen": "Régler la messagerie",
-  "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtiungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.":
+  "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
       "Si tu souhaites régler la messagerie en mode discret ou désactiver certains types de messages, il te suffit d’appuyer longuement sur un message reçu afin d’accéder aux réglages de la messagerie pour l’appli.",
   "Danke!": "Merci!",
   "Vielen Dank, dass Du Eure Erfahrungen geteilt hast.":
@@ -924,6 +928,8 @@ const Map<String, dynamic> fr = {
   "Zur Aktion": "Vers l’action",
   "Feedback": "Commentaire",
   "Über Aktion berichten": "Commentaire",
+  // "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
+  //     "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.",
 };
 
 const Map<String, dynamic> de = {
