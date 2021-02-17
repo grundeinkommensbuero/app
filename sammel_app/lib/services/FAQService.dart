@@ -270,12 +270,11 @@ class FAQService {
           'Spekulation',
           'Unternehmen'
         ]),
-    FAQItem(
+    FAQItem.short(
         17,
         "Video: Was kostet die Vergesellschaftung?",
         GestureDetector(
           onTap: () => launch('https://www.youtube.com/watch?v=oijmRknMXOI'),
-          // handle your image tap here
           child: Center(
               child: Image.asset(
             'assets/images/dw_video_enteignen_bezahlen.png',
@@ -283,12 +282,6 @@ class FAQService {
             height: 110.0,
           )),
         ),
-        Center(
-            child: Image.asset(
-          'assets/images/dw_video_enteignen_bezahlen.png',
-          fit: BoxFit.cover,
-          height: 110.0,
-        )),
         text_was_kostet_die_vergesellschaftung,
         [
           "Gewinn",
@@ -763,7 +756,6 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
       List<FAQItem> orderedItems =
           List<FAQItem>.of(items); // Kopie zum sortieren
       orderedItems.sort((item1, item2) => item1.id < item2.id ? -1 : 1);
-      print("return sorted luist");
       return orderedItems;
     ***REMOVED***
 
