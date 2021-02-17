@@ -15,6 +15,13 @@ class FAQState extends State<FAQ> {
   final searchInputController = TextEditingController();
   int opened;
   List<FAQItem> items = FAQService.loadItems('');
+  ScrollController controller;
+
+  @override
+  void initState() {
+    controller = ScrollController();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,13 +50,13 @@ class FAQState extends State<FAQ> {
                     borderSide: BorderSide.none,
                     borderRadius: BorderRadius.circular(20.0)),
                 hintText: 'Durchsuchen'.tr()),
-            onChanged: (text) =>
-                setState(() => items = FAQService.loadItems(text)),
+            onChanged: (text){controller.jumpTo(0); setState(() => items = FAQService.loadItems(text));},
           ),
         ),
       ),
       Expanded(
         child: ListView.builder(
+            controller: controller,
             itemCount: items.length,
             itemBuilder: (BuildContext context, int index) => InkWell(
                 onTap: () => setState(() {
