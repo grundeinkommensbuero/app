@@ -5,6 +5,112 @@ import 'package:quiver/strings.dart';
 import 'package:sammel_app/model/FAQItem.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+String bullet = "\u2022";
+String text_argumente = '''1. weil Deutsche Wohnen und Co die Mieten immer weiter hochtreiben und hohe Mieten ihr Geschäftsziel sind. \n'''
+       '''2. weil Deutsche Wohnen und Co mit den Mietsteigerungen auch die lokale Mietspiegel nach oben beeinflussen und andere Vermieter*innen Mietererhöhungen damit rechtfertigen. \n'''
+       '''3. weil einige dieser Konzerne Milliardären gehören (Akelius, Covivio, Heimstaden, Pears Global, Grand City Properties), die sich auf Kosten der Berliner Bevölkerung weiter bereichern. \n'''
+       '''4. weil Deutsche Wohnen und Co fast keine neuen Wohnungen bauen, sondern fast nur Häuser aufkaufen. Damit verschlimmern sie Wohnungsknappheit in Berlin. \n'''
+       '''5. weil durch die Mietsteigerungen der Immobilienkonzerne immer mehr Menschen von Verdrängung betroffen sind. \n'''
+       '''6. weil eine handvoll Eigentümer und Vorstandsvorsitzende über die Wohnungen hunderttausender in Berlin verfügen können und das im Kern undemokratisch ist. \n'''
+       '''7. die überwiegende Mehrzahl der Wohnungen im Besitz der Deutsche Wohnen früher in kommunaler Hand waren (GSW und GEHAG). Wir wollen einfach unsere Häuser zurück. \n'''
+       '''8. weil die Deutsche Wohnen die Häuser vergammeln lässt, keine ausreichende Instandhaltung betreibt (z.B. ständige, tagelange Heizungsausfälle im Winter), um sie später teuer zu modernisieren und die Bestandsmieter*innen damit zu vertreiben. \n'''
+       '''9. weil Wohnen ein Grundbedürfnis ist und jeder Mensch das Recht haben sollte, keine Angst um die eigene Wohnung zu haben. \n'''
+       '''10. weil die Konzerne mit sogenannten "Share Deals" beim Immobilienkauf die Grunderwerbssteuer umgehen und das Berlin jährlich Millionen Euro kostet''';
+
+String text_argumente_short = '''1. weil Deutsche Wohnen und Co die Mieten immer weiter hochtreiben und hohe Mieten ihr Geschäftsziel sind. \n'''
+    '''2. weil Deutsche Wohnen und Co mit den Mietsteigerungen auch die lokale Mietspiegel nach oben beeinflussen und andere Vermieter*innen Mietererhöhungen damit rechtfertigen. \n'''
+    '''...''';
+
+
+String text_warum_erst_ab_3000 = '''Ab ungefähr dieser Schwelle erreichen die Unternehmen eine relevante Stellung auf dem Wohnungsmarkt in Berlin, bei dem die Vergesellschaftung nach Art. 15 GG greifen kann. Ausserdem sind ab dieser Schwelle die Konzerne erfasst, die als Finanzunternehmen agieren, also mit dem Zweck der Vermarktung von Wohnraum auf dem internationalen Finanzmarkt. Kapital aus der ganzen Welt wird in den Berliner Immobilienmarkt, und vor allem in diese Unternehmen investiert, mit der Erwartung von hohen Renditen. Das heißt konkret, sie kaufen Aktien dieser Unternehmen, z.B. Vonovia. Macht Vonovia Gewinn, schütten sie einen Teil davon in Form von Dividenden an die Aktionär*innen aus. So fließt Geld von den Mieter*innen über Vonovia auch an reiche Aktionär*innen. Diese Form der Geldanlage ist besonders attraktiv für große ausländische Fonds.''';
+String text_warum_erst_ab_3000_short = '''Ab ungefähr dieser Schwelle erreichen die Unternehmen eine relevante Stellung auf dem Wohnungsmarkt in Berlin, bei dem die Vergesellschaftung nach Art. 15 GG greifen kann. Ausserdem sind ab dieser Schwelle die Konzerne erfasst, die als Finanzunternehmen agieren...''';
+
+String text_was_kostet_die_vergesellschaftung = '''Wir schlagen das „Faire-Mieten-Modell“ vor, nach der die Entschädigungshöhe bei acht Milliarden Euro liegt. Klingt viel, ist aber sehr wenig im Vergleich zu den Gewinnen der Konzerne. Allein die Deutsche Wohnen machte 2019 einen Gewinn von 1,6 Milliarden Euro - zumeist auf Kosten der Berliner Mieter*innen.
+Unser Modell geht vom Interesse der Allgemeinheit nach bezahlbaren Wohnraum aus und kalkuliert eine Miethöhe, die sich auch Menschen an der Armutsgrenze leisten können, konkret 3,70€ pro Quadratmeter nettokalt.
+Für die Entschädigungssumme wird ein Kredit aufgenommen, der auf 43,5 Jahre gestreckt von den laufenden Mieteinnahmen refinanziert wird. Der Tilgungszeitraum 43,5 Jahre wird vom Berliner Senat in seiner Kostenschätzung vorgeschlagen.
+In diesem Zeitraum bleibt die AöR handlungsfähig. Die Mieten sind kostendeckend und es können neue Projekte durchgeführt werden, bspw. Renovierungen und der Neubau von Wohnungen.''';
+String text_was_kostet_die_vergesellschaftung_short = '''Wir schlagen das „Faire-Mieten-Modell“ vor, nach der die Entschädigungshöhe bei acht Milliarden Euro liegt. Klingt viel, ist aber sehr wenig im Vergleich zu den Gewinnen der Konzerne. Allein die Deutsche Wohnen machte 2019 einen Gewinn von 1,6 Milliarden Euro - zumeist auf Kosten der Berliner Mieter*innen.
+Unser Modell geht vom Interesse der Allgemeinheit nach bezahlbaren Wohnraum aus und kalkuliert eine Miethöhe...''';
+
+
+String sammel_tipps_1 = '''Ein kurzer und inhaltlich einfacher Satz hat sich oft bewährt.
+
+Ein paar Beispiele:
+"Hast Du schon von unserem Volksbegehren gehört?“ 
+„Möchtest Du für bezahlbare Mieten unterschreiben?“
+„Wir sammeln Unterschriften gegen zu hohe Mieten – möchten Sie unterschreiben?“
+
+Nach kurzer Bedenkzeit der Person kann eine weitere erläuternder Satz nachgeschoben werden:
+
+„Wir sind von der Initiative gegen die Deutsche Wohnen und anderer Immobilienunternehmen“ 
+„Wir sind von der Initiative Deutsche Wohnen und Co enteignen.“''';
+
+String sammel_tipps_1_short = '''Ein kurzer und inhaltlich einfacher Satz hat sich oft bewährt.
+
+Ein paar Beispiele...''';
+
+
+String sammel_tipps_3 = '''Einem großen Teil der Bevölkerung sind Begriffe wie „Spekulation“ und „Vergesellschaftung“ nicht ganz klar. Hilfreich sind daher einfachere Formulierungen: "Zurzeit werden einige wenige Unternehmer*innen mit den Mieten superreich, während die meisten Mieter*innen darunter leiden. Wir möchten, dass Wohnungen demokratisch verwaltet werden und zu gerechten Miete verfügbar sind."''';
+String sammel_tipps_3_short = '''Einem großen Teil der Bevölkerung sind Begriffe wie „Spekulation“ und „Vergesellschaftung“ nicht ganz klar...''';
+
+String argumentation_tipps_1 = '''Ja. Wir berufen uns auf Art. 15 des Grundgesetzes, der Vergesellschaftungen grundsätzlich ermöglicht. Es wurden bereits mehrere Gutachten erstellt, drei im Auftrag des Berliner Senats und eins vom wissenschaftlichen Dienst des Bundestages. Alle sagen: Vergesellschaftung ist möglich! Sie unterscheiden sie lediglich bei Fragen zur Entschädigung und Ausführung. 
+Es ist zu erwarten, dass sich die Deutsche Wohnen und Co vor Gericht gegen ihre eigene Vergesellschaftung wehren möchten. Das sollte uns jedoch nicht davon abhalten, weiter politisch dafür zu kämpfen.''';
+
+String argumentation_tipps_1_short = '''Ja. Wir berufen uns auf Art. 15 des Grundgesetzes, der Vergesellschaftungen grundsätzlich ermöglicht...''';
+
+String beschluss_text = '''In seltenen Fällen kann es passieren, dass ihr beim Sammeln auf das Vorzeigen des vollstädnigen Beschlusstext  der Landeswahlleitung angesprochen werdet. Gedruckte Exemplare gibt es im Kampagnenbüro (Graefestr. 14, 10967 Berlin), alternativ könnt ihr ihn auch unter diesem ''';
+
+String text_counter_argument_1 = '''Es werden keine günstigen Mieten garantiert, solange Wohnraum als Kapitalanlage genutzt wird. Beim aktuellen Wohnungsmarkt ist das Ziel nicht günstige Wohnraumversorgung für alle, sondern hoher Profit & Rendite der wenigen Aktionär*innen und Unternehmenseigentümer*innen.
+Die Immobilienunternehmen nutzen die Wohnungsbestände als Kapitalanlage. Je höher also die Miete, desto höher deren Wert und damit der Wert des jeweiligen Unternehmens. Höhere Mieten sind also ihr Geschäftsziel!
+Der Wohnungsneubau von privaten Immobilienunternehmen ist zumeist teuer oder in Form von Eigentumswohnungen, die sich ein Großteil der Bevölkerung nicht leisten kann. Durch die Vergesellschaftung bleiben die Mieten hingegen stabil in gemeinwirtschaftlicher und öffentlicher Hand.''';
+String text_counter_argument_1_short = '''Es werden keine günstigen Mieten garantiert, solange Wohnraum als Kapitalanlage genutzt wird. Beim aktuellen Wohnungsmarkt ist das Ziel nicht günstige Wohnraumversorgung für alle, sondern hoher Profit & Rendite der wenigen Aktionär*innen und Unternehmenseigentümer*innen.
+Die Immobilienunternehmen...''';
+
+String text_counter_argument_2 = '''Die Vergesellschaftung soll die Stadt Berlin langfristig nichts kosten. Die Kredite trägt die neue Anstalt des öffentlichen Rechts, nicht der Berliner Haushalt. Sie Kredite werden auf 43,5 Jahre gestreckt und von den laufenden Mieteinnahmen getilgt. Die öffentliche Hand verliert nicht Geld, sondern das öffentliche Vermögen wird durch die vergesellschafteten Immobilien langfristig erhöht. 
+DW & Co hingegen nutzen Steuerschlupflöcher, verursachen so Verluste von hunderten Millionen Euro, aber der Staat zahlt einen Teil der Mieten durch Sozialleistungen mit. Wir können uns also die Konzerne nicht leisten.''';
+String text_counter_argument_2_short = "Die Vergesellschaftung soll die Stadt Berlin langfristig nichts kosten. Die Kredite trägt die neue Anstalt des öffentlichen Rechts, nicht der Berliner Haushalt. Sie Kredite werden auf 43,5 Jahre gestreckt und von den laufenden Mieteinnahmen getilgt...";
+
+String text_counter_argument_3 = '''Enteignungen sind gängige Praxis in Deutschland mit dem Grundgesetz-Artikel 14. Es gibt hunderte Verfahren jedes Jahr. Aber bisher sind nur Familien, Landwirte und sonstige Einzelpersonen betroffen, beispielsweise beim Straßenbau oder für Kohletagebaue. Wir drehen den Spieß um, indem wir die Vergesellschaftung großer profitorientierter Immobilienkonzerne fordern.
+Artikel 15 GG sieht die Vergesellschaftung im Sinne des Gemeinwohls explizit vor. Unser Ziel ist eine Demokratisierung des Wohnungssektors. Wir wollen eine demokratische und dezentrale Verwaltung der Wohnungen in der Anstalt öffentlichen Rechts. Die Mieter*innen sollen durch die Wahl eines Gesamtmieter*innenrat mitentscheiden können.''';
+String text_counter_argument_3_short = '''Enteignungen sind gängige Praxis in Deutschland mit dem Grundgesetz-Artikel 14. Es gibt hunderte Verfahren jedes Jahr. Aber bisher sind nur Familien, Landwirte und sonstige Einzelpersonen betroffen, beispielsweise beim Straßenbau oder für Kohletagebaue. Wir drehen den Spieß um, indem wir die Vergesellschaftung großer ...''';
+
+String text_counter_argument_4 = '''DW & Co Unternehmen bauen selbst fast keine neuen Wohnungen, sondern kaufen Wohnungen zumeist auf.
+Eine Studie von 2019 zeigt, dass private Konzerne nur einen Bruchteil ihrer Ausgaben (ca. 1-5 %) in Neubau investieren, die Gewobag hingegen (als Beispiel eines landeseigenen Wohnungsunternehmens) 27 %. Einige der privaten Konzerne bauen schlicht gar keine neuen Wohnungen. Genossenschaften und landeseigene Wohnungsunternehmen bauen hingegen mehr und günstigere Wohnungen.
+Langfristig sichern wir mit der Enteignung und Vergesellschaftung günstigen Wohnungsneubau ab. Mit der Anstalt öffentlichen Rechts entsteht ein großer gemeinwohlorientierter Akteur, der Neubau ankurbeln und sozial gestalten kann.''';
+String text_counter_argument_4_short = '''DW & Co Unternehmen bauen selbst fast keine neuen Wohnungen, sondern kaufen Wohnungen zumeist auf.
+ Eine Studie von 2019 zeigt, dass private Konzerne nur einen Bruchteil ihrer Ausgaben (ca. 1-5 %) in Neubau investieren, die Gewobag...''';
+
+String text_climate = '''Konzerne wie die Deutsche Wohnen nutzen die energetische Modernisierung bisher als Hebel, um die Mieten zu steigern. Diese Mietererhöhungen gelten auch dann weiter, wenn die Dämmung abbezahlt ist. Die gesparten Heizkosten sind oft gering, die verwendeten Materialien oft ökologisch fragwürdig.
+In der Anstalt öffentlichen Rechts könnte diese Praxis sinnvoll angepasst werden: Dämmung nur dort, wo es Heizkosten spart und mit ökologisch verträglichen Materialien, finanziert aus allgemeinen Überschüssen und nicht durch enorme Mieterhöhungen.
+Zusätzlich könnte demokratisch entschieden werden Photovoltaikanlagen auf den Dächern zu installieren, deren Solarstrom zu Vorzugspreisen direkt an die Mieter*innen geliefert wird. So treiben inzwischen auch einige landeseigene Unternehmen die Energiewende voran, ohne den Landeshaushalt zu belasten.
+Die Gemeinwirtschaft im Wohnungsbereich könnte so erheblich zu einer sozial-ökologischen Transformation beitragen.''';
+String text_climate_short = '''Konzerne wie die Deutsche Wohnen nutzen die energetische Modernisierung bisher als Hebel, um die Mieten zu steigern. Diese Mietererhöhungen gelten auch dann weiter, wenn die Dämmung abbezahlt ist. Die gesparten Heizkosten sind oft...''';
+
+String text_senate_numbers = '''Die erste Zahl entspricht dem (spekulativ überhöhten) Marktwert der Wohnungsbestände. Das entspräche einem reinen Rückkauf zum Marktpreis. Der Marktpreis enthält die Wette, dass die Mieten in Berlin steigen werden und der hohe Kaufpreis der Wohnungen sich so im Laufe der Zeit für einen neuen Eigentümer lohnt.
+Bei der zweiten Zahl sind zumindest die leistungslosen Wertsteigerungen des Bodens abgezogen.
+Sinn und Zweck der Vergesellschaftung ist jedoch deutlich unter dem Marktwert zu entschädigen.
+Andere Methoden zur Ermittlung der Entschädigungshöhe kommen auf 11 oder 18 Milliarden Euro. Aber selbst bei 18 Mrd. könnten wir eine Durchschnittsmiete von rund 5,50€ nettokalt garantieren.''';
+String text_senate_numbers_short = 'Die erste Zahl entspricht dem (spekulativ überhöhten) Marktwert der Wohnungsbestände. Das entspräche einem reinen Rückkauf zum Marktpreis. Der Marktpreis enthält die Wette, dass die Mieten in Berlin steigen...';
+
+String text_vergesellschaftung_finanziell = '''Bisher fließen auch Transferleistungen (Wohngeld, Kosten für Unterkunft bei Arbeitslosengeld, Sozialhilfe) auf das Konto von Immobilienunternehmen und damit an deren wohlhabende Aktionär*innen und die Finanzmärkte.
+Durch die Vergesellschaftung würden die öffentlichen Kassen diese Kosten zum Teil einsparen. Außerdem würde das Geld an die AöR gehen und somit einer gemeinwohlorientierten Wirtschaftsform in Berlin erhalten bleiben.
+Wegen der geringeren Mieten wird der regionale Wirtschaftskreislauf gestärkt. Denn statt für überhöhte Mieten geben die Menschen das Geld in anderen Bereichen aus, bspw. in der Gastronomie, für neue Anschaffungen oder Freizeitaktivitäten.''';
+String text_vergesellschaftung_finanziell_short = '''Bisher fließen auch Transferleistungen (Wohngeld, Kosten für Unterkunft bei Arbeitslosengeld, Sozialhilfe) auf das Konto von Immobilienunternehmen und damit an deren wohlhabende Aktionär*innen und die Finanzmärkte.
+Durch die Vergesellschaftung würden...''';
+
+String text_warum_aoer_keine_wbg = '''Die Geschäftsführungen der sechs landeseigenen Wohnungsbaugesellschaften sind nicht gewählt, sondern vom Berliner Senat eingesetzt. Ihre Rechtsformen sind GmbH und Aktiengesellschaft und bedeuten ebenso Geschäftsgeheimnis und Intransparenz. Die Geschäftsvorstände beziehen Jahresgehälter in Höhe von rund 300.000€. Die Verwaltungsentscheidungen werden nicht demokratisch getroffen.
+Deshalb bevorzugen wir die Anstalt öffentlichen Rechts als Rechtsform. Sie kann eine direkte und demokratische Kontrolle der Wohnungsbestände sicherstellen. Im Verwaltungsrat der AöR sollen Mieter*innen und Beschäftigte eine wesentlich größere Entscheidungsbefugnis innehaben als die Senatsvertreter*innen.
+Zudem ist bei einer AöR die Festlegung eines Privatisierungsverbotes möglich.''';
+String text_warum_aoer_keine_wbg_short = '''Die Geschäftsführungen der sechs landeseigenen Wohnungsbaugesellschaften sind nicht gewählt, sondern vom Berliner Senat eingesetzt. Ihre Rechtsformen sind GmbH und Aktiengesellschaft und bedeuten ebenso Geschäftsgeheimnis und Intransparenz. Die Geschäftsvorstände beziehen Jahresgehälter in Höhe von rund 300.000€...''';
+
+String text_warum_aoer = '''Die Anstalt öffentlichen Rechts (AöR) ist eine eigenständige juristische Person für einen öffentlichen Zweck. Beispiele für Anstalten öffentlichen Rechts sind ZDF & ARD, die Berliner Bäderbetriebe oder öffentliche Krankenhäuser.
+Als eigenständige Rechtspersönlichkeit soll die AöR ihre Aufgabe (günstige Wohnraumversorgung) unabhängig erfüllen. Eine erneute Privatisierung der Wohnungsbestände soll per Satzung ausgeschlossen werden.
+Die Anstalt öffentlichen Rechts ermöglicht eine demokratische Mitbestimmung – wir streben einen Gesamtmieter*innenrat an, über den die Mieter*innen an Entscheidungen beteiligt werden. Das ist bei landeseigenen Wohnungsunternehmen nicht möglich. Die Angestellten der bisherigen Unternehmen behalten ihre Jobs, werden in die Anstalt öffentlichen Rechts übernommen und in die demokratischen Entscheidungsprozesse mit einbezogen.''';
+
+String text_warum_aoer_short = '''Die Anstalt öffentlichen Rechts (AöR) ist eine eigenständige juristische Person für einen öffentlichen Zweck. Beispiele für Anstalten öffentlichen Rechts sind ZDF & ARD, die Berliner Bäderbetriebe oder öffentliche Krankenhäuser.
+Als eigenständige Rechtspersönlichkeit soll die AöR...''';
+
+
 class FAQService {
   static List<FAQItem> items = [
     anleitung,
@@ -41,7 +147,7 @@ class FAQService {
     FAQItem.text(
         5,
         'Wessen Unterschrift ist gültig?',
-        'Wahlberechtigt sind alle Berliner*innen mit deutschem Pass, die mindestens drei Monate in Berlin gemeldet sind und mindestens 18 sind. Ein großer Teil der Berliner*innen wird also nicht gezählt. Das ist ein politischer Skandal, für uns aber nicht änderbar. Deshalb sammeln wir auch sogenannte „politische“ Unterschriften, also auch Unterschriften von Berliner*innen, die nicht gezählt werden können, um den Rückhalt aller Berliner*innen zu zeigen.',
+        'Wahlberechtigt sind alle Berliner*innen mit deutschem Pass, die mindestens drei Monate in Berlin gemeldet und mindestens 18 Jahre alt sind. Die Unterschriften eines großen Teils der Einwohner*innen Berlins, werden also für ungültig erklärt. Das ist unserer Meinung nach höchst undemokratisch und ein politischer Skandal. Wir freuen uns jedoch über jede Unterstützung und finden es deshalb gut, wenn auch Personen unterschreiben, die nicht wahlberechtigt sind.',
         [
           'Wer',
           'Gültigkeit',
@@ -57,61 +163,22 @@ class FAQService {
         ['Unterschriften', 'abgeben', 'Listen']),
     FAQItem.short(
         7,
-        'Wie kann ich mich mehr in einem Kiezteam oder der Initiative einbringen?',
-        Column(children: [
-          Text('Mehr Infos übers Mitmachen findest du unter: '),
-          RichText(
-              text: TextSpan(
-                  text: 'dwenteignen.de/mitmachen',
-                  style: TextStyle(
-                      fontSize: 15.0,
-                      color: Colors.indigo,
-                      decoration: TextDecoration.underline),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap =
-                        () => launch('https://www.dwenteignen.de/mitmachen')))
-        ]),
-        'Mehr Infos findest du unter: dwenteignen.de/mitmachen',
-        ['wer', 'gültig', 'Unterschrift']),
+        'Wie kann ich mich in einem Kiezteam oder in der Initiative einbringen?',
+        create_text_element_with_link('Mehr Infos übers Mitmachen und Kontakte zu den Kiezteams findest du unter: ', 'dwenteignen.de/mitmachen', 'https://www.dwenteignen.de/mitmachen'),
+        'Mehr Infos übers Mitmachen und Kontakte zu den Kiezteams findest du unter: ',
+        ['Mitmachen', 'Partizipation', 'Kiezteam']),
     FAQItem.short(
         8,
         'Wo gibt es Sammelmaterial?',
-        Column(children: [
-          Text(
-              'Material kannst du im Kampagnenbüro in der Graefestr. 14 und bei einigen solidarischen Orten [link zur karte] abholen. Unterschriftenlisten als .pdf zum selber ausdrucken findest du auf'),
-          RichText(
-              text: TextSpan(
-                  text: 'dwenteignen.de',
-                  style: TextStyle(
-                      fontSize: 15.0,
-                      color: Colors.indigo,
-                      decoration: TextDecoration.underline),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () => launch('https://www.dwenteignen.de')))
-        ]),
-        'Material kannst du im Kampagnenbüro in der Graefestr. 14 und bei einigen solidarischen Orten [link zur karte] abholen. Unterschriftenlisten als .pdf zum selber ausdrucken findest du auf',
+         create_text_element_with_link2('Material kannst du im Kampagnenbüro in der Graefestr. 14 und bei einigen solidarischen Orten abholen. Unterschriftenlisten als .pdf zum selber ausdrucken findest du auf ', 'dwenteignen.de', 'https://www.dwenteignen.de', ' (Die Größe und das Format muss unbedingt beigehalten werden!).'),
+        'Material kannst du im Kampagnenbüro in der Graefestr. 14 und bei einigen solidarischen Orten abholen. Unterschriftenlisten als .pdf zum selber ausdrucken findest du auf',
         ['Flyer', 'Material', 'Plakat', 'Broschüre', 'Zeitung']),
     FAQItem.short(
         9,
         'Gibt es eine Übersicht der solidarischen Orte?',
-        Row(children: [
-          Text('Ja unter: '),
-          RichText(
-              text: TextSpan(
-                  text: 'dwenteignen.de/mitmachen',
-                  style: TextStyle(
-                      fontSize: 15.0,
-                      color: Colors.indigo,
-                      decoration: TextDecoration.underline),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap =
-                        () => launch('https://www.dwenteignen.de/mitmachen')))
-        ]),
-        'Wie viel Entschädigung muss den Wohnungskonzernen deren Wohnungen vergesellschaftet werden gezahlt werden? Diese Frage treibt viele um. Bereits in unserem Kurzgutachten haben wir festegstellt: Das ist eine politische Entscheidung! Sogar eine nominelle Entschädigung ist möglich.\n\n'
-            'Wir haben verschiedene Modelle durchgerechnet. Von der nominellen Entschädigung bis zum Zweckentschädigungsmodell. Letzteres beruht darauf, dass nicht mehr Entschädigung gezahlt werden darf, als notwendig ist. Voraussetzung ist, dass der Vergesellschaftungszweck erfüllt wird. Die Überführung der Wohnungen in die Gemeinwirtschaft, so dass sie für alle leistbar sind. Der Zweck der Vergesellschaftung setzt der Entschädigungshöhe enge Grenzen.\n\n'
-            'Mit verschiedenen Modellen kommen wir so auf eine Summe von 1,5 bis 2,4 Mrd, die vom Landeshaushalt direkt getragen werden müssten.\n\n'
-            'Der Rest ist, wie allgemein üblich beim Erwerb von Immobilien, kreditfinanziert und wird über bezahlbare Mieten abbezahlt. Die gesamte Entschädigungssumme beläuft sich für 200.000 Wohnungen somit auf 7,3 bis 12 Mrd. Euro, exklusive der Möglichkeit der nominellen Entschädigung.',
-        ['Unterschriftenlisten', 'Listen', 'öffentlich']),
+        create_text_element_with_link('Ja unter: ', 'https://sammeln.dwenteignen.de/pages/karte', 'https://sammeln.dwenteignen.de/pages/karte'),
+        'Ja unter',
+        ['Solidarische Orte', 'wo']),
     FAQItem.text(
         10,
         'Wo kann unterschrieben werden?',
@@ -120,12 +187,12 @@ class FAQService {
     FAQItem.text(
         11,
         'Kann ich auch digital unterschreiben?',
-        'Nein, laut Berliner Wahlgesetz sind nur handschriftliche Unterschriften gültig.',
+        'Nein, laut Berliner Wahlgesetz sind nur handschriftliche Unterschriften gültig. Du kannst jedoch die Liste selbst ausdrucken, unterschreiben und an uns schicken (vgl. Punkt 8.).',
         ['digital', 'Internet', 'online', 'E-Mail', 'Mail']),
     FAQItem.text(
         12,
         'Was passiert mit meiner Unterschrift?',
-        'Die Unterschriftenlisten werden der Landeswahlleitung zur Überprüfung auf Gültigkeit und Zählung übergeben. Sie werden nicht veröffentlicht.',
+        'Die Unterschriftenlisten werden der Landeswahlleitung zur Überprüfung auf Gültigkeit und Zählung übergeben. Sie werden nicht veröffentlicht oder an Dritte weitergegeben.',
         ['Datenschutz', 'Privatsphäre', 'Sicherheit', 'Zählung', 'Auszählung']),
     FAQItem.text(
         13,
@@ -144,96 +211,34 @@ class FAQService {
           'Volksentscheid',
           'dritte Stufe'
         ]),
-    FAQItem.text(
+    FAQItem.short(
         15,
-        'Umgang mit Corona',
-        'Die Gesundheit aller Sammler*innen und Unterschreibenden ist uns wichtig. Im Kampagnenbüro gibt es dafür kostenlos FFP2-Masken. Alle Materialien werden von uns regelmäßig desinfiziert.',
+        'Wie funktioniert Sammeln in Pandemiezeiten?',
+        create_text_element_with_link('Die Gesundheit aller Sammler*innen und Unterschreibenden ist uns sehr wichtig. Im Kampagnenbüro gibt es dafür kostenlose FFP2-Masken und Desinfektionsmittel. Unser Hygienekonzept findest du auf ', 'dwenteignen.de', 'https://www.dwenteignen.de'),
+        'Die Gesundheit aller Sammler*innen und Unterschreibenden ist uns sehr wichtig. Im Kampagnenbüro gibt es dafür kostenlose FFP2-Masken und Desinfektionsmittel. Unser Hygienekonzept findest du auf ',
         ['Corona', 'Pandemie', 'Gesundheit']),
-    FAQItem.text(
+    FAQItem(
         16,
         'Welche Unternehmen sollen vergesellschaftet werden?',
-        'Vergesellschaftet werden die Berliner Bestände aller auf Profit ausgerichteten Immobilienkonzerne mit mehr als 3000 Wohnungen. Dazu gehören Deutsche Wohnen, Vonovia, Akelius, Covivio, Heimstaden, Pears Global, TAG Immobilien, Grand City Properties, BGP Investment, ADO Properties und noch einige weitere.',
+        Text('Vergesellschaftet werden die Berliner Bestände aller auf Profit ausgerichteten Immobilienkonzerne mit mehr als 3000 Wohnungen. Dazu gehören die Deutsche Wohnen, Vonovia, Akelius, Covivio, Heimstaden, Pears Global, TAG Immobilien, Grand City Properties, BGP Investment, ADO Properties, Deutsche Vermögens- und Immobilienverwaltungs GmbH (DVI), IMW Immobilien, und Blackstone, der Investmentfonds Phoenix Spree und möglicherweise die Familienstiftung Becker & Kries.'),
+        Text('Vergesellschaftet werden die Berliner Bestände aller auf Profit ausgerichteten Immobilienkonzerne mit mehr als 3000 Wohnungen. Dazu gehören die Deutsche Wohnen, Vonovia, ...'),
+        'Vergesellschaftet werden die Berliner Bestände aller auf Profit ausgerichteten Immobilienkonzerne mit mehr als 3000 Wohnungen. Dazu gehören die Deutsche Wohnen, Vonovia, Akelius, Covivio, Heimstaden, Pears Global, TAG Immobilien, Grand City Properties, BGP Investment, ADO Properties, Deutsche Vermögens- und Immobilienverwaltungs GmbH (DVI), IMW Immobilien, und Blackstone, der Investmentfonds Phoenix Spree und möglicherweise die Familienstiftung Becker & Kries.',
         [
           'Enteignung',
           'Vergesellschaftung',
           'Konzern',
           'Immobilienkapital',
-          'Spekulation'
+          'Spekulation',
+          'Unternehmen'
         ]),
-    FAQItem(
-        17,
-        '„Durch Enteignung entsteht keine einzige neue Wohnung.“',
-        Column(children: [
-          Text(
-              '- DW & Co Unternehmen bauen selbst fast keine neuen Wohnungen, sondern kaufen Wohnungen auf.'),
-          Text(
-              '- Konkreter: Eine Studie von 2019 zeigt, dass private Konzerne nur einen Bruchteil ihrer Ausgaben (ca. 1-5%) in Neubau investieren, die Gewobag hingegen (als Beispiel einer landeseigenen Wohnungsunternehmens) 27%.  Einige der privaten Konzerne bauen schlicht gar keine neuen Wohnungen.'),
-          Text(
-              '- Genossenschaften und landeseigene Wohnungsunternehmen bauen hingegen mehr und günstigere Wohnungen.'),
-          Text(
-              '- Langfristig sichern Enteignung & Vergesellschaftung Wohnungsneubau also ab.')
-        ]),
-        Column(children: [
-          Text(
-              '- DW & Co Unternehmen bauen selbst fast keine neuen Wohnungen, sondern kaufen Wohnungen auf.'),
-          Text(
-              '- Konkreter: Eine Studie von 2019 zeigt, dass private Konzerne nur einen Bruchteil ihrer Ausgaben (ca. 1-5%) in Neubau investieren...'
-              '')
-        ]),
-        '''- DW & Co Unternehmen bauen selbst fast keine neuen Wohnungen, sondern kaufen Wohnungen auf.
-- Konkreter: Eine Studie von 2019 zeigt, dass private Konzerne nur einen Bruchteil ihrer Ausgaben (ca. 1-5%) in Neubau investieren, die Gewobag hingegen (als Beispiel einer landeseigenen Wohnungsunternehmens) 27%.  Einige der privaten Konzerne bauen schlicht gar keine neuen Wohnungen.
-- Genossenschaften und landeseigene Wohnungsunternehmen bauen hingegen mehr und günstigere Wohnungen.
-- Langfristig sichern Enteignung & Vergesellschaftung Wohnungsneubau also ab.''',
-        ['Bauen', 'Neubau', 'Konzern', 'Immobilienkapital', 'Spekulation']),
-    FAQItem(
-        18,
-        '„Es muss einfach mehr gebaut werden!“',
-        Text(
-            '- Das funktioniert nicht, solange Wohnraum als Kapitalanlage gilt. Beim aktuellen Wohnungsmarkt ist das Ziel nicht günstige Wohnraumversorgung für alle, sondern hoher Profit & Rendite der wenigen Aktionäre und Unternehmenseigentümer. \n- Die Immobilienunternehmen nutzen die Wohnungsbestände als Kapitalanlage. Je höher also die Miete, desto höher deren Wert und damit der Wert der ganzen Unternehmen – höhere Mieten sind also der Kern ihres Geschäfts.\n- Der Neubau von privaten Immobilienunternehmen ist zumeist teuer, luxuriös oder Eigentumswohnungen, die sich ein Großteil der Bevölkerung nicht leisten können.\n- Die Mieten bleiben stabil bei Wohnungen in gemeinwirtschaftlicher und öffentlicher Hand.'),
-        Text('- Das funktioniert nicht, solange Wohnraum als Kapitalanlage gilt. Beim aktuellen Wohnungsmarkt ist das Ziel nicht günstige Wohnraumversorgung für alle, sondern hoher Profit & Rendite der wenigen Aktionäre und Unternehmenseigentümer. \n- Die Immobilienunternehmen nutzen die Wohnungsbestände als...'),
-        'Das funktioniert nicht, solange Wohnraum als Kapitalanlage gilt. Beim aktuellen Wohnungsmarkt ist das Ziel nicht günstige Wohnraumversorgung für alle, sondern hoher Profit & Rendite der wenigen Aktionäre und Unternehmenseigentümer. Die Immobilienunternehmen nutzen die Wohnungsbestände als Kapitalanlage. Je höher also die Miete, desto höher deren Wert und damit der Wert der ganzen Unternehmen – höhere Mieten sind also der Kern ihres Geschäfts.\n- Der Neubau von privaten Immobilienunternehmen ist zumeist teuer, luxuriös oder Eigentumswohnungen, die sich ein Großteil der Bevölkerung nicht leisten können. Die Mieten bleiben stabil bei Wohnungen in gemeinwirtschaftlicher und öffentlicher Hand.',
-        [
-          'Gemeinwohl',
-          'Neubau',
-          'Eigentum',
-          'Wohnungsmarkt',
-          'Kapital',
-          'Spekulation'
-        ]),
-    FAQItem(
-        19,
-        'Kosten der Vergesellschaftung und Finanzierbarkeit',
-        Text(
-            '- Die Vergesellschaftung soll der Stadt Berlin langfristig nichts kosten – Kredite trägt eine neue Anstalt des öffentlichen Rechts, nicht der Berliner Haushal.\n- Die öffentliche Hand verliert nicht Geld, sondern das öffentliche Vermögen wird durch die vergesellschafteten Immobilien langfristig erhöht.\n- DW & Co nutzen Steuerschlupflöcher, verursachen so Verluste von hunderten Millionen Euro, der Staat zahlt somit einen Teil der Mieten durch Sozialleistungen mit. Wir können uns die Konzerne nicht leisten.\n- Die Immobilienunternehmen nutzen die Wohnungsbestände als Kapitalanlage. Je höher also die Miete, desto höher deren Wert und damit der Wert der ganzen Unternehmen – höhere Mieten sind also der Kern ihres Geschäfts.\n- Der Neubau von privaten Immobilienunternehmen ist zumeist teuer, luxuriös oder Eigentumswohnungen, die sich ein Großteil der Bevölkerung nicht leisten können.\n- Die Mieten bleiben stabil bei Wohnungen in gemeinwirtschaftlicher und öffentlicher Hand.'),
-        Text(
-            '- Die Vergesellschaftung soll der Stadt Berlin langfristig nichts kosten – Kredite trägt eine neue Anstalt des öffentlichen Rechts, nicht der Berliner Haushalt. \n- Die öffentliche Hand verliert nicht Geld, sondern...'),
-        'Die Vergesellschaftung soll der Stadt Berlin langfristig nichts kosten – Kredite trägt eine neue Anstalt des öffentlichen Rechts, nicht der Berliner Haushal. Die öffentliche Hand verliert nicht Geld, sondern das öffentliche Vermögen wird durch die vergesellschafteten Immobilien langfristig erhöht. DW & Co nutzen Steuerschlupflöcher, verursachen so Verluste von hunderten Millionen Euro, der Staat zahlt somit einen Teil der Mieten durch Sozialleistungen mit. Wir können uns die Konzerne nicht leisten. Die Immobilienunternehmen nutzen die Wohnungsbestände als Kapitalanlage. Je höher also die Miete, desto höher deren Wert und damit der Wert der ganzen Unternehmen – höhere Mieten sind also der Kern ihres Geschäfts. Der Neubau von privaten Immobilienunternehmen ist zumeist teuer, luxuriös oder Eigentumswohnungen, die sich ein Großteil der Bevölkerung nicht leisten können.\n- Die Mieten bleiben stabil bei Wohnungen in gemeinwirtschaftlicher und öffentlicher Hand.',
-        [
-          'Finanzierung',
-          'Vergesellschaftung',
-          'Entschädigung',
-          'Kosten',
-          'Kriedit',
-          'Vermögen',
-          'Verlust',
-          'Steuern',
-          'Haushalt'
-        ]),
+    FAQItem(18, 'Der Senat spricht aber von 36, später von 29 Milliarden Euro! Woher dieser Unterschied?', Text(text_senate_numbers), Text(text_senate_numbers_short), text_senate_numbers, ["Senat", "Kostenschätzung", "Finanzierung", "Vergesellschaftung", "Entschädigung", "Kosten", "Milliarden"]),
+    FAQItem(19, 'Warum eine Anstalt öffentlichen Rechts und keine neue landeseigene Wohnungsbaugesellschaft?', Text(text_warum_aoer_keine_wbg), Text(text_warum_aoer_keine_wbg_short), text_warum_aoer_keine_wbg, ["landeseigen", "kommunal", "Wohnungsbaugesellschaft", "AöR", "Anstalt öffentlichen Rechts", "demokratisch"]),
     FAQItem(
         20,
         'Was ist eine Anstalt öffentlichen Rechts und warum wollen wir diese Form?',
-        Text(
-            '''- Es handelt sich um eine eigenständige juristische Person (öffentliche Institution) für einen öffentlichen Zweck. Beispiele für Anstalten öffentlichen Rechts sind ZDF & ARD, Berliner Bäderbetriebe, Öffentliche Krankenhäuser usw.
-- Anstalten öffentlichen Rechts gehören nicht dem Staat und können daher nicht wieder privatisiert werden.
-- Die Anstalten öffentlichen Rechts ermöglicht eine demokratische Mitbestimmung - wir streben einen Gesamtmieter*innenrat an. Das ist auch bei landeseigenen Wohnungsunternehmen nicht möglich.
-- die Angestellten der Unternehmen behalten ihre Jobs und werden in die Anstalt öffentlichen Rechts übernommen und in die demokraitschen Entscheidungsprozesse mit einbezogen.'''),
-        Text(
-            '''- Es handelt sich um eine eigenständige juristische Person (öffentliche Institution) für einen öffentlichen Zweck. Beispiele für Anstalten öffentlichen Rechts sind ZDF & ARD, Berliner Bäderbetriebe, Öffentliche Krankenhäuser usw.
-- Anstalten öffentlichen Rechts gehören nicht dem Staat...'''),
-        '''- Es handelt sich um eine eigenständige juristische Person (öffentliche Institution) für einen öffentlichen Zweck. Beispiele für Anstalten öffentlichen Rechts sind ZDF & ARD, Berliner Bäderbetriebe, Öffentliche Krankenhäuser usw.
-- Anstalten öffentlichen Rechts gehören nicht dem Staat und können daher nicht wieder privatisiert werden.
-- Die Anstalten öffentlichen Rechts ermöglicht eine demokratische Mitbestimmung - wir streben einen Gesamtmieter*innenrat an. Das ist auch bei landeseigenen Wohnungsunternehmen nicht möglich.
-- die Angestellten der Unternehmen behalten ihre Jobs und werden in die Anstalt öffentlichen Rechts übernommen und in die demokraitschen Entscheidungsprozesse mit einbezogen.''',
+        Text(text_warum_aoer),
+        Text(text_warum_aoer_short),
+        text_warum_aoer,
         [
           'AöR',
           'Verstaatlichung',
@@ -243,53 +248,69 @@ class FAQService {
           'Rechts',
           'demokratische',
           'Mitbestimmung',
-          'Privatisierung'
+          'Privatisierung', 'Jobs', 'Mitarbeiter'
         ]),
-    FAQItem(
-        21,
-        'Rechtliche Grundlage im Grundgesetz',
-        Text(
-            '''- Enteignungen sind gängige Praxis in Deutschland mit Grundgesetz-Artikel 14 & 15. Es gibt hunderte Verfahren jedes Jahr.
-- Artikel 15 GG sieht die Vergesellschaftung im Sinne des Gemeinwohls explizit vor
-- Aber bisher sind nur Familien, Landwirte usw. betroffen, beispielsweise bei Straßenbau oder Kohletagebau. Wir drehen den Spieß um, indem wir die Vergesellschaftung großer profitorientierter Immobilienkonzerne fordern.'''),
-        Text(
-            '''- Enteignungen sind gängige Praxis in Deutschland mit Grundgesetz-Artikel 14 & 15. Es gibt hunderte Verfahren jedes Jahr.
-- Artikel 15 GG sieht die Vergesellschaftung im Sinne des Gemeinwohls explizit vor...'''),
-        '''- Enteignungen sind gängige Praxis in Deutschland mit Grundgesetz-Artikel 14 & 15. Es gibt hunderte Verfahren jedes Jahr.
-- Artikel 15 GG sieht die Vergesellschaftung im Sinne des Gemeinwohls explizit vor
-- Aber bisher sind nur Familien, Landwirte usw. betroffen, beispielsweise bei Straßenbau oder Kohletagebau. Wir drehen den Spieß um, indem wir die Vergesellschaftung großer profitorientierter Immobilienkonzerne fordern.''',
-        [
-          'Recht',
-          'Grundgesetz',
-          'DDR',
-          'Stalinismus',
-          'Sowjetunion',
-          'Unrecht',
-          'Verfassung',
-          'Demokratie',
-        ]),
+    FAQItem(21, "Was bringt die Vergesellschaftung für den Klimaschutz?", Text(text_climate), Text(text_climate_short), text_climate, ["Klima", "Umwelt", "ökologisch", "Modernisierung", "Energiewende", "demokratisch", "Anstalt öffentlichen Rechts"]),
     FAQItem(
         22,
-        'Mietendeckel - Ist Vergesellschaftung überhaupt noch notwendig?',
-        Text(
-            '''- Der Mietendeckel ist (leider) noch rechtlich unsicher - Das Bundesverfassungsgericht könnte ihn kippen.
-- Der Mietendeckel gilt nur für fünf Jahre - und schon jetzt haben Politiker*innen wie Franziska Giffey (SPD) angedeutet, ihn nicht verlängern zu wollen. Dann drohen massenhaft Mieterhöhungen. 
-- Beide Gesetze (Mietendeckel und Vergesellschaftung) können nebeneinander stehen.
-- Der Mietendeckel reguliert, Vergesellschaftung denkt Wohnen neu: mit Mieten soll kein Profit mehr gemacht werden!'''),
-        Text(
-            '''- Der Mietendeckel ist (leider) noch rechtlich unsicher - Das Bundesverfassungsgericht könnte ihn kippen.
-- Der Mietendeckel gilt nur für fünf Jahre - und schon jetzt haben Politiker*innen wie Franziska Giffey (SPD) angedeutet, ihn nicht verlängern zu wollen...'''),
-        '''- Der Mietendeckel ist (leider) noch rechtlich unsicher - Das Bundesverfassungsgericht könnte ihn kippen.
-- Der Mietendeckel gilt nur für fünf Jahre - und schon jetzt haben Politiker*innen wie Franziska Giffey (SPD) angedeutet, ihn nicht verlängern zu wollen. Dann drohen massenhaft Mieterhöhungen. 
-- Beide Gesetze (Mietendeckel und Vergesellschaftung) können nebeneinander stehen.
-- Der Mietendeckel reguliert, Vergesellschaftung denkt Wohnen neu: mit Mieten soll kein Profit mehr gemacht werden!''',
+        'Wir haben den Mietendeckel, ist da die Vergesellschaftung überhaupt noch notwendig?',
+        Text('''Der Mietendeckel ist (leider) rechtlich unsicher. Das Bundesverfassungsgericht könnte ihn kippen. Zudem gilt er nur für fünf Jahre und schon jetzt hat die SPD-Führung angekündigt, ihn nicht verlängern zu wollen. Dann drohen massenhaft Mieterhöhungen.
+Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen: Der Mietendeckel reguliert, Vergesellschaftung denkt Wohnen neu, denn mit Mieten soll kein Profit mehr gemacht werden!'''),
+        Text('''Der Mietendeckel ist (leider) rechtlich unsicher. Das Bundesverfassungsgericht könnte ihn kippen. Zudem gilt er nur für fünf Jahre und schon jetzt hat die SPD-Führung angekündigt, ihn nicht verlängern zu wollen. Dann drohen massenhaft Mieterhöhungen.
+Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen: Der Mietendeckel...'''),
+        '''Der Mietendeckel ist (leider) rechtlich unsicher. Das Bundesverfassungsgericht könnte ihn kippen. Zudem gilt er nur für fünf Jahre und schon jetzt hat die SPD-Führung angekündigt, ihn nicht verlängern zu wollen...''',
         [
           'Mietendeckel',
           'Vergesellschaftung',
           'Mieterhöhung',
           'Mietenstopp',
         ]),
+    FAQItem(23, "10 Kurzargumente - Warum enteignen?", Text(text_argumente), Text(text_argumente_short), text_argumente, ["hohe Mieten", "Sanierung", "Neubau", "Eigentum", "Wem gehört die Stadt", "Wohnungsknappheit", "Hauskauf", "Demokratie", "Modernisierung", "Wohnen", "Share Deals"]),
+    FAQItem(24, "Warum soll die Vergesellschaftung Unternehmen erst ab 3000 Wohnungen in Berlin betreffen?", Text(text_warum_erst_ab_3000), Text(text_warum_erst_ab_3000_short), text_warum_erst_ab_3000, ["3000", "Konzern", "Unternehmen", "Aktie", "Rendite", "Dividende", "Finanzmarkt"]),
+    FAQItem.text(25, "Warum ist keine nominelle / symbolische Entschädigung (also 1€ pro Unternehmen oder pro Wohnung) möglich?", "Eine nominelle Entschädigung würden wir uns mit Blick auf die enormen Gewinne von DW & Co in den letzten Jahren zwar wünschen, aber die Vergesellschaftung erfordert jedoch laut Art. 14 GG Abs. 3 eine Entschädigung. Eine nominelle Entschädigung wäre dabei juristisch kaum möglich und würde wahrscheinlich sofort per Gerichtsverfahren kassiert werden.", ["Entschädigung", "nominell", "symbolisch", "Vergesellschaftung"]),
+    FAQItem(26, "Was bringt uns die Vergesellschaftung finanziell?", Text(text_vergesellschaftung_finanziell), Text(text_vergesellschaftung_finanziell_short),text_vergesellschaftung_finanziell,["Gewinn", "Einsparung", "Sozialleistung", "Arbeitslosengeld", "Sozialhilfe", "Wohngeld"] ),
+    FAQItem(27, "Was kostet uns die Vergesellschaftung?", Text(text_was_kostet_die_vergesellschaftung), Text(text_was_kostet_die_vergesellschaftung_short), text_was_kostet_die_vergesellschaftung, ["Finanzierung", "Vergesellschaftung", "Entschädigung", "Kosten", "Milliarden", "Mieten", "Kredit"]),
+    FAQItem(28, "Was kostet uns die Vergesellschaftung? - Video",   GestureDetector(
+    onTap: () => launch('https://www.dwenteignen.de/mitmachen'), // handle your image tap here
+    child: Image.asset(
+      'assets/images/dwe.png',
+      fit: BoxFit.cover, // this is the solution for border
+      width: 110.0,
+      height: 110.0,
+    ),
+  ), Text("Argumente"), text_was_kostet_die_vergesellschaftung, ["Gewinn", "Einsparung", "Sozialleistung", "Arbeitslosengeld", "Sozialhilfe", "Wohngeld"]),
+    FAQItem(29, 'Sammeltipps: Erste Ansprache', Text(sammel_tipps_1), Text(sammel_tipps_1_short), sammel_tipps_1, ["Sammeltipps", "ansprechen", "sammeln", "erster Satz", "Ansprache"]),
+    FAQItem(31, 'Sammeltipps: Niedrigschwellig argumentieren', Text(sammel_tipps_3), Text(sammel_tipps_3_short), sammel_tipps_3, ["Sammeltipps", 'Vergesellschaftung', 'Mieten', 'einfach', 'formulieren']),
+    FAQItem(33, 'Ist die Vergesellschaftung rechtlich überhaupt möglich?', Text(argumentation_tipps_1), Text(argumentation_tipps_1_short), argumentation_tipps_1,  ['Argumentationstipps', 'Vergesellschaftung', 'Gutachten', 'Entschädigung'] ),
+    FAQItem.short(34, 'Müssen die Mieter*innen infolge der Enteignung ausziehen?',  Text('Nein. Im Prinzip ändert sich nur ihre Vermieterin in die Anstalt öffentlichen Rechts (AöR) und ihre Mieten sinken.'), 'Nein. Im Prinzip ändert sich nur ihre Vermieterin in die Anstalt öffentlichen Rechts (AöR) und ihre Mieten sinken.', ['Enteignung', 'Auszug', 'ausziehen', 'Wohnung', 'wechseln']),
+    FAQItem.short(35, "Wo finde ich den Beschlusstext?", create_text_element_with_link2(beschluss_text, "Link", "https://www.berlin.de/landesverwaltungsamt/_assets/logistikservice/amtsblatt-fuer-berlin/abl_2021_06_0365_0436_online.pdf", " (S. 367-371) einsehen."), beschluss_text, ["Beschlusstext"] ),
+    FAQItem.text(36, "Werden alle Wohnungen enteignet oder erst ab 3000?", "Es werden alle Wohnungen der Unternehmen enteignet und vergesellschaftet.", ["3000", "Wohnungen", "Unternehmen", "alle"] ),
+    FAQItem.text(37, "Könnten sich die Unternehmen nicht in verschiedene Tochtergesellschaften mit jeweils maximal 2999 Wohnungen aufspalten, um der Vergesellschaftung zu entgehen?", "Das ist ein häufiger Trick von Unternehmen, beispielsweise um Steuern zu umgehen. Wir werden aber bei einem Vergesellschaftungsgesetz die Gesamtkonzernebene in den Blick nehmen, inklusive aller Tochtergesellschaften.", ["Unternehmen", "3000", "Vergesellschaftung", "Tochterunternehmen", "Tochtergesellschaft", "aufspalten", "aufteilen"] ),
+    FAQItem(38, "Gegenargument: „Es muss einfach mehr gebaut werden!“ ", Text(text_counter_argument_1), Text(text_counter_argument_1_short), text_counter_argument_1, ["Gemeinwohl", "Neubau", "Eigentum", "Wohnungsmarkt", "Kapital", "Spekulation"]),
+    FAQItem(39, "Gegenargument: „Die Vergesellschaftung ist zu teuer und Berlin kann sich das nicht leisten.“ ", Text(text_counter_argument_2), Text(text_counter_argument_2_short), text_counter_argument_2, ["Finanzierung", "Vergesellschaftung","Entschädigung", "Kosten", "Kredit", "Vermögen", "Verlust", "Steuern", "Haushalt"]),
+    FAQItem(40, "Gegenargument: „Enteignungen – wie in der DDR!“ " , Text(text_counter_argument_3), Text(text_counter_argument_3_short), text_counter_argument_3, ["Recht", "DDR", "Grundgesetz", "Sozialismus", "Sowjetunion", "Unrecht", "Verfassung", "Demokratie"]),
+    FAQItem(41, "Gegenargument: „Durch Enteignung entsteht keine einzige neue Wohnung.“ ", Text(text_counter_argument_4), Text(text_counter_argument_4_short), text_counter_argument_4, ["Bauen", "Neubau", "Wohnungen", "Gemeinwohl", "Konzern", "Unternehmen", "Spekulation"])
+    // FAQItem(29, "Was kostet uns die Vergesellschaftung?", Text(""))
   ];
+
+  static RichText create_text_element_with_link(String text, String link_text, String link){
+    return RichText(text: TextSpan(text: text, style: TextStyle(color: Colors.black, fontSize: 14), children: [create_link_element(link_text, link)]) );
+  ***REMOVED***
+
+  static RichText create_text_element_with_link2(String text, String link_text, String link, String text_after_link){
+    return RichText(text: TextSpan(text: text, style: TextStyle(color: Colors.black, fontSize: 14) ,  children: [create_link_element(link_text, link), TextSpan(text: text_after_link, style: TextStyle(color: Colors.black, fontSize: 14))]) );
+  ***REMOVED***
+
+  static TextSpan create_link_element(String text, String link) {
+    return TextSpan(
+                text: text,
+                style: TextStyle(
+                    fontSize: 15.0,
+                    color: Colors.indigo,
+                    decoration: TextDecoration.underline),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () => launch(link));
+  ***REMOVED***
 
   static var anleitung = FAQItem(
       0,
