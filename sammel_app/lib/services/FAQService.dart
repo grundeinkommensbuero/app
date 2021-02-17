@@ -231,10 +231,29 @@ class FAQService {
           'Spekulation',
           'Unternehmen'
         ]),
-    FAQItem(18, 'Der Senat spricht aber von 36, später von 29 Milliarden Euro! Woher dieser Unterschied?', Text(text_senate_numbers), Text(text_senate_numbers_short), text_senate_numbers, ["Senat", "Kostenschätzung", "Finanzierung", "Vergesellschaftung", "Entschädigung", "Kosten", "Milliarden"]),
-    FAQItem(19, 'Warum eine Anstalt öffentlichen Rechts und keine neue landeseigene Wohnungsbaugesellschaft?', Text(text_warum_aoer_keine_wbg), Text(text_warum_aoer_keine_wbg_short), text_warum_aoer_keine_wbg, ["landeseigen", "kommunal", "Wohnungsbaugesellschaft", "AöR", "Anstalt öffentlichen Rechts", "demokratisch"]),
+    FAQItem(17, "Video: Was kostet die Vergesellschaftung?",   GestureDetector(
+      onTap: () => launch('https://www.youtube.com/watch?v=oijmRknMXOI'), // handle your image tap here
+      child: Center(child: Image.asset('assets/images/dw_video_enteignen_bezahlen.png', fit: BoxFit.cover, height: 110.0,)),), Center(child: Image.asset('assets/images/dw_video_enteignen_bezahlen.png', fit: BoxFit.cover, height: 110.0,)), text_was_kostet_die_vergesellschaftung, ["Gewinn", "Einsparung", "Sozialleistung", "Arbeitslosengeld", "Sozialhilfe", "Wohngeld"]),
+    FAQItem(18, "10 Kurzargumente - Warum enteignen?", Text(text_argumente), Text(text_argumente_short), text_argumente, ["hohe Mieten", "Sanierung", "Neubau", "Eigentum", "Wem gehört die Stadt", "Wohnungsknappheit", "Hauskauf", "Demokratie", "Modernisierung", "Wohnen", "Share Deals"]),
     FAQItem(
-        20,
+        19,
+        'Wir haben den Mietendeckel, ist da die Vergesellschaftung überhaupt noch notwendig?',
+        Text('''Der Mietendeckel ist (leider) rechtlich unsicher. Das Bundesverfassungsgericht könnte ihn kippen. Zudem gilt er nur für fünf Jahre und schon jetzt hat die SPD-Führung angekündigt, ihn nicht verlängern zu wollen. Dann drohen massenhaft Mieterhöhungen.
+Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen: Der Mietendeckel reguliert, Vergesellschaftung denkt Wohnen neu, denn mit Mieten soll kein Profit mehr gemacht werden!'''),
+        Text('''Der Mietendeckel ist (leider) rechtlich unsicher. Das Bundesverfassungsgericht könnte ihn kippen. Zudem gilt er nur für fünf Jahre und schon jetzt hat die SPD-Führung angekündigt, ihn nicht verlängern zu wollen. Dann drohen massenhaft Mieterhöhungen.
+Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen: Der Mietendeckel...'''),
+        '''Der Mietendeckel ist (leider) rechtlich unsicher. Das Bundesverfassungsgericht könnte ihn kippen. Zudem gilt er nur für fünf Jahre und schon jetzt hat die SPD-Führung angekündigt, ihn nicht verlängern zu wollen...''',
+        [
+          'Mietendeckel',
+          'Vergesellschaftung',
+          'Mieterhöhung',
+          'Mietenstopp',
+        ]),
+    FAQItem(20, "Was kostet uns die Vergesellschaftung?", Text(text_was_kostet_die_vergesellschaftung), Text(text_was_kostet_die_vergesellschaftung_short), text_was_kostet_die_vergesellschaftung, ["Finanzierung", "Vergesellschaftung", "Entschädigung", "Kosten", "Milliarden", "Mieten", "Kredit"]),
+    FAQItem(21, 'Ist die Vergesellschaftung rechtlich überhaupt möglich?', Text(argumentation_tipps_1), Text(argumentation_tipps_1_short), argumentation_tipps_1,  ['Argumentationstipps', 'Vergesellschaftung', 'Gutachten', 'Entschädigung'] ),
+    FAQItem(22, 'Warum eine Anstalt öffentlichen Rechts und keine neue landeseigene Wohnungsbaugesellschaft?', Text(text_warum_aoer_keine_wbg), Text(text_warum_aoer_keine_wbg_short), text_warum_aoer_keine_wbg, ["landeseigen", "kommunal", "Wohnungsbaugesellschaft", "AöR", "Anstalt öffentlichen Rechts", "demokratisch"]),
+    FAQItem(
+        23,
         'Was ist eine Anstalt öffentlichen Rechts und warum wollen wir diese Form?',
         Text(text_warum_aoer),
         Text(text_warum_aoer_short),
@@ -250,62 +269,37 @@ class FAQService {
           'Mitbestimmung',
           'Privatisierung', 'Jobs', 'Mitarbeiter'
         ]),
-    FAQItem(21, "Was bringt die Vergesellschaftung für den Klimaschutz?", Text(text_climate), Text(text_climate_short), text_climate, ["Klima", "Umwelt", "ökologisch", "Modernisierung", "Energiewende", "demokratisch", "Anstalt öffentlichen Rechts"]),
-    FAQItem(
-        22,
-        'Wir haben den Mietendeckel, ist da die Vergesellschaftung überhaupt noch notwendig?',
-        Text('''Der Mietendeckel ist (leider) rechtlich unsicher. Das Bundesverfassungsgericht könnte ihn kippen. Zudem gilt er nur für fünf Jahre und schon jetzt hat die SPD-Führung angekündigt, ihn nicht verlängern zu wollen. Dann drohen massenhaft Mieterhöhungen.
-Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen: Der Mietendeckel reguliert, Vergesellschaftung denkt Wohnen neu, denn mit Mieten soll kein Profit mehr gemacht werden!'''),
-        Text('''Der Mietendeckel ist (leider) rechtlich unsicher. Das Bundesverfassungsgericht könnte ihn kippen. Zudem gilt er nur für fünf Jahre und schon jetzt hat die SPD-Führung angekündigt, ihn nicht verlängern zu wollen. Dann drohen massenhaft Mieterhöhungen.
-Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen: Der Mietendeckel...'''),
-        '''Der Mietendeckel ist (leider) rechtlich unsicher. Das Bundesverfassungsgericht könnte ihn kippen. Zudem gilt er nur für fünf Jahre und schon jetzt hat die SPD-Führung angekündigt, ihn nicht verlängern zu wollen...''',
-        [
-          'Mietendeckel',
-          'Vergesellschaftung',
-          'Mieterhöhung',
-          'Mietenstopp',
-        ]),
-    FAQItem(23, "10 Kurzargumente - Warum enteignen?", Text(text_argumente), Text(text_argumente_short), text_argumente, ["hohe Mieten", "Sanierung", "Neubau", "Eigentum", "Wem gehört die Stadt", "Wohnungsknappheit", "Hauskauf", "Demokratie", "Modernisierung", "Wohnen", "Share Deals"]),
-    FAQItem(24, "Warum soll die Vergesellschaftung Unternehmen erst ab 3000 Wohnungen in Berlin betreffen?", Text(text_warum_erst_ab_3000), Text(text_warum_erst_ab_3000_short), text_warum_erst_ab_3000, ["3000", "Konzern", "Unternehmen", "Aktie", "Rendite", "Dividende", "Finanzmarkt"]),
-    FAQItem.text(25, "Warum ist keine nominelle / symbolische Entschädigung (also 1€ pro Unternehmen oder pro Wohnung) möglich?", "Eine nominelle Entschädigung würden wir uns mit Blick auf die enormen Gewinne von DW & Co in den letzten Jahren zwar wünschen, aber die Vergesellschaftung erfordert jedoch laut Art. 14 GG Abs. 3 eine Entschädigung. Eine nominelle Entschädigung wäre dabei juristisch kaum möglich und würde wahrscheinlich sofort per Gerichtsverfahren kassiert werden.", ["Entschädigung", "nominell", "symbolisch", "Vergesellschaftung"]),
-    FAQItem(26, "Was bringt uns die Vergesellschaftung finanziell?", Text(text_vergesellschaftung_finanziell), Text(text_vergesellschaftung_finanziell_short),text_vergesellschaftung_finanziell,["Gewinn", "Einsparung", "Sozialleistung", "Arbeitslosengeld", "Sozialhilfe", "Wohngeld"] ),
-    FAQItem(27, "Was kostet uns die Vergesellschaftung?", Text(text_was_kostet_die_vergesellschaftung), Text(text_was_kostet_die_vergesellschaftung_short), text_was_kostet_die_vergesellschaftung, ["Finanzierung", "Vergesellschaftung", "Entschädigung", "Kosten", "Milliarden", "Mieten", "Kredit"]),
-    FAQItem(28, "Was kostet uns die Vergesellschaftung? - Video",   GestureDetector(
-    onTap: () => launch('https://www.dwenteignen.de/mitmachen'), // handle your image tap here
-    child: Image.asset(
-      'assets/images/dwe.png',
-      fit: BoxFit.cover, // this is the solution for border
-      width: 110.0,
-      height: 110.0,
-    ),
-  ), Text("Argumente"), text_was_kostet_die_vergesellschaftung, ["Gewinn", "Einsparung", "Sozialleistung", "Arbeitslosengeld", "Sozialhilfe", "Wohngeld"]),
-    FAQItem(29, 'Sammeltipps: Erste Ansprache', Text(sammel_tipps_1), Text(sammel_tipps_1_short), sammel_tipps_1, ["Sammeltipps", "ansprechen", "sammeln", "erster Satz", "Ansprache"]),
-    FAQItem(31, 'Sammeltipps: Niedrigschwellig argumentieren', Text(sammel_tipps_3), Text(sammel_tipps_3_short), sammel_tipps_3, ["Sammeltipps", 'Vergesellschaftung', 'Mieten', 'einfach', 'formulieren']),
-    FAQItem(33, 'Ist die Vergesellschaftung rechtlich überhaupt möglich?', Text(argumentation_tipps_1), Text(argumentation_tipps_1_short), argumentation_tipps_1,  ['Argumentationstipps', 'Vergesellschaftung', 'Gutachten', 'Entschädigung'] ),
-    FAQItem.short(34, 'Müssen die Mieter*innen infolge der Enteignung ausziehen?',  Text('Nein. Im Prinzip ändert sich nur ihre Vermieterin in die Anstalt öffentlichen Rechts (AöR) und ihre Mieten sinken.'), 'Nein. Im Prinzip ändert sich nur ihre Vermieterin in die Anstalt öffentlichen Rechts (AöR) und ihre Mieten sinken.', ['Enteignung', 'Auszug', 'ausziehen', 'Wohnung', 'wechseln']),
-    FAQItem.short(35, "Wo finde ich den Beschlusstext?", create_text_element_with_link2(beschluss_text, "Link", "https://www.berlin.de/landesverwaltungsamt/_assets/logistikservice/amtsblatt-fuer-berlin/abl_2021_06_0365_0436_online.pdf", " (S. 367-371) einsehen."), beschluss_text, ["Beschlusstext"] ),
-    FAQItem.text(36, "Werden alle Wohnungen enteignet oder erst ab 3000?", "Es werden alle Wohnungen der Unternehmen enteignet und vergesellschaftet.", ["3000", "Wohnungen", "Unternehmen", "alle"] ),
-    FAQItem.text(37, "Könnten sich die Unternehmen nicht in verschiedene Tochtergesellschaften mit jeweils maximal 2999 Wohnungen aufspalten, um der Vergesellschaftung zu entgehen?", "Das ist ein häufiger Trick von Unternehmen, beispielsweise um Steuern zu umgehen. Wir werden aber bei einem Vergesellschaftungsgesetz die Gesamtkonzernebene in den Blick nehmen, inklusive aller Tochtergesellschaften.", ["Unternehmen", "3000", "Vergesellschaftung", "Tochterunternehmen", "Tochtergesellschaft", "aufspalten", "aufteilen"] ),
-    FAQItem(38, "Gegenargument: „Es muss einfach mehr gebaut werden!“ ", Text(text_counter_argument_1), Text(text_counter_argument_1_short), text_counter_argument_1, ["Gemeinwohl", "Neubau", "Eigentum", "Wohnungsmarkt", "Kapital", "Spekulation"]),
-    FAQItem(39, "Gegenargument: „Die Vergesellschaftung ist zu teuer und Berlin kann sich das nicht leisten.“ ", Text(text_counter_argument_2), Text(text_counter_argument_2_short), text_counter_argument_2, ["Finanzierung", "Vergesellschaftung","Entschädigung", "Kosten", "Kredit", "Vermögen", "Verlust", "Steuern", "Haushalt"]),
-    FAQItem(40, "Gegenargument: „Enteignungen – wie in der DDR!“ " , Text(text_counter_argument_3), Text(text_counter_argument_3_short), text_counter_argument_3, ["Recht", "DDR", "Grundgesetz", "Sozialismus", "Sowjetunion", "Unrecht", "Verfassung", "Demokratie"]),
-    FAQItem(41, "Gegenargument: „Durch Enteignung entsteht keine einzige neue Wohnung.“ ", Text(text_counter_argument_4), Text(text_counter_argument_4_short), text_counter_argument_4, ["Bauen", "Neubau", "Wohnungen", "Gemeinwohl", "Konzern", "Unternehmen", "Spekulation"])
+    FAQItem(24, "Was bringt die Vergesellschaftung für den Klimaschutz?", Text(text_climate), Text(text_climate_short), text_climate, ["Klima", "Umwelt", "ökologisch", "Modernisierung", "Energiewende", "demokratisch", "Anstalt öffentlichen Rechts"]),
+    FAQItem(25, "Warum soll die Vergesellschaftung Unternehmen erst ab 3000 Wohnungen in Berlin betreffen?", Text(text_warum_erst_ab_3000), Text(text_warum_erst_ab_3000_short), text_warum_erst_ab_3000, ["3000", "Konzern", "Unternehmen", "Aktie", "Rendite", "Dividende", "Finanzmarkt"]),
+    FAQItem.text(26, "Werden alle Wohnungen enteignet oder erst ab 3000?", "Von den Unternehmen, die mehr als 3000 Wohnungen besitzen, werden alle Wohnungen enteignet und vergesellschaftet.", ["3000", "Wohnungen", "Unternehmen", "alle"] ),
+    FAQItem.text(27, "Könnten sich die Unternehmen nicht in verschiedene Tochtergesellschaften mit jeweils maximal 2999 Wohnungen aufspalten, um der Vergesellschaftung zu entgehen?", "Das ist ein häufiger Trick von Unternehmen, beispielsweise um Steuern zu umgehen. Wir werden aber bei einem Vergesellschaftungsgesetz die Gesamtkonzernebene in den Blick nehmen, inklusive aller Tochtergesellschaften.", ["Unternehmen", "3000", "Vergesellschaftung", "Tochterunternehmen", "Tochtergesellschaft", "aufspalten", "aufteilen"] ),
+    FAQItem(28, "Was bringt uns die Vergesellschaftung finanziell?", Text(text_vergesellschaftung_finanziell), Text(text_vergesellschaftung_finanziell_short),text_vergesellschaftung_finanziell,["Gewinn", "Einsparung", "Sozialleistung", "Arbeitslosengeld", "Sozialhilfe", "Wohngeld"] ),
+    FAQItem.text(29, "Warum ist keine nominelle / symbolische Entschädigung (also 1€ pro Unternehmen oder pro Wohnung) möglich?", "Eine nominelle Entschädigung würden wir uns mit Blick auf die enormen Gewinne von DW & Co in den letzten Jahren zwar wünschen, aber die Vergesellschaftung erfordert jedoch laut Art. 14 GG Abs. 3 eine Entschädigung. Eine nominelle Entschädigung wäre dabei juristisch kaum möglich und würde wahrscheinlich sofort per Gerichtsverfahren kassiert werden.", ["Entschädigung", "nominell", "symbolisch", "Vergesellschaftung"]),
+    FAQItem.short(30, 'Müssen die Mieter*innen infolge der Enteignung ausziehen?',  Text('Nein. Im Prinzip ändert sich nur ihre Vermieterin in die Anstalt öffentlichen Rechts (AöR) und ihre Mieten sinken.'), 'Nein. Im Prinzip ändert sich nur ihre Vermieterin in die Anstalt öffentlichen Rechts (AöR) und ihre Mieten sinken.', ['Enteignung', 'Auszug', 'ausziehen', 'Wohnung', 'wechseln']),
+    FAQItem(31, 'Sammeltipps: Erste Ansprache', Text(sammel_tipps_1), Text(sammel_tipps_1_short), sammel_tipps_1, ["Sammeltipps", "ansprechen", "sammeln", "erster Satz", "Ansprache"]),
+    FAQItem(32, 'Sammeltipps: Niedrigschwellig argumentieren', Text(sammel_tipps_3), Text(sammel_tipps_3_short), sammel_tipps_3, ["Sammeltipps", 'Vergesellschaftung', 'Mieten', 'einfach', 'formulieren']),
+    FAQItem(33, "Gegenargument: „Es muss einfach mehr gebaut werden!“ ", Text(text_counter_argument_1), Text(text_counter_argument_1_short), text_counter_argument_1, ["Gemeinwohl", "Neubau", "Eigentum", "Wohnungsmarkt", "Kapital", "Spekulation"]),
+    FAQItem(34, "Gegenargument: „Die Vergesellschaftung ist zu teuer und Berlin kann sich das nicht leisten.“ ", Text(text_counter_argument_2), Text(text_counter_argument_2_short), text_counter_argument_2, ["Finanzierung", "Vergesellschaftung","Entschädigung", "Kosten", "Kredit", "Vermögen", "Verlust", "Steuern", "Haushalt"]),
+    FAQItem(35, "Gegenargument: „Enteignungen – wie in der DDR!“ " , Text(text_counter_argument_3), Text(text_counter_argument_3_short), text_counter_argument_3, ["Recht", "DDR", "Grundgesetz", "Sozialismus", "Sowjetunion", "Unrecht", "Verfassung", "Demokratie"]),
+    FAQItem(36, "Gegenargument: „Durch Enteignung entsteht keine einzige neue Wohnung.“ ", Text(text_counter_argument_4), Text(text_counter_argument_4_short), text_counter_argument_4, ["Bauen", "Neubau", "Wohnungen", "Gemeinwohl", "Konzern", "Unternehmen", "Spekulation"]),
+    FAQItem(37, 'Der Senat spricht aber von 36, später von 29 Milliarden Euro! Woher dieser Unterschied?', Text(text_senate_numbers), Text(text_senate_numbers_short), text_senate_numbers, ["Senat", "Kostenschätzung", "Finanzierung", "Vergesellschaftung", "Entschädigung", "Kosten", "Milliarden"]),
+    FAQItem.short(38, "Wo finde ich den Beschlusstext?", create_text_element_with_link2(beschluss_text, "Link", "https://www.berlin.de/landesverwaltungsamt/_assets/logistikservice/amtsblatt-fuer-berlin/abl_2021_06_0365_0436_online.pdf", " (S. 367-371) einsehen."), beschluss_text, ["Beschlusstext"] ),
     // FAQItem(29, "Was kostet uns die Vergesellschaftung?", Text(""))
   ];
 
-  static RichText create_text_element_with_link(String text, String link_text, String link){
-    return RichText(text: TextSpan(text: text, style: TextStyle(color: Colors.black, fontSize: 14), children: [create_link_element(link_text, link)]) );
+  static Text create_text_element_with_link(String text, String link_text, String link){
+    return Text.rich(TextSpan(text: text, children: [create_link_element(link_text, link)]) );
   ***REMOVED***
 
-  static RichText create_text_element_with_link2(String text, String link_text, String link, String text_after_link){
-    return RichText(text: TextSpan(text: text, style: TextStyle(color: Colors.black, fontSize: 14) ,  children: [create_link_element(link_text, link), TextSpan(text: text_after_link, style: TextStyle(color: Colors.black, fontSize: 14))]) );
+  static Text create_text_element_with_link2(String text, String link_text, String link, String text_after_link){
+    return Text.rich(TextSpan(text: text,  children: [create_link_element(link_text, link), TextSpan(text: text_after_link)]));
   ***REMOVED***
 
   static TextSpan create_link_element(String text, String link) {
     return TextSpan(
                 text: text,
                 style: TextStyle(
-                    fontSize: 15.0,
+//                    fontSize: 16,
                     color: Colors.indigo,
                     decoration: TextDecoration.underline),
                 recognizer: TapGestureRecognizer()
@@ -427,6 +421,14 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
 
   static List<FAQItem> loadItems(String search) {
     if (search == null) search = '';
+
+    if (search == '')
+      {
+        List<FAQItem> orderedItems = List<FAQItem>.of(items); // Kopie zum sortieren
+        orderedItems.sort((item1, item2) => item1.id < item2.id ? -1 : 1);
+        print("return sorted luist");
+        return orderedItems;
+      ***REMOVED***
 
     var searchWords = search
         .split(RegExp(r"\s+"))
