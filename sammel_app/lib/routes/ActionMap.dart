@@ -193,13 +193,13 @@ class ListLocationMarker extends Marker {
                               text: tr('Du kannst den Ort eintragen auf:\n'),
                               style: TextStyle(color: Colors.black)),
                           TextSpan(
-                              text: 'www.dwenteignen.de/mitmachen',
+                              text: 'www.dwenteignen.de/sammelpunkte/',
                               style: TextStyle(
                                   color: Colors.indigo,
                                   decoration: TextDecoration.underline),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () => launch(
-                                    'https://www.dwenteignen.de/mitmachen'))
+                                    'www.dwenteignen.de/sammelpunkte/'))
                         ]))
                   ]));
 }
