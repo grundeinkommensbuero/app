@@ -71,22 +71,11 @@ class Termin {
             ? 'assets/images/Kundgebung_centered.png'
             : 'assets/images/Kundgebung.png';
     }
-    throw UnknownActionTypeException('Logo für Aktionstyp "$typ" fehlt');
+    return 'assets/images/logo_transparent.png'; // Platzhalter
   }
 
   static final int Function(Termin a, Termin b) compareByStart =
       (termin1, termin2) => termin1.beginn.compareTo(termin2.beginn);
-}
-
-class UnknownActionTypeException extends Error {
-  var message;
-
-  UnknownActionTypeException(this.message) : super();
-
-  @override
-  String toString() {
-    return 'UnkownActionTypeException: $message';
-  }
 }
 
 class ActionWithToken {
