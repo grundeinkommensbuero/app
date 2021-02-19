@@ -242,10 +242,10 @@ void main() {
           infoveranstaltung.getAsset(), 'assets/images/Infoveranstaltung.png');
     ***REMOVED***);
 
-    test('throws Error when type is unknown', () {
+    test('returns placeholder when type is unknown', () {
       infoveranstaltung.typ = 'Unbekannt';
-      expect(() => infoveranstaltung.getAsset(),
-          throwsA((e) => e is UnknownActionTypeException));
+      expect(infoveranstaltung.getAsset(centered: false),
+          'assets/images/logo_transparent.png');
     ***REMOVED***);
 
     test('returns non-centered icon path', () {
@@ -259,11 +259,6 @@ void main() {
       expect(infoveranstaltung.getAsset(centered: true),
           'assets/images/Sammeln_centered.png');
     ***REMOVED***);
-  ***REMOVED***);
-
-  test('UnkownActionTypeException.toString generates message', () {
-    expect(UnknownActionTypeException('this is the message').toString(),
-        'UnkownActionTypeException: this is the message');
   ***REMOVED***);
 ***REMOVED***
 
