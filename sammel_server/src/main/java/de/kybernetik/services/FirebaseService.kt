@@ -5,11 +5,11 @@ import org.jboss.logging.Logger
 import de.kybernetik.rest.PushNotificationDto
 import java.lang.Exception
 import javax.ejb.EJB
-import javax.ejb.Singleton
 import javax.ejb.Startup
+import javax.ejb.Stateless
 
 @Startup
-@Singleton
+@Stateless
 open class FirebaseService {
     private val LOG = Logger.getLogger(FirebaseService::class.java)
 
