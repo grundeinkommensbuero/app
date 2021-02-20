@@ -8,45 +8,45 @@ import org.jboss.logging.Logger
 import java.io.FileInputStream
 import java.io.IOException
 import javax.annotation.PostConstruct
-import javax.ejb.Singleton
-import javax.ejb.Startup
+import javax.ejb.*
+import javax.ejb.LockType.READ
 
 
 @Startup
 @Singleton
+@Lock(READ)
 open class Firebase {
     private val LOG = Logger.getLogger(Firebase::class.java)
-    private var initialized = false
 
     @PostConstruct
     @Suppress("unused")
     open fun initializeFirebase() {
-        try {
-        val creds =
-            FileInputStream("/opt/shared/secrets/sammel-app-firebase-adminsdk.json")
+        if (FirebaseApp.getApps().isEmpty())
+            try {
+                val creds =
+                    FileInputStream("/opt/shared/secrets/sammel-app-firebase-adminsdk.json")
 
-            FirebaseApp.initializeApp(
-                FirebaseOptions.Builder()
-                    .setCredentials(GoogleCredentials.fromStream(creds))
-                    .setDatabaseUrl("https://sammel-app.firebaseio.com")
-                    .build()
-            )
-            initialized = true
-            LOG.info("Firebase wurde initialisiert für ${FirebaseApp.DEFAULT_APP_NAME}")
-        } catch (e: IOException) {
-            LOG.warn("Firebase konnte nicht initialisiert werden: ${e.message}. Möglicherweise liegen die API-Keys nicht vor")
-        }
+                FirebaseApp.initializeApp(
+                    FirebaseOptions.Builder()
+                        .setCredentials(GoogleCredentials.fromStream(creds))
+                        .setDatabaseUrl("https://sammel-app.firebaseio.com")
+                        .build()
+                )
+                LOG.debug("Firebase wurde initialisiert für ${FirebaseApp.DEFAULT_APP_NAME}")
+            } catch (e: IOException) {
+                LOG.warn("Firebase konnte nicht initialisiert werden: ${e.message}. Möglicherweise liegen die API-Keys nicht vor")
+            }
     }
 
     open fun send(message: Message): String {
-        if (initialized)
+        if (FirebaseApp.getApps().isNotEmpty())
             return FirebaseMessaging.getInstance().send(message)
         LOG.warn("Nachricht konnte nicht an Firebase versendet werden, weil Firebase nicht initialisiert wurde")
         return ""
     }
 
     open fun sendMulticast(message: MulticastMessage?): BatchResponse? {
-        if (initialized)
+        if (FirebaseApp.getApps().isNotEmpty())
             return FirebaseMessaging.getInstance().sendMulticast(message)
         LOG.warn("Nachricht konnte nicht an Firebase versendet werden, weil Firebase nicht initialisiert wurde")
         return null
