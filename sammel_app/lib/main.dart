@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
   static var stammdatenService = StammdatenService();
   static var firebaseService = FirebaseReceiveService(pullMode);
   static var storageService = StorageService();
-  static final backend = Backend(version);
+  static final backend = Backend();
   static final userService = demoMode
       ? DemoUserService()
       : UserService(storageService, firebaseService, backend);
