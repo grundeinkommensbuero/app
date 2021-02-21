@@ -177,7 +177,7 @@ open class TermineRestResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun meldeTeilnahmeAn(@QueryParam("id") id: Long?): Response {
-        LOG.debug("Teilnahme an Aktion $id durch ${context.userPrincipal.name}")
+        LOG.info("Teilnahme an Aktion $id durch ${context.userPrincipal.name}")
 
         val ungueltigeAktion = "Die angegebene Aktion ist ungültig"
         if (id == null) {
@@ -215,7 +215,7 @@ open class TermineRestResource {
     @RolesAllowed("user")
     @Produces(APPLICATION_JSON)
     open fun sageTeilnahmeAb(@QueryParam("id") id: Long?): Response {
-        LOG.debug("Absage an Aktion $id durch ${context.userPrincipal.name}")
+        LOG.info("Absage an Aktion $id durch ${context.userPrincipal.name}")
         if (id == null)
             return Response.status(422)
                 .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
@@ -247,7 +247,7 @@ open class TermineRestResource {
     @Produces(APPLICATION_JSON)
     open fun aktualisiereEvaluation(evaluation: EvaluationDto): Response {
         if (evaluation.termin_id == null) return noValidActionResponse
-        LOG.debug("Aktualisiere Evaluation für ${evaluation.termin_id} durch ${context.userPrincipal.name}")
+        LOG.info("Aktualisiere Evaluation für ${evaluation.termin_id} durch ${context.userPrincipal.name}")
 
         val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
 
@@ -425,7 +425,7 @@ open class TermineRestResource {
 
     open fun informiereUeberAbsage(benutzer: Benutzer, aktion: Termin) {
         if(aktion.teilnehmer.isEmpty()) {
-            LOG.debug("Aktion ${aktion.id} hat keine Teilnehmer, deswgen kann niemand informiert werden")
+            LOG.debug("Aktion ${aktion.id} hat keine Teilnehmer, deswegen kann niemand informiert werden")
             return
         }
         val name = if (benutzer.name.isNullOrBlank()) "Jemand" else benutzer.name!!
