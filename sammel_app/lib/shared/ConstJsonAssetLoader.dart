@@ -145,7 +145,7 @@ const Map<String, dynamic> en = {
   "SSL-Zertifikat konnte nicht geladen werden":
       "SSL-certificate could not be loaded",
   "Deine App-Version ist veraltet. Dies ist die Version {version}, du musst aber mindestens Version {minClient} benutzen, damit die App richtig funktioniert.":
-      "Your version of the app is out-of-date. This is version {version}. You need to use at {minClient} or later, for the app to work properly.",
+      "Your version of the app is out-of-date. This is version {version}. You need to use at least {minClient} or later for the app to work properly.",
   "Falsches Format": "Wrong format",
   "Listen-Orte konnten nicht geladen werden.":
       "List of locations could not be loaded.",
