@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
@@ -15,8 +16,6 @@ import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/KiezPicker.dart';
 import 'package:sammel_app/shared/showUsernameDialog.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../Provisioning.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -74,12 +73,13 @@ class ProfilePageState extends State<ProfilePage> {
                   child: Container(
                       alignment: Alignment.center,
                       child: Text(
-                              languages[EasyLocalization.of(context)
-                                      ?.locale
-                                      ?.languageCode] ??
-                                  'Keine',
-                              overflow: TextOverflow.fade,
-                              style: TextStyle(fontSize: 28))
+                          languages[EasyLocalization
+                              .of(context)
+                              ?.locale
+                              ?.languageCode] ??
+                              'Keine',
+                          overflow: TextOverflow.fade,
+                          style: TextStyle(fontSize: 28))
                           .tr()),
                   onPressed: showLanguageDialog,
                 ),
@@ -102,35 +102,37 @@ class ProfilePageState extends State<ProfilePage> {
                     title: "Dein Kiez",
                     child: Container(
                         child: Column(children: [
-                      Text(kiezeCaption,
+                          Text(kiezeCaption,
                               maxLines: 20,
                               style: TextStyle(
                                   fontSize: 12 +
                                       16 / ((100 + kiezeCaption.length) / 100)))
-                          .tr(),
-                      SizedBox(height: 10.0),
-                      Text(
-                        'Mit deiner Kiez-Auswahl bestimmst du für welche Gegenden du über neue Aktionen informiert werden willst.',
-                        style: TextStyle(
-                            fontWeight: FontWeight.normal, color: Colors.black),
-                      ).tr()
-                    ])),
+                              .tr(),
+                          SizedBox(height: 10.0),
+                          Text(
+                            'Mit deiner Kiez-Auswahl bestimmst du für welche Gegenden du über neue Aktionen informiert werden willst.',
+                            style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                color: Colors.black),
+                          ).tr()
+                        ])),
                     onPressed: (_) => showKiezPicker()),
                 SizedBox(height: 20.0),
                 ProfileItem(
                     title: "Deine Benachrichtigungen",
                     child: Container(
                         child: Column(children: [
-                      Text(interval ?? 'lade...',
+                          Text(interval ?? 'lade...',
                               style: TextStyle(fontSize: 28.0))
-                          .tr(),
-                      SizedBox(height: 10.0),
-                      Text(
-                        'Wie oft und aktuell willst du über neue Sammel-Aktionen in deinem Kiez informiert werden?',
-                        style: TextStyle(
-                            fontWeight: FontWeight.normal, color: Colors.black),
-                      ).tr()
-                    ])),
+                              .tr(),
+                          SizedBox(height: 10.0),
+                          Text(
+                            'Wie oft und aktuell willst du über neue Sammel-Aktionen in deinem Kiez informiert werden?',
+                            style: TextStyle(
+                                fontWeight: FontWeight.normal,
+                                color: Colors.black),
+                          ).tr()
+                        ])),
                     onPressed: (context) => showNotificationDialog(context)),
                 SizedBox(height: 20.0),
                 ProfileItem(
@@ -139,12 +141,12 @@ class ProfilePageState extends State<ProfilePage> {
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                          Text('Benachrichtigungen einstellen',
+                              Text('Benachrichtigungen einstellen',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: Colors.black, fontSize: 20.0))
-                              .tr(),
-                        ])),
+                                  .tr(),
+                            ])),
                     onPressed: (context) => showNotificationInfoDialog(context),
                     editable: false),
                 SizedBox(height: 20.0),
@@ -154,12 +156,12 @@ class ProfilePageState extends State<ProfilePage> {
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                          Text('Datenschutz',
+                              Text('Datenschutz',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: Colors.black, fontSize: 28.0))
-                              .tr(),
-                        ])),
+                                  .tr(),
+                            ])),
                     onPressed: (context) => showPrivacyDialog(context),
                     editable: false),
                 SizedBox(height: 20.0),
@@ -176,10 +178,12 @@ class ProfilePageState extends State<ProfilePage> {
 
   showKiezPicker() async {
     var selection = (await KiezPicker(
-                (await Provider.of<StammdatenService>(context).kieze)
-                    .where((kiez) => myKieze.contains(kiez.name))
-                    .toSet())
-            .showKiezPicker(context))
+        (await Provider
+            .of<StammdatenService>(context)
+            .kieze)
+            .where((kiez) => myKieze.contains(kiez.name))
+            .toSet())
+        .showKiezPicker(context))
         ?.map((kiez) => kiez.name)
         ?.toList();
 
@@ -193,38 +197,51 @@ class ProfilePageState extends State<ProfilePage> {
   showLanguageDialog(BuildContext context) async {
     String selection = await showDialog(
         context: context,
-        builder: (context) => SimpleDialog(
-            key: Key('language selection dialog'),
-            contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
-            titlePadding: EdgeInsets.all(15.0),
-            title: const Text('Sprache').tr(),
-            children: []..addAll(languageOptions.map((option) => RadioListTile(
-                  groupValue: EasyLocalization.of(context).locale.languageCode,
-                  value: option,
-                  title: Text(languages[option]),
-                  onChanged: (selected) => Navigator.pop(context, selected),
-                )))));
+        builder: (context) =>
+            SimpleDialog(
+                key: Key('language selection dialog'),
+                contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
+                titlePadding: EdgeInsets.all(15.0),
+                title: const Text('Sprache').tr(),
+                children: []
+                  ..addAll(languageOptions.map((option) =>
+                      RadioListTile(
+                        groupValue: EasyLocalization
+                            .of(context)
+                            .locale
+                            .languageCode,
+                        value: option,
+                        title: Text(languages[option]),
+                        onChanged: (selected) =>
+                            Navigator.pop(context, selected),
+                      )))));
 
     if (selection != null)
-      EasyLocalization.of(context).locale = Locale(selection);
+      EasyLocalization
+          .of(context)
+          .locale = Locale(selection);
   }
 
   showNotificationDialog(BuildContext context) async {
     String selection = await showDialog(
         context: context,
-        builder: (context) => SimpleDialog(
-            key: Key('notification selection dialog'),
-            contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
-            titlePadding: EdgeInsets.all(15.0),
-            title: Text(
+        builder: (context) =>
+            SimpleDialog(
+                key: Key('notification selection dialog'),
+                contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
+                titlePadding: EdgeInsets.all(15.0),
+                title: Text(
                     'Wie häufig möchtest du Infos über anstehende Aktionen bekommen?')
-                .tr(),
-            children: []..addAll(intervalOptions.map((option) => RadioListTile(
-                  groupValue: interval,
-                  value: option,
-                  title: Text(option).tr(),
-                  onChanged: (selected) => Navigator.pop(context, selected),
-                )))));
+                    .tr(),
+                children: []
+                  ..addAll(intervalOptions.map((option) =>
+                      RadioListTile(
+                        groupValue: interval,
+                        value: option,
+                        title: Text(option).tr(),
+                        onChanged: (selected) =>
+                            Navigator.pop(context, selected),
+                      )))));
 
     if (selection != null && selection != interval) {
       renewTopicSubscriptions(myKieze, selection);
@@ -259,8 +276,8 @@ showNotificationInfoDialog(BuildContext context) {
             Container(
                 padding: EdgeInsets.all(10),
                 child: Text(Platform.isIOS
-                        ? 'Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.'
-                        : 'Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.')
+                    ? 'Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.'
+                    : 'Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.')
                     .tr()),
             FlatButton(
                 child: Text('Okay', textAlign: TextAlign.end).tr(),
@@ -284,7 +301,7 @@ showPrivacyDialog(BuildContext context) {
             Container(
                 padding: EdgeInsets.all(10),
                 child: Text(
-                        'Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an app@dwenteignen.de.')
+                    'Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an app@dwenteignen.de.')
                     .tr()),
             FlatButton(
                 child: Text('Okay', textAlign: TextAlign.end).tr(),
@@ -331,36 +348,40 @@ class ProfileItem extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                        Text(title,
+                            Text(title,
                                 style: TextStyle(
                                     fontSize: 15.0,
                                     fontWeight: FontWeight.normal,
                                     color: Colors.black))
-                            .tr(),
-                        SizedBox(height: 10.0),
-                        child,
-                        SizedBox(width: 15.0)
-                      ])),
+                                .tr(),
+                            SizedBox(height: 10.0),
+                            child,
+                            SizedBox(width: 15.0)
+                          ])),
                   editable ? Icon(Icons.edit) : SizedBox(),
                 ])));
   }
 }
 
-showAboutDialog(BuildContext context) {
+showAboutDialog(BuildContext context) async {
+  final packageInfo = await PackageInfo.fromPlatform();
   showDialog(
       context: context,
-      builder: (context) => AboutDialog(
+      builder: (context) =>
+          AboutDialog(
             applicationName: 'Deutsche Wohnen & Co. Enteignen',
             applicationIcon:
-                Image.asset('assets/images/logo_transparent.png', width: 40.0),
-            applicationVersion: version,
+            Image.asset('assets/images/logo_transparent.png', width: 40.0),
+            applicationVersion: '${packageInfo.version} (${packageInfo
+                .buildNumber})',
             children: [
               SizedBox(
                   height: 230,
                   child: Image.asset('assets/images/housy_info.png')),
               SizedBox(height: 15.0),
               Text(
-                  'Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.').tr(),
+                  'Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.')
+                  .tr(),
               SizedBox(height: 15.0),
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
                 RichText(
@@ -371,8 +392,9 @@ showAboutDialog(BuildContext context) {
                             color: Colors.indigo,
                             decoration: TextDecoration.underline),
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () => launch(
-                              'https://gitlab.com/kybernetik/sammel-app'))),
+                          ..onTap = () =>
+                              launch(
+                                  'https://gitlab.com/kybernetik/sammel-app'))),
                 RichText(
                     text: TextSpan(
                         text: 'app@dwenteignen.de',

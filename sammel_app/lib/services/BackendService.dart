@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/services.dart';
 import 'package:http_server/http_server.dart';
+import 'package:package_info/package_info.dart';
 import 'package:sammel_app/Provisioning.dart';
 import 'package:sammel_app/model/Health.dart';
 import 'package:sammel_app/services/ErrorService.dart';
@@ -155,7 +156,7 @@ class NoUserAuthException implements Exception {
 }
 
 class Backend {
-  final String version;
+  PackageInfo version;
 
   final Future<void> zertifikatGeladen = ladeZertifikat().timeout(
       Duration(seconds: 10),
@@ -170,20 +171,22 @@ class Backend {
     HttpHeaders.acceptHeader: "*/*",
   };
 
-  Backend(this.version) {
+  Backend() {
+    PackageInfo.fromPlatform().then((info) => version = info);
     var serverHealth = getServerHealth();
     serverHealth.then((health) {
       if (!health.alive)
         ErrorService.handleError(
             WarningException("Der Server meldet Probleme: ${health.status}"),
             StackTrace.current);
-      if (int.parse(this.version.substring(this.version.indexOf('+') + 1)) <
-          int.parse(health.minClient.substring(this.version.indexOf('+') + 1)))
+      if (int.parse(version.buildNumber) <
+          int.parse(
+              health.minClient.substring(health.minClient.indexOf('+') + 1)))
         ErrorService.handleError(
             WarningException(
                 'Deine App-Version ist veraltet. Dies ist die Version {version}, du musst aber mindestens Version {minClient} benutzen, damit die App richtig funktioniert.'
                     .tr(namedArgs: {
-              'version': version,
+              'version': '${version.version}+${version.buildNumber}',
               'minClient': health.minClient
             })),
             StackTrace.current);
@@ -335,10 +338,13 @@ class DemoBackend implements Backend {
       throw UnimplementedError();
 
   @override
-  String get version => throw UnimplementedError();
+  PackageInfo get version => throw UnimplementedError();
 
   @override
   Future<void> get zertifikatGeladen => throw UnimplementedError();
+
+  @override
+  void set version(PackageInfo _version) => throw UnimplementedError();
 }
 
 class DemoBackendShouldNeverBeUsedError {}

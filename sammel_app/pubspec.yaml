@@ -53,6 +53,7 @@ dependencies:
   easy_localization: ^2.3.3
   scrollable_positioned_list: ^0.1.9
   after_layout: ^1.0.7+2
+  package_info: ^0.4.3+4
 
 dev_dependencies:
   flutter_test:
