@@ -500,7 +500,7 @@ open class TermineRestResource {
             )
         )
         val restTeilnehmer = teilnehmer.subList(1, teilnehmer.size)
-        if (restTeilnehmer.size > 0)
+        if (restTeilnehmer.isNotEmpty())
             LOG.debug("Informiere Teilnehmer ${restTeilnehmer.map { it.id }} von Aktion ${aktion.id} über Löschung")
         pushService.sendePushNachrichtAnEmpfaenger(pushMessage, restTeilnehmer)
     }
