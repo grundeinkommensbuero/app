@@ -104,13 +104,6 @@ class FirebaseServiceTest {
     }
 
     @Test
-    fun `sendeNachrichtAnAlle schickt eine Nachricht ab`() {
-        service.sendeNachrichtAnAlle(PushNotificationDto(channel = "Allgemein", collapseId = null), emptyMap())
-
-        verify(firebase, times(2)).send(any())
-    }
-
-    @Test
     fun `Firebase stubbed FirebaseMessaging wenn keine Konfigurationsdatei existiert`() {
         val firebase4real = Firebase()
 
