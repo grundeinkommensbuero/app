@@ -63,13 +63,10 @@ open class FirebaseService {
     ***REMOVED***
 
     open fun sendePushNachrichtAnTopic(notification: PushNotificationDto?, data: Map<String, String>?, topic: String) {
-        LOG.debug("Sende Nachricht $notification/$data an Thema $topic")
-
         if (topic.isEmpty())
             throw MissingMessageTarget("Die Nachricht enthält kein Topic")
 
         // Quelle: https://firebase.google.com/docs/cloud-messaging/send-message#send-messages-to-topics
-        var pushResponse = "ohne Notification"
         if (notification != null) {
             val pushMessage = Message.builder()
                 .setNotification(
@@ -95,13 +92,10 @@ open class FirebaseService {
                 .putAllData(data ?: emptyMap())
                 .setTopic(topic)
                 .build()
-            pushResponse = firebase.send(pushMessage)
+            val pushResponse = firebase.send(pushMessage)
+            LOG.debug("Erfolgreich Nachricht an Topic $topic gesendet: $pushResponse")
         ***REMOVED***
-        LOG.debug("Erfolgreich Nachricht an Topic $topic gesendet: $pushResponse")
     ***REMOVED***
-
-    open fun sendeNachrichtAnAlle(notification: PushNotificationDto?, data: Map<String, String>?) =
-        sendePushNachrichtAnTopic(notification, data, "global")
 
     class MissingMessageTarget(message: String) : Exception(message)
     class TooManyRecipientsError : Exception("Nicht mehr als 500 Empfänger für eine Nachricht möglich")
