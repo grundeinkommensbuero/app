@@ -121,6 +121,7 @@ open class BenutzerRestResource {
     @Produces(APPLICATION_JSON)
     open fun authentifiziereBenutzer(login: Login): Response {
         LOG.debug("authentifiziere Benutzer ${login.user.id***REMOVED***")
+        LOG.trace("Firebase-Key: ${login.firebaseKey***REMOVED***")
         val benutzer = login.user
         if (benutzer.id == null) {
             return Response
