@@ -1,5 +1,4 @@
 const Mode mode = Mode.DEMO;
-const version = '1.1.0+28';
 
 // Debug
 const bool pullMode = false;
