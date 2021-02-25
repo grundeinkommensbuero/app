@@ -40,12 +40,13 @@ open class PushService {
     private var PREFIX = "undefined."
     private val GSON = GsonBuilder().create()
     private var KEY: SecretKeySpec? = null
+    private var ENCRYPTION = "AES"
     private val secureRandom = SecureRandom()
     private val LOG = Logger.getLogger(PushService::class.java)
 
     @PostConstruct
     @Suppress("unused")
-    open fun ermittleModusUndSchluessel() {
+    open fun werteUmgebungsvariabelnAus() {
         val modus = getProperty("mode")
         LOG.debug("Ermittelter Modus: $modus")
         when (modus) {
@@ -54,6 +55,11 @@ open class PushService {
             "PROD" -> PREFIX = ""
             else -> LOG.error("Server-Modus unbekannt")
         }
+        // TODO in späterer Version aktivieren, zusammen mit neuem Key
+//        when (modus) {
+//            "LOCAL" -> ENCRYPTION = "AES_PROD"
+//            else -> ENCRYPTION = "AES"
+//        }
 
         val key = getProperty("key")
         KEY = SecretKeySpec(Base64.getDecoder().decode(key), "AES")
@@ -102,7 +108,7 @@ open class PushService {
                 ciphertext = Base64.getEncoder().encodeToString(verschluesselt)
             }
             LOG.debug("Verschlüssele $data zu $ciphertext mit Nonce $nonce")
-            return mapOf("encrypted" to "AES", "payload" to ciphertext, "nonce" to nonce)
+            return mapOf("encrypted" to ENCRYPTION, "payload" to ciphertext, "nonce" to nonce)
         } catch (e: JsonSyntaxException) {
             LOG.error("Serialisieren von Push-Nachricht gescheitert", e)
             return null

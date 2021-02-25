@@ -18,6 +18,7 @@ int get port => portMap[mode];
 String get topicPrefix => topicPrefixMap[mode];
 
 const String appAuth = 'MTpiOTdjNzU5Ny1mNjY5LTRmZWItOWJhMi0zMjE0YzE4MjIzMzk=';
+const String prodKey = 'Produktiv-Verschüsselungs-Key goes here';
 
 const hostMap = {
   Mode.DEMO: 'none',
