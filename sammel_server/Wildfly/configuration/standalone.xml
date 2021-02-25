@@ -41,8 +41,8 @@
             <security-realm name="ManagementRealm">
                 <server-identities>
                     <ssl>
-                        <keystore path="${STORE_NAME}" relative-to="jboss.server.config.dir"
-                                  keystore-password="${STORE_PASSWORD}" alias="server" key-password="${STORE_PASSWORD}"/>
+                        <keystore path="${store_name}" relative-to="jboss.server.config.dir"
+                                  keystore-password="${store_password}" alias="server" key-password="${store_password}"/>
                     </ssl>
                 </server-identities>
                 <authentication>
@@ -185,7 +185,7 @@
                 </datasource>
                 <datasource jndi-name="java:jboss/datasources/mariaDBDS" pool-name="mariaDBDS"
                             statistics-enabled="${wildfly.datasources.statistics-enabled:${wildfly.statistics-enabled:false}}">
-                    <connection-url>jdbc:mariadb://${DB_URL}:${DB_PORT}/${DB_SCHEMA}</connection-url>
+                    <connection-url>jdbc:mariadb://${db_url}:${db_port}/${db_schema}</connection-url>
                     <driver>mariaDB</driver>
                     <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
                     <pool>
@@ -193,8 +193,8 @@
                         <max-pool-size>200</max-pool-size>
                     </pool>
                     <security>
-                        <user-name>${DB_USER}</user-name>
-                        <password>${DB_PASSWORD}</password>
+                        <user-name>${db_user}</user-name>
+                        <password>${db_password}</password>
                     </security>
                     <validation>
                         <valid-connection-checker
@@ -437,14 +437,14 @@
             <tls>
                 <key-stores>
                     <key-store name="dweKeyStore">
-                        <credential-reference clear-text="${STORE_PASSWORD}"/>
+                        <credential-reference clear-text="${store_password}"/>
                         <implementation type="PKCS12"/>
-                        <file path="${STORE_NAME}" relative-to="jboss.server.config.dir"/>
+                        <file path="${store_name}" relative-to="jboss.server.config.dir"/>
                     </key-store>
                 </key-stores>
                 <key-managers>
                     <key-manager name="dweKeyManager" key-store="dweKeyStore">
-                        <credential-reference clear-text="${STORE_PASSWORD}"/>
+                        <credential-reference clear-text="${store_password}"/>
                     </key-manager>
                 </key-managers>
                 <server-ssl-contexts>

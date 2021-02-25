@@ -9,11 +9,13 @@ import de.kybernetik.database.subscriptions.SubscriptionDao
 import de.kybernetik.rest.*
 import de.kybernetik.rest.TermineRestResource.TerminDto
 import org.jboss.logging.Logger
+import java.lang.System.getProperty
 import java.net.URLEncoder
 import java.security.SecureRandom
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import javax.annotation.PostConstruct
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 import javax.ejb.EJB
@@ -35,10 +37,27 @@ open class PushService {
     @EJB
     private lateinit var subscriptionDao: SubscriptionDao
 
+    private var PREFIX = "undefined."
     private val GSON = GsonBuilder().create()
-    private val KEY = SecretKeySpec(Base64.getDecoder().decode("vue8NkTYyN1e2OoHGcapLZWiCTC+13Eqk9gXBSq4azc="), "AES")
+    private var KEY: SecretKeySpec? = null
     private val secureRandom = SecureRandom()
     private val LOG = Logger.getLogger(PushService::class.java)
+
+    @PostConstruct
+    @Suppress("unused")
+    open fun ermittleModusUndSchluessel() {
+        val modus = getProperty("mode")
+        LOG.debug("Ermittelter Modus: $modus")
+        when (modus) {
+            "LOCAL" -> PREFIX = "local."
+            "TEST" -> PREFIX = "test."
+            "PROD" -> PREFIX = ""
+            else -> LOG.error("Server-Modus unbekannt")
+        }
+
+        val key = getProperty("key")
+        KEY = SecretKeySpec(Base64.getDecoder().decode(key), "AES")
+    }
 
     open fun sendePushNachrichtAnEmpfaenger(nachricht: PushMessageDto, empfaenger: List<Benutzer>) {
         val firebaseKeys = benutzerDao.getFirebaseKeys(empfaenger)
@@ -55,10 +74,11 @@ open class PushService {
     }
 
     open fun sendePushNachrichtAnTopic(nachricht: PushMessageDto, topic: String) {
+        val topicInModus = "$PREFIX$topic"
         val verschluesselt = verschluessele(nachricht.data)
-        firebase.sendePushNachrichtAnTopic(nachricht.notification, verschluesselt, topic)
+        firebase.sendePushNachrichtAnTopic(nachricht.notification, verschluesselt, topicInModus)
 
-        val subscribers = subscriptionDao.getSubscribersForTopic(topic)
+        val subscribers = subscriptionDao.getSubscribersForTopic(topicInModus)
         val subscribedBenutzer = benutzerDao.getBenutzer(subscribers)
         if (subscribedBenutzer.isNotEmpty())
             pushDao.speicherePushMessageFuerEmpfaenger(nachricht.notification, verschluesselt, subscribedBenutzer)
