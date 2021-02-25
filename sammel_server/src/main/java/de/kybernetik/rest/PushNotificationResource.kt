@@ -64,8 +64,10 @@ open class PushNotificationResource {
     @Path("topic/{topic}")
     @RolesAllowed("moderator")
     @POST
-    open fun pushToTopic(nachricht: PushMessageDto, @PathParam("topic") topic: String) =
+    open fun pushToTopic(nachricht: PushMessageDto, @PathParam("topic") topic: String) {
+        LOG.info("Pushe Nachricht zu Topic $topic (unmodifiziert)")
         pushService.sendePushNachrichtAnTopic(nachricht, topic)
+    }
 
     @Path("pull")
     @RolesAllowed("user")
