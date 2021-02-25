@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 
 Future<void> main() async {
-  var titel = "Neue Version 1.1";
+  var titel = 'Neue Version 1.1';
   var inhalt = '''Liebe Sammler*innen. Kurz vor dem offiziellen Sammel-Start gibt es noch einmal die neue App-Version 1.1
 Die Version beinhaltet kleinere Fehlerbehebungen und wichtige Features, die es nicht mehr in die Release-Version geschafft hatten.
   
@@ -48,7 +48,7 @@ Das App-Team :)''';
   ***REMOVED***
 
   final response = await post(
-      'https://dwe.idash.org/service/push/topic/test-global',
+      'http://localhost:18080/service/push/topic/global',
       headers: {
         "Authorization":
             "Basic MzpmZjdhOGI2Yi1lMTVhLTRmZWUtOWY3OS1kY2EwNmZkNmM4ODM=",

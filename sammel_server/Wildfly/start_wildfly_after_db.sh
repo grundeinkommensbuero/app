@@ -1,15 +1,8 @@
 
 #!/bin/sh
-db_url=$1
-db_port=$2
-db_schema=$3
-db_user=$4
-db_password=$5
-store_name=$6
-store_password=$7
-printf "%s" "waiting for database $1:$2/$3 to run ..."
+printf "%s" "waiting for database $DB_URL:$DB_PORT/$DB_SCHEMA to run ..."
 i=1
-while ! (echo >/dev/tcp/$db_url/$db_port) &> /dev/null
+while ! (echo >/dev/tcp/$DB_URL/$DB_PORT) &> /dev/null
 do
   i=$((i+1))
   sleep 1
@@ -20,15 +13,21 @@ do
     exit
   fi
 done
+
+printf "\n%s\n"  "Richte Standard-Admin-Nutzer ein"
+/opt/jboss/wildfly/bin/add-user.sh admin $SERVER_PASSWORD --silent
+
 printf "\n%s\n"  "Database responded, starting server..."
 /opt/jboss/wildfly/bin/standalone.sh \
   -b "0.0.0.0" \
   -bmanagement "0.0.0.0" \
-  -DDB_URL=$db_url \
-  -DDB_PORT=$db_port \
-  -DDB_SCHEMA=$db_schema \
-  -DDB_USER=$db_user \
-  -DDB_PASSWORD=$db_password \
-  -DSTORE_NAME=$store_name \
-  -DSTORE_PASSWORD=$store_password \
+  -Ddb_url=$DB_URL \
+  -Ddb_port=$DB_PORT \
+  -Ddb_schema=$DB_SCHEMA \
+  -Ddb_user=$DB_USER \
+  -Ddb_password=$DB_PASSWORD \
+  -Dstore_name=$STORE_NAME \
+  -Dstore_password=$SERVER_PASSWORD \
+  -Dmode=$MODE \
+  -Dkey=$KEY \
   --debug

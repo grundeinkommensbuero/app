@@ -41,8 +41,8 @@
             <security-realm name="ManagementRealm">
                 <server-identities>
                     <ssl>
-                        <keystore path="${STORE_NAME***REMOVED***" relative-to="jboss.server.config.dir"
-                                  keystore-password="${STORE_PASSWORD***REMOVED***" alias="server" key-password="${STORE_PASSWORD***REMOVED***"/>
+                        <keystore path="${store_name***REMOVED***" relative-to="jboss.server.config.dir"
+                                  keystore-password="${store_password***REMOVED***" alias="server" key-password="${store_password***REMOVED***"/>
                     </ssl>
                 </server-identities>
                 <authentication>
@@ -185,7 +185,7 @@
                 </datasource>
                 <datasource jndi-name="java:jboss/datasources/mariaDBDS" pool-name="mariaDBDS"
                             statistics-enabled="${wildfly.datasources.statistics-enabled:${wildfly.statistics-enabled:false***REMOVED******REMOVED***">
-                    <connection-url>jdbc:mariadb://${DB_URL***REMOVED***:${DB_PORT***REMOVED***/${DB_SCHEMA***REMOVED***</connection-url>
+                    <connection-url>jdbc:mariadb://${db_url***REMOVED***:${db_port***REMOVED***/${db_schema***REMOVED***</connection-url>
                     <driver>mariaDB</driver>
                     <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
                     <pool>
@@ -193,8 +193,8 @@
                         <max-pool-size>200</max-pool-size>
                     </pool>
                     <security>
-                        <user-name>${DB_USER***REMOVED***</user-name>
-                        <password>${DB_PASSWORD***REMOVED***</password>
+                        <user-name>${db_user***REMOVED***</user-name>
+                        <password>${db_password***REMOVED***</password>
                     </security>
                     <validation>
                         <valid-connection-checker
@@ -437,14 +437,14 @@
             <tls>
                 <key-stores>
                     <key-store name="dweKeyStore">
-                        <credential-reference clear-text="${STORE_PASSWORD***REMOVED***"/>
+                        <credential-reference clear-text="${store_password***REMOVED***"/>
                         <implementation type="PKCS12"/>
-                        <file path="${STORE_NAME***REMOVED***" relative-to="jboss.server.config.dir"/>
+                        <file path="${store_name***REMOVED***" relative-to="jboss.server.config.dir"/>
                     </key-store>
                 </key-stores>
                 <key-managers>
                     <key-manager name="dweKeyManager" key-store="dweKeyStore">
-                        <credential-reference clear-text="${STORE_PASSWORD***REMOVED***"/>
+                        <credential-reference clear-text="${store_password***REMOVED***"/>
                     </key-manager>
                 </key-managers>
                 <server-ssl-contexts>

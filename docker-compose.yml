@@ -32,18 +32,20 @@ services:
       - DB_USER=user
       - DB_PASSWORD=password
       - STORE_NAME=sammel-app.local-keystore.p12
-      - STORE_PASSWORD=password
+      - SERVER_PASSWORD=password
+      - MODE=LOCAL
+      - KEY=vue8NkTYyN1e2OoHGcapLZWiCTC+13Eqk9gXBSq4azc=
     ports:
-     - '19993:9993'
-     - '18080:8080'
-     - '18443:8443'
-     - '18787:8787'
+      - '19993:9993'
+      - '18080:8080'
+      - '18443:8443'
+      - '18787:8787'
     links:
-     - db
+      - db
     depends_on:
-     - db
+      - db
     volumes:
       - ./server-work-dir:/opt/shared
 
 volumes:
-  my-db: {***REMOVED***
+  my-db: { ***REMOVED***
