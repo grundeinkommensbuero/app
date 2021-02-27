@@ -1,9 +1,11 @@
 package de.kybernetik.database.termine
 
 import de.kybernetik.database.DatabaseException
+import de.kybernetik.database.benutzer.Benutzer
 import org.jboss.logging.Logger
 import de.kybernetik.rest.TermineFilter
 import de.kybernetik.shared.toDate
+import java.lang.System.getProperty
 import java.time.LocalDate.now
 import javax.ejb.Stateless
 import javax.inject.Inject
@@ -19,13 +21,14 @@ open class TermineDao {
     @PersistenceContext(unitName = "mariaDB")
     private lateinit var entityManager: EntityManager
 
-    open fun getTermine(filter: TermineFilter): List<Termin> {
-        val ergebnisse = erzeugeGetTermineQuery(filter).resultList
+    open fun getTermine(filter: TermineFilter, benutzerId: Long): List<Termin> {
+        val ergebnisse = erzeugeGetTermineQuery(filter, Benutzer(benutzerId, null, 0)).resultList
         LOG.debug("Gefundene Aktionen nach Filter ${filter.typen***REMOVED***, ${filter.tage***REMOVED***, ${filter.von***REMOVED***, ${filter.bis***REMOVED***, ${filter.orte***REMOVED***: ${ergebnisse.map { it.id ***REMOVED******REMOVED***")
         return ergebnisse
     ***REMOVED***
 
-    private val aktuellKlausel: String = "DATE(termine.ende) > (:vor7Tagen)"
+    private val aktuellKlausel: String =
+        "(DATE(termine.ende) > (:heute) or ((:benutzer) in elements(termine.teilnehmer) and DATE(termine.ende) > (:vor7Tagen)))"
     private val typenKlausel = "termine.typ in (:typen)"
     private val tageKlausel = "DATE(termine.beginn) in (:tage)"
     private val vonKlausel = "TIME(termine.beginn) >= TIME(:von)"
@@ -34,7 +37,7 @@ open class TermineDao {
     private val idsKlausel = "termine.id in (:ids)"
 
     @Suppress("JpaQueryApiInspection") // IDEA kriegt die Query nicht zusammen
-    open fun erzeugeGetTermineQuery(filter: TermineFilter): TypedQuery<Termin> {
+    open fun erzeugeGetTermineQuery(filter: TermineFilter, benutzer: Benutzer): TypedQuery<Termin> {
         val filterKlausel = mutableListOf<String>()
         filterKlausel.add(aktuellKlausel)
         if (!filter.typen.isNullOrEmpty()) filterKlausel.add(typenKlausel)
@@ -48,9 +51,12 @@ open class TermineDao {
         if (filterKlausel.isNotEmpty()) sql += " where " + filterKlausel.joinToString(" and ")
         sql += " order by termine.beginn"
         val query = entityManager.createQuery(sql, Termin::class.java)
-        query.setMaxResults(100)
+        query.maxResults = getProperty("de.kybernetik.max-actions").toInt()
 
-        query.setParameter("vor7Tagen", now().minusDays(7).toDate())
+        query.setParameter("heute", now().toDate())
+        query.setParameter("benutzer", benutzer)
+        query.setParameter("vor7Tagen", now()
+            .minusDays(getProperty("de.kybernetik.action-age").toLong()).toDate())
         if (filterKlausel.contains(typenKlausel)) query.setParameter("typen", filter.typen)
         if (filterKlausel.contains(tageKlausel)) query.setParameter("tage", filter.tage!!.map { it.toDate() ***REMOVED***)
         if (filterKlausel.contains(vonKlausel)) query.setParameter("von", filter.von!!.atDate(now()))

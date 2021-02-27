@@ -50,7 +50,7 @@ open class NeueAktionenNotification {
         LOG.debug("Starte Job für wöchentliche Push-Nachrichten über neue Aktionen")
         try {
             val filter = TermineFilter(tage = (0L..14L).map { LocalDate.now().plus(it, ChronoUnit.DAYS) ***REMOVED***)
-            val aktionen = termineDao.getTermine(filter)
+            val aktionen = termineDao.getTermine(filter, 0L)
 
             LOG.debug("Aktionen der nächsten 2 Wochen: ${aktionen.map { it.id ***REMOVED******REMOVED***")
             for (kiez in aktionen.map { it.ort ***REMOVED***.distinct()) {

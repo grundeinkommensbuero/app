@@ -43,7 +43,7 @@ class ActionExportRestResourceTest {
 
     @Test
     fun `getActionsAsGeoJson returns found actions in geoJson format`() {
-        whenever(dao.getTermine(any())).thenReturn(listOf(
+        whenever(dao.getTermine(any(), 0L)).thenReturn(listOf(
                 terminOhneTeilnehmerMitDetails(),
                 terminOhneTeilnehmerMitDetails(),
                 terminOhneTeilnehmerMitDetails()))
@@ -61,7 +61,7 @@ class ActionExportRestResourceTest {
     fun `getActionsAsGeoJson filters actions without coordinates`() {
         val invalidAction = terminOhneTeilnehmerMitDetails()
         invalidAction.longitude = null
-        whenever(dao.getTermine(any())).thenReturn(listOf(
+        whenever(dao.getTermine(any(), 0L)).thenReturn(listOf(
                 terminOhneTeilnehmerMitDetails(),
                 terminOhneTeilnehmerMitDetails(),
                 invalidAction))

@@ -36,13 +36,18 @@
         <extension module="org.wildfly.extension.security.manager"/>
         <extension module="org.wildfly.extension.undertow"/>
     </extensions>
+    <system-properties>
+        <property name="de.kybernetik.max-actions" value="100"/>
+        <property name="de.kybernetik.action-age" value="7"/> <!-- in Tagen -->
+    </system-properties>
     <management>
         <security-realms>
             <security-realm name="ManagementRealm">
                 <server-identities>
                     <ssl>
                         <keystore path="${store_name***REMOVED***" relative-to="jboss.server.config.dir"
-                                  keystore-password="${store_password***REMOVED***" alias="server" key-password="${store_password***REMOVED***"/>
+                                  keystore-password="${store_password***REMOVED***" alias="server"
+                                  key-password="${store_password***REMOVED***"/>
                     </ssl>
                 </server-identities>
                 <authentication>
@@ -611,7 +616,8 @@
                 <https-listener name="https" socket-binding="https" ssl-context="dweSSLContext" enable-http2="true"/>
                 <host name="default-host" alias="localhost">
                     <location name="/" handler="welcome-content"/>
-                    <access-log directory="/opt/shared/logs" pattern="%h %t &quot;%r&quot; %s &quot;%{i,User-Agent***REMOVED***&quot;" use-server-log="false"/>
+                    <access-log directory="/opt/shared/logs"
+                                pattern="%h %t &quot;%r&quot; %s &quot;%{i,User-Agent***REMOVED***&quot;" use-server-log="false"/>
                     <http-invoker security-realm="ApplicationRealm"/>
                 </host>
             </server>

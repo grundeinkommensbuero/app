@@ -124,7 +124,7 @@ class TermineRestResourceTest {
 
     @Test
     fun `getTermineL liefert TerminDtos aus mit Filter`() {
-        whenever(dao.getTermine(any())).thenReturn(
+        whenever(dao.getTermine(any(), 0L)).thenReturn(
             listOf(
                 terminOhneTeilnehmerOhneDetails(),
                 terminOhneTeilnehmerMitDetails()
@@ -133,7 +133,7 @@ class TermineRestResourceTest {
         val filter = TermineFilter()
         val response = resource.getTermine(filter)
 
-        verify(dao, atLeastOnce()).getTermine(filter)
+        verify(dao, atLeastOnce()).getTermine(filter, 0L)
 
         assertEquals(response.status, 200)
         val termine = response.entity as List<*>
@@ -147,7 +147,7 @@ class TermineRestResourceTest {
 
     @Test
     fun `getTermine nimmt fuer keinen Filter leeren Filter`() {
-        whenever(dao.getTermine(any())).thenReturn(
+        whenever(dao.getTermine(any(), 0L)).thenReturn(
             listOf(
                 terminOhneTeilnehmerOhneDetails(),
                 terminOhneTeilnehmerMitDetails()
@@ -156,7 +156,7 @@ class TermineRestResourceTest {
         resource.getTermine(null)
 
         val captor = ArgumentCaptor.forClass(TermineFilter::class.java)
-        verify(dao, atLeastOnce()).getTermine(capture<TermineFilter>(captor))
+        verify(dao, atLeastOnce()).getTermine(capture<TermineFilter>(captor), 0L)
         assertEquals(captor.value.typen, emptyList())
         assertEquals(captor.value.tage, emptyList())
         assertEquals(captor.value.von, null)
