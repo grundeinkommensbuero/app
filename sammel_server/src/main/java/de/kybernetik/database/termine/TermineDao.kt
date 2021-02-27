@@ -23,7 +23,7 @@ open class TermineDao {
 
     open fun getTermine(filter: TermineFilter, benutzerId: Long): List<Termin> {
         val ergebnisse = erzeugeGetTermineQuery(filter, Benutzer(benutzerId, null, 0)).resultList
-        LOG.debug("Gefundene Aktionen nach Filter ${filter.typen***REMOVED***, ${filter.tage***REMOVED***, ${filter.von***REMOVED***, ${filter.bis***REMOVED***, ${filter.orte***REMOVED***: ${ergebnisse.map { it.id ***REMOVED******REMOVED***")
+        LOG.debug("Gefundene Aktionen: ${ergebnisse.map { it.id ***REMOVED******REMOVED***")
         return ergebnisse
     ***REMOVED***
 

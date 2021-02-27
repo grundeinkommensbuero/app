@@ -31,7 +31,6 @@ open class ActionExportRestResource {
         LOG.debug("Bearbeite Anfrage nach Aktionen als GeoJson")
         val filter = TermineFilter(emptyList(), next7days, null, null, emptyList())
         val actions = dao.getTermine(filter, 0L)
-        LOG.debug("Aktionen ${actions.map { action -> action.id ***REMOVED******REMOVED*** gefunden")
         val geoJsonActions = actions
                 .filter { action -> action.longitude != null && action.latitude != null ***REMOVED***
                 .map { action -> GeoJsonAction.convertFromAction(action) ***REMOVED***

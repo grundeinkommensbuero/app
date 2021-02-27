@@ -47,7 +47,7 @@ open class NeueAktionenNotification {
     @Schedule(dayOfWeek = "Wed", hour = "18")
     @Suppress("unused")
     open fun weeklyNeueAktionenNotification() {
-        LOG.debug("Starte Job für wöchentliche Push-Nachrichten über neue Aktionen")
+        LOG.info("Starte Job für wöchentliche Push-Nachrichten über neue Aktionen")
         try {
             val filter = TermineFilter(tage = (0L..14L).map { LocalDate.now().plus(it, ChronoUnit.DAYS) ***REMOVED***)
             val aktionen = termineDao.getTermine(filter, 0L)
