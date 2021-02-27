@@ -7,7 +7,6 @@ import TestdatenVorrat.Companion.sammeltermin
 import TestdatenVorrat.Companion.terminDetails
 import com.nhaarman.mockitokotlin2.*
 import de.kybernetik.database.DatabaseException
-import de.kybernetik.database.benutzer.Benutzer
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentCaptor
@@ -95,8 +94,7 @@ class TermineDaoTest {
         whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)
 
         dao.erzeugeGetTermineQuery(
-            TermineFilter(emptyList(), emptyList(), null, null, emptyList()),
-            Benutzer(0, null, 0)
+            TermineFilter(emptyList(), emptyList(), null, null, emptyList()), null
         )
 
         val vor7tagen = LocalDate.now().minusDays(7)
@@ -115,8 +113,7 @@ class TermineDaoTest {
         whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)
 
         dao.erzeugeGetTermineQuery(
-            TermineFilter(listOf("Sammeln", "Infoveranstaltung"), emptyList(), null, null, emptyList()),
-            Benutzer(0, null, 0)
+            TermineFilter(listOf("Sammeln", "Infoveranstaltung"), emptyList(), null, null, emptyList()), null
         )
 
         val queryCaptor = ArgumentCaptor.forClass(String::class.java)
@@ -132,7 +129,7 @@ class TermineDaoTest {
     fun erzeugeGetTermineQueryErgaenztTypenKlauselNICHTWennNull() {
         whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)
 
-        dao.erzeugeGetTermineQuery(TermineFilter(), Benutzer(0, null, 0))
+        dao.erzeugeGetTermineQuery(TermineFilter(), null)
 
         val queryCaptor = ArgumentCaptor.forClass(String::class.java)
         verify(entityManager, atLeastOnce()).createQuery(queryCaptor.capture(), any<Class<Termin>>())
@@ -146,8 +143,7 @@ class TermineDaoTest {
 
         val heute = LocalDate.now()
         dao.erzeugeGetTermineQuery(
-            TermineFilter(emptyList(), listOf(heute, heute.plusDays(1)), null, null, emptyList()),
-            Benutzer(0, null, 0)
+            TermineFilter(emptyList(), listOf(heute, heute.plusDays(1)), null, null, emptyList()), null
         )
 
         val queryCaptor = ArgumentCaptor.forClass(String::class.java)
@@ -163,7 +159,7 @@ class TermineDaoTest {
     fun erzeugeGetTermineQueryErgaenztTageKlauselNICHTWennNull() {
         whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)
 
-        dao.erzeugeGetTermineQuery(TermineFilter(), Benutzer(0, null, 0))
+        dao.erzeugeGetTermineQuery(TermineFilter(), null)
 
         val queryCaptor = ArgumentCaptor.forClass(String::class.java)
         verify(entityManager, atLeastOnce()).createQuery(queryCaptor.capture(), any<Class<Termin>>())
@@ -177,8 +173,7 @@ class TermineDaoTest {
 
         val jetzt = LocalTime.now()
         dao.erzeugeGetTermineQuery(
-            TermineFilter(emptyList(), emptyList(), jetzt, null, emptyList()),
-            Benutzer(0, null, 0)
+            TermineFilter(emptyList(), emptyList(), jetzt, null, emptyList()), null
         )
 
         val queryCaptor = ArgumentCaptor.forClass(String::class.java)
@@ -191,7 +186,7 @@ class TermineDaoTest {
     fun erzeugeGetTermineQueryErgaenztVonKlauselNICHTWennNull() {
         whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)
 
-        dao.erzeugeGetTermineQuery(TermineFilter(), Benutzer(0, null, 0))
+        dao.erzeugeGetTermineQuery(TermineFilter(), null)
 
         val queryCaptor = ArgumentCaptor.forClass(String::class.java)
         verify(entityManager, atLeastOnce()).createQuery(queryCaptor.capture(), any<Class<Termin>>())
@@ -205,8 +200,7 @@ class TermineDaoTest {
 
         val jetzt = LocalTime.now()
         dao.erzeugeGetTermineQuery(
-            TermineFilter(emptyList(), emptyList(), null, jetzt, emptyList()),
-            Benutzer(0, null, 0)
+            TermineFilter(emptyList(), emptyList(), null, jetzt, emptyList()), null
         )
 
         val queryCaptor = ArgumentCaptor.forClass(String::class.java)
@@ -219,7 +213,7 @@ class TermineDaoTest {
     fun erzeugeGetTermineQueryErgaenztBisKlauselNICHTWennNull() {
         whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)
 
-        dao.erzeugeGetTermineQuery(TermineFilter(), Benutzer(0, null, 0))
+        dao.erzeugeGetTermineQuery(TermineFilter(), null)
 
         val queryCaptor = ArgumentCaptor.forClass(String::class.java)
         verify(entityManager, atLeastOnce()).createQuery(queryCaptor.capture(), any<Class<Termin>>())
@@ -232,8 +226,7 @@ class TermineDaoTest {
         whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)
 
         dao.erzeugeGetTermineQuery(
-            TermineFilter(emptyList(), emptyList(), null, null, listOf("Frankfurter Allee Nord")),
-            Benutzer(0, null, 0)
+            TermineFilter(emptyList(), emptyList(), null, null, listOf("Frankfurter Allee Nord")), null
         )
 
         val queryCaptor = ArgumentCaptor.forClass(String::class.java)
@@ -248,7 +241,7 @@ class TermineDaoTest {
     fun erzeugeGetTermineQueryErgaenztOrteKlauselNICHTWennNull() {
         whenever(entityManager.createQuery(anyString(), any<Class<Termin>>())).thenReturn(typedQuery)
 
-        dao.erzeugeGetTermineQuery(TermineFilter(), Benutzer(0, null, 0))
+        dao.erzeugeGetTermineQuery(TermineFilter(), null)
 
         val queryCaptor = ArgumentCaptor.forClass(String::class.java)
         verify(entityManager, atLeastOnce()).createQuery(queryCaptor.capture(), any<Class<Termin>>())
@@ -267,7 +260,7 @@ class TermineDaoTest {
                 LocalTime.of(12, 0, 0),
                 LocalTime.of(18, 0, 0),
                 listOf("Frankfurter Allee Nord")
-            ), Benutzer(0, null, 0)
+            ), null
         )
 
         val queryCaptor = ArgumentCaptor.forClass(String::class.java)
