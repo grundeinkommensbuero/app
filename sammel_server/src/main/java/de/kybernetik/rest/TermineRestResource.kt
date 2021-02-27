@@ -57,7 +57,7 @@ open class TermineRestResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun getTermine(filter: TermineFilter?): Response {
-        val termine = dao.getTermine(filter ?: TermineFilter())
+        val termine = dao.getTermine(filter ?: TermineFilter(), context.userPrincipal.name.toLong())
         return Response
             .ok()
             .entity(termine.map { termin -> convertFromTerminWithoutDetails(termin) })
@@ -379,7 +379,7 @@ open class TermineRestResource {
     }
 
     open fun informiereUeberTeilnahme(benutzer: Benutzer, aktion: Termin) {
-        if(aktion.teilnehmer.isEmpty()) {
+        if (aktion.teilnehmer.isEmpty()) {
             LOG.debug("Aktion ${aktion.id} hat keine Teilnehmer, deswgen kann niemand informiert werden")
             return
         }
@@ -424,7 +424,7 @@ open class TermineRestResource {
     }
 
     open fun informiereUeberAbsage(benutzer: Benutzer, aktion: Termin) {
-        if(aktion.teilnehmer.isEmpty()) {
+        if (aktion.teilnehmer.isEmpty()) {
             LOG.debug("Aktion ${aktion.id} hat keine Teilnehmer, deswegen kann niemand informiert werden")
             return
         }
