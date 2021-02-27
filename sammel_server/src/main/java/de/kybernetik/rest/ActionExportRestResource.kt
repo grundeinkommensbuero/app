@@ -30,7 +30,7 @@ open class ActionExportRestResource {
     open fun getActionsAsGeoJson(): Response {
         LOG.debug("Bearbeite Anfrage nach Aktionen als GeoJson")
         val filter = TermineFilter(emptyList(), next7days, null, null, emptyList())
-        val actions = dao.getTermine(filter, 0L)
+        val actions = dao.getTermine(filter, null)
         val geoJsonActions = actions
                 .filter { action -> action.longitude != null && action.latitude != null }
                 .map { action -> GeoJsonAction.convertFromAction(action) }

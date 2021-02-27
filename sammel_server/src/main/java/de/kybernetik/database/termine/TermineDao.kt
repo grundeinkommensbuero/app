@@ -21,8 +21,8 @@ open class TermineDao {
     @PersistenceContext(unitName = "mariaDB")
     private lateinit var entityManager: EntityManager
 
-    open fun getTermine(filter: TermineFilter, benutzerId: Long): List<Termin> {
-        val ergebnisse = erzeugeGetTermineQuery(filter, Benutzer(benutzerId, null, 0)).resultList
+    open fun getTermine(filter: TermineFilter, benutzerId: Long?): List<Termin> {
+        val ergebnisse = erzeugeGetTermineQuery(filter, benutzerId).resultList
         LOG.debug("Gefundene Aktionen: ${ergebnisse.map { it.id }}")
         return ergebnisse
     }
@@ -37,9 +37,9 @@ open class TermineDao {
     private val idsKlausel = "termine.id in (:ids)"
 
     @Suppress("JpaQueryApiInspection") // IDEA kriegt die Query nicht zusammen
-    open fun erzeugeGetTermineQuery(filter: TermineFilter, benutzer: Benutzer): TypedQuery<Termin> {
+    open fun erzeugeGetTermineQuery(filter: TermineFilter, benutzerId: Long?): TypedQuery<Termin> {
         val filterKlausel = mutableListOf<String>()
-        filterKlausel.add(aktuellKlausel)
+        if (benutzerId != null) filterKlausel.add(aktuellKlausel)
         if (!filter.typen.isNullOrEmpty()) filterKlausel.add(typenKlausel)
         if (!filter.tage.isNullOrEmpty()) filterKlausel.add(tageKlausel)
         if (filter.von != null) filterKlausel.add(vonKlausel)
@@ -53,10 +53,12 @@ open class TermineDao {
         val query = entityManager.createQuery(sql, Termin::class.java)
         query.maxResults = getProperty("de.kybernetik.max-actions").toInt()
 
-        query.setParameter("heute", now().toDate())
-        query.setParameter("benutzer", benutzer)
-        query.setParameter("vor7Tagen", now()
-            .minusDays(getProperty("de.kybernetik.action-age").toLong()).toDate())
+        if(filterKlausel.contains(aktuellKlausel)) {
+            query.setParameter("heute", now().toDate())
+            query.setParameter("benutzer", Benutzer(benutzerId!!, null, 0L))
+            query.setParameter("vor7Tagen", now()
+                .minusDays(getProperty("de.kybernetik.action-age").toLong()).toDate())
+        }
         if (filterKlausel.contains(typenKlausel)) query.setParameter("typen", filter.typen)
         if (filterKlausel.contains(tageKlausel)) query.setParameter("tage", filter.tage!!.map { it.toDate() })
         if (filterKlausel.contains(vonKlausel)) query.setParameter("von", filter.von!!.atDate(now()))
