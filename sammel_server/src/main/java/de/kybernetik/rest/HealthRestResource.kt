@@ -17,7 +17,7 @@ open class HealthRestResource {
     open fun health(): Response {
         return Response
                 .ok()
-                .entity(Health(status = "lebendig", version = "1.1.0", minClient = "1.1.0+28"))
+                .entity(Health(status = "lebendig", version = "1.2.1", minClient = "1.1.0+28"))
                 .build()
 
     }
