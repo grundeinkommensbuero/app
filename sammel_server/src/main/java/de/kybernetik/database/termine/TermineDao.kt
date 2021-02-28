@@ -28,7 +28,7 @@ open class TermineDao {
     ***REMOVED***
 
     private val aktuellKlausel: String =
-        "(DATE(termine.ende) > (:heute) or ((:benutzer) in elements(termine.teilnehmer) and DATE(termine.ende) > (:vor7Tagen)))"
+        "(DATE(termine.ende) >= (:heute) or ((:benutzer) in elements(termine.teilnehmer) and DATE(termine.ende) > (:vor7Tagen)))"
     private val typenKlausel = "termine.typ in (:typen)"
     private val tageKlausel = "DATE(termine.beginn) in (:tage)"
     private val vonKlausel = "TIME(termine.beginn) >= TIME(:von)"
