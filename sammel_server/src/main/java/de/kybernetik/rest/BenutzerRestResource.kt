@@ -161,8 +161,11 @@ open class BenutzerRestResource {
             return Response.status(500).entity(RestFehlermeldung(meldung)).build()
         ***REMOVED***
 
+        if(!credentials.firebaseKey.equals(login.firebaseKey))
+            LOG.warn("Firbase-Key stimmt nicht überein: ${login.firebaseKey***REMOVED***")
+
         if (!verifiziert) {
-            LOG.info("Falscher Login mit Benutzer ${login.user.id***REMOVED***")
+            LOG.warn("Falscher Login mit Benutzer ${login.user.id***REMOVED***")
             return Response
                     .ok()
                     .entity(false)
