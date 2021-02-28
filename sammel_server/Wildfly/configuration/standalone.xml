@@ -145,10 +145,10 @@
             <logger category="de.kybernetik.services.PushService">
                 <level name="INFO"/>
             </logger>
-            <logger category="de.kybernetik.shared.Security">
+            <logger category="de.kybernetik.database.termine.TermineDao">
                 <level name="INFO"/>
             </logger>
-            <logger category="de.kybernetik.services.TermineDao">
+            <logger category="de.kybernetik.shared.Security">
                 <level name="INFO"/>
             </logger>
             <root-logger>
