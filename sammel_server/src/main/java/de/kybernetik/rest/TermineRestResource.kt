@@ -8,6 +8,7 @@ import de.kybernetik.database.termine.TerminDetails
 import de.kybernetik.database.termine.TermineDao
 import de.kybernetik.database.termine.Evaluation
 import de.kybernetik.database.termine.Token
+import de.kybernetik.rest.TermineRestResource.EvaluationDto.Companion.convertFromEvaluation
 import de.kybernetik.rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithDetails
 import org.jboss.logging.Logger
 import de.kybernetik.rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithoutDetails
@@ -17,6 +18,7 @@ import org.wildfly.security.http.HttpConstants.FORBIDDEN
 import java.time.LocalDateTime
 import java.time.ZonedDateTime.now
 import java.time.format.DateTimeFormatter.*
+import java.util.stream.Collectors.toList
 import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
 import javax.ejb.EJBException
@@ -274,6 +276,33 @@ open class TermineRestResource {
             .build()
     ***REMOVED***
 
+    @GET
+    @Path("evaluation")
+    @RolesAllowed("evaluation")
+    @Produces(APPLICATION_JSON)
+    open fun alleEvalationen(): Response {
+        LOG.info("Alle Evaluationen abgefragt")
+        val alleAktionen = dao.getTermine(TermineFilter(), null)
+        val alleEvaluation = dao.ladeAlleEvaluationen()
+        LOG.info("${alleEvaluation.size***REMOVED*** Evaluationen zu ${alleAktionen.size***REMOVED*** ausgeliefert")
+        return Response
+            .ok()
+            .entity(
+                EvaluationenUndAktionenDto(
+                    alleAktionen.stream()
+                        .map { convertFromTerminWithoutDetails(it) ***REMOVED***
+                        .peek { it.participants = null ***REMOVED***
+                        .collect(toList()),
+                    alleEvaluation.map { convertFromEvaluation(it) ***REMOVED***)
+            )
+            .build()
+    ***REMOVED***
+
+    data class EvaluationenUndAktionenDto(
+        var aktionen: List<TerminDto> = emptyList(),
+        var evaluationen: List<EvaluationDto> = emptyList()
+    )
+
     data class EvaluationDto(
         var id: Long? = null,
         var termin_id: Long? = null,
@@ -300,6 +329,19 @@ open class TermineRestResource {
             )
         ***REMOVED***
 
+        companion object {
+            fun convertFromEvaluation(it: Evaluation) = EvaluationDto(
+                id = it.id,
+                termin_id = it.termin_id,
+                teilnehmer = it.teilnehmer,
+                unterschriften = it.unterschriften,
+                bewertung = it.bewertung,
+                stunden = it.stunden,
+                kommentar = it.kommentar,
+                situation = it.situation,
+                ausgefallen = it.ausgefallen
+            )
+        ***REMOVED***
     ***REMOVED***
 
     data class TerminDto(

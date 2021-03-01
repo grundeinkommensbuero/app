@@ -69,7 +69,7 @@ class SecurityTest {
     @Ignore("Zum Erzeugen von BASE64-codierter Basic-Auth")
     @Test
     fun `erzeuge BASE64-encodiertes BasicAuth`() {
-        val base64 = Base64.getEncoder().encodeToString("1:mySecret".toByteArray())
+        val base64 = Base64.getEncoder().encodeToString("5:5ffa8dbf-013f-43e0-bdb6-9a24c9f4b965".toByteArray())
 
         println(base64)
     ***REMOVED***

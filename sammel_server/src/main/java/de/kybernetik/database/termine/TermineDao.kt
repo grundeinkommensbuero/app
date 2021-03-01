@@ -90,6 +90,15 @@ open class TermineDao {
         return evaluation
     ***REMOVED***
 
+    open fun ladeAlleEvaluationen(): List<Evaluation> {
+        LOG.debug("Lade alle Evaluationen aus Datenbank")
+        val evaluationen = entityManager
+            .createQuery("select e from Evaluation e", Evaluation::class.java)
+            .resultList
+        LOG.trace("Evaluationen gefunden: ${evaluationen***REMOVED***")
+        return evaluationen
+    ***REMOVED***
+
     open fun erstelleNeuenTermin(termin: Termin): Termin {
         termin.details!!.termin = termin
         LOG.debug("Speichere Aktion ${termin.id***REMOVED***")
