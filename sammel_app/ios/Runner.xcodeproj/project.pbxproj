@@ -224,7 +224,6 @@
 			inputPaths = (
 				"${PODS_ROOT***REMOVED***/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/AppAuth/AppAuth.framework",
-				"${BUILT_PRODUCTS_DIR***REMOVED***/BoringSSL-GRPC/openssl_grpc.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/FMDB/FMDB.framework",
 				"${PODS_ROOT***REMOVED***/../Flutter/Flutter.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/GTMAppAuth/GTMAppAuth.framework",
@@ -233,15 +232,12 @@
 				"${BUILT_PRODUCTS_DIR***REMOVED***/PromisesObjC/FBLPromises.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/Protobuf/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/Reachability/Reachability.framework",
-				"${BUILT_PRODUCTS_DIR***REMOVED***/abseil/absl.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/connectivity/connectivity.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/flutter_compass/flutter_compass.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/flutter_local_notifications/flutter_local_notifications.framework",
-				"${BUILT_PRODUCTS_DIR***REMOVED***/gRPC-C++/grpcpp.framework",
-				"${BUILT_PRODUCTS_DIR***REMOVED***/gRPC-Core/grpc.framework",
-				"${BUILT_PRODUCTS_DIR***REMOVED***/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/location/location.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/nanopb/nanopb.framework",
+				"${BUILT_PRODUCTS_DIR***REMOVED***/package_info/package_info.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/path_provider/path_provider.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/shared_preferences/shared_preferences.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/sqflite/sqflite.framework",
@@ -251,7 +247,6 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/AppAuth.framework",
-				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/openssl_grpc.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/FMDB.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/Flutter.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/GTMAppAuth.framework",
@@ -260,15 +255,12 @@
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/FBLPromises.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/Protobuf.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/Reachability.framework",
-				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/absl.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/connectivity.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/flutter_compass.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/flutter_local_notifications.framework",
-				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/grpcpp.framework",
-				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/grpc.framework",
-				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/leveldb.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/location.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/nanopb.framework",
+				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/package_info.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/path_provider.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/shared_preferences.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/sqflite.framework",
@@ -323,10 +315,12 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT***REMOVED***/Target Support Files/Pods-Runner/Pods-Runner-resources.sh",
+				"${PODS_ROOT***REMOVED***/FirebaseFirestore/FirebaseFirestore/Resources/gRPCCertificates-Cpp.bundle",
 				"${PODS_ROOT***REMOVED***/GoogleSignIn/Resources/GoogleSignIn.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
+				"${TARGET_BUILD_DIR***REMOVED***/${UNLOCALIZED_RESOURCES_FOLDER_PATH***REMOVED***/gRPCCertificates-Cpp.bundle",
 				"${TARGET_BUILD_DIR***REMOVED***/${UNLOCALIZED_RESOURCES_FOLDER_PATH***REMOVED***/GoogleSignIn.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
