@@ -29,15 +29,17 @@ class ActionExportRestResourceTest {
 
     @Test
     fun `generates list of today and coming 7 days`() {
-        resource.next7days.containsAll(
-                listOf(LocalDate.now(),
-                        LocalDate.now().plusDays(1),
-                        LocalDate.now().plusDays(2),
-                        LocalDate.now().plusDays(3),
-                        LocalDate.now().plusDays(4),
-                        LocalDate.now().plusDays(5),
-                        LocalDate.now().plusDays(6),
-                        LocalDate.now().plusDays(7))
+        (0L..7L).map { days -> LocalDate.now().plusDays(days) ***REMOVED***.containsAll(
+            listOf(
+                LocalDate.now(),
+                LocalDate.now().plusDays(1),
+                LocalDate.now().plusDays(2),
+                LocalDate.now().plusDays(3),
+                LocalDate.now().plusDays(4),
+                LocalDate.now().plusDays(5),
+                LocalDate.now().plusDays(6),
+                LocalDate.now().plusDays(7)
+            )
         )
     ***REMOVED***
 
