@@ -364,7 +364,11 @@ class ProfileItem extends StatelessWidget {
 }
 
 showAboutDialog(BuildContext context) async {
+  print('what the fuck');
   final packageInfo = await PackageInfo.fromPlatform();
+  print(packageInfo.version);
+  print(packageInfo.appName);
+  print(packageInfo.buildNumber);
   showDialog(
       context: context,
       builder: (context) =>
