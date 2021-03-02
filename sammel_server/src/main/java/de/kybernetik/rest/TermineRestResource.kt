@@ -250,7 +250,7 @@ open class TermineRestResource {
     @Produces(APPLICATION_JSON)
     open fun aktualisiereEvaluation(evaluation: EvaluationDto): Response {
         if (evaluation.termin_id == null) return noValidActionResponse
-        LOG.info("Aktualisiere Evaluation für ${evaluation.termin_id***REMOVED*** durch ${context.userPrincipal.name***REMOVED***")
+        LOG.info("Speichere Evaluation für ${evaluation.termin_id***REMOVED*** durch ${context.userPrincipal.name***REMOVED***")
 
         val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
 
