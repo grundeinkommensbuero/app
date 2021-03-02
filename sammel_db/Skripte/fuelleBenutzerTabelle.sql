@@ -1,6 +1,7 @@
 INSERT INTO Benutzer (id, name, color) VALUES (1, 'app', 1);
 INSERT INTO Benutzer (id, name, color) VALUES (2, 'website', 2);
 INSERT INTO Benutzer (id, name, color) VALUES (3, 'global', 3);
+INSERT INTO Benutzer (id, name, color) VALUES (5, 'evaluation', 5);
 INSERT INTO Benutzer (id, name, color) VALUES (11, 'Karl Marx', 4294198070);
 INSERT INTO Benutzer (id, name, color) VALUES (12, 'Rosa Luxemburg', 4288423856);
 
@@ -13,6 +14,9 @@ INSERT INTO Credentials (id, secret, salt, iterations, firebasekey) VALUES (2, '
 # Secret ff7a8b6b-e15a-4fee-9f79-dca06fd6c883
 # BASE64-encodiertes BASIC-AUTH MzpmZjdhOGI2Yi1lMTVhLTRmZWUtOWY3OS1kY2EwNmZkNmM4ODM=
 INSERT INTO Credentials (id, secret, salt, iterations, firebasekey) VALUES (3, 'c2e53588f5f8563c6da2470f29cea3560b8f1dfdd972e2', '603a221f77d6d03bb56ff6cc8988eb32', 10, 'iamnokey');
+# Secret 5ffa8dbf-013f-43e0-bdb6-9a24c9f4b965
+# BASE64-encodiertes BASIC-AUTH MTI6NzZmMTkwMzAtMDVlZS0xMWViLWFmZWYtYTViZTU1OWY2YjU4
+INSERT INTO Credentials (id, secret, salt, iterations, firebasekey) VALUES (5, '87ca70c8d3734bf86602e10756dfe09719750280f3a2dc', '04fead48db6cae29868382185ebafe75', 10, 'iamnokey');
 # Secret BASIC-AUTH ac430960-05eb-11eb-8a26-fdc7683a84bc
 # BASE64-encodiertes BASIC-AUTH MTE6YWM0MzA5NjAtMDVlYi0xMWViLThhMjYtZmRjNzY4M2E4NGJj
 INSERT INTO Credentials (id, secret, salt, iterations, firebasekey) VALUES (11, '90818603d7da23266d968f0c526850f13bc50e0610aca3', '57fdb727bd21f83e3594f0a0da384492', 10, 'AAAAAAAA');
@@ -31,3 +35,4 @@ INSERT INTO Roles (id, role) VALUES (11, 'named');
 INSERT INTO Roles (id, role) VALUES (12, 'app');
 INSERT INTO Roles (id, role) VALUES (12, 'user');
 INSERT INTO Roles (id, role) VALUES (12, 'named');
+INSERT INTO Roles (id, role) VALUES (5, 'evaluation');
