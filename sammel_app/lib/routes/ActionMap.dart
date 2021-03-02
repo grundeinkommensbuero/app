@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong/latlong.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sammel_app/model/ListLocation.dart';
@@ -53,14 +54,53 @@ class ActionMapState extends State<ActionMap> {
 
   @override
   Widget build(BuildContext context) {
+    var listLocationMarkers = generateListLocationMarkers();
+    var actionMarkers = generateActionMarkers();
     var markers = generateMarkers();
     var plugins = List<MapPlugin>();
     plugins.add(AttributionPlugin());
+    plugins.add(MarkerClusterPlugin());
+
     var layers = [
       TileLayerOptions(
           urlTemplate: "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
           subdomains: ['a', 'b', 'c']),
-      MarkerLayerOptions(markers: markers),
+      MarkerClusterLayerOptions(
+        markers: actionMarkers,
+        maxClusterRadius: 120,
+        size: Size(40, 40),
+        fitBoundsOptions: FitBoundsOptions(
+          padding: EdgeInsets.all(50),
+        ),
+        polygonOptions: PolygonOptions(
+            borderColor: Colors.blueAccent,
+            color: Colors.black12,
+            borderStrokeWidth: 3),
+        builder: (context, markers) {
+          return FloatingActionButton(
+            child: Text(markers.length.toString()),
+            onPressed: null,
+          );
+        ***REMOVED***,
+      ),
+      MarkerClusterLayerOptions(
+        markers: listLocationMarkers,
+        maxClusterRadius: 120,
+        size: Size(40, 40),
+        fitBoundsOptions: FitBoundsOptions(
+          padding: EdgeInsets.all(50),
+        ),
+        polygonOptions: PolygonOptions(
+            borderColor: Colors.blueAccent,
+            color: Colors.black12,
+            borderStrokeWidth: 3),
+        builder: (context, markers) {
+          return FloatingActionButton(
+            child: Text(markers.length.toString()),
+            onPressed: null,
+          );
+        ***REMOVED***,
+      ),
     ];
     layers.add(AttributionOptions());
 
@@ -198,8 +238,8 @@ class ListLocationMarker extends Marker {
                                   color: Colors.indigo,
                                   decoration: TextDecoration.underline),
                               recognizer: TapGestureRecognizer()
-                                ..onTap = () => launch(
-                                    'www.dwenteignen.de/sammelpunkte/'))
+                                ..onTap = () =>
+                                    launch('www.dwenteignen.de/sammelpunkte/'))
                         ]))
                   ]));
 ***REMOVED***
