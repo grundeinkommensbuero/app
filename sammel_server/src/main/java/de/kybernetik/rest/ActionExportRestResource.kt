@@ -20,7 +20,6 @@ import javax.ws.rs.core.Response
 @Stateless
 open class ActionExportRestResource {
     private val LOG = Logger.getLogger(TermineRestResource::class.java)
-    open val next7days = (0L..7L).map { days -> LocalDate.now().plusDays(days) }
 
     @EJB
     private lateinit var dao: TermineDao
@@ -29,11 +28,18 @@ open class ActionExportRestResource {
     @Produces(MediaType.APPLICATION_JSON)
     open fun getActionsAsGeoJson(): Response {
         LOG.debug("Bearbeite Anfrage nach Aktionen als GeoJson")
-        val filter = TermineFilter(emptyList(), next7days, null, null, emptyList())
+        val filter =
+            TermineFilter(
+                emptyList(),
+                (0L..7L).map { days -> LocalDate.now().plusDays(days) },
+                null,
+                null,
+                emptyList()
+            )
         val actions = dao.getTermine(filter, null)
         val geoJsonActions = actions
-                .filter { action -> action.longitude != null && action.latitude != null }
-                .map { action -> GeoJsonAction.convertFromAction(action) }
+            .filter { action -> action.longitude != null && action.latitude != null }
+            .map { action -> GeoJsonAction.convertFromAction(action) }
         val geoJsoncollection = GeoJsonCollection(geoJsonActions)
         LOG.debug("${geoJsonActions.size} Aktionen ausgegeben")
         return Response.ok().entity(geoJsoncollection).build()
@@ -44,7 +50,8 @@ open class ActionExportRestResource {
         val type = "FeatureCollection"
     }
 
-    data class GeoJsonAction(val name: String, val properties: GeoJsonProperties, val geometry: GeoJsonGeometry
+    data class GeoJsonAction(
+        val name: String, val properties: GeoJsonProperties, val geometry: GeoJsonGeometry
     ) {
         val type = "Feature"
 
@@ -61,21 +68,24 @@ open class ActionExportRestResource {
                     throw GeoJsonParseException("Kann kein GeoJson-Objekt ohne Koordinaten erzeugen (Aktions-ID ${action.id}")
 
                 return GeoJsonAction(
-                        action.typ ?: "Aktion",
-                        GeoJsonProperties(action.typ ?: "Aktion", generateJsonDescription(action)),
-                        GeoJsonGeometry(listOf(action.longitude!!, action.latitude!!)))
+                    action.typ ?: "Aktion",
+                    GeoJsonProperties(action.typ ?: "Aktion", generateJsonDescription(action)),
+                    GeoJsonGeometry(listOf(action.longitude!!, action.latitude!!))
+                )
             }
 
             fun generateJsonDescription(action: Termin): String =
-                    "${action.details?.beschreibung ?: "Zu dieser Aktion gibt es keine Beschreibung"}\n" +
-                            (if (action.beginn != null) "\nam ${LocalDate.from(action.beginn).format(ofPattern("dd.MM.yyyy"))}" +
-                                    " ab ${action.beginn!!.format(ofPattern("HH:mm"))} Uhr" +
-                                    if (action.ende != null)
-                                        " bis ${action.ende!!.format(ofPattern("HH:mm"))} Uhr"
-                                    else ""
-                            else "") +
-                            if (action.details?.treffpunkt != null) "\nTreffpunkt: ${action.details!!.treffpunkt!!}"
-                            else ""
+                "${action.details?.beschreibung ?: "Zu dieser Aktion gibt es keine Beschreibung"}\n" +
+                        (if (action.beginn != null) "\nam ${
+                            LocalDate.from(action.beginn).format(ofPattern("dd.MM.yyyy"))
+                        }" +
+                                " ab ${action.beginn!!.format(ofPattern("HH:mm"))} Uhr" +
+                                if (action.ende != null)
+                                    " bis ${action.ende!!.format(ofPattern("HH:mm"))} Uhr"
+                                else ""
+                        else "") +
+                        if (action.details?.treffpunkt != null) "\nTreffpunkt: ${action.details!!.treffpunkt!!}"
+                        else ""
         }
 
         class GeoJsonParseException(message: String) : Exception(message)
