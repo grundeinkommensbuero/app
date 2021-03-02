@@ -1,5 +1,6 @@
 package de.kybernetik.rest
 
+import java.lang.System.getProperty
 import javax.annotation.security.PermitAll
 import javax.ejb.Stateless
 import javax.ws.rs.GET
@@ -16,11 +17,11 @@ open class HealthRestResource {
     @Produces("application/json")
     open fun health(): Response {
         return Response
-                .ok()
-                .entity(Health(status = "lebendig", version = "1.2.2", minClient = "1.1.0+28"))
-                .build()
+            .ok()
+            .entity(Health(status = "lebendig", version = "1.2.2", minClient = "1.1.0+28", modus = getProperty("mode")))
+            .build()
 
     ***REMOVED***
 ***REMOVED***
 
-data class Health(val status: String, val version: String, val minClient: String)
+data class Health(val status: String, val version: String, val minClient: String, val modus: String)
