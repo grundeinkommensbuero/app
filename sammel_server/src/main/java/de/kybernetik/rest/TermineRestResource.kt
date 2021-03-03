@@ -59,7 +59,7 @@ open class TermineRestResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun getTermine(filter: TermineFilter?): Response {
-        LOG.debug("Lade Aktionen mit Filter ${filter?.typen}, ${filter?.tage}, ${filter?.von}, ${filter?.bis}, ${filter?.orte}")
+        LOG.debug("Lade Aktionen mit Filter ${filter?.typen}, ${filter?.tage}, ${filter?.von}, ${filter?.bis}, ${filter?.orte}, ${filter?.nurEigene}")
         val termine = dao.getTermine(filter ?: TermineFilter(), context.userPrincipal.name.toLong())
         return Response
             .ok()

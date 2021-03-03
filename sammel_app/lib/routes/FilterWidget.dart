@@ -103,7 +103,8 @@ class FilterWidgetState extends State<FilterWidget>
                             key: Key('filter button text'),
                             textScaleFactor: 1.2),
                     Icon(expanded ? Icons.done : Icons.filter_alt_sharp,
-                        color: filter.isEmpty ? DweTheme.yellow : DweTheme.green),
+                        color:
+                            filter.isEmpty ? DweTheme.yellow : DweTheme.green),
                   ],
                 ),
                 onPressed: () {
@@ -160,8 +161,13 @@ class FilterWidgetState extends State<FilterWidget>
 
   String artButtonBeschriftung() {
     return filter.typen != null && filter.typen.isNotEmpty
-        ? filter.typen.join(', ')
-        : 'Alle Aktions-Arten,'.tr();
+        ? (filter.typen.join(', ') +
+            ((filter.nurEigene != null && filter.nurEigene)
+                ? ', (${'eigene'.tr()})'
+                : ','))
+        : (filter.nurEigene != null && filter.nurEigene)
+            ? 'Eigene Aktionen,'.tr()
+            : 'Alle Aktions-Arten,'.tr();
   }
 
   static String uhrzeitButtonBeschriftung(TermineFilter filter) {
@@ -200,6 +206,8 @@ class FilterWidgetState extends State<FilterWidget>
     ];
     List<String> ausgewTypen = List<String>()
       ..addAll(filter.typen == null ? [] : filter.typen);
+    bool nurEigene = filter.nurEigene == null ? false : filter.nurEigene;
+
     await showDialog<List<String>>(
         context: context,
         builder: (context) =>
@@ -212,28 +220,45 @@ class FilterWidgetState extends State<FilterWidget>
                       leading: null,
                       automaticallyImplyLeading: false,
                       title: const Text('Wähle Aktions-Arten').tr()),
-                  children:
-                      List.of(moeglicheTypen.map((typ) => CheckboxListTile(
-                            checkColor: Colors.black,
-                            activeColor: DweTheme.yellowLight,
-                            value: ausgewTypen.contains(typ),
-                            title: Text(typ).tr(),
-                            onChanged: (neuerWert) {
-                              setDialogState(() {
-                                if (neuerWert) {
-                                  ausgewTypen.add(typ);
-                                } else {
-                                  ausgewTypen.remove(typ);
-                                }
-                              });
-                            },
-                          )))
-                        ..add(RaisedButton(
-                            child: Text('Fertig').tr(),
-                            onPressed: () => Navigator.pop(context))));
+                  children: [
+                    SwitchListTile(
+                        activeColor: DweTheme.purple,
+                        inactiveThumbColor: DweTheme.yellow,
+                        value: nurEigene,
+                        title: Text('Nur eigene Aktionen').tr(),
+                        onChanged: (neuerWert) {
+                          setDialogState(() {
+                            nurEigene = neuerWert;
+                          });
+                        })
+                  ]
+                    ..add(Divider(
+                        indent: 16, endIndent: 16, thickness: 1, height: 8))
+                    ..addAll(
+                        List.of(moeglicheTypen.map((typ) => CheckboxListTile(
+                              checkColor: Colors.black,
+                              activeColor: DweTheme.yellowLight,
+                              value: ausgewTypen.contains(typ),
+                              title: Text(typ).tr(),
+                              onChanged: (neuerWert) {
+                                setDialogState(() {
+                                  if (neuerWert) {
+                                    ausgewTypen.add(typ);
+                                  } else {
+                                    ausgewTypen.remove(typ);
+                                  }
+                                });
+                              },
+                            ))))
+                    ..add(RaisedButton(
+                        child: Text('Fertig').tr(),
+                        onPressed: () => Navigator.pop(context))));
             }));
 
-    setState(() => filter.typen = ausgewTypen);
+    setState(() {
+      filter.typen = ausgewTypen;
+      filter.nurEigene = nurEigene;
+    });
   }
 
   resetType() => setState(() => filter.typen = []);

@@ -34,6 +34,7 @@ open class TermineDao {
     private val vonKlausel = "TIME(termine.beginn) >= TIME(:von)"
     private val bisKlausel = "TIME(termine.beginn) <= TIME(:bis)"
     private val orteKlausel = "termine.ort in (:orte)"
+    private val nurEigeneKlausel = "(:benutzer) in elements(termine.teilnehmer)"
 
     @Suppress("JpaQueryApiInspection") // IDEA kriegt die Query nicht zusammen
     open fun erzeugeGetTermineQuery(filter: TermineFilter, benutzerId: Long?): TypedQuery<Termin> {
@@ -44,6 +45,7 @@ open class TermineDao {
         if (filter.von != null) filterKlausel.add(vonKlausel)
         if (filter.bis != null) filterKlausel.add(bisKlausel)
         if (!filter.orte.isNullOrEmpty()) filterKlausel.add(orteKlausel)
+        if (filter.nurEigene != null && filter.nurEigene) filterKlausel.add(nurEigeneKlausel)
 
         var sql = "select termine from Termin termine"
         if (filterKlausel.isNotEmpty()) sql += " where " + filterKlausel.joinToString(" and ")
