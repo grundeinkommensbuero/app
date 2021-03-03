@@ -11,7 +11,7 @@ import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/shared/AttributionPlugin.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:user_location/user_location.dart';
+// import 'package:user_location/user_location.dart';
 
 class ActionMap extends StatefulWidget {
   final List<Termin> termine;
@@ -66,37 +66,38 @@ class ActionMapState extends State<ActionMap> {
           urlTemplate: "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
           subdomains: ['a', 'b', 'c']),
       MarkerClusterLayerOptions(
+        disableClusteringAtZoom: 17,
         markers: actionMarkers,
-        maxClusterRadius: 120,
-        size: Size(40, 40),
-        fitBoundsOptions: FitBoundsOptions(
-          padding: EdgeInsets.all(50),
-        ),
+        maxClusterRadius: 50,
         polygonOptions: PolygonOptions(
-            borderColor: Colors.blueAccent,
-            color: Colors.black12,
-            borderStrokeWidth: 3),
+            color: DweTheme.yellow.withOpacity(0.12)
+        ),
+        fitBoundsOptions: FitBoundsOptions(
+          padding: EdgeInsets.fromLTRB(40, 90, 40, 100)
+        ),
         builder: (context, markers) {
           return FloatingActionButton(
             child: Text(markers.length.toString()),
+            backgroundColor: DweTheme.yellow,
+            foregroundColor: DweTheme.purple,
             onPressed: null,
           );
         },
       ),
       MarkerClusterLayerOptions(
+        disableClusteringAtZoom: 17,
         markers: listLocationMarkers,
-        maxClusterRadius: 120,
-        size: Size(40, 40),
-        fitBoundsOptions: FitBoundsOptions(
-          padding: EdgeInsets.all(50),
-        ),
+        maxClusterRadius: 50,
         polygonOptions: PolygonOptions(
-            borderColor: Colors.blueAccent,
-            color: Colors.black12,
-            borderStrokeWidth: 3),
+            color: DweTheme.purple.withOpacity(0.12)
+        ),
+        fitBoundsOptions: FitBoundsOptions(
+            padding: EdgeInsets.fromLTRB(40, 90, 40, 100)
+        ),
         builder: (context, markers) {
           return FloatingActionButton(
             child: Text(markers.length.toString()),
+            backgroundColor: DweTheme.purple,
             onPressed: null,
           );
         },
@@ -145,14 +146,14 @@ class ActionMapState extends State<ActionMap> {
 
   void addUserLocationSettings(List<Marker> markers, List<MapPlugin> plugins,
       List<LayerOptions> layers) {
-    plugins.add(UserLocationPlugin());
-    layers.add(UserLocationOptions(
+    //plugins.add(UserLocationPlugin());
+    /*layers.add(UserLocationOptions(
       context: context,
       mapController: widget.mapController,
       markers: markers,
       updateMapLocationOnPositionChange: false,
       showMoveToCurrentLocationFloatingActionButton: false,
-    ));
+    ));*/
   }
 
   Color generateColor(String bezirk) {

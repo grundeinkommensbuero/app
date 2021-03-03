@@ -36,8 +36,8 @@ dependencies:
   shared_preferences: ^0.5.6
   validators: ^2.0.0
   uuid: ^2.0.4
-  flutter_map: ^0.8.2
-  flutter_map_marker_cluster: any
+  flutter_map: any
+  flutter_map_marker_cluster: ^0.3.1
   latlong: ^0.6.1
   url_launcher: ^5.4.2
   firebase_messaging: ^7.0.3
@@ -45,7 +45,7 @@ dependencies:
   firebase_auth: 0.18.1
   cloud_firestore: ^0.14.1
   google_sign_in: ^4.4.4
-  user_location: any
+  # user_location: any
   permission_handler: ^5.0.0+hotfix.4
   poly: ^1.0.5
   connectivity: ^2.0.2
