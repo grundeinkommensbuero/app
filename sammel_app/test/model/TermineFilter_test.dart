@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 
-import '../shared/TestdatenVorrat.dart';
-
 void main() {
   group('serialisere', () {
     test('serialisiert leeren TermineFilter', () {
@@ -20,8 +18,7 @@ void main() {
               [DateTime(2019, 11, 22, 0, 0, 0), DateTime(2019, 1, 30, 0, 0, 0)],
               TimeOfDay(hour: 4, minute: 10),
               TimeOfDay(hour: 23, minute: 0),
-              ['Frankfurter Allee Süd'],
-              [])),
+              ['Frankfurter Allee Süd'])),
           '{'
           '"typen":["Sammeln","Infoveranstaltung"],'
           '"tage":["2019-11-22","2019-01-30"],'
@@ -81,6 +78,33 @@ void main() {
       expect([termineFilter.bis.hour, termineFilter.bis.minute], [1, 2]);
       expect(termineFilter.orte.length, 1);
       expect(termineFilter.orte[0], 'Frankfurter Allee Nord');
+    ***REMOVED***);
+  ***REMOVED***);
+
+  group('isEmpty',() {
+    test('returns true on empty filter', () {
+      expect(TermineFilter([], [], null, null, []).isEmpty, true);
+      expect(TermineFilter(null, null, null, null, null).isEmpty, true);
+    ***REMOVED***);
+
+    test('returns false if types set', () {
+      expect(TermineFilter(['Sammeln'], [], null, null, []).isEmpty, false);
+    ***REMOVED***);
+
+    test('returns false if days set', () {
+      expect(TermineFilter([], [DateTime.now()], null, null, []).isEmpty, false);
+    ***REMOVED***);
+
+    test('returns false if types set', () {
+      expect(TermineFilter([], [], TimeOfDay.now(), null, []).isEmpty, false);
+    ***REMOVED***);
+
+    test('returns false if types set', () {
+      expect(TermineFilter([], [], null, TimeOfDay.now(), []).isEmpty, false);
+    ***REMOVED***);
+
+    test('returns false if types set', () {
+      expect(TermineFilter([], [], null, null, ['Kiez']).isEmpty, false);
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***
