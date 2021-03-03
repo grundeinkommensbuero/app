@@ -249,10 +249,7 @@ class DemoTermineService extends AbstractTermineService {
               : filter.orte.contains(termin.ort.name)) &&
           (filter.typen == null || filter.typen.isEmpty
               ? true
-              : filter.typen.contains(termin.typ)) &&
-          (filter.ids == null || filter.ids.isEmpty
-              ? true
-              : filter.ids.contains(termin.id));
+              : filter.typen.contains(termin.typ));
     }).toList();
   }
 

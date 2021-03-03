@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
@@ -9,11 +8,10 @@ class TermineFilter {
   TimeOfDay von;
   TimeOfDay bis;
   List<String> orte;
-  List<int> ids;
 
-  TermineFilter(this.typen, this.tage, this.von, this.bis, this.orte, this.ids);
+  TermineFilter(this.typen, this.tage, this.von, this.bis, this.orte);
 
-  static leererFilter() => TermineFilter([], [], null, null, [], []);
+  static leererFilter() => TermineFilter([], [], null, null, []);
 
   TermineFilter.fromJSON(Map<String, dynamic> json)
       : typen = (json['typen'] as List).map((typ) => typ as String).toList(),
@@ -21,10 +19,10 @@ class TermineFilter {
             .map((tag) => DateFormat("yyyy-MM-dd").parse(tag))
             .toList(),
         von = json['von'] == null ? null : TimeOfDay.fromDateTime(
-          // Dirty Hack für Bug https://github.com/dart-lang/intl/issues/244
+            // Dirty Hack für Bug https://github.com/dart-lang/intl/issues/244
             DateFormat("yyyy HH:mm:ss").parse('2019 ' + json['von'])),
         bis = json['bis'] == null ? null : TimeOfDay.fromDateTime(
-          // Dirty Hack für Bug https://github.com/dart-lang/intl/issues/244
+            // Dirty Hack für Bug https://github.com/dart-lang/intl/issues/244
             DateFormat("yyyy HH:mm:ss").parse('2019 ' + json['bis'])),
         orte = (json['orte'] as List<dynamic>).map((e) => e as String).toList();
 
@@ -35,6 +33,12 @@ class TermineFilter {
         'von': ChronoHelfer.timeToStringHHmmss(von),
         'bis': ChronoHelfer.timeToStringHHmmss(bis),
         'orte': orte,
-        'ids': ids,
       };
+
+  get isEmpty =>
+      (tage == null || tage.isEmpty) &&
+      (bis == null || bis == null) &&
+      von == null &&
+      (orte == null || orte.isEmpty) &&
+      (typen == null || typen.isEmpty);
 }

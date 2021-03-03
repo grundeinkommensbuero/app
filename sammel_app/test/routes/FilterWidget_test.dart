@@ -306,8 +306,7 @@ void main() {
           [DateTime(2019, 12, 16)],
           TimeOfDay(hour: 19, minute: 15),
           TimeOfDay(hour: 20, minute: 21),
-          ['kiez'],
-          []);
+          ['kiez']);
 
       numberOfTimesCalled = 0;
       iWasCalledResult = null;
@@ -350,8 +349,7 @@ void main() {
           [DateTime(2020, 1, 14), DateTime(2020, 1, 16)],
           TimeOfDay(hour: 12, minute: 30),
           TimeOfDay(hour: 15, minute: 0),
-          [ffAlleeNord().name, tempVorstadt().name],
-          []));
+          [ffAlleeNord().name, tempVorstadt().name]));
 
       await pumpFilterWidget(tester);
 

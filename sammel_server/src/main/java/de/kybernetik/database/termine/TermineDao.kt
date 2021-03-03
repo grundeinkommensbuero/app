@@ -34,7 +34,6 @@ open class TermineDao {
     private val vonKlausel = "TIME(termine.beginn) >= TIME(:von)"
     private val bisKlausel = "TIME(termine.beginn) <= TIME(:bis)"
     private val orteKlausel = "termine.ort in (:orte)"
-    private val idsKlausel = "termine.id in (:ids)"
 
     @Suppress("JpaQueryApiInspection") // IDEA kriegt die Query nicht zusammen
     open fun erzeugeGetTermineQuery(filter: TermineFilter, benutzerId: Long?): TypedQuery<Termin> {
@@ -45,7 +44,6 @@ open class TermineDao {
         if (filter.von != null) filterKlausel.add(vonKlausel)
         if (filter.bis != null) filterKlausel.add(bisKlausel)
         if (!filter.orte.isNullOrEmpty()) filterKlausel.add(orteKlausel)
-        if (!filter.ids.isNullOrEmpty()) filterKlausel.add(idsKlausel)
 
         var sql = "select termine from Termin termine"
         if (filterKlausel.isNotEmpty()) sql += " where " + filterKlausel.joinToString(" and ")
@@ -64,7 +62,6 @@ open class TermineDao {
         if (filterKlausel.contains(vonKlausel)) query.setParameter("von", filter.von!!.atDate(now()))
         if (filterKlausel.contains(bisKlausel)) query.setParameter("bis", filter.bis!!.atDate(now()))
         if (filterKlausel.contains(orteKlausel)) query.setParameter("orte", filter.orte)
-        if (filterKlausel.contains(idsKlausel)) query.setParameter("ids", filter.ids)
         return query
     }
 
@@ -95,7 +92,7 @@ open class TermineDao {
         val evaluationen = entityManager
             .createQuery("select e from Evaluation e", Evaluation::class.java)
             .resultList
-        LOG.trace("Evaluationen gefunden: ${evaluationen}")
+        LOG.trace("Evaluationen gefunden: $evaluationen")
         return evaluationen
     }
 
@@ -140,5 +137,4 @@ open class TermineDao {
     }
 }
 
-class DatenkonsistenzException(message: String?) : Exception(message) {
-}
+class DatenkonsistenzException(message: String?) : Exception(message)
