@@ -166,7 +166,7 @@ class FilterWidgetState extends State<FilterWidget>
                 ? ', (${'eigene'.tr()***REMOVED***)'
                 : ','))
         : (filter.nurEigene != null && filter.nurEigene)
-            ? 'Eigene Aktionen,'.tr()
+            ? 'Eigene Aktionen'.tr() + ','
             : 'Alle Aktions-Arten,'.tr();
   ***REMOVED***
 
@@ -261,7 +261,10 @@ class FilterWidgetState extends State<FilterWidget>
     ***REMOVED***);
   ***REMOVED***
 
-  resetType() => setState(() => filter.typen = []);
+  resetType() => setState(() {
+    filter.typen = [];
+    filter.nurEigene = false;
+  ***REMOVED*** );
 
   daysSelection() async {
     var selectedDates = await showMultipleDatePicker(filter.tage, context,
