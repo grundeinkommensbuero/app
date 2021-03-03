@@ -216,7 +216,10 @@ class DemoTermineService extends AbstractTermineService {
               'Infoveranstaltung',
               52.48612,
               13.47192,
-              [User(12, "Rosa Luxemburg", Colors.purple)],
+              [
+                User(12, "Rosa Luxemburg", Colors.purple),
+                User(13, "Ich", Colors.red)
+              ],
               TerminDetails(
                   'DGB-Haus, Raum 1312',
                   'Ihr seid alle herzlich eingeladen zur Strategiediskussion',
@@ -249,7 +252,10 @@ class DemoTermineService extends AbstractTermineService {
               : filter.orte.contains(termin.ort.name)) &&
           (filter.typen == null || filter.typen.isEmpty
               ? true
-              : filter.typen.contains(termin.typ));
+              : filter.typen.contains(termin.typ)) &&
+          (filter.nurEigene == null || filter.nurEigene == false
+              ? true
+              : termin.participants.map((u) => u.id).contains(13));
     ***REMOVED***).toList();
   ***REMOVED***
 
