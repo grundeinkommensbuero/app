@@ -18,7 +18,9 @@ void main() {
               [DateTime(2019, 11, 22, 0, 0, 0), DateTime(2019, 1, 30, 0, 0, 0)],
               TimeOfDay(hour: 4, minute: 10),
               TimeOfDay(hour: 23, minute: 0),
-              ['Frankfurter Allee Süd'])),
+              ['Frankfurter Allee Süd'],
+              false,
+              false)),
           '{'
           '"typen":["Sammeln","Infoveranstaltung"],'
           '"tage":["2019-11-22","2019-01-30"],'
@@ -81,30 +83,43 @@ void main() {
     });
   });
 
-  group('isEmpty',() {
+  group('isEmpty', () {
     test('returns true on empty filter', () {
-      expect(TermineFilter([], [], null, null, []).isEmpty, true);
-      expect(TermineFilter(null, null, null, null, null).isEmpty, true);
+      expect(TermineFilter([], [], null, null, [], false, false).isEmpty, true);
+      expect(TermineFilter(null, null, null, null, null, false, false).isEmpty,
+          true);
     });
 
     test('returns false if types set', () {
-      expect(TermineFilter(['Sammeln'], [], null, null, []).isEmpty, false);
+      expect(
+          TermineFilter(['Sammeln'], [], null, null, [], false, false).isEmpty,
+          false);
     });
 
     test('returns false if days set', () {
-      expect(TermineFilter([], [DateTime.now()], null, null, []).isEmpty, false);
+      expect(
+          TermineFilter([], [DateTime.now()], null, null, [], false, false)
+              .isEmpty,
+          false);
     });
 
     test('returns false if types set', () {
-      expect(TermineFilter([], [], TimeOfDay.now(), null, []).isEmpty, false);
+      expect(
+          TermineFilter([], [], TimeOfDay.now(), null, [], false, false)
+              .isEmpty,
+          false);
     });
 
     test('returns false if types set', () {
-      expect(TermineFilter([], [], null, TimeOfDay.now(), []).isEmpty, false);
+      expect(
+          TermineFilter([], [], null, TimeOfDay.now(), [], false, false)
+              .isEmpty,
+          false);
     });
 
     test('returns false if types set', () {
-      expect(TermineFilter([], [], null, null, ['Kiez']).isEmpty, false);
+      expect(TermineFilter([], [], null, null, ['Kiez'], false, false).isEmpty,
+          false);
     });
   });
 }
