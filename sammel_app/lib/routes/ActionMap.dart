@@ -5,13 +5,11 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong/latlong.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/shared/AttributionPlugin.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:url_launcher/url_launcher.dart';
-// import 'package:user_location/user_location.dart';
 
 class ActionMap extends StatefulWidget {
   final List<Termin> termine;
@@ -48,15 +46,12 @@ class ActionMapState extends State<ActionMap> {
   @override
   void initState() {
     super.initState();
-    Permission.locationWhenInUse.request().then((status) =>
-        setState(() => locationPermissionGranted = status.isGranted));
   }
 
   @override
   Widget build(BuildContext context) {
     var listLocationMarkers = generateListLocationMarkers();
     var actionMarkers = generateActionMarkers();
-    var markers = generateMarkers();
     var plugins = List<MapPlugin>();
     plugins.add(AttributionPlugin());
     plugins.add(MarkerClusterPlugin());
@@ -105,17 +100,16 @@ class ActionMapState extends State<ActionMap> {
     ];
     layers.add(AttributionOptions());
 
-    if (locationPermissionGranted) {
-      addUserLocationSettings(markers, plugins, layers);
-    }
-
     return FlutterMap(
       key: Key('action map map'),
       options: MapOptions(
         plugins: plugins,
         center: LatLng(52.5170365, 13.3888599),
-        zoom: 10.0,
+        swPanBoundary: LatLng(52.324702,13.126562),
+        nePanBoundary: LatLng(52.670823,13.752095),
+        zoom: 12.0,
         maxZoom: 19.0,
+        minZoom: 10.0,
       ),
       layers: layers,
       mapController: widget.mapController ?? MapController(),
@@ -143,18 +137,6 @@ class ActionMapState extends State<ActionMap> {
   List<Marker> generateMarkers() => <Marker>[]
     ..addAll(generateListLocationMarkers())
     ..addAll(generateActionMarkers());
-
-  void addUserLocationSettings(List<Marker> markers, List<MapPlugin> plugins,
-      List<LayerOptions> layers) {
-    //plugins.add(UserLocationPlugin());
-    /*layers.add(UserLocationOptions(
-      context: context,
-      mapController: widget.mapController,
-      markers: markers,
-      updateMapLocationOnPositionChange: false,
-      showMoveToCurrentLocationFloatingActionButton: false,
-    ));*/
-  }
 
   Color generateColor(String bezirk) {
     return Color.fromARGB(150, bezirk.hashCode * 10, bezirk.hashCode * 100,
