@@ -207,6 +207,7 @@ class FilterWidgetState extends State<FilterWidget>
     List<String> ausgewTypen = List<String>()
       ..addAll(filter.typen == null ? [] : filter.typen);
     bool nurEigene = filter.nurEigene == null ? false : filter.nurEigene;
+    bool immerEigene = filter.immerEigene == null ? true : filter.immerEigene;
 
     await showDialog<List<String>>(
         context: context,
@@ -225,12 +226,23 @@ class FilterWidgetState extends State<FilterWidget>
                         activeColor: DweTheme.purple,
                         inactiveThumbColor: DweTheme.yellow,
                         value: nurEigene,
-                        title: Text('Nur eigene Aktionen').tr(),
+                        title: Text('Nur eigene Aktionen anzeigen').tr(),
                         onChanged: (neuerWert) {
                           setDialogState(() {
                             nurEigene = neuerWert;
                           ***REMOVED***);
-                        ***REMOVED***)
+                        ***REMOVED***),
+                    SwitchListTile(
+                        activeColor: DweTheme.purple,
+                        inactiveThumbColor: DweTheme.yellow,
+                        value: immerEigene,
+                        title: Text('Eigene Aktionen immer anzeigen').tr(),
+                        onChanged: (neuerWert) {
+                          setDialogState(() {
+                            immerEigene = neuerWert;
+                          ***REMOVED***);
+                        ***REMOVED***),
+
                   ]
                     ..add(Divider(
                         indent: 16, endIndent: 16, thickness: 1, height: 8))
@@ -258,6 +270,7 @@ class FilterWidgetState extends State<FilterWidget>
     setState(() {
       filter.typen = ausgewTypen;
       filter.nurEigene = nurEigene;
+      filter.immerEigene = immerEigene;
     ***REMOVED***);
   ***REMOVED***
 

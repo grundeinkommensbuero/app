@@ -255,7 +255,10 @@ class DemoTermineService extends AbstractTermineService {
               : filter.typen.contains(termin.typ)) &&
           (filter.nurEigene == null || filter.nurEigene == false
               ? true
-              : termin.participants.map((u) => u.id).contains(13));
+              : termin.participants.map((u) => u.id).contains(13)) ||
+          (filter.immerEigene == null || filter.immerEigene == true
+              ? termin.participants.map((u) => u.id).contains(13)
+              : false);
     ***REMOVED***).toList();
   ***REMOVED***
 

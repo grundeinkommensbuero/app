@@ -9,10 +9,11 @@ class TermineFilter {
   TimeOfDay bis;
   List<String> orte;
   bool nurEigene;
+  bool immerEigene;
 
-  TermineFilter(this.typen, this.tage, this.von, this.bis, this.orte, this.nurEigene);
+  TermineFilter(this.typen, this.tage, this.von, this.bis, this.orte, this.nurEigene, this.immerEigene);
 
-  static leererFilter() => TermineFilter([], [], null, null, [], false);
+  static leererFilter() => TermineFilter([], [], null, null, [], false, true);
 
   TermineFilter.fromJSON(Map<String, dynamic> json)
       : typen = (json['typen'] as List).map((typ) => typ as String).toList(),
@@ -26,7 +27,8 @@ class TermineFilter {
             // Dirty Hack für Bug https://github.com/dart-lang/intl/issues/244
             DateFormat("yyyy HH:mm:ss").parse('2019 ' + json['bis'])),
         orte = (json['orte'] as List<dynamic>).map((e) => e as String).toList(),
-        nurEigene = json['nurEigene'] as bool;
+        nurEigene = json['nurEigene'] as bool,
+        immerEigene = json['immerEigene'] as bool;
 
   Map<String, dynamic> toJson() => {
         'typen': typen,
@@ -36,6 +38,7 @@ class TermineFilter {
         'bis': ChronoHelfer.timeToStringHHmmss(bis),
         'orte': orte,
         'nurEigene': nurEigene,
+        'immerEigene': immerEigene
       ***REMOVED***
 
   get isEmpty =>
@@ -44,5 +47,6 @@ class TermineFilter {
       von == null &&
       (orte == null || orte.isEmpty) &&
       (typen == null || typen.isEmpty) &&
-      nurEigene == false;
+      nurEigene == false &&
+      immerEigene == true;
 ***REMOVED***

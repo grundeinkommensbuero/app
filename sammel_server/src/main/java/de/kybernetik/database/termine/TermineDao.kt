@@ -35,6 +35,7 @@ open class TermineDao {
     private val bisKlausel = "TIME(termine.beginn) <= TIME(:bis)"
     private val orteKlausel = "termine.ort in (:orte)"
     private val nurEigeneKlausel = "(:benutzer) in elements(termine.teilnehmer)"
+    private val immerEigeneKlausel = "(:benutzer) in elements(termine.teilnehmer)" // identisch zu nurEigeneKlausel, wird aber mit "or" angefügt
 
     @Suppress("JpaQueryApiInspection") // IDEA kriegt die Query nicht zusammen
     open fun erzeugeGetTermineQuery(filter: TermineFilter, benutzerId: Long?): TypedQuery<Termin> {
@@ -49,6 +50,7 @@ open class TermineDao {
 
         var sql = "select termine from Termin termine"
         if (filterKlausel.isNotEmpty()) sql += " where " + filterKlausel.joinToString(" and ")
+        if (filter.immerEigene == null || filter.immerEigene)  sql += " or $immerEigeneKlausel"
         sql += " order by termine.beginn"
         val query = entityManager.createQuery(sql, Termin::class.java)
         query.maxResults = getProperty("de.kybernetik.max-actions").toInt()
