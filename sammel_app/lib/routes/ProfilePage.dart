@@ -365,7 +365,6 @@ class ProfileItem extends StatelessWidget {
 
 showAboutDialog(BuildContext context) async {
   final packageInfo = await PackageInfo.fromPlatform();
-  print(packageInfo.buildNumber);
   showDialog(
       context: context,
       builder: (context) =>
