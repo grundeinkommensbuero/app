@@ -1,4 +1,4 @@
-const Mode mode = Mode.DEMO;
+const Mode mode = Mode.TEST;
 
 // Debug
 const bool pullMode = false;

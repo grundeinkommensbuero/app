@@ -161,8 +161,11 @@ open class BenutzerRestResource {
             return Response.status(500).entity(RestFehlermeldung(meldung)).build()
         }
 
-        if(!credentials.firebaseKey.equals(login.firebaseKey))
-            LOG.warn("Firbase-Key stimmt nicht überein: ${login.firebaseKey}")
+        if(login.firebaseKey != null && !credentials.firebaseKey.equals(login.firebaseKey))
+            LOG.warn("Firbase-Key stimmt nicht überein für Benutzer ${login.user}: ${login.firebaseKey}")
+
+        if(login.firebaseKey == null && !credentials.firebaseKey.equals("none"))
+            LOG.debug("Firbase-Key null für Benutzer ${login.user} obwohl Key hinterlegt ist")
 
         if (!verifiziert) {
             LOG.warn("Falscher Login mit Benutzer ${login.user.id}")
