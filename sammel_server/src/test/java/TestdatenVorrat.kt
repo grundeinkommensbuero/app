@@ -4,6 +4,7 @@ import de.kybernetik.database.termine.Termin
 import de.kybernetik.database.termine.TerminDetails
 import de.kybernetik.rest.TermineRestResource
 import java.time.LocalDateTime
+import java.time.LocalDateTime.now
 
 class TestdatenVorrat {
     companion object {
@@ -28,52 +29,61 @@ class TestdatenVorrat {
         ***REMOVED***
 
         fun terminOhneTeilnehmerOhneDetails(): Termin {
-            return Termin(1L,
-                    LocalDateTime.of(2019, 10, 22, 16, 30, 0),
-                    LocalDateTime.of(2019, 10, 22, 18, 0, 0),
-                    "Frankfurter Allee Nord",
-                    sammeltermin(),
-                    emptyList(),
-                    52.48612,
-                    13.47192,
-                    null)
+            return Termin(
+                1L,
+                LocalDateTime.of(2019, 10, 22, 16, 30, 0),
+                LocalDateTime.of(2019, 10, 22, 18, 0, 0),
+                "Frankfurter Allee Nord",
+                sammeltermin(),
+                emptyList(),
+                52.48612,
+                13.47192,
+                null
+            )
         ***REMOVED***
 
         fun terminMitTeilnehmerOhneDetails(): Termin {
-            return Termin(2L,
-                    LocalDateTime.of(2019, 10, 22, 12, 0, 0),
-                    LocalDateTime.of(2019, 10, 22, 15, 0, 0),
-                    "Tempelhofer Vorstadt",
-                    sammeltermin(),
-                    listOf(karl(), rosa()),
-                    52.48612,
-                    13.47192,
-                    null)
+            return Termin(
+                2L,
+                LocalDateTime.of(2019, 10, 22, 12, 0, 0),
+                LocalDateTime.of(2019, 10, 22, 15, 0, 0),
+                "Tempelhofer Vorstadt",
+                sammeltermin(),
+                listOf(karl(), rosa()),
+                52.48612,
+                13.47192,
+                null
+            )
         ***REMOVED***
 
         fun terminMitTeilnehmerMitDetails(): Termin {
-            return Termin(2L,
-                    LocalDateTime.of(2019, 10, 22, 12, 0, 0),
-                    LocalDateTime.of(2019, 10, 22, 15, 0, 0),
+            return Termin(
+                2L,
+                LocalDateTime.of(2019, 10, 22, 12, 0, 0),
+                LocalDateTime.of(2019, 10, 22, 15, 0, 0),
                 "Tempelhofer Vorstadt",
-                    sammeltermin(),
-                    listOf(karl(), rosa()),
-                    52.48612,
-                    13.47192,
-                    terminDetails())
+                sammeltermin(),
+                listOf(karl(), rosa()),
+                52.48612,
+                13.47192,
+                terminDetails()
+            )
         ***REMOVED***
 
         fun terminOhneTeilnehmerMitDetails(): Termin {
-            return Termin(2L,
-                    LocalDateTime.of(2019, 10, 22, 12, 0, 0),
-                    LocalDateTime.of(2019, 10, 22, 15, 0, 0),
+            return Termin(
+                2L,
+                LocalDateTime.of(2019, 10, 22, 12, 0, 0),
+                LocalDateTime.of(2019, 10, 22, 15, 0, 0),
                 "Tempelhofer Vorstadt",
-                    sammeltermin(),
-                    emptyList(),
-                    52.48612,
-                    13.47192,
-                    terminDetails())
+                sammeltermin(),
+                emptyList(),
+                52.48612,
+                13.47192,
+                terminDetails()
+            )
         ***REMOVED***
+
 
         fun terminDto(): TermineRestResource.TerminDto {
             return TermineRestResource.TerminDto.convertFromTerminWithoutDetails(terminOhneTeilnehmerOhneDetails())
@@ -90,6 +100,36 @@ class TestdatenVorrat {
         fun zukunft(): ListLocation = ListLocation("1", "Zukunft", "Laskerstraße", "5", 52.5016524, 13.4655402)
 
         fun sampleListLocations() = listOf(curry36(), cafeKotti(), zukunft())
+    ***REMOVED***
 
+    @Suppress("unused")
+    open class TerminBuilder {
+        val termin = terminOhneTeilnehmerOhneDetails()
+
+        open fun mitTeilnehmern(): TerminBuilder {
+            termin.teilnehmer = terminMitTeilnehmerOhneDetails().teilnehmer
+            return this
+        ***REMOVED***
+
+        open fun mitDetails(): TerminBuilder {
+            termin.details = terminMitTeilnehmerMitDetails().details
+            return this
+        ***REMOVED***
+
+        open fun heute(): TerminBuilder {
+            termin.beginn = now().plusHours(1)
+            termin.ende = now().plusHours(3)
+            return this
+        ***REMOVED***
+
+        open fun mitKoordinaten(latitude: Double?, longitude: Double?): TerminBuilder {
+            termin.latitude = latitude
+            termin.longitude = longitude
+            return this
+        ***REMOVED***
+
+        open fun build(): Termin {
+            return termin
+        ***REMOVED***
     ***REMOVED***
 ***REMOVED***
