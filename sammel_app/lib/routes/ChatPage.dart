@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/routes/TopicChatWindow.dart';
@@ -50,9 +49,7 @@ class ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
             decoration: DweTheme.happyHouseBackground,
             height: 100,
             width: 100,
-            child: LoadingIndicator(
-                indicatorType: Indicator.ballRotateChase,
-                color: Color.fromARGB(100, 128, 128, 128))));
+            child: Container(color: Colors.white)));
   ***REMOVED***
 
   @override
