@@ -1,11 +1,18 @@
 package de.kybernetik.rest
 
+import org.junit.Before
 import org.junit.Test
+import java.lang.System.setProperty
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class HealthRestResourceTest {
     private val resource = HealthRestResource()
+
+    @Before
+    fun setUp() {
+        setProperty("mode", "LOCAL")
+    }
 
     @Test
     fun healthSendetLebenszeichen() {
@@ -14,6 +21,7 @@ class HealthRestResourceTest {
         val health = response.entity as Health
         assertEquals(health.status,"lebendig")
         assertTrue(health.version.isNotEmpty())
-//        assertEquals(health.minClient,"0.3.0+13")
+        assertTrue(health.minClient.isNotEmpty())
+        assertEquals("LOCAL", health.modus)
     }
 }
