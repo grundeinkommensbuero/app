@@ -663,8 +663,6 @@ class TermineRestResourceTest {
         assertEquals(captor.firstValue.tage, emptyList())
         assertEquals(captor.firstValue.orte, emptyList())
         assertEquals(captor.firstValue.typen, emptyList())
-        assertEquals(true, captor.firstValue.immerEigene)
-        assertEquals(false, captor.firstValue.nurEigene)
 
         verify(dao, times(1)).ladeAlleEvaluationen()
     ***REMOVED***
