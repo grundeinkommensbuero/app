@@ -1,4 +1,3 @@
-import 'package:easy_localization/src/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -21,13 +20,15 @@ main() {
   Function(Termin) joinAction = (_) {};
   Function(Termin) leaveAction = (_) {};
 
-  setUp(() {
+  mockTranslation();
+
+  setUp(() async {
     reset(storageServiceMock);
     when(storageServiceMock.loadAllStoredEvaluations())
         .thenAnswer((_) async => []);
 
-    Localization.load(Locale('en'), translations: TranslationsMock());
     Termin termin = TerminTestDaten.einTerminMitTeilisUndDetails();
+
     widget = MultiProvider(
         providers: [
           Provider<AbstractTermineService>.value(value: TermineServiceMock()),
