@@ -26,7 +26,6 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import de.kybernetik.rest.TermineRestResource.*
-import de.kybernetik.services.NeueAktionenNotification
 import de.kybernetik.services.PushService
 import java.time.LocalDateTime.now
 import java.time.ZonedDateTime
@@ -698,16 +697,15 @@ class TermineRestResourceTest {
     fun `convertFromEvaluation konvertiert Evaluation zu Dto`() {
         val evaluation = Evaluation(1L, 2L, 3L, 4, 5L, 4L, 3.0, "ganz okay", "Sonnenschein", false)
 
-        val vonEvaluation = EvaluationDto.vonEvaluation(evaluation)
-        assertEquals(1L, evaluation.id)
-        assertEquals(2L, evaluation.termin_id)
-        assertEquals(3L, evaluation.user_id)
-        assertEquals(4, evaluation.teilnehmer)
-        assertEquals(5L, evaluation.unterschriften)
-        assertEquals(4L, evaluation.bewertung)
-        assertEquals(3.0, evaluation.stunden)
-        assertEquals("ganz okay", evaluation.kommentar)
-        assertEquals("Sonnenschein", evaluation.situation)
-        assertEquals(false, evaluation.ausgefallen)
+        val dto = EvaluationDto.vonEvaluation(evaluation)
+        assertEquals(1L, dto.id)
+        assertEquals(2L, dto.termin_id)
+        assertEquals(4, dto.teilnehmer)
+        assertEquals(5L, dto.unterschriften)
+        assertEquals(4L, dto.bewertung)
+        assertEquals(3.0, dto.stunden)
+        assertEquals("ganz okay", dto.kommentar)
+        assertEquals("Sonnenschein", dto.situation)
+        assertEquals(false, dto.ausgefallen)
     ***REMOVED***
 ***REMOVED***
