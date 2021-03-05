@@ -8,7 +8,7 @@ void main() {
   group('serialisere', () {
     test('serialisiert leeren TermineFilter', () {
       expect(jsonEncode(TermineFilter.leererFilter()),
-          '{"typen":[],"tage":[],"von":null,"bis":null,"orte":[],"ids":[]***REMOVED***');
+          '{"typen":[],"tage":[],"von":null,"bis":null,"orte":[]***REMOVED***');
     ***REMOVED***);
 
     test('serialisiert gefuellten TermineFilter', () {
@@ -24,8 +24,7 @@ void main() {
           '"tage":["2019-11-22","2019-01-30"],'
           '"von":"04:10:00",'
           '"bis":"23:00:00",'
-          '"orte":["Frankfurter Allee Süd"],'
-          '"ids":[]'
+          '"orte":["Frankfurter Allee Süd"]'
           '***REMOVED***');
     ***REMOVED***);
   ***REMOVED***);
