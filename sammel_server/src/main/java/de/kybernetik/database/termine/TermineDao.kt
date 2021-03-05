@@ -46,11 +46,11 @@ open class TermineDao {
         if (filter.von != null) filterKlausel.add(vonKlausel)
         if (filter.bis != null) filterKlausel.add(bisKlausel)
         if (!filter.orte.isNullOrEmpty()) filterKlausel.add(orteKlausel)
-        if (filter.nurEigene != null && filter.nurEigene) filterKlausel.add(nurEigeneKlausel)
+        if (filter.nurEigene != null && filter.nurEigene && benutzerId != null) filterKlausel.add(nurEigeneKlausel)
 
         var sql = "select termine from Termin termine"
         if (filterKlausel.isNotEmpty()) sql += " where " + filterKlausel.joinToString(" and ")
-        if (filter.immerEigene == null || filter.immerEigene)  sql += " or $immerEigeneKlausel"
+        if (filter.immerEigene == null || filter.immerEigene && benutzerId != null)  sql += " or $immerEigeneKlausel"
         sql += " order by termine.beginn"
         val query = entityManager.createQuery(sql, Termin::class.java)
         query.maxResults = getProperty("de.kybernetik.max-actions").toInt()
