@@ -15,6 +15,7 @@ import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import de.kybernetik.shared.Security
 import org.apache.http.auth.BasicUserPrincipal
+import org.junit.Ignore
 import java.lang.IllegalArgumentException
 import java.sql.SQLException
 import javax.ws.rs.core.SecurityContext
@@ -68,6 +69,7 @@ class BenutzerRestResourceTest {
         assertEquals(captor.firstValue.isFirebase, false)
     ***REMOVED***
 
+    @Ignore("ausgebautes Feature")
     @Test
     fun `legeNeuenBenutzerAn lehnt bereits bestehende Benutzernamen ab`() {
         whenever(dao.benutzernameExistiert("Karl Marx")).thenReturn(true)
@@ -96,6 +98,7 @@ class BenutzerRestResourceTest {
         verify(dao, times(1)).legeNeuenBenutzerAn(any())
     ***REMOVED***
 
+    @Ignore("auskommentiertes Feature")
     @Test
     fun `legeNeuenBenutzerAn entfernt Leerzeichen vor und hinter Benutzername`() {
         whenever(dao.benutzernameExistiert("Karl Marx")).thenReturn(false)
@@ -105,7 +108,7 @@ class BenutzerRestResourceTest {
 
         val captor = argumentCaptor<Benutzer>()
         verify(dao, times(1)).legeNeuenBenutzerAn(captor.capture())
-        assertEquals(captor.firstValue.name, "Karl Marx")
+        assertEquals("Karl Marx", captor.firstValue.name)
     ***REMOVED***
 
     @Test
