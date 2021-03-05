@@ -5,12 +5,14 @@ import TestdatenVorrat.Companion.rosa
 import TestdatenVorrat.Companion.bini
 import TestdatenVorrat.Companion.terminDto
 import TestdatenVorrat.Companion.terminMitTeilnehmerMitDetails
+import TestdatenVorrat.Companion.terminMitTeilnehmerOhneDetails
 import TestdatenVorrat.Companion.terminOhneTeilnehmerMitDetails
 import TestdatenVorrat.Companion.terminOhneTeilnehmerOhneDetails
 import com.nhaarman.mockitokotlin2.*
 import de.kybernetik.database.DatabaseException
 import de.kybernetik.database.benutzer.Benutzer
 import de.kybernetik.database.benutzer.BenutzerDao
+import de.kybernetik.database.termine.Evaluation
 import de.kybernetik.database.termine.Termin
 import de.kybernetik.database.termine.TermineDao
 import de.kybernetik.database.termine.Token
@@ -24,7 +26,6 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import de.kybernetik.rest.TermineRestResource.*
-import de.kybernetik.services.NeueAktionenNotification
 import de.kybernetik.services.PushService
 import java.time.LocalDateTime.now
 import java.time.ZonedDateTime
@@ -50,9 +51,6 @@ class TermineRestResourceTest {
     private lateinit var pushService: PushService
 
     @Mock
-    private lateinit var neueAktionenNotification: NeueAktionenNotification
-
-    @Mock
     private lateinit var context: SecurityContext
 
     @InjectMocks
@@ -62,6 +60,23 @@ class TermineRestResourceTest {
     fun setUp() {
         whenever(context.userPrincipal).thenReturn(BasicUserPrincipal("11"))
         reset(pushService)
+        reset(dao)
+
+        whenever(dao.ladeAlleEvaluationen()).thenReturn(
+            listOf(
+                Evaluation(1L, 1L, 1L, 5L, 20L, 3L, 2.0, "war ganz okay", "schlechtes Wetter", false),
+                Evaluation(2L, 1L, 3L, 5L, 30L, 4L, 2.0, "super, gerne wieder", "Regen", false),
+                Evaluation(3L, 2L, 1L, 5L, 12L, 2L, 1.0, "ziemlich wenig los", "Feiertag", false)
+            )
+        )
+
+        val aktion1 = terminMitTeilnehmerOhneDetails()
+        aktion1.id = 1L
+        val aktion2 = terminMitTeilnehmerOhneDetails()
+        aktion2.id = 2L
+        val aktion3 = terminMitTeilnehmerOhneDetails()
+        aktion3.id = 3L
+        whenever(dao.getTermine(any(), anyOrNull())).thenReturn(listOf(aktion1, aktion2, aktion3))
     ***REMOVED***
 
     @Test
@@ -439,8 +454,8 @@ class TermineRestResourceTest {
         val empfaengerCaptor = argumentCaptor<List<Benutzer>>()
         val nachricht = argumentCaptor<PushMessageDto>()
         verify(pushService, times(2)).sendePushNachrichtAnEmpfaenger(
-                nachricht.capture(),
-                empfaengerCaptor.capture()
+            nachricht.capture(),
+            empfaengerCaptor.capture()
         )
         assertEquals(empfaengerCaptor.secondValue[0].name, rosa().name)
         assertEquals(empfaengerCaptor.secondValue.size, 1)
@@ -635,5 +650,62 @@ class TermineRestResourceTest {
         println(ZonedDateTime.now().format(ISO_OFFSET_DATE_TIME))
         println(ZonedDateTime.now().format(ISO_ZONED_DATE_TIME))
         println(ZonedDateTime.now().format(ISO_INSTANT))
+    ***REMOVED***
+
+    @Test
+    fun `fragt alle Aktionen und alle Evaluationen aus Datenbank ab`() {
+        resource.alleEvalationen()
+
+        val captor = argumentCaptor<TermineFilter>()
+        verify(dao, times(1)).getTermine(captor.capture(), anyOrNull())
+        assertNull(captor.firstValue.von)
+        assertNull(captor.firstValue.bis)
+        assertEquals(captor.firstValue.tage, emptyList())
+        assertEquals(captor.firstValue.orte, emptyList())
+        assertEquals(captor.firstValue.typen, emptyList())
+        assertEquals(true, captor.firstValue.immerEigene)
+        assertEquals(false, captor.firstValue.nurEigene)
+
+        verify(dao, times(1)).ladeAlleEvaluationen()
+    ***REMOVED***
+
+    @Test
+    fun `liefert alle Aktionen und Evaluationen aus`() {
+
+        val ergebnis = resource.alleEvalationen()
+
+        assertTrue(ergebnis.entity is EvaluationenUndAktionenDto)
+        assertEquals(1L, (ergebnis.entity as EvaluationenUndAktionenDto).aktionen[0].id)
+        assertEquals(2L, (ergebnis.entity as EvaluationenUndAktionenDto).aktionen[1].id)
+        assertEquals(3L, (ergebnis.entity as EvaluationenUndAktionenDto).aktionen[2].id)
+        assertEquals(1L, (ergebnis.entity as EvaluationenUndAktionenDto).evaluationen[0].id)
+        assertEquals(2L, (ergebnis.entity as EvaluationenUndAktionenDto).evaluationen[1].id)
+    ***REMOVED***
+
+    @Test
+    fun `liefert Aktionen ohne Teilnehmer aus`() {
+
+        val ergebnis = resource.alleEvalationen()
+
+        assertTrue(ergebnis.entity is EvaluationenUndAktionenDto)
+        assertNull((ergebnis.entity as EvaluationenUndAktionenDto).aktionen[0].participants)
+        assertNull((ergebnis.entity as EvaluationenUndAktionenDto).aktionen[1].participants)
+        assertNull((ergebnis.entity as EvaluationenUndAktionenDto).aktionen[2].participants)
+    ***REMOVED***
+
+    @Test
+    fun `convertFromEvaluation konvertiert Evaluation zu Dto`() {
+        val evaluation = Evaluation(1L, 2L, 3L, 4, 5L, 4L, 3.0, "ganz okay", "Sonnenschein", false)
+
+        val dto = EvaluationDto.vonEvaluation(evaluation)
+        assertEquals(1L, dto.id)
+        assertEquals(2L, dto.termin_id)
+        assertEquals(4, dto.teilnehmer)
+        assertEquals(5L, dto.unterschriften)
+        assertEquals(4L, dto.bewertung)
+        assertEquals(3.0, dto.stunden)
+        assertEquals("ganz okay", dto.kommentar)
+        assertEquals("Sonnenschein", dto.situation)
+        assertEquals(false, dto.ausgefallen)
     ***REMOVED***
 ***REMOVED***
