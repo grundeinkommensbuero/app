@@ -26,6 +26,7 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import de.kybernetik.rest.TermineRestResource.*
+import de.kybernetik.services.NeueAktionenNotification
 import de.kybernetik.services.PushService
 import java.time.LocalDateTime.now
 import java.time.ZonedDateTime
@@ -49,6 +50,10 @@ class TermineRestResourceTest {
 
     @Mock
     private lateinit var pushService: PushService
+
+    @Suppress("unused")
+    @Mock
+    private lateinit var neueAktionenNotification: NeueAktionenNotification
 
     @Mock
     private lateinit var context: SecurityContext
@@ -138,8 +143,8 @@ class TermineRestResourceTest {
     }
 
     @Test
-    fun `getTermineL liefert TerminDtos aus mit Filter`() {
-        whenever(dao.getTermine(any(), 0L)).thenReturn(
+    fun `getTermine liefert TerminDtos aus mit Filter`() {
+        whenever(dao.getTermine(any(), anyOrNull())).thenReturn(
             listOf(
                 terminOhneTeilnehmerOhneDetails(),
                 terminOhneTeilnehmerMitDetails()
@@ -148,7 +153,7 @@ class TermineRestResourceTest {
         val filter = TermineFilter()
         val response = resource.getTermine(filter)
 
-        verify(dao, atLeastOnce()).getTermine(filter, 0L)
+        verify(dao, atLeastOnce()).getTermine(filter, 11L)
 
         assertEquals(response.status, 200)
         val termine = response.entity as List<*>
@@ -162,7 +167,7 @@ class TermineRestResourceTest {
 
     @Test
     fun `getTermine nimmt fuer keinen Filter leeren Filter`() {
-        whenever(dao.getTermine(any(), 0L)).thenReturn(
+        whenever(dao.getTermine(any(), anyOrNull())).thenReturn(
             listOf(
                 terminOhneTeilnehmerOhneDetails(),
                 terminOhneTeilnehmerMitDetails()
@@ -171,7 +176,7 @@ class TermineRestResourceTest {
         resource.getTermine(null)
 
         val captor = ArgumentCaptor.forClass(TermineFilter::class.java)
-        verify(dao, atLeastOnce()).getTermine(capture<TermineFilter>(captor), 0L)
+        verify(dao, atLeastOnce()).getTermine(capture<TermineFilter>(captor), anyOrNull())
         assertEquals(captor.value.typen, emptyList())
         assertEquals(captor.value.tage, emptyList())
         assertEquals(captor.value.von, null)

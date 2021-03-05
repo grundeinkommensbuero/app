@@ -53,6 +53,10 @@ class PushServiceTest {
     fun setUp() {
         whenever(benutzerDao.getFirebaseKeys(any())).thenReturn(emptyList())
         whenever(benutzerDao.getBenutzerOhneFirebase(any())).thenReturn(emptyList())
+
+        System.setProperty("key", "vue8NkTYyN1e2OoHGcapLZWiCTC+13Eqk9gXBSq4azc=")
+        System.setProperty("mode", "LOCAL")
+        service.werteUmgebungsvariabelnAus()
     }
 
     @Test
