@@ -77,7 +77,11 @@ class LocationDialogState extends State<LocationDialog> {
                     options: MapOptions(
                         center: widget.center ?? LatLng(52.5170365, 13.3888599),
                         zoom: widget.center != null ? 14.0 : 10.0,
+                        swPanBoundary: LatLng(52.324702,13.126562),
+                        nePanBoundary: LatLng(52.670823,13.752095),
+                        zoom: 12.0,
                         maxZoom: 19.0,
+                        minZoom: 10.0,
                         onTap: locationSelected,
                         plugins: [AttributionPlugin()]),
                     layers: [
