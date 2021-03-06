@@ -35,7 +35,7 @@ open class TermineDao {
     private val bisKlausel = "TIME(termine.beginn) <= TIME(:bis)"
     private val orteKlausel = "termine.ort in (:orte)"
     private val nurEigeneKlausel = "(:benutzer) in elements(termine.teilnehmer)"
-    private val immerEigeneKlausel = "(:benutzer) in elements(termine.teilnehmer)" // identisch zu nurEigeneKlausel, wird aber mit "or" angefügt
+    private val immerEigeneKlausel = "((:benutzer) in elements(termine.teilnehmer) and DATE(termine.ende) > (:vor7Tagen))"
 
     @Suppress("JpaQueryApiInspection") // IDEA kriegt die Query nicht zusammen
     open fun erzeugeGetTermineQuery(filter: TermineFilter, benutzerId: Long?): TypedQuery<Termin> {
@@ -55,12 +55,19 @@ open class TermineDao {
         val query = entityManager.createQuery(sql, Termin::class.java)
         query.maxResults = getProperty("de.kybernetik.max-actions").toInt()
 
-        if(filterKlausel.contains(aktuellKlausel)) {
+
+        if(filterKlausel.contains(aktuellKlausel) || filterKlausel.contains(immerEigeneKlausel)) {
             query.setParameter("heute", now().toDate())
             query.setParameter("benutzer", Benutzer(benutzerId!!, null, 0L))
             query.setParameter("vor7Tagen", now()
                 .minusDays(getProperty("de.kybernetik.action-age").toLong()).toDate())
         ***REMOVED***
+
+        if(filterKlausel.contains(aktuellKlausel) || filterKlausel.contains(immerEigeneKlausel) || filterKlausel.contains(nurEigeneKlausel)) {
+            query.setParameter("benutzer", Benutzer(benutzerId!!, null, 0L))
+        ***REMOVED***
+
+
         if (filterKlausel.contains(typenKlausel)) query.setParameter("typen", filter.typen)
         if (filterKlausel.contains(tageKlausel)) query.setParameter("tage", filter.tage!!.map { it.toDate() ***REMOVED***)
         if (filterKlausel.contains(vonKlausel)) query.setParameter("von", filter.von!!.atDate(now()))
