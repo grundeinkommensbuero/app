@@ -9,6 +9,7 @@ import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/shared/AttributionPlugin.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/NoRotation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ActionMap extends StatefulWidget {
@@ -42,6 +43,7 @@ class ActionMapState extends State<ActionMap> {
   ActionMapState();
 
   var locationPermissionGranted = false;
+  List<Marker> listLocationMarkers = [];
 
   @override
   void initState() {
@@ -50,7 +52,6 @@ class ActionMapState extends State<ActionMap> {
 
   @override
   Widget build(BuildContext context) {
-    var listLocationMarkers = generateListLocationMarkers();
     var actionMarkers = generateActionMarkers();
     var plugins = List<MapPlugin>();
     plugins.add(AttributionPlugin());
@@ -60,39 +61,22 @@ class ActionMapState extends State<ActionMap> {
       TileLayerOptions(
           urlTemplate: "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
           subdomains: ['a', 'b', 'c']),
+      MarkerLayerOptions(markers: listLocationMarkers),
       MarkerClusterLayerOptions(
-        disableClusteringAtZoom: 17,
+        disableClusteringAtZoom: 14,
         markers: actionMarkers,
         maxClusterRadius: 50,
-        polygonOptions: PolygonOptions(
-            color: DweTheme.yellow.withOpacity(0.12)
-        ),
-        fitBoundsOptions: FitBoundsOptions(
-          padding: EdgeInsets.fromLTRB(40, 90, 40, 100)
-        ),
+        polygonOptions:
+            PolygonOptions(color: DweTheme.yellow.withOpacity(0.12)),
+        fitBoundsOptions:
+            FitBoundsOptions(padding: EdgeInsets.fromLTRB(40, 90, 40, 100)),
         builder: (context, markers) {
           return FloatingActionButton(
             child: Text(markers.length.toString()),
             backgroundColor: DweTheme.yellow,
             foregroundColor: DweTheme.purple,
-            onPressed: null,
-          );
-        ***REMOVED***,
-      ),
-      MarkerClusterLayerOptions(
-        disableClusteringAtZoom: 17,
-        markers: listLocationMarkers,
-        maxClusterRadius: 50,
-        polygonOptions: PolygonOptions(
-            color: DweTheme.purple.withOpacity(0.12)
-        ),
-        fitBoundsOptions: FitBoundsOptions(
-            padding: EdgeInsets.fromLTRB(40, 90, 40, 100)
-        ),
-        builder: (context, markers) {
-          return FloatingActionButton(
-            child: Text(markers.length.toString()),
-            backgroundColor: DweTheme.purple,
+            shape:
+                CircleBorder(side: BorderSide(color: Colors.black, width: 1.0)),
             onPressed: null,
           );
         ***REMOVED***,
@@ -103,14 +87,17 @@ class ActionMapState extends State<ActionMap> {
     return FlutterMap(
       key: Key('action map map'),
       options: MapOptions(
-        plugins: plugins,
-        center: LatLng(52.5170365, 13.3888599),
-        swPanBoundary: LatLng(52.324702,13.126562),
-        nePanBoundary: LatLng(52.670823,13.752095),
-        zoom: 12.0,
-        maxZoom: 19.0,
-        minZoom: 10.0,
-      ),
+          plugins: plugins,
+          center: LatLng(52.5170365, 13.3888599),
+          swPanBoundary: LatLng(52.324702, 13.126562),
+          nePanBoundary: LatLng(52.670823, 13.752095),
+          zoom: 12.0,
+          interactiveFlags: noRotation,
+          maxZoom: 19.0,
+          minZoom: 10.0,
+          onPositionChanged: (position, _) => widget.mapController.onReady.then(
+              (_) => setState(() =>
+                  this.listLocationMarkers = generateListLocationMarkers()))),
       layers: layers,
       mapController: widget.mapController ?? MapController(),
     );
@@ -128,15 +115,13 @@ class ActionMapState extends State<ActionMap> {
         .toList();
   ***REMOVED***
 
-  Iterable<Marker> generateListLocationMarkers() {
+  List<Marker> generateListLocationMarkers() {
+    if (widget.mapController == null || widget.mapController.zoom < 13)
+      return [];
     return widget.listLocations
         .map((listlocation) => ListLocationMarker(listlocation))
         .toList();
   ***REMOVED***
-
-  List<Marker> generateMarkers() => <Marker>[]
-    ..addAll(generateListLocationMarkers())
-    ..addAll(generateActionMarkers());
 
   Color generateColor(String bezirk) {
     return Color.fromARGB(150, bezirk.hashCode * 10, bezirk.hashCode * 100,
