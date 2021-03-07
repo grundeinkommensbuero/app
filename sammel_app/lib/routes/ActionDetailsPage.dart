@@ -59,9 +59,8 @@ class ActionDetailsPage extends StatefulWidget {
   }
 
   @override
-  State<StatefulWidget> createState() {
-    return ActionDetailsPageState(this.isMyAction, this.iAmParticipant);
-  }
+  State<StatefulWidget> createState() =>
+      ActionDetailsPageState(this.isMyAction, this.iAmParticipant);
 }
 
 class ActionDetailsPageState extends State<ActionDetailsPage> {
@@ -96,6 +95,13 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
 
     PopupMenuButton menu =
         menuButton(widget.action, isMyAction, iAmParticipant);
+
+    Locale locale;
+    try {
+      locale = context.locale;
+    } catch (_) {
+      print('Konnte Locale nicht ermitteln');
+    }
 
     return Scaffold(
         backgroundColor: color,
@@ -135,7 +141,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                       ).tr(),
                       SelectableText(
                           ChronoHelfer.formatDateOfDateTimeMitWochentag(
-                              widget.action.beginn, context.locale)),
+                              widget.action.beginn, locale)),
                       SelectableText(ChronoHelfer.formatFromToTimeOfDateTimes(
                           widget.action.beginn, widget.action.ende)),
                       isPastAction(widget.action)

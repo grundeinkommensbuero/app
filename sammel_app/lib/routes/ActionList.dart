@@ -65,7 +65,7 @@ class ActionListState extends State<ActionList> {
         snackbarTimer = Timer(
             Duration(seconds: 2),
             () => Scaffold.of(context).showSnackBar(SnackBar(
-                content: Text('Dein Feedback zu einer Aktion fehlt noch'.tr(),
+                content: Text('Dein Bericht zu einer Aktion fehlt noch'.tr(),
                     style: TextStyle(color: Colors.black87)),
                 behavior: SnackBarBehavior.floating,
                 duration: Duration(seconds: 7),
@@ -125,16 +125,6 @@ class ActionListState extends State<ActionList> {
           'Jetzt',
           key: Key('action list now line'),
           style: TextStyle(color: DweTheme.purple, fontSize: 16.0),
-        ).tr(),
-      ]);
-    if (index == 99)
-      tile = Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        tile,
-        Text(
-          'In der Liste und auf der Karte werden höchstens 100 Aktionen angezeigt. Du kannst die Filterfunktion benutzen um konkreter nach Aktionen zu suchen.',
-          key: Key('action list end line'),
-          style: TextStyle(fontSize: 14.0),
-          textAlign: TextAlign.center,
         ).tr(),
       ]);
     return tile;

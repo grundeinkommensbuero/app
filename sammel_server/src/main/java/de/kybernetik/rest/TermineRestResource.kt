@@ -8,7 +8,7 @@ import de.kybernetik.database.termine.TerminDetails
 import de.kybernetik.database.termine.TermineDao
 import de.kybernetik.database.termine.Evaluation
 import de.kybernetik.database.termine.Token
-import de.kybernetik.rest.TermineRestResource.EvaluationDto.Companion.convertFromEvaluation
+import de.kybernetik.rest.TermineRestResource.EvaluationDto.Companion.vonEvaluation
 import de.kybernetik.rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithDetails
 import org.jboss.logging.Logger
 import de.kybernetik.rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithoutDetails
@@ -250,7 +250,7 @@ open class TermineRestResource {
     @Produces(APPLICATION_JSON)
     open fun aktualisiereEvaluation(evaluation: EvaluationDto): Response {
         if (evaluation.termin_id == null) return noValidActionResponse
-        LOG.info("Aktualisiere Evaluation für ${evaluation.termin_id} durch ${context.userPrincipal.name}")
+        LOG.info("Speichere Evaluation für ${evaluation.termin_id} durch ${context.userPrincipal.name}")
 
         val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
 
@@ -284,7 +284,7 @@ open class TermineRestResource {
         LOG.info("Alle Evaluationen abgefragt")
         val alleAktionen = dao.getTermine(TermineFilter(), null)
         val alleEvaluation = dao.ladeAlleEvaluationen()
-        LOG.info("${alleEvaluation.size} Evaluationen zu ${alleAktionen.size} ausgeliefert")
+        LOG.info("${alleEvaluation.size} Evaluationen zu ${alleAktionen.size} Aktionen ausgeliefert")
         return Response
             .ok()
             .entity(
@@ -293,7 +293,7 @@ open class TermineRestResource {
                         .map { convertFromTerminWithoutDetails(it) }
                         .peek { it.participants = null }
                         .collect(toList()),
-                    alleEvaluation.map { convertFromEvaluation(it) })
+                    alleEvaluation.map { vonEvaluation(it) })
             )
             .build()
     }
@@ -330,7 +330,7 @@ open class TermineRestResource {
         }
 
         companion object {
-            fun convertFromEvaluation(it: Evaluation) = EvaluationDto(
+            fun vonEvaluation(it: Evaluation) = EvaluationDto(
                 id = it.id,
                 termin_id = it.termin_id,
                 teilnehmer = it.teilnehmer,

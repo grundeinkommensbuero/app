@@ -19,7 +19,6 @@ import 'TermineSeite.dart';
 class Navigation extends StatefulWidget {
   var clearButton = false;
   GlobalKey actionPage;
-  var globalChat = null;
 
   Navigation(this.actionPage, [this.clearButton])
       : super(key: Key('navigation'));
@@ -249,7 +248,7 @@ class NavigationState extends State<Navigation>
   maybeDispose(ChatChannel value) {
     var cls = value.ccl as State<StatefulWidget>;
     if (cls == null) return;
-    if (ModalRoute.of(cls?.context)?.settings.name == "/") {
+    if (ModalRoute.of(cls?.context)?.settings?.name == "/") {
       value.disposeListener();
     }
   }

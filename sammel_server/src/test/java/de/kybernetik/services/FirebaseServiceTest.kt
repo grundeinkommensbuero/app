@@ -62,7 +62,7 @@ class FirebaseServiceTest {
         service.sendePushNachrichtAnEmpfaenger(PushNotificationDto(channel = "Allgemein", collapseId = null), emptyMap(), (1..50).map { Int.toString() })
 
         val captor = argumentCaptor<MulticastMessage>()
-        verify(firebase, times(2)).sendMulticast(captor.capture())
+        verify(firebase, times(1)).sendMulticast(captor.capture())
         @Suppress("UNCHECKED_CAST") val tokens = tokenField.get(captor.firstValue) as List<String>
         assertTrue(tokens.containsAll((1..50).map { Int.toString() }))
     }
@@ -76,7 +76,7 @@ class FirebaseServiceTest {
         service.sendePushNachrichtAnEmpfaenger(PushNotificationDto(channel = "Allgemein", collapseId = null), emptyMap(), listOf("1", "1", "1", "2", "2", "3"))
 
         val captor = argumentCaptor<MulticastMessage>()
-        verify(firebase, times(2)).sendMulticast(captor.capture())
+        verify(firebase, times(1)).sendMulticast(captor.capture())
         @Suppress("UNCHECKED_CAST") val tokens = tokenField.get(captor.firstValue) as List<String>
         assertTrue(tokens.containsAll(listOf("1", "2", "3")))
     }
@@ -89,7 +89,7 @@ class FirebaseServiceTest {
 
         service.sendePushNachrichtAnEmpfaenger(PushNotificationDto(channel = "Allgemein", collapseId = null), null, (1..50).map { Int.toString() })
 
-        verify(firebase, times(2)).sendMulticast(any())
+        verify(firebase, times(1)).sendMulticast(any())
     }
 
     @Test(expected = MissingMessageTarget::class)
@@ -100,7 +100,7 @@ class FirebaseServiceTest {
     fun `sendePushNachrichtAnTopic schickt eine Nachricht ab`() {
         service.sendePushNachrichtAnTopic(PushNotificationDto(channel = "Allgemein", collapseId = null), emptyMap(), "topic")
 
-        verify(firebase, times(2)).send(any())
+        verify(firebase, times(1)).send(any())
     }
 
     @Test

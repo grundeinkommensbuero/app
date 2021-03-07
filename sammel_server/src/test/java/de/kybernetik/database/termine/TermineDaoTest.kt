@@ -18,6 +18,7 @@ import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import de.kybernetik.rest.TermineFilter
 import de.kybernetik.shared.toDate
+import org.junit.Before
 import org.junit.Ignore
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -44,6 +45,12 @@ class TermineDaoTest {
 
     private val beginn = LocalDateTime.of(2019, 10, 22, 14, 0, 0)
     private val ende = LocalDateTime.of(2019, 10, 22, 18, 0, 0)
+
+    @Before
+    fun setUp() {
+        System.setProperty("de.kybernetik.max-actions","100")
+        System.setProperty("de.kybernetik.action-age","7")
+    }
 
     @Test
     fun getTermineLiefertAlleTermineAusDbMitLeeremFilter() {
