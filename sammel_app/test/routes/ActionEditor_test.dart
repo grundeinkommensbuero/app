@@ -78,7 +78,6 @@ void main() {
           child: MaterialApp(
             home: Navigation(GlobalKey(debugLabel: 'action page')),
           )));
-      await tester.pumpAndSettle();
     ***REMOVED***(tester);
 
     var nav = tester.state<NavigationState>(find.byKey(Key('navigation')));
@@ -946,6 +945,6 @@ ActionData testActionData() => ActionData(
     TimeOfDay.fromDateTime(DateTime.now()),
     TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 1))),
     ffAlleeNord(),
-        [DateTime.now()],
-        TerminDetails('Weltzeituhr', 'Es gibt Kuchen', 'Ich bin ich'),
-        LatLng(52.51579, 13.45399));
+    [DateTime.now()],
+    TerminDetails('Weltzeituhr', 'Es gibt Kuchen', 'Ich bin ich'),
+    LatLng(52.51579, 13.45399));

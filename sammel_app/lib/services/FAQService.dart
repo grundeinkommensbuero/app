@@ -595,7 +595,7 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
         Text('• deine Teilnahme an Aktionen ankündigen\n'
             '• Zum Aktions-Chat gelangen\n'
             '• deine Teilnahme an Aktionen absagen\n'
-            '• Feedback zu vergangenen AKtionen abgeben (mit wichtigen Infos für die Kiezteams)\n'
+            '• Bericht zu vergangenen AKtionen abgeben (mit wichtigen Infos für die Kiezteams)\n'
             '• und eigene Aktionen bearbeiten\n'
             '• oder löschen\n'),
         Image.asset('assets/images/chat-seite.png', width: 250),
@@ -688,7 +688,7 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
           '• deine Teilnahme an Aktionen ankündigen\n'
           '• Zum Aktions-Chat gelangen\n'
           '• deine Teilnahme an Aktionen absagen\n'
-          '• Feedback zu vergangenen AKtionen abgeben (mit wichtigen Infos für die Kiezteams)\n'
+          '• Bericht zu vergangenen AKtionen abgeben (mit wichtigen Infos für die Kiezteams)\n'
           '• und eigene Aktionen bearbeiten\n'
           '• oder löschen '
           'Tippst du auf den Chat-Knopf, gelangst du in den Aktions-Chat der '

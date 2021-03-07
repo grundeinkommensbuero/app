@@ -102,7 +102,8 @@ class FilterWidgetState extends State<FilterWidget>
                         : Text(buttonText,
                             key: Key('filter button text'),
                             textScaleFactor: 1.2),
-                    Icon(expanded ? Icons.done : Icons.filter_alt_sharp),
+                    Icon(expanded ? Icons.done : Icons.filter_alt_sharp,
+                        color: filter.isEmpty ? DweTheme.yellow : DweTheme.green),
                   ],
                 ),
                 onPressed: () {
