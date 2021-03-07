@@ -171,10 +171,19 @@ class FAQService {
           'Quorum',
           'Erfolg'
         ]),
-    FAQItem.text(
+    FAQItem(
         5,
         'Wessen Unterschrift ist gültig?',
-        'Wahlberechtigt sind alle Berliner*innen mit deutschem Pass, die mindestens drei Monate in Berlin gemeldet und mindestens 18 Jahre alt sind. Die Unterschriften eines großen Teils der Einwohner*innen Berlins, werden also für ungültig erklärt. Das ist unserer Meinung nach höchst undemokratisch und ein politischer Skandal. Wir freuen uns jedoch über jede Unterstützung und finden es deshalb gut, wenn auch Personen unterschreiben, die nicht wahlberechtigt sind.',
+        Text(
+            'Wahlberechtigt sind alle Berliner*innen mit deutschem Pass, die mindestens drei Monate in Berlin gemeldet und mindestens 18 Jahre alt sind. Die Unterschriften eines großen Teils der Einwohner*innen Berlins, werden also für ungültig erklärt. Das ist unserer Meinung nach höchst undemokratisch und ein politischer Skandal. Wir freuen uns jedoch über jede Unterstützung und finden es deshalb gut, wenn auch Personen unterschreiben, die nicht wahlberechtigt sind.\n\n'
+            'Eine Ausnahmeregelung gilt gemäß Wahlgesetz jedoch: "Personen, die nicht in einem Melderegister der Bundesrepublik Deutschland verzeichnet sind oder nicht seit drei Monaten vor dem Tag der Unterzeichnung im Melderegister in Berlin gemeldet sind, können das Volksbegehren ebenfalls unterzeichnen. Sie müssen mit der Unterzeichnung in einer amtlichen Auslegungsstelle oder im Bezirksamt durch Versicherung an Eides Statt gegenüber dem Bezirksamt glaubhaft machen, dass sie sich in den letzten drei Monaten überwiegend in Berlin aufgehalten haben.\n'
+            'Erklärt eine zustimmungswillige Person, dass sie nicht schreiben kann, so ist die Eintragung von Amts wegen in einer amtlichen Auslegungsstelle oder im Bezirksamt unter Vermerk dieser Erklärung vorzunehmen".'),
+        Text(
+            'Wahlberechtigt sind alle Berliner*innen mit deutschem Pass, die mindestens drei Monate in Berlin gemeldet und mindestens 18 Jahre alt sind. Die Unterschriften eines großen Teils der Einwohner*innen Berlins, werden also für ungültig erklärt. Das ist unserer Meinung nach höchst undemokratisch und ein politischer Skandal. Wir freuen uns jedoch über jede Unterstützung und finden es deshalb gut, wenn auch Personen unterschreiben, die nicht wahlberechtigt sind.\n\n'
+            'Eine Ausnahmeregelung gilt gemäß Wahlgesetz jedoch: '),
+        'Wahlberechtigt sind alle Berliner*innen mit deutschem Pass, die mindestens drei Monate in Berlin gemeldet und mindestens 18 Jahre alt sind. Die Unterschriften eines großen Teils der Einwohner*innen Berlins, werden also für ungültig erklärt. Das ist unserer Meinung nach höchst undemokratisch und ein politischer Skandal. Wir freuen uns jedoch über jede Unterstützung und finden es deshalb gut, wenn auch Personen unterschreiben, die nicht wahlberechtigt sind.\n\n'
+            'Eine Ausnahmeregelung gilt gemäß Wahlgesetz jedoch: "Personen, die nicht in einem Melderegister der Bundesrepublik Deutschland verzeichnet sind oder nicht seit drei Monaten vor dem Tag der Unterzeichnung im Melderegister in Berlin gemeldet sind, können das Volksbegehren ebenfalls unterzeichnen. Sie müssen mit der Unterzeichnung in einer amtlichen Auslegungsstelle oder im Bezirksamt durch Versicherung an Eides Statt gegenüber dem Bezirksamt glaubhaft machen, dass sie sich in den letzten drei Monaten überwiegend in Berlin aufgehalten haben.\n'
+            'Erklärt eine zustimmungswillige Person, dass sie nicht schreiben kann, so ist die Eintragung von Amts wegen in einer amtlichen Auslegungsstelle oder im Bezirksamt unter Vermerk dieser Erklärung vorzunehmen".',
         [
           'Wer',
           'Gültigkeit',
@@ -213,11 +222,60 @@ class FAQService {
             'https://sammeln.dwenteignen.de/pages/karte'),
         'Ja unter',
         ['Solidarische Orte', 'wo']),
-    FAQItem.text(
+    FAQItem(
         10,
         'Wo kann unterschrieben werden?',
+        Column(children: [
+          Text(
+              'Unterschrieben werden kann in jedem Berliner Bezirksamt, in einigen solidarischen Orten und bei unseren Sammler*innen auf der Straße.'),
+          Text('Auslegungstage und Öffnungszeiten der Bürgerämter:\n\n'
+              'Montag von 8 bis 15 Uhr\n'
+              'Dienstag und Donnerstag von 11 bis 18 Uhr\n'
+              'Mittwoch und Freitag von 8 bis 13 Uhr\n\n'
+              'Mitte\n'
+              'Bürgeramt Rathaus Mitte, Karl-Marx-Allee 31, 10178 Berlin\n\n'
+              'Friedrichshain-Kreuzberg\n'
+              'Bezirkswahlamt, Frankfurter Allee 35/37, 10247 Berlin\n\n'
+              'Pankow\n'
+              'Bürgeramt Weißensee, Berliner Allee 252 – 260, 13088 Berlin\n'
+              'Bürgeramt Karow / Buch, Franz-Schmidt-Str. 8-10, 13125 Berlin\n'
+              'Bürgeramt Prenzlauer Berg, Fröbelstraße 17, Haus 6, 10405 Berlin\n'
+              'Bürgeramt Pankow, Breite Str. 24a – 26, 13187 Berlin\n\n'
+              'Charlottenburg-Wilmersdorf\n'
+              'Rathaus Charlottenburg, Otto-Suhr-Allee 100, 10585 Berlin, – Eingangshalle -\n\n'
+              'Spandau\n'
+              'Bürgeramt Rathaus, Carl-Schurz-Straße 2/6, 13597 Berlin\n'
+              'Steglitz-Zehlendorf\n\n'
+              'Bürgeramt Steglitz, Schloßstrasse 37, 12163 Berlin\n'
+              'Bürgeramt Rathaus Zehlendorf, Kirchstraße 1/3 (Eingang Teltower Damm), 14163 Berlin\n'
+              'Bürgeramt Lankwitz, Gallwitzallee 87 (Polizeigebäude, 1. OG), 12249 Berlin\n\n'
+              'Tempelhof-Schöneberg\n'
+              'Rathaus Schöneberg (im Inneren zwischen Ein- und Ausgang), John-F.-Kennedy-Platz, 10820 Berlin\n'
+              'Bürgeramt Lichtenrade, Briesingstraße 6, 12307 Berlin\n\n'
+              'Neukölln\n'
+              'Bürgeramt 1, Rathaus Neukölln, Karl-Marx-Str. 83-85 (Eingang: Donaustr. 29), 12043 Berlin\n\n'
+              'Treptow-Köpenick\n'
+              'Rathaus Treptow, Neue Krugallee 4 – Pförtnerloge, 12435 Berlin\n'
+              'Rathaus Köpenick, Alt-Köpenick 21 – Büro für Bürgerinnen- und Bürgerbeteiligung R.66, 12555 Berlin\n\n'
+              'Marzahn-Hellersdorf\n'
+              'Stadtteilbibliothek Kaulsdorf im Forum Kienberg, Neue Grottkauer Straße 5, 12619 Berlin\n'
+              'Stadtteilbibliothek Erich Weinert, Helene-Weigel-Platz 4, 12681 Berlin\n'
+              'Mittelpunktbibliothek Ehm Welk, Alte Hellersdorfer Straße 125, 12629 Berlin\n'
+              'Bezirkszentralbibliothek Mark Twain (im Freizeitforum Marzahn), Marzahner Promenade 55, 12679 Berlin\n\n'
+              'Lichtenberg\n'
+              'Bürgeramt 1 – Neu-Hohenschönhausen, Egon-Erwin-Kisch-Str. 106, 13059 Berlin\n'
+              'Bürgeramt 2 – Lichtenberg, Normannenstr. 1-2, 10367 Berlin\n\n'
+              'Reinickendorf\n'
+              'Bürgeramt Rathaus, Eichborndamm 215, 13437 Berlin\n'
+              'Bürgeramt Reinickendorf-Ost, Teichstraße 65, 13407 Berlin\n'
+              'Bürgeramt Tegel, Berliner Straße 35, 13507 Berlin\n'
+              'Bürgeramt Heiligensee, Ruppiner Chaussee 268, 13503 Berlin')
+        ]),
+        Text(
+            'Unterschrieben werden kann in jedem Berliner Bezirksamt, in einigen solidarischen Orten und bei unseren Sammler*innen auf der Straße.\n'
+            'Auslegungstage und Öffnungszeiten der Bürgerämter:\n\n'),
         'Unterschrieben werden kann in jedem Berliner Bezirksamt, in einigen solidarischen Orten und bei unseren Sammler*innen auf der Straße.',
-        ['wo', 'Unterschriften', 'unterschreiben', 'Listen', 'Orte']),
+        ['wo', 'Unterschriften', 'unterschreiben', 'Listen', 'Orte', 'Bürgeramt', 'Bürgerämter', 'Öffnungszeiten']),
     FAQItem.text(
         11,
         'Kann ich auch digital unterschreiben?',
@@ -256,6 +314,42 @@ class FAQService {
         ['Corona', 'Pandemie', 'Gesundheit']),
     FAQItem(
         16,
+        'Wie kann ich mich stärker einbringen',
+        Column(children: [
+          Text(
+              'Wenn du dich noch stärker in die Kampagne und Organisation einbringen willst, '
+              'besuch doch eins unserer Kiezteams! Du erreichst sie per Mail:\n\n'),
+          create_mail_element('kiezteam_wilmersdorf@dwenteignen.de'),
+          create_mail_element('kiezteam_zehlendorfsteglitz@dwenteignen.de'),
+          create_mail_element('kiezteam_kreuzberg@dwenteignen.de'),
+          create_mail_element('kiezteam_suedneukoelln@dwenteignen.de'),
+          create_mail_element('kiezteam_suedneukoelln@dwenteignen.de'),
+          create_mail_element('kiezteam_suedneukoelln@dwenteignen.de'),
+          create_mail_element('kiezteam_wedding@dwenteignen.de'),
+          create_mail_element('kiezteam_lichtenberg@dwenteignen.de'),
+          create_mail_element('kiezteam_neukoelln@dwenteignen.de'),
+          create_mail_element('kiezteam_friedrichshain@dwenteignen.de'),
+          create_mail_element('kiezteam_tempelhofschoeneberg@dwenteignen.de'),
+          create_mail_element('kiezteam_charlottenburg@dwenteignen.de'),
+          create_mail_element('kiezteam_moabit@dwenteignen.de'),
+          create_mail_element('kiezteam_prenzlauerberg@dwenteignen.de'),
+          create_mail_element('kiezteam_treptow@dwenteignen.de'),
+          create_mail_element('kiezteam_spandau@dwenteignen.de'),
+          create_mail_element('kiezteam_pankow@dwenteignen.de'),
+          create_mail_element('kiezteam_mitte@dwenteignen.de'),
+          create_mail_element('kiezteam_marzahn@dwenteignen.de'),
+          create_mail_element('hochschulen@dwenteignen.de',
+              text:
+                  'hochschulen@dwenteignen.de (Mobilisierung an Hochschulen)'),
+        ]),
+        Text(
+            'Wenn du dich noch stärker in die Kampagne und Organisation einbringen willst, '
+            'besuch doch eins unserer Kiezteams! Du erreichst sie per Mail:'),
+        'Wenn du dich noch stärker in die Kampagne und Organisation einbringen willst, '
+            'besuch doch eins unserer Kiezteams! Du erreichst sie per Mail',
+        ['Kiezteam', 'Mitmachen', 'Organisation', 'Kontakt']),
+    FAQItem(
+        17,
         'Welche Unternehmen sollen vergesellschaftet werden?',
         Text(
             'Vergesellschaftet werden die Berliner Bestände aller auf Profit ausgerichteten Immobilienkonzerne mit mehr als 3000 Wohnungen. Dazu gehören die Deutsche Wohnen, Vonovia, Akelius, Covivio, Heimstaden, Pears Global, TAG Immobilien, Grand City Properties, BGP Investment, ADO Properties, Deutsche Vermögens- und Immobilienverwaltungs GmbH (DVI), IMW Immobilien, und Blackstone, der Investmentfonds Phoenix Spree und möglicherweise die Familienstiftung Becker & Kries.'),
@@ -271,7 +365,7 @@ class FAQService {
           'Unternehmen'
         ]),
     FAQItem.short(
-        17,
+        18,
         "Video: Was kostet die Vergesellschaftung?",
         GestureDetector(
           onTap: () => launch('https://www.youtube.com/watch?v=oijmRknMXOI'),
@@ -291,7 +385,7 @@ class FAQService {
           "Sozialhilfe",
           "Wohngeld"
         ]),
-    FAQItem(18, "10 Kurzargumente - Warum enteignen?", Text(text_argumente),
+    FAQItem(19, "10 Kurzargumente - Warum enteignen?", Text(text_argumente),
         Text(text_argumente_short), text_argumente, [
       "hohe Mieten",
       "Sanierung",
@@ -306,7 +400,7 @@ class FAQService {
       "Share Deals"
     ]),
     FAQItem(
-        19,
+        20,
         'Wir haben den Mietendeckel, ist da die Vergesellschaftung überhaupt noch notwendig?',
         Text(
             '''Der Mietendeckel ist (leider) rechtlich unsicher. Das Bundesverfassungsgericht könnte ihn kippen. Zudem gilt er nur für fünf Jahre und schon jetzt hat die SPD-Führung angekündigt, ihn nicht verlängern zu wollen. Dann drohen massenhaft Mieterhöhungen.
@@ -322,7 +416,7 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
           'Mietenstopp',
         ]),
     FAQItem(
-        20,
+        21,
         "Was kostet uns die Vergesellschaftung?",
         Text(text_was_kostet_die_vergesellschaftung),
         Text(text_was_kostet_die_vergesellschaftung_short),
@@ -336,7 +430,7 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
       "Kredit"
     ]),
     FAQItem(
-        21,
+        22,
         'Ist die Vergesellschaftung rechtlich überhaupt möglich?',
         Text(argumentation_tipps_1),
         Text(argumentation_tipps_1_short),
@@ -347,7 +441,7 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
       'Entschädigung'
     ]),
     FAQItem(
-        22,
+        23,
         'Warum eine Anstalt öffentlichen Rechts und keine neue landeseigene Wohnungsbaugesellschaft?',
         Text(text_warum_aoer_keine_wbg),
         Text(text_warum_aoer_keine_wbg_short),
@@ -360,7 +454,7 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
       "demokratisch"
     ]),
     FAQItem(
-        23,
+        24,
         'Was ist eine Anstalt öffentlichen Rechts und warum wollen wir diese Form?',
         Text(text_warum_aoer),
         Text(text_warum_aoer_short),
@@ -377,7 +471,7 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
       'Jobs',
       'Mitarbeiter'
     ]),
-    FAQItem(24, "Was bringt die Vergesellschaftung für den Klimaschutz?",
+    FAQItem(25, "Was bringt die Vergesellschaftung für den Klimaschutz?",
         Text(text_climate), Text(text_climate_short), text_climate, [
       "Klima",
       "Umwelt",
@@ -388,7 +482,7 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
       "Anstalt öffentlichen Rechts"
     ]),
     FAQItem(
-        25,
+        26,
         "Warum soll die Vergesellschaftung Unternehmen erst ab 3000 Wohnungen in Berlin betreffen?",
         Text(text_warum_erst_ab_3000),
         Text(text_warum_erst_ab_3000_short),
@@ -402,12 +496,12 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
       "Finanzmarkt"
     ]),
     FAQItem.text(
-        26,
+        27,
         "Werden alle Wohnungen enteignet oder erst ab 3000?",
         "Von den Unternehmen, die mehr als 3000 Wohnungen besitzen, werden alle Wohnungen enteignet und vergesellschaftet.",
         ["3000", "Wohnungen", "Unternehmen", "alle"]),
     FAQItem.text(
-        27,
+        28,
         "Könnten sich die Unternehmen nicht in verschiedene Tochtergesellschaften mit jeweils maximal 2999 Wohnungen aufspalten, um der Vergesellschaftung zu entgehen?",
         "Das ist ein häufiger Trick von Unternehmen, beispielsweise um Steuern zu umgehen. Wir werden aber bei einem Vergesellschaftungsgesetz die Gesamtkonzernebene in den Blick nehmen, inklusive aller Tochtergesellschaften.",
         [
@@ -420,7 +514,7 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
           "aufteilen"
         ]),
     FAQItem(
-        28,
+        29,
         "Was bringt uns die Vergesellschaftung finanziell?",
         Text(text_vergesellschaftung_finanziell),
         Text(text_vergesellschaftung_finanziell_short),
@@ -433,25 +527,25 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
       "Wohngeld"
     ]),
     FAQItem.text(
-        29,
+        30,
         "Warum ist keine nominelle / symbolische Entschädigung (also 1€ pro Unternehmen oder pro Wohnung) möglich?",
         "Eine nominelle Entschädigung würden wir uns mit Blick auf die enormen Gewinne von DW & Co in den letzten Jahren zwar wünschen, aber die Vergesellschaftung erfordert jedoch laut Art. 14 GG Abs. 3 eine Entschädigung. Eine nominelle Entschädigung wäre dabei juristisch kaum möglich und würde wahrscheinlich sofort per Gerichtsverfahren kassiert werden.",
         ["Entschädigung", "nominell", "symbolisch", "Vergesellschaftung"]),
     FAQItem.short(
-        30,
+        31,
         'Müssen die Mieter*innen infolge der Enteignung ausziehen?',
         Text(
             'Nein. Im Prinzip ändert sich nur ihre Vermieterin in die Anstalt öffentlichen Rechts (AöR) und ihre Mieten sinken.'),
         'Nein. Im Prinzip ändert sich nur ihre Vermieterin in die Anstalt öffentlichen Rechts (AöR) und ihre Mieten sinken.',
         ['Enteignung', 'Auszug', 'ausziehen', 'Wohnung', 'wechseln']),
     FAQItem(
-        31,
+        32,
         'Sammeltipps: Erste Ansprache',
         Text(sammel_tipps_1),
         Text(sammel_tipps_1_short),
         sammel_tipps_1,
         ["Sammeltipps", "ansprechen", "sammeln", "erster Satz", "Ansprache"]),
-    FAQItem(32, 'Sammeltipps: Niedrigschwellig argumentieren',
+    FAQItem(33, 'Sammeltipps: Niedrigschwellig argumentieren',
         Text(sammel_tipps_3), Text(sammel_tipps_3_short), sammel_tipps_3, [
       "Sammeltipps",
       'Vergesellschaftung',
@@ -460,7 +554,7 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
       'formulieren'
     ]),
     FAQItem(
-        33,
+        34,
         "Gegenargument: „Es muss einfach mehr gebaut werden!“ ",
         Text(text_counter_argument_1),
         Text(text_counter_argument_1_short),
@@ -473,7 +567,7 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
       "Spekulation"
     ]),
     FAQItem(
-        34,
+        35,
         "Gegenargument: „Die Vergesellschaftung ist zu teuer und Berlin kann sich das nicht leisten.“ ",
         Text(text_counter_argument_2),
         Text(text_counter_argument_2_short),
@@ -489,7 +583,7 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
       "Haushalt"
     ]),
     FAQItem(
-        35,
+        36,
         "Gegenargument: „Enteignungen – wie in der DDR!“ ",
         Text(text_counter_argument_3),
         Text(text_counter_argument_3_short),
@@ -504,7 +598,7 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
       "Demokratie"
     ]),
     FAQItem(
-        36,
+        37,
         "Gegenargument: „Durch Enteignung entsteht keine einzige neue Wohnung.“ ",
         Text(text_counter_argument_4),
         Text(text_counter_argument_4_short),
@@ -518,7 +612,7 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
       "Spekulation"
     ]),
     FAQItem(
-        37,
+        38,
         'Der Senat spricht aber von 36, später von 29 Milliarden Euro! Woher dieser Unterschied?',
         Text(text_senate_numbers),
         Text(text_senate_numbers_short),
@@ -532,7 +626,7 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
       "Milliarden"
     ]),
     FAQItem.short(
-        38,
+        39,
         "Wo finde ich den Beschlusstext?",
         create_text_element_with_link2(
             beschluss_text,
@@ -541,7 +635,6 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
             " (S. 367-371) einsehen."),
         beschluss_text,
         ["Beschlusstext"]),
-    // FAQItem(29, "Was kostet uns die Vergesellschaftung?", Text(""))
   ];
 
   static Text create_text_element_with_link(
@@ -562,10 +655,17 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
     return TextSpan(
         text: text,
         style: TextStyle(
-//                    fontSize: 16,
-            color: Colors.indigo,
-            decoration: TextDecoration.underline),
+            color: Colors.indigo, decoration: TextDecoration.underline),
         recognizer: TapGestureRecognizer()..onTap = () => launch(link));
+  ***REMOVED***
+
+  static Text create_mail_element(String link, {String text***REMOVED***) {
+    return Text.rich(TextSpan(
+        text: text ?? link,
+        style: TextStyle(
+            color: Colors.indigo, decoration: TextDecoration.underline),
+        recognizer: TapGestureRecognizer()
+          ..onTap = () => launch('mailto:$link')));
   ***REMOVED***
 
   static var anleitung = FAQItem(
