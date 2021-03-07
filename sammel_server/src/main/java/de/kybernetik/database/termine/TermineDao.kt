@@ -27,13 +27,15 @@ open class TermineDao {
         return ergebnisse
     ***REMOVED***
 
-    private val aktuellKlausel: String =
-        "(DATE(termine.ende) >= (:heute) or ((:benutzer) in elements(termine.teilnehmer) and DATE(termine.ende) > (:vor7Tagen)))"
+    private val aktuellKlausel: String = "DATE(termine.ende) >= (:heute)"
     private val typenKlausel = "termine.typ in (:typen)"
     private val tageKlausel = "DATE(termine.beginn) in (:tage)"
     private val vonKlausel = "TIME(termine.beginn) >= TIME(:von)"
     private val bisKlausel = "TIME(termine.beginn) <= TIME(:bis)"
     private val orteKlausel = "termine.ort in (:orte)"
+    private val nurEigeneKlausel = "(:benutzer) in elements(termine.teilnehmer)"
+    private val immerEigeneKlausel =
+        "((:benutzer) in elements(termine.teilnehmer) and DATE(termine.ende) > (:vor7Tagen))"
 
     @Suppress("JpaQueryApiInspection") // IDEA kriegt die Query nicht zusammen
     open fun erzeugeGetTermineQuery(filter: TermineFilter, benutzerId: Long?): TypedQuery<Termin> {
@@ -44,19 +46,27 @@ open class TermineDao {
         if (filter.von != null) filterKlausel.add(vonKlausel)
         if (filter.bis != null) filterKlausel.add(bisKlausel)
         if (!filter.orte.isNullOrEmpty()) filterKlausel.add(orteKlausel)
+        if (filter.nurEigene && benutzerId != null) filterKlausel.add(nurEigeneKlausel)
 
         var sql = "select termine from Termin termine"
         if (filterKlausel.isNotEmpty()) sql += " where " + filterKlausel.joinToString(" and ")
+
+        if (filter.immerEigene && benutzerId != null) sql += " or $immerEigeneKlausel"
+
         sql += " order by termine.beginn"
         val query = entityManager.createQuery(sql, Termin::class.java)
         query.maxResults = getProperty("de.kybernetik.max-actions").toInt()
 
-        if(filterKlausel.contains(aktuellKlausel)) {
+
+        if (filterKlausel.contains(aktuellKlausel))
             query.setParameter("heute", now().toDate())
+        if (sql.contains(immerEigeneKlausel))
+            query.setParameter(
+                "vor7Tagen", now()
+                    .minusDays(getProperty("de.kybernetik.action-age").toLong()).toDate()
+            )
+        if (sql.contains(immerEigeneKlausel) || filterKlausel.contains(nurEigeneKlausel))
             query.setParameter("benutzer", Benutzer(benutzerId!!, null, 0L))
-            query.setParameter("vor7Tagen", now()
-                .minusDays(getProperty("de.kybernetik.action-age").toLong()).toDate())
-        ***REMOVED***
         if (filterKlausel.contains(typenKlausel)) query.setParameter("typen", filter.typen)
         if (filterKlausel.contains(tageKlausel)) query.setParameter("tage", filter.tage!!.map { it.toDate() ***REMOVED***)
         if (filterKlausel.contains(vonKlausel)) query.setParameter("von", filter.von!!.atDate(now()))
