@@ -177,7 +177,6 @@ void main() {
       expect(find.byKey(Key('days selection dialog')), findsOneWidget);
     });
 
-
     // FIXME
     /*testUI('Filter opens Locations selection with click at locations button',
         (WidgetTester tester) async {
@@ -306,7 +305,9 @@ void main() {
           [DateTime(2019, 12, 16)],
           TimeOfDay(hour: 19, minute: 15),
           TimeOfDay(hour: 20, minute: 21),
-          ['kiez']);
+          ['kiez'],
+          false,
+          false);
 
       numberOfTimesCalled = 0;
       iWasCalledResult = null;
@@ -349,7 +350,9 @@ void main() {
           [DateTime(2020, 1, 14), DateTime(2020, 1, 16)],
           TimeOfDay(hour: 12, minute: 30),
           TimeOfDay(hour: 15, minute: 0),
-          [ffAlleeNord().name, tempVorstadt().name]));
+          [ffAlleeNord().name, tempVorstadt().name],
+          false,
+          false));
 
       await pumpFilterWidget(tester);
 

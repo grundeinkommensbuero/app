@@ -8,5 +8,7 @@ data class TermineFilter(
         var tage: List<LocalDate>? = emptyList(),
         var von: LocalTime? = null,
         var bis: LocalTime? = null,
-        var orte: List<String>? = emptyList()
+        var orte: List<String>? = emptyList(),
+        var nurEigene: Boolean = false,
+        var immerEigene: Boolean = true
 )

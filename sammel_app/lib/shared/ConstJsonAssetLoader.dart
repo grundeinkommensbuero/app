@@ -317,6 +317,11 @@ const Map<String, dynamic> en = {
   "Zur Aktion": "Go to action",
   "Über Aktion berichten": "Report on the action",
   "Kundgebung": "Manifestation",
+  "eigene": "own",
+  "Nur eigene Aktionen anzeigen": "Only show my actions",
+  "Eigene Aktionen immer anzeigen": "Always show my actions",
+  "Eigene Aktionen": "Own actions",
+  "lade...": "loading..."
 };
 
 const Map<String, dynamic> ru = {
@@ -1245,4 +1250,9 @@ const Map<String, dynamic> de = {
   "Berichten": "Feedback",
   "Über Aktion berichten": "Über Aktion berichten",
   "Kundgebung": "Kundgebung",
+  "eigene": "eigene",
+  "Nur eigene Aktionen anzeigen": "Nur eigene Aktionen anzeigen",
+  "Eigene Aktionen immer anzeigen": "Eigene Aktionen immer anzeigen",
+  "Eigene Aktionen": "Eigene Aktionen",
+  "lade...": "lade..."
 };

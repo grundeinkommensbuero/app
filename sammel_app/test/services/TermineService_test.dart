@@ -417,6 +417,8 @@ TermineFilter einFilter() {
       [datum],
       TimeOfDay.fromDateTime(start),
       TimeOfDay.fromDateTime(end),
-      [ffAlleeNord().name]);
+      [ffAlleeNord().name],
+      false,
+      false);
   return einFilter;
 }
