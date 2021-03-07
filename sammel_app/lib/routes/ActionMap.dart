@@ -76,7 +76,10 @@ class ActionMapState extends State<ActionMap> {
                 BoxShadow(offset: Offset(-2.0, 2.0), blurRadius: 4.0)
               ], shape: BoxShape.circle),
               child: FloatingActionButton(
-                child: Text(markers.length.toString()),
+                child: Text(
+                  markers.length.toString(),
+                  style: TextStyle(fontSize: 18),
+                ),
                 backgroundColor: DweTheme.yellow,
                 foregroundColor: DweTheme.purple,
                 shape: CircleBorder(
