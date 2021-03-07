@@ -71,14 +71,18 @@ class ActionMapState extends State<ActionMap> {
         fitBoundsOptions:
             FitBoundsOptions(padding: EdgeInsets.fromLTRB(40, 90, 40, 100)),
         builder: (context, markers) {
-          return FloatingActionButton(
-            child: Text(markers.length.toString()),
-            backgroundColor: DweTheme.yellow,
-            foregroundColor: DweTheme.purple,
-            shape:
-                CircleBorder(side: BorderSide(color: Colors.black, width: 1.0)),
-            onPressed: null,
-          );
+          return DecoratedBox(
+              decoration: BoxDecoration(boxShadow: [
+                BoxShadow(offset: Offset(-2.0, 2.0), blurRadius: 4.0)
+              ], shape: BoxShape.circle),
+              child: FloatingActionButton(
+                child: Text(markers.length.toString()),
+                backgroundColor: DweTheme.yellow,
+                foregroundColor: DweTheme.purple,
+                shape: CircleBorder(
+                    side: BorderSide(color: Colors.black, width: 1.0)),
+                onPressed: null,
+              ));
         ***REMOVED***,
       ),
     ];
