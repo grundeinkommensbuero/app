@@ -246,30 +246,28 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
               SizedBox(
                 height: 10.0,
               ),
-              InkWell(
-                child: Container(
-                  height: 150.0,
-                  width: 250.0,
-                  decoration: BoxDecoration(
-                      border: Border.all(color: DweTheme.purple, width: 1.0)),
-                  child: FlutterMap(
-                    key: Key('action details map'),
-                    options: MapOptions(
+              Container(
+                height: 150.0,
+                width: 250.0,
+                decoration: BoxDecoration(
+                    border: Border.all(color: DweTheme.purple, width: 1.0)),
+                child: FlutterMap(
+                  key: Key('action details map'),
+                  options: MapOptions(
                       center: LatLng(
                           widget.action.latitude, widget.action.longitude),
                       zoom: 15,
                       interactive: false,
-                    ),
-                    layers: [
-                      TileLayerOptions(
-                          urlTemplate:
-                              "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
-                          subdomains: ['a', 'b', 'c']),
-                      MarkerLayerOptions(markers: [widget.marker]),
-                    ],
-                  ),
+                      onTap: (_) =>
+                          Navigator.pop(context, TerminDetailsCommand.FOCUS)),
+                  layers: [
+                    TileLayerOptions(
+                        urlTemplate:
+                            "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
+                        subdomains: ['a', 'b', 'c']),
+                    MarkerLayerOptions(markers: [widget.marker]),
+                  ],
                 ),
-                onTap: () => Navigator.pop(context, TerminDetailsCommand.FOCUS),
               ),
             ])),
         persistentFooterButtons: [

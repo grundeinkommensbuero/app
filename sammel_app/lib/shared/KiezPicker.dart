@@ -7,6 +7,7 @@ import 'package:poly/poly.dart' as poly;
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
+import 'package:sammel_app/shared/NoRotation.dart';
 
 import 'DweTheme.dart';
 
@@ -64,8 +65,12 @@ class KiezPicker {
                             key: Key('kiez selection map'),
                             options: MapOptions(
                                 center: LatLng(52.5170365, 13.3888599),
-                                zoom: 10.0,
+                                interactiveFlags: noRotation,
+                                swPanBoundary: LatLng(52.324702,13.126562),
+                                nePanBoundary: LatLng(52.670823,13.752095),
+                                zoom: 12.0,
                                 maxZoom: 19.0,
+                                minZoom: 10.0,
                                 onTap: (position) =>
                                     setDialogState(() => markKiez(position)),
                                 onPositionChanged: (position, _) =>
