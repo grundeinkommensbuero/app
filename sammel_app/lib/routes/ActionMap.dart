@@ -3,14 +3,14 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong/latlong.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/shared/AttributionPlugin.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/NoRotation.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:user_location/user_location.dart';
 
 class ActionMap extends StatefulWidget {
   final List<Termin> termine;
@@ -43,39 +43,61 @@ class ActionMapState extends State<ActionMap> {
   ActionMapState();
 
   var locationPermissionGranted = false;
+  List<Marker> listLocationMarkers = [];
 
   @override
   void initState() {
     super.initState();
-    Permission.locationWhenInUse.request().then((status) =>
-        setState(() => locationPermissionGranted = status.isGranted));
   ***REMOVED***
 
   @override
   Widget build(BuildContext context) {
-    var markers = generateMarkers();
+    var actionMarkers = generateActionMarkers();
     var plugins = List<MapPlugin>();
     plugins.add(AttributionPlugin());
+    plugins.add(MarkerClusterPlugin());
+
     var layers = [
       TileLayerOptions(
           urlTemplate: "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
           subdomains: ['a', 'b', 'c']),
-      MarkerLayerOptions(markers: markers),
+      MarkerLayerOptions(markers: listLocationMarkers),
+      MarkerClusterLayerOptions(
+        disableClusteringAtZoom: 14,
+        markers: actionMarkers,
+        maxClusterRadius: 50,
+        polygonOptions:
+            PolygonOptions(color: DweTheme.yellow.withOpacity(0.12)),
+        fitBoundsOptions:
+            FitBoundsOptions(padding: EdgeInsets.fromLTRB(40, 90, 40, 100)),
+        builder: (context, markers) {
+          return FloatingActionButton(
+            child: Text(markers.length.toString()),
+            backgroundColor: DweTheme.yellow,
+            foregroundColor: DweTheme.purple,
+            shape:
+                CircleBorder(side: BorderSide(color: Colors.black, width: 1.0)),
+            onPressed: null,
+          );
+        ***REMOVED***,
+      ),
     ];
     layers.add(AttributionOptions());
-
-    if (locationPermissionGranted) {
-      addUserLocationSettings(markers, plugins, layers);
-    ***REMOVED***
 
     return FlutterMap(
       key: Key('action map map'),
       options: MapOptions(
-        plugins: plugins,
-        center: LatLng(52.5170365, 13.3888599),
-        zoom: 10.0,
-        maxZoom: 19.0,
-      ),
+          plugins: plugins,
+          center: LatLng(52.5170365, 13.3888599),
+          swPanBoundary: LatLng(52.324702, 13.126562),
+          nePanBoundary: LatLng(52.670823, 13.752095),
+          zoom: 12.0,
+          interactiveFlags: noRotation,
+          maxZoom: 19.0,
+          minZoom: 10.0,
+          onPositionChanged: (position, _) => widget.mapController.onReady.then(
+              (_) => setState(() =>
+                  this.listLocationMarkers = generateListLocationMarkers()))),
       layers: layers,
       mapController: widget.mapController ?? MapController(),
     );
@@ -93,26 +115,12 @@ class ActionMapState extends State<ActionMap> {
         .toList();
   ***REMOVED***
 
-  Iterable<Marker> generateListLocationMarkers() {
+  List<Marker> generateListLocationMarkers() {
+    if (widget.mapController == null || widget.mapController.zoom < 13)
+      return [];
     return widget.listLocations
         .map((listlocation) => ListLocationMarker(listlocation))
         .toList();
-  ***REMOVED***
-
-  List<Marker> generateMarkers() => <Marker>[]
-    ..addAll(generateListLocationMarkers())
-    ..addAll(generateActionMarkers());
-
-  void addUserLocationSettings(List<Marker> markers, List<MapPlugin> plugins,
-      List<LayerOptions> layers) {
-    plugins.add(UserLocationPlugin());
-    layers.add(UserLocationOptions(
-      context: context,
-      mapController: widget.mapController,
-      markers: markers,
-      updateMapLocationOnPositionChange: false,
-      showMoveToCurrentLocationFloatingActionButton: false,
-    ));
   ***REMOVED***
 
   Color generateColor(String bezirk) {
@@ -198,8 +206,8 @@ class ListLocationMarker extends Marker {
                                   color: Colors.indigo,
                                   decoration: TextDecoration.underline),
                               recognizer: TapGestureRecognizer()
-                                ..onTap = () => launch(
-                                    'www.dwenteignen.de/sammelpunkte/'))
+                                ..onTap = () =>
+                                    launch('www.dwenteignen.de/sammelpunkte/'))
                         ]))
                   ]));
 ***REMOVED***
