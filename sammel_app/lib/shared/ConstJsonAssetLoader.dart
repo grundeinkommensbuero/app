@@ -311,8 +311,9 @@ const Map<String, dynamic> en = {
   "Löschen": "Delete",
   "Bearbeiten": "Edit",
   "diese Aktion ist beendet": "this event has been finished",
-  "Dein Feedback zu einer Aktion fehlt noch":
+  "Dein Bericht zu einer Aktion fehlt noch":
       "We're missing your feedback for an action",
+  "Berichten": "Feedback",
   "Zur Aktion": "Go to action",
   "Über Aktion berichten": "Report on the action",
   "Kundgebung": "Manifestation",
@@ -610,10 +611,10 @@ const Map<String, dynamic> ru = {
   "Löschen": "удалить",
   "Bearbeiten": "править",
   "diese Aktion ist beendet": "эта акция закончилась",
-  "Dein Feedback zu einer Aktion fehlt noch":
+  "Dein Bericht zu einer Aktion fehlt noch":
       "твой отзыв о акции еще отсутствует",
   "Zur Aktion": "к акции",
-  "Feedback": "отзыв",
+  "Berichten": "отзыв",
   "Über Aktion berichten": "отзыв",
   // "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
   //     "If you want to change Notifications to silent or disable certain notification categories, just long press a received notification. You will then be guided to the notification preferences for this app.",
@@ -925,10 +926,10 @@ const Map<String, dynamic> fr = {
   "Löschen": "Supprimer",
   "Bearbeiten": "Configurer",
   "diese Aktion ist beendet": "cette action est terminée",
-  "Dein Feedback zu einer Aktion fehlt noch":
+  "Dein Bericht zu einer Aktion fehlt noch":
       "Ton commentaire pour une action est encore manquant",
   "Zur Aktion": "Vers l’action",
-  "Feedback": "Commentaire",
+  "Berichten": "Commentaire",
   "Über Aktion berichten": "Commentaire",
   "Kundgebung": "Manifestation",
   // "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
@@ -1238,10 +1239,10 @@ const Map<String, dynamic> de = {
   "Löschen": "Löschen",
   "Bearbeiten": "Bearbeiten",
   "diese Aktion ist beendet": "diese Aktion ist beendet",
-  "Dein Feedback zu einer Aktion fehlt noch":
-      "Dein Feedback zu einer Aktion fehlt noch",
+  "Dein Bericht zu einer Aktion fehlt noch":
+      "Dein Bericht zu einer Aktion fehlt noch",
   "Zur Aktion": "Zur Aktion",
-  "Feedback": "Feedback",
+  "Berichten": "Feedback",
   "Über Aktion berichten": "Über Aktion berichten",
   "Kundgebung": "Kundgebung",
 };
