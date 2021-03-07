@@ -127,16 +127,6 @@ class ActionListState extends State<ActionList> {
           style: TextStyle(color: DweTheme.purple, fontSize: 16.0),
         ).tr(),
       ]);
-    if (index == 99)
-      tile = Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-        tile,
-        Text(
-          'In der Liste und auf der Karte werden höchstens 100 Aktionen angezeigt. Du kannst die Filterfunktion benutzen um konkreter nach Aktionen zu suchen.',
-          key: Key('action list end line'),
-          style: TextStyle(fontSize: 14.0),
-          textAlign: TextAlign.center,
-        ).tr(),
-      ]);
     return tile;
   }
 
