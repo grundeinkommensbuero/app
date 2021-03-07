@@ -65,7 +65,7 @@ class ActionListState extends State<ActionList> {
         snackbarTimer = Timer(
             Duration(seconds: 2),
             () => Scaffold.of(context).showSnackBar(SnackBar(
-                content: Text('Dein Feedback zu einer Aktion fehlt noch'.tr(),
+                content: Text('Dein Bericht zu einer Aktion fehlt noch'.tr(),
                     style: TextStyle(color: Colors.black87)),
                 behavior: SnackBarBehavior.floating,
                 duration: Duration(seconds: 7),
