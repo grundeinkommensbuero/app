@@ -10,6 +10,7 @@ import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/shared/AttributionPlugin.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/NoRotation.dart';
 
 Future showLocationDialog(
         {BuildContext context,
@@ -77,9 +78,9 @@ class LocationDialogState extends State<LocationDialog> {
                     options: MapOptions(
                         center: widget.center ?? LatLng(52.5170365, 13.3888599),
                         zoom: widget.center != null ? 14.0 : 10.0,
+                        interactiveFlags: noRotation,
                         swPanBoundary: LatLng(52.324702,13.126562),
                         nePanBoundary: LatLng(52.670823,13.752095),
-                        zoom: 12.0,
                         maxZoom: 19.0,
                         minZoom: 10.0,
                         onTap: locationSelected,
