@@ -11,7 +11,8 @@ class TermineFilter {
   bool nurEigene;
   bool immerEigene;
 
-  TermineFilter(this.typen, this.tage, this.von, this.bis, this.orte, this.nurEigene, this.immerEigene);
+  TermineFilter(this.typen, this.tage, this.von, this.bis, this.orte,
+      this.nurEigene, this.immerEigene);
 
   static leererFilter() => TermineFilter([], [], null, null, [], false, true);
 
@@ -43,10 +44,10 @@ class TermineFilter {
 
   get isEmpty =>
       (tage == null || tage.isEmpty) &&
-      (bis == null || bis == null) &&
+      (bis == null) &&
       von == null &&
       (orte == null || orte.isEmpty) &&
       (typen == null || typen.isEmpty) &&
-      nurEigene == false &&
-      immerEigene == true;
+      (nurEigene == null || nurEigene == false) &&
+      (immerEigene == null || immerEigene);
 }

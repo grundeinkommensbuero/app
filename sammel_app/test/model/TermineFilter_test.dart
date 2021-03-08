@@ -8,7 +8,7 @@ void main() {
   group('serialisere', () {
     test('serialisiert leeren TermineFilter', () {
       expect(jsonEncode(TermineFilter.leererFilter()),
-          '{"typen":[],"tage":[],"von":null,"bis":null,"orte":[]}');
+          '{"typen":[],"tage":[],"von":null,"bis":null,"orte":[],"nurEigene":false,"immerEigene":true}');
     });
 
     test('serialisiert gefuellten TermineFilter', () {
@@ -19,14 +19,16 @@ void main() {
               TimeOfDay(hour: 4, minute: 10),
               TimeOfDay(hour: 23, minute: 0),
               ['Frankfurter Allee Süd'],
-              false,
+              true,
               false)),
           '{'
           '"typen":["Sammeln","Infoveranstaltung"],'
           '"tage":["2019-11-22","2019-01-30"],'
           '"von":"04:10:00",'
           '"bis":"23:00:00",'
-          '"orte":["Frankfurter Allee Süd"]'
+          '"orte":["Frankfurter Allee Süd"],'
+          '"nurEigene":true,'
+          '"immerEigene":false'
           '}');
     });
   });
@@ -84,8 +86,8 @@ void main() {
 
   group('isEmpty', () {
     test('returns true on empty filter', () {
-      expect(TermineFilter([], [], null, null, [], false, false).isEmpty, true);
-      expect(TermineFilter(null, null, null, null, null, false, false).isEmpty,
+      expect(TermineFilter([], [], null, null, [], false, true).isEmpty, true);
+      expect(TermineFilter(null, null, null, null, null, null, null).isEmpty,
           true);
     });
 
@@ -119,6 +121,18 @@ void main() {
     test('returns false if types set', () {
       expect(TermineFilter([], [], null, null, ['Kiez'], false, false).isEmpty,
           false);
+    });
+
+    test('seralizes properly', () {
+      var termineFilter = TermineFilter.fromJSON(jsonDecode('{'
+          '"typen":[],'
+          '"tage":[],'
+          '"von":null,'
+          '"bis":null,'
+          '"orte":[]'
+          '}'));
+      expect(jsonEncode(termineFilter),
+          '{"typen":[],"tage":[],"von":null,"bis":null,"orte":[],"nurEigene":null,"immerEigene":null}');
     });
   });
 }
