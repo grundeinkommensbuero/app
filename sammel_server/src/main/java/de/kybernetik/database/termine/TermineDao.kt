@@ -46,12 +46,12 @@ open class TermineDao {
         if (filter.von != null) filterKlausel.add(vonKlausel)
         if (filter.bis != null) filterKlausel.add(bisKlausel)
         if (!filter.orte.isNullOrEmpty()) filterKlausel.add(orteKlausel)
-        if (filter.nurEigene && benutzerId != null) filterKlausel.add(nurEigeneKlausel)
+        if (filter.nurEigene == true && benutzerId != null) filterKlausel.add(nurEigeneKlausel)
 
         var sql = "select termine from Termin termine"
         if (filterKlausel.isNotEmpty()) sql += " where " + filterKlausel.joinToString(" and ")
 
-        if (filter.immerEigene && benutzerId != null) sql += " or $immerEigeneKlausel"
+        if (filter.immerEigene == null || filter.immerEigene == true && benutzerId != null) sql += " or $immerEigeneKlausel"
 
         sql += " order by termine.beginn"
         val query = entityManager.createQuery(sql, Termin::class.java)
