@@ -22,9 +22,6 @@ create table Evaluationen
     situation       text    null,
     ausgefallen     bool    not null        default false,
 
-    constraint Evaluationen_Termine_fk
-        foreign key (termin_id) references Termine (id)
-            on update cascade,
     constraint Evaluationen_Benutzer_fk
         foreign key (user_id) references Benutzer (id)
             on update cascade
