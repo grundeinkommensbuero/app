@@ -3,41 +3,18 @@ import 'dart:convert';
 import 'package:http/http.dart';
 
 Future<void> main() async {
-  var titel = 'Neue Version 1.1';
-  var inhalt = '''Liebe Sammler*innen. Kurz vor dem offiziellen Sammel-Start gibt es noch einmal die neue App-Version 1.1
-Die Version beinhaltet kleinere Fehlerbehebungen und wichtige Features, die es nicht mehr in die Release-Version geschafft hatten.
-  
-Achtung: Die alte Version 1.0 wird nun nicht mehr richtig funktionieren, darum aktualisiert die App unbedingt über euren App-Store!
-  
-Neuerungen in der Version 1.1:
-  
-Neue Sprachen:
-• russisch
-• französisch
-
-Neue Features:
-• Bedienungsanleitung in Fragen&Antworten-Seite
-• Erinnerung für ausstehendes Feedback
-• Aktionsliste scrollt automatisch zu anstehenden Aktionen
-• Neue Aktionsarten: Plakatieren, Kundgebung
-• Neue Artikel auf Fragen&Antworten-Seite
-• App merkt sich Selbstbeschreibung
-• Hinweis bei vergangenen Aktionen
-
-Fehlerbehebungen:
-• Fehler behoben durch den die App Chat-Nachrichten wieder 'vergessen' hat
-• Termin-Darum nun veränderbar
-• sinnvolle Dauer-Angabe bei Aktionen unter einer Stunde
-
-Viel Spaß und Erfolg! Fehler und Anregungen könnt ihr weiterhin gerne an app@dwenteignen.de melden
-
-Das App-Team :)''';
+  var titel = 'Neue Version 1.2';
+  var inhalt = '''Soeben ist unsere neue Version 1.2 veröffentlicht worden.
+Die offensichtlichste Neuerung ist, dass Aktionen auf der Übersichtskarte jetzt zusammengefasst werden, um sie übersichtlicher und auf langsameren Geräten performanter zu machen.
+Aus dem selben Grund werden die Solidarischen Orte nun erst angezeigt, wenn du näher heranzoomst.
+Außerdem lassen sich nun mit dem Aktionen-Filter speziell Aktionen anzeigen, an denen du teilnimmst. Der Filter-Knopf ist nun grün, wenn ein Filter aktiv ist und ein Bug wurde behoben der verhinderte, dass vergangene Aktionen gelöscht werden konnten.
+Viel Spaß mit der App!''';
 
   final body = {
     "data": {
       "type": "TopicChatMessage",
       "channel": "topic:global",
-      "timestamp": "2021-02-20 23:00:00.000000",
+      "timestamp": "2021-03-08 23:45:00.000000",
       "text": '$titel\n\n$inhalt',
       "color": 4292668415, // DWE hellblau für App-Info
       // "color": 4294960680, // DWE mittelgelb für Deutsche Wohnen & Co. Enteignen
