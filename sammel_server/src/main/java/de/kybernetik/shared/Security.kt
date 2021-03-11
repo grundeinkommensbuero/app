@@ -14,10 +14,10 @@ import java.security.SecureRandom
 import java.time.Instant.now
 import java.time.temporal.ChronoUnit.MILLIS
 import java.util.*
-import javax.ejb.Singleton
+import javax.ejb.Stateless
 
 
-@Singleton
+@Stateless
 open class Security {
     private val LOG = Logger.getLogger(Security::class.java)
     private val ELYTRON_PROVIDER: Provider = WildFlyElytronProvider()
