@@ -307,8 +307,8 @@ void main() {
           tester.state(find.byKey(Key('action map map'))) as FlutterMapState;
       var actionPosition = LatLng(TerminTestDaten.einTermin().latitude,
           TerminTestDaten.einTermin().longitude);
-      expect(mapState.map.center, actionPosition);
-      expect(mapState.map.zoom, 15);
+      expect(mapState.mapState.center, actionPosition);
+      expect(mapState.mapState.zoom, 15);
     });
 
     testWidgets(
