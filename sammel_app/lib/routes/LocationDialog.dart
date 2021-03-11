@@ -12,6 +12,8 @@ import 'package:sammel_app/shared/AttributionPlugin.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/NoRotation.dart';
 
+import '../Provisioning.dart';
+
 Future showLocationDialog(
         {BuildContext context,
         String initDescription,
@@ -76,13 +78,16 @@ class LocationDialogState extends State<LocationDialog> {
                 child: FlutterMap(
                     key: Key('venue map'),
                     options: MapOptions(
-                        center: widget.center ?? LatLng(52.5170365, 13.3888599),
-                        zoom: widget.center != null ? 14.0 : 10.0,
+                        center: widget.center ??
+                            LatLng(geo.initCenterLat, geo.initCenterLong),
+                        zoom: widget.center != null ? geo.initZoom : 10.0,
                         interactiveFlags: noRotation,
-                        swPanBoundary: LatLng(52.324702,13.126562),
-                        nePanBoundary: LatLng(52.670823,13.752095),
-                        maxZoom: 19.0,
-                        minZoom: 10.0,
+                        swPanBoundary:
+                            LatLng(geo.boundLatMin, geo.boundLongMin),
+                        nePanBoundary:
+                            LatLng(geo.boundLatMax, geo.boundLongMax),
+                        maxZoom: geo.zoomMax,
+                        minZoom: geo.zoomMin,
                         onTap: locationSelected,
                         plugins: [AttributionPlugin()]),
                     layers: [
