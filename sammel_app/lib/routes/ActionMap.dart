@@ -5,6 +5,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong/latlong.dart';
+import 'package:sammel_app/Provisioning.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/shared/AttributionPlugin.dart';
@@ -95,13 +96,13 @@ class ActionMapState extends State<ActionMap> {
       key: Key('action map map'),
       options: MapOptions(
           plugins: plugins,
-          center: LatLng(52.5170365, 13.3888599),
-          swPanBoundary: LatLng(52.324702, 13.126562),
-          nePanBoundary: LatLng(52.670823, 13.752095),
-          zoom: 12.0,
+          center: LatLng(geo.initCenterLat, geo.initCenterLong),
+          swPanBoundary: LatLng(geo.boundLatMin, geo.boundLongMin),
+          nePanBoundary: LatLng(geo.boundLatMax, geo.boundLongMax),
+          zoom: geo.initZoom,
           interactiveFlags: noRotation,
-          maxZoom: 19.0,
-          minZoom: 10.0,
+          maxZoom: geo.zoomMax,
+          minZoom: geo.zoomMin,
           onPositionChanged: (position, _) => widget.mapController.onReady.then(
               (_) => setState(() =>
                   this.listLocationMarkers = generateListLocationMarkers()))),
