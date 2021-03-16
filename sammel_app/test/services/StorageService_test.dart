@@ -71,7 +71,7 @@ void main() async {
 
     test('loadAllStoredActionIds returns empty list if storage empty',
         () async {
-      await _prefs.setStringList('actionlist', null);
+      await _prefs.remove('actionlist');
 
       var list = await service.loadAllStoredActionIds();
 
@@ -94,7 +94,7 @@ void main() async {
 
       expect(result, true);
       expect(_prefs.containsKey('filter'), true);
-      var storedString = _prefs.getString('filter');
+      var storedString = _prefs.getString('filter')!;
       var filterFromStorage = TermineFilter.fromJSON(jsonDecode(storedString));
       expect(filterFromStorage.typen,
           containsAll(['Sammeln', 'Infoveranstaltung']));
@@ -118,7 +118,7 @@ void main() async {
           false);
       _prefs.setString('filter', jsonEncode(filter.toJson()));
 
-      TermineFilter readFilter = await service.loadFilter();
+      TermineFilter readFilter = (await service.loadFilter())!;
 
       expect(readFilter, isNotNull);
       expect(readFilter.typen, containsAll(['Sammeln', 'Infoveranstaltung']));
@@ -142,7 +142,7 @@ void main() async {
           false);
       _prefs.clear();
 
-      TermineFilter readFilter = await service.loadFilter();
+      TermineFilter readFilter = (await service.loadFilter())!;
 
       expect(readFilter, isNotNull);
       expect(readFilter.typen, []);
@@ -208,11 +208,11 @@ void main() async {
       _prefs.setString(
           'user', '{"id":11,"name":"Karl Marx","color":4294198070***REMOVED***');
 
-      var user = await service.loadUser();
+      var user = (await service.loadUser())!;
 
       expect(user.id, 11);
       expect(user.name, 'Karl Marx');
-      expect(user.color.value, 4294198070);
+      expect(user.color?.value, 4294198070);
     ***REMOVED***);
 
     test('loadUser returns null if no user stored', () async {

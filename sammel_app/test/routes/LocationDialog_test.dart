@@ -12,7 +12,7 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import '../services/StammdatenService_test.dart';
 import '../shared/Mocks.dart';
 
-StammdatenService _stammdatenService;
+late StammdatenService _stammdatenService;
 final GeoService _geoService = GeoServiceMock();
 
 void main() {
@@ -95,7 +95,7 @@ void main() {
 
       var state =
           tester.state(find.byType(LocationDialog)) as LocationDialogState;
-      expect(state.marker.point, initCoordinates);
+      expect(state.marker?.point, initCoordinates);
       expect(find.byKey(Key('location marker')), findsOneWidget);
     ***REMOVED***);
 
@@ -169,7 +169,7 @@ void main() {
         await tester.pump();
         state = tester.state(find.byType(LocationDialog));
 
-        expect(state.marker.point == initCoordinates, true);
+        expect(state.marker?.point == initCoordinates, true);
 
         await tester.tap(find.byKey(Key('venue map')));
         await Future.delayed(Duration(seconds: 1));
@@ -177,7 +177,7 @@ void main() {
         await tester.pumpAndSettle();
 
         expect(find.byKey(Key('location marker')), findsOneWidget);
-        expect(state.marker.point != initCoordinates, true);
+        expect(state.marker?.point != initCoordinates, true);
       ***REMOVED***);
     ***REMOVED***);
   ***REMOVED***);
@@ -201,7 +201,7 @@ void main() {
 
         LocationDialogTester venueTester =
             tester.widget(find.byType(LocationDialogTester));
-        expect(venueTester.result.coordinates, state.marker.point);
+        expect(venueTester.result?.coordinates, state.marker?.point);
       ***REMOVED***);
     ***REMOVED***);
 
@@ -223,7 +223,7 @@ void main() {
 
       LocationDialogTester venueTester =
           tester.widget(find.byType(LocationDialogTester));
-      expect(venueTester.result.coordinates, state.marker.point);
+      expect(venueTester.result!.coordinates, state.marker!.point);
     ***REMOVED***);
 
     testWidgets('description', (WidgetTester tester) async {
@@ -241,7 +241,7 @@ void main() {
 
       LocationDialogTester venueTester =
           tester.widget(find.byType(LocationDialogTester));
-      expect(venueTester.result.description, 'description');
+      expect(venueTester.result!.description, 'description');
     ***REMOVED***);
 
     testWidgets('new description', (WidgetTester tester) async {
@@ -258,7 +258,7 @@ void main() {
 
       LocationDialogTester venueTester =
           tester.widget(find.byType(LocationDialogTester));
-      expect(venueTester.result.description, 'new description');
+      expect(venueTester.result!.description, 'new description');
     ***REMOVED***);
 
     testWidgets('old values, with no input', (WidgetTester tester) async {
@@ -273,8 +273,8 @@ void main() {
 
       LocationDialogTester venueTester =
           tester.widget(find.byType(LocationDialogTester));
-      expect(venueTester.result.description, 'description');
-      expect(venueTester.result.coordinates, LatLng(52.51579, 13.45399));
+      expect(venueTester.result!.description, 'description');
+      expect(venueTester.result!.coordinates, LatLng(52.51579, 13.45399));
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***
@@ -296,11 +296,11 @@ _pumpLocationDialogTester(
 // nur eine Testklasse
 // ignore: must_be_immutable
 class LocationDialogTester extends StatelessWidget {
-  final String initDescription;
-  final LatLng initCoordinates;
-  final LatLng center;
+  final String? initDescription;
+  final LatLng? initCoordinates;
+  final LatLng? center;
 
-  Location result;
+  Location? result;
 
   LocationDialogTester(this.initDescription, this.initCoordinates, this.center);
 

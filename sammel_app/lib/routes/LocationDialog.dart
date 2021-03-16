@@ -14,22 +14,23 @@ import 'package:sammel_app/shared/NoRotation.dart';
 
 import '../Provisioning.dart';
 
-Future showLocationDialog(
-        {BuildContext context,
-        String initDescription,
-        LatLng initCoordinates,
-        Kiez initKiez,
-        LatLng center***REMOVED***) =>
+Future<Location?> showLocationDialog(
+        {required BuildContext context,
+        String? initDescription,
+        LatLng? initCoordinates,
+        Kiez? initKiez,
+        LatLng? center***REMOVED***) =>
     showDialog(
       context: context,
-      child: LocationDialog(initDescription, initCoordinates, initKiez, center),
+      builder: (context) =>
+          LocationDialog(initDescription, initCoordinates, initKiez, center),
     );
 
 class LocationDialog extends StatefulWidget {
-  final LatLng center;
-  final LatLng initCoordinates;
-  final String initDescription;
-  Kiez initKiez;
+  final LatLng? center;
+  final LatLng? initCoordinates;
+  final String? initDescription;
+  final Kiez? initKiez;
 
   LocationDialog(
       this.initDescription, this.initCoordinates, this.initKiez, this.center)
@@ -37,20 +38,20 @@ class LocationDialog extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    LocationMarker initMarker =
-        initCoordinates != null ? LocationMarker(initCoordinates) : null;
+    LocationMarker? initMarker =
+        initCoordinates != null ? LocationMarker(initCoordinates!) : null;
     var location = Location(initDescription ?? '', initCoordinates, initKiez);
     return LocationDialogState(location, initMarker, center);
   ***REMOVED***
 ***REMOVED***
 
 class LocationDialogState extends State<LocationDialog> {
-  LocationMarker marker;
-  Location location;
-  TextEditingController venueController;
+  LocationMarker? marker;
+  late Location location;
+  late TextEditingController venueController;
 
   LocationDialogState(
-      Location initVenue, LocationMarker initMarker, LatLng center) {
+      Location initVenue, LocationMarker? initMarker, LatLng? center) {
     marker = initMarker;
     location = initVenue;
     venueController = TextEditingController(text: location.description);
@@ -96,7 +97,7 @@ class LocationDialogState extends State<LocationDialog> {
                               "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
                           subdomains: ['a', 'b', 'c']),
                       MarkerLayerOptions(
-                          markers: marker == null ? [] : [marker]),
+                          markers: marker == null ? [] : [marker!]),
                       AttributionOptions(),
                     ]))),
         SizedBox(
@@ -104,7 +105,7 @@ class LocationDialogState extends State<LocationDialog> {
         ),
         Text(
             location.kiez != null
-                ? '${location.kiez.name***REMOVED*** in ${location.kiez.region***REMOVED***'
+                ? '${location.kiez!.name***REMOVED*** in ${location.kiez!.region***REMOVED***'
                 : '',
             style: TextStyle(fontSize: 13, color: DweTheme.purple),
             softWrap: false,
@@ -157,15 +158,17 @@ class LocationDialogState extends State<LocationDialog> {
         .getDescriptionToPoint(point)
         .catchError((e, s) {
       ErrorService.handleError(e, s);
-      return '';
+      return GeoData('', '', '');
     ***REMOVED***);
-    var kiez = (await Provider.of<StammdatenService>(context).kieze).firstWhere(
-        (kiez) => poly.Polygon(kiez.polygon
-                .map((latlng) =>
-                    poly.Point<num>(latlng.latitude, latlng.longitude))
-                .toList())
-            .contains(point.latitude, point.longitude),
-        orElse: () => null);
+    Kiez? kiez =
+        (await Provider.of<StammdatenService>(context).kieze as List<Kiez?>)
+            .firstWhere(
+                (kiez) => poly.Polygon(kiez!.polygon
+                        .map((latlng) =>
+                            poly.Point<num>(latlng.latitude, latlng.longitude))
+                        .toList())
+                    .contains(point.latitude, point.longitude),
+                orElse: () => null);
 
     if (kiez == null) return;
     setState(() {
@@ -194,9 +197,9 @@ class LocationMarker extends Marker {
 ***REMOVED***
 
 class Location {
-  String description;
-  LatLng coordinates;
-  Kiez kiez;
+  String? description;
+  LatLng? coordinates;
+  Kiez? kiez;
 
   Location(this.description, this.coordinates, this.kiez);
 ***REMOVED***

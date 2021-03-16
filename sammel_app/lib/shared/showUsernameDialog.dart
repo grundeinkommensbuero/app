@@ -4,15 +4,15 @@ import 'package:provider/provider.dart';
 import 'package:quiver/strings.dart';
 import 'package:sammel_app/services/UserService.dart';
 
-Future<String> showUsernameDialog(
-        {BuildContext context, bool hideHint = false***REMOVED***) =>
+Future<String?> showUsernameDialog(
+        {required BuildContext context, bool hideHint = false***REMOVED***) =>
     showDialog(
       context: context,
-      child: UsernameDialog(hideHint),
+      builder: (context) => UsernameDialog(hideHint),
     );
 
 class UsernameDialog extends StatefulWidget {
-  bool hideHint;
+  final bool hideHint;
 
   UsernameDialog(this.hideHint) : super(key: Key('username dialog'));
 
@@ -21,7 +21,7 @@ class UsernameDialog extends StatefulWidget {
 ***REMOVED***
 
 class UsernameDialogState extends State<UsernameDialog> {
-  String username;
+  String? username;
 
   UsernameDialogState();
 
@@ -61,7 +61,7 @@ class UsernameDialogState extends State<UsernameDialog> {
 
   Future<void> changeUserNameAndClose() async {
     try {
-      await Provider.of<AbstractUserService>(context).updateUsername(username);
+      await Provider.of<AbstractUserService>(context).updateUsername(username!);
       Navigator.pop(context, username);
     ***REMOVED*** catch (e) {
       Navigator.pop(context, null);

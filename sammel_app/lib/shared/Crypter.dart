@@ -12,7 +12,7 @@ Map<String, dynamic> decrypt(dynamic data) {
   if (data['encrypted'] == 'Base64') {
     if (data['payload'] == null) return {***REMOVED***
     var decodiert = jsonDecode(utf8.decode(base64Decode(data['payload'])));
-    print('Codierte Push-Nachricht: ${decodiert***REMOVED***');
+    print('Codierte Push-Nachricht: $decodiert');
     return decodiert;
   ***REMOVED***
   if (data['encrypted'] == 'AES') {
@@ -21,7 +21,7 @@ Map<String, dynamic> decrypt(dynamic data) {
     final decrypted = aesCbc.decryptSync(base64.decode(data['payload']),
         secretKey: key, nonce: nonce);
     final decoded = jsonDecode(utf8.decode(decrypted));
-    print('Verschlüsselte Push-Nachricht (test): ${decoded***REMOVED***');
+    print('Verschlüsselte Push-Nachricht (test): $decoded');
     return decoded;
   ***REMOVED***
   if (data['encrypted'] == 'AES_PROD') {
@@ -30,7 +30,7 @@ Map<String, dynamic> decrypt(dynamic data) {
     final decrypted = aesCbc.decryptSync(base64.decode(data['payload']),
         secretKey: pKey, nonce: nonce);
     final decoded = jsonDecode(utf8.decode(decrypted));
-    print('Verschlüsselte Push-Nachricht (prod): ${decoded***REMOVED***');
+    print('Verschlüsselte Push-Nachricht (prod): $decoded');
     return decoded;
   ***REMOVED***
   if (data['encrypted'] == 'Plain') {
@@ -39,11 +39,11 @@ Map<String, dynamic> decrypt(dynamic data) {
     try {
       print(jsonDecode(data['payload']));
     ***REMOVED*** catch (e) {
-      print("decoding error ${e***REMOVED***");
+      print("decoding error $e");
     ***REMOVED***
 
     return data['payload'];
   ***REMOVED***
-  print('Push-Nachricht nicht entschlüsselt: ${data***REMOVED***');
+  print('Push-Nachricht nicht entschlüsselt: $data');
   return data;
 ***REMOVED***

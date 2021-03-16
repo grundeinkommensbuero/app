@@ -13,7 +13,7 @@ import 'package:sammel_app/services/UserService.dart';
 import '../shared/Mocks.dart';
 
 main() {
-  PushNotificationManager manager;
+  late PushNotificationManager manager;
   StorageService storageService = StorageServiceMock();
   FirebaseReceiveService firebaseMock = FirebaseReceiveServiceMock();
   Backend backend = BackendMock();
@@ -63,7 +63,7 @@ main() {
     DemoPushSendService pushSendService = DemoPushSendServiceMock();
     DemoPushNotificationManager service =
         DemoPushNotificationManager(pushSendService);
-    StreamController<PushData> controller;
+    late StreamController<PushData> controller;
 
     setUp(() {
       reset(pushSendService);
@@ -74,8 +74,8 @@ main() {
     test('serves push messages to correct listener', () async {
       var listener1 = TestListener();
       var listener2 = TestListener();
-      service.register_message_callback('type1', listener1);
-      service.register_message_callback('type2', listener2);
+      service.registerMessageCallback('type1', listener1);
+      service.registerMessageCallback('type2', listener2);
 
       var data1 = TestPushData('type1');
       var data2 = TestPushData('type1');
@@ -105,7 +105,7 @@ class TestListener implements PushNotificationListener {
   List<Map<String, dynamic>> nachrichten = [];
 
   @override
-  void receive_message(Map<dynamic, dynamic> data) {
+  void receiveMessage(Map<String, dynamic> data) {
     nachrichten.add(data);
   ***REMOVED***
 

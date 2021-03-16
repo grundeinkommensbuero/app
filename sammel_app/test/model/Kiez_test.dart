@@ -18,27 +18,10 @@ void main() {
       expect(plaenterwald().equals(plaenterwald()), true);
     ***REMOVED***);
 
-    test('returns true for null locations', () {
-      expect(
-          Kiez(null, null, null, []).equals(Kiez(null, null, null, [])), true);
-    ***REMOVED***);
-
     test('returns false for different location', () {
       expect(
           Kiez('Kiez', 'Region 1', 'Ortsteil', [])
               .equals(Kiez('Kiez', 'Region 2', 'Ortsteil', [])),
-          false);
-    ***REMOVED***);
-    test('returns false for null name', () {
-      expect(
-          Kiez(null, 'Kiez', 'Ortsteil', [])
-              .equals(Kiez('Kiez', 'Region', 'Ortsteil', [])),
-          false);
-    ***REMOVED***);
-    test('returns false for name and null', () {
-      expect(
-          Kiez('Kiez', 'Region', 'Ortsteil', [])
-              .equals(Kiez(null, 'Region', 'Ortsteil', [])),
           false);
     ***REMOVED***);
 
@@ -46,18 +29,6 @@ void main() {
       expect(
           Kiez('Kiez', 'Region 1', 'Ortsteil', [])
               .equals(Kiez('Kiez', 'Region 2', 'Ortsteil', [])),
-          false);
-    ***REMOVED***);
-    test('returns false for null place', () {
-      expect(
-          Kiez(null, 'Region', 'Ortsteil', [])
-              .equals(Kiez('Kiez', 'Region', 'Ortsteil', [])),
-          false);
-    ***REMOVED***);
-    test('returns false for place and null', () {
-      expect(
-          Kiez('Kiez', 'Region', 'Ortsteil', [])
-              .equals(Kiez(null, 'Region', 'Ortsteil', [])),
           false);
     ***REMOVED***);
   ***REMOVED***);

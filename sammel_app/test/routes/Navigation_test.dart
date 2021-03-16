@@ -33,7 +33,7 @@ void main() {
   mockTranslation();
 
   group('Navigation', () {
-    Navigation navigation;
+    late Navigation navigation;
     var actionPage = GlobalKey(debugLabel: 'action page');
 
     setUpUI((WidgetTester tester) async {

@@ -17,10 +17,10 @@ import 'FAQ.dart';
 import 'TermineSeite.dart';
 
 class Navigation extends StatefulWidget {
-  var clearButton = false;
-  GlobalKey actionPage;
+  final clearButton;
+  final GlobalKey actionPage;
 
-  Navigation(this.actionPage, [this.clearButton])
+  Navigation(this.actionPage, [this.clearButton = false])
       : super(key: Key('navigation'));
 
   @override
@@ -31,14 +31,14 @@ class NavigationState extends State<Navigation>
     with SingleTickerProviderStateMixin {
   int navigation = 0;
   List<int> history = [];
-  AnimationController _animationController;
-  Animation<Offset> _slide;
-  Animation<double> _fade;
+  late AnimationController _animationController;
+  Animation<Offset>? _slide;
+  Animation<double>? _fade;
   bool swipeUp = false;
-  FAQ faq;
-  ChatPage chatPage;
+  FAQ? faq;
+  ChatPage? chatPage;
   final int chatPageIndex = 3;
-  AbstractPushSendService pushService;
+  AbstractPushSendService? pushService;
 
   @override
   void initState() {
@@ -56,7 +56,7 @@ class NavigationState extends State<Navigation>
     ));
 
     // Error-Service kann am Ende des ersten Builds Dialoge zeigen
-    SchedulerBinding.instance
+    SchedulerBinding.instance!
         .addPostFrameCallback((_) => ErrorService.setContext(context));
   ***REMOVED***
 
@@ -102,9 +102,9 @@ class NavigationState extends State<Navigation>
           body: Container(
             color: DweTheme.yellowLight,
             child: FadeTransition(
-              opacity: _fade,
+              opacity: _fade!,
               child: SlideTransition(
-                  position: _slide,
+                  position: _slide!,
                   child: IndexedStack(children: pages, index: navigation)),
             ),
           ),
@@ -174,7 +174,7 @@ class NavigationState extends State<Navigation>
   ***REMOVED***
 
   Widget menuEntry(
-      {Key key, String title = '', String subtitle = '', int index = 0***REMOVED***) {
+      {Key? key, String title = '', String subtitle = '', int index = 0***REMOVED***) {
     var selected = navigation == index;
     return Container(
         key: key,
@@ -215,7 +215,7 @@ class NavigationState extends State<Navigation>
     ***REMOVED***);
     await _animationController.reverse();
 
-    primaryFocus.unfocus(); // sonst nimmt man die Tastatur mit
+    primaryFocus?.unfocus(); // sonst nimmt man die Tastatur mit
   ***REMOVED***
 
   newActionCreated(List<Termin> actions) {
@@ -246,9 +246,9 @@ class NavigationState extends State<Navigation>
   ***REMOVED***
 
   maybeDispose(ChatChannel value) {
-    var cls = value.ccl as State<StatefulWidget>;
+    var cls = value.ccl as State<StatefulWidget>?;
     if (cls == null) return;
-    if (ModalRoute.of(cls?.context)?.settings?.name == "/") {
+    if (ModalRoute.of(cls.context)?.settings.name == "/") {
       value.disposeListener();
     ***REMOVED***
   ***REMOVED***

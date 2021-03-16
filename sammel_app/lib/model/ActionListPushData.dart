@@ -7,7 +7,7 @@ class ActionListPushData implements PushData {
   @override
   String type = "ActionList";
 
-  List<Termin> actions;
+  List<Termin> actions = List.empty();
 
   ActionListPushData.fromJson(Map<String, dynamic> json, Set<Kiez> kieze) {
     type = json['type'] as String;

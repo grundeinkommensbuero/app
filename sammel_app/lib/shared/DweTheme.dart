@@ -42,8 +42,6 @@ class DweTheme {
       TextStyle(fontSize: 20.0, color: DweTheme.yellow);
 
   static Color actionColor(DateTime ende, bool owner, bool participant) {
-    if (owner == null) owner = false;
-    if (participant == null) participant = false;
 
     final past = ende.isBefore(DateTime.now());
 

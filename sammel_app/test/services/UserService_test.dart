@@ -15,9 +15,9 @@ import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';
 
 void main() {
-  StorageService storageService;
-  FirebaseReceiveService firebase;
-  Backend backendMock;
+  late StorageService storageService;
+  late FirebaseReceiveService firebase;
+  late Backend backendMock;
   mockTranslation();
 
   group('UserService', () {
@@ -134,8 +134,6 @@ void main() {
 
         var service = UserService(storageService, firebase, backendMock);
         var userHeaders = await service.userHeaders;
-
-        print(await userHeaders);
 
         expect(service.userService, service);
         expect(userHeaders['Authorization'], 'Basic MTE6c2VjcmV0');
@@ -259,12 +257,12 @@ void main() {
       var users = await user.toList();
       expect(users.map((user) => user.name),
           containsAll([null, 'neuer Name', 'neuerer Name']));
-      expect(service.latestUser.name, 'neuerer Name');
+      expect(service.latestUser!.name, 'neuerer Name');
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***
 
 bool equals(User user1, User user2) =>
-    user1.id == user2?.id &&
-    user1.name == user2?.name &&
-    user1.color?.value == user2?.color?.value;
+    user1.id == user2.id &&
+    user1.name == user2.name &&
+    user1.color?.value == user2.color?.value;

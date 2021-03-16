@@ -54,7 +54,7 @@ void main() {
 
         var message = ParticipationMessage.fromJson(json);
         expect(message.type, 'ParticipationMessage');
-        expect(message.obtained_from_server, isFalse);
+        expect(message.obtainedFromServer, isFalse);
         expect(message.timestamp.toString(), '2020-12-12 23:58:00.000');
         expect(message.username, 'Karl Marx');
         expect(message.joins, isTrue);

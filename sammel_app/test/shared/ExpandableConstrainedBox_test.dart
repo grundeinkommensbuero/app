@@ -13,10 +13,6 @@ void main() {
     expect(find.text('Content'), findsOneWidget);
   ***REMOVED***);
 
-  testWidgets('ExpandableConstrainedBox does not accept empty child',
-      (WidgetTester tester) async {
-    expect(() => ExpandableConstrainedBox(child: null), throwsAssertionError);
-  ***REMOVED***);
   testWidgets('ExpandableConstrainedBox accepts long child',
       (WidgetTester tester) async {
     var widget = ExpandableConstrainedBox(

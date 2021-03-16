@@ -77,8 +77,8 @@ void main() {
         1,
         2019
       ]);
-      expect([termineFilter.von.hour, termineFilter.von.minute], [23, 59]);
-      expect([termineFilter.bis.hour, termineFilter.bis.minute], [1, 2]);
+      expect([termineFilter.von?.hour, termineFilter.von?.minute], [23, 59]);
+      expect([termineFilter.bis?.hour, termineFilter.bis?.minute], [1, 2]);
       expect(termineFilter.orte.length, 1);
       expect(termineFilter.orte[0], 'Frankfurter Allee Nord');
     ***REMOVED***);
@@ -87,7 +87,7 @@ void main() {
   group('isEmpty', () {
     test('returns true on empty filter', () {
       expect(TermineFilter([], [], null, null, [], false, true).isEmpty, true);
-      expect(TermineFilter(null, null, null, null, null, null, null).isEmpty,
+      expect(TermineFilter([], [], null, null, [], null, null).isEmpty,
           true);
     ***REMOVED***);
 

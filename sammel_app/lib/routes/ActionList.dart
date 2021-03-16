@@ -18,7 +18,7 @@ class ActionList extends StatefulWidget {
 
   ActionList(this.termine, this.isMyAction, this.isPastAction,
       this.iAmParticipant, this.openActionDetails,
-      {Key key***REMOVED***)
+      {Key? key***REMOVED***)
       : super(key: key);
 
   @override
@@ -28,28 +28,28 @@ class ActionList extends StatefulWidget {
 class ActionListState extends State<ActionList> {
   ItemScrollController _scrollController = ItemScrollController();
 
-  Timer snackbarTimer;
+  Timer? snackbarTimer;
 
-  List<int> evaluations;
+  List<int>? evaluations;
 
   @override
   Widget build(BuildContext context) {
     if (snackbarTimer == null) maybeShowEvaluationSnackBar(context);
-    var index_of_now = getIndexOfNow();
+    var indexOfNow = getIndexOfNow();
 
     var scrollableList = ScrollablePositionedList.builder(
         itemScrollController: _scrollController,
         itemCount: widget.termine.length,
         itemBuilder: cardListBuilder,
-        initialScrollIndex: index_of_now);
-    if (index_of_now > 0 && _scrollController.isAttached) {
+        initialScrollIndex: indexOfNow);
+    if (indexOfNow > 0 && _scrollController.isAttached) {
       Timer(
           Duration(milliseconds: 100),
           () => _scrollController.scrollTo(
-              index: index_of_now,
+              index: indexOfNow,
               alignment: 0,
               curve: Curves.easeOutCubic,
-              duration: Duration(milliseconds: index_of_now * 75)));
+              duration: Duration(milliseconds: indexOfNow * 75)));
     ***REMOVED***
     return scrollableList;
   ***REMOVED***
@@ -61,7 +61,7 @@ class ActionListState extends State<ActionList> {
     for (Termin termin in widget.termine) {
       if (widget.isPastAction(termin) &&
           widget.iAmParticipant(termin) &&
-          !termin.isEvaluated(evaluations)) {
+          !termin.isEvaluated(evaluations!)) {
         snackbarTimer = Timer(
             Duration(seconds: 2),
             () => Scaffold.of(context).showSnackBar(SnackBar(

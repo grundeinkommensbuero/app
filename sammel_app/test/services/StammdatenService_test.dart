@@ -15,7 +15,7 @@ final ortsteile =
 FileReader fileReaderMock = TestFileReader();
 
 void main() {
-  StammdatenService stammdatenService;
+  late StammdatenService stammdatenService;
   setUp(() {
     StammdatenService.fileReader = TestFileReader();
     stammdatenService = StammdatenService();

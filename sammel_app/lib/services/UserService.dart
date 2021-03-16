@@ -14,9 +14,9 @@ import 'package:uuid/uuid.dart';
 
 abstract class AbstractUserService extends BackendService {
   final streamController = StreamController<User>.broadcast();
-  Stream<User> _userStream;
-  User latestUser;
-  Future<Map<String, String>> userHeaders;
+  late Stream<User> _userStream;
+  User? latestUser;
+  late Future<Map<String, String>> userHeaders;
 
   AbstractUserService(Backend backend) : super(null, backend) {
     this._userStream = streamController.stream;
@@ -27,7 +27,7 @@ abstract class AbstractUserService extends BackendService {
 
   Stream<User> get user {
     var streamController = StreamController<User>();
-    if (latestUser != null) streamController.add(latestUser);
+    if (latestUser != null) streamController.add(latestUser!);
     streamController
         .addStream(_userStream)
         .then((_) => streamController.close());
@@ -58,7 +58,7 @@ class UserService extends AbstractUserService {
         ***REMOVED***, test: (e) => e is InvalidUserException);
       else
         user = await createNewUser();
-      streamController.add(user);
+      streamController.add(user!);
     ***REMOVED*** catch (e) {
       streamController.addError(e);
     ***REMOVED***
@@ -66,7 +66,7 @@ class UserService extends AbstractUserService {
 
   Future<User> createNewUser() async {
     String secret = await generateSecret();
-    String firebaseKey = await firebase.token;
+    String? firebaseKey = await firebase.token;
     final user = User(0, null, _randomColor());
 
     Login login = Login(user, secret, firebaseKey);
@@ -87,7 +87,7 @@ class UserService extends AbstractUserService {
 
   verifyUser(User user) async {
     String secret = await storageService.loadSecret();
-    String firebaseKey = await firebase.token;
+    String? firebaseKey = await firebase.token;
 
     Login login = Login(user, secret, firebaseKey);
     var response;

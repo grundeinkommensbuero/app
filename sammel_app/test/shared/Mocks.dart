@@ -92,7 +92,7 @@ class DemoPushSendServiceMock extends Mock implements DemoPushSendService {***RE
 class GeoServiceMock extends Mock implements GeoService {***REMOVED***
 
 class TranslationsMock extends Mock implements Translations {
-  TranslationsMock([Function(Translations) training]) {
+  TranslationsMock([Function(Translations)? training]) {
     when(this.get(any)).thenAnswer((inv) => inv.positionalArguments[0]);
     if (training != null) training(this);
   ***REMOVED***

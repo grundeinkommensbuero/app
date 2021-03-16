@@ -16,7 +16,8 @@ Viel Spaß mit der App!''';
       "channel": "topic:global",
       "timestamp": "2021-03-08 23:45:00.000000",
       "text": '$titel\n\n$inhalt',
-      "color": 4292668415, // DWE hellblau für App-Info
+      "color": 4292668415,
+      // DWE hellblau für App-Info
       // "color": 4294960680, // DWE mittelgelb für Deutsche Wohnen & Co. Enteignen
       "sender_name": "App-Info",
       "user_id": -1
@@ -25,7 +26,11 @@ Viel Spaß mit der App!''';
   ***REMOVED***
 
   final response = await post(
-      'http://localhost:18080/service/push/topic/global',
+      Uri(
+          scheme: 'http',
+          host: 'localhost',
+          port: 18080,
+          path: 'service/push/topic/global'),
       headers: {
         "Authorization":
             "Basic MzpmZjdhOGI2Yi1lMTVhLTRmZWUtOWY3OS1kY2EwNmZkNmM4ODM=",

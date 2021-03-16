@@ -12,7 +12,7 @@ void main() {
   mockTranslation();
 
   setUp(() {
-    ErrorService.errorQueue = List<List<String>>();
+    ErrorService.errorQueue = [];
     ErrorService.setContext(null);
     ErrorService.displayedTypes = [];
   ***REMOVED***);
@@ -133,7 +133,7 @@ void main() {
   ***REMOVED***);
 
   group('setContext', () {
-    BuildContext context;
+    late BuildContext context;
     setUpUI((WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(home: Material(
         child: Builder(builder: (BuildContext newContext) {

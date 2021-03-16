@@ -39,7 +39,7 @@ Future<TerminDetailsCommand> showActionDetailsPage(
 // ignore: must_be_immutable
 class ActionDetailsPage extends StatefulWidget {
   final Termin action;
-  Marker marker;
+  late final Marker marker;
   final bool isMyAction;
   final bool iAmParticipant;
 
@@ -67,14 +67,14 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
   bool iAmParticipant;
   bool isMyAction;
 
-  ActionDetailsPageState(this.isMyAction, this.iAmParticipant);
-
   List<int> myEvaluations = [];
-  User me;
+  User? me;
 
-  AbstractTermineService termineService;
-  ChatMessageService chatMessageService;
+  late AbstractTermineService termineService;
+  late ChatMessageService chatMessageService;
   var initialized = false;
+
+  ActionDetailsPageState(this.isMyAction, this.iAmParticipant);
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +96,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
     PopupMenuButton menu =
         menuButton(widget.action, isMyAction, iAmParticipant);
 
-    Locale locale;
+    Locale? locale;
     try {
       locale = context.locale;
     ***REMOVED*** catch (_) {
@@ -173,14 +173,14 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                       ).tr(),
                       ExpandableConstrainedBox(
                         child: SelectableText(
-                          widget.action.details.beschreibung,
+                          widget.action.details!.beschreibung,
                           // onTap: () => {***REMOVED***,
                           // TODO: SelectableText stiehlt ExpandableContraintBox den onTap
                           style: TextStyle(fontWeight: FontWeight.normal),
                         ),
                         maxHeight: 105.0,
                         expandableCondition:
-                            widget.action.details.beschreibung.length > 200,
+                            widget.action.details!.beschreibung.length > 200,
                       )
                     ]))
               ]),
@@ -204,12 +204,12 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                       ).tr(),
                       ExpandableConstrainedBox(
                         child: SelectableText(
-                          widget.action.details.kontakt,
+                          widget.action.details!.kontakt,
                           style: TextStyle(fontWeight: FontWeight.normal),
                         ),
                         maxHeight: 105.0,
                         expandableCondition:
-                            widget.action.details.kontakt.length > 200,
+                            widget.action.details!.kontakt.length > 200,
                       )
                     ]))
               ]),
@@ -234,12 +234,12 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                                   'kiez': widget.action.ort.name,
                                   'bezirk': widget.action.ort.ortsteil,
                                   'treffpunkt':
-                                      widget.action.details.treffpunkt,
+                                      widget.action.details!.treffpunkt,
                                 ***REMOVED***),
                             style: TextStyle(fontWeight: FontWeight.normal)),
                         maxHeight: 80,
                         expandableCondition:
-                            widget.action.details.treffpunkt.length > 70,
+                            widget.action.details!.treffpunkt.length > 70,
                       ),
                     ]))
               ]),
@@ -362,13 +362,13 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
   ***REMOVED***
 
   openChatWindow() async {
-    ChatChannel message_channel =
-        await chatMessageService.getActionChannel(widget.action.id);
+    ChatChannel messageChannel =
+        await chatMessageService.getActionChannel(widget.action.id!);
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) =>
-                ChatWindow(message_channel, widget.action, true)));
+                ChatWindow(messageChannel, widget.action, true)));
   ***REMOVED***
 
   SizedBox editButton() {
@@ -403,6 +403,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
         iAmParticipant &&
         !widget.action.isEvaluated(myEvaluations))
       return RaisedButton(
+          // TODO
           key: Key('action evaluate button'),
           padding: EdgeInsets.all(8.0),
           color: DweTheme.purple,
@@ -427,12 +428,15 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           padding: EdgeInsets.all(8.0),
           child: Text('Mitmachen').tr(),
           onPressed: () => joinAction());
+
+    return Container();
   ***REMOVED***
 
   void joinAction() {
     widget.joinAction(widget.action);
+    if (me == null) return;
     setState(() {
-      widget.action.participants.add(me);
+      (widget.action.participants ?? []).add(me!);
       iAmParticipant = true;
     ***REMOVED***);
   ***REMOVED***
@@ -440,8 +444,8 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
   void leaveAction() {
     widget.leaveAction(widget.action);
     setState(() {
-      widget.action.participants
-          .remove(widget.action.participants.firstWhere((u) => u.id == me?.id));
+      widget.action.participants?.remove(
+          widget.action.participants?.firstWhere((u) => u.id == me?.id));
       iAmParticipant = false;
     ***REMOVED***);
   ***REMOVED***
@@ -454,6 +458,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
   void deleteAction() => showDialog<bool>(
           context: context,
           builder: (context) => confirmDeleteDialog(context)).then((confirmed) {
-        if (confirmed) Navigator.pop(context, TerminDetailsCommand.DELETE);
+        if (confirmed == true)
+          Navigator.pop(context, TerminDetailsCommand.DELETE);
       ***REMOVED***);
 ***REMOVED***

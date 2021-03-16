@@ -1,45 +1,44 @@
+import 'package:collection/collection.dart';
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
-import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/routes/ChatWindow.dart';
+import 'package:sammel_app/services/ErrorService.dart';
+import 'package:sammel_app/shared/ChronoHelfer.dart';
 
 class ChatChannel {
-  String id;
-  List<Message> channel_messages;
+  String? id;
+  List<Message> channelMessages = List<Message>.empty(growable: true);
 
-  ChannelChangeListener ccl;
+  ChannelChangeListener? ccl;
 
-  ChatChannel(this.id) {
-    this.channel_messages = List<Message>();
-  ***REMOVED***
+  ChatChannel(this.id);
 
-  pushMessages(List<Message> messages) {
+  pushMessages(List<Message?> messages) {
     messages
-        .where((message) => message is ChatMessage)
-        .forEach((message) => pushChatMessage(message));
-    messages
-        .where((message) => message is ParticipationMessage)
-        .forEach((message) => pushParticipationMessage(message));
+        .where((message) => message != null && message is ChatMessage)
+        .forEach((message) => pushChatMessage(message!));
+    messages.where((message) => message is ParticipationMessage).forEach(
+        (message) => pushParticipationMessage(message as ParticipationMessage));
 
-    channel_messages.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+    channelMessages.sort((a, b) => compareTimestamp(a.timestamp, b.timestamp));
     ccl?.channelChanged(this);
   ***REMOVED***
 
-  Future<void> pushChatMessage(Message message) {
-    Message ownMessage = channel_messages
-        .firstWhere((e) => message.isMessageEqual(e), orElse: () => null);
+  pushChatMessage(Message message) {
+    Message? ownMessage =
+        channelMessages.firstWhereOrNull((e) => message.isMessageEqual(e));
     if (ownMessage == null)
-      channel_messages.add(message);
+      channelMessages.add(message);
     else
-      ownMessage.obtained_from_server = true;
+      ownMessage.obtainedFromServer = true;
   ***REMOVED***
 
   pushParticipationMessage(ParticipationMessage message) {
-    if (channel_messages.any((m) => message.isMessageEqual(m))) return;
-    channel_messages.add(message);
+    if (channelMessages.any((m) => message.isMessageEqual(m))) return;
+    channelMessages.add(message);
   ***REMOVED***
 
-  void register_channel_change_listener(ChannelChangeListener c) {
+  void registerChannelChangeListener(ChannelChangeListener c) {
     if (ccl == null) {
       ccl = c;
     ***REMOVED*** else if (c != ccl) {
@@ -51,23 +50,25 @@ class ChatChannel {
 
   Map<String, dynamic> toJson() => {
         'id': this.id,
-        'messages': this.channel_messages != null ? this.channel_messages : []
+        'messages': this.channelMessages,
       ***REMOVED***
 
   ChatChannel.fromJSON(Map<dynamic, dynamic> json) {
     this.id = json['id'];
-    channel_messages = json['messages'].map<Message>((jsonMsg) {
+    channelMessages = json['messages'].map<Message>((jsonMsg) {
       var type = Message.determineType(jsonMsg);
-      if (type == PushDataTypes.ParticipationMessage)
+      if (type == PushDataTypes.participationMessage)
         return ParticipationMessage.fromJson(jsonMsg);
-      if (type == PushDataTypes.SimpleChatMessage)
+      if (type == PushDataTypes.simpleChatMessage)
         return ChatMessage.fromJson(jsonMsg);
       ErrorService.handleError(
           throw UnkownMessageTypeError(
               'Unbekannter Nachrichtentyp abgespeichert'),
-          StackTrace.current);
+          StackTrace.current); // TODO
     ***REMOVED***).toList();
-    this.channel_messages?.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+    this
+        .channelMessages
+        .sort((a, b) => compareTimestamp(a.timestamp, b.timestamp));
   ***REMOVED***
 ***REMOVED***
 

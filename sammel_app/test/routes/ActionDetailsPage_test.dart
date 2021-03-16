@@ -15,7 +15,7 @@ import '../shared/Mocks.dart';
 final storageServiceMock = StorageServiceMock();
 
 main() {
-  Widget widget;
+  late Widget widget;
 
   Function(Termin) joinAction = (_) {***REMOVED***
   Function(Termin) leaveAction = (_) {***REMOVED***

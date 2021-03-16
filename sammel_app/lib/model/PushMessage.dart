@@ -4,11 +4,13 @@ import 'package:sammel_app/shared/ServerException.dart';
 import 'Message.dart';
 
 class PushMessage {
-  List<String> recipients;
+  List<String> recipients = List.empty();
   PushData data;
   PushNotification notification;
 
-  PushMessage(this.data, this.notification, {this.recipients***REMOVED***);
+  PushMessage(this.data, this.notification, {recipients***REMOVED***) {
+    this.recipients = recipients ?? List.empty();
+  ***REMOVED***
 
   toJson() => {
         'recipients': recipients,
@@ -30,17 +32,18 @@ class PushNotification {
 ***REMOVED***
 
 class PushDataTypes {
-  static final SimpleChatMessage = 'SimpleChatMessage';
-  static final ParticipationMessage = 'ParticipationMessage';
-  static final NewKiezActions = 'NewKiezActions';
-  static final ActionChanged = 'ActionChanged';
-  static final ActionDeleted = 'ActionDeleted';
-  static final TopicChatMessage = 'TopicChatMessage';
+  static final chatMessage = 'ChatMessage';
+  static final simpleChatMessage = 'SimpleChatMessage';
+  static final participationMessage = 'ParticipationMessage';
+  static final newKiezActions = 'NewKiezActions';
+  static final actionChanged = 'ActionChanged';
+  static final actionDeleted = 'ActionDeleted';
+  static final topicChatMessage = 'TopicChatMessage';
 ***REMOVED***
 
 // Alle Data-Objekte müssen in eine flache Map<String, String> serialisiert werden können
 class PushData {
-  String type;
+  String type = 'general';
 
   PushData();
 
@@ -51,11 +54,11 @@ class PushData {
 
 class ChatPushData extends PushData {
   String channel;
-  String type;
+  String type = PushDataTypes.chatMessage;
 
   ChatPushData(this.channel);
 
-  Message get message =>
+  Message? get message =>
       throw UnimplementedError("Das hier soll abstrakt sein");
 
   ChatPushData.fromJson(Map<String, dynamic> json)
@@ -65,38 +68,40 @@ class ChatPushData extends PushData {
 
 class ActionChatMessagePushData extends ChatPushData {
   @override
-  ChatMessage message;
-  int action;
-  final String type = PushDataTypes.SimpleChatMessage;
+  late ChatMessage message;
+  late int action;
+  final String type = PushDataTypes.simpleChatMessage;
 
-  ActionChatMessagePushData(this.message, this.action, channel) : super(channel);
+  ActionChatMessagePushData(this.message, this.action, channel)
+      : super(channel);
 
   toJson() {
-    var json_message = message.toJson();
-    json_message['type'] = type;
-    json_message['action'] = action;
-    json_message['channel'] = this.channel;
-    return json_message;
+    var jsonMessage = message.toJson();
+    jsonMessage['type'] = type;
+    jsonMessage['action'] = action;
+    jsonMessage['channel'] = this.channel;
+    return jsonMessage;
   ***REMOVED***
 
   ActionChatMessagePushData.fromJson(Map<String, dynamic> json)
       : super(json['channel']) {
     try {
-      var action = json['action'] ?? null;
-      this.action = action == null ? -1 : int.parse("$action");
+      String? action = json['action'];
+      assert(action != null);
+      this.action = int.parse(action!);
       this.message = ChatMessage.fromJson(json);
     ***REMOVED*** on AssertionError catch (e) {
       throw UnreadablePushMessage(tr(
           'Unlesbare Chat-Nachricht empfangen: {message***REMOVED***',
-          namedArgs: {'named': e.message***REMOVED***));
+          namedArgs: {'named': e.message as String***REMOVED***));
     ***REMOVED***
   ***REMOVED***
 ***REMOVED***
 
-class TopicChatMessagePushData extends ChatPushData
-{
-  final String type = PushDataTypes.TopicChatMessage;
-  ChatMessage message;
+class TopicChatMessagePushData extends ChatPushData {
+  final String type = PushDataTypes.topicChatMessage;
+  ChatMessage? message;
+
   TopicChatMessagePushData(this.message, channel) : super(channel);
 
   TopicChatMessagePushData.fromJson(Map<String, dynamic> json)
@@ -106,40 +111,38 @@ class TopicChatMessagePushData extends ChatPushData
     ***REMOVED*** on AssertionError catch (e) {
       throw UnreadablePushMessage(tr(
           'Unlesbare Topic-Nachricht empfangen: {message***REMOVED***',
-          namedArgs: {'named': e.message***REMOVED***));
+          namedArgs: {'named': e.message as String***REMOVED***));
     ***REMOVED***
   ***REMOVED***
 
   toJson() {
-    var json_message = message.toJson();
-    json_message['type'] = type;
-    json_message['channel'] = this.channel;
-    return json_message;
+    var jsonMessage = message?.toJson() ?? {***REMOVED***
+    jsonMessage['type'] = type;
+    jsonMessage['channel'] = this.channel;
+    return jsonMessage;
   ***REMOVED***
-
 ***REMOVED***
 
 class ParticipationPushData extends ChatPushData {
   @override
-  ParticipationMessage message;
-  int action;
-  final String type = PushDataTypes.ParticipationMessage;
+  ParticipationMessage? message;
+  late int action;
+  final String type = PushDataTypes.participationMessage;
 
   ParticipationPushData(this.message, this.action, channel) : super(channel);
 
   toJson() {
-    var json_message = message.toJson();
-    json_message['type'] = type;
-    json_message["action"] = action;
-    json_message['channel'] = this.channel;
-    return json_message;
+    var jsonMessage = message?.toJson() ?? {***REMOVED***
+    jsonMessage['type'] = type;
+    jsonMessage["action"] = action;
+    jsonMessage['channel'] = this.channel;
+    return jsonMessage;
   ***REMOVED***
 
   ParticipationPushData.fromJson(Map<String, dynamic> json)
       : super(json['channel']) {
+    this.action = json['action']!;
     try {
-      var action = json['action'] ?? null;
-      this.action = action == null ? -1 : action;
       this.message = ParticipationMessage.fromJson(json);
     ***REMOVED*** on AssertionError catch (e) {
       throw UnreadablePushMessage(
@@ -169,7 +172,7 @@ class WrongDataTypeKeyError {
   String expected;
   String found;
 
-  WrongDataTypeKeyError({this.expected, this.found***REMOVED***);
+  WrongDataTypeKeyError({required this.expected, required this.found***REMOVED***);
 
   String getMessage() =>
       'Der Typ "$found" entspricht nicht dem erwarteten Typ "$expected"';
@@ -183,11 +186,11 @@ class UnreadablePushMessage implements ServerException {
 
 ChatPushData chatPushDataFromJson(Map<String, dynamic> data) {
   var pushData = ChatPushData.fromJson(data);
-  if (pushData.type == PushDataTypes.SimpleChatMessage)
+  if (pushData.type == PushDataTypes.simpleChatMessage)
     pushData = ActionChatMessagePushData.fromJson(data);
-  if (pushData.type == PushDataTypes.ParticipationMessage)
+  if (pushData.type == PushDataTypes.participationMessage)
     pushData = ParticipationPushData.fromJson(data);
-  if (pushData.type == PushDataTypes.TopicChatMessage)
+  if (pushData.type == PushDataTypes.topicChatMessage)
     pushData = TopicChatMessagePushData.fromJson(data);
 
   return pushData;

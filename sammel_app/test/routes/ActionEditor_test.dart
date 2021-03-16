@@ -7,11 +7,11 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
+import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/PushSendService.dart';
@@ -19,7 +19,6 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
-import 'package:sammel_app/services/ChatMessageService.dart';
 
 import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';
@@ -198,19 +197,19 @@ void main() {
           tester.state(find.byKey(Key('action creator')));
       expect(
           find.text('${tempVorstadt().name***REMOVED*** in ${tempVorstadt().ortsteil***REMOVED***\n'
-              ' Treffpunkt: ${actionData.action.terminDetails.treffpunkt***REMOVED***'),
+              ' Treffpunkt: ${actionData.action.treffpunkt***REMOVED***'),
           findsNothing);
       // ignore: invalid_use_of_protected_member
       actionData.setState(() {
         actionData.action.ort = tempVorstadt();
-        actionData.action.terminDetails.treffpunkt = 'Hier';
+        actionData.action.treffpunkt = 'Hier';
         actionData.action.coordinates = LatLng(52.5170365, 13.3888599);
         actionData.validateAllInput();
       ***REMOVED***);
       await tester.pumpAndSettle();
       expect(
           find.text('${tempVorstadt().name***REMOVED*** in ${tempVorstadt().ortsteil***REMOVED***\n'
-              ' Treffpunkt: ${actionData.action.terminDetails.treffpunkt***REMOVED***'),
+              ' Treffpunkt: ${actionData.action.treffpunkt***REMOVED***'),
           findsOneWidget);
     ***REMOVED***);
 
@@ -221,7 +220,7 @@ void main() {
           tester.state(find.byKey(Key('action creator')));
       // ignore: invalid_use_of_protected_member
       actionData.setState(() {
-        actionData.action.terminDetails.kontakt = 'test1';
+        actionData.action.kontakt = 'test1';
         actionData.validateAllInput();
       ***REMOVED***);
       await tester.pump();
@@ -235,7 +234,7 @@ void main() {
           tester.state(find.byKey(Key('action creator')));
       // ignore: invalid_use_of_protected_member
       actionData.setState(() {
-        actionData.action.terminDetails.treffpunkt = 'test1';
+        actionData.action.treffpunkt = 'test1';
         actionData.validateAllInput();
       ***REMOVED***);
       await tester.pump();
@@ -249,7 +248,7 @@ void main() {
           tester.state(find.byKey(Key('action creator')));
       // ignore: invalid_use_of_protected_member
       actionData.setState(() {
-        actionData.action.terminDetails.beschreibung = 'test1';
+        actionData.action.beschreibung = 'test1';
         actionData.validateAllInput();
       ***REMOVED***);
       await tester.pump();
@@ -311,7 +310,7 @@ void main() {
       actionData.action.tage = [DateTime(2019, 12, 1)];
       actionData.action.von = TimeOfDay(hour: 10, minute: 32);
       actionData.action.bis = TimeOfDay(hour: 10, minute: 31);
-      List<Termin> newTermine = await actionData.generateActions();
+      List<Termin> newTermine = (await actionData.generateActions())!;
       expect(newTermine[0].ende.day, 2);
     ***REMOVED***);
 
@@ -331,7 +330,7 @@ void main() {
   ***REMOVED***);
 
   group('validates', () {
-    ActionEditorState actionEditor;
+    late ActionEditorState actionEditor;
     setUp(() {
       actionEditor =
           ActionEditorState(TerminTestDaten.einTerminMitTeilisUndDetails());
@@ -367,34 +366,20 @@ void main() {
       expect(actionEditor.action.validated['all'], ValidationState.error);
     ***REMOVED***);
 
-    test('typ', () {
-      actionEditor.action.typ = null;
-      actionEditor.validateAllInput();
-
-      expect(actionEditor.action.validated['typ'], ValidationState.error);
-      expect(actionEditor.action.validated['all'], ValidationState.error);
-
-      actionEditor.action.typ = '';
-      actionEditor.validateAllInput();
-
-      expect(actionEditor.action.validated['typ'], ValidationState.error);
-      expect(actionEditor.action.validated['all'], ValidationState.error);
-    ***REMOVED***);
-
     test('venue', () {
-      actionEditor.action.terminDetails.treffpunkt = null;
+      actionEditor.action.treffpunkt = null;
       actionEditor.validateAllInput();
 
       expect(actionEditor.action.validated['venue'], ValidationState.error);
       expect(actionEditor.action.validated['all'], ValidationState.error);
 
-      actionEditor.action.terminDetails.treffpunkt = '';
+      actionEditor.action.treffpunkt = '';
       actionEditor.validateAllInput();
 
       expect(actionEditor.action.validated['venue'], ValidationState.error);
       expect(actionEditor.action.validated['all'], ValidationState.error);
 
-      actionEditor.action.terminDetails.treffpunkt = 'treffpunkt';
+      actionEditor.action.treffpunkt = 'treffpunkt';
       actionEditor.action.coordinates = null;
       actionEditor.validateAllInput();
 
@@ -403,14 +388,14 @@ void main() {
     ***REMOVED***);
 
     test('description', () {
-      actionEditor.action.terminDetails.beschreibung = null;
+      actionEditor.action.beschreibung = null;
       actionEditor.validateAllInput();
 
       expect(
           actionEditor.action.validated['beschreibung'], ValidationState.error);
       expect(actionEditor.action.validated['all'], ValidationState.error);
 
-      actionEditor.action.terminDetails.beschreibung = '';
+      actionEditor.action.beschreibung = '';
       actionEditor.validateAllInput();
 
       expect(
@@ -419,13 +404,13 @@ void main() {
     ***REMOVED***);
 
     test('contact', () {
-      actionEditor.action.terminDetails.kontakt = null;
+      actionEditor.action.kontakt = null;
       actionEditor.validateAllInput();
 
       expect(actionEditor.action.validated['kontakt'], ValidationState.error);
       expect(actionEditor.action.validated['all'], ValidationState.error);
 
-      actionEditor.action.terminDetails.kontakt = '';
+      actionEditor.action.kontakt = '';
       actionEditor.validateAllInput();
 
       expect(actionEditor.action.validated['kontakt'], ValidationState.error);
@@ -438,7 +423,7 @@ void main() {
 
       expect(state.action.validated['all'], ValidationState.ok);
 
-      state.action = testActionData()..tage = null;
+      state.action = testActionData()..von = null;
 
       when(_terminService.createAction(any, any))
           .thenAnswer((_) async => TerminTestDaten.einTermin());
@@ -457,11 +442,12 @@ void main() {
     ***REMOVED***);
 
     test('returns null, if no coordinates given', () {
-      var actionData = ActionData(null, null, null, null, null, null, null);
+      var actionData =
+          ActionData('Sammeln', null, null, null, null, null, null);
 
       expect(ActionEditorState.determineMapCenter(actionData), null);
 
-      actionData = ActionData(null, null, null,
+      actionData = ActionData('Sammeln', null, null,
           Kiez('Kiez', 'Region', 'Ortsteil', []), null, null, null);
 
       expect(ActionEditorState.determineMapCenter(actionData), null);
@@ -483,7 +469,7 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      Termin action = (await state.generateActions())[0];
+      Termin action = (await state.generateActions())![0];
 
       expect(action.beginn, TerminTestDaten.einTermin().beginn);
     ***REMOVED***);
@@ -492,7 +478,7 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      Termin action = (await state.generateActions())[0];
+      Termin action = (await state.generateActions())![0];
 
       expect(action.ende, TerminTestDaten.einTermin().ende);
     ***REMOVED***);
@@ -501,7 +487,7 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      Termin action = (await state.generateActions())[0];
+      Termin action = (await state.generateActions())![0];
 
       expect(action.ort.equals(TerminTestDaten.einTermin().ort), true);
     ***REMOVED***);
@@ -510,7 +496,7 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      Termin action = (await state.generateActions())[0];
+      Termin action = (await state.generateActions())![0];
 
       expect(action.typ, TerminTestDaten.einTermin().typ);
     ***REMOVED***);
@@ -519,7 +505,7 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      Termin action = (await state.generateActions())[0];
+      Termin action = (await state.generateActions())![0];
 
       expect(action.id, TerminTestDaten.einTermin().id);
     ***REMOVED***);
@@ -528,10 +514,10 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      Termin action = (await state.generateActions())[0];
+      Termin action = (await state.generateActions())![0];
 
-      expect(action.details.kontakt,
-          TerminTestDaten.einTerminMitTeilisUndDetails().details.kontakt);
+      expect(action.details!.kontakt,
+          TerminTestDaten.einTerminMitTeilisUndDetails().details!.kontakt);
     ***REMOVED***);
 
     testWidgets('with old description, w/o changes',
@@ -539,10 +525,10 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      Termin action = (await state.generateActions())[0];
+      Termin action = (await state.generateActions())![0];
 
-      expect(action.details.beschreibung,
-          TerminTestDaten.einTerminMitTeilisUndDetails().details.beschreibung);
+      expect(action.details!.beschreibung,
+          TerminTestDaten.einTerminMitTeilisUndDetails().details!.beschreibung);
     ***REMOVED***);
 
     testWidgets('with old venue description, w/o changes',
@@ -550,10 +536,10 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      Termin action = (await state.generateActions())[0];
+      Termin action = (await state.generateActions())![0];
 
-      expect(action.details.treffpunkt,
-          TerminTestDaten.einTerminMitTeilisUndDetails().details.treffpunkt);
+      expect(action.details!.treffpunkt,
+          TerminTestDaten.einTerminMitTeilisUndDetails().details!.treffpunkt);
     ***REMOVED***);
 
     testWidgets('with old coordinates, w/o changes',
@@ -561,7 +547,7 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      Termin action = (await state.generateActions())[0];
+      Termin action = (await state.generateActions())![0];
 
       expect(action.latitude,
           TerminTestDaten.einTerminMitTeilisUndDetails().latitude);
@@ -575,7 +561,7 @@ void main() {
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       var now = TimeOfDay.now();
       state.action.von = now;
-      Termin action = (await state.generateActions())[0];
+      Termin action = (await state.generateActions())![0];
 
       expect(action.beginn, DateTime(2019, 11, 04, now.hour, now.minute));
     ***REMOVED***);
@@ -586,7 +572,7 @@ void main() {
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       var now = TimeOfDay(hour: 23, minute: 0);
       state.action.bis = now;
-      Termin action = (await state.generateActions())[0];
+      Termin action = (await state.generateActions())![0];
 
       expect(action.ende, DateTime(2019, 11, 04, now.hour, now.minute));
     ***REMOVED***);
@@ -596,7 +582,7 @@ void main() {
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       state.action.ort = ffAlleeNord();
-      Termin action = (await state.generateActions())[0];
+      Termin action = (await state.generateActions())![0];
 
       expect(action.ort.equals(ffAlleeNord()), true);
     ***REMOVED***);
@@ -606,7 +592,7 @@ void main() {
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       state.action.typ = 'Neuer Typ';
-      Termin action = (await state.generateActions())[0];
+      Termin action = (await state.generateActions())![0];
 
       expect(action.typ, 'Neuer Typ');
     ***REMOVED***);
@@ -615,10 +601,10 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      state.action.terminDetails.kontakt = 'Neuer Kontakt';
-      Termin action = (await state.generateActions())[0];
+      state.action.kontakt = 'Neuer Kontakt';
+      Termin action = (await state.generateActions())![0];
 
-      expect(action.details.kontakt, 'Neuer Kontakt');
+      expect(action.details!.kontakt, 'Neuer Kontakt');
     ***REMOVED***);
 
     testWidgets('with new description, w/ changes',
@@ -626,10 +612,10 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      state.action.terminDetails.beschreibung = 'Neue Beschreibung';
-      Termin action = (await state.generateActions())[0];
+      state.action.beschreibung = 'Neue Beschreibung';
+      Termin action = (await state.generateActions())![0];
 
-      expect(action.details.beschreibung, 'Neue Beschreibung');
+      expect(action.details?.beschreibung, 'Neue Beschreibung');
     ***REMOVED***);
 
     testWidgets('with new venue description, w/ changes',
@@ -637,10 +623,10 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      state.action.terminDetails.treffpunkt = 'Neuer Treffpunkt';
-      Termin action = (await state.generateActions())[0];
+      state.action.treffpunkt = 'Neuer Treffpunkt';
+      Termin action = (await state.generateActions())![0];
 
-      expect(action.details.treffpunkt, 'Neuer Treffpunkt');
+      expect(action.details?.treffpunkt, 'Neuer Treffpunkt');
     ***REMOVED***);
 
     testWidgets('with new coordinates, w/ changes',
@@ -649,7 +635,7 @@ void main() {
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
       state.action.coordinates = LatLng(52.5170365, 13.3888599);
-      Termin action = (await state.generateActions())[0];
+      Termin action = (await state.generateActions())![0];
 
       expect(action.latitude, 52.5170365);
       expect(action.longitude, 13.3888599);
@@ -660,12 +646,12 @@ void main() {
       await _openActionEditor(tester);
 
       ActionEditorState state = tester.state(find.byType(ActionEditor));
-      Termin action = (await state.generateActions())[0];
+      Termin action = (await state.generateActions())![0];
 
-      expect(action.participants.length, 1);
-      expect(action.participants[0].id, 11);
-      expect(action.participants[0].name, 'Karl Marx');
-      expect(action.participants[0].color.value, 4294198070);
+      expect(action.participants!.length, 1);
+      expect(action.participants![0].id, 11);
+      expect(action.participants![0].name, 'Karl Marx');
+      expect(action.participants![0].color?.value, 4294198070);
     ***REMOVED***);
   ***REMOVED***);
   group('finish button', () {
@@ -690,9 +676,9 @@ void main() {
       expect(state.action.ort, isNotNull);
       expect(state.action.typ, isNotNull);
       expect(state.action.tage, isNotEmpty);
-      expect(state.action.terminDetails.beschreibung, isNotEmpty);
-      expect(state.action.terminDetails.kontakt, isNotEmpty);
-      expect(state.action.terminDetails.treffpunkt, isNotEmpty);
+      expect(state.action.beschreibung, isNotEmpty);
+      expect(state.action.kontakt, isNotEmpty);
+      expect(state.action.treffpunkt, isNotEmpty);
       expect(state.action.coordinates, isNotNull);
 
       await tester.tap(find.byKey(Key('action editor finish button')));
@@ -703,9 +689,9 @@ void main() {
       expect(state.action.ort, isNull);
       expect(state.action.typ, 'Sammeln');
       expect(state.action.tage, isEmpty);
-      expect(state.action.terminDetails.beschreibung, isEmpty);
-      expect(state.action.terminDetails.kontakt, 'Ich bin ich');
-      expect(state.action.terminDetails.treffpunkt, isEmpty);
+      expect(state.action.beschreibung, isEmpty);
+      expect(state.action.kontakt, 'Ich bin ich');
+      expect(state.action.treffpunkt, isEmpty);
       expect(state.action.coordinates, isNull);
     ***REMOVED***);
 
@@ -718,9 +704,9 @@ void main() {
       expect(state.action.ort, isNotNull);
       expect(state.action.typ, isNotNull);
       expect(state.action.tage, isNotEmpty);
-      expect(state.action.terminDetails.beschreibung, isNotEmpty);
-      expect(state.action.terminDetails.kontakt, isNotEmpty);
-      expect(state.action.terminDetails.treffpunkt, isNotEmpty);
+      expect(state.action.beschreibung, isNotEmpty);
+      expect(state.action.kontakt, isNotEmpty);
+      expect(state.action.treffpunkt, isNotEmpty);
       expect(state.action.coordinates, isNotNull);
 
       await tester.tap(find.byKey(Key('action editor cancel button')));
@@ -731,9 +717,9 @@ void main() {
       expect(state.action.ort, isNull);
       expect(state.action.typ, 'Sammeln');
       expect(state.action.tage, isEmpty);
-      expect(state.action.terminDetails.beschreibung, isEmpty);
-      expect(state.action.terminDetails.kontakt, 'Ich bin ich');
-      expect(state.action.terminDetails.treffpunkt, isEmpty);
+      expect(state.action.beschreibung, isEmpty);
+      expect(state.action.kontakt, 'Ich bin ich');
+      expect(state.action.treffpunkt, isEmpty);
       expect(state.action.coordinates, isNull);
     ***REMOVED***);
 
@@ -867,7 +853,7 @@ void main() {
     testWidgets('saves contact to storage on finish with initial action',
         (tester) async {
       final state = await _pumpActionEditor(tester);
-      state.action.terminDetails.kontakt = 'Ick bin ein Berliner';
+      state.action.kontakt = 'Ick bin ein Berliner';
 
       await tester.tap(find.byKey(Key('action editor finish button')));
       await tester.pump();
@@ -925,7 +911,7 @@ Future _openActionEditor(WidgetTester tester) async {
 ***REMOVED***
 
 Future<ActionEditorState> _pumpActionEditor(WidgetTester tester,
-    {Function onFinish, UserServiceMock userService***REMOVED***) async {
+    {Function(List<Termin>)? onFinish, UserServiceMock? userService***REMOVED***) async {
   onFinish = onFinish ?? (_) {***REMOVED***
 
   final action = TerminTestDaten.einTerminMitTeilisUndDetails();
@@ -946,5 +932,7 @@ ActionData testActionData() => ActionData(
     TimeOfDay.fromDateTime(DateTime.now().add(Duration(hours: 1))),
     ffAlleeNord(),
     [DateTime.now()],
-    TerminDetails('Weltzeituhr', 'Es gibt Kuchen', 'Ich bin ich'),
+    'Weltzeituhr',
+    'Es gibt Kuchen',
+    'Ich bin ich',
     LatLng(52.51579, 13.45399));

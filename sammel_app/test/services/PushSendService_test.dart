@@ -13,7 +13,7 @@ main() {
   var backendMock = BackendMock();
 
   group('PushService', () {
-    PushSendService service;
+    late PushSendService service;
     setUp(() {
       reset(backendMock);
       service = PushSendService(userService, backendMock);
@@ -47,7 +47,7 @@ main() {
   ***REMOVED***);
 
   group('DemoPushService', () {
-    DemoPushSendService service;
+    late DemoPushSendService service;
 
     setUp(() {
       reset(backendMock);

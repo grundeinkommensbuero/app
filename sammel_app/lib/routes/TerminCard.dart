@@ -16,7 +16,7 @@ class TerminCard extends StatelessWidget {
   final bool participant;
 
   TerminCard(this.termin,
-      [this.myAction = false, this.participant = false, Key key])
+      [this.myAction = false, this.participant = false, Key? key])
       : super(key: key);
 
   build(context) {
@@ -84,8 +84,8 @@ class TerminCard extends StatelessWidget {
       DateTime beginn, DateTime ende, Locale locale) {
     return '{prefix***REMOVED***{date***REMOVED*** um {zeit***REMOVED*** Uhr, '.tr(namedArgs: {
           'prefix': ermittlePrefix(beginn, locale),
-          'date': DateFormat.MMMd(locale?.languageCode).format(beginn),
-          'zeit': DateFormat.Hm(locale?.languageCode).format(beginn),
+          'date': DateFormat.MMMd(locale.languageCode).format(beginn),
+          'zeit': DateFormat.Hm(locale.languageCode).format(beginn),
         ***REMOVED***) +
         (ende.difference(beginn).inHours < 1
             ? '< ' + '{***REMOVED*** Stunden'.plural(1)

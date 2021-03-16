@@ -8,7 +8,7 @@ import 'package:sammel_app/services/StorageService.dart';
 import '../shared/Mocks.dart';
 
 void main() {
-  ChatMessageService service;
+  late ChatMessageService service;
   StorageService storageService = StorageServiceMock();
   PushNotificationManager manager = PushNotificationManagerMock();
 

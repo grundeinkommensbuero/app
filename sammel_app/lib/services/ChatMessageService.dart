@@ -13,38 +13,37 @@ import 'package:sammel_app/services/TermineService.dart';
 import 'LocalNotificationService.dart';
 
 class ChatMessageService implements PushNotificationListener {
-  GlobalKey<NavigatorState> navigatorKey;
+  GlobalKey<NavigatorState>? navigatorKey;
+
+  Map<String, ChatChannel> channels = Map<String, ChatChannel>();
+  StorageService? storageService;
 
   ChatMessageService(StorageService storageService,
       AbstractPushNotificationManager manager, this.navigatorKey) {
-    manager.register_message_callback(PushDataTypes.SimpleChatMessage, this);
-    manager.register_message_callback(PushDataTypes.ParticipationMessage, this);
-    manager.register_message_callback(PushDataTypes.TopicChatMessage, this);
-    this.storage_service = storageService;
+    manager.registerMessageCallback(PushDataTypes.simpleChatMessage, this);
+    manager.registerMessageCallback(PushDataTypes.participationMessage, this);
+    manager.registerMessageCallback(PushDataTypes.topicChatMessage, this);
+    this.storageService = storageService;
   ***REMOVED***
 
-  Map<String, ChatChannel> channels = Map<String, ChatChannel>();
-  StorageService storage_service;
-
   @override
-  receive_message(Map<String, dynamic> json) async {
+  receiveMessage(Map<String, dynamic> json) async {
     try {
       var pushData = chatPushDataFromJson(json);
       ChatChannel channel = await storeMessage(pushData);
-      if (channel == null) return;
 
       // check if chat window is open
-      State<StatefulWidget> cls = channel.ccl as State<StatefulWidget>;
+      final cls = channel.ccl as State<StatefulWidget>?;
       if (cls == null || ModalRoute.of(cls.context)?.isActive == false) {
         // chat window is not open: push local message
         var notifier =
-            Provider.of<LocalNotificationService>(navigatorKey.currentContext);
-        if (json['type'] == PushDataTypes.SimpleChatMessage)
+            Provider.of<LocalNotificationService>(navigatorKey!.currentContext!);
+        if (json['type'] == PushDataTypes.simpleChatMessage)
           notifier.sendChatNotification(ActionChatMessagePushData.fromJson(json));
-        if (json['type'] == PushDataTypes.ParticipationMessage)
+        if (json['type'] == PushDataTypes.participationMessage)
           notifier.sendParticipationNotification(
               ParticipationPushData.fromJson(json));
-        if (json['type'] == PushDataTypes.TopicChatMessage) {
+        if (json['type'] == PushDataTypes.topicChatMessage) {
           notifier.sendTopicChatNotification(
               TopicChatMessagePushData.fromJson(json));
         ***REMOVED***
@@ -70,52 +69,52 @@ class ChatMessageService implements PushNotificationListener {
 
       channel.pushMessages(messages);
 
-      this.storage_service.saveChatChannel(channel);
+      this.storageService?.saveChatChannel(channel);
       channels.add(channel);
     ***REMOVED***
     return channels;
   ***REMOVED***
 
   @override
-  Future<void> handleNotificationTap(Map<dynamic, dynamic> data) async {
-    if (Message.determineType(data) == PushDataTypes.TopicChatMessage) {
-      var chat_push_data = TopicChatMessagePushData.fromJson(data);
-      final channel = await getChannel(chat_push_data.channel);
-      State<StatefulWidget> cls = channel.ccl as State<StatefulWidget>;
-      create_or_recreate_topic_chat_page(cls, channel);
-    ***REMOVED*** else if (Message.determineType(data) == PushDataTypes.SimpleChatMessage) {
-      var chat_push_data = ActionChatMessagePushData.fromJson(data);
-      final channel = await getChannel(chat_push_data.channel);
-      State<StatefulWidget> cls = channel.ccl as State<StatefulWidget>;
-      create_or_recreat_chat_page(cls, channel, chat_push_data.action);
-    ***REMOVED*** else if (Message.determineType(data) == PushDataTypes.ParticipationMessage) {
-      var participation_push_data = ParticipationPushData.fromJson(data);
-      final channel = await getChannel(participation_push_data.channel);
-      State<StatefulWidget> cls = channel.ccl as State<StatefulWidget>;
-      create_or_recreat_chat_page(cls, channel, participation_push_data.action);
+  Future<void> handleNotificationTap(Map<String, dynamic> data) async {
+    if (Message.determineType(data) == PushDataTypes.topicChatMessage) {
+      var chatPushData = TopicChatMessagePushData.fromJson(data);
+      final channel = await getChannel(chatPushData.channel);
+      State<StatefulWidget>? cls = channel.ccl as State<StatefulWidget>?;
+      createOrRecreateTpoicPage(cls, channel);
+    ***REMOVED*** else if (Message.determineType(data) == PushDataTypes.simpleChatMessage) {
+      var chatPushData = ActionChatMessagePushData.fromJson(data);
+      final channel = await getChannel(chatPushData.channel);
+      State<StatefulWidget>? cls = channel.ccl as State<StatefulWidget>?;
+      createOrRecreateChatPage(cls, channel, chatPushData.action);
+    ***REMOVED*** else if (Message.determineType(data) == PushDataTypes.participationMessage) {
+      var participationPushData = ParticipationPushData.fromJson(data);
+      final channel = await getChannel(participationPushData.channel);
+      State<StatefulWidget>? cls = channel.ccl as State<StatefulWidget>?;
+      createOrRecreateChatPage(cls, channel, participationPushData.action);
     ***REMOVED***
   ***REMOVED***
 
-  void create_or_recreat_chat_page(
-      State<StatefulWidget> cls, ChatChannel channel, int termin_id) {
-    if (cls == null || ModalRoute.of(cls?.context)?.isActive == false) {
+  void createOrRecreateChatPage(
+      State<StatefulWidget>? cls, ChatChannel channel, int terminId) {
+    if (cls == null || ModalRoute.of(cls.context)?.isActive == false) {
       if (cls != null) {
         Navigator.pop(cls.context);
       ***REMOVED***
-      Provider.of<AbstractTermineService>(navigatorKey.currentContext)
-          .getActionWithDetails(termin_id)
-          .then((value) => navigatorKey.currentState.push(MaterialPageRoute(
+      Provider.of<AbstractTermineService>(navigatorKey!.currentContext!)
+          .getActionWithDetails(terminId)
+          .then((value) => navigatorKey!.currentState!.push(MaterialPageRoute(
               builder: (context) => ChatWindow(channel, value, true))));
     ***REMOVED***
   ***REMOVED***
 
-  void create_or_recreate_topic_chat_page(
-      State<StatefulWidget> cls, ChatChannel channel) {
-    if (cls == null || ModalRoute.of(cls?.context)?.isActive == false) {
+  void createOrRecreateTpoicPage(
+      State<StatefulWidget>? cls, ChatChannel channel) {
+    if (cls == null || ModalRoute.of(cls.context)?.isActive == false) {
       if (cls != null) {
         Navigator.pop(cls.context);
       ***REMOVED***
-      navigatorKey.currentState.push(MaterialPageRoute(
+      navigatorKey!.currentState!.push(MaterialPageRoute(
           builder: (context) => TopicChatWindow(channel, true)));
     ***REMOVED***
   ***REMOVED***
@@ -127,22 +126,22 @@ class ChatMessageService implements PushNotificationListener {
       await getChannel('action:$idNr');
 
   Future<ChatChannel> getChannel(String id) async {
-    if (channels.containsKey(id)) return channels[id];
+    if (channels.containsKey(id)) return channels[id]!;
 
-    ChatChannel channel = await this.storage_service.loadChatChannel(id);
+    ChatChannel? channel = await this.storageService?.loadChatChannel(id);
 
     if (channel == null) {
       channel = ChatChannel(id);
-      await this.storage_service.saveChatChannel(channel);
+      await this.storageService?.saveChatChannel(channel);
     ***REMOVED***
-    channels[channel.id] = channel;
+    channels[channel.id!] = channel;
     return channel;
   ***REMOVED***
 
   void createChannel(String id) {
     var newChannel = ChatChannel(id);
-    this.storage_service.saveChatChannel(newChannel);
-    channels[newChannel.id] = newChannel;
+    this.storageService?.saveChatChannel(newChannel);
+    channels[newChannel.id!] = newChannel;
   ***REMOVED***
 
   @override
