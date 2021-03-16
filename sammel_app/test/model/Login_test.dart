@@ -6,7 +6,7 @@ import 'package:sammel_app/model/Login.dart';
 import 'package:sammel_app/model/User.dart';
 
 void main() {
-  test('  serialises empty Login', () {
+  test('serialises empty Login', () {
     expect(
         jsonEncode(Login(null, null, null).toJson()),
         '{'

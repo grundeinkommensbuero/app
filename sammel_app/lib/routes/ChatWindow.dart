@@ -16,15 +16,15 @@ import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/showUsernameDialog.dart';
 
-import 'ChatListWidget.dart';
 import 'ChatInput.dart';
+import 'ChatListWidget.dart';
 
 class ChatWindow extends StatefulWidget {
-  ChatChannel channel;
-  Termin termin;
-  bool writable = true;
+  final ChatChannel channel;
+  final Termin termin;
+  final bool writable;
 
-  ChatWindow(this.channel, this.termin, this.writable, {Key key})
+  ChatWindow(this.channel, this.termin, this.writable, {Key? key})
       : super(key: key);
 
   @override
@@ -36,21 +36,20 @@ abstract class ChannelChangeListener {
 }
 
 class ChatWindowState extends State<ChatWindow> {
-  FocusNode myFocusNode;
+  FocusNode? focusNode;
   bool initialized = false;
-
   bool textFieldHasFocus = false;
-
-  ChatWindowState(this.channel, this.termin);
 
   ChatChannel channel;
   Termin termin;
-  User user;
-  AbstractPushSendService pushService;
+  User? user;
+  AbstractPushSendService? pushService;
+  late ChatListWidget widgetList;
+  ScrollController? scrollController;
 
-  // ignore: non_constant_identifier_names
-  ChatListWidget widget_list;
-  ScrollController scroll_controller;
+  ChatWindowState(this.channel, this.termin) {
+    this.widgetList = ChatListWidget(this.channel);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,17 +61,15 @@ class ChatWindowState extends State<ChatWindow> {
       initialized = true;
     }
 
-    var inputWidget = null;
-
+    var inputWidget;
     if (widget.writable) {
       inputWidget = ChatInputWidget(onSendMessage);
     }
-    this.widget_list = ChatListWidget(this.channel);
-    var header_widget = buildHeader(widget.termin);
+    var headerWidget = buildHeader(widget.termin);
     Scaffold page = Scaffold(
-        appBar: header_widget,
+        appBar: headerWidget,
         body: Column(children: [
-          Expanded(child: this.widget_list),
+          Expanded(child: this.widgetList),
           widget.writable ? inputWidget : null
         ]));
     return page;
@@ -102,13 +99,15 @@ class ChatWindowState extends State<ChatWindow> {
               overflow: TextOverflow.fade)
         ]),
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.people),
-            tooltip: 'Show Chat Member',
-            onPressed: () {
-              openMemberPage(context, termin.participants);
-            },
-          ),
+          termin.participants != null
+              ? IconButton(
+                  icon: const Icon(Icons.people),
+                  tooltip: 'Show Chat Member',
+                  onPressed: () {
+                    openMemberPage(context, termin.participants!);
+                  },
+                )
+              : Container(),
         ]);
   }
 
@@ -119,21 +118,22 @@ class ChatWindowState extends State<ChatWindow> {
           appBar: AppBar(
             title: Text('Teilnehmer*innen').tr(),
           ),
-          body: create_member_list_widget(participants),
+          body: createMemberListWidget(participants),
         );
       },
     ));
   }
 
-  Widget create_member_list_widget(List<User> participants) {
+  Widget createMemberListWidget(List<User> participants) {
     if (participants.length == 0) {
       return Text('Keine Teilnehmer*innen').tr();
     } else {
       List<Widget> users = participants
-          .where((user) => user.name != null && user.name != '')
-          .map((user) => create_user_widget(user.name, user.color))
+          .where((user) => user.name != null && user.name!.isEmpty)
+          .where((user) => user.color != null)
+          .map((user) => createUserWidget(user.name!, user.color!))
           .toList();
-      int a_count = participants
+      int aCount = participants
           .where((user) => user.name == null || user.name == '')
           .length;
       users.insert(
@@ -144,50 +144,54 @@ class ChatWindowState extends State<ChatWindow> {
                       style: TextStyle(
                           fontSize: 15, fontWeight: FontWeight.normal))
                   .tr(namedArgs: {
-                'count': (users.length + a_count).toString()
+                'count': (users.length + aCount).toString()
               })));
-      if (a_count > 0) {
-        users.add(create_user_widget(
+      if (aCount > 0) {
+        users.add(createUserWidget(
             '+ {count} weitere Teilnehmer*innen'
-                .tr(namedArgs: {'count': a_count.toString()}),
+                .tr(namedArgs: {'count': aCount.toString()}),
             Colors.black));
       }
       return SingleChildScrollView(child: Column(children: users));
     }
   }
 
-  Padding create_user_widget(String user_name, Color user_color) => Padding(
+  Padding createUserWidget(String name, Color color) => Padding(
       padding: EdgeInsets.only(left: 15, top: 5, bottom: 5),
       child: Row(children: [
         Icon(
           Icons.person,
-          color: user_color,
+          color: color,
           size: 55,
         ),
         SizedBox(
           width: 10,
         ),
-        Text(user_name,
+        Text(name,
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.normal))
       ]));
 
   onSendMessage(TextEditingController controller) async {
+    if (pushService == null) return;
     if (controller.text == "") return;
-    var name = user.name;
+    if (termin.id == null) return;
+
+    var name = user?.name;
     if (isBlank(name)) {
       name = await showUsernameDialog(context: context);
       if (name == null) return;
     }
+
     ChatMessage message = ChatMessage(
         text: controller.text,
         timestamp: DateTime.now(),
-        message_color: user.color,
-        sender_name: name,
-        user_id: user.id);
+        messageColor: user?.color,
+        senderName: name,
+        userId: user?.id);
     ChatPushData mpd =
-        ActionChatMessagePushData(message, termin.id, channel.id);
-    pushService.pushToAction(
-        widget.termin.id,
+        ActionChatMessagePushData(message, termin.id!, channel.id);
+    pushService!.pushToAction(
+        widget.termin.id!,
         mpd,
         PushNotification(
             'Neue Chat-Nachricht',
@@ -203,19 +207,19 @@ class ChatWindowState extends State<ChatWindow> {
   @override
   void initState() {
     super.initState();
-    myFocusNode = FocusNode();
-    myFocusNode.addListener(onFocusChange);
+    focusNode = FocusNode();
+    focusNode!.addListener(onFocusChange);
   }
 
   @override
   void dispose() {
     this.channel.disposeListener();
-    myFocusNode.dispose();
+    focusNode?.dispose();
     super.dispose();
   }
 
   void onFocusChange() {
-    if (myFocusNode.hasFocus) {
+    if (focusNode?.hasFocus ?? false) {
       textFieldHasFocus = true;
     }
   }
@@ -226,7 +230,7 @@ class ChatWindowState extends State<ChatWindow> {
       FocusScope.of(context).requestFocus(FocusNode());
     } else {
       this.channel.disposeListener();
-      myFocusNode.dispose();
+      focusNode?.dispose();
       Navigator.pop(context);
     }
   }

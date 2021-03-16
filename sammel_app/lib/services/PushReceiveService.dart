@@ -23,20 +23,20 @@ abstract class PushReceiveService {
 
   void unsubscribeFromTopics(List<String> topic);
 
-  Future<String> token;
+  abstract Future<String?> token;
 }
 
 class FirebaseReceiveService implements PushReceiveService {
-  static FirebaseMessaging firebaseMessaging = FirebaseMessaging();
-  static StreamController<String> _tokenStreamController =
+  static FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+  static StreamController<String?> _tokenStreamController =
       StreamController.broadcast();
   @override
-  Future<String> token = _tokenStreamController.stream.first;
+  Future<String?> token = _tokenStreamController.stream.first;
 
   final bool pullMode;
 
   FirebaseReceiveService(
-      [this.pullMode = false, FirebaseMessaging firebaseMock]) {
+      [this.pullMode = false, FirebaseMessaging? firebaseMock]) {
     if (firebaseMock != null)
       firebaseMessaging = firebaseMock;
     else if (pullMode) {
@@ -53,7 +53,7 @@ class FirebaseReceiveService implements PushReceiveService {
         .then((token) => _tokenStreamController.add(token));
 
     // For iOS request permission first.
-    firebaseMessaging.requestNotificationPermissions();
+    firebaseMessaging.requestPermission();
 
     if (await token != null) {
       var topicEnc = Uri.encodeComponent('${topicPrefix}global');
@@ -91,7 +91,7 @@ class FirebaseReceiveService implements PushReceiveService {
 }
 
 class PullService extends BackendService implements PushReceiveService {
-  Timer timer;
+  late Timer timer;
   MessageHandler onMessage = (_) async => Map();
 
   PullService(AbstractUserService userService, Backend backend)
@@ -140,5 +140,5 @@ class PullService extends BackendService implements PushReceiveService {
   }
 
   @override
-  Future<String> token = Future.value('Pull-Modus');
+  Future<String?> token = Future.value('Pull-Modus');
 }

@@ -52,7 +52,7 @@ void main() {
 
   testWidgets('marks participating actions for highlighting',
       (WidgetTester tester) async {
-    var participating = (Termin action) => action.participants[0].id == 11;
+    var participating = (Termin action) => action.participants![0].id == 11;
 
     await tester.pumpWidget(MaterialApp(
         home: Scaffold(

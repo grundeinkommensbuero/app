@@ -15,7 +15,7 @@ import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';
 
 int numberOfTimesCalled = 0;
-TermineFilter iWasCalledResult;
+TermineFilter? iWasCalledResult;
 
 Future iWasCalled(TermineFilter result) async {
   numberOfTimesCalled++;
@@ -316,12 +316,12 @@ void main() {
       await tester.pump();
 
       expect(numberOfTimesCalled, 1);
-      expect(iWasCalledResult.typen, containsAll(['Sammeln']));
-      expect(ChronoHelfer.timeToStringHHmm(iWasCalledResult.von), '19:15');
-      expect(ChronoHelfer.timeToStringHHmm(iWasCalledResult.bis), '20:21');
-      expect(iWasCalledResult.tage.map((t) => DateFormat.yMd().format(t)),
+      expect(iWasCalledResult?.typen, containsAll(['Sammeln']));
+      expect(ChronoHelfer.timeToStringHHmm(iWasCalledResult?.von), '19:15');
+      expect(ChronoHelfer.timeToStringHHmm(iWasCalledResult?.bis), '20:21');
+      expect(iWasCalledResult?.tage.map((t) => DateFormat.yMd().format(t)),
           containsAll(['12/16/2019']));
-      expect(iWasCalledResult.orte, containsAll(['kiez']));
+      expect(iWasCalledResult?.orte, containsAll(['kiez']));
     });
   });
 

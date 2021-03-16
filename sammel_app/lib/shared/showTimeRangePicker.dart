@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
 Future<TimeRange> showTimeRangePicker(
-    BuildContext context, TimeOfDay initialFrom, TimeOfDay initialTo) async {
+    BuildContext context, TimeOfDay? initialFrom, TimeOfDay? initialTo) async {
   var from = await showSingleTimePicker(context,
       initialFrom ?? TimeOfDay(hour: 12, minute: 00), 'Startzeit', 'Weiter',
       key: Key('from time picker'));
@@ -13,43 +13,42 @@ Future<TimeRange> showTimeRangePicker(
   return TimeRange(from, to);
 }
 
-Future<TimeOfDay> showSingleTimePicker(
+Future<TimeOfDay?> showSingleTimePicker(
     BuildContext context, TimeOfDay initialTime, String title, String next,
-    {Key key}) async {
-  TransitionBuilder builder = (BuildContext context, Widget timePicker) {
-    return MediaQuery(
-        key: key,
-        data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-        // aus unerklärlichen Gründen bezieht der TimePicker sein Styling seit
-        // irgendeinem Flutter-Upgrade nicht mehr aus dem Theme, sondern muss
-        // explizit gestylt werden
-        child: TimePickerTheme(
-            data: TimePickerTheme.of(context).copyWith(
-                backgroundColor: DweTheme.yellowLight,
-                dialBackgroundColor: DweTheme.yellowBright,
-                dialHandColor: DweTheme.purple,
-                hourMinuteTextColor: DweTheme.purple,
-                helpTextStyle: TextStyle(
-                    color: DweTheme.purple,
-                    fontWeight: FontWeight.bold)),
-            child: Theme(
-                data: Theme.of(context).copyWith(
-                    textButtonTheme: TextButtonThemeData(
-                        style: TextButton.styleFrom(primary: DweTheme.purple))),
-                child: timePicker)));
-  };
+    {Key? key}) async {
   return await showTimePicker(
       context: context,
       initialTime: initialTime,
       helpText: title.tr(),
       cancelText: 'Keine Auswahl'.tr(),
       confirmText: next.tr(),
-      builder: builder);
+      builder: (context, timePicker) {
+        return MediaQuery(
+            key: key,
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+            // aus unerklärlichen Gründen bezieht der TimePicker sein Styling seit
+            // irgendeinem Flutter-Upgrade nicht mehr aus dem Theme, sondern muss
+            // explizit gestylt werden
+            child: TimePickerTheme(
+                data: TimePickerTheme.of(context).copyWith(
+                    backgroundColor: DweTheme.yellowLight,
+                    dialBackgroundColor: DweTheme.yellowBright,
+                    dialHandColor: DweTheme.purple,
+                    hourMinuteTextColor: DweTheme.purple,
+                    helpTextStyle: TextStyle(
+                        color: DweTheme.purple, fontWeight: FontWeight.bold)),
+                child: Theme(
+                    data: Theme.of(context).copyWith(
+                        textButtonTheme: TextButtonThemeData(
+                            style: TextButton.styleFrom(
+                                primary: DweTheme.purple))),
+                    child: timePicker!)));
+      });
 }
 
 class TimeRange {
-  TimeOfDay from;
-  TimeOfDay to;
+  TimeOfDay? from;
+  TimeOfDay? to;
 
   TimeRange(this.from, this.to);
 }

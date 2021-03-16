@@ -6,9 +6,9 @@ class ExpandableConstrainedBox extends StatefulWidget {
   final bool expandableCondition;
 
   ExpandableConstrainedBox(
-      {this.child, this.maxHeight = 40.0, this.expandableCondition = true}) {
-    assert(child != null, 'child cannot be null');
-  }
+      {required this.child,
+      this.maxHeight = 40.0,
+      this.expandableCondition = true});
 
   @override
   State<StatefulWidget> createState() {
@@ -30,20 +30,22 @@ class _ExpandableConstraintBox extends State<ExpandableConstrainedBox>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(child: AnimatedSize(
-                        curve: Curves.decelerate,
-                        vsync: this,
-                        alignment: Alignment.topCenter,
-                        duration: Duration(milliseconds: 250),
-                        child: ConstrainedBox(
-                            key: Key('ExpandableConstraintBox constrained box'),
-                            constraints: BoxConstraints(
-                                maxHeight: expanded
-                                    ? double.infinity
-                                    : widget.maxHeight,
-                                maxWidth: 220.0,
-                                minWidth: 220.0),
-                            child: widget.child))),
+                    Expanded(
+                        child: AnimatedSize(
+                            curve: Curves.decelerate,
+                            vsync: this,
+                            alignment: Alignment.topCenter,
+                            duration: Duration(milliseconds: 250),
+                            child: ConstrainedBox(
+                                key: Key(
+                                    'ExpandableConstraintBox constrained box'),
+                                constraints: BoxConstraints(
+                                    maxHeight: expanded
+                                        ? double.infinity
+                                        : widget.maxHeight,
+                                    maxWidth: 220.0,
+                                    minWidth: 220.0),
+                                child: widget.child))),
                     Icon(
                       expanded
                           ? Icons.keyboard_arrow_up

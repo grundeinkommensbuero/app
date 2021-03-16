@@ -17,7 +17,7 @@ import 'package:sammel_app/shared/showTimeRangePicker.dart';
 class FilterWidget extends StatefulWidget {
   final Future Function(TermineFilter) onApply;
 
-  FilterWidget(this.onApply, {Key key}) : super(key: key);
+  FilterWidget(this.onApply, {Key? key}) : super(key: key);
 
   @override
   FilterWidgetState createState() => FilterWidgetState();
@@ -35,8 +35,8 @@ class FilterWidgetState extends State<FilterWidget>
   var expanded = false;
   var loading = true;
 
-  StorageService storageService;
-  Set<Kiez> allLocations;
+  StorageService? storageService;
+  Set<Kiez> allLocations = {};
 
   @override
   Widget build(BuildContext context) {
@@ -70,8 +70,7 @@ class FilterWidgetState extends State<FilterWidget>
                     FilterElement(
                       key: Key('locations button'),
                       child: Text(ortButtonBeschriftung(filter)),
-                      selectionFunction:
-                          allLocations != null ? locationSelection : null,
+                      selectionFunction: locationSelection,
                       resetFunction: resetLocations,
                     ),
                   ],
@@ -112,7 +111,7 @@ class FilterWidgetState extends State<FilterWidget>
                     setState(() => buttonText = '');
                     expanded = false;
                     onApply();
-                    storageService.saveFilter(filter);
+                    storageService?.saveFilter(filter);
                   } else {
                     setState(() => buttonText = 'Anwenden'.tr());
                     expanded = true;
@@ -135,7 +134,7 @@ class FilterWidgetState extends State<FilterWidget>
   // Kann nicht im Konstruktor ausgeführt werden, weil der Provider den context braucht, der ins build reingereicht wird
   void initialize(BuildContext context) {
     storageService = Provider.of<StorageService>(context);
-    storageService.loadFilter().then((filter) {
+    storageService!.loadFilter().then((filter) {
       setState(() {
         this.filter = filter != null ? filter : TermineFilter.leererFilter();
       });
@@ -148,7 +147,7 @@ class FilterWidgetState extends State<FilterWidget>
   }
 
   Text tageButtonBeschriftung() {
-    if (filter.tage == null || filter.tage.isEmpty) {
+    if (filter.tage.isEmpty) {
       return Text('alle Tage,').tr();
     } else {
       return Text('am {tage},').tr(namedArgs: {
@@ -160,12 +159,10 @@ class FilterWidgetState extends State<FilterWidget>
   }
 
   String artButtonBeschriftung() {
-    return filter.typen != null && filter.typen.isNotEmpty
+    return filter.typen.isNotEmpty
         ? (filter.typen.join(', ') +
-            ((filter.nurEigene != null && filter.nurEigene)
-                ? ', (${'eigene'.tr()})'
-                : ','))
-        : (filter.nurEigene != null && filter.nurEigene)
+            ((filter.nurEigene == true) ? ', (${'eigene'.tr()})' : ','))
+        : (filter.nurEigene == true)
             ? 'Eigene Aktionen'.tr() + ','
             : 'Alle Aktions-Arten,'.tr();
   }
@@ -173,9 +170,9 @@ class FilterWidgetState extends State<FilterWidget>
   static String uhrzeitButtonBeschriftung(TermineFilter filter) {
     String beschriftung = '';
     if (filter.von != null)
-      beschriftung += 'von '.tr() + ChronoHelfer.timeToStringHHmm(filter.von);
+      beschriftung += 'von '.tr() + ChronoHelfer.timeToStringHHmm(filter.von)!;
     if (filter.bis != null)
-      beschriftung += ' bis ' + ChronoHelfer.timeToStringHHmm(filter.bis);
+      beschriftung += ' bis ' + ChronoHelfer.timeToStringHHmm(filter.bis)!;
     if (beschriftung.isEmpty) beschriftung = 'jederzeit'.tr();
     beschriftung += ',';
     return beschriftung;
@@ -183,7 +180,7 @@ class FilterWidgetState extends State<FilterWidget>
 
   String ortButtonBeschriftung(TermineFilter filter) {
     const maxLength = 500;
-    return (filter?.orte == null || filter.orte.isEmpty)
+    return (filter.orte.isEmpty)
         ? 'überall'.tr()
         : filter.orte.map((ort) => ort).toList().join(", ").length < maxLength
             ? 'in ${filter.orte.map((ort) => ort).toList().join(", ")}'
@@ -204,10 +201,10 @@ class FilterWidgetState extends State<FilterWidget>
       'Plakatieren',
       'Kundgebung'
     ];
-    List<String> ausgewTypen = List<String>()
-      ..addAll(filter.typen == null ? [] : filter.typen);
-    bool nurEigene = filter.nurEigene == null ? false : filter.nurEigene;
-    bool immerEigene = filter.immerEigene == null ? true : filter.immerEigene;
+    List<String> ausgewTypen = []
+      ..addAll(filter.typen);
+    bool nurEigene = filter.nurEigene == true;
+    bool immerEigene = filter.immerEigene == true;
 
     await showDialog<List<String>>(
         context: context,
@@ -242,7 +239,6 @@ class FilterWidgetState extends State<FilterWidget>
                             immerEigene = neuerWert;
                           });
                         }),
-
                   ]
                     ..add(Divider(
                         indent: 16, endIndent: 16, thickness: 1, height: 8))
@@ -252,9 +248,9 @@ class FilterWidgetState extends State<FilterWidget>
                               activeColor: DweTheme.yellowLight,
                               value: ausgewTypen.contains(typ),
                               title: Text(typ).tr(),
-                              onChanged: (neuerWert) {
+                              onChanged: (bool? neuerWert) {
                                 setDialogState(() {
-                                  if (neuerWert) {
+                                  if (neuerWert == true) {
                                     ausgewTypen.add(typ);
                                   } else {
                                     ausgewTypen.remove(typ);
@@ -275,9 +271,9 @@ class FilterWidgetState extends State<FilterWidget>
   }
 
   resetType() => setState(() {
-    filter.typen = [];
-    filter.nurEigene = false;
-  } );
+        filter.typen = [];
+        filter.nurEigene = false;
+      });
 
   daysSelection() async {
     var selectedDates = await showMultipleDatePicker(filter.tage, context,
@@ -320,10 +316,13 @@ class FilterWidgetState extends State<FilterWidget>
 class FilterElement extends StatelessWidget {
   final _zeroPadding = MaterialTapTargetSize.shrinkWrap;
   final Widget child;
-  final Function selectionFunction;
-  final Function resetFunction;
+  final Function()? selectionFunction;
+  final Function()? resetFunction;
 
-  FilterElement({key, this.child, this.selectionFunction, this.resetFunction})
+  static emptyFunction() => null;
+
+  FilterElement(
+      {key, required this.child, this.selectionFunction, this.resetFunction})
       : super(key: key);
 
   @override

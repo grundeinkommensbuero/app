@@ -1,19 +1,18 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:calendarro/calendarro.dart';
-import 'package:calendarro/date_utils.dart';
+import 'package:calendarro/date_utils.dart' as cal;
 import 'package:calendarro/default_day_tile.dart';
 import 'package:calendarro/default_weekday_labels_row.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
-Future<List<DateTime>> showMultipleDatePicker(
+Future<List<DateTime>?> showMultipleDatePicker(
     List<DateTime> initDates, BuildContext context,
     {key: Key, multiMode = true, maxTage = 0}) async {
-  initDates ??= [];
   DateTime displayedMonth =
       initDates.isNotEmpty ? initDates.first : DateTime.now();
-  List<DateTime> dates = []..addAll(initDates ?? []);
+  List<DateTime> dates = []..addAll(initDates);
 
   var selectedDatesFromDialog = await showDialog<List<DateTime>>(
       context: context,
@@ -34,13 +33,14 @@ Future<List<DateTime>> showMultipleDatePicker(
                           shape: CircleBorder(),
                           child: Icon(Icons.arrow_left),
                           onPressed: () => setDialogState(() => displayedMonth =
-                              Jiffy(displayedMonth).subtract(months: 1)),
+                              (Jiffy(displayedMonth)..subtract(months: 1))
+                                  .dateTime),
                         )),
                         Flexible(
                           child: Column(children: [
                             Text(
                                 DateFormat.MMMM(Localizations.localeOf(context)
-                                        ?.languageCode)
+                                        .languageCode)
                                     .format(displayedMonth),
                                 key: Key('current month'),
                                 style: TextStyle(fontWeight: FontWeight.bold)),
@@ -54,7 +54,7 @@ Future<List<DateTime>> showMultipleDatePicker(
                           shape: CircleBorder(),
                           child: Icon(Icons.arrow_right),
                           onPressed: () => setDialogState(() => displayedMonth =
-                              Jiffy(displayedMonth).add(months: 1)),
+                              (Jiffy(displayedMonth)..add(months: 1)).dateTime),
                         )),
                       ],
                     )),
@@ -63,8 +63,10 @@ Future<List<DateTime>> showMultipleDatePicker(
                       height: 260.0,
                       width: 1.0,
                       child: Calendarro(
-                        startDate: Jiffy(displayedMonth).startOf("month"),
-                        endDate: Jiffy(displayedMonth).endOf("month"),
+                        startDate: (Jiffy(displayedMonth)..startOf(Units.MONTH))
+                            .dateTime,
+                        endDate: (Jiffy(displayedMonth)..endOf(Units.MONTH))
+                            .dateTime,
                         selectedDates: dates,
                         selectedSingleDate:
                             initDates.isNotEmpty ? initDates[0] : null,
@@ -115,12 +117,13 @@ class DweDayTileBuilder extends DayTileBuilder {
 // Warning inherited from CalendarroItem
 // ignore: must_be_immutable
 class DweCalendarroDayItem extends CalendarroDayItem {
-  DweCalendarroDayItem({DateTime date, CalendarroState calendarroState, onTap})
+  DweCalendarroDayItem(
+      {required DateTime date, required CalendarroState calendarroState, onTap})
       : super(date: date, calendarroState: calendarroState, onTap: onTap);
 
   @override
   Widget build(BuildContext context) {
-    bool isWeekend = DateUtils.isWeekend(date);
+    bool isWeekend = cal.DateUtils.isWeekend(date);
     bool dayBeforeSelected =
         calendarroState.isDateSelected(date.subtract(Duration(days: 1)));
     bool daySelected = calendarroState.isDateSelected(date);
@@ -129,10 +132,10 @@ class DweCalendarroDayItem extends CalendarroDayItem {
     var textColor = isWeekend ? DweTheme.purple : Colors.black;
     if (daySelected) textColor = DweTheme.yellow;
     var fontWeight = isWeekend ? FontWeight.bold : FontWeight.normal;
-    bool isToday = DateUtils.isToday(date);
+    bool isToday = cal.DateUtils.isToday(date);
     calendarroState = Calendarro.of(context);
 
-    BoxDecoration boxDecoration;
+    late BoxDecoration boxDecoration;
     if (daySelected) {
       var leftborder = dayBeforeSelected ? Radius.zero : Radius.circular(20.0);
       var rightborder = dayAfterSelected ? Radius.zero : Radius.circular(20.0);
@@ -188,15 +191,16 @@ class GerCalendarroWeekdayLabelsView extends CalendarroWeekdayLabelsView {
 showTooManyDatesDialog(context, maxTage) {
   showDialog(
       context: context,
-      child: AlertDialog(
-        title: Text('Zu viele Tage'.tr()),
-        content: SelectableText('Bitte wähle {maxTage} Tage oder weniger aus.'
-            .tr(namedArgs: {'maxTage': maxTage.toString()})),
-        actions: <Widget>[
-          RaisedButton(
-            child: Text('Schließen').tr(),
-            onPressed: () => Navigator.pop(context),
-          )
-        ],
-      ));
+      builder: (context) => AlertDialog(
+            title: Text('Zu viele Tage'.tr()),
+            content: SelectableText(
+                'Bitte wähle {maxTage} Tage oder weniger aus.'
+                    .tr(namedArgs: {'maxTage': maxTage.toString()})),
+            actions: <Widget>[
+              RaisedButton(
+                child: Text('Schließen').tr(),
+                onPressed: () => Navigator.pop(context),
+              )
+            ],
+          ));
 }

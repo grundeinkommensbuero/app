@@ -8,8 +8,8 @@ import 'package:sammel_app/shared/MessageException.dart';
 import 'package:sammel_app/shared/ServerException.dart';
 
 class ErrorService {
-  static BuildContext _context;
-  static List<List<String>> errorQueue = List<List<String>>();
+  static BuildContext? _context;
+  static List<List<String>> errorQueue = [];
   static List<String> displayedTypes = [];
 
   static const EMAIL =
@@ -23,7 +23,7 @@ class ErrorService {
         showErrorDialog(error[0], error[1], key: Key('error dialog')));
   }
 
-  static handleError(error, StackTrace stacktrace, {String context}) async {
+  static handleError(error, StackTrace stacktrace, {String? context}) async {
     print('Fehler aufgetreten: $error\n$stacktrace');
 
     if (context != null) context = context.tr();
@@ -87,7 +87,7 @@ class ErrorService {
     if (displayedTypes.contains(title)) return;
     displayedTypes.add(title);
     showDialog(
-        context: _context,
+        context: _context!,
         builder: (_) => AlertDialog(
               key: key,
               title: Text(title),
@@ -105,7 +105,7 @@ class ErrorService {
                 RaisedButton(
                   key: Key('error dialog close button'),
                   child: Text('Okay...'),
-                  onPressed: () => Navigator.pop(_context),
+                  onPressed: () => Navigator.pop(_context!),
                 )
               ],
             )).whenComplete(() => displayedTypes.remove(title));

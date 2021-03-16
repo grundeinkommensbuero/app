@@ -4,7 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 
 class ConstJsonAssetLoader extends AssetLoader {
   @override
-  Future<Map<String, dynamic>> load(String _, Locale locale) async =>
+  Future<Map<String, dynamic>?> load(String _, Locale locale) async =>
       languages[locale.languageCode];
 }
 

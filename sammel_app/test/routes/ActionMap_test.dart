@@ -24,7 +24,7 @@ void main() {
   });
 
   group('action marker', () {
-    Widget actionMap;
+    late Widget actionMap;
     setUp(() {
       actionMap = MaterialApp(
           home: Scaffold(
@@ -78,7 +78,7 @@ void main() {
 
     testWidgets('are higlighted for past actions', (WidgetTester tester) async {
       var isMyAction = (Termin action) => action.id == 2;
-      var iAmParticipant = (Termin action) => action.participants.isNotEmpty;
+      var iAmParticipant = (Termin action) => action.participants!.isNotEmpty;
 
       await tester.pumpWidget(MaterialApp(
               home: Scaffold(
@@ -109,7 +109,7 @@ void main() {
 
     testWidgets('are higlighted for joined actions',
         (WidgetTester tester) async {
-      var iAmParticipant = (Termin action) => action.participants.isNotEmpty;
+      var iAmParticipant = (Termin action) => action.participants!.isNotEmpty;
 
       await tester.pumpWidget(MaterialApp(
               home: Scaffold(
@@ -189,7 +189,7 @@ void main() {
     await tester.pump();
 
     expect(find.byKey(Key('list location info dialog')), findsOneWidget);
-    expect(find.text(curry36().name), findsOneWidget);
+    expect(find.text(curry36().name!), findsOneWidget);
   });
 
 //  Funktioniert nicht wegen null-Exception im dispose vom User-Location-Plugin

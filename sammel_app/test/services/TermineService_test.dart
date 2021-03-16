@@ -17,7 +17,7 @@ import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';
 
 void main() {
-  UserService userService;
+  late UserService userService;
   PushNotificationManager pushManager = PushNotificationManagerMock();
   StammdatenService stammdatenService = StammdatenServiceMock();
   final localNotificationService = LocalNotificationServiceMock();
@@ -27,7 +27,7 @@ void main() {
   });
 
   group('DemoTermineService', () {
-    DemoTermineService service;
+    late DemoTermineService service;
     setUp(() {
       service = DemoTermineService(stammdatenService, userService);
     });
@@ -44,7 +44,7 @@ void main() {
           Termin(
               null,
               DateTime.now(),
-              Jiffy(DateTime.now()).add(days: 1),
+              (Jiffy(DateTime.now())..add(days: 1)).dateTime,
               ffAlleeNord(),
               'Sammeln',
               52.52116,
@@ -78,7 +78,7 @@ void main() {
       var termine = await service.termine;
       expect(termine[0].typ, 'Sammeln');
       expect(termine[0].ort.name, 'Frankfurter Allee Nord');
-      expect(termine[0].details.kontakt, 'Ruft mich an unter 01234567');
+      expect(termine[0].details!.kontakt, 'Ruft mich an unter 01234567');
 
       await service.saveAction(
           TerminTestDaten.einTermin()
@@ -91,7 +91,7 @@ void main() {
       termine = await service.termine;
       expect(termine[0].typ, 'Infoveranstaltung');
       expect(termine[0].ort.name, 'Plänterwald');
-      expect(termine[0].details.kontakt, 'Test123');
+      expect(termine[0].details!.kontakt, 'Test123');
     });
 
     test('joinAction adds user to action', () async {
@@ -101,7 +101,7 @@ void main() {
       await service.joinAction(1);
 
       termine = await service.termine;
-      expect(termine[0].participants.map((e) => e.id), containsAll([11, 12]));
+      expect(termine[0].participants!.map((e) => e.id), containsAll([11, 12]));
     });
 
     test('joinAction ignores if user already partakes', () async {
@@ -111,7 +111,7 @@ void main() {
       await service.joinAction(1);
 
       termine = await service.termine;
-      expect(termine[0].participants.map((e) => e.id), containsAll([11, 12]));
+      expect(termine[0].participants!.map((e) => e.id), containsAll([11, 12]));
     });
 
     test('leaveAction removes user from action', () async {
@@ -121,7 +121,7 @@ void main() {
       await service.leaveAction(1);
 
       termine = await service.termine;
-      expect(termine[0].participants.map((e) => e.id), containsAll([12]));
+      expect(termine[0].participants!.map((e) => e.id), containsAll([12]));
     });
 
     test('leaveAction ignores if user doesnt partake', () async {
@@ -131,24 +131,24 @@ void main() {
       await service.leaveAction(1);
 
       termine = await service.termine;
-      expect(termine[0].participants.map((e) => e.id), containsAll([12]));
+      expect(termine[0].participants!.map((e) => e.id), containsAll([12]));
     });
   });
 
   group('TermineService', () {
-    Backend backend;
-    TermineService service;
+    late Backend backend;
+    late TermineService service;
 
     setUp(() {
       backend = BackendMock();
       service = TermineService(stammdatenService, userService, backend,
-          pushManager, localNotificationService, null);
+          pushManager, localNotificationService, GlobalKey());
       service.userService = userService;
     });
 
     test('loadActions calls right path and serializes Filter correctly',
         () async {
-      when(backend.post('service/termine', any, any)).thenAnswer((_) =>
+      when(backend.post('service/termine', '', {})).thenAnswer((_) =>
           Future<HttpClientResponseBody>.value(
               HttpClientResponseBodyMock([], 200)));
 
@@ -186,14 +186,14 @@ void main() {
       expect(actions[0].typ, 'Sammeln');
       expect(actions[0].latitude, 52.52116);
       expect(actions[0].longitude, 13.41331);
-      expect(actions[0].participants.length, 1);
-      expect(actions[0].participants[0].id, 11);
-      expect(actions[0].participants[0].name, 'Karl Marx');
-      expect(actions[0].participants[0].color.value, Colors.red.value);
-      expect(actions[0].details.beschreibung,
+      expect(actions[0].participants!.length, 1);
+      expect(actions[0].participants![0].id, 11);
+      expect(actions[0].participants![0].name, 'Karl Marx');
+      expect(actions[0].participants![0].color?.value, Colors.red.value);
+      expect(actions[0].details!.beschreibung,
           'Bringe Westen und Klämmbretter mit');
-      expect(actions[0].details.treffpunkt, 'Weltzeituhr');
-      expect(actions[0].details.kontakt, 'Ruft an unter 012345678');
+      expect(actions[0].details!.treffpunkt, 'Weltzeituhr');
+      expect(actions[0].details!.kontakt, 'Ruft an unter 012345678');
       expect(actions[1].id, 0);
       expect(actions[1].beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(actions[1].ende, DateTime(2019, 11, 4, 18, 9, 0));
@@ -203,11 +203,11 @@ void main() {
       expect(actions[1].typ, 'Sammeln');
       expect(actions[1].latitude, 52.52116);
       expect(actions[1].longitude, 13.41331);
-      expect(actions[1].participants.length, 0);
-      expect(actions[1].details.beschreibung,
+      expect(actions[1].participants!.length, 0);
+      expect(actions[1].details!.beschreibung,
           'Bringe Westen und Klämmbretter mit');
-      expect(actions[1].details.treffpunkt, 'Weltzeituhr');
-      expect(actions[1].details.kontakt, 'Ruft an unter 012345678');
+      expect(actions[1].details!.treffpunkt, 'Weltzeituhr');
+      expect(actions[1].details!.kontakt, 'Ruft an unter 012345678');
     });
 
     test(
@@ -262,13 +262,13 @@ void main() {
       expect(action.typ, 'Sammeln');
       expect(action.latitude, 52.52116);
       expect(action.longitude, 13.41331);
-      expect(action.participants.length, 1);
-      expect(action.participants[0].id, 11);
-      expect(action.participants[0].name, 'Karl Marx');
-      expect(action.participants[0].color.value, Colors.red.value);
-      expect(action.details.beschreibung, 'Bringe Westen und Klämmbretter mit');
-      expect(action.details.treffpunkt, 'Weltzeituhr');
-      expect(action.details.kontakt, 'Ruft an unter 012345678');
+      expect(action.participants!.length, 1);
+      expect(action.participants![0].id, 11);
+      expect(action.participants![0].name, 'Karl Marx');
+      expect(action.participants![0].color?.value, Colors.red.value);
+      expect(action.details!.beschreibung, 'Bringe Westen und Klämmbretter mit');
+      expect(action.details!.treffpunkt, 'Weltzeituhr');
+      expect(action.details!.kontakt, 'Ruft an unter 012345678');
     });
 
     test('getActionWithDetails calls right path', () async {
@@ -297,13 +297,13 @@ void main() {
       expect(action.typ, 'Sammeln');
       expect(action.latitude, 52.52116);
       expect(action.longitude, 13.41331);
-      expect(action.participants.length, 1);
-      expect(action.participants[0].id, 11);
-      expect(action.participants[0].name, 'Karl Marx');
-      expect(action.participants[0].color.value, Colors.red.value);
-      expect(action.details.beschreibung, 'Bringe Westen und Klämmbretter mit');
-      expect(action.details.treffpunkt, 'Weltzeituhr');
-      expect(action.details.kontakt, 'Ruft an unter 012345678');
+      expect(action.participants!.length, 1);
+      expect(action.participants![0].id, 11);
+      expect(action.participants![0].name, 'Karl Marx');
+      expect(action.participants![0].color?.value, Colors.red.value);
+      expect(action.details!.beschreibung, 'Bringe Westen und Klämmbretter mit');
+      expect(action.details!.treffpunkt, 'Weltzeituhr');
+      expect(action.details!.kontakt, 'Ruft an unter 012345678');
     });
 
     test(

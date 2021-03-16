@@ -12,6 +12,7 @@ import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/AuthFehler.dart';
+import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
@@ -21,7 +22,6 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
-import 'package:sammel_app/services/ChatMessageService.dart';
 
 import '../model/Termin_test.dart';
 import '../shared/Mocks.dart';
@@ -39,7 +39,7 @@ final _pushManager = PushNotificationManagerMock();
 void main() {
   mockTranslation();
 
-  MultiProvider termineSeiteWidget;
+  late MultiProvider termineSeiteWidget;
 
   setUp(() {
     when(_storageService.loadFilter()).thenAnswer((_) async => null);
@@ -337,7 +337,7 @@ void main() {
       await tester.tap(find.byKey(Key('join action button')));
       await tester.pump();
 
-      verify(_termineService.joinAction(action.id)).called(1);
+      verify(_termineService.joinAction(action.id!)).called(1);
       expect(state.termine[0].participants, containsAll([_userService.me]));
       expect(find.byKey(Key('join action button')), findsNothing);
       expect(find.byKey(Key('leave action button')), findsOneWidget);
@@ -370,7 +370,7 @@ void main() {
       await tester.tap(find.byKey(Key('leave action button')));
       await tester.pump();
 
-      verify(_termineService.leaveAction(action.id)).called(1);
+      verify(_termineService.leaveAction(action.id!)).called(1);
       expect(state.termine[0].participants, isEmpty);
       expect(find.byKey(Key('leave action button')), findsNothing);
       expect(find.byKey(Key('join action button')), findsOneWidget);
@@ -411,7 +411,9 @@ void main() {
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
           tempVorstadt(),
           [today],
-          TerminDetails('test1', 'test2', 'test3'),
+          'test1',
+          'test2',
+          'test3',
           LatLng(52.49653, 13.43762));
 
       when(_termineService.createAction(any, any)).thenAnswer((_) async =>
@@ -424,7 +426,10 @@ void main() {
               52.52116,
               13.41331,
               [],
-              editorState.action.terminDetails));
+              TerminDetails(
+                  editorState.action.treffpunkt!,
+                  editorState.action.beschreibung!,
+                  editorState.action.kontakt!)));
 
       await tester.tap(find.byKey(Key('action editor finish button')));
       await tester.pumpAndSettle();
@@ -473,7 +478,9 @@ void main() {
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
           tempVorstadt(),
           [today],
-          TerminDetails('test1', 'test2', 'test3'),
+          'test1',
+          'test2',
+          'test3',
           LatLng(52.49653, 13.43762));
 
       when(_termineService.createAction(any, any)).thenAnswer(
@@ -486,7 +493,8 @@ void main() {
             52.52116,
             13.41331,
             [],
-            editorState.action.terminDetails),
+            TerminDetails(editorState.action.treffpunkt!,
+                editorState.action.beschreibung!, editorState.action.kontakt!)),
       );
 
       await tester.tap(find.byKey(Key('action editor finish button')));
@@ -536,7 +544,9 @@ void main() {
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
           tempVorstadt(),
           [today],
-          TerminDetails('test1', 'test2', 'test3'),
+          'test1',
+          'test2',
+          'test3',
           LatLng(52.49653, 13.43762));
 
       when(_termineService.createAction(any, any)).thenAnswer((_) async =>
@@ -549,7 +559,10 @@ void main() {
               52.52116,
               13.41331,
               [],
-              editorState.action.terminDetails));
+              TerminDetails(
+                  editorState.action.treffpunkt!,
+                  editorState.action.beschreibung!,
+                  editorState.action.kontakt!)));
 
       await tester.tap(find.byKey(Key('action editor finish button')));
       await tester.pumpAndSettle();
@@ -598,7 +611,9 @@ void main() {
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
           tempVorstadt(),
           [today],
-          TerminDetails('test1', 'test2', 'test3'),
+          'test1',
+          'test2',
+          'test3',
           LatLng(52.49653, 13.43762));
 
       when(_termineService.createAction(any, any))
@@ -728,7 +743,7 @@ void main() {
 
       var listView = find.byType(ListView);
 
-      List<String> keys = tester
+      List<String?> keys = tester
           .widgetList(
               find.descendant(of: listView, matching: find.byType(Text)))
           .map((widget) => (widget as Text).data)
@@ -788,7 +803,7 @@ void main() {
 
       var listView = find.byType(ListView);
 
-      List<String> keys = tester
+      List<String?> keys = tester
           .widgetList(
               find.descendant(of: listView, matching: find.byType(Text)))
           .map((widget) => (widget as Text).data)
@@ -837,7 +852,7 @@ void main() {
 
       var listView = find.byType(ListView);
 
-      List<String> keys = tester
+      List<String?> keys = tester
           .widgetList(
               find.descendant(of: listView, matching: find.byType(Text)))
           .map((widget) => (widget as Text).data)
@@ -1081,7 +1096,9 @@ void main() {
         await tester.pumpAndSettle(Duration(seconds: 10));
 
         expect(find.byKey(Key('error dialog')), findsOneWidget);
-        expect(find.text('Aktion konnte nicht gelöscht werden. message \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an app@dwenteignen.de'),
+        expect(
+            find.text(
+                'Aktion konnte nicht gelöscht werden. message \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an app@dwenteignen.de'),
             findsOneWidget);
       });
 
@@ -1107,13 +1124,15 @@ void main() {
 
         expect(find.byKey(Key('error dialog')), findsOneWidget);
         expect(
-            find.text('Aktion konnte nicht gelöscht werden. message \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an app@dwenteignen.de'), findsOneWidget);
+            find.text(
+                'Aktion konnte nicht gelöscht werden. message \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an app@dwenteignen.de'),
+            findsOneWidget);
       });
     });
   });
 
   group('action token', () {
-    TermineSeiteState actionPageState;
+    late TermineSeiteState actionPageState;
     setUp(() {
       actionPageState = TermineSeiteState();
       actionPageState.storageService = _storageService;
@@ -1149,7 +1168,7 @@ void main() {
           .thenAnswer((_) async => 'storedToken1');
       when(_storageService.loadActionToken(2))
           .thenAnswer((_) async => 'storedToken2');
-      when(_termineService.saveAction(any, any)).thenAnswer((_) => null);
+      when(_termineService.saveAction(any, any)).thenAnswer((_) async => null);
 
       await actionPageState.saveAction(action1);
       await actionPageState.saveAction(action2);
@@ -1239,7 +1258,7 @@ void main() {
   });
 
   group('createAndAddAction', () {
-    TermineSeiteState state;
+    late TermineSeiteState state;
     setUpUI((tester) async {
       await tester.pumpWidget(termineSeiteWidget);
 

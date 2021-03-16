@@ -1,8 +1,8 @@
 class ListLocation {
   String id;
-  String name;
-  String street;
-  String number;
+  String? name;
+  String? street;
+  String? number;
   double latitude;
   double longitude;
 

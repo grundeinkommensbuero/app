@@ -7,7 +7,7 @@ import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageService {
-  Future<SharedPreferences> _prefs;
+  late Future<SharedPreferences> _prefs;
 
   Future<SharedPreferences> get prefs => _prefs.timeout(Duration(seconds: 5));
 
@@ -36,14 +36,14 @@ class StorageService {
       .then((prefs) => prefs.remove('$_ACTION:$id'))
       .whenComplete(() => unmarkActionIdAsStored(id));
 
-  Future<String> loadActionToken(int id) =>
+  Future<String?> loadActionToken(int id) =>
       prefs.then((prefs) => prefs.getString('$_ACTION:${id.toString()}'));
 
   Future<bool> saveChatChannel(ChatChannel channel) => prefs.then((prefs) =>
       prefs.setString('$_CHANNEL:${channel.id}', jsonEncode(channel.toJson())));
 
-  Future<ChatChannel> loadChatChannel(String id) async => prefs.then((prefs) {
-        var json = prefs.getString('$_CHANNEL:${id}');
+  Future<ChatChannel?> loadChatChannel(String id) async => prefs.then((prefs) {
+        var json = prefs.getString('$_CHANNEL:$id');
         if (json == null) return null;
         return ChatChannel.fromJSON(jsonDecode(json));
       });
@@ -59,14 +59,14 @@ class StorageService {
           prefs.setStringList(_EVALUATIONLIST, list..add(id.toString()))));
 
   Future<List<int>> loadAllStoredActionIds() => prefs.then((prefs) async {
-        List<String> stringList = prefs.getStringList(_ACTIONLIST);
+        List<String>? stringList = prefs.getStringList(_ACTIONLIST);
         if (stringList == null) return [];
         List<int> intList = stringList.map((id) => int.parse(id)).toList();
         return intList;
       });
 
   Future<List<int>> loadAllStoredEvaluations() => prefs.then((prefs) async {
-        List<String> stringList = prefs.getStringList(_EVALUATIONLIST);
+        List<String>? stringList = prefs.getStringList(_EVALUATIONLIST);
         if (stringList == null) return [];
         List<int> intList = stringList.map((id) => int.parse(id)).toList();
         return intList;
@@ -87,7 +87,7 @@ class StorageService {
   Future<bool> saveFilter(TermineFilter filter) => prefs
       .then((prefs) => prefs.setString(_FILTER, jsonEncode(filter.toJson())));
 
-  Future<TermineFilter> loadFilter() => prefs.then((prefs) {
+  Future<TermineFilter?> loadFilter() => prefs.then((prefs) {
         var filter = prefs.getString(_FILTER);
         if (filter == null) return TermineFilter.leererFilter();
         return TermineFilter.fromJSON(jsonDecode(filter));
@@ -98,7 +98,7 @@ class StorageService {
   Future<bool> saveUser(User user) =>
       prefs.then((prefs) => prefs.setString(_USER, jsonEncode(user.toJson())));
 
-  Future<User> loadUser() => prefs.then((prefs) {
+  Future<User?> loadUser() => prefs.then((prefs) {
         var user = prefs.getString(_USER);
         if (user == null) return null;
         return User.fromJSON(jsonDecode(user));
@@ -111,7 +111,7 @@ class StorageService {
       await Future.delayed(Duration(milliseconds: 500));
       return prefs.getString(_SECRET) == null;
     });
-    var secret = prefs.getString(_SECRET);
+    var secret = prefs.getString(_SECRET)!;
     return secret;
   }
 
@@ -142,13 +142,13 @@ class StorageService {
   Future<bool> saveNotificationInterval(String interval) =>
       prefs.then((prefs) => prefs.setString(_NOTIF_INTERVAL, interval));
 
-  Future<String> loadNotificationInterval() =>
+  Future<String?> loadNotificationInterval() =>
       prefs.then((prefs) => prefs.getString(_NOTIF_INTERVAL));
 
   Future<bool> saveContact(String interval) =>
       prefs.then((prefs) => prefs.setString(_CONTACT, interval));
 
-  Future<String> loadContact() =>
+  Future<String?> loadContact() =>
       prefs.then((prefs) => prefs.getString(_CONTACT));
 
   // for Debugging only

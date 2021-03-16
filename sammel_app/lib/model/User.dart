@@ -1,9 +1,9 @@
 import 'dart:ui';
 
 class User {
-  int id;
-  String name;
-  Color color;
+  int? id;
+  String? name;
+  Color? color;
 
   User(this.id, this.name, this.color);
 
@@ -16,7 +16,7 @@ class User {
   User.fromJSON(Map<dynamic, dynamic> json) {
     this.id = json['id'];
     this.name = json['name'];
-    if (json['color'] != null) this.color = Color(json['color']);
+    this.color = json['color'] != null ? Color(json['color']) : null;
   }
 
   Map<String, dynamic> toJson() => {

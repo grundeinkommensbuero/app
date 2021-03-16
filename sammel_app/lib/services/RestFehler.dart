@@ -1,5 +1,5 @@
 class RestFehler implements Exception {
-  String message;
+  late String message;
 
   RestFehler(String reason) {
     this.message = '$reason';

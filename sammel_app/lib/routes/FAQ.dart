@@ -13,9 +13,9 @@ class FAQ extends StatefulWidget {
 
 class FAQState extends State<FAQ> {
   final searchInputController = TextEditingController();
-  int opened;
+  int? opened;
   List<FAQItem> items = FAQService.loadItems('');
-  ScrollController controller;
+  ScrollController? controller;
 
   @override
   void initState() {
@@ -50,7 +50,10 @@ class FAQState extends State<FAQ> {
                     borderSide: BorderSide.none,
                     borderRadius: BorderRadius.circular(20.0)),
                 hintText: 'Durchsuchen'.tr()),
-            onChanged: (text){controller.jumpTo(0); setState(() => items = FAQService.loadItems(text));},
+            onChanged: (text) {
+              controller?.jumpTo(0);
+              setState(() => items = FAQService.loadItems(text));
+            },
           ),
         ),
       ),
@@ -64,7 +67,7 @@ class FAQState extends State<FAQ> {
                         opened = null;
                       else
                         opened = items[index].id;
-                      primaryFocus.unfocus();
+                      primaryFocus?.unfocus();
                     }),
                 child: FAQTile(items[index],
                     extended: opened == items[index].id))),
@@ -78,7 +81,7 @@ class FAQTile extends StatelessWidget {
   final FAQItem item;
   final bool extended;
 
-  FAQTile(this.item, {this.extended}) : super(key: Key('item tile'));
+  FAQTile(this.item, {this.extended = false}) : super(key: Key('item tile'));
 
   @override
   Widget build(BuildContext context) {

@@ -8,7 +8,7 @@ import 'package:sammel_app/services/ErrorService.dart';
 import 'UserService.dart';
 
 abstract class AbstractPushSendService extends BackendService {
-  AbstractPushSendService(userService, [Backend backendMock])
+  AbstractPushSendService(userService, Backend backendMock)
       : super(userService, backendMock);
 
   pushToDevices(
@@ -21,7 +21,7 @@ class PushSendService extends AbstractPushSendService {
   PushSendService(AbstractUserService userService, Backend backend)
       : super(userService, backend);
 
-  pushToDevices(List<String> recipients, PushData data,
+  pushToDevices(List<String>? recipients, PushData data,
       PushNotification notification) async {
     if (recipients == null || recipients.isEmpty) {
       throw MissingTargetError(
@@ -40,7 +40,7 @@ class PushSendService extends AbstractPushSendService {
   }
 
   pushToAction(
-      int actionId, PushData data, PushNotification notification) async {
+      int? actionId, PushData data, PushNotification notification) async {
     if (actionId == null) {
       throw MissingTargetError(
           'Für Push-Nachrichten an Aktionen muss die Aktions-ID angegeben werden.');
@@ -65,7 +65,7 @@ class DemoPushSendService extends AbstractPushSendService {
   get stream => controller.stream;
 
   @override
-  pushToDevices(List<String> recipients, PushData data,
+  pushToDevices(List<String>? recipients, PushData data,
       PushNotification notification) async {
     if (recipients == null || recipients.isEmpty) {
       throw MissingTargetError(

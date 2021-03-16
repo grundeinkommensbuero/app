@@ -12,7 +12,7 @@ import 'TestdatenVorrat.dart';
 void main() {
   mockTranslation();
 
-  String result;
+  String? result;
   var _userService = UserServiceMock();
   var hideHint = false;
 

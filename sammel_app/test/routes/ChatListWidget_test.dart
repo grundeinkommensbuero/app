@@ -11,9 +11,9 @@ import 'package:sammel_app/services/UserService.dart';
 import '../shared/Mocks.dart';
 
 void main() {
-  Widget widget;
+  late Widget widget;
   UserService _userService;
-  ChatChannel channel;
+  late ChatChannel channel;
 
   setUpUI((tester) async {
     Localization.load(Locale('en'), translations: TranslationsMock());

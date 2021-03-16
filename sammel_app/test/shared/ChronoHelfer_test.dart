@@ -14,7 +14,7 @@ void main() {
 
     test('ergaenzt 00 Sekunden', () {
       var string =
-          ChronoHelfer.timeToStringHHmmss(TimeOfDay(hour: 1, minute: 2));
+          ChronoHelfer.timeToStringHHmmss(TimeOfDay(hour: 1, minute: 2))!;
       expect(string.endsWith(":00"), true);
     });
 

@@ -1,17 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'dart:io';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:sammel_app/shared/DweTheme.dart';
 
 class ChatInputWidget extends StatefulWidget {
-  Function(TextEditingController) onSendMessage;
-  TextEditingController textEditingController = TextEditingController();
+  final Function(TextEditingController) onSendMessage;
+  final TextEditingController textEditingController = TextEditingController();
 
-  ChatInputWidget(this.onSendMessage, {Key key}) : super(key: key);
+  ChatInputWidget(this.onSendMessage, {Key? key}) : super(key: key);
 
   @override
   ChatInputState createState() => ChatInputState();

@@ -13,13 +13,13 @@ import 'BackendService.dart';
 import 'ErrorService.dart';
 
 abstract class AbstractPushNotificationManager {
-  void register_message_callback(String id, PushNotificationListener callback);
+  void registerMessageCallback(String id, PushNotificationListener callback);
 
   void unsubscribeFromKiezActionTopics(List<String> kieze, String interval);
 
   void subscribeToKiezActionTopics(List<String> kieze, String interval);
 
-  Future<String> get pushToken;
+  Future<String?> get pushToken;
 
   onTap(Map<String, Map<String, dynamic>> map);
 
@@ -27,21 +27,21 @@ abstract class AbstractPushNotificationManager {
 }
 
 abstract class PushNotificationListener {
-  void receive_message(Map<String, dynamic> data) {}
+  void receiveMessage(Map<String, dynamic> data) {}
 
-  void handleNotificationTap(Map<dynamic, dynamic> data) {}
+  void handleNotificationTap(Map<String, dynamic> data) {}
 
   void updateMessages(List<Map<String, dynamic>> data) {}
 }
 
 class PushNotificationManager implements AbstractPushNotificationManager {
-  PushReceiveService listener;
-  StorageService storageService;
-  AbstractUserService userService;
-  PushUpdateService updateService;
+  late PushReceiveService listener;
+  late StorageService storageService;
+  late AbstractUserService userService;
+  late PushUpdateService updateService;
 
   @override
-  Future<String> pushToken;
+  late Future<String?> pushToken;
 
   PushNotificationManager(this.storageService, this.userService,
       FirebaseReceiveService firebaseService, Backend backend) {
@@ -57,7 +57,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
       listener = PullService(userService, backend);
     else {
       pushToken = firebaseService.token;
-      if (isNull(await pushToken) || (await pushToken).isEmpty) {
+      if (isNull(await pushToken) || (await pushToken)!.isEmpty) {
         ErrorService.pushError(
             'Problem beim Einrichten von Push-Nachrichten',
             'Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. '
@@ -76,14 +76,14 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     return listener;
   }
 
-  Map<String, PushNotificationListener> callback_map = Map();
+  Map<String, PushNotificationListener> callbackMap = Map();
 
   Future<dynamic> onReceived(Map<dynamic, dynamic> message) async {
     final data = extractData(message);
 
     try {
       if (data.containsKey('type'))
-        callback_map[data['type']]?.receive_message(data);
+        callbackMap[data['type']]?.receiveMessage(data);
     } catch (e, s) {
       ErrorService.handleError(e, s);
     }
@@ -91,14 +91,14 @@ class PushNotificationManager implements AbstractPushNotificationManager {
 
   Future<dynamic> onTap(Map<dynamic, dynamic> message) async {
     print(
-        'onTap: Push-Nachricht empfangen: $message \nund Callback-Map für: ${callback_map.keys}');
+        'onTap: Push-Nachricht empfangen: $message \nund Callback-Map für: ${callbackMap.keys}');
     final data = extractData(message);
 
     try {
       if (data.containsKey('type')) {
         String type = data['type'];
-        if (callback_map.containsKey(type)) {
-          callback_map[type].handleNotificationTap(data);
+        if (callbackMap.containsKey(type)) {
+          callbackMap[type]?.handleNotificationTap(data);
         }
       }
     } catch (e, s) {
@@ -115,8 +115,8 @@ class PushNotificationManager implements AbstractPushNotificationManager {
   }
 
   @override
-  void register_message_callback(String id, PushNotificationListener callback) {
-    this.callback_map[id] = callback;
+  void registerMessageCallback(String id, PushNotificationListener callback) {
+    this.callbackMap[id] = callback;
   }
 
   @override
@@ -143,7 +143,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
       return; // im Pull-Modus sollen Push-Nachrichten regulär vom Timer geladen werden
     try {
       messageMap.forEach((type, messages) {
-        callback_map[type]?.updateMessages(messages);
+        callbackMap[type]?.updateMessages(messages);
       });
     } catch (e, s) {
       ErrorService.handleError(e, s);
@@ -154,26 +154,24 @@ class PushNotificationManager implements AbstractPushNotificationManager {
 Map<String, List<Map<String, dynamic>>> sortMessagesByType(
         List<Map<String, dynamic>> messages) =>
     messages
-        .where((message) => message != null)
-        .where((data) => data != null && data['type'] != null)
+        .where((data) => data['type'] != null)
         .fold(Map<String, List<Map<String, dynamic>>>(), (typeMap, data) {
       if (typeMap[data['type']] == null) typeMap[data['type']] = [];
-      typeMap[data['type']].add(data);
+      typeMap[data['type']]?.add(data);
       return typeMap;
     });
 
 class DemoPushNotificationManager implements AbstractPushNotificationManager {
   DemoPushSendService pushService;
-  PushNotificationListener callback;
 
   DemoPushNotificationManager(this.pushService);
 
   @override
-  void register_message_callback(
+  void registerMessageCallback(
       String type, PushNotificationListener callback) {
     pushService.stream
         .where((data) => data.type == type)
-        .listen((data) => callback.receive_message(data.toJson()));
+        .listen((data) => callback.receiveMessage(data.toJson()));
   }
 
   // Ignore

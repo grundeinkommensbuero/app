@@ -10,11 +10,11 @@ get demoMode => mode == Mode.DEMO;
 
 get localMode => mode == Mode.LOCAL;
 
-String get host => hostMap[mode];
+String get host => hostMap[mode]!;
 
-int get port => portMap[mode];
+int get port => portMap[mode]!;
 
-String get topicPrefix => topicPrefixMap[mode];
+String get topicPrefix => topicPrefixMap[mode]!;
 
 const String appAuth = 'MTpiOTdjNzU5Ny1mNjY5LTRmZWItOWJhMi0zMjE0YzE4MjIzMzk=';
 const String prodKey = 'Produktiv-Verschüsselungs-Key goes here';
@@ -63,13 +63,13 @@ class GeoProperties {
   final double initZoom;
 
   const GeoProperties(
-      {this.boundLatMin,
-      this.boundLatMax,
-      this.boundLongMin,
-      this.boundLongMax,
-      this.zoomMin,
-      this.zoomMax,
-      this.initCenterLat,
-      this.initCenterLong,
-      this.initZoom});
+      {required this.boundLatMin,
+      required this.boundLatMax,
+      required this.boundLongMin,
+      required this.boundLongMax,
+      required this.zoomMin,
+      required this.zoomMax,
+      required this.initCenterLat,
+      required this.initCenterLong,
+      required this.initZoom});
 }

@@ -42,7 +42,7 @@ main() {
 
   group('PullService', () {
     Backend backend = BackendMock();
-    PullService service;
+    late PullService service;
 
     setUp(() {
       reset(backend);

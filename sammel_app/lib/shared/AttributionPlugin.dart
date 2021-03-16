@@ -105,7 +105,7 @@ class AttributionPlugin extends MapPlugin {
   @override
   Widget createLayer(
       LayerOptions options, MapState mapState, Stream<void> stream) {
-    return AttributionLayer(options, mapState, stream);
+    return AttributionLayer(options as AttributionOptions, mapState, stream);
   }
 
   @override

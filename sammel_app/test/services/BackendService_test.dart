@@ -13,14 +13,14 @@ main() {
   AbstractUserService userService = ConfiguredUserServiceMock();
 
   group('BackendService', () {
-    BackendMock backend;
+    late BackendMock backend;
 
     setUp(() {
       backend = BackendMock();
     });
 
     group('authentication', () {
-      BackendService service;
+      late BackendService service;
 
       setUp(() {
         service = BackendService(userService, backend);
@@ -64,15 +64,15 @@ main() {
         });
 
         test('with post requests', () async {
-          await service.post('anyUrl', null, appAuth: true);
+          await service.post('anyUrl', '', appAuth: true);
 
-          verify(backend.post('anyUrl', null, BackendService.appHeaders));
+          verify(backend.post('anyUrl', '', BackendService.appHeaders));
         });
 
         test('with delete requests', () async {
-          await service.delete('anyUrl', null, appAuth: true);
+          await service.delete('anyUrl', '', appAuth: true);
 
-          verify(backend.delete('anyUrl', null, BackendService.appHeaders));
+          verify(backend.delete('anyUrl', '', BackendService.appHeaders));
         });
       });
 
@@ -97,17 +97,17 @@ main() {
         });
 
         test('with post requests', () async {
-          await service.post('anyUrl', null);
+          await service.post('anyUrl', '');
           var userHeaders = {'Authorization': 'userCreds'};
 
-          verify(backend.post('anyUrl', null, userHeaders));
+          verify(backend.post('anyUrl', '', userHeaders));
         });
 
         test('with delete requests', () async {
-          await service.delete('anyUrl', null, appAuth: false);
+          await service.delete('anyUrl', '', appAuth: false);
           var userHeaders = {'Authorization': 'userCreds'};
 
-          verify(backend.delete('anyUrl', null, userHeaders));
+          verify(backend.delete('anyUrl', '', userHeaders));
         });
       });
 
@@ -126,15 +126,15 @@ main() {
     });
 
     group('uses backend mock', () {
-      BackendService service;
-      Backend mock;
+      late BackendService service;
+      late Backend mock;
       setUp(() {
         mock = BackendMock();
         service = BackendService(userService, mock);
       });
 
       test('for get', () async {
-        when(mock.get(any, any)).thenAnswer((_) =>
+        when(mock.get('', {})).thenAnswer((_) =>
             Future<HttpClientResponseBody>.value(
                 HttpClientResponseBodyMock('response', 200)));
         await service.get('any URL');
@@ -175,8 +175,8 @@ main() {
     });
   });
   group('error handling', () {
-    BackendService service;
-    Backend mock;
+    late BackendService service;
+    late Backend mock;
     setUp(() {
       mock = BackendMock();
       service = BackendService(userService, mock);
