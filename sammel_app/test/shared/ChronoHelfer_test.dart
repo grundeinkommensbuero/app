@@ -3,13 +3,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 
-import 'Mocks.dart';
+import 'Trainer.dart';
+import '../shared/generated.mocks.dart';
 
 void main() {
   initializeDateFormatting('de');
   group('timeToString', () {
     setUp(() {
-      mockTranslation();
+      trainTranslation(MockTranslations());
     ***REMOVED***);
 
     test('ergaenzt 00 Sekunden', () {

@@ -8,16 +8,17 @@ import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/routes/ChatListWidget.dart';
 import 'package:sammel_app/services/UserService.dart';
 
-import '../shared/Mocks.dart';
+import '../shared/Trainer.dart';
+import '../shared/generated.mocks.dart';
 
 void main() {
+  trainTranslation(MockTranslations());
   late Widget widget;
   UserService _userService;
   late ChatChannel channel;
 
   setUpUI((tester) async {
-    Localization.load(Locale('en'), translations: TranslationsMock());
-    _userService = ConfiguredUserServiceMock();
+    _userService = MockUserService();
     channel = ChatChannel('action:1');
     widget = Provider<AbstractUserService>(
         create: (context) => _userService,

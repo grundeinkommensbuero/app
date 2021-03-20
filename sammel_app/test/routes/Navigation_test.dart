@@ -17,20 +17,21 @@ import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 
 import '../model/Termin_test.dart';
-import '../shared/Mocks.dart';
+import '../shared/Trainer.dart';
+import '../shared/generated.mocks.dart';
 import 'ActionEditor_test.dart';
 
-final _stammdatenService = StammdatenServiceMock();
-final _termineService = TermineServiceMock();
-final _listLocationService = ListLocationServiceMock();
-final _storageService = StorageServiceMock();
-final _pushService = PushSendServiceMock();
-final _userService = ConfiguredUserServiceMock();
-final _chatService = ChatMessageServiceMock();
-final _pushManager = PushNotificationManagerMock();
+final _stammdatenService = MockStammdatenService();
+final _termineService = MockTermineService();
+final _listLocationService = MockListLocationService();
+final _storageService = MockStorageService();
+final _pushService = MockPushSendService();
+final _userService = MockUserService();
+final _chatService = MockChatMessageService();
+final _pushManager = MockPushNotificationManager();
 
 void main() {
-  mockTranslation();
+  trainTranslation(MockTranslations());
 
   group('Navigation', () {
     late Navigation navigation;

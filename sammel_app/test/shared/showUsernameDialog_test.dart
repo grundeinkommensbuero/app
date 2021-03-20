@@ -6,14 +6,15 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/showUsernameDialog.dart';
 
-import 'Mocks.dart';
+import 'Trainer.dart';
 import 'TestdatenVorrat.dart';
+import '../shared/generated.mocks.dart';
 
 void main() {
-  mockTranslation();
+  trainTranslation(MockTranslations());
 
   String? result;
-  var _userService = UserServiceMock();
+  var _userService = MockUserService();
   var hideHint = false;
 
   setUpUI((tester) async {

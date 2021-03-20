@@ -24,20 +24,22 @@ import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
 import '../model/Termin_test.dart';
-import '../shared/Mocks.dart';
+import '../shared/Trainer.dart';
 import '../shared/TestdatenVorrat.dart';
+import '../shared/generated.mocks.dart';
 
-final _stammdatenService = StammdatenServiceMock();
-final _termineService = TermineServiceMock();
-final _listLocationService = ListLocationServiceMock();
-final _storageService = StorageServiceMock();
-final _pushService = PushSendServiceMock();
-final _userService = ConfiguredUserServiceMock();
-final _chatMessageService = ChatMessageServiceMock();
-final _pushManager = PushNotificationManagerMock();
+final _stammdatenService = MockStammdatenService();
+final _termineService = MockTermineService();
+final _listLocationService = MockListLocationService();
+final _storageService = MockStorageService();
+final _pushService = MockPushSendService();
+final _userService = MockUserService();
+final _chatMessageService = MockChatMessageService();
+final _pushManager = MockPushNotificationManager();
 
 void main() {
-  mockTranslation();
+  trainTranslation(MockTranslations());
+  trainUserService(_userService);
 
   late MultiProvider termineSeiteWidget;
 
@@ -77,7 +79,7 @@ void main() {
       var yesterday = today.subtract(Duration(days: 1));
       var me = karl();
 
-      var userService = UserServiceMock();
+      var userService = MockUserService();
       when(userService.user).thenAnswer((_) => Stream.value(me));
 
       when(_termineService.loadActions(any)).thenAnswer((_) async => [
@@ -338,7 +340,7 @@ void main() {
       await tester.pump();
 
       verify(_termineService.joinAction(action.id!)).called(1);
-      expect(state.termine[0].participants, containsAll([_userService.me]));
+      expect(state.termine[0].participants, containsAll([karl()]));
       expect(find.byKey(Key('join action button')), findsNothing);
       expect(find.byKey(Key('leave action button')), findsOneWidget);
     ***REMOVED***);

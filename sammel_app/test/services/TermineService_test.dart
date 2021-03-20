@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_server/http_server.dart';
@@ -10,20 +11,20 @@ import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
-import 'package:sammel_app/services/UserService.dart';
 
 import '../model/Termin_test.dart';
-import '../shared/Mocks.dart';
+import '../shared/Trainer.dart';
 import '../shared/TestdatenVorrat.dart';
+import '../shared/generated.mocks.dart';
 
 void main() {
-  late UserService userService;
-  PushNotificationManager pushManager = PushNotificationManagerMock();
-  StammdatenService stammdatenService = StammdatenServiceMock();
-  final localNotificationService = LocalNotificationServiceMock();
+  PushNotificationManager pushManager = MockPushNotificationManager();
+  StammdatenService stammdatenService = MockStammdatenService();
+  final localNotificationService = MockLocalNotificationService();
+  final userService = MockUserService();
 
   setUp(() {
-    userService = ConfiguredUserServiceMock();
+    trainUserService(userService);
   ***REMOVED***);
 
   group('DemoTermineService', () {
@@ -136,11 +137,12 @@ void main() {
   ***REMOVED***);
 
   group('TermineService', () {
-    late Backend backend;
+    late MockBackend backend;
     late TermineService service;
 
     setUp(() {
-      backend = BackendMock();
+      backend = MockBackend();
+      trainBackend(backend);
       service = TermineService(stammdatenService, userService, backend,
           pushManager, localNotificationService, GlobalKey());
       service.userService = userService;
@@ -150,7 +152,7 @@ void main() {
         () async {
       when(backend.post('service/termine', '', {***REMOVED***)).thenAnswer((_) =>
           Future<HttpClientResponseBody>.value(
-              HttpClientResponseBodyMock([], 200)));
+              trainHttpResponse(MockHttpClientResponseBody(), 200, [])));
 
       await service.loadActions(einFilter());
 
@@ -169,10 +171,11 @@ void main() {
 
     test('loadActions deserializes actions correctly', () async {
       when(backend.post('service/termine', any, any)).thenAnswer((_) =>
-          Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock([
+          Future<HttpClientResponseBody>.value(
+              trainHttpResponse(MockHttpClientResponseBody(), 200, [
             TerminTestDaten.einTerminMitTeilisUndDetails().toJson(),
             TerminTestDaten.einTerminOhneTeilisMitDetails().toJson()
-          ], 200)));
+          ])));
 
       var actions = await service.loadActions(einFilter());
 
@@ -214,8 +217,10 @@ void main() {
         'createTermin calls right path and serializes action and token correctly',
         () async {
       when(backend.post('service/termine/neu', any, any)).thenAnswer((_) =>
-          Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
-              TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200)));
+          Future<HttpClientResponseBody>.value(trainHttpResponse(
+              MockHttpClientResponseBody(),
+              200,
+              TerminTestDaten.einTerminMitTeilisUndDetails().toJson())));
 
       await service.createAction(
           TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
@@ -247,8 +252,10 @@ void main() {
 
     test('createTermin deserializes action correctly', () async {
       when(backend.post('service/termine/neu', any, any)).thenAnswer((_) =>
-          Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
-              TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200)));
+          Future<HttpClientResponseBody>.value(trainHttpResponse(
+              MockHttpClientResponseBody(),
+              200,
+              TerminTestDaten.einTerminMitTeilisUndDetails().toJson())));
 
       var action = await service.createAction(
           TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
@@ -266,15 +273,18 @@ void main() {
       expect(action.participants![0].id, 11);
       expect(action.participants![0].name, 'Karl Marx');
       expect(action.participants![0].color?.value, Colors.red.value);
-      expect(action.details!.beschreibung, 'Bringe Westen und Klämmbretter mit');
+      expect(
+          action.details!.beschreibung, 'Bringe Westen und Klämmbretter mit');
       expect(action.details!.treffpunkt, 'Weltzeituhr');
       expect(action.details!.kontakt, 'Ruft an unter 012345678');
     ***REMOVED***);
 
     test('getActionWithDetails calls right path', () async {
       when(backend.get('service/termine/termin?id=0', any)).thenAnswer((_) =>
-          Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
-              TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200)));
+          Future<HttpClientResponseBody>.value(trainHttpResponse(
+              MockHttpClientResponseBody(),
+              200,
+              TerminTestDaten.einTerminMitTeilisUndDetails().toJson())));
 
       await service.getActionWithDetails(0);
 
@@ -283,8 +293,10 @@ void main() {
 
     test('getActionWithDetails deserializes action correctly', () async {
       when(backend.get('service/termine/termin?id=0', any)).thenAnswer((_) =>
-          Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
-              TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200)));
+          Future<HttpClientResponseBody>.value(trainHttpResponse(
+              MockHttpClientResponseBody(),
+              200,
+              TerminTestDaten.einTerminMitTeilisUndDetails().toJson())));
 
       var action = await service.getActionWithDetails(0);
 
@@ -301,7 +313,8 @@ void main() {
       expect(action.participants![0].id, 11);
       expect(action.participants![0].name, 'Karl Marx');
       expect(action.participants![0].color?.value, Colors.red.value);
-      expect(action.details!.beschreibung, 'Bringe Westen und Klämmbretter mit');
+      expect(
+          action.details!.beschreibung, 'Bringe Westen und Klämmbretter mit');
       expect(action.details!.treffpunkt, 'Weltzeituhr');
       expect(action.details!.kontakt, 'Ruft an unter 012345678');
     ***REMOVED***);
@@ -310,8 +323,8 @@ void main() {
         'saveAction calls right path and serialises action and token correctly',
         () async {
       when(backend.post('service/termine/termin', any, any)).thenAnswer((_) =>
-          Future<HttpClientResponseBody>.value(
-              HttpClientResponseBodyMock('response', 200)));
+          Future<HttpClientResponseBody>.value(trainHttpResponse(
+              MockHttpClientResponseBody(), 200, 'response')));
 
       await service.saveAction(
           TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
@@ -345,8 +358,8 @@ void main() {
         'deleteAction calls right path and serialises action and token correctly',
         () async {
       when(backend.delete('service/termine/termin', any, any)).thenAnswer((_) =>
-          Future<HttpClientResponseBody>.value(
-              HttpClientResponseBodyMock('response', 200)));
+          Future<HttpClientResponseBody>.value(trainHttpResponse(
+              MockHttpClientResponseBody(), 200, 'response')));
 
       await service.deleteAction(
           TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
@@ -379,7 +392,7 @@ void main() {
     test('joinAction calls correct path with parameters', () async {
       when(backend.post(any, any, any, any)).thenAnswer((_) =>
           Future<HttpClientResponseBody>.value(
-              HttpClientResponseBodyMock(null, 202)));
+              trainHttpResponse(MockHttpClientResponseBody(), 202, null)));
 
       await service.joinAction(0);
 
@@ -394,7 +407,7 @@ void main() {
     test('leaveAction calls correct path with parameters', () async {
       when(backend.post(any, any, any, any)).thenAnswer((_) =>
           Future<HttpClientResponseBody>.value(
-              HttpClientResponseBodyMock(null, 202)));
+              trainHttpResponse(MockHttpClientResponseBody(), 200, null)));
 
       await service.leaveAction(0);
 

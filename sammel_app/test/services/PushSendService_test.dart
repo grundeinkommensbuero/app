@@ -3,14 +3,16 @@ import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/services/PushSendService.dart';
-import 'package:sammel_app/services/UserService.dart';
 
-import '../shared/Mocks.dart';
+import '../shared/Trainer.dart';
+import '../shared/generated.mocks.dart';
 
 main() {
-  UserService userService = ConfiguredUserServiceMock();
+  var userService = MockUserService();
+  trainUserService(userService);
 
-  var backendMock = BackendMock();
+  var backendMock = MockBackend();
+  trainBackend(backendMock);
 
   group('PushService', () {
     late PushSendService service;
@@ -34,7 +36,7 @@ main() {
     test('pushToDevices sendet Push-Nachricht an Server', () async {
       when(backendMock.post(any, any, any)).thenAnswer((_) async =>
           Future<HttpClientResponseBody>.value(
-              HttpClientResponseBodyMock(null, 200)));
+              trainHttpResponse(MockHttpClientResponseBody(), 200, null)));
       await service.pushToDevices(
           ['Empfänger'], PushData(), PushNotification('Titel', 'Inhalt'));
 

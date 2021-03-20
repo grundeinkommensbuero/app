@@ -1,4 +1,3 @@
-import 'package:easy_localization/src/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sammel_app/model/Termin.dart';
@@ -7,13 +6,12 @@ import 'package:sammel_app/shared/DweTheme.dart';
 
 import '../TestdataStorage.dart';
 import '../model/Termin_test.dart';
-import '../shared/Mocks.dart';
+import '../shared/Trainer.dart';
+import '../shared/generated.mocks.dart';
 import '../shared/TestdatenVorrat.dart';
 
 void main() {
-  setUp(() {
-    Localization.load(Locale('en'), translations: TranslationsMock());
-  ***REMOVED***);
+  trainTranslation(MockTranslations());
 
   testWidgets('uses default values', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(home: Scaffold(body: ActionMap())));

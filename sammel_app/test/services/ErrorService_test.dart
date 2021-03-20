@@ -6,10 +6,11 @@ import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 
-import '../shared/Mocks.dart';
+import '../shared/Trainer.dart';
+import '../shared/generated.mocks.dart';
 
 void main() {
-  mockTranslation();
+  trainTranslation(MockTranslations());
 
   setUp(() {
     ErrorService.errorQueue = [];

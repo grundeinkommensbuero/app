@@ -1,4 +1,3 @@
-import 'package:easy_localization/src/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,14 +9,16 @@ import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 
 import '../services/StammdatenService_test.dart';
-import '../shared/Mocks.dart';
+import '../shared/Trainer.dart';
+import '../shared/generated.mocks.dart';
 
 late StammdatenService _stammdatenService;
-final GeoService _geoService = GeoServiceMock();
+final MockGeoService _geoService = MockGeoService();
 
 void main() {
+  trainTranslation(MockTranslations());
+
   setUp(() async {
-    Localization.load(Locale('en'), translations: TranslationsMock());
     reset(_geoService);
     when(_geoService.getDescriptionToPoint(any))
         .thenAnswer((_) async => GeoData('name', 'street', '12'));
