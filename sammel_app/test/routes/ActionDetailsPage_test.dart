@@ -10,9 +10,10 @@ import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
 import '../model/Termin_test.dart';
-import '../shared/Mocks.dart';
+import '../shared/Trainer.dart';
+import '../shared/generated.mocks.dart';
 
-final storageServiceMock = StorageServiceMock();
+final storageServiceMock = MockStorageService();
 
 main() {
   late Widget widget;
@@ -20,7 +21,7 @@ main() {
   Function(Termin) joinAction = (_) {};
   Function(Termin) leaveAction = (_) {};
 
-  mockTranslation();
+  trainTranslation(MockTranslations());
 
   setUp(() async {
     reset(storageServiceMock);
@@ -31,11 +32,11 @@ main() {
 
     widget = MultiProvider(
         providers: [
-          Provider<AbstractTermineService>.value(value: TermineServiceMock()),
-          Provider<ChatMessageService>.value(value: ChatMessageServiceMock()),
+          Provider<AbstractTermineService>.value(value: MockTermineService()),
+          Provider<ChatMessageService>.value(value: MockChatMessageService()),
           Provider<StorageService>.value(value: storageServiceMock),
           Provider<AbstractUserService>.value(
-              value: ConfiguredUserServiceMock()),
+              value: MockUserService()), //FIXME
         ],
         child: MaterialApp(
             home: Dialog(

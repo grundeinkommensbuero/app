@@ -1,4 +1,3 @@
-import 'package:easy_localization/src/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sammel_app/model/Termin.dart';
@@ -6,13 +5,12 @@ import 'package:sammel_app/routes/ActionList.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 
 import '../model/Termin_test.dart';
-import '../shared/Mocks.dart';
+import '../shared/Trainer.dart';
+import '../shared/generated.mocks.dart';
 import '../shared/TestdatenVorrat.dart';
 
 void main() {
-  setUp(() {
-    Localization.load(Locale('en'), translations: TranslationsMock());
-  });
+  trainTranslation(MockTranslations());
 
   testWidgets('TermineSeite shows all actions', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(

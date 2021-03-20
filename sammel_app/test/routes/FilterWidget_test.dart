@@ -1,4 +1,3 @@
-import 'package:easy_localization/src/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_test_ui/flutter_test_ui.dart';
@@ -11,7 +10,8 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 
-import '../shared/Mocks.dart';
+import '../shared/Trainer.dart';
+import '../shared/generated.mocks.dart';
 import '../shared/TestdatenVorrat.dart';
 
 int numberOfTimesCalled = 0;
@@ -23,13 +23,11 @@ Future iWasCalled(TermineFilter result) async {
   return Future.value();
 }
 
-final _stammdatenService = StammdatenServiceMock();
-final _storageService = StorageServiceMock();
+final _stammdatenService = MockStammdatenService();
+final _storageService = MockStorageService();
 
 void main() {
-  setUp(() {
-    Localization.load(Locale('en'), translations: TranslationsMock());
-  });
+  trainTranslation(MockTranslations());
 
   group('ui', () {
     setUpUI((WidgetTester tester) async {

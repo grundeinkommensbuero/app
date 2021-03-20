@@ -1,4 +1,3 @@
-import 'package:easy_localization/src/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong/latlong.dart';
@@ -21,21 +20,24 @@ import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
 import '../model/Termin_test.dart';
-import '../shared/Mocks.dart';
+import '../shared/Trainer.dart';
+import '../shared/generated.mocks.dart';
 import '../shared/TestdatenVorrat.dart';
 
-final _stammdatenService = StammdatenServiceMock();
-final _terminService = TermineServiceMock();
-final _listLocationService = ListLocationServiceMock();
-final _storageService = StorageServiceMock();
-final _pushService = PushSendServiceMock();
-final _userService = ConfiguredUserServiceMock();
-final _chatService = ChatMessageServiceMock();
-final _pushManager = PushNotificationManagerMock();
+late MockStammdatenService _stammdatenService = MockStammdatenService();
+late MockTermineService _terminService= MockTermineService();
+late MockListLocationService _listLocationService = MockListLocationService();
+late MockStorageService _storageService = MockStorageService();
+late MockPushSendService _pushService = MockPushSendService();
+late MockUserService _userService = MockUserService();
+late MockChatMessageService _chatService = MockChatMessageService();
+late MockPushNotificationManager _pushManager = MockPushNotificationManager();
 
 void main() {
+  trainTranslation(MockTranslations());
+  trainUserService(_userService);
+
   setUp(() {
-    Localization.load(Locale('en'), translations: TranslationsMock());
     reset(_storageService);
     reset(_listLocationService);
     reset(_terminService);
@@ -724,7 +726,7 @@ void main() {
     });
 
     testWidgets('opens name dialog if no username', (tester) async {
-      var userService = UserServiceMock();
+      var userService = MockUserService();
       when(userService.user)
           .thenAnswer((_) => Stream.value(User(13, null, Colors.red)));
       await _pumpActionEditor(tester, userService: userService);
@@ -745,7 +747,7 @@ void main() {
     });
 
     testWidgets('creates action with new username', (tester) async {
-      var userService = UserServiceMock();
+      var userService = MockUserService();
       when(userService.user)
           .thenAnswer((_) => Stream.value(User(13, null, Colors.red)));
       var fired = false;
@@ -772,7 +774,7 @@ void main() {
     testWidgets(
         'cancel username does not close action creator and keeps inputs',
         (tester) async {
-      var userService = UserServiceMock();
+      var userService = MockUserService();
       when(userService.user)
           .thenAnswer((_) => Stream.value(User(13, null, Colors.red)));
       bool fired = false;
@@ -911,7 +913,7 @@ Future _openActionEditor(WidgetTester tester) async {
 }
 
 Future<ActionEditorState> _pumpActionEditor(WidgetTester tester,
-    {Function(List<Termin>)? onFinish, UserServiceMock? userService}) async {
+    {Function(List<Termin>)? onFinish, MockUserService? userService}) async {
   onFinish = onFinish ?? (_) {};
 
   final action = TerminTestDaten.einTerminMitTeilisUndDetails();

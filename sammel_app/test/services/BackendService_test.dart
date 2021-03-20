@@ -6,17 +6,20 @@ import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/UserService.dart';
 
-import '../shared/Mocks.dart';
+import '../shared/Trainer.dart';
 import '../shared/TestdatenVorrat.dart';
+import '../shared/generated.mocks.dart';
 
 main() {
-  AbstractUserService userService = ConfiguredUserServiceMock();
+  AbstractUserService userService = MockUserService();
+  MockHttpClientResponseBody http200Mock =
+      trainHttpResponse(MockHttpClientResponseBody(), 200, null);
 
   group('BackendService', () {
-    late BackendMock backend;
+    late MockBackend backend;
 
     setUp(() {
-      backend = BackendMock();
+      backend = MockBackend();
     });
 
     group('authentication', () {
@@ -32,29 +35,27 @@ main() {
       });
 
       test('needs UserService and throws error if missing', () {
-        expect(() => BackendService(null, BackendMock()),
+        expect(() => BackendService(null, MockBackend()),
             throwsA((e) => e is ArgumentError));
       });
 
       test('needs no UserService if it is UserService', () {
-        var storageServiceMock = StorageServiceMock();
+        var storageServiceMock = MockStorageService();
         when(storageServiceMock.loadUser()).thenAnswer((_) async => karl());
         when(storageServiceMock.loadSecret()).thenAnswer((_) async => "secret");
         var service = UserService(
-            storageServiceMock, FirebaseReceiveServiceMock(), BackendMock());
+            storageServiceMock, MockFirebaseReceiveService(), MockBackend());
         expect(service, isNotNull);
       });
 
       group('uses app credentials if appAuth flag is set', () {
         setUp(() {
-          var httpClientResponseBodyMock =
-              HttpClientResponseBodyMock(null, 200);
-          when(backend.get(any, any)).thenAnswer((_) =>
-              Future<HttpClientResponseBody>.value(httpClientResponseBodyMock));
-          when(backend.post(any, any, any)).thenAnswer((_) =>
-              Future<HttpClientResponseBody>.value(httpClientResponseBodyMock));
-          when(backend.delete(any, any, any)).thenAnswer((_) =>
-              Future<HttpClientResponseBody>.value(httpClientResponseBodyMock));
+          when(backend.get(any, any)).thenAnswer(
+              (_) => Future<HttpClientResponseBody>.value(http200Mock));
+          when(backend.post(any, any, any)).thenAnswer(
+              (_) => Future<HttpClientResponseBody>.value(http200Mock));
+          when(backend.delete(any, any, any)).thenAnswer(
+              (_) => Future<HttpClientResponseBody>.value(http200Mock));
         });
 
         test('with get requests', () async {
@@ -78,15 +79,14 @@ main() {
 
       group('uses user credentials if appAuth flag is not set or false', () {
         setUp(() {
-          when(backend.get(any, any)).thenAnswer((_) =>
-              Future<HttpClientResponseBody>.value(
-                  HttpClientResponseBodyMock(null, 200)));
-          when(backend.post(any, any, any)).thenAnswer((_) =>
-              Future<HttpClientResponseBody>.value(
-                  HttpClientResponseBodyMock(null, 200)));
-          when(backend.delete(any, any, any)).thenAnswer((_) =>
-              Future<HttpClientResponseBody>.value(
-                  HttpClientResponseBodyMock(null, 200)));
+          var response200 =
+              trainHttpResponse(MockHttpClientResponseBody(), 200, null);
+          when(backend.get(any, any)).thenAnswer(
+              (_) => Future<HttpClientResponseBody>.value(response200));
+          when(backend.post(any, any, any)).thenAnswer(
+              (_) => Future<HttpClientResponseBody>.value(response200));
+          when(backend.delete(any, any, any)).thenAnswer(
+              (_) => Future<HttpClientResponseBody>.value(response200));
         });
 
         test('with get requests', () async {
@@ -114,12 +114,12 @@ main() {
       test(
           'authHeaders throws Error if appAuth flag is not set but no user credentials can be determined in 10 seconds',
           () async {
-        final userService = UserServiceMock();
+        final userService = MockUserService();
         when(userService.user).thenAnswer((_) => Stream.value(karl()));
         when(userService.userHeaders).thenAnswer((_) => Future.delayed(
             Duration(seconds: 11), () => {'Authorization': 'my creds'}));
 
-        final service = BackendService(userService, BackendMock());
+        final service = BackendService(userService, MockBackend());
 
         expect(service.authHeaders(false), throwsA(NoUserAuthException));
       });
@@ -127,24 +127,23 @@ main() {
 
     group('uses backend mock', () {
       late BackendService service;
-      late Backend mock;
+      late MockBackend mock;
       setUp(() {
-        mock = BackendMock();
+        mock = MockBackend();
         service = BackendService(userService, mock);
       });
 
       test('for get', () async {
-        when(mock.get('', {})).thenAnswer((_) =>
-            Future<HttpClientResponseBody>.value(
-                HttpClientResponseBodyMock('response', 200)));
+        when(mock.get('', {})).thenAnswer((_) {
+          return Future<HttpClientResponseBody>.value(http200Mock);
+        });
         await service.get('any URL');
         verify(mock.get('any URL', any)).called(1);
       });
 
       test('for post', () async {
-        when(mock.post(any, any, any)).thenAnswer((_) =>
-            Future<HttpClientResponseBody>.value(
-                HttpClientResponseBodyMock('response', 200)));
+        when(mock.post(any, any, any)).thenAnswer(
+            (_) => Future<HttpClientResponseBody>.value(http200Mock));
         await service.post('any URL', 'any data');
         verify(mock.post('any URL', 'any data', any)).called(1);
       });
@@ -152,7 +151,7 @@ main() {
       test('for delete', () async {
         when(mock.delete(any, any, any)).thenAnswer((_) =>
             Future<HttpClientResponseBody>.value(
-                HttpClientResponseBodyMock('response', 200)));
+                trainHttpResponse(MockHttpClientResponseBody(), 200, null)));
         await service.delete('any URL', 'any data');
         verify(mock.delete('any URL', 'any data', any)).called(1);
       });
@@ -176,24 +175,27 @@ main() {
   });
   group('error handling', () {
     late BackendService service;
-    late Backend mock;
+    late MockBackend mock = MockBackend();
+
     setUp(() {
-      mock = BackendMock();
+      trainBackend(mock);
       service = BackendService(userService, mock);
     });
 
     test('throws rest error on non-200 and non-403 status code', () {
-      when(mock.get(any, any)).thenAnswer((_) =>
-          Future<HttpClientResponseBody>.value(
-              HttpClientResponseBodyMock('Dies ist ein Fehler', 400)));
+      when(mock.get(any, any)).thenAnswer((_) {
+        return Future<HttpClientResponseBody>.value(trainHttpResponse(
+            MockHttpClientResponseBody(), 400, 'Dies ist ein Fehler'));
+      });
 
       expect(() => service.get('anyUrl'), throwsA((e) => e is RestFehler));
     });
 
     test('throws auth error on 403 status code', () {
-      when(mock.get(any, any)).thenAnswer((_) =>
-          Future<HttpClientResponseBody>.value(
-              HttpClientResponseBodyMock('Dies ist ein Fehler', 403)));
+      when(mock.get(any, any)).thenAnswer((_) {
+        return Future<HttpClientResponseBody>.value(trainHttpResponse(
+            MockHttpClientResponseBody(), 403, 'Dies ist ein Fehler'));
+      });
 
       expect(() => service.get('anyUrl'), throwsA((e) => e is AuthFehler));
     });

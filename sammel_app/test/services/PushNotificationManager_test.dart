@@ -8,16 +8,17 @@ import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StorageService.dart';
-import 'package:sammel_app/services/UserService.dart';
 
-import '../shared/Mocks.dart';
+import '../shared/Trainer.dart';
+import '../shared/generated.mocks.dart';
 
 main() {
   late PushNotificationManager manager;
-  StorageService storageService = StorageServiceMock();
-  FirebaseReceiveService firebaseMock = FirebaseReceiveServiceMock();
-  Backend backend = BackendMock();
-  UserService userService = ConfiguredUserServiceMock();
+  StorageService storageService = MockStorageService();
+  FirebaseReceiveService firebaseMock = MockFirebaseReceiveService();
+  Backend backend = MockBackend();
+  MockUserService userService = MockUserService();
+  trainUserService(userService);
 
   setUp(() {
     reset(backend);
@@ -60,7 +61,7 @@ main() {
   });
 
   group('DemoPushNotificationManager', () {
-    DemoPushSendService pushSendService = DemoPushSendServiceMock();
+    DemoPushSendService pushSendService = MockDemoPushSendService();
     DemoPushNotificationManager service =
         DemoPushNotificationManager(pushSendService);
     late StreamController<PushData> controller;

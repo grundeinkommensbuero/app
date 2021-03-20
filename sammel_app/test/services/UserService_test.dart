@@ -6,25 +6,24 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/User.dart';
-import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
-import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
-import '../shared/Mocks.dart';
+import '../shared/Trainer.dart';
 import '../shared/TestdatenVorrat.dart';
+import '../shared/generated.mocks.dart';
 
 void main() {
-  late StorageService storageService;
-  late FirebaseReceiveService firebase;
-  late Backend backendMock;
-  mockTranslation();
+  MockStorageService storageService = MockStorageService();
+  FirebaseReceiveService firebase = MockFirebaseReceiveService();
+  MockBackend backendMock = MockBackend();
+  trainTranslation(MockTranslations());
 
   group('UserService', () {
     setUp(() {
-      storageService = StorageServiceMock();
-      backendMock = BackendMock();
-      firebase = FirebaseReceiveServiceMock();
+      reset(storageService);
+      trainBackend(backendMock);
+      reset(firebase);
 
       //defaults
       when(storageService.loadUser())
@@ -33,10 +32,12 @@ void main() {
       when(firebase.token).thenAnswer((_) async => 'firebaseToken');
       when(backendMock.post('service/benutzer/authentifiziere', any, any))
           .thenAnswer((_) => Future<HttpClientResponseBody>.value(
-              HttpClientResponseBodyMock(true, 200)));
+              trainHttpResponse(MockHttpClientResponseBody(), 200, true)));
       when(backendMock.post('service/benutzer/neu', any, any)).thenAnswer((_) =>
-          Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
-              User(11, '', Colors.red).toJson(), 200)));
+          Future<HttpClientResponseBody>.value(trainHttpResponse(
+              MockHttpClientResponseBody(),
+              200,
+              User(11, '', Colors.red).toJson())));
     });
 
     group('user streams', () {
@@ -212,7 +213,7 @@ void main() {
       test('registers new user if authentication to server fails', () async {
         when(backendMock.post('service/benutzer/authentifiziere', any, any))
             .thenAnswer((_) => Future<HttpClientResponseBody>.value(
-                HttpClientResponseBodyMock(false, 200)));
+                trainHttpResponse(MockHttpClientResponseBody(), 200, false)));
 
         UserService(storageService, firebase, backendMock);
 

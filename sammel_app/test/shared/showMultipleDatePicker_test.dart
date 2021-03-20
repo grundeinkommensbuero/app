@@ -6,7 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:sammel_app/shared/showMultipleDatePicker.dart';
 
-import 'Mocks.dart';
+import 'Trainer.dart';
+import '../shared/generated.mocks.dart';
 
 Widget createWidgetWithMultipleDatePicker(List<DateTime> previousSelection,
     Function result) {
@@ -27,7 +28,7 @@ Widget createWidgetWithMultipleDatePicker(List<DateTime> previousSelection,
 }
 
 void main() {
-  mockTranslation();
+  trainTranslation(MockTranslations());
   initializeDateFormatting('en', null);
 
   testWidgets('Days Selection selects initially days from filter',
