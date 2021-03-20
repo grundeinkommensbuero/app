@@ -79,7 +79,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
   Map<String, PushNotificationListener> callbackMap = Map();
 
   Future<dynamic> onReceived(Map<dynamic, dynamic> message) async {
-    final data = extractData(message);
+    final data = await extractData(message);
 
     try {
       if (data.containsKey('type'))
@@ -92,7 +92,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
   Future<dynamic> onTap(Map<dynamic, dynamic> message) async {
     print(
         'onTap: Push-Nachricht empfangen: $message \nund Callback-Map für: ${callbackMap.keys}');
-    final data = extractData(message);
+    final data = await extractData(message);
 
     try {
       if (data.containsKey('type')) {
@@ -106,12 +106,12 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     }
   }
 
-  Map<String, dynamic> extractData(Map message) {
+  Future<Map<String, dynamic>> extractData(Map message) async {
     // iOS sendet nur Data, Android verpackt es
     if (Platform.isAndroid)
-      return decrypt(message['data']);
+      return await decrypt(message['data']);
     else
-      return decrypt(message);
+      return await decrypt(message);
   }
 
   @override
@@ -135,8 +135,8 @@ class PushNotificationManager implements AbstractPushNotificationManager {
   Future<void> updateMessages() async {
     final messages = await updateService.getLatestPushMessages();
     if (messages == null) return;
-    final decrypted =
-        messages.map((message) => decrypt(message['data'])).toList();
+    List<Map<String, dynamic>> decrypted = [];
+    messages.forEach((msg) async => decrypted.add(await decrypt(msg['data'])));
     final messageMap = sortMessagesByType(decrypted);
 
     if (listener is PullService)
@@ -167,8 +167,7 @@ class DemoPushNotificationManager implements AbstractPushNotificationManager {
   DemoPushNotificationManager(this.pushService);
 
   @override
-  void registerMessageCallback(
-      String type, PushNotificationListener callback) {
+  void registerMessageCallback(String type, PushNotificationListener callback) {
     pushService.stream
         .where((data) => data.type == type)
         .listen((data) => callback.receiveMessage(data.toJson()));
