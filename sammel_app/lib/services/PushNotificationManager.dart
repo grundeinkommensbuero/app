@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/PushUpdateService.dart';
@@ -21,7 +21,7 @@ abstract class AbstractPushNotificationManager {
 
   Future<String?> get pushToken;
 
-  onTap(Map<String, Map<String, dynamic>> map);
+  onTap(RemoteMessage message);
 
   updateMessages() {}
 }
@@ -78,8 +78,8 @@ class PushNotificationManager implements AbstractPushNotificationManager {
 
   Map<String, PushNotificationListener> callbackMap = Map();
 
-  Future<dynamic> onReceived(Map<dynamic, dynamic> message) async {
-    final data = await extractData(message);
+  onReceived(RemoteMessage message) async {
+    final data = await await decrypt(message.data);
 
     try {
       if (data.containsKey('type'))
@@ -89,10 +89,10 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     }
   }
 
-  Future<dynamic> onTap(Map<dynamic, dynamic> message) async {
+  onTap(RemoteMessage message) async {
     print(
         'onTap: Push-Nachricht empfangen: $message \nund Callback-Map für: ${callbackMap.keys}');
-    final data = await extractData(message);
+    final data = await decrypt(message.data);
 
     try {
       if (data.containsKey('type')) {
@@ -104,14 +104,6 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     } catch (e, s) {
       ErrorService.handleError(e, s);
     }
-  }
-
-  Future<Map<String, dynamic>> extractData(Map message) async {
-    // iOS sendet nur Data, Android verpackt es
-    if (Platform.isAndroid)
-      return await decrypt(message['data']);
-    else
-      return await decrypt(message);
   }
 
   @override
@@ -186,9 +178,7 @@ class DemoPushNotificationManager implements AbstractPushNotificationManager {
 
   // Ignore - no Push-Messages in Demo-Mode
   @override
-  onTap(Map<String, Map<String, dynamic>> map) {
-    throw UnimplementedError();
-  }
+  onTap(RemoteMessage message) => throw UnimplementedError();
 
   // Ignore - no Push-Messages in Demo-Mode
   @override
