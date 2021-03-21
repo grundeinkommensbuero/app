@@ -58,6 +58,11 @@ dependencies:
   flutter_markdown: 0.6.0
   collection: ^1.15.0
 
+# FIXME remove after officially released
+dependency_overrides:
+  calendarro: #https://github.com/adamstyrc/calendarro/pull/46 DateUtils and ancestorStateOfType fixes
+    git: https://github.com/ProbablyRational/calendarro.git
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
