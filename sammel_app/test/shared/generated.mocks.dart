@@ -92,8 +92,11 @@ class _FakeHttpClient extends _i2.Fake implements _i17.HttpClient {***REMOVED***
 
 class _FakeGeoData extends _i2.Fake implements _i18.GeoData {***REMOVED***
 
-// Ungültiger Code generiert
-// class _FakeFirebaseApp extends _i2.Fake implements _i19.FirebaseApp {***REMOVED***
+// wird irgendwie falsch generiert
+class _FakeFirebaseApp extends _i2.Fake implements _i19.FirebaseApp {
+  @override
+  bool operator ==(dynamic other) => super == other;
+***REMOVED***
 
 class _FakeRemoteMessage extends _i2.Fake implements _i20.RemoteMessage {***REMOVED***
 
@@ -751,17 +754,11 @@ class MockPushNotificationManager extends _i2.Mock
               Future.value(_FakePushReceiveService())) as _i15
           .Future<_i14.PushReceiveService>);
   @override
-  _i15.Future<dynamic> onReceived(Map<dynamic, dynamic>? message) =>
-      (super.noSuchMethod(Invocation.method(#onReceived, [message]),
-          returnValue: Future.value(null)) as _i15.Future<dynamic>);
+  dynamic onReceived(_i20.RemoteMessage? message) =>
+      super.noSuchMethod(Invocation.method(#onReceived, [message]));
   @override
-  _i15.Future<dynamic> onTap(Map<dynamic, dynamic>? message) =>
-      (super.noSuchMethod(Invocation.method(#onTap, [message]),
-          returnValue: Future.value(null)) as _i15.Future<dynamic>);
-  @override
-  Map<String, dynamic> extractData(Map<dynamic, dynamic>? message) =>
-      (super.noSuchMethod(Invocation.method(#extractData, [message]),
-          returnValue: <String, dynamic>{***REMOVED***) as Map<String, dynamic>);
+  dynamic onTap(_i20.RemoteMessage? message) =>
+      super.noSuchMethod(Invocation.method(#onTap, [message]));
   @override
   void registerMessageCallback(
           String? id, _i23.PushNotificationListener? callback) =>
@@ -829,10 +826,9 @@ class MockFirebaseMessaging extends _i2.Mock implements _i35.FirebaseMessaging {
     _i2.throwOnMissingStub(this);
   ***REMOVED***
 
-  // Generierung von _FakeFirebaseApp ungültig
-  // @override
-  // _i19.FirebaseApp get app => (super.noSuchMethod(Invocation.getter(#app),
-  //     returnValue: _FakeFirebaseApp()) as _i19.FirebaseApp);
+  @override
+  _i19.FirebaseApp get app => (super.noSuchMethod(Invocation.getter(#app),
+      returnValue: _FakeFirebaseApp()) as _i19.FirebaseApp);
   @override
   set app(_i19.FirebaseApp? _app) =>
       super.noSuchMethod(Invocation.setter(#app, _app),

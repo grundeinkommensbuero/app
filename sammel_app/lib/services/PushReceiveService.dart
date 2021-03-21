@@ -1,9 +1,8 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http_server/http_server.dart';
 import 'package:sammel_app/Provisioning.dart';
@@ -14,10 +13,10 @@ import 'ErrorService.dart';
 
 abstract class PushReceiveService {
   void subscribe(
-      {MessageHandler onMessage,
-      MessageHandler onResume,
-      MessageHandler onLaunch,
-      MessageHandler onBackgroundMessage***REMOVED***);
+      {Function(RemoteMessage)? onMessage,
+      Function(RemoteMessage)? onResume,
+      Function(RemoteMessage)? onLaunch,
+      Function(RemoteMessage)? onBackgroundMessage***REMOVED***);
 
   void subscribeToTopics(List<String> topics);
 
@@ -47,6 +46,7 @@ class FirebaseReceiveService implements PushReceiveService {
   ***REMOVED***
 
   initializeFirebase() async {
+    // TODO eigentlich muss hier ein `Firebase.initializeApp()` stehen, siehe https://pub.dev/packages/firebase_messaging/example
     await firebaseMessaging
         .getToken()
         .timeout(Duration(seconds: 5), onTimeout: () => null)
@@ -66,11 +66,16 @@ class FirebaseReceiveService implements PushReceiveService {
   @override
   void subscribe({onMessage, onResume, onLaunch, onBackgroundMessage***REMOVED***) {
     if (Platform.isIOS) onBackgroundMessage = null;
-    firebaseMessaging.configure(
-        onMessage: onMessage,
-        onResume: onResume,
-        onLaunch: onLaunch,
-        onBackgroundMessage: onBackgroundMessage);
+    if (onMessage != null)
+      FirebaseMessaging.onMessage.listen((message) => onMessage(message));
+    if (onResume != null)
+      FirebaseMessaging.onMessageOpenedApp
+          .listen((message) => onResume(message));
+    if (onLaunch != null)
+      firebaseMessaging.getInitialMessage().then((message) => onLaunch);
+    if (onBackgroundMessage != null)
+      FirebaseMessaging.onBackgroundMessage(
+          (message) => onBackgroundMessage!(message));
   ***REMOVED***
 
   @override
@@ -92,7 +97,7 @@ class FirebaseReceiveService implements PushReceiveService {
 
 class PullService extends BackendService implements PushReceiveService {
   late Timer timer;
-  MessageHandler onMessage = (_) async => Map();
+  Function(RemoteMessage) onMessage = (_) async => Map();
 
   PullService(AbstractUserService userService, Backend backend)
       : super(userService, backend) {
@@ -102,7 +107,7 @@ class PullService extends BackendService implements PushReceiveService {
   @override
   void subscribe({onMessage, onResume, onLaunch, onBackgroundMessage***REMOVED***) {
     // ignore onResume, onLaunch and onBackgroundMessage, since they are not happening in Pull Mode
-    this.onMessage = onMessage;
+    if (onMessage != null) this.onMessage = onMessage;
   ***REMOVED***
 
   Future<void> pull() async {

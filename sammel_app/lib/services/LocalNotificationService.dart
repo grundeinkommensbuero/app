@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:sammel_app/model/ActionListPushData.dart';
 import 'package:sammel_app/model/PushMessage.dart';
@@ -93,9 +94,8 @@ class LocalNotificationService {
   late Function(String) onTap;
 
   LocalNotificationService(this.pushManager) {
-    onTap = (String message) async => await pushManager.onTap({
-          'data': {'payload': jsonDecode(message), 'encrypted': 'Plain'***REMOVED***
-        ***REMOVED***);
+    onTap = (String message) async => await pushManager.onTap(RemoteMessage(
+        data: {'payload': jsonDecode(message), 'encrypted': 'Plain'***REMOVED***));
   ***REMOVED***
 
   Future sendChatNotification(ActionChatMessagePushData chatMessage) async {
@@ -120,7 +120,7 @@ class LocalNotificationService {
   ***REMOVED***
 
   Future<void> sendParticipationNotification(ParticipationPushData data) async {
-    if(data.message == null) return;
+    if (data.message == null) return;
     AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails(
             'Teilnahmen und Absagen',
@@ -242,7 +242,7 @@ class LocalNotificationService {
 
   void sendTopicChatNotification(
       TopicChatMessagePushData topicChatMessagePushData) async {
-    if(topicChatMessagePushData.message == null) return;
+    if (topicChatMessagePushData.message == null) return;
     AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails('Topic-Chats', 'Topic-Chats',
             'Benachrichtigungen über neue Topic-Nachrichten',
