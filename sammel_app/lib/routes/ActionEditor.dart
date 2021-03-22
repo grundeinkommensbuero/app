@@ -65,10 +65,9 @@ class ActionEditor extends StatefulWidget {
   final Termin? initAction;
   late Function onFinish;
 
-  ActionEditor({this.initAction, Function(List<Termin>)? onFinish, Key? key})
-      : super(key: key) {
-    this.onFinish = onFinish ?? (List<Termin> _) {};
-  }
+  ActionEditor(
+      {this.initAction, required this.onFinish, Key? key})
+      : super(key: key);
 
   @override
   ActionEditorState createState() => ActionEditorState(this.initAction);
@@ -613,7 +612,9 @@ class ActionEditorState extends State<ActionEditor>
             this.action.bis!, this.action.von!)) {
           end = end.add(Duration(days: 1));
         }
-        User me = await Provider.of<AbstractUserService>(context).user.first;
+        User me = await Provider.of<AbstractUserService>(context, listen: false)
+            .user
+            .first;
         termine.add(Termin(
             widget.initAction?.id,
             begin,
@@ -638,8 +639,10 @@ class ActionEditorState extends State<ActionEditor>
       validateAllInput();
     });
     if (action.validated['all'] == ValidationState.ok) {
-      var name =
-          (await Provider.of<AbstractUserService>(context).user.first).name;
+      var name = (await Provider.of<AbstractUserService>(context, listen: false)
+              .user
+              .first)
+          .name;
       if (isBlank(name)) {
         var name = await showUsernameDialog(context: context);
         if (name == null) return;
@@ -655,7 +658,8 @@ class ActionEditorState extends State<ActionEditor>
           resetAction();
         else
           Navigator.maybePop(context);
-        Provider.of<StorageService>(context).saveContact(action.kontakt!);
+        Provider.of<StorageService>(context, listen: false)
+            .saveContact(action.kontakt!);
       }
     }
   }

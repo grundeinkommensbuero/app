@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quiver/strings.dart';
+import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
 Future<String?> showUsernameDialog(
@@ -34,9 +35,9 @@ class UsernameDialogState extends State<UsernameDialog> {
           child: Column(children: [
         (widget.hideHint
             ? SizedBox()
-            : Text(
-                'Um diese Aktion auszuführen musst du dir einen Benutzer*in-Name geben',
-                key: Key('username dialog hint')).tr()),
+            : Text('Um diese Aktion auszuführen musst du dir einen Benutzer*in-Name geben',
+                    key: Key('username dialog hint'))
+                .tr()),
         TextField(
           key: Key('user name input'),
           autofocus: true,
@@ -61,9 +62,11 @@ class UsernameDialogState extends State<UsernameDialog> {
 
   Future<void> changeUserNameAndClose() async {
     try {
-      await Provider.of<AbstractUserService>(context).updateUsername(username!);
+      await Provider.of<AbstractUserService>(context, listen: false)
+          .updateUsername(username!);
       Navigator.pop(context, username);
     } catch (e) {
+      ErrorService.handleError(e, StackTrace.current);
       Navigator.pop(context, null);
     }
   }

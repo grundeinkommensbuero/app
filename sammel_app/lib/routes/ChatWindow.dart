@@ -200,7 +200,8 @@ class ChatWindowState extends State<ChatWindow> {
                 'um ${ChronoHelfer.dateTimeToStringHHmm(termin.beginn)} '
                 ', ${termin.ort.ortsteil}'));
     channel.pushMessages([message]);
-    Provider.of<StorageService>(context).saveChatChannel(channel);
+    Provider.of<StorageService>(context, listen: false)
+        .saveChatChannel(channel);
     controller.clear();
   }
 

@@ -29,7 +29,7 @@ class KiezPicker {
   KiezPicker(this.selectedKieze);
 
   Future<Set<Kiez>?> showKiezPicker(context) async {
-    stammdatenService = Provider.of<StammdatenService>(context);
+    stammdatenService = Provider.of<StammdatenService>(context, listen: false);
     regionen = await stammdatenService!.regionen;
     kieze = await stammdatenService!.kieze;
     ortsteile = await stammdatenService!.ortsteile;

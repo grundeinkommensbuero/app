@@ -173,7 +173,8 @@ class ProfilePageState extends State<ProfilePage> {
 
   showKiezPicker() async {
     var selection = (await KiezPicker(
-                (await Provider.of<StammdatenService>(context).kieze)
+                (await Provider.of<StammdatenService>(context, listen: false)
+                        .kieze)
                     .where((kiez) => myKieze.contains(kiez.name))
                     .toSet())
             .showKiezPicker(context))

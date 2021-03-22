@@ -135,7 +135,7 @@ class DweCalendarroDayItem extends CalendarroDayItem {
     bool isToday = cal.DateUtils.isToday(date);
     calendarroState = Calendarro.of(context);
 
-    late BoxDecoration boxDecoration;
+    BoxDecoration? boxDecoration;
     if (daySelected) {
       var leftborder = dayBeforeSelected ? Radius.zero : Radius.circular(20.0);
       var rightborder = dayAfterSelected ? Radius.zero : Radius.circular(20.0);

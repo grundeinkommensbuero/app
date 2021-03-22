@@ -111,8 +111,9 @@ class NavigationState extends State<Navigation>
           floatingActionButton: widget.clearButton == true
               ? FloatingActionButton(
                   heroTag: 'clearButtonHero',
-                  onPressed: () => Provider.of<StorageService>(context)
-                      .clearAllPreferences(),
+                  onPressed: () =>
+                      Provider.of<StorageService>(context, listen: false)
+                          .clearAllPreferences(),
                   child: Icon(Icons.delete_forever),
                   foregroundColor: Colors.red,
                 )
@@ -206,7 +207,7 @@ class NavigationState extends State<Navigation>
     await _animationController.forward();
     setState(() {
       if (navigation == chatPageIndex && index != chatPageIndex) {
-        Provider.of<ChatMessageService>(context)
+        Provider.of<ChatMessageService>(context, listen: false)
             .getTopicChannel("global")
             .then((value) => maybeDispose(value));
       }
