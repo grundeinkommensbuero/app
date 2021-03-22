@@ -20,8 +20,9 @@ import 'package:sammel_app/shared/DweTheme.dart';
 import 'services/BackendService.dart';
 import 'services/LocalNotificationService.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   runApp(EasyLocalization(
       supportedLocales: [
         Locale('en'),
