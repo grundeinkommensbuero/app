@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http_server/http_server.dart';
 import 'package:sammel_app/Provisioning.dart';
@@ -46,7 +47,7 @@ class FirebaseReceiveService implements PushReceiveService {
   ***REMOVED***
 
   initializeFirebase() async {
-    // TODO eigentlich muss hier ein `Firebase.initializeApp()` stehen, siehe https://pub.dev/packages/firebase_messaging/example
+    await Firebase.initializeApp();
     await firebaseMessaging
         .getToken()
         .timeout(Duration(seconds: 5), onTimeout: () => null)
