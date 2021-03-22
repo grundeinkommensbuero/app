@@ -100,7 +100,9 @@ class ActionEditorState extends State<ActionEditor>
   @override
   void afterFirstLayout(BuildContext context) {
     if (isNewAction)
-      Provider.of<StorageService>(context).loadContact().then((stored) {
+      Provider.of<StorageService>(context, listen: false)
+          .loadContact()
+          .then((stored) {
         setState(() => action.kontakt = stored);
         validateContact();
       ***REMOVED***);
