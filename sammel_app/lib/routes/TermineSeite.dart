@@ -371,7 +371,6 @@ class TermineSeiteState extends State<TermineSeite>
   ***REMOVED***
 
   createAndAddAction(Termin action) async {
-    if(action.id == null) return;
     try {
       Termin actionWithId = await createNewAction(action);
       myActions.add(actionWithId.id!);

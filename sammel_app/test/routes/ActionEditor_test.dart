@@ -874,7 +874,7 @@ Future<ActionEditorState> _pumpActionCreator(WidgetTester tester) async {
       child: MaterialApp(
           home: WillPopScope(
         onWillPop: () => Future.value(false),
-        child: ActionEditor(key: Key('action creator')),
+        child: ActionEditor(key: Key('action creator'), onFinish: (_) {***REMOVED***),
       ))));
   await tester.pumpAndSettle();
   return tester.state(find.byType(ActionEditor));

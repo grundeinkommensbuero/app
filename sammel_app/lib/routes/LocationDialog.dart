@@ -154,21 +154,23 @@ class LocationDialogState extends State<LocationDialog> {
   ***REMOVED***
 
   locationSelected(LatLng point) async {
-    var geodata = await Provider.of<GeoService>(context)
+    var geodata = await Provider.of<GeoService>(context, listen: false)
         .getDescriptionToPoint(point)
         .catchError((e, s) {
       ErrorService.handleError(e, s);
       return GeoData('', '', '');
     ***REMOVED***);
-    Kiez? kiez =
-        (await Provider.of<StammdatenService>(context).kieze as List<Kiez?>)
-            .firstWhere(
-                (kiez) => poly.Polygon(kiez!.polygon
-                        .map((latlng) =>
-                            poly.Point<num>(latlng.latitude, latlng.longitude))
-                        .toList())
-                    .contains(point.latitude, point.longitude),
-                orElse: () => null);
+    Kiez? kiez = (await Provider.of<StammdatenService>(context, listen: false)
+            .kieze)
+        // ignore: unnecessary_cast
+        .map((kiez) => kiez as Kiez?) // nötig wegen orElse => null
+        .firstWhere(
+            (kiez) => poly.Polygon(kiez!.polygon
+                    .map((latlng) =>
+                        poly.Point<num>(latlng.latitude, latlng.longitude))
+                    .toList())
+                .contains(point.latitude, point.longitude),
+            orElse: () => null);
 
     if (kiez == null) return;
     setState(() {

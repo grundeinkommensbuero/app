@@ -86,9 +86,7 @@ class ActionChatMessagePushData extends ChatPushData {
   ActionChatMessagePushData.fromJson(Map<String, dynamic> json)
       : super(json['channel']) {
     try {
-      String? action = json['action'];
-      assert(action != null);
-      this.action = int.parse(action!);
+      this.action = json['action'];
       this.message = ChatMessage.fromJson(json);
     ***REMOVED*** on AssertionError catch (e) {
       throw UnreadablePushMessage(tr(

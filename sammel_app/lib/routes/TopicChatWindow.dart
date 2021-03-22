@@ -29,7 +29,7 @@ class TopicChatWindowState extends State<TopicChatWindow>
 
   TopicChatWindowState(ChatChannel channel) {
     channel.registerChannelChangeListener(this);
-    messages = channel.channelMessages as List<ChatMessage>;
+    messages = channel.channelMessages.map((e) => e as ChatMessage).toList();
   ***REMOVED***
 
   @override
