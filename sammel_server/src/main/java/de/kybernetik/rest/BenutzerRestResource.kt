@@ -161,8 +161,10 @@ open class BenutzerRestResource {
             return Response.status(500).entity(RestFehlermeldung(meldung)).build()
         ***REMOVED***
 
-        if(login.firebaseKey != null && !credentials.firebaseKey.equals(login.firebaseKey))
-            LOG.warn("Firbase-Key stimmt nicht überein für Benutzer ${login.user***REMOVED***: ${login.firebaseKey***REMOVED***")
+        if(login.firebaseKey != null && !credentials.firebaseKey.equals(login.firebaseKey)) {
+            LOG.warn("Erneuere veralteten Firbase-Key von Benutzer ${login.user.id***REMOVED***: ${credentials.firebaseKey***REMOVED***")
+            credentials.firebaseKey = login.firebaseKey!!
+        ***REMOVED***
 
         if(login.firebaseKey == null && !credentials.firebaseKey.equals("none"))
             LOG.debug("Firbase-Key null für Benutzer ${login.user***REMOVED*** obwohl Key hinterlegt ist")
