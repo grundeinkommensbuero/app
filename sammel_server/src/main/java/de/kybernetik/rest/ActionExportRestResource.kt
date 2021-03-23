@@ -3,7 +3,6 @@ package de.kybernetik.rest
 import de.kybernetik.database.termine.Termin
 import de.kybernetik.database.termine.TermineDao
 import org.jboss.logging.Logger
-import java.lang.Exception
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter.ofPattern
 import javax.annotation.security.PermitAll
@@ -42,7 +41,7 @@ open class ActionExportRestResource {
             .map { action -> GeoJsonAction.convertFromAction(action) ***REMOVED***
         val geoJsoncollection = GeoJsonCollection(geoJsonActions)
         LOG.debug("${geoJsonActions.size***REMOVED*** Aktionen ausgegeben")
-        return Response.ok().entity(geoJsoncollection).build()
+        return Response.ok().entity(geoJsoncollection).header("Access-Control-Allow-Origin", "*").build()
     ***REMOVED***
 
     data class GeoJsonCollection(val features: List<GeoJsonAction>) {
