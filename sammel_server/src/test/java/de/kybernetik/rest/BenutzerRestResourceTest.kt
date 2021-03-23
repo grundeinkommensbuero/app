@@ -4,6 +4,7 @@ import com.nhaarman.mockitokotlin2.*
 import de.kybernetik.database.benutzer.Benutzer
 import de.kybernetik.database.benutzer.BenutzerDao
 import de.kybernetik.database.benutzer.Credentials
+import de.kybernetik.database.subscriptions.SubscriptionDao
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -36,6 +37,10 @@ class BenutzerRestResourceTest {
 
     @Mock
     private lateinit var context: SecurityContext
+
+    @Suppress("unused")
+    @Mock
+    private lateinit var subscriptinDao: SubscriptionDao
 
     @InjectMocks
     private lateinit var resource: BenutzerRestResource
@@ -213,6 +218,42 @@ class BenutzerRestResourceTest {
 
         verify(security, times(1)).verifiziereSecretMitHash(anyString(), any())
         assertEquals(response.status, 200)
+    ***REMOVED***
+
+    @Test
+    fun `authentifiziereBenutzer tauscht Firebas-Key aus, wenn er nicht uebereinstimmt`() {
+        val credentials = Credentials(11L, "hash", "salt", "alter Firebase-Key", true, emptyList())
+        whenever(dao.getCredentials(11L)).thenReturn(credentials)
+        whenever(security.verifiziereSecretMitHash(anyString(), any())).thenReturn(true)
+        assertEquals(credentials.firebaseKey, "alter Firebase-Key")
+
+        resource.authentifiziereBenutzer(Login("richtig", "neuer Firebase-Key", BenutzerDto(11L, "Karl Marx", 4294198070)))
+
+        assertEquals(credentials.firebaseKey, "neuer Firebase-Key")
+    ***REMOVED***
+
+    @Test
+    fun `authentifiziereBenutzer ergaenzt Firebas-Key wenn keiner hinterlegt ist`() {
+        val credentials = Credentials(11L, "hash", "salt", "none", true, emptyList())
+        whenever(dao.getCredentials(11L)).thenReturn(credentials)
+        whenever(security.verifiziereSecretMitHash(anyString(), any())).thenReturn(true)
+        assertEquals(credentials.firebaseKey, "none")
+
+        resource.authentifiziereBenutzer(Login("richtig", "neuer Firebase-Key", BenutzerDto(11L, "Karl Marx", 4294198070)))
+
+        assertEquals(credentials.firebaseKey, "neuer Firebase-Key")
+    ***REMOVED***
+
+    @Test
+    fun `authentifiziereBenutzer ersetzt echten Firebas-Key nicht, wenn neuer Key null ist`() {
+        val credentials = Credentials(11L, "hash", "salt", "alter Firebase-Key", true, emptyList())
+        whenever(dao.getCredentials(11L)).thenReturn(credentials)
+        whenever(security.verifiziereSecretMitHash(anyString(), any())).thenReturn(true)
+        assertEquals(credentials.firebaseKey, "alter Firebase-Key")
+
+        resource.authentifiziereBenutzer(Login("richtig", null, BenutzerDto(11L, "Karl Marx", 4294198070)))
+
+        assertEquals(credentials.firebaseKey, "alter Firebase-Key")
     ***REMOVED***
 
     @Test
