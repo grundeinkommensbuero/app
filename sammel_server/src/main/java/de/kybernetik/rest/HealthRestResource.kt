@@ -18,10 +18,10 @@ open class HealthRestResource {
     open fun health(): Response {
         return Response
             .ok()
-            .entity(Health(status = "lebendig", version = "1.2.6", minClient = "1.1.0+28", modus = getProperty("mode")))
+            .entity(Health(status = "lebendig", version = "1.2.7", minClient = "1.1.0+28", modus = getProperty("mode")))
             .build()
 
     ***REMOVED***
 ***REMOVED***
 
-data class Health(val status: String, val version: String, val minClient: String, val modus: String)
+data class Health(val status: String, val version: String, val minClient: String, val modus: String?)
