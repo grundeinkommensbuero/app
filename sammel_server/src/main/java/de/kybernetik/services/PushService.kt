@@ -81,6 +81,7 @@ open class PushService {
 
     open fun sendePushNachrichtAnTopic(nachricht: PushMessageDto, topic: String) {
         val topicInModus = "$PREFIX$topic"
+        LOG.info("Pushe Nachricht zu Topic $PREFIX$topic")
         val verschluesselt = verschluessele(nachricht.data)
         firebase.sendePushNachrichtAnTopic(nachricht.notification, verschluesselt, topicInModus)
 

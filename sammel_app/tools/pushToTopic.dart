@@ -2,24 +2,29 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 
+const authMap = {
+  Mode.LOCAL: 'Basic MzpmZjdhOGI2Yi1lMTVhLTRmZWUtOWY3OS1kY2EwNmZkNmM4ODM=',
+  Mode.TEST: 'Basic MzpmZjdhOGI2Yi1lMTVhLTRmZWUtOWY3OS1kY2EwNmZkNmM4ODM=',
+  Mode.PROD: 'KEY NICHT EINCHECKEN!',
+***REMOVED***
+
 Future<void> main() async {
-  var titel = 'Neue Version 1.2';
-  var inhalt = '''Soeben ist unsere neue Version 1.2 veröffentlicht worden.
-Die offensichtlichste Neuerung ist, dass Aktionen auf der Übersichtskarte jetzt zusammengefasst werden, um sie übersichtlicher und auf langsameren Geräten performanter zu machen.
-Aus dem selben Grund werden die Solidarischen Orte nun erst angezeigt, wenn du näher heranzoomst.
-Außerdem lassen sich nun mit dem Aktionen-Filter speziell Aktionen anzeigen, an denen du teilnimmst. Der Filter-Knopf ist nun grün, wenn ein Filter aktiv ist und ein Bug wurde behoben der verhinderte, dass vergangene Aktionen gelöscht werden konnten.
-Viel Spaß mit der App!''';
+  var mode = Mode.PROD;
+  var author = Author.APP;
+  var titel = '47.342';
+  var inhalt = '''Wir dürfen heute bekanntgeben: die Zahl der Unterschriften bis jetzt lautet: 47.342! Danke allen Sammler:innen. 😍
+Es geht weiter bis 26.6.21. 🥳 Und dafür brauchen wir eure Unterstützung. Gemeinsam sind wir stark!''';
+
+  assert(authMap[mode] != null, 'Authentifizierung eintragen');
 
   final body = {
     "data": {
       "type": "TopicChatMessage",
       "channel": "topic:global",
-      "timestamp": "2021-03-08 23:45:00.000000",
+      "timestamp": DateTime.now().toString(),
       "text": '$titel\n\n$inhalt',
-      "color": 4292668415,
-      // DWE hellblau für App-Info
-      // "color": 4294960680, // DWE mittelgelb für Deutsche Wohnen & Co. Enteignen
-      "sender_name": "App-Info",
+      "color": colorMap[author],
+      "sender_name": nameMap[author],
       "user_id": -1
     ***REMOVED***,
     "notification": {"title": titel, "body": inhalt***REMOVED***
@@ -27,13 +32,12 @@ Viel Spaß mit der App!''';
 
   final response = await post(
       Uri(
-          scheme: 'http',
-          host: 'localhost',
-          port: 18080,
-          path: 'service/push/topic/global'),
+          scheme: protocolMap[mode],
+          host: hostMap[mode],
+          port: portMap[mode],
+          path: '/service/push/topic/global'),
       headers: {
-        "Authorization":
-            "Basic MzpmZjdhOGI2Yi1lMTVhLTRmZWUtOWY3OS1kY2EwNmZkNmM4ODM=",
+        "Authorization": authMap[mode]!,
         "Content-Type": "application/json",
         "Accept": "application/json"
       ***REMOVED***,
@@ -41,4 +45,35 @@ Viel Spaß mit der App!''';
 
   print(
       'Ergebnis: ${response.statusCode***REMOVED*** - ${response.body***REMOVED*** - ${response.reasonPhrase***REMOVED***');
+***REMOVED***
+
+enum Mode { LOCAL, TEST, PROD ***REMOVED***
+enum Author { APP, DWE ***REMOVED***
+
+***REMOVED***
+  Mode.LOCAL: 'localhost',
+***REMOVED***
+  Mode.PROD: 'dwenteignen.party',
+***REMOVED***
+
+const protocolMap = {
+  Mode.LOCAL: 'http',
+  Mode.TEST: 'https',
+  Mode.PROD: 'https',
+***REMOVED***
+
+***REMOVED***
+  Mode.LOCAL: 18080,
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+const colorMap = {
+  Author.APP: 4292668415,
+  Author.DWE: 4294960680,
+***REMOVED***
+
+const nameMap = {
+  Author.APP: 'App-Info',
+  Author.DWE: 'Deutsche Wohnen & Co. Enteignen',
 ***REMOVED***

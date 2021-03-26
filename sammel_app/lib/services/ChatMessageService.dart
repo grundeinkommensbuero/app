@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
-import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/routes/ChatWindow.dart';
 import 'package:sammel_app/routes/TopicChatWindow.dart';
 import 'package:sammel_app/services/ErrorService.dart';
@@ -36,10 +36,12 @@ class ChatMessageService implements PushNotificationListener {
       final cls = channel.ccl as State<StatefulWidget>?;
       if (cls == null || ModalRoute.of(cls.context)?.isActive == false) {
         // chat window is not open: push local message
-        var notifier =
-            Provider.of<LocalNotificationService>(navigatorKey!.currentContext!);
+        var notifier = Provider.of<LocalNotificationService>(
+            navigatorKey!.currentContext!,
+            listen: false);
         if (json['type'] == PushDataTypes.simpleChatMessage)
-          notifier.sendChatNotification(ActionChatMessagePushData.fromJson(json));
+          notifier
+              .sendChatNotification(ActionChatMessagePushData.fromJson(json));
         if (json['type'] == PushDataTypes.participationMessage)
           notifier.sendParticipationNotification(
               ParticipationPushData.fromJson(json));
@@ -87,7 +89,8 @@ class ChatMessageService implements PushNotificationListener {
       final channel = await getChannel(chatPushData.channel);
       State<StatefulWidget>? cls = channel.ccl as State<StatefulWidget>?;
       createOrRecreateChatPage(cls, channel, chatPushData.action);
-    ***REMOVED*** else if (Message.determineType(data) == PushDataTypes.participationMessage) {
+    ***REMOVED*** else if (Message.determineType(data) ==
+        PushDataTypes.participationMessage) {
       var participationPushData = ParticipationPushData.fromJson(data);
       final channel = await getChannel(participationPushData.channel);
       State<StatefulWidget>? cls = channel.ccl as State<StatefulWidget>?;
