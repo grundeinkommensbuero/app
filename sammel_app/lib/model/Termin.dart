@@ -28,7 +28,7 @@ class Termin {
         longitude = json['longitude'] ?? null,
         participants = (json['participants'] as List?)
             ?.map((user) => User.fromJSON(user))
-            .toList() ?? [],
+            .toList(),
         details = json['details'] != null
             ? TerminDetails.fromJSON(json['details'])
             : null;
