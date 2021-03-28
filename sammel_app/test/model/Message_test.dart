@@ -73,17 +73,6 @@ void main() {
         expect(message.username, isNull);
       ***REMOVED***);
 
-      test('fromJson expects timestamp', () async {
-        var json = {
-          'type': 'ParticipationMessage',
-          'obtained_from_server': false,
-          'username': 'Karl Marx',
-          'joins': true
-        ***REMOVED***
-        expect(() => ParticipationMessage.fromJson(json),
-            throwsA((e) => e is TypeError));
-      ***REMOVED***);
-
       test('fromJson expects joins', () async {
         var json = {
           'type': 'ParticipationMessage',

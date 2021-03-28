@@ -84,8 +84,9 @@ class ParticipationMessage implements Message {
       [this.obtainedFromServer = false]);
 
   factory ParticipationMessage.fromJson(Map<dynamic, dynamic> json) {
+    final bool joins = json['joins'];
     return ParticipationMessage(DateTime.parse(json['timestamp']),
-        json['username'], json['joins'], json['obtained_from_server'] ?? false);
+        json['username'], joins, json['obtained_from_server'] ?? false);
   ***REMOVED***
 
   @override
