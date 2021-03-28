@@ -8,7 +8,7 @@ abstract class Message {
   bool obtainedFromServer = false;
   abstract DateTime? timestamp;
 
-  static String determineType(Map<String, dynamic> data) =>
+  static String? determineType(Map<String, dynamic> data) =>
       data['type'] ?? null;
 
   Map<String, dynamic> toJson();
@@ -74,23 +74,18 @@ class ParticipationMessage implements Message {
   @override
   String type = PushDataTypes.participationMessage;
   @override
-  bool obtainedFromServer = false;
+  bool obtainedFromServer;
   @override
   DateTime? timestamp;
   String? username;
-  late bool joins;
+  bool joins;
 
-  ParticipationMessage(
-      this.obtainedFromServer, this.timestamp, this.username, this.joins);
+  ParticipationMessage(this.timestamp, this.username, this.joins,
+      [this.obtainedFromServer = false]);
 
-  ParticipationMessage.fromJson(Map<dynamic, dynamic> json) {
-    obtainedFromServer = json['obtained_from_server'];
-    timestamp =
-        json['timestamp'] != null ? DateTime.parse(json['timestamp']) : null;
-    username = json['username'];
-    joins = json['joins'];
-
-    assert(timestamp != null, 'Zeistempel fehlt');
+  factory ParticipationMessage.fromJson(Map<dynamic, dynamic> json) {
+    return ParticipationMessage(DateTime.parse(json['timestamp']),
+        json['username'], json['joins'], json['obtained_from_server'] ?? false);
   ***REMOVED***
 
   @override

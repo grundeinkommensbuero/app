@@ -5,7 +5,7 @@ import 'package:sammel_app/model/PushMessage.dart';
 import '../routes/TerminCard_test.dart';
 
 ParticipationMessage message() =>
-    ParticipationMessage(false, now(), 'Karl Marx', true);
+    ParticipationMessage(now(), 'Karl Marx', true);
 
 void main() {
   group('ParticipationPushData', () {
