@@ -20,7 +20,7 @@ void main() {
     group('toJson', () {
       test('serializes corretly', () {
         var message = ParticipationMessage(
-            false, DateTime(2020, 12, 12, 23, 58), 'Karl Marx', true);
+            DateTime(2020, 12, 12, 23, 58), 'Karl Marx', true);
 
         var json = message.toJson();
         expect(json['type'], 'ParticipationMessage');
@@ -31,8 +31,8 @@ void main() {
       });
 
       test('serializes null username', () {
-        var message = ParticipationMessage(
-            false, DateTime(2020, 12, 12, 23, 58), null, true);
+        var message =
+            ParticipationMessage(DateTime(2020, 12, 12, 23, 58), null, true);
         var json = message.toJson();
         expect(json['type'], 'ParticipationMessage');
         expect(json['obtained_from_server'], isFalse);
@@ -80,7 +80,8 @@ void main() {
           'username': 'Karl Marx',
           'joins': true
         };
-        expect(() => ParticipationMessage.fromJson(json), throwsAssertionError);
+        expect(() => ParticipationMessage.fromJson(json),
+            throwsA((e) => e is TypeError));
       });
 
       test('fromJson expects joins', () async {
@@ -90,24 +91,25 @@ void main() {
           'timestamp': '2020-12-12 23:58:00.000',
           'username': 'Karl Marx',
         };
-        expect(() => ParticipationMessage.fromJson(json), throwsAssertionError);
+        expect(() => ParticipationMessage.fromJson(json),
+            throwsA((e) => e is TypeError));
       });
     });
     group('isMessageEqual', () {
       test('idntifies equal values', () {
         var user1 = ParticipationMessage(
-            false, DateTime(2020, 1, 11, 04, 18), 'Karl Marx', true);
+            DateTime(2020, 1, 11, 04, 18), 'Karl Marx', true);
         var user2 = ParticipationMessage(
-            false, DateTime(2020, 1, 11, 04, 18), 'Karl Marx', true);
+            DateTime(2020, 1, 11, 04, 18), 'Karl Marx', true);
 
         expect(user1.isMessageEqual(user2), isTrue);
       });
 
       test('ignores different obtained_from_server values', () {
         var user1 = ParticipationMessage(
-            true, DateTime(2020, 1, 11, 04, 18), 'Karl Marx', true);
+            DateTime(2020, 1, 11, 04, 18), 'Karl Marx', true, true);
         var user2 = ParticipationMessage(
-            false, DateTime(2020, 1, 11, 04, 18), 'Karl Marx', true);
+            DateTime(2020, 1, 11, 04, 18), 'Karl Marx', true);
 
         expect(user1.isMessageEqual(user2), isTrue);
       });

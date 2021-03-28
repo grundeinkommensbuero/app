@@ -8,7 +8,7 @@ void main() {
 
   group('fromJson', () {
     final participationMessage =
-        ParticipationMessage(true, timestamp, 'Karl Marx', true);
+        ParticipationMessage(timestamp, 'Karl Marx', true, true);
     final chatMessage = ChatMessage(
         text: 'This is my last resort',
         senderName: 'Karl Marx',
