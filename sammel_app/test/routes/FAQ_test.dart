@@ -5,8 +5,8 @@ import 'package:sammel_app/routes/FAQ.dart';
 import 'package:sammel_app/services/FAQService.dart';
 
 import '../services/FAQService_test.dart';
-import '../shared/Trainer.dart';
-import '../shared/generated.mocks.dart';
+import '../shared/mocks.trainer.dart';
+import '../shared/mocks.mocks.dart';
 
 main() {
   trainTranslation(MockTranslations());

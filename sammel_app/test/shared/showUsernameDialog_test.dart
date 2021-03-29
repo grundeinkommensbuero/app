@@ -6,9 +6,9 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/showUsernameDialog.dart';
 
-import 'Trainer.dart';
+import 'mocks.trainer.dart';
 import 'TestdatenVorrat.dart';
-import '../shared/generated.mocks.dart';
+import '../shared/mocks.mocks.dart';
 
 void main() {
   trainTranslation(MockTranslations());

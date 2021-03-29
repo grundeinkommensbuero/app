@@ -7,8 +7,8 @@ import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/routes/ChatListWidget.dart';
 import 'package:sammel_app/services/UserService.dart';
 
-import '../shared/Trainer.dart';
-import '../shared/generated.mocks.dart';
+import '../shared/mocks.trainer.dart';
+import '../shared/mocks.mocks.dart';
 
 void main() {
   trainTranslation(MockTranslations());

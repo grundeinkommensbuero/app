@@ -6,8 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:sammel_app/shared/showMultipleDatePicker.dart';
 
-import 'Trainer.dart';
-import '../shared/generated.mocks.dart';
+import 'mocks.trainer.dart';
+import '../shared/mocks.mocks.dart';
 
 Widget createWidgetWithMultipleDatePicker(List<DateTime> previousSelection,
     Function result) {

@@ -1,8 +1,4 @@
 
-import 'dart:io';
-
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:http_server/http_server.dart';
 import 'package:mockito/annotations.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
@@ -28,13 +24,10 @@ import 'package:easy_localization/src/translations.dart';
   ChatMessageService,
   PushNotificationManager,
   GeoService,
-  FirebaseMessaging,
   Backend,
   LocalNotificationService,
   FirebaseReceiveService,
   Translations,
-  HttpClientResponse,
-  HttpClientResponseBody,
   DemoPushSendService,
 ])
 // run `flutter pub run build_runner build` to generate Mocks

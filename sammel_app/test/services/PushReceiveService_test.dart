@@ -4,8 +4,9 @@ import 'package:mockito/mockito.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:test/test.dart';
 
-import '../shared/Trainer.dart';
-import '../shared/generated.mocks.dart';
+import '../shared/mocks.trainer.dart';
+import '../shared/mocks.costumized.dart';
+import '../shared/mocks.mocks.dart';
 
 main() {
   trainTranslation(MockTranslations());

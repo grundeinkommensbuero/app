@@ -6,8 +6,8 @@ import 'package:sammel_app/shared/DweTheme.dart';
 
 import '../TestdataStorage.dart';
 import '../model/Termin_test.dart';
-import '../shared/Trainer.dart';
-import '../shared/generated.mocks.dart';
+import '../shared/mocks.trainer.dart';
+import '../shared/mocks.mocks.dart';
 import '../shared/TestdatenVorrat.dart';
 
 void main() {

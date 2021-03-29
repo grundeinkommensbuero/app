@@ -139,13 +139,11 @@ class ParticipationPushData extends ChatPushData {
 
   ParticipationPushData.fromJson(Map<String, dynamic> json)
       : super(json['channel']) {
-    this.action = json['action']!;
-    try {
-      this.message = ParticipationMessage.fromJson(json);
-    ***REMOVED*** on AssertionError catch (e) {
+    if (json['action'] == null)
       throw UnreadablePushMessage(
-          'Unlesbare Teilnahme-Nachricht empfangen: ${e.message***REMOVED***');
-    ***REMOVED***
+          'Unlesbare Teilnahme-Nachricht empfangen: Fehlende Aktions-ID');
+    else this.action = json['action'];
+    this.message = ParticipationMessage.fromJson(json);
   ***REMOVED***
 ***REMOVED***
 

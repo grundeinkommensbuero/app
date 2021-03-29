@@ -4,8 +4,8 @@ import 'package:flutter_test_ui/flutter_test_ui.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/shared/showErrorDialog.dart';
 
-import 'Trainer.dart';
-import '../shared/generated.mocks.dart';
+import 'mocks.trainer.dart';
+import '../shared/mocks.mocks.dart';
 
 main() {
   trainTranslation(MockTranslations());

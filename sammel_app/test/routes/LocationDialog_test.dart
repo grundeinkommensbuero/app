@@ -9,8 +9,9 @@ import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 
 import '../services/StammdatenService_test.dart';
-import '../shared/Trainer.dart';
-import '../shared/generated.mocks.dart';
+import '../shared/mocks.trainer.dart';
+import '../shared/mocks.mocks.dart';
+import '../shared/mocks.costumized.dart';
 
 late StammdatenService _stammdatenService;
 final MockGeoService _geoService = MockGeoService();

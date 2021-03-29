@@ -30,6 +30,7 @@ void main() {
           'obtained_from_server': false,
           'timestamp': '2020-12-12 23:58:00.000',
           'username': 'Karl Marx',
+          'action': 1,
           'joins': true
         ***REMOVED***
 
@@ -38,7 +39,7 @@ void main() {
         expect(pushData.channel, 'my channel');
       ***REMOVED***);
 
-      test('throws UnreadablePushMessage on incosistend data', () {
+      test('throws UnreadablePushMessage on incosistent data', () {
         var json = {
           'type': 'ParticipationMessage',
           'channel': 'my channel',

@@ -5,9 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:test/test.dart';
 
-import '../shared/Trainer.dart';
+import '../shared/mocks.trainer.dart';
 import '../shared/TestdatenVorrat.dart';
-import '../shared/generated.mocks.dart';
+import '../shared/mocks.mocks.dart';
 
 void main() {
   trainTranslation(MockTranslations());

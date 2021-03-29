@@ -24,11 +24,11 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-  http: ^0.13.0
+  http: ^0.13.0 # nur für sendToTopic
   quiver: '>=2.0.0 <3.0.0' # bei nächster Gelegenheit hochziehen wegen null-safety
   flutter_local_notifications: ^5.0.0-nullsafety.1
   date_format: ^1.0.6
-  http_server: ^0.9.8+3
+  http_server: ^1.0.0
   provider: ^5.0.0
   intl: ^0.17.0
   calendarro: ^1.2.0
