@@ -6,20 +6,26 @@ import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/UserService.dart';
 
-import '../shared/mocks.trainer.dart';
 import '../shared/TestdatenVorrat.dart';
-import '../shared/mocks.mocks.dart';
 import '../shared/mocks.costumized.dart';
+import '../shared/mocks.mocks.dart';
+import '../shared/mocks.trainer.dart';
 
 main() {
-  AbstractUserService userService = MockUserService();
+  MockUserService userService = MockUserService();
   MockHttpClientResponseBody http200Mock =
       trainHttpResponse(MockHttpClientResponseBody(), 200, null);
+  final mockFirebaseReceiveService = MockFirebaseReceiveService();
 
   group('BackendService', () {
     late MockBackend backend;
 
     setUp(() {
+      reset(mockFirebaseReceiveService);
+      when(mockFirebaseReceiveService.token)
+          .thenAnswer((_) async => 'firebase-token');
+      reset(userService);
+      trainUserService(userService);
       backend = MockBackend();
     });
 
@@ -44,8 +50,8 @@ main() {
         var storageServiceMock = MockStorageService();
         when(storageServiceMock.loadUser()).thenAnswer((_) async => karl());
         when(storageServiceMock.loadSecret()).thenAnswer((_) async => "secret");
-        var service = UserService(
-            storageServiceMock, MockFirebaseReceiveService(), MockBackend());
+        var service = UserService(storageServiceMock,
+            mockFirebaseReceiveService, trainBackend(MockBackend()));
         expect(service, isNotNull);
       });
 
@@ -118,7 +124,7 @@ main() {
         final userService = MockUserService();
         when(userService.user).thenAnswer((_) => Stream.value(karl()));
         when(userService.userHeaders).thenAnswer((_) => Future.delayed(
-            Duration(seconds: 11), () => {'Authorization': 'my creds'}));
+            Duration(seconds: 21), () => {'Authorization': 'my creds'}));
 
         final service = BackendService(userService, MockBackend());
 
@@ -135,9 +141,8 @@ main() {
       });
 
       test('for get', () async {
-        when(mock.get('', {})).thenAnswer((_) {
-          return Future<HttpClientResponseBody>.value(http200Mock);
-        });
+        when(mock.get('any URL', {'Authorization': 'userCreds'})).thenAnswer(
+            (_) => Future<HttpClientResponseBody>.value(http200Mock));
         await service.get('any URL');
         verify(mock.get('any URL', any)).called(1);
       });

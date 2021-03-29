@@ -20,12 +20,15 @@ import '../shared/mocks.mocks.dart';
 
 void main() {
   PushNotificationManager pushManager = MockPushNotificationManager();
-  StammdatenService stammdatenService = MockStammdatenService();
+  MockStammdatenService stammdatenService = MockStammdatenService();
   final localNotificationService = MockLocalNotificationService();
   final userService = MockUserService();
 
   setUp(() {
+    reset(userService);
     trainUserService(userService);
+    reset(stammdatenService);
+    trainStammdatenService(stammdatenService);
   });
 
   group('DemoTermineService', () {

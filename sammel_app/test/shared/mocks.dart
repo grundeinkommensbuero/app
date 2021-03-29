@@ -15,7 +15,6 @@ import 'package:sammel_app/services/UserService.dart';
 import 'package:easy_localization/src/translations.dart';
 
 @GenerateMocks([
-  StammdatenService,
   TermineService,
   ListLocationService,
   StorageService,
@@ -29,6 +28,6 @@ import 'package:easy_localization/src/translations.dart';
   FirebaseReceiveService,
   Translations,
   DemoPushSendService,
-])
+], customMocks: [MockSpec<StammdatenService>(returnNullOnMissingStub: true)])
 // run `flutter pub run build_runner build` to generate Mocks
 void main() {}

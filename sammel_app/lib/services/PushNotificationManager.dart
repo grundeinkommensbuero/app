@@ -79,7 +79,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
   Map<String, PushNotificationListener> callbackMap = Map();
 
   onReceived(RemoteMessage message) async {
-    final data = await await decrypt(message.data);
+    final data = await decrypt(message.data);
 
     try {
       if (data.containsKey('type'))
