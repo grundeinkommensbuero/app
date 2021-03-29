@@ -5,9 +5,9 @@ import 'package:easy_localization/src/translations.dart';
 import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
 
+import '../shared/mocks.costumized.dart';
 import '../shared/mocks.mocks.dart';
 import 'TestdatenVorrat.dart';
-import '../shared/mocks.costumized.dart';
 
 trainStammdatenService(MockStammdatenService mock) {
   when(mock.kieze).thenAnswer((_) =>
@@ -24,21 +24,26 @@ trainUserService(MockUserService mock) {
       .thenAnswer((_) async => {'Authorization': 'userCreds'***REMOVED***);
 ***REMOVED***
 
-trainBackend(MockBackend mock) {
+MockBackend trainBackend(MockBackend mock) {
+  when(mock.post(any, any, any))
+      .thenAnswer((_) async => MockHttpClientResponseBody());
+  when(mock.get(any, any))
+      .thenAnswer((_) async => MockHttpClientResponseBody());
+  when(mock.delete(any, any, any))
+      .thenAnswer((_) async => MockHttpClientResponseBody());
   when(mock.post('service/benutzer/authentifiziere', any, any)).thenAnswer((_) {
     return Future<HttpClientResponseBody>.value(
         trainHttpResponse(MockHttpClientResponseBody(), 200, true));
   ***REMOVED***);
+  return mock;
 ***REMOVED***
 
 trainHttpResponse(
     HttpClientResponseBody bodyMock, int status, dynamic content) {
   var clientMock = MockHttpClientResponse();
   when(clientMock.statusCode).thenReturn(status);
-
-  var response = MockHttpClientResponse();
+  when(bodyMock.response).thenAnswer((_) => clientMock);
   when(bodyMock.body).thenReturn(content);
-  when(bodyMock.response).thenAnswer((_) => response);
   return bodyMock;
 ***REMOVED***
 

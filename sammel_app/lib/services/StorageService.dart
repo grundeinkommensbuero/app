@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
-import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageService {
@@ -42,7 +42,8 @@ class StorageService {
   Future<bool> saveChatChannel(ChatChannel channel) => prefs.then((prefs) =>
       prefs.setString('$_CHANNEL:${channel.id***REMOVED***', jsonEncode(channel.toJson())));
 
-  Future<ChatChannel?> loadChatChannel(String id) async => prefs.then((prefs) {
+  FutureOr<ChatChannel?> loadChatChannel(String id) async =>
+      prefs.then((prefs) {
         var json = prefs.getString('$_CHANNEL:$id');
         if (json == null) return null;
         return ChatChannel.fromJSON(jsonDecode(json));

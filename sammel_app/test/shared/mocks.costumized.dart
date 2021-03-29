@@ -16,6 +16,7 @@ class _FakeSocket extends _i2.Fake implements _i24.Socket {***REMOVED***
 
 class _FakeFirebaseApp extends _i2.Fake implements _i19.FirebaseApp {
   @override
+  // ignore: hash_and_equals
   bool operator ==(dynamic other) => super == other;
 ***REMOVED***
 
