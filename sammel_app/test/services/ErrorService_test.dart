@@ -6,8 +6,8 @@ import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 
-import '../shared/Trainer.dart';
-import '../shared/generated.mocks.dart';
+import '../shared/mocks.trainer.dart';
+import '../shared/mocks.mocks.dart';
 
 void main() {
   trainTranslation(MockTranslations());

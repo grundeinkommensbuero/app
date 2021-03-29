@@ -10,8 +10,8 @@ import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
 import '../model/Termin_test.dart';
-import '../shared/Trainer.dart';
-import '../shared/generated.mocks.dart';
+import '../shared/mocks.trainer.dart';
+import '../shared/mocks.mocks.dart';
 
 final storageServiceMock = MockStorageService();
 

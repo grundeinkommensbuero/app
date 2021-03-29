@@ -3,6 +3,8 @@ import 'dart:ui';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 
+import 'PushMessage.dart';
+
 abstract class Message {
   abstract String type;
   bool obtainedFromServer = false;
@@ -84,7 +86,7 @@ class ParticipationMessage implements Message {
       [this.obtainedFromServer = false]);
 
   factory ParticipationMessage.fromJson(Map<dynamic, dynamic> json) {
-    final bool joins = json['joins'];
+    final bool joins = json['joins']!;
     return ParticipationMessage(DateTime.parse(json['timestamp']),
         json['username'], joins, json['obtained_from_server'] ?? false);
   }

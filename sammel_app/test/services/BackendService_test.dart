@@ -6,9 +6,10 @@ import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/UserService.dart';
 
-import '../shared/Trainer.dart';
+import '../shared/mocks.trainer.dart';
 import '../shared/TestdatenVorrat.dart';
-import '../shared/generated.mocks.dart';
+import '../shared/mocks.mocks.dart';
+import '../shared/mocks.costumized.dart';
 
 main() {
   AbstractUserService userService = MockUserService();

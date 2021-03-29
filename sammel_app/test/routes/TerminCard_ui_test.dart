@@ -3,9 +3,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
-import '../shared/Trainer.dart';
+import '../shared/mocks.trainer.dart';
 import '../shared/TestdatenVorrat.dart';
-import '../shared/generated.mocks.dart';
+import '../shared/mocks.mocks.dart';
 
 void main() {
   trainTranslation(MockTranslations());

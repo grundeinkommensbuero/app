@@ -13,9 +13,10 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 
 import '../model/Termin_test.dart';
-import '../shared/Trainer.dart';
+import '../shared/mocks.trainer.dart';
 import '../shared/TestdatenVorrat.dart';
-import '../shared/generated.mocks.dart';
+import '../shared/mocks.costumized.dart';
+import '../shared/mocks.mocks.dart';
 
 void main() {
   PushNotificationManager pushManager = MockPushNotificationManager();

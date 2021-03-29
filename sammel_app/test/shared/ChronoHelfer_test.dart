@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 
-import 'Trainer.dart';
-import '../shared/generated.mocks.dart';
+import 'mocks.trainer.dart';
+import '../shared/mocks.mocks.dart';
 
 void main() {
   initializeDateFormatting('de');

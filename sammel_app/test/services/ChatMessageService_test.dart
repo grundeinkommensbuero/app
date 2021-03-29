@@ -3,7 +3,7 @@ import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 
-import '../shared/generated.mocks.dart';
+import '../shared/mocks.mocks.dart';
 
 void main() {
   late ChatMessageService service;

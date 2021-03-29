@@ -5,8 +5,9 @@ import 'package:easy_localization/src/translations.dart';
 import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
 
-import '../shared/generated.mocks.dart';
+import '../shared/mocks.mocks.dart';
 import 'TestdatenVorrat.dart';
+import '../shared/mocks.costumized.dart';
 
 trainStammdatenService(MockStammdatenService mock) {
   when(mock.kieze).thenAnswer((_) =>
