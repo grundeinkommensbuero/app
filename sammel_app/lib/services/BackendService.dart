@@ -34,7 +34,7 @@ class BackendService {
     try {
       var response = await backend.get(url, await authHeaders(appAuth)).timeout(
           Duration(seconds: 5),
-          onTimeout: () async => await checkConnectivity());
+          onTimeout: () => checkConnectivity());
 
       if (response.response.statusCode >= 200 &&
           response.response.statusCode < 300) return response;

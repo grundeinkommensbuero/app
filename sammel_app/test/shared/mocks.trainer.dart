@@ -18,10 +18,11 @@ trainStammdatenService(MockStammdatenService mock) {
       Future.value([friedrichshain(), kreuzberg(), koepenick()].toSet()));
 }
 
-trainUserService(MockUserService mock) {
+MockUserService trainUserService(MockUserService mock) {
   when(mock.user).thenAnswer((_) => Stream.value(karl()));
   when(mock.userHeaders)
       .thenAnswer((_) async => {'Authorization': 'userCreds'});
+  return mock;
 }
 
 MockBackend trainBackend(MockBackend mock) {
