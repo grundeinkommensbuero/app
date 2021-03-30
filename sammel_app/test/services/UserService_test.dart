@@ -23,6 +23,7 @@ void main() {
   group('UserService', () {
     setUp(() {
       reset(storageService);
+      reset(backendMock);
       trainBackend(backendMock);
       reset(firebase);
 
@@ -258,7 +259,7 @@ void main() {
 
       var users = await user.toList();
       expect(users.map((user) => user.name),
-          containsAll([null, 'neuer Name', 'neuerer Name']));
+          containsAll(['Ich', 'neuer Name', 'neuerer Name']));
       expect(service.latestUser!.name, 'neuerer Name');
     ***REMOVED***);
   ***REMOVED***);

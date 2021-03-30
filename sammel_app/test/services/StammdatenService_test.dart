@@ -24,10 +24,10 @@ void main() {
   test('reads Kiez main features from files', () async {
     var kieze = await stammdatenService.kieze;
 
-    expect(kieze.length, 141);
+    expect(kieze.length, 138);
 
     expect(kieze.toList()[0].ortsteil, 'Mitte');
-    expect(kieze.toList()[0].region, 'Zentrum');
+    expect(kieze.toList()[0].region, 'Zentrum - Mitte');
     expect(kieze.toList()[0].name, 'Brunnenstraße Süd');
 
     expect(kieze.toList()[1].ortsteil, 'Prenzlauer Berg');
