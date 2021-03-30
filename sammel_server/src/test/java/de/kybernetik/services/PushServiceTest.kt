@@ -207,21 +207,6 @@ class PushServiceTest {
         service.verschluessele(mapOf("content" to "Hello World"))
     ***REMOVED***
 
-    @Test
-    fun test() {
-        val GSON = GsonBuilder().create()
-
-        val json = GSON.toJson(
-            mapOf<String, Any>(
-                "type" to "ActionChanged",
-                "timestamp" to ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME),
-                "action" to listOf(terminOhneTeilnehmerMitDetails())
-            )
-        )
-
-        println(json)
-    ***REMOVED***
-
     companion object {
         fun entschluessele(data: Map<String, String>): String {
             val nonce = data["nonce"] as String
