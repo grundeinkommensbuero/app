@@ -2,7 +2,6 @@
 import 'package:mockito/annotations.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
-import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/LocalNotificationService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
@@ -17,17 +16,16 @@ import 'package:easy_localization/src/translations.dart';
 @GenerateMocks([
   TermineService,
   ListLocationService,
-  StorageService,
   PushSendService,
   UserService,
   ChatMessageService,
   PushNotificationManager,
-  GeoService,
   Backend,
   LocalNotificationService,
   FirebaseReceiveService,
   Translations,
   DemoPushSendService,
-], customMocks: [MockSpec<StammdatenService>(returnNullOnMissingStub: true)])
+  StammdatenService,
+], customMocks: [MockSpec<StorageService>(returnNullOnMissingStub: true)])
 // run `flutter pub run build_runner build` to generate Mocks
 void main() {***REMOVED***

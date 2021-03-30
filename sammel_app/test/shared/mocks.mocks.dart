@@ -2,38 +2,38 @@
 // in sammel_app/test/shared/mocks.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i15;
+import 'dart:async' as _i11;
 
-import 'package:easy_localization/src/translations.dart' as _i33;
+import 'package:easy_localization/src/translations.dart' as _i29;
 import 'package:firebase_messaging_platform_interface/src/remote_message.dart'
-    as _i30;
+    as _i27;
 import 'package:flutter/src/widgets/framework.dart' as _i1;
 import 'package:http_server/src/http_body.dart' as _i8;
 import 'package:mockito/mockito.dart' as _i2;
-import 'package:sammel_app/model/ActionListPushData.dart' as _i32;
-import 'package:sammel_app/model/ChatChannel.dart' as _i10;
-import 'package:sammel_app/model/Evaluation.dart' as _i24;
-import 'package:sammel_app/model/Health.dart' as _i19;
-import 'package:sammel_app/model/Kiez.dart' as _i21;
-import 'package:sammel_app/model/ListLocation.dart' as _i26;
-import 'package:sammel_app/model/PushMessage.dart' as _i28;
+import 'package:sammel_app/model/ActionListPushData.dart' as _i28;
+import 'package:sammel_app/model/ChatChannel.dart' as _i13;
+import 'package:sammel_app/model/Evaluation.dart' as _i21;
+import 'package:sammel_app/model/Health.dart' as _i15;
+import 'package:sammel_app/model/Kiez.dart' as _i30;
+import 'package:sammel_app/model/ListLocation.dart' as _i23;
+import 'package:sammel_app/model/PushMessage.dart' as _i25;
 import 'package:sammel_app/model/Termin.dart' as _i7;
-import 'package:sammel_app/model/TermineFilter.dart' as _i11;
+import 'package:sammel_app/model/TermineFilter.dart' as _i18;
 import 'package:sammel_app/model/User.dart' as _i12;
-import 'package:sammel_app/routes/TermineSeite.dart' as _i23;
+import 'package:sammel_app/routes/TermineSeite.dart' as _i20;
 import 'package:sammel_app/services/BackendService.dart' as _i5;
-import 'package:sammel_app/services/ChatMessageService.dart' as _i29;
-import 'package:sammel_app/services/ListLocationService.dart' as _i25;
+import 'package:sammel_app/services/ChatMessageService.dart' as _i26;
+import 'package:sammel_app/services/ListLocationService.dart' as _i22;
 import 'package:sammel_app/services/LocalNotificationService.dart' as _i3;
-import 'package:sammel_app/services/PushNotificationManager.dart' as _i20;
-import 'package:sammel_app/services/PushReceiveService.dart' as _i14;
-import 'package:sammel_app/services/PushSendService.dart' as _i27;
-import 'package:sammel_app/services/PushUpdateService.dart' as _i16;
+import 'package:sammel_app/services/PushNotificationManager.dart' as _i16;
+import 'package:sammel_app/services/PushReceiveService.dart' as _i10;
+import 'package:sammel_app/services/PushSendService.dart' as _i24;
+import 'package:sammel_app/services/PushUpdateService.dart' as _i14;
 import 'package:sammel_app/services/StammdatenService.dart' as _i4;
-import 'package:sammel_app/services/StorageService.dart' as _i13;
-import 'package:sammel_app/services/TermineService.dart' as _i22;
+import 'package:sammel_app/services/StorageService.dart' as _i9;
+import 'package:sammel_app/services/TermineService.dart' as _i19;
 import 'package:sammel_app/services/UserService.dart' as _i6;
-import 'package:shared_preferences/shared_preferences.dart' as _i9;
+import 'package:shared_preferences/shared_preferences.dart' as _i17;
 
 // ignore_for_file: comment_references
 // ignore_for_file: unnecessary_parenthesis
@@ -57,73 +57,49 @@ class _FakeTermin extends _i2.Fake implements _i7.Termin {***REMOVED***
 class _FakeHttpClientResponseBody extends _i2.Fake
     implements _i8.HttpClientResponseBody {***REMOVED***
 
-class _FakeSharedPreferences extends _i2.Fake implements _i9.SharedPreferences {
-***REMOVED***
+class _FakeStorageService extends _i2.Fake implements _i9.StorageService {***REMOVED***
 
-class _FakeChatChannel extends _i2.Fake implements _i10.ChatChannel {***REMOVED***
+class _FakeFirebaseReceiveService extends _i2.Fake
+    implements _i10.FirebaseReceiveService {***REMOVED***
 
-class _FakeTermineFilter extends _i2.Fake implements _i11.TermineFilter {***REMOVED***
+class _FakeStreamController<T> extends _i2.Fake
+    implements _i11.StreamController<T> {***REMOVED***
 
 class _FakeUser extends _i2.Fake implements _i12.User {***REMOVED***
 
-class _FakeStorageService extends _i2.Fake implements _i13.StorageService {***REMOVED***
-
-class _FakeFirebaseReceiveService extends _i2.Fake
-    implements _i14.FirebaseReceiveService {***REMOVED***
-
-class _FakeStreamController<T> extends _i2.Fake
-    implements _i15.StreamController<T> {***REMOVED***
+class _FakeChatChannel extends _i2.Fake implements _i13.ChatChannel {***REMOVED***
 
 class _FakePushReceiveService extends _i2.Fake
-    implements _i14.PushReceiveService {***REMOVED***
+    implements _i10.PushReceiveService {***REMOVED***
 
 class _FakePushUpdateService extends _i2.Fake
-    implements _i16.PushUpdateService {***REMOVED***
+    implements _i14.PushUpdateService {***REMOVED***
 
-class _FakeServerHealth extends _i2.Fake implements _i19.ServerHealth {***REMOVED***
+class _FakeServerHealth extends _i2.Fake implements _i15.ServerHealth {***REMOVED***
 
 class _FakeAbstractPushNotificationManager extends _i2.Fake
-    implements _i20.AbstractPushNotificationManager {***REMOVED***
+    implements _i16.AbstractPushNotificationManager {***REMOVED***
 
-/// A class which mocks [StammdatenService].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockStammdatenService extends _i2.Mock implements _i4.StammdatenService {
-  MockStammdatenService() {
-    _i2.throwOnMissingStub(this);
-  ***REMOVED***
+class _FakeSharedPreferences extends _i2.Fake
+    implements _i17.SharedPreferences {***REMOVED***
 
-  @override
-  _i15.Future<Set<_i21.Kiez>> get kieze => (super.noSuchMethod(
-      Invocation.getter(#kieze),
-      returnValue: Future.value(<_i21.Kiez>{***REMOVED***)) as _i15.Future<Set<_i21.Kiez>>);
-  @override
-  _i15.Future<Set<_i21.Region>> get regionen =>
-      (super.noSuchMethod(Invocation.getter(#regionen),
-              returnValue: Future.value(<_i21.Region>{***REMOVED***))
-          as _i15.Future<Set<_i21.Region>>);
-  @override
-  _i15.Future<Set<_i21.Ortsteil>> get ortsteile =>
-      (super.noSuchMethod(Invocation.getter(#ortsteile),
-              returnValue: Future.value(<_i21.Ortsteil>{***REMOVED***))
-          as _i15.Future<Set<_i21.Ortsteil>>);
-***REMOVED***
+class _FakeTermineFilter extends _i2.Fake implements _i18.TermineFilter {***REMOVED***
 
 /// A class which mocks [TermineService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTermineService extends _i2.Mock implements _i22.TermineService {
+class MockTermineService extends _i2.Mock implements _i19.TermineService {
   MockTermineService() {
     _i2.throwOnMissingStub(this);
   ***REMOVED***
 
   @override
-  _i1.GlobalKey<_i23.TermineSeiteState> get actionPageKey =>
+  _i1.GlobalKey<_i20.TermineSeiteState> get actionPageKey =>
       (super.noSuchMethod(Invocation.getter(#actionPageKey),
-              returnValue: _FakeGlobalKey<_i23.TermineSeiteState>())
-          as _i1.GlobalKey<_i23.TermineSeiteState>);
+              returnValue: _FakeGlobalKey<_i20.TermineSeiteState>())
+          as _i1.GlobalKey<_i20.TermineSeiteState>);
   @override
-  set actionPageKey(_i1.GlobalKey<_i23.TermineSeiteState>? _actionPageKey) =>
+  set actionPageKey(_i1.GlobalKey<_i20.TermineSeiteState>? _actionPageKey) =>
       super.noSuchMethod(Invocation.setter(#actionPageKey, _actionPageKey),
           returnValueForMissingStub: null);
   @override
@@ -158,23 +134,23 @@ class MockTermineService extends _i2.Mock implements _i22.TermineService {
       super.noSuchMethod(Invocation.setter(#userService, _userService),
           returnValueForMissingStub: null);
   @override
-  _i15.Future<List<_i7.Termin>> loadActions(_i11.TermineFilter? filter) =>
+  _i11.Future<List<_i7.Termin>> loadActions(_i18.TermineFilter? filter) =>
       (super.noSuchMethod(Invocation.method(#loadActions, [filter]),
               returnValue: Future.value(<_i7.Termin>[]))
-          as _i15.Future<List<_i7.Termin>>);
+          as _i11.Future<List<_i7.Termin>>);
   @override
-  _i15.Future<_i7.Termin> createAction(_i7.Termin? termin, String? token) =>
+  _i11.Future<_i7.Termin> createAction(_i7.Termin? termin, String? token) =>
       (super.noSuchMethod(Invocation.method(#createAction, [termin, token]),
-          returnValue: Future.value(_FakeTermin())) as _i15.Future<_i7.Termin>);
+          returnValue: Future.value(_FakeTermin())) as _i11.Future<_i7.Termin>);
   @override
-  _i15.Future<_i7.Termin> getActionWithDetails(int? id) =>
+  _i11.Future<_i7.Termin> getActionWithDetails(int? id) =>
       (super.noSuchMethod(Invocation.method(#getActionWithDetails, [id]),
-          returnValue: Future.value(_FakeTermin())) as _i15.Future<_i7.Termin>);
+          returnValue: Future.value(_FakeTermin())) as _i11.Future<_i7.Termin>);
   @override
-  _i15.Future<void> saveAction(_i7.Termin? action, String? token) =>
+  _i11.Future<void> saveAction(_i7.Termin? action, String? token) =>
       (super.noSuchMethod(Invocation.method(#saveAction, [action, token]),
           returnValue: Future.value(null),
-          returnValueForMissingStub: Future.value()) as _i15.Future<void>);
+          returnValueForMissingStub: Future.value()) as _i11.Future<void>);
   @override
   dynamic deleteAction(_i7.Termin? action, String? token) =>
       super.noSuchMethod(Invocation.method(#deleteAction, [action, token]));
@@ -197,50 +173,50 @@ class MockTermineService extends _i2.Mock implements _i22.TermineService {
       super.noSuchMethod(Invocation.method(#updateMessages, [data]),
           returnValueForMissingStub: null);
   @override
-  _i15.Future<void> saveEvaluation(_i24.Evaluation? evaluation) =>
+  _i11.Future<void> saveEvaluation(_i21.Evaluation? evaluation) =>
       (super.noSuchMethod(Invocation.method(#saveEvaluation, [evaluation]),
           returnValue: Future.value(null),
-          returnValueForMissingStub: Future.value()) as _i15.Future<void>);
+          returnValueForMissingStub: Future.value()) as _i11.Future<void>);
   @override
-  _i15.Future<_i8.HttpClientResponseBody> get(String? url, {bool? appAuth***REMOVED***) =>
+  _i11.Future<_i8.HttpClientResponseBody> get(String? url, {bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(Invocation.method(#get, [url], {#appAuth: appAuth***REMOVED***),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
-          as _i15.Future<_i8.HttpClientResponseBody>);
+          as _i11.Future<_i8.HttpClientResponseBody>);
   @override
-  _i15.Future<_i8.HttpClientResponseBody> post(String? url, String? data,
+  _i11.Future<_i8.HttpClientResponseBody> post(String? url, String? data,
           {Map<String, String>? parameters, bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(
               Invocation.method(#post, [url, data],
                   {#parameters: parameters, #appAuth: appAuth***REMOVED***),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
-          as _i15.Future<_i8.HttpClientResponseBody>);
+          as _i11.Future<_i8.HttpClientResponseBody>);
   @override
-  _i15.Future<_i8.HttpClientResponseBody> delete(String? url, String? data,
+  _i11.Future<_i8.HttpClientResponseBody> delete(String? url, String? data,
           {bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(
               Invocation.method(#delete, [url, data], {#appAuth: appAuth***REMOVED***),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
-          as _i15.Future<_i8.HttpClientResponseBody>);
+          as _i11.Future<_i8.HttpClientResponseBody>);
   @override
-  _i15.Future<Map<String, String>> authHeaders(bool? appAuth) =>
+  _i11.Future<Map<String, String>> authHeaders(bool? appAuth) =>
       (super.noSuchMethod(Invocation.method(#authHeaders, [appAuth]),
               returnValue: Future.value(<String, String>{***REMOVED***))
-          as _i15.Future<Map<String, String>>);
+          as _i11.Future<Map<String, String>>);
   @override
-  _i15.Future<_i8.HttpClientResponseBody> checkConnectivity(
+  _i11.Future<_i8.HttpClientResponseBody> checkConnectivity(
           {dynamic originalError***REMOVED***) =>
       (super.noSuchMethod(
               Invocation.method(
                   #checkConnectivity, [], {#originalError: originalError***REMOVED***),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
-          as _i15.Future<_i8.HttpClientResponseBody>);
+          as _i11.Future<_i8.HttpClientResponseBody>);
 ***REMOVED***
 
 /// A class which mocks [ListLocationService].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockListLocationService extends _i2.Mock
-    implements _i25.ListLocationService {
+    implements _i22.ListLocationService {
   MockListLocationService() {
     _i2.throwOnMissingStub(this);
   ***REMOVED***
@@ -257,167 +233,49 @@ class MockListLocationService extends _i2.Mock
       super.noSuchMethod(Invocation.setter(#userService, _userService),
           returnValueForMissingStub: null);
   @override
-  _i15.Future<List<_i26.ListLocation>> getActiveListLocations() =>
+  _i11.Future<List<_i23.ListLocation>> getActiveListLocations() =>
       (super.noSuchMethod(Invocation.method(#getActiveListLocations, []),
-              returnValue: Future.value(<_i26.ListLocation>[]))
-          as _i15.Future<List<_i26.ListLocation>>);
+              returnValue: Future.value(<_i23.ListLocation>[]))
+          as _i11.Future<List<_i23.ListLocation>>);
   @override
-  _i15.Future<_i8.HttpClientResponseBody> get(String? url, {bool? appAuth***REMOVED***) =>
+  _i11.Future<_i8.HttpClientResponseBody> get(String? url, {bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(Invocation.method(#get, [url], {#appAuth: appAuth***REMOVED***),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
-          as _i15.Future<_i8.HttpClientResponseBody>);
+          as _i11.Future<_i8.HttpClientResponseBody>);
   @override
-  _i15.Future<_i8.HttpClientResponseBody> post(String? url, String? data,
+  _i11.Future<_i8.HttpClientResponseBody> post(String? url, String? data,
           {Map<String, String>? parameters, bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(
               Invocation.method(#post, [url, data],
                   {#parameters: parameters, #appAuth: appAuth***REMOVED***),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
-          as _i15.Future<_i8.HttpClientResponseBody>);
+          as _i11.Future<_i8.HttpClientResponseBody>);
   @override
-  _i15.Future<_i8.HttpClientResponseBody> delete(String? url, String? data,
+  _i11.Future<_i8.HttpClientResponseBody> delete(String? url, String? data,
           {bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(
               Invocation.method(#delete, [url, data], {#appAuth: appAuth***REMOVED***),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
-          as _i15.Future<_i8.HttpClientResponseBody>);
+          as _i11.Future<_i8.HttpClientResponseBody>);
   @override
-  _i15.Future<Map<String, String>> authHeaders(bool? appAuth) =>
+  _i11.Future<Map<String, String>> authHeaders(bool? appAuth) =>
       (super.noSuchMethod(Invocation.method(#authHeaders, [appAuth]),
               returnValue: Future.value(<String, String>{***REMOVED***))
-          as _i15.Future<Map<String, String>>);
+          as _i11.Future<Map<String, String>>);
   @override
-  _i15.Future<_i8.HttpClientResponseBody> checkConnectivity(
+  _i11.Future<_i8.HttpClientResponseBody> checkConnectivity(
           {dynamic originalError***REMOVED***) =>
       (super.noSuchMethod(
               Invocation.method(
                   #checkConnectivity, [], {#originalError: originalError***REMOVED***),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
-          as _i15.Future<_i8.HttpClientResponseBody>);
-***REMOVED***
-
-/// A class which mocks [StorageService].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockStorageService extends _i2.Mock implements _i13.StorageService {
-  MockStorageService() {
-    _i2.throwOnMissingStub(this);
-  ***REMOVED***
-
-  @override
-  _i15.Future<_i9.SharedPreferences> get prefs =>
-      (super.noSuchMethod(Invocation.getter(#prefs),
-              returnValue: Future.value(_FakeSharedPreferences()))
-          as _i15.Future<_i9.SharedPreferences>);
-  @override
-  _i15.Future<bool> saveActionToken(int? id, String? token) =>
-      (super.noSuchMethod(Invocation.method(#saveActionToken, [id, token]),
-          returnValue: Future.value(false)) as _i15.Future<bool>);
-  @override
-  _i15.Future<bool> deleteActionToken(int? id) =>
-      (super.noSuchMethod(Invocation.method(#deleteActionToken, [id]),
-          returnValue: Future.value(false)) as _i15.Future<bool>);
-  @override
-  _i15.Future<String?> loadActionToken(int? id) =>
-      (super.noSuchMethod(Invocation.method(#loadActionToken, [id]),
-          returnValue: Future.value('')) as _i15.Future<String?>);
-  @override
-  _i15.Future<bool> saveChatChannel(_i10.ChatChannel? channel) =>
-      (super.noSuchMethod(Invocation.method(#saveChatChannel, [channel]),
-          returnValue: Future.value(false)) as _i15.Future<bool>);
-  @override
-  _i15.Future<_i10.ChatChannel?> loadChatChannel(String? id) =>
-      (super.noSuchMethod(Invocation.method(#loadChatChannel, [id]),
-              returnValue: Future.value(_FakeChatChannel()))
-          as _i15.Future<_i10.ChatChannel?>);
-  @override
-  dynamic markActionIdAsStored(int? id) =>
-      super.noSuchMethod(Invocation.method(#markActionIdAsStored, [id]));
-  @override
-  dynamic unmarkActionIdAsStored(int? id) =>
-      super.noSuchMethod(Invocation.method(#unmarkActionIdAsStored, [id]));
-  @override
-  dynamic markActionIdAsEvaluated(int? id) =>
-      super.noSuchMethod(Invocation.method(#markActionIdAsEvaluated, [id]));
-  @override
-  _i15.Future<List<int>> loadAllStoredActionIds() =>
-      (super.noSuchMethod(Invocation.method(#loadAllStoredActionIds, []),
-          returnValue: Future.value(<int>[])) as _i15.Future<List<int>>);
-  @override
-  _i15.Future<List<int>> loadAllStoredEvaluations() =>
-      (super.noSuchMethod(Invocation.method(#loadAllStoredEvaluations, []),
-          returnValue: Future.value(<int>[])) as _i15.Future<List<int>>);
-  @override
-  _i15.Future<bool> saveFilter(_i11.TermineFilter? filter) =>
-      (super.noSuchMethod(Invocation.method(#saveFilter, [filter]),
-          returnValue: Future.value(false)) as _i15.Future<bool>);
-  @override
-  _i15.Future<_i11.TermineFilter?> loadFilter() =>
-      (super.noSuchMethod(Invocation.method(#loadFilter, []),
-              returnValue: Future.value(_FakeTermineFilter()))
-          as _i15.Future<_i11.TermineFilter?>);
-  @override
-  _i15.Future<bool> saveUser(_i12.User? user) =>
-      (super.noSuchMethod(Invocation.method(#saveUser, [user]),
-          returnValue: Future.value(false)) as _i15.Future<bool>);
-  @override
-  _i15.Future<_i12.User?> loadUser() =>
-      (super.noSuchMethod(Invocation.method(#loadUser, []),
-          returnValue: Future.value(_FakeUser())) as _i15.Future<_i12.User?>);
-  @override
-  _i15.Future<String> loadSecret() =>
-      (super.noSuchMethod(Invocation.method(#loadSecret, []),
-          returnValue: Future.value('')) as _i15.Future<String>);
-  @override
-  _i15.Future<void> saveSecret(String? secret) =>
-      (super.noSuchMethod(Invocation.method(#saveSecret, [secret]),
-          returnValue: Future.value(null),
-          returnValueForMissingStub: Future.value()) as _i15.Future<void>);
-  @override
-  _i15.Future<void> saveCostumPushToken(String? token) =>
-      (super.noSuchMethod(Invocation.method(#saveCostumPushToken, [token]),
-          returnValue: Future.value(null),
-          returnValueForMissingStub: Future.value()) as _i15.Future<void>);
-  @override
-  _i15.Future<void> markPullMode() =>
-      (super.noSuchMethod(Invocation.method(#markPullMode, []),
-          returnValue: Future.value(null),
-          returnValueForMissingStub: Future.value()) as _i15.Future<void>);
-  @override
-  _i15.Future<bool> isPullMode() =>
-      (super.noSuchMethod(Invocation.method(#isPullMode, []),
-          returnValue: Future.value(false)) as _i15.Future<bool>);
-  @override
-  _i15.Future<void> saveMyKiez(List<String>? kieze) =>
-      (super.noSuchMethod(Invocation.method(#saveMyKiez, [kieze]),
-          returnValue: Future.value(null),
-          returnValueForMissingStub: Future.value()) as _i15.Future<void>);
-  @override
-  _i15.Future<List<String>> loadMyKiez() =>
-      (super.noSuchMethod(Invocation.method(#loadMyKiez, []),
-          returnValue: Future.value(<String>[])) as _i15.Future<List<String>>);
-  @override
-  _i15.Future<bool> saveNotificationInterval(String? interval) => (super
-      .noSuchMethod(Invocation.method(#saveNotificationInterval, [interval]),
-          returnValue: Future.value(false)) as _i15.Future<bool>);
-  @override
-  _i15.Future<String?> loadNotificationInterval() =>
-      (super.noSuchMethod(Invocation.method(#loadNotificationInterval, []),
-          returnValue: Future.value('')) as _i15.Future<String?>);
-  @override
-  _i15.Future<bool> saveContact(String? interval) =>
-      (super.noSuchMethod(Invocation.method(#saveContact, [interval]),
-          returnValue: Future.value(false)) as _i15.Future<bool>);
-  @override
-  _i15.Future<String?> loadContact() =>
-      (super.noSuchMethod(Invocation.method(#loadContact, []),
-          returnValue: Future.value('')) as _i15.Future<String?>);
+          as _i11.Future<_i8.HttpClientResponseBody>);
 ***REMOVED***
 
 /// A class which mocks [PushSendService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockPushSendService extends _i2.Mock implements _i27.PushSendService {
+class MockPushSendService extends _i2.Mock implements _i24.PushSendService {
   MockPushSendService() {
     _i2.throwOnMissingStub(this);
   ***REMOVED***
@@ -434,48 +292,48 @@ class MockPushSendService extends _i2.Mock implements _i27.PushSendService {
       super.noSuchMethod(Invocation.setter(#userService, _userService),
           returnValueForMissingStub: null);
   @override
-  dynamic pushToDevices(List<String>? recipients, _i28.PushData? data,
-          _i28.PushNotification? notification) =>
+  dynamic pushToDevices(List<String>? recipients, _i25.PushData? data,
+          _i25.PushNotification? notification) =>
       super.noSuchMethod(
           Invocation.method(#pushToDevices, [recipients, data, notification]));
   @override
-  dynamic pushToAction(int? actionId, _i28.PushData? data,
-          _i28.PushNotification? notification) =>
+  dynamic pushToAction(int? actionId, _i25.PushData? data,
+          _i25.PushNotification? notification) =>
       super.noSuchMethod(
           Invocation.method(#pushToAction, [actionId, data, notification]));
   @override
-  _i15.Future<_i8.HttpClientResponseBody> get(String? url, {bool? appAuth***REMOVED***) =>
+  _i11.Future<_i8.HttpClientResponseBody> get(String? url, {bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(Invocation.method(#get, [url], {#appAuth: appAuth***REMOVED***),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
-          as _i15.Future<_i8.HttpClientResponseBody>);
+          as _i11.Future<_i8.HttpClientResponseBody>);
   @override
-  _i15.Future<_i8.HttpClientResponseBody> post(String? url, String? data,
+  _i11.Future<_i8.HttpClientResponseBody> post(String? url, String? data,
           {Map<String, String>? parameters, bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(
               Invocation.method(#post, [url, data],
                   {#parameters: parameters, #appAuth: appAuth***REMOVED***),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
-          as _i15.Future<_i8.HttpClientResponseBody>);
+          as _i11.Future<_i8.HttpClientResponseBody>);
   @override
-  _i15.Future<_i8.HttpClientResponseBody> delete(String? url, String? data,
+  _i11.Future<_i8.HttpClientResponseBody> delete(String? url, String? data,
           {bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(
               Invocation.method(#delete, [url, data], {#appAuth: appAuth***REMOVED***),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
-          as _i15.Future<_i8.HttpClientResponseBody>);
+          as _i11.Future<_i8.HttpClientResponseBody>);
   @override
-  _i15.Future<Map<String, String>> authHeaders(bool? appAuth) =>
+  _i11.Future<Map<String, String>> authHeaders(bool? appAuth) =>
       (super.noSuchMethod(Invocation.method(#authHeaders, [appAuth]),
               returnValue: Future.value(<String, String>{***REMOVED***))
-          as _i15.Future<Map<String, String>>);
+          as _i11.Future<Map<String, String>>);
   @override
-  _i15.Future<_i8.HttpClientResponseBody> checkConnectivity(
+  _i11.Future<_i8.HttpClientResponseBody> checkConnectivity(
           {dynamic originalError***REMOVED***) =>
       (super.noSuchMethod(
               Invocation.method(
                   #checkConnectivity, [], {#originalError: originalError***REMOVED***),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
-          as _i15.Future<_i8.HttpClientResponseBody>);
+          as _i11.Future<_i8.HttpClientResponseBody>);
 ***REMOVED***
 
 /// A class which mocks [UserService].
@@ -487,40 +345,40 @@ class MockUserService extends _i2.Mock implements _i6.UserService {
   ***REMOVED***
 
   @override
-  _i13.StorageService get storageService =>
+  _i9.StorageService get storageService =>
       (super.noSuchMethod(Invocation.getter(#storageService),
-          returnValue: _FakeStorageService()) as _i13.StorageService);
+          returnValue: _FakeStorageService()) as _i9.StorageService);
   @override
-  set storageService(_i13.StorageService? _storageService) =>
+  set storageService(_i9.StorageService? _storageService) =>
       super.noSuchMethod(Invocation.setter(#storageService, _storageService),
           returnValueForMissingStub: null);
   @override
-  _i14.FirebaseReceiveService get firebase =>
+  _i10.FirebaseReceiveService get firebase =>
       (super.noSuchMethod(Invocation.getter(#firebase),
               returnValue: _FakeFirebaseReceiveService())
-          as _i14.FirebaseReceiveService);
+          as _i10.FirebaseReceiveService);
   @override
-  set firebase(_i14.FirebaseReceiveService? _firebase) =>
+  set firebase(_i10.FirebaseReceiveService? _firebase) =>
       super.noSuchMethod(Invocation.setter(#firebase, _firebase),
           returnValueForMissingStub: null);
   @override
-  _i15.StreamController<_i12.User> get streamController =>
+  _i11.StreamController<_i12.User> get streamController =>
       (super.noSuchMethod(Invocation.getter(#streamController),
               returnValue: _FakeStreamController<_i12.User>())
-          as _i15.StreamController<_i12.User>);
+          as _i11.StreamController<_i12.User>);
   @override
-  _i15.Future<Map<String, String>> get userHeaders =>
+  _i11.Future<Map<String, String>> get userHeaders =>
       (super.noSuchMethod(Invocation.getter(#userHeaders),
               returnValue: Future.value(<String, String>{***REMOVED***))
-          as _i15.Future<Map<String, String>>);
+          as _i11.Future<Map<String, String>>);
   @override
-  set userHeaders(_i15.Future<Map<String, String>>? _userHeaders) =>
+  set userHeaders(_i11.Future<Map<String, String>>? _userHeaders) =>
       super.noSuchMethod(Invocation.setter(#userHeaders, _userHeaders),
           returnValueForMissingStub: null);
   @override
-  _i15.Stream<_i12.User> get user =>
+  _i11.Stream<_i12.User> get user =>
       (super.noSuchMethod(Invocation.getter(#user),
-          returnValue: Stream<_i12.User>.empty()) as _i15.Stream<_i12.User>);
+          returnValue: Stream<_i12.User>.empty()) as _i11.Stream<_i12.User>);
   @override
   _i5.Backend get backend => (super.noSuchMethod(Invocation.getter(#backend),
       returnValue: _FakeBackend()) as _i5.Backend);
@@ -533,70 +391,70 @@ class MockUserService extends _i2.Mock implements _i6.UserService {
       super.noSuchMethod(Invocation.setter(#userService, _userService),
           returnValueForMissingStub: null);
   @override
-  _i15.Future<_i12.User> createNewUser() =>
+  _i11.Future<_i12.User> createNewUser() =>
       (super.noSuchMethod(Invocation.method(#createNewUser, []),
-          returnValue: Future.value(_FakeUser())) as _i15.Future<_i12.User>);
+          returnValue: Future.value(_FakeUser())) as _i11.Future<_i12.User>);
   @override
   dynamic verifyUser(_i12.User? user) =>
       super.noSuchMethod(Invocation.method(#verifyUser, [user]));
   @override
-  _i15.Future<String> generateSecret() =>
+  _i11.Future<String> generateSecret() =>
       (super.noSuchMethod(Invocation.method(#generateSecret, []),
-          returnValue: Future.value('')) as _i15.Future<String>);
+          returnValue: Future.value('')) as _i11.Future<String>);
   @override
   dynamic updateUsername(String? name) =>
       super.noSuchMethod(Invocation.method(#updateUsername, [name]));
   @override
-  _i15.Future<_i8.HttpClientResponseBody> get(String? url, {bool? appAuth***REMOVED***) =>
+  _i11.Future<_i8.HttpClientResponseBody> get(String? url, {bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(Invocation.method(#get, [url], {#appAuth: appAuth***REMOVED***),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
-          as _i15.Future<_i8.HttpClientResponseBody>);
+          as _i11.Future<_i8.HttpClientResponseBody>);
   @override
-  _i15.Future<_i8.HttpClientResponseBody> post(String? url, String? data,
+  _i11.Future<_i8.HttpClientResponseBody> post(String? url, String? data,
           {Map<String, String>? parameters, bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(
               Invocation.method(#post, [url, data],
                   {#parameters: parameters, #appAuth: appAuth***REMOVED***),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
-          as _i15.Future<_i8.HttpClientResponseBody>);
+          as _i11.Future<_i8.HttpClientResponseBody>);
   @override
-  _i15.Future<_i8.HttpClientResponseBody> delete(String? url, String? data,
+  _i11.Future<_i8.HttpClientResponseBody> delete(String? url, String? data,
           {bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(
               Invocation.method(#delete, [url, data], {#appAuth: appAuth***REMOVED***),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
-          as _i15.Future<_i8.HttpClientResponseBody>);
+          as _i11.Future<_i8.HttpClientResponseBody>);
   @override
-  _i15.Future<Map<String, String>> authHeaders(bool? appAuth) =>
+  _i11.Future<Map<String, String>> authHeaders(bool? appAuth) =>
       (super.noSuchMethod(Invocation.method(#authHeaders, [appAuth]),
               returnValue: Future.value(<String, String>{***REMOVED***))
-          as _i15.Future<Map<String, String>>);
+          as _i11.Future<Map<String, String>>);
   @override
-  _i15.Future<_i8.HttpClientResponseBody> checkConnectivity(
+  _i11.Future<_i8.HttpClientResponseBody> checkConnectivity(
           {dynamic originalError***REMOVED***) =>
       (super.noSuchMethod(
               Invocation.method(
                   #checkConnectivity, [], {#originalError: originalError***REMOVED***),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
-          as _i15.Future<_i8.HttpClientResponseBody>);
+          as _i11.Future<_i8.HttpClientResponseBody>);
 ***REMOVED***
 
 /// A class which mocks [ChatMessageService].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockChatMessageService extends _i2.Mock
-    implements _i29.ChatMessageService {
+    implements _i26.ChatMessageService {
   MockChatMessageService() {
     _i2.throwOnMissingStub(this);
   ***REMOVED***
 
   @override
-  Map<String, _i10.ChatChannel> get channels =>
+  Map<String, _i13.ChatChannel> get channels =>
       (super.noSuchMethod(Invocation.getter(#channels),
-              returnValue: <String, _i10.ChatChannel>{***REMOVED***)
-          as Map<String, _i10.ChatChannel>);
+              returnValue: <String, _i13.ChatChannel>{***REMOVED***)
+          as Map<String, _i13.ChatChannel>);
   @override
-  set channels(Map<String, _i10.ChatChannel>? _channels) =>
+  set channels(Map<String, _i13.ChatChannel>? _channels) =>
       super.noSuchMethod(Invocation.setter(#channels, _channels),
           returnValueForMissingStub: null);
   @override
@@ -604,49 +462,49 @@ class MockChatMessageService extends _i2.Mock
       super.noSuchMethod(Invocation.method(#receiveMessage, [json]),
           returnValueForMissingStub: null);
   @override
-  _i15.Future<_i10.ChatChannel> storeMessage(_i28.ChatPushData? pushData) =>
+  _i11.Future<_i13.ChatChannel> storeMessage(_i25.ChatPushData? pushData) =>
       (super.noSuchMethod(Invocation.method(#storeMessage, [pushData]),
               returnValue: Future.value(_FakeChatChannel()))
-          as _i15.Future<_i10.ChatChannel>);
+          as _i11.Future<_i13.ChatChannel>);
   @override
-  _i15.Future<List<_i10.ChatChannel>> storeMessages(
-          List<_i28.ChatPushData>? pushData) =>
+  _i11.Future<List<_i13.ChatChannel>> storeMessages(
+          List<_i25.ChatPushData>? pushData) =>
       (super.noSuchMethod(Invocation.method(#storeMessages, [pushData]),
-              returnValue: Future.value(<_i10.ChatChannel>[]))
-          as _i15.Future<List<_i10.ChatChannel>>);
+              returnValue: Future.value(<_i13.ChatChannel>[]))
+          as _i11.Future<List<_i13.ChatChannel>>);
   @override
-  _i15.Future<void> handleNotificationTap(Map<String, dynamic>? data) =>
+  _i11.Future<void> handleNotificationTap(Map<String, dynamic>? data) =>
       (super.noSuchMethod(Invocation.method(#handleNotificationTap, [data]),
           returnValue: Future.value(null),
-          returnValueForMissingStub: Future.value()) as _i15.Future<void>);
+          returnValueForMissingStub: Future.value()) as _i11.Future<void>);
   @override
   void createOrRecreateChatPage(_i1.State<_i1.StatefulWidget>? cls,
-          _i10.ChatChannel? channel, int? terminId) =>
+          _i13.ChatChannel? channel, int? terminId) =>
       super.noSuchMethod(
           Invocation.method(
               #createOrRecreateChatPage, [cls, channel, terminId]),
           returnValueForMissingStub: null);
   @override
   void createOrRecreateTpoicPage(
-          _i1.State<_i1.StatefulWidget>? cls, _i10.ChatChannel? channel) =>
+          _i1.State<_i1.StatefulWidget>? cls, _i13.ChatChannel? channel) =>
       super.noSuchMethod(
           Invocation.method(#createOrRecreateTpoicPage, [cls, channel]),
           returnValueForMissingStub: null);
   @override
-  _i15.Future<_i10.ChatChannel> getTopicChannel(String? topic) =>
+  _i11.Future<_i13.ChatChannel> getTopicChannel(String? topic) =>
       (super.noSuchMethod(Invocation.method(#getTopicChannel, [topic]),
               returnValue: Future.value(_FakeChatChannel()))
-          as _i15.Future<_i10.ChatChannel>);
+          as _i11.Future<_i13.ChatChannel>);
   @override
-  _i15.Future<_i10.ChatChannel> getActionChannel(int? idNr) =>
+  _i11.Future<_i13.ChatChannel> getActionChannel(int? idNr) =>
       (super.noSuchMethod(Invocation.method(#getActionChannel, [idNr]),
               returnValue: Future.value(_FakeChatChannel()))
-          as _i15.Future<_i10.ChatChannel>);
+          as _i11.Future<_i13.ChatChannel>);
   @override
-  _i15.Future<_i10.ChatChannel> getChannel(String? id) =>
+  _i11.Future<_i13.ChatChannel> getChannel(String? id) =>
       (super.noSuchMethod(Invocation.method(#getChannel, [id]),
               returnValue: Future.value(_FakeChatChannel()))
-          as _i15.Future<_i10.ChatChannel>);
+          as _i11.Future<_i13.ChatChannel>);
   @override
   void createChannel(String? id) =>
       super.noSuchMethod(Invocation.method(#createChannel, [id]),
@@ -661,25 +519,25 @@ class MockChatMessageService extends _i2.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockPushNotificationManager extends _i2.Mock
-    implements _i20.PushNotificationManager {
+    implements _i16.PushNotificationManager {
   MockPushNotificationManager() {
     _i2.throwOnMissingStub(this);
   ***REMOVED***
 
   @override
-  _i14.PushReceiveService get listener =>
+  _i10.PushReceiveService get listener =>
       (super.noSuchMethod(Invocation.getter(#listener),
-          returnValue: _FakePushReceiveService()) as _i14.PushReceiveService);
+          returnValue: _FakePushReceiveService()) as _i10.PushReceiveService);
   @override
-  set listener(_i14.PushReceiveService? _listener) =>
+  set listener(_i10.PushReceiveService? _listener) =>
       super.noSuchMethod(Invocation.setter(#listener, _listener),
           returnValueForMissingStub: null);
   @override
-  _i13.StorageService get storageService =>
+  _i9.StorageService get storageService =>
       (super.noSuchMethod(Invocation.getter(#storageService),
-          returnValue: _FakeStorageService()) as _i13.StorageService);
+          returnValue: _FakeStorageService()) as _i9.StorageService);
   @override
-  set storageService(_i13.StorageService? _storageService) =>
+  set storageService(_i9.StorageService? _storageService) =>
       super.noSuchMethod(Invocation.setter(#storageService, _storageService),
           returnValueForMissingStub: null);
   @override
@@ -691,47 +549,47 @@ class MockPushNotificationManager extends _i2.Mock
       super.noSuchMethod(Invocation.setter(#userService, _userService),
           returnValueForMissingStub: null);
   @override
-  _i16.PushUpdateService get updateService =>
+  _i14.PushUpdateService get updateService =>
       (super.noSuchMethod(Invocation.getter(#updateService),
-          returnValue: _FakePushUpdateService()) as _i16.PushUpdateService);
+          returnValue: _FakePushUpdateService()) as _i14.PushUpdateService);
   @override
-  set updateService(_i16.PushUpdateService? _updateService) =>
+  set updateService(_i14.PushUpdateService? _updateService) =>
       super.noSuchMethod(Invocation.setter(#updateService, _updateService),
           returnValueForMissingStub: null);
   @override
-  _i15.Future<String?> get pushToken =>
+  _i11.Future<String?> get pushToken =>
       (super.noSuchMethod(Invocation.getter(#pushToken),
-          returnValue: Future.value('')) as _i15.Future<String?>);
+          returnValue: Future.value('')) as _i11.Future<String?>);
   @override
-  set pushToken(_i15.Future<String?>? _pushToken) =>
+  set pushToken(_i11.Future<String?>? _pushToken) =>
       super.noSuchMethod(Invocation.setter(#pushToken, _pushToken),
           returnValueForMissingStub: null);
   @override
-  Map<String, _i20.PushNotificationListener> get callbackMap =>
+  Map<String, _i16.PushNotificationListener> get callbackMap =>
       (super.noSuchMethod(Invocation.getter(#callbackMap),
-              returnValue: <String, _i20.PushNotificationListener>{***REMOVED***)
-          as Map<String, _i20.PushNotificationListener>);
+              returnValue: <String, _i16.PushNotificationListener>{***REMOVED***)
+          as Map<String, _i16.PushNotificationListener>);
   @override
-  set callbackMap(Map<String, _i20.PushNotificationListener>? _callbackMap) =>
+  set callbackMap(Map<String, _i16.PushNotificationListener>? _callbackMap) =>
       super.noSuchMethod(Invocation.setter(#callbackMap, _callbackMap),
           returnValueForMissingStub: null);
   @override
-  _i15.Future<_i14.PushReceiveService> createPushListener(
-          _i14.FirebaseReceiveService? firebaseService, _i5.Backend? backend) =>
+  _i11.Future<_i10.PushReceiveService> createPushListener(
+          _i10.FirebaseReceiveService? firebaseService, _i5.Backend? backend) =>
       (super.noSuchMethod(
           Invocation.method(#createPushListener, [firebaseService, backend]),
           returnValue:
-              Future.value(_FakePushReceiveService())) as _i15
-          .Future<_i14.PushReceiveService>);
+              Future.value(_FakePushReceiveService())) as _i11
+          .Future<_i10.PushReceiveService>);
   @override
-  dynamic onReceived(_i30.RemoteMessage? message) =>
+  dynamic onReceived(_i27.RemoteMessage? message) =>
       super.noSuchMethod(Invocation.method(#onReceived, [message]));
   @override
-  dynamic onTap(_i30.RemoteMessage? message) =>
+  dynamic onTap(_i27.RemoteMessage? message) =>
       super.noSuchMethod(Invocation.method(#onTap, [message]));
   @override
   void registerMessageCallback(
-          String? id, _i20.PushNotificationListener? callback) =>
+          String? id, _i16.PushNotificationListener? callback) =>
       super.noSuchMethod(
           Invocation.method(#registerMessageCallback, [id, callback]),
           returnValueForMissingStub: null);
@@ -747,10 +605,10 @@ class MockPushNotificationManager extends _i2.Mock
               #unsubscribeFromKiezActionTopics, [kieze, interval]),
           returnValueForMissingStub: null);
   @override
-  _i15.Future<void> updateMessages() =>
+  _i11.Future<void> updateMessages() =>
       (super.noSuchMethod(Invocation.method(#updateMessages, []),
           returnValue: Future.value(null),
-          returnValueForMissingStub: Future.value()) as _i15.Future<void>);
+          returnValueForMissingStub: Future.value()) as _i11.Future<void>);
 ***REMOVED***
 
 /// A class which mocks [Backend].
@@ -762,39 +620,39 @@ class MockBackend extends _i2.Mock implements _i5.Backend {
   ***REMOVED***
 
   @override
-  _i15.Future<void> get zertifikatGeladen =>
+  _i11.Future<void> get zertifikatGeladen =>
       (super.noSuchMethod(Invocation.getter(#zertifikatGeladen),
-          returnValue: Future.value(null)) as _i15.Future<void>);
+          returnValue: Future.value(null)) as _i11.Future<void>);
   @override
-  _i15.Future<_i8.HttpClientResponseBody> get(
+  _i11.Future<_i8.HttpClientResponseBody> get(
           String? url, Map<String, String>? headers) =>
       (super.noSuchMethod(Invocation.method(#get, [url, headers]),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
-          as _i15.Future<_i8.HttpClientResponseBody>);
+          as _i11.Future<_i8.HttpClientResponseBody>);
   @override
-  _i15.Future<_i8.HttpClientResponseBody> post(
+  _i11.Future<_i8.HttpClientResponseBody> post(
           String? url, String? data, Map<String, String>? headers,
           [Map<String, String>? parameters]) =>
       (super.noSuchMethod(
               Invocation.method(#post, [url, data, headers, parameters]),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
-          as _i15.Future<_i8.HttpClientResponseBody>);
+          as _i11.Future<_i8.HttpClientResponseBody>);
   @override
-  _i15.Future<_i8.HttpClientResponseBody> delete(
+  _i11.Future<_i8.HttpClientResponseBody> delete(
           String? url, String? data, Map<String, String>? headers) =>
       (super.noSuchMethod(Invocation.method(#delete, [url, data, headers]),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
-          as _i15.Future<_i8.HttpClientResponseBody>);
+          as _i11.Future<_i8.HttpClientResponseBody>);
   @override
-  _i15.Future<void> callGoogle() =>
+  _i11.Future<void> callGoogle() =>
       (super.noSuchMethod(Invocation.method(#callGoogle, []),
           returnValue: Future.value(null),
-          returnValueForMissingStub: Future.value()) as _i15.Future<void>);
+          returnValueForMissingStub: Future.value()) as _i11.Future<void>);
   @override
-  _i15.Future<_i19.ServerHealth> getServerHealth() =>
+  _i11.Future<_i15.ServerHealth> getServerHealth() =>
       (super.noSuchMethod(Invocation.method(#getServerHealth, []),
               returnValue: Future.value(_FakeServerHealth()))
-          as _i15.Future<_i19.ServerHealth>);
+          as _i11.Future<_i15.ServerHealth>);
 ***REMOVED***
 
 /// A class which mocks [LocalNotificationService].
@@ -807,12 +665,12 @@ class MockLocalNotificationService extends _i2.Mock
   ***REMOVED***
 
   @override
-  _i20.AbstractPushNotificationManager get pushManager =>
+  _i16.AbstractPushNotificationManager get pushManager =>
       (super.noSuchMethod(Invocation.getter(#pushManager),
               returnValue: _FakeAbstractPushNotificationManager())
-          as _i20.AbstractPushNotificationManager);
+          as _i16.AbstractPushNotificationManager);
   @override
-  set pushManager(_i20.AbstractPushNotificationManager? _pushManager) =>
+  set pushManager(_i16.AbstractPushNotificationManager? _pushManager) =>
       super.noSuchMethod(Invocation.setter(#pushManager, _pushManager),
           returnValueForMissingStub: null);
   @override
@@ -824,47 +682,47 @@ class MockLocalNotificationService extends _i2.Mock
       super.noSuchMethod(Invocation.setter(#onTap, _onTap),
           returnValueForMissingStub: null);
   @override
-  _i15.Future<dynamic> sendChatNotification(
-          _i28.ActionChatMessagePushData? chatMessage) =>
+  _i11.Future<dynamic> sendChatNotification(
+          _i25.ActionChatMessagePushData? chatMessage) =>
       (super.noSuchMethod(
           Invocation.method(#sendChatNotification, [chatMessage]),
-          returnValue: Future.value(null)) as _i15.Future<dynamic>);
+          returnValue: Future.value(null)) as _i11.Future<dynamic>);
   @override
-  _i15.Future<void> sendParticipationNotification(
-          _i28.ParticipationPushData? data) =>
+  _i11.Future<void> sendParticipationNotification(
+          _i25.ParticipationPushData? data) =>
       (super.noSuchMethod(
           Invocation.method(#sendParticipationNotification, [data]),
           returnValue: Future.value(null),
-          returnValueForMissingStub: Future.value()) as _i15.Future<void>);
+          returnValueForMissingStub: Future.value()) as _i11.Future<void>);
   @override
-  _i15.Future<void> sendNewActionsNotification(
-          _i32.ActionListPushData? partMessage) =>
+  _i11.Future<void> sendNewActionsNotification(
+          _i28.ActionListPushData? partMessage) =>
       (super.noSuchMethod(
           Invocation.method(#sendNewActionsNotification, [partMessage]),
           returnValue: Future.value(null),
-          returnValueForMissingStub: Future.value()) as _i15.Future<void>);
+          returnValueForMissingStub: Future.value()) as _i11.Future<void>);
   @override
-  _i15.Future<void> sendActionDeletedNotification(
-          _i32.ActionListPushData? partMessage) =>
+  _i11.Future<void> sendActionDeletedNotification(
+          _i28.ActionListPushData? partMessage) =>
       (super.noSuchMethod(
           Invocation.method(#sendActionDeletedNotification, [partMessage]),
           returnValue: Future.value(null),
-          returnValueForMissingStub: Future.value()) as _i15.Future<void>);
+          returnValueForMissingStub: Future.value()) as _i11.Future<void>);
   @override
-  _i15.Future<void> sendActionChangedNotification(
-          _i32.ActionListPushData? partMessage) =>
+  _i11.Future<void> sendActionChangedNotification(
+          _i28.ActionListPushData? partMessage) =>
       (super.noSuchMethod(
           Invocation.method(#sendActionChangedNotification, [partMessage]),
           returnValue: Future.value(null),
-          returnValueForMissingStub: Future.value()) as _i15.Future<void>);
+          returnValueForMissingStub: Future.value()) as _i11.Future<void>);
   @override
-  _i15.Future<void> sendOtherNotification(Map<String, dynamic>? data) =>
+  _i11.Future<void> sendOtherNotification(Map<String, dynamic>? data) =>
       (super.noSuchMethod(Invocation.method(#sendOtherNotification, [data]),
           returnValue: Future.value(null),
-          returnValueForMissingStub: Future.value()) as _i15.Future<void>);
+          returnValueForMissingStub: Future.value()) as _i11.Future<void>);
   @override
   void sendTopicChatNotification(
-          _i28.TopicChatMessagePushData? topicChatMessagePushData) =>
+          _i25.TopicChatMessagePushData? topicChatMessagePushData) =>
       super.noSuchMethod(
           Invocation.method(
               #sendTopicChatNotification, [topicChatMessagePushData]),
@@ -875,17 +733,17 @@ class MockLocalNotificationService extends _i2.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFirebaseReceiveService extends _i2.Mock
-    implements _i14.FirebaseReceiveService {
+    implements _i10.FirebaseReceiveService {
   MockFirebaseReceiveService() {
     _i2.throwOnMissingStub(this);
   ***REMOVED***
 
   @override
-  _i15.Future<String?> get token =>
+  _i11.Future<String?> get token =>
       (super.noSuchMethod(Invocation.getter(#token),
-          returnValue: Future.value('')) as _i15.Future<String?>);
+          returnValue: Future.value('')) as _i11.Future<String?>);
   @override
-  set token(_i15.Future<String?>? _token) =>
+  set token(_i11.Future<String?>? _token) =>
       super.noSuchMethod(Invocation.setter(#token, _token),
           returnValueForMissingStub: null);
   @override
@@ -905,7 +763,7 @@ class MockFirebaseReceiveService extends _i2.Mock
 /// A class which mocks [Translations].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTranslations extends _i2.Mock implements _i33.Translations {
+class MockTranslations extends _i2.Mock implements _i29.Translations {
   MockTranslations() {
     _i2.throwOnMissingStub(this);
   ***REMOVED***
@@ -934,18 +792,18 @@ class MockTranslations extends _i2.Mock implements _i33.Translations {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockDemoPushSendService extends _i2.Mock
-    implements _i27.DemoPushSendService {
+    implements _i24.DemoPushSendService {
   MockDemoPushSendService() {
     _i2.throwOnMissingStub(this);
   ***REMOVED***
 
   @override
-  _i15.StreamController<_i28.PushData> get controller =>
+  _i11.StreamController<_i25.PushData> get controller =>
       (super.noSuchMethod(Invocation.getter(#controller),
-              returnValue: _FakeStreamController<_i28.PushData>())
-          as _i15.StreamController<_i28.PushData>);
+              returnValue: _FakeStreamController<_i25.PushData>())
+          as _i11.StreamController<_i25.PushData>);
   @override
-  set controller(_i15.StreamController<_i28.PushData>? _controller) =>
+  set controller(_i11.StreamController<_i25.PushData>? _controller) =>
       super.noSuchMethod(Invocation.setter(#controller, _controller),
           returnValueForMissingStub: null);
   @override
@@ -960,46 +818,183 @@ class MockDemoPushSendService extends _i2.Mock
       super.noSuchMethod(Invocation.setter(#userService, _userService),
           returnValueForMissingStub: null);
   @override
-  dynamic pushToDevices(List<String>? recipients, _i28.PushData? data,
-          _i28.PushNotification? notification) =>
+  dynamic pushToDevices(List<String>? recipients, _i25.PushData? data,
+          _i25.PushNotification? notification) =>
       super.noSuchMethod(
           Invocation.method(#pushToDevices, [recipients, data, notification]));
   @override
-  dynamic pushToAction(int? actionId, _i28.PushData? data,
-          _i28.PushNotification? notification) =>
+  dynamic pushToAction(int? actionId, _i25.PushData? data,
+          _i25.PushNotification? notification) =>
       super.noSuchMethod(
           Invocation.method(#pushToAction, [actionId, data, notification]));
   @override
-  _i15.Future<_i8.HttpClientResponseBody> get(String? url, {bool? appAuth***REMOVED***) =>
+  _i11.Future<_i8.HttpClientResponseBody> get(String? url, {bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(Invocation.method(#get, [url], {#appAuth: appAuth***REMOVED***),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
-          as _i15.Future<_i8.HttpClientResponseBody>);
+          as _i11.Future<_i8.HttpClientResponseBody>);
   @override
-  _i15.Future<_i8.HttpClientResponseBody> post(String? url, String? data,
+  _i11.Future<_i8.HttpClientResponseBody> post(String? url, String? data,
           {Map<String, String>? parameters, bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(
               Invocation.method(#post, [url, data],
                   {#parameters: parameters, #appAuth: appAuth***REMOVED***),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
-          as _i15.Future<_i8.HttpClientResponseBody>);
+          as _i11.Future<_i8.HttpClientResponseBody>);
   @override
-  _i15.Future<_i8.HttpClientResponseBody> delete(String? url, String? data,
+  _i11.Future<_i8.HttpClientResponseBody> delete(String? url, String? data,
           {bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(
               Invocation.method(#delete, [url, data], {#appAuth: appAuth***REMOVED***),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
-          as _i15.Future<_i8.HttpClientResponseBody>);
+          as _i11.Future<_i8.HttpClientResponseBody>);
   @override
-  _i15.Future<Map<String, String>> authHeaders(bool? appAuth) =>
+  _i11.Future<Map<String, String>> authHeaders(bool? appAuth) =>
       (super.noSuchMethod(Invocation.method(#authHeaders, [appAuth]),
               returnValue: Future.value(<String, String>{***REMOVED***))
-          as _i15.Future<Map<String, String>>);
+          as _i11.Future<Map<String, String>>);
   @override
-  _i15.Future<_i8.HttpClientResponseBody> checkConnectivity(
+  _i11.Future<_i8.HttpClientResponseBody> checkConnectivity(
           {dynamic originalError***REMOVED***) =>
       (super.noSuchMethod(
               Invocation.method(
                   #checkConnectivity, [], {#originalError: originalError***REMOVED***),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
-          as _i15.Future<_i8.HttpClientResponseBody>);
+          as _i11.Future<_i8.HttpClientResponseBody>);
+***REMOVED***
+
+/// A class which mocks [StammdatenService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockStammdatenService extends _i2.Mock implements _i4.StammdatenService {
+  MockStammdatenService() {
+    _i2.throwOnMissingStub(this);
+  ***REMOVED***
+
+  @override
+  _i11.Future<Set<_i30.Kiez>> get kieze => (super.noSuchMethod(
+      Invocation.getter(#kieze),
+      returnValue: Future.value(<_i30.Kiez>{***REMOVED***)) as _i11.Future<Set<_i30.Kiez>>);
+  @override
+  _i11.Future<Set<_i30.Region>> get regionen =>
+      (super.noSuchMethod(Invocation.getter(#regionen),
+              returnValue: Future.value(<_i30.Region>{***REMOVED***))
+          as _i11.Future<Set<_i30.Region>>);
+  @override
+  _i11.Future<Set<_i30.Ortsteil>> get ortsteile =>
+      (super.noSuchMethod(Invocation.getter(#ortsteile),
+              returnValue: Future.value(<_i30.Ortsteil>{***REMOVED***))
+          as _i11.Future<Set<_i30.Ortsteil>>);
+***REMOVED***
+
+/// A class which mocks [StorageService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockStorageService extends _i2.Mock implements _i9.StorageService {
+  @override
+  _i11.Future<_i17.SharedPreferences> get prefs =>
+      (super.noSuchMethod(Invocation.getter(#prefs),
+              returnValue: Future.value(_FakeSharedPreferences()))
+          as _i11.Future<_i17.SharedPreferences>);
+  @override
+  _i11.Future<bool> saveActionToken(int? id, String? token) =>
+      (super.noSuchMethod(Invocation.method(#saveActionToken, [id, token]),
+          returnValue: Future.value(false)) as _i11.Future<bool>);
+  @override
+  _i11.Future<bool> deleteActionToken(int? id) =>
+      (super.noSuchMethod(Invocation.method(#deleteActionToken, [id]),
+          returnValue: Future.value(false)) as _i11.Future<bool>);
+  @override
+  _i11.Future<String?> loadActionToken(int? id) =>
+      (super.noSuchMethod(Invocation.method(#loadActionToken, [id]),
+          returnValue: Future.value('')) as _i11.Future<String?>);
+  @override
+  _i11.Future<bool> saveChatChannel(_i13.ChatChannel? channel) =>
+      (super.noSuchMethod(Invocation.method(#saveChatChannel, [channel]),
+          returnValue: Future.value(false)) as _i11.Future<bool>);
+  @override
+  _i11.FutureOr<_i13.ChatChannel?>? loadChatChannel(String? id) =>
+      (super.noSuchMethod(Invocation.method(#loadChatChannel, [id]))
+          as _i11.FutureOr<_i13.ChatChannel?>?);
+  @override
+  dynamic markActionIdAsStored(int? id) =>
+      super.noSuchMethod(Invocation.method(#markActionIdAsStored, [id]));
+  @override
+  dynamic unmarkActionIdAsStored(int? id) =>
+      super.noSuchMethod(Invocation.method(#unmarkActionIdAsStored, [id]));
+  @override
+  dynamic markActionIdAsEvaluated(int? id) =>
+      super.noSuchMethod(Invocation.method(#markActionIdAsEvaluated, [id]));
+  @override
+  _i11.Future<List<int>> loadAllStoredActionIds() =>
+      (super.noSuchMethod(Invocation.method(#loadAllStoredActionIds, []),
+          returnValue: Future.value(<int>[])) as _i11.Future<List<int>>);
+  @override
+  _i11.Future<List<int>> loadAllStoredEvaluations() =>
+      (super.noSuchMethod(Invocation.method(#loadAllStoredEvaluations, []),
+          returnValue: Future.value(<int>[])) as _i11.Future<List<int>>);
+  @override
+  _i11.Future<bool> saveFilter(_i18.TermineFilter? filter) =>
+      (super.noSuchMethod(Invocation.method(#saveFilter, [filter]),
+          returnValue: Future.value(false)) as _i11.Future<bool>);
+  @override
+  _i11.Future<_i18.TermineFilter?> loadFilter() =>
+      (super.noSuchMethod(Invocation.method(#loadFilter, []),
+              returnValue: Future.value(_FakeTermineFilter()))
+          as _i11.Future<_i18.TermineFilter?>);
+  @override
+  _i11.Future<bool> saveUser(_i12.User? user) =>
+      (super.noSuchMethod(Invocation.method(#saveUser, [user]),
+          returnValue: Future.value(false)) as _i11.Future<bool>);
+  @override
+  _i11.Future<_i12.User?> loadUser() =>
+      (super.noSuchMethod(Invocation.method(#loadUser, []),
+          returnValue: Future.value(_FakeUser())) as _i11.Future<_i12.User?>);
+  @override
+  _i11.Future<String> loadSecret() =>
+      (super.noSuchMethod(Invocation.method(#loadSecret, []),
+          returnValue: Future.value('')) as _i11.Future<String>);
+  @override
+  _i11.Future<void> saveSecret(String? secret) =>
+      (super.noSuchMethod(Invocation.method(#saveSecret, [secret]),
+          returnValue: Future.value(null),
+          returnValueForMissingStub: Future.value()) as _i11.Future<void>);
+  @override
+  _i11.Future<void> saveCostumPushToken(String? token) =>
+      (super.noSuchMethod(Invocation.method(#saveCostumPushToken, [token]),
+          returnValue: Future.value(null),
+          returnValueForMissingStub: Future.value()) as _i11.Future<void>);
+  @override
+  _i11.Future<void> markPullMode() =>
+      (super.noSuchMethod(Invocation.method(#markPullMode, []),
+          returnValue: Future.value(null),
+          returnValueForMissingStub: Future.value()) as _i11.Future<void>);
+  @override
+  _i11.Future<bool> isPullMode() =>
+      (super.noSuchMethod(Invocation.method(#isPullMode, []),
+          returnValue: Future.value(false)) as _i11.Future<bool>);
+  @override
+  _i11.Future<void> saveMyKiez(List<String>? kieze) =>
+      (super.noSuchMethod(Invocation.method(#saveMyKiez, [kieze]),
+          returnValue: Future.value(null),
+          returnValueForMissingStub: Future.value()) as _i11.Future<void>);
+  @override
+  _i11.Future<List<String>> loadMyKiez() =>
+      (super.noSuchMethod(Invocation.method(#loadMyKiez, []),
+          returnValue: Future.value(<String>[])) as _i11.Future<List<String>>);
+  @override
+  _i11.Future<bool> saveNotificationInterval(String? interval) => (super
+      .noSuchMethod(Invocation.method(#saveNotificationInterval, [interval]),
+          returnValue: Future.value(false)) as _i11.Future<bool>);
+  @override
+  _i11.Future<String?> loadNotificationInterval() =>
+      (super.noSuchMethod(Invocation.method(#loadNotificationInterval, []),
+          returnValue: Future.value('')) as _i11.Future<String?>);
+  @override
+  _i11.Future<bool> saveContact(String? interval) =>
+      (super.noSuchMethod(Invocation.method(#saveContact, [interval]),
+          returnValue: Future.value(false)) as _i11.Future<bool>);
+  @override
+  _i11.Future<String?> loadContact() =>
+      (super.noSuchMethod(Invocation.method(#loadContact, []),
+          returnValue: Future.value('')) as _i11.Future<String?>);
 ***REMOVED***
