@@ -9,14 +9,13 @@ import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
-import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 
 import '../model/Termin_test.dart';
-import '../shared/mocks.trainer.dart';
 import '../shared/TestdatenVorrat.dart';
 import '../shared/mocks.costumized.dart';
 import '../shared/mocks.mocks.dart';
+import '../shared/mocks.trainer.dart';
 
 void main() {
   PushNotificationManager pushManager = MockPushNotificationManager();
@@ -154,8 +153,8 @@ void main() {
 
     test('loadActions calls right path and serializes Filter correctly',
         () async {
-      when(backend.post('service/termine', '', {})).thenAnswer((_) =>
-          Future<HttpClientResponseBody>.value(
+      when(backend.post('service/termine', any, any)).thenAnswer((_) =>
+          Future.value(
               trainHttpResponse(MockHttpClientResponseBody(), 200, [])));
 
       await service.loadActions(einFilter());
@@ -168,7 +167,8 @@ void main() {
               '"von":"15:00:00",'
               '"bis":"18:30:00",'
               '"orte":["Frankfurter Allee Nord"],'
-              '"ids":[]'
+              '"nurEigene":false,'
+              '"immerEigene":false'
               '}',
           any));
     });

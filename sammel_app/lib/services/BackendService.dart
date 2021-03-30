@@ -32,9 +32,9 @@ class BackendService {
 
   Future<HttpClientResponseBody> get(String url, {bool? appAuth}) async {
     try {
-      var response = await backend.get(url, await authHeaders(appAuth)).timeout(
-          Duration(seconds: 5),
-          onTimeout: () => checkConnectivity());
+      var response = await backend
+          .get(url, await authHeaders(appAuth))
+          .timeout(Duration(seconds: 5), onTimeout: () => checkConnectivity());
 
       if (response.response.statusCode >= 200 &&
           response.response.statusCode < 300) return response;
@@ -52,10 +52,10 @@ class BackendService {
   Future<HttpClientResponseBody> post(String url, String data,
       {Map<String, String>? parameters, bool? appAuth}) async {
     try {
-      var post = backend
-          .post(url, data, await authHeaders(appAuth), parameters)
-          .timeout(Duration(seconds: 10),
-              onTimeout: () async => await checkConnectivity());
+      Future<HttpClientResponseBody> post = backend
+          .post(url, data, await authHeaders(appAuth), parameters);
+      FutureOr<HttpClientResponseBody> Function() checker = () => checkConnectivity();
+      post.timeout(Duration(seconds: 10), onTimeout: checker);
       var response = await post;
 
       if (response.response.statusCode >= 200 &&

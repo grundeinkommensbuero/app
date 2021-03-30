@@ -43,7 +43,7 @@ main() {
 
       verify(backendMock.post(
           'service/push/devices',
-          '{"recipients":["Empfänger"],"data":{"type":null},"notification":{"title":"Titel","body":"Inhalt"}}',
+          '{"recipients":["Empfänger"],"data":{"type":"general"},"notification":{"title":"Titel","body":"Inhalt"}}',
           any,
           any));
     });

@@ -53,7 +53,6 @@ class PushNotificationManager implements AbstractPushNotificationManager {
 
   Future<PushReceiveService> createPushListener(
       FirebaseReceiveService firebaseService, Backend backend) async {
-    print('### storageService.isPullMode() = ${await storageService.isPullMode()}');
     if (await storageService.isPullMode())
       listener = PullService(userService, backend);
     else {

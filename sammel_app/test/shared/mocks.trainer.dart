@@ -27,11 +27,11 @@ MockUserService trainUserService(MockUserService mock) {
 
 MockBackend trainBackend(MockBackend mock) {
   when(mock.post(any, any, any))
-      .thenAnswer((_) async => MockHttpClientResponseBody());
+      .thenAnswer((_) => Future.value(MockHttpClientResponseBody()));
   when(mock.get(any, any))
-      .thenAnswer((_) async => MockHttpClientResponseBody());
+      .thenAnswer((_) => Future.value(MockHttpClientResponseBody()));
   when(mock.delete(any, any, any))
-      .thenAnswer((_) async => MockHttpClientResponseBody());
+      .thenAnswer((_) => Future.value(MockHttpClientResponseBody()));
   when(mock.post('service/benutzer/authentifiziere', any, any)).thenAnswer((_) {
     return Future<HttpClientResponseBody>.value(
         trainHttpResponse(MockHttpClientResponseBody(), 200, true));
@@ -39,7 +39,7 @@ MockBackend trainBackend(MockBackend mock) {
   return mock;
 }
 
-trainHttpResponse(
+HttpClientResponseBody trainHttpResponse(
     HttpClientResponseBody bodyMock, int status, dynamic content) {
   var clientMock = MockHttpClientResponse();
   when(clientMock.statusCode).thenReturn(status);

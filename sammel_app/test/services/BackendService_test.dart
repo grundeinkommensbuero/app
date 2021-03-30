@@ -13,7 +13,7 @@ import '../shared/mocks.trainer.dart';
 
 main() {
   MockUserService userService = MockUserService();
-  MockHttpClientResponseBody http200Mock =
+  HttpClientResponseBody http200Mock =
       trainHttpResponse(MockHttpClientResponseBody(), 200, null);
   final mockFirebaseReceiveService = MockFirebaseReceiveService();
 
@@ -119,7 +119,7 @@ main() {
       });
 
       test(
-          'authHeaders throws Error if appAuth flag is not set but no user credentials can be determined in 10 seconds',
+          'authHeaders throws Error if appAuth flag is not set but no user credentials can be determined in 20 seconds',
           () async {
         final userService = MockUserService();
         when(userService.user).thenAnswer((_) => Stream.value(karl()));
