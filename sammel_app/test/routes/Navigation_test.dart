@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_test_ui/flutter_test_ui.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
@@ -32,6 +33,11 @@ final _pushManager = MockPushNotificationManager();
 
 void main() {
   trainTranslation(MockTranslations());
+  trainUserService(_userService);
+  trainStammdatenService(_stammdatenService);
+  trainChatMessageService(_chatService);
+  trainStorageService(_storageService);
+  initializeDateFormatting('de');
 
   group('Navigation', () {
     late Navigation navigation;
