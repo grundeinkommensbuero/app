@@ -11,7 +11,7 @@ const authMap = {
 Future<void> main() async {
   var mode = Mode.LOCAL;
   var author = Author.APP;
-  var silent = true;
+  var silent = false;
   var titel = 'Die heißen Flyer für die Sammel-App sind da!';
   var inhalt = '''Wofür sind die gut? 
 Falls ihr beim Sammeln Leute trefft, die euch erzählen, dass sie die Kampagne unterstützen möchten und wissen wollen wie sie am einfachsten beim Sammeln helfen können, dann drückt ihnen einfach für den App-Flyer in die Hand.
