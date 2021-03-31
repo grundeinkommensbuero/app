@@ -43,6 +43,7 @@ void main() {
   trainUserService(_userService);
   trainStammdatenService(_stammdatenService);
   trainStorageService(_storageService);
+  trainChatMessageService(_chatMessageService);
   initializeDateFormatting('de');
 
   late MultiProvider termineSeiteWidget;
@@ -56,6 +57,7 @@ void main() {
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
     when(_termineService.loadActions(any)).thenAnswer((_) async => []);
+    when(_termineService.deleteAction(any, any)).thenReturn(null);
     when(_pushManager.pushToken).thenAnswer((_) => Future.value('Token'));
     ErrorService.displayedTypes = [];
 

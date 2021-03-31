@@ -4,6 +4,7 @@ import 'package:easy_localization/src/localization.dart';
 import 'package:easy_localization/src/translations.dart';
 import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
+import 'package:sammel_app/model/ChatChannel.dart';
 
 import '../shared/mocks.costumized.dart';
 import '../shared/mocks.mocks.dart';
@@ -29,6 +30,14 @@ MockUserService trainUserService(MockUserService mock) {
 MockStorageService trainStorageService(MockStorageService mock) {
   when(mock.loadAllStoredEvaluations())
       .thenAnswer((_) => Future.value(List.empty()));
+  when(mock.loadContact())
+    .thenAnswer((_) => Future.value('Ruft an unter 123456'));
+  return mock;
+}
+
+MockChatMessageService trainChatMessageService(MockChatMessageService mock) {
+  when(mock.getTopicChannel('global'))
+      .thenAnswer((_) => Future.value(ChatChannel('topic:global')));
   return mock;
 }
 
