@@ -40,6 +40,7 @@ final _pushManager = MockPushNotificationManager();
 void main() {
   trainTranslation(MockTranslations());
   trainUserService(_userService);
+  trainStammdatenService(_stammdatenService);
 
   late MultiProvider termineSeiteWidget;
 
