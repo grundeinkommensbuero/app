@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_test_ui/flutter_test_ui.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,7 @@ final _storageService = MockStorageService();
 void main() {
   trainTranslation(MockTranslations());
   trainStammdatenService(_stammdatenService);
+  initializeDateFormatting('de');
 
   group('ui', () {
     setUpUI((WidgetTester tester) async {
