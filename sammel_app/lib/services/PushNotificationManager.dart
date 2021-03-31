@@ -128,7 +128,10 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     final messages = await updateService.getLatestPushMessages();
     if (messages == null) return;
     List<Map<String, dynamic>> decrypted = [];
-    messages.forEach((msg) async => decrypted.add(await decrypt(msg['data'])));
+    for(var message in messages) {
+      final decryptedMessage = await decrypt(message['data']);
+      decrypted.add(decryptedMessage);
+    ***REMOVED***
     final messageMap = sortMessagesByType(decrypted);
 
     if (listener is PullService)

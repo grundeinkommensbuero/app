@@ -9,11 +9,14 @@ const authMap = {
 ***REMOVED***
 
 Future<void> main() async {
-  var mode = Mode.PROD;
+  var mode = Mode.LOCAL;
   var author = Author.APP;
-  var titel = '47.342';
-  var inhalt = '''Wir dürfen heute bekanntgeben: die Zahl der Unterschriften bis jetzt lautet: 47.342! Danke allen Sammler:innen. 😍
-Es geht weiter bis 26.6.21. 🥳 Und dafür brauchen wir eure Unterstützung. Gemeinsam sind wir stark!''';
+  var silent = true;
+  var titel = 'Die heißen Flyer für die Sammel-App sind da!';
+  var inhalt = '''Wofür sind die gut? 
+Falls ihr beim Sammeln Leute trefft, die euch erzählen, dass sie die Kampagne unterstützen möchten und wissen wollen wie sie am einfachsten beim Sammeln helfen können, dann drückt ihnen einfach für den App-Flyer in die Hand.
+Auf diese Weise können sie dann schnell und einfach Gelegenheiten finden mitzumachen.
+Abholen könnt ihr die Flyer und viele andere Materialien im DWE-Büro in der Graefestraße 14 immer Mo-Fr 10-18 Uhr''';
 
   assert(authMap[mode] != null, 'Authentifizierung eintragen');
 
@@ -27,7 +30,7 @@ Es geht weiter bis 26.6.21. 🥳 Und dafür brauchen wir eure Unterstützung. Ge
       "sender_name": nameMap[author],
       "user_id": -1
     ***REMOVED***,
-    "notification": {"title": titel, "body": inhalt***REMOVED***
+    "notification": silent ? null : {"title": titel, "body": inhalt***REMOVED***
   ***REMOVED***
 
   final response = await post(
