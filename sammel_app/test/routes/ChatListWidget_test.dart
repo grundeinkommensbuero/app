@@ -17,7 +17,7 @@ void main() {
   late ChatChannel channel;
 
   setUpUI((tester) async {
-    _userService = MockUserService();
+    _userService = trainUserService(MockUserService());
     channel = ChatChannel('action:1');
     widget = Provider<AbstractUserService>(
         create: (context) => _userService,

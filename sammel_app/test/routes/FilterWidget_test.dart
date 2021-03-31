@@ -28,6 +28,7 @@ final _storageService = MockStorageService();
 
 void main() {
   trainTranslation(MockTranslations());
+  trainStammdatenService(_stammdatenService);
 
   group('ui', () {
     setUpUI((WidgetTester tester) async {
