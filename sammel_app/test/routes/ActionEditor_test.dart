@@ -20,12 +20,12 @@ import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
 import '../model/Termin_test.dart';
-import '../shared/mocks.trainer.dart';
-import '../shared/mocks.mocks.dart';
 import '../shared/TestdatenVorrat.dart';
+import '../shared/mocks.mocks.dart';
+import '../shared/mocks.trainer.dart';
 
 late MockStammdatenService _stammdatenService = MockStammdatenService();
-late MockTermineService _terminService= MockTermineService();
+late MockTermineService _terminService = MockTermineService();
 late MockListLocationService _listLocationService = MockListLocationService();
 late MockStorageService _storageService = MockStorageService();
 late MockPushSendService _pushService = MockPushSendService();
@@ -43,6 +43,7 @@ void main() {
     reset(_terminService);
     reset(_pushManager);
     reset(_chatService);
+    reset(_stammdatenService);
     when(_storageService.loadFilter()).thenAnswer((_) async => null);
     when(_storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
     when(_storageService.loadMyKiez()).thenAnswer((_) async => []);
@@ -57,6 +58,8 @@ void main() {
         .thenAnswer((_) async => ChatChannel('channel:global'));
     when(_storageService.loadAllStoredEvaluations())
         .thenAnswer((_) async => []);
+    when(_stammdatenService.kieze).thenAnswer(
+        (_) => Future.value({ffAlleeNord(), plaenterwald(), tempVorstadt()}));
   });
 
   testWidgets('Navigation opens CreateTerminDialog',
