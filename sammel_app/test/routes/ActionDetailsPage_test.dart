@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -24,6 +26,7 @@ main() {
   trainTranslation(MockTranslations());
 
   setUp(() async {
+    HttpOverrides.global = null;
     reset(storageServiceMock);
     when(storageServiceMock.loadAllStoredEvaluations())
         .thenAnswer((_) async => []);
