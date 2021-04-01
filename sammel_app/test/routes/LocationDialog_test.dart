@@ -126,7 +126,7 @@ void main() {
 
       FlutterMap map = tester.widget(find.byKey(Key('venue map')));
       expect(map.options.center, LatLng(52.49653, 13.43762));
-      expect(map.options.zoom, 14.0);
+      expect(map.options.zoom, 12.0);
     });
 
     testWidgets('at Berlin with no coordinates given', (tester) async {
