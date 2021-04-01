@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -23,6 +21,7 @@ import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 
 import '../model/Termin_test.dart';
+import '../shared/mocks.costumized.dart';
 import '../shared/mocks.trainer.dart';
 import '../shared/mocks.mocks.dart';
 import 'ActionEditor_test.dart';
@@ -44,13 +43,7 @@ void main() {
   trainStorageService(_storageService);
   initializeDateFormatting('de');
 
-
-  setUp(() {
-    HttpOverrides.global = null;
-  ***REMOVED***);
-
-
-  setUp(() =>     HttpOverrides.global = null);
+  setUp(() => HttpOverrides.global = MapHttpOverrides());
 
   group('Navigation', () {
     late Navigation navigation;

@@ -1,4 +1,5 @@
 import 'dart:async' as _i15;
+import 'dart:async';
 import 'dart:io';
 import 'dart:io' as _i24;
 
@@ -15,29 +16,43 @@ import 'package:mockito/mockito.dart' as _i2;
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/services/GeoService.dart' as _i18;
 
-class MockHttpOverrides extends HttpOverrides {
+class MapHttpClientResponse extends Mock implements HttpClientResponse {
+  final _stream = readFile();
+
   @override
-  HttpClient createHttpClient(SecurityContext? securityContext) => MockClient();
+  int get statusCode => HttpStatus.ok;
+
+  @override
+  HttpClientResponseCompressionState get compressionState =>
+      HttpClientResponseCompressionState.notCompressed;
+
+  @override
+  StreamSubscription<List<int>> listen(void Function(List<int> event)? onData,
+      {Function? onError, void Function()? onDone, bool? cancelOnError***REMOVED***) {
+    return _stream.listen(onData,
+        onError: onError, onDone: onDone, cancelOnError: cancelOnError);
+  ***REMOVED***
+
+  static Stream<List<int>> readFile() => File('test/res/map.png').openRead();
 ***REMOVED***
 
-class MockClient extends Mock implements HttpClient {
+class MockHttpClientRequest extends Mock implements HttpClientRequest {***REMOVED***
+
+class MapClient extends Mock implements HttpClient {
   @override
   Future<HttpClientRequest> getUrl(Uri url) {
     final request = MockHttpClientRequest();
     when(request.close()).thenAnswer((_) async {
-      var response = MockHttpClientResponse();
-      when(response.statusCode).thenReturn(200);
-      when(response.contentLength).thenReturn(0);
-      when(response.compressionState)
-          .thenReturn(HttpClientResponseCompressionState.notCompressed);
-      when(response.listen).thenReturn((onData, {cancelOnError, onDone, onError***REMOVED***) => null);
-      return response;
+      return MapHttpClientResponse();
     ***REMOVED***);
     return Future.value(request);
   ***REMOVED***
 ***REMOVED***
 
-class MockHttpClientRequest extends Mock implements HttpClientRequest {***REMOVED***
+class MapHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? securityContext) => MapClient();
+***REMOVED***
 
 class _FakeSocket extends _i2.Fake implements _i24.Socket {***REMOVED***
 

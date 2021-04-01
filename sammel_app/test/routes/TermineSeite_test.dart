@@ -27,6 +27,7 @@ import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
 import '../model/Termin_test.dart';
+import '../shared/mocks.costumized.dart';
 import '../shared/mocks.trainer.dart';
 import '../shared/TestdatenVorrat.dart';
 import '../shared/mocks.mocks.dart';
@@ -51,7 +52,7 @@ void main() {
   late MultiProvider termineSeiteWidget;
 
   setUp(() {
-    HttpOverrides.global = null;
+    HttpOverrides.global = MapHttpOverrides();
     when(_storageService.loadFilter()).thenAnswer((_) async => null);
     when(_storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
     when(_storageService.loadMyKiez()).thenAnswer((_) async => []);
