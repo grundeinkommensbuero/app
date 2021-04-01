@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sammel_app/model/Termin.dart';
@@ -12,6 +14,10 @@ import '../shared/TestdatenVorrat.dart';
 
 void main() {
   trainTranslation(MockTranslations());
+
+  setUpAll(() {
+    HttpOverrides.global = null;
+  ***REMOVED***);
 
   testWidgets('uses default values', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(home: Scaffold(body: ActionMap())));

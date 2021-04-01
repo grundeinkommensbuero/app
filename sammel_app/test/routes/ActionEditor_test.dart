@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:latlong/latlong.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
@@ -36,8 +39,11 @@ late MockPushNotificationManager _pushManager = MockPushNotificationManager();
 void main() {
   trainTranslation(MockTranslations());
   trainUserService(_userService);
+  trainStammdatenService(_stammdatenService);
+  initializeDateFormatting('de');
 
   setUp(() {
+    HttpOverrides.global = null;
     reset(_storageService);
     reset(_listLocationService);
     reset(_terminService);
