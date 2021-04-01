@@ -4,20 +4,21 @@ import 'package:mockito/mockito.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:test/test.dart';
 
-import '../shared/mocks.trainer.dart';
 import '../shared/mocks.costumized.dart';
 import '../shared/mocks.mocks.dart';
+import '../shared/mocks.trainer.dart';
 
 main() {
   trainTranslation(MockTranslations());
 
   FirebaseMessaging firebaseMock = MockFirebaseMessaging();
   MockUserService userService = MockUserService();
-  trainUserService(userService);
 
   setUp(() {
     reset(firebaseMock);
     when(firebaseMock.getToken()).thenAnswer((_) async => "firebase-token");
+    reset(userService);
+    trainUserService(userService);
   ***REMOVED***);
 
   group('FirebaseReceiveService', () {
@@ -31,17 +32,16 @@ main() {
           true);
     ***REMOVED***);
 
-    test('listens to onMessage', () {
-      var firebaseListener = FirebaseReceiveService(false, firebaseMock);
-      var invoked = false;
-      var onMessage = (_) async => invoked = true;
-
-      firebaseListener.subscribe(onMessage: onMessage);
-
-      // TODO: Mock FirebaseMessaging
-      // verify(FirebaseMessaging.onMessage(onMessage)).called(1);
-      // verify(firebaseMock.configure(onMessage: onMessage)).called(1);
-    ***REMOVED***);
+    // neues Firebase-Framework nicht mehr sinnvoll mockbar...
+    // test('listens to onMessage', () {
+    //   var firebaseListener = FirebaseReceiveService(false, firebaseMock);
+    //   var invoked = false;
+    //   var onMessage = (_) async => invoked = true;
+    //
+    //   firebaseListener.subscribe(onMessage: onMessage);
+    //
+    //   verify(FirebaseMessaging.onMessage(onMessage)).called(1);
+    // ***REMOVED***);
   ***REMOVED***);
 
   group('PullService', () {
@@ -103,7 +103,7 @@ main() {
             Future<HttpClientResponseBody>.value(trainHttpResponse(
                 MockHttpClientResponseBody(),
                 200,
-                [Map<String, dynamic>(), Map<String, dynamic>()])));
+                [RemoteMessage(), RemoteMessage()])));
 
         await service.pull();
 
