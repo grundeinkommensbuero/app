@@ -692,17 +692,23 @@ void main() {
       expect(state.action.treffpunkt, isNotEmpty);
       expect(state.action.coordinates, isNotNull);
 
+      print(state.action.beschreibung);
+      print(state.action.treffpunkt);
+
       await tester.tap(find.byKey(Key('action editor finish button')));
       await tester.pump();
+
+      print(state.action.beschreibung);
+      print(state.action.treffpunkt);
 
       expect(state.action.von, isNull);
       expect(state.action.bis, isNull);
       expect(state.action.ort, isNull);
       expect(state.action.typ, 'Sammeln');
       expect(state.action.tage, isEmpty);
-      expect(state.action.beschreibung, isEmpty);
+      expect(state.action.beschreibung, isNull);
       expect(state.action.kontakt, 'Ich bin ich');
-      expect(state.action.treffpunkt, isEmpty);
+      expect(state.action.treffpunkt, isNull);
       expect(state.action.coordinates, isNull);
     ***REMOVED***);
 
@@ -728,9 +734,9 @@ void main() {
       expect(state.action.ort, isNull);
       expect(state.action.typ, 'Sammeln');
       expect(state.action.tage, isEmpty);
-      expect(state.action.beschreibung, isEmpty);
+      expect(state.action.beschreibung, isNull);
       expect(state.action.kontakt, 'Ich bin ich');
-      expect(state.action.treffpunkt, isEmpty);
+      expect(state.action.treffpunkt, isNull);
       expect(state.action.coordinates, isNull);
     ***REMOVED***);
 
