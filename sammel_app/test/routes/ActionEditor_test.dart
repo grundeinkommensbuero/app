@@ -466,6 +466,7 @@ void main() {
   ***REMOVED***);
   group('generateActions generates actions', () {
     setUp(() async {
+      HttpOverrides.global = null;
       when(_terminService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);
