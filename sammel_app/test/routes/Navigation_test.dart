@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -47,6 +49,8 @@ void main() {
     HttpOverrides.global = null;
   });
 
+
+  setUp(() =>     HttpOverrides.global = null);
 
   group('Navigation', () {
     late Navigation navigation;

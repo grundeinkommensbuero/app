@@ -1,4 +1,5 @@
 import 'dart:async' as _i15;
+import 'dart:io';
 import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart' as _i2;
 import 'package:http_server/src/http_body.dart' as _i8;
@@ -11,7 +12,26 @@ as _i20;
 
 import 'dart:io' as _i24;
 import 'package:latlong/latlong.dart' as _i31;
+import 'package:mockito/mockito.dart';
 import 'package:sammel_app/services/GeoService.dart' as _i18;
+
+class MockHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? securityContext) => MockClient();
+}
+
+class MockClient extends Mock implements HttpClient {
+  @override
+  Future<HttpClientRequest> getUrl(Uri url) {
+    final request = MockHttpClientRequest();
+    when(request.close()).thenAnswer((_) async {
+      return MockHttpClientResponse();
+    });
+    return Future.value(request);
+  }
+}
+
+class MockHttpClientRequest extends Mock implements HttpClientRequest {}
 
 class _FakeSocket extends _i2.Fake implements _i24.Socket {}
 
