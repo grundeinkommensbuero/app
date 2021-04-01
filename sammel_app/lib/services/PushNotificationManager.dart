@@ -46,9 +46,12 @@ class PushNotificationManager implements AbstractPushNotificationManager {
   PushNotificationManager(this.storageService, this.userService,
       FirebaseReceiveService firebaseService, Backend backend) {
     var listener = createPushListener(firebaseService, backend);
-    pushToken = listener.then((listener) => listener.token);
     updateService = PushUpdateService(userService, backend);
-    updateMessages();
+
+    listener.then((listener) {
+      pushToken = listener.token;
+      updateMessages();
+    });
   }
 
   Future<PushReceiveService> createPushListener(
@@ -128,7 +131,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     final messages = await updateService.getLatestPushMessages();
     if (messages == null) return;
     List<Map<String, dynamic>> decrypted = [];
-    for(var message in messages) {
+    for (var message in messages) {
       final decryptedMessage = await decrypt(message['data']);
       decrypted.add(decryptedMessage);
     }
