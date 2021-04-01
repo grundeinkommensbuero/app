@@ -98,7 +98,7 @@ class FirebaseReceiveService implements PushReceiveService {
 
 class PullService extends BackendService implements PushReceiveService {
   late Timer timer;
-  Function(RemoteMessage) onMessage = (_) async => Map();
+  Function(RemoteMessage) onMessage = (_) => Future.value({});
 
   PullService(AbstractUserService userService, Backend backend)
       : super(userService, backend) {

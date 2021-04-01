@@ -8,8 +8,9 @@ import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 
-import '../shared/mocks.trainer.dart';
+import '../shared/mocks.costumized.dart';
 import '../shared/mocks.mocks.dart';
+import '../shared/mocks.trainer.dart';
 
 main() {
   StorageService storageService = MockStorageService();
@@ -17,21 +18,25 @@ main() {
   MockBackend backend = MockBackend();
   MockUserService userService = MockUserService();
   trainUserService(userService);
+  late PushNotificationManager manager;
 
   setUp(() {
     reset(backend);
     trainBackend(backend);
+    when(backend.get('service/push/pull', any)).thenAnswer((_) =>
+        Future.value(trainHttpResponse(MockHttpClientResponseBody(), 200, [])));
     reset(storageService);
     reset(firebaseMock);
     when(firebaseMock.token).thenAnswer((_) async => "firebase-token");
     when(storageService.isPullMode()).thenAnswer((_) async => false);
+
+    manager = PushNotificationManager(
+        storageService, userService, firebaseMock, backend);
   });
 
   group('createPushListener', () {
     test('erzeugt PullService, wenn bereits im Pull-Modus', () async {
       when(storageService.isPullMode()).thenAnswer((_) async => true);
-      PushNotificationManager manager = PushNotificationManager(
-          storageService, userService, firebaseMock, backend);
 
       await manager.createPushListener(firebaseMock, backend);
 
@@ -39,8 +44,8 @@ main() {
     });
 
     test('hinterlegt Firebase-Service, wenn Token nicht null ist', () async {
-      PushNotificationManager manager = PushNotificationManager(
-          storageService, userService, firebaseMock, backend);
+      when(firebaseMock.token).thenAnswer((_) async => "firebase-token");
+
       await manager.createPushListener(firebaseMock, backend);
 
       expect(true, manager.listener is FirebaseReceiveService);
@@ -48,8 +53,6 @@ main() {
 
     test('erzeugt PullService, wenn Token null ist', () async {
       when(firebaseMock.token).thenAnswer((_) async => null);
-      PushNotificationManager manager = PushNotificationManager(
-          storageService, userService, firebaseMock, backend);
 
       await manager.createPushListener(firebaseMock, backend);
 
@@ -58,8 +61,6 @@ main() {
 
     test('speichert als Pull-Modus, wenn Token null ist', () async {
       when(firebaseMock.token).thenAnswer((_) async => null);
-      PushNotificationManager manager = PushNotificationManager(
-          storageService, userService, firebaseMock, backend);
 
       await manager.createPushListener(firebaseMock, backend);
 
@@ -118,8 +119,7 @@ class TestListener implements PushNotificationListener {
   }
 
   @override
-  void handleNotificationTap(Map<dynamic, dynamic> data) {
-  }
+  void handleNotificationTap(Map<dynamic, dynamic> data) {}
 
   @override
   void updateMessages(List<Map<String, dynamic>> data) {}
