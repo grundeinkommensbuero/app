@@ -759,6 +759,8 @@ void main() {
       var userService = MockUserService();
       when(userService.user)
           .thenAnswer((_) => Stream.value(User(13, null, Colors.red)));
+      when(userService.updateUsername(any))
+          .thenAnswer((_) => Future.value(null));
       var fired = false;
       await _pumpActionEditor(tester,
           onFinish: (_) => fired = true, userService: userService);
@@ -786,6 +788,8 @@ void main() {
       var userService = MockUserService();
       when(userService.user)
           .thenAnswer((_) => Stream.value(User(13, null, Colors.red)));
+      when(userService.updateUsername(any))
+          .thenAnswer((_) => Future.value(null));
       bool fired = false;
       await _pumpActionEditor(tester,
           onFinish: (_) => fired = true, userService: userService);
