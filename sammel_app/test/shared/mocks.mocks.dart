@@ -729,37 +729,6 @@ class MockLocalNotificationService extends _i2.Mock
           returnValueForMissingStub: null);
 ***REMOVED***
 
-/// A class which mocks [FirebaseReceiveService].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockFirebaseReceiveService extends _i2.Mock
-    implements _i10.FirebaseReceiveService {
-  MockFirebaseReceiveService() {
-    _i2.throwOnMissingStub(this);
-  ***REMOVED***
-
-  @override
-  _i11.Future<String?> get token =>
-      (super.noSuchMethod(Invocation.getter(#token),
-          returnValue: Future.value('')) as _i11.Future<String?>);
-  @override
-  set token(_i11.Future<String?>? _token) =>
-      super.noSuchMethod(Invocation.setter(#token, _token),
-          returnValueForMissingStub: null);
-  @override
-  bool get pullMode =>
-      (super.noSuchMethod(Invocation.getter(#pullMode), returnValue: false)
-          as bool);
-  @override
-  void subscribeToTopics(List<String>? topics) =>
-      super.noSuchMethod(Invocation.method(#subscribeToTopics, [topics]),
-          returnValueForMissingStub: null);
-  @override
-  void unsubscribeFromTopics(List<String>? topics) =>
-      super.noSuchMethod(Invocation.method(#unsubscribeFromTopics, [topics]),
-          returnValueForMissingStub: null);
-***REMOVED***
-
 /// A class which mocks [Translations].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -997,4 +966,31 @@ class MockStorageService extends _i2.Mock implements _i9.StorageService {
   _i11.Future<String?> loadContact() =>
       (super.noSuchMethod(Invocation.method(#loadContact, []),
           returnValue: Future.value('')) as _i11.Future<String?>);
+***REMOVED***
+
+/// A class which mocks [FirebaseReceiveService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFirebaseReceiveService extends _i2.Mock
+    implements _i10.FirebaseReceiveService {
+  @override
+  _i11.Future<String?> get token =>
+      (super.noSuchMethod(Invocation.getter(#token),
+          returnValue: Future.value('')) as _i11.Future<String?>);
+  @override
+  set token(_i11.Future<String?>? _token) =>
+      super.noSuchMethod(Invocation.setter(#token, _token),
+          returnValueForMissingStub: null);
+  @override
+  bool get pullMode =>
+      (super.noSuchMethod(Invocation.getter(#pullMode), returnValue: false)
+          as bool);
+  @override
+  void subscribeToTopics(List<String>? topics) =>
+      super.noSuchMethod(Invocation.method(#subscribeToTopics, [topics]),
+          returnValueForMissingStub: null);
+  @override
+  void unsubscribeFromTopics(List<String>? topics) =>
+      super.noSuchMethod(Invocation.method(#unsubscribeFromTopics, [topics]),
+          returnValueForMissingStub: null);
 ***REMOVED***
