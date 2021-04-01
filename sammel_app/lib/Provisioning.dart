@@ -28,7 +28,7 @@ const geo = GeoProperties(
     zoomMax: 18.0,
     initCenterLat: 52.5170365,
     initCenterLong: 13.3888599,
-    initZoom: 12.0);
+    initZoom: 11.0);
 
 const hostMap = {
   Mode.DEMO: 'none',

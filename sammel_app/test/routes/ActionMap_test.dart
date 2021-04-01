@@ -8,6 +8,7 @@ import 'package:sammel_app/shared/DweTheme.dart';
 
 import '../TestdataStorage.dart';
 import '../model/Termin_test.dart';
+import '../shared/mocks.costumized.dart';
 import '../shared/mocks.trainer.dart';
 import '../shared/mocks.mocks.dart';
 import '../shared/TestdatenVorrat.dart';
@@ -16,10 +17,8 @@ void main() {
   trainTranslation(MockTranslations());
 
   setUpAll(() {
-    HttpOverrides.global = null;
+    HttpOverrides.global = MapHttpOverrides();
   });
-
-  setUp(() => HttpOverrides.global = null);
 
   testWidgets('uses default values', (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(home: Scaffold(body: ActionMap())));

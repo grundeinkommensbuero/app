@@ -24,6 +24,7 @@ import 'package:sammel_app/services/UserService.dart';
 
 import '../model/Termin_test.dart';
 import '../shared/TestdatenVorrat.dart';
+import '../shared/mocks.costumized.dart';
 import '../shared/mocks.mocks.dart';
 import '../shared/mocks.trainer.dart';
 
@@ -43,7 +44,7 @@ void main() {
   initializeDateFormatting('de');
 
   setUp(() {
-    HttpOverrides.global = null;
+    HttpOverrides.global = MapHttpOverrides();
     reset(_storageService);
     reset(_listLocationService);
     reset(_terminService);
@@ -466,7 +467,7 @@ void main() {
   });
   group('generateActions generates actions', () {
     setUp(() async {
-      HttpOverrides.global = null;
+      HttpOverrides.global = MapHttpOverrides();
       when(_terminService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
           ]);

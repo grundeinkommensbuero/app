@@ -22,7 +22,7 @@ void main() {
   trainTranslation(MockTranslations());
 
   setUp(() async {
-    HttpOverrides.global = null;
+    HttpOverrides.global = MapHttpOverrides();
     reset(_geoService);
     when(_geoService.getDescriptionToPoint(any))
         .thenAnswer((_) async => GeoData('name', 'street', '12'));
@@ -126,7 +126,7 @@ void main() {
 
       FlutterMap map = tester.widget(find.byKey(Key('venue map')));
       expect(map.options.center, LatLng(52.49653, 13.43762));
-      expect(map.options.zoom, 12.0);
+      expect(map.options.zoom, 11.0);
     });
 
     testWidgets('at Berlin with no coordinates given', (tester) async {

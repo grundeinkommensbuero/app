@@ -60,7 +60,7 @@ class UsernameDialogState extends State<UsernameDialog> {
     );
   }
 
-  Future<void> changeUserNameAndClose() async {
+  changeUserNameAndClose() async {
     try {
       await Provider.of<AbstractUserService>(context, listen: false)
           .updateUsername(username!);
