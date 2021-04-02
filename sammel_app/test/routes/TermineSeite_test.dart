@@ -368,9 +368,13 @@ void main() {
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
           ]);
-      var action = TerminTestDaten.einTerminMitTeilisUndDetails();
+      var action = TerminTestDaten.einTerminMitTeilisUndDetails()
+        ..beginn = DateTime.now().add(new Duration(hours: 24))
+        ..ende = DateTime.now().add(new Duration(hours: 26));
       when(_termineService.getActionWithDetails(any))
           .thenAnswer((_) async => action);
+      when(_termineService.leaveAction(any))
+          .thenAnswer((_) => null);
 
       await tester.pumpWidget(termineSeiteWidget);
 
@@ -383,12 +387,13 @@ void main() {
       var state = tester.state<TermineSeiteState>(find.byType(TermineSeite));
       expect(state.termine[0].participants, containsAll([me]));
 
-      await tester.tap(find.byKey(Key('leave action button')));
-      await tester.pump();
+      await tester.tap(find.byKey(Key('action details menu button')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(Key('action details menu leave item')));
+      await tester.pumpAndSettle();
 
       verify(_termineService.leaveAction(action.id!)).called(1);
       expect(state.termine[0].participants, isEmpty);
-      expect(find.byKey(Key('leave action button')), findsNothing);
       expect(find.byKey(Key('join action button')), findsOneWidget);
     });
   });
