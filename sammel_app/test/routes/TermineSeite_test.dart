@@ -311,7 +311,7 @@ void main() {
       expect(page.navigation, 0);
 
       await tester.tap(find.byKey(Key('action details map marker')));
-      await tester.pumpAndSettle();
+      await tester.pumpAndSettle(new Duration(milliseconds: 200)); // default value is not enough
 
       expect(page.navigation, 1);
       expect(find.byKey(Key('action map map')), findsOneWidget);
