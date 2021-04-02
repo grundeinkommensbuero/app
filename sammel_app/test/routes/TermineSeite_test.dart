@@ -311,7 +311,7 @@ void main() {
       expect(page.navigation, 0);
 
       await tester.tap(find.byKey(Key('action details map marker')));
-      await tester.pumpAndSettle(new Duration(milliseconds: 200)); // default value is not enough
+      await tester.pumpAndSettle();
 
       expect(page.navigation, 1);
       expect(find.byKey(Key('action map map')), findsOneWidget);
@@ -331,9 +331,13 @@ void main() {
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
           ]);
-      var action = TerminTestDaten.einTerminOhneTeilisMitDetails();
+      var action = TerminTestDaten.einTerminOhneTeilisMitDetails()
+        ..beginn = DateTime.now().add(new Duration(hours: 24))
+        ..ende = DateTime.now().add(new Duration(hours: 26));
       when(_termineService.getActionWithDetails(any))
           .thenAnswer((_) async => action);
+      when(_termineService.joinAction(any))
+          .thenAnswer((_) => null);
 
       await tester.pumpWidget(termineSeiteWidget);
 
@@ -350,9 +354,9 @@ void main() {
       await tester.pump();
 
       verify(_termineService.joinAction(action.id!)).called(1);
-      expect(state.termine[0].participants, containsAll([karl()]));
+      expect(state.termine[0].participants![0].name, equals('Karl Marx'));
       expect(find.byKey(Key('join action button')), findsNothing);
-      expect(find.byKey(Key('leave action button')), findsOneWidget);
+      expect(find.byKey(Key('open chat window')), findsOneWidget);
     });
 
     testWidgets(
