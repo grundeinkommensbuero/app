@@ -1024,6 +1024,9 @@ void main() {
       });
 
       testWidgets('deletes action in backend', (WidgetTester tester) async {
+        when(_storageService.loadActionToken(any))
+            .thenAnswer((_) async => '1234');
+
         await tester.pumpWidget(termineSeiteWidget);
 
         // Warten bis asynchron Termine geladen wurden
@@ -1032,8 +1035,10 @@ void main() {
         await tester.tap(find.text('Infoveranstaltung'));
         await tester.pump();
 
-        await tester.tap(find.byKey(Key('action delete button')));
-        await tester.pump();
+        await tester.tap(find.byKey(Key('action details menu button')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(Key('action details delete menu item')));
+        await tester.pumpAndSettle();
 
         expect(find.byKey(Key('deletion confirmation dialog')), findsOneWidget);
 
