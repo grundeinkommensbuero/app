@@ -693,11 +693,16 @@ void main() {
     });
 
     testUI('closes after action edit', (WidgetTester tester) async {
+      when(_storageService.loadActionToken(any))
+          .thenAnswer((_) async => '1234');
+
       await tester.tap(find.byKey(Key('action card')).first);
       await tester.pump();
 
-      await tester.tap(find.byKey(Key('action edit button')));
-      await tester.pump();
+      await tester.tap(find.byKey(Key('action details menu button')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(Key('action details edit menu item')));
+      await tester.pumpAndSettle();
 
       expect(find.byKey(Key('action editor')), findsOneWidget);
 
