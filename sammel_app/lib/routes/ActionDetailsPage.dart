@@ -259,7 +259,6 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                       zoom: 15,
                       interactive: false,
                       onTap: (_) {
-                        print('onTap called');
                         return Navigator.pop(context, TerminDetailsCommand.FOCUS);
                       ***REMOVED***),
                   layers: [

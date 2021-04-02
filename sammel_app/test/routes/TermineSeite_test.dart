@@ -28,10 +28,10 @@ import 'package:sammel_app/services/UserService.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../model/Termin_test.dart';
-import '../shared/mocks.costumized.dart';
-import '../shared/mocks.trainer.dart';
 import '../shared/TestdatenVorrat.dart';
+import '../shared/mocks.costumized.dart';
 import '../shared/mocks.mocks.dart';
+import '../shared/mocks.trainer.dart';
 
 final _stammdatenService = MockStammdatenService();
 final _termineService = MockTermineService();
@@ -164,7 +164,8 @@ void main() {
       await tester.tap(find.byKey(Key('action details menu button')));
       await tester.pump();
 
-      expect(find.byKey(Key('action details delete menu item')), findsOneWidget);
+      expect(
+          find.byKey(Key('action details delete menu item')), findsOneWidget);
       expect(find.byKey(Key('action details edit menu item')), findsOneWidget);
 
       await tester.tap(find.byKey(Key('action details menu button')));
@@ -308,11 +309,11 @@ void main() {
 
     testWidgets('switches to map view and centers at action on tap at map',
         (WidgetTester tester) async {
-      when(_termineService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) => Future.value([
             TerminTestDaten.einTermin(),
-          ]);
+          ]));
       when(_termineService.getActionWithDetails(any)).thenAnswer(
-          (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
+          (_) => Future.value(TerminTestDaten.einTerminMitTeilisUndDetails()));
 
       await tester.pumpWidget(termineSeiteWidget);
       // Warten bis asynchron Termine geladen wurden
@@ -329,13 +330,12 @@ void main() {
 
       expect(page.navigation, 1);
       expect(find.byKey(Key('action map map')), findsOneWidget);
-      FlutterMapState mapState =
-          tester.state(find.byKey(Key('action map map'))) as FlutterMapState;
       var actionPosition = LatLng(TerminTestDaten.einTermin().latitude,
           TerminTestDaten.einTermin().longitude);
-      expect(mapState.mapState.center, actionPosition);
-      expect(mapState.mapState.zoom, 15);
-    ***REMOVED***);
+      TermineSeiteState actionPage = tester.state(find.byKey(Key('action page')));
+      expect(actionPage.mapController.zoom, 15);
+      expect(actionPage.mapController.center, actionPosition);
+        ***REMOVED***);
 
     testWidgets(
         'triggers server call and highlihgts action with tap on join button',
@@ -350,8 +350,7 @@ void main() {
         ..ende = DateTime.now().add(new Duration(hours: 26));
       when(_termineService.getActionWithDetails(any))
           .thenAnswer((_) async => action);
-      when(_termineService.joinAction(any))
-          .thenAnswer((_) => null);
+      when(_termineService.joinAction(any)).thenAnswer((_) => null);
 
       await tester.pumpWidget(termineSeiteWidget);
 
@@ -387,8 +386,7 @@ void main() {
         ..ende = DateTime.now().add(new Duration(hours: 26));
       when(_termineService.getActionWithDetails(any))
           .thenAnswer((_) async => action);
-      when(_termineService.leaveAction(any))
-          .thenAnswer((_) => null);
+      when(_termineService.leaveAction(any)).thenAnswer((_) => null);
 
       await tester.pumpWidget(termineSeiteWidget);
 
@@ -784,8 +782,7 @@ void main() {
       var list = find.byType(ScrollablePositionedList);
 
       List<String?> keys = tester
-          .widgetList(
-              find.descendant(of: list, matching: find.byType(Text)))
+          .widgetList(find.descendant(of: list, matching: find.byType(Text)))
           .map((widget) => (widget as Text).data)
           .where((key) => key == 'Sammeln' || key == 'Jetzt')
           .toList();
@@ -844,8 +841,7 @@ void main() {
       var list = find.byType(ScrollablePositionedList);
 
       List<String?> keys = tester
-          .widgetList(
-              find.descendant(of: list, matching: find.byType(Text)))
+          .widgetList(find.descendant(of: list, matching: find.byType(Text)))
           .map((widget) => (widget as Text).data)
           .where((key) => key == 'Sammeln' || key == 'Jetzt')
           .toList();
@@ -893,8 +889,7 @@ void main() {
       var list = find.byType(ScrollablePositionedList);
 
       List<String?> keys = tester
-          .widgetList(
-              find.descendant(of: list, matching: find.byType(Text)))
+          .widgetList(find.descendant(of: list, matching: find.byType(Text)))
           .map((widget) => (widget as Text).data)
           .where((key) => key == 'Sammeln' || key == 'Jetzt')
           .toList();
