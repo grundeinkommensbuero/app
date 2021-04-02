@@ -202,7 +202,6 @@ void main() {
 
         await tester.tap(find.byKey(Key('venue dialog finish button')));
         await tester.pump();
-        await Future.delayed(Duration(seconds: 1));
 
         LocationDialogTester venueTester =
             tester.widget(find.byType(LocationDialogTester));

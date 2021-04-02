@@ -45,7 +45,7 @@ class TermineSeiteState extends State<TermineSeite>
     color: Color.fromARGB(255, 129, 28, 98),
     fontSize: 15.0,
   );
-  static MapController mapController = MapController();
+  final MapController mapController = MapController();
   bool _initialized = false;
 
   List<Termin> termine = [];
@@ -393,10 +393,8 @@ class TermineSeiteState extends State<TermineSeite>
   }
 
   void showActionOnMap(Termin action) {
+    setState(() => navigation = 1);
     mapController.move(LatLng(action.latitude, action.longitude), 15.0);
-    setState(() {
-      navigation = 1; // change to map view
-    });
   }
 
   Future<void> joinAction(Termin action) async {
