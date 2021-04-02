@@ -25,6 +25,7 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../model/Termin_test.dart';
 import '../shared/mocks.costumized.dart';
@@ -780,11 +781,11 @@ void main() {
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
 
-      var listView = find.byType(ListView);
+      var list = find.byType(ScrollablePositionedList);
 
       List<String?> keys = tester
           .widgetList(
-              find.descendant(of: listView, matching: find.byType(Text)))
+              find.descendant(of: list, matching: find.byType(Text)))
           .map((widget) => (widget as Text).data)
           .where((key) => key == 'Sammeln' || key == 'Jetzt')
           .toList();
@@ -840,11 +841,11 @@ void main() {
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
 
-      var listView = find.byType(ListView);
+      var list = find.byType(ScrollablePositionedList);
 
       List<String?> keys = tester
           .widgetList(
-              find.descendant(of: listView, matching: find.byType(Text)))
+              find.descendant(of: list, matching: find.byType(Text)))
           .map((widget) => (widget as Text).data)
           .where((key) => key == 'Sammeln' || key == 'Jetzt')
           .toList();
@@ -889,11 +890,11 @@ void main() {
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
 
-      var listView = find.byType(ListView);
+      var list = find.byType(ScrollablePositionedList);
 
       List<String?> keys = tester
           .widgetList(
-              find.descendant(of: listView, matching: find.byType(Text)))
+              find.descendant(of: list, matching: find.byType(Text)))
           .map((widget) => (widget as Text).data)
           .where((key) => key == 'Sammeln' || key == 'Jetzt')
           .toList();
