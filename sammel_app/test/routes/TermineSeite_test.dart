@@ -145,9 +145,14 @@ void main() {
       await tester.pump();
 
       // no buttons at first action
-      expect(find.byKey(Key('action delete button')), findsNothing);
-      expect(find.byKey(Key('action edit button')), findsNothing);
+      await tester.tap(find.byKey(Key('action details menu button')));
+      await tester.pump();
 
+      expect(find.byKey(Key('action details delete menu item')), findsNothing);
+      expect(find.byKey(Key('action details edit menu item')), findsNothing);
+
+      await tester.tap(find.byKey(Key('action details menu button')));
+      await tester.pump();
       await tester.tap(find.byKey(Key('action details close button')));
       await tester.pump();
 
@@ -155,9 +160,14 @@ void main() {
       await tester.tap(find.byKey(Key('action card')).at(1));
       await tester.pump();
 
-      expect(find.byKey(Key('action delete button')), findsOneWidget);
-      expect(find.byKey(Key('action edit button')), findsOneWidget);
+      await tester.tap(find.byKey(Key('action details menu button')));
+      await tester.pump();
 
+      expect(find.byKey(Key('action details delete menu item')), findsOneWidget);
+      expect(find.byKey(Key('action details edit menu item')), findsOneWidget);
+
+      await tester.tap(find.byKey(Key('action details menu button')));
+      await tester.pump();
       await tester.tap(find.byKey(Key('action details close button')));
       await tester.pump();
 
@@ -165,8 +175,11 @@ void main() {
       await tester.tap(find.byKey(Key('action card')).at(2));
       await tester.pump();
 
-      expect(find.byKey(Key('action delete button')), findsNothing);
-      expect(find.byKey(Key('action edit button')), findsNothing);
+      await tester.tap(find.byKey(Key('action details menu button')));
+      await tester.pump();
+
+      expect(find.byKey(Key('action details delete menu item')), findsNothing);
+      expect(find.byKey(Key('action details edit menu item')), findsNothing);
     ***REMOVED***);
   ***REMOVED***);
 
