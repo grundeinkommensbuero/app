@@ -395,11 +395,6 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
             onPressed: () => deleteAction()));
   ***REMOVED***
 
-  Widget leaveButton(Termin terminMitDetails) => RaisedButton(
-      key: Key('leave action button'),
-      child: Text('Verlassen').tr(),
-      onPressed: () => leaveAction());
-
   List<Widget> determineActionButton() {
     if (isPastAction(widget.action) &&
         iAmParticipant &&
