@@ -1058,8 +1058,10 @@ void main() {
         await tester.tap(find.byKey(Key('action card')).at(1));
         await tester.pump();
 
-        await tester.tap(find.byKey(Key('action delete button')));
-        await tester.pump();
+        await tester.tap(find.byKey(Key('action details menu button')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(Key('action details delete menu item')));
+        await tester.pumpAndSettle();
 
         expect(find.byKey(Key('deletion confirmation dialog')), findsOneWidget);
 
@@ -1080,8 +1082,10 @@ void main() {
         await tester.tap(find.byKey(Key('action card')).at(1));
         await tester.pump();
 
-        await tester.tap(find.byKey(Key('action delete button')));
-        await tester.pump();
+        await tester.tap(find.byKey(Key('action details menu button')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(Key('action details delete menu item')));
+        await tester.pumpAndSettle();
 
         expect(find.byKey(Key('deletion confirmation dialog')), findsOneWidget);
 
@@ -1102,13 +1106,15 @@ void main() {
         await tester.tap(find.byKey(Key('action card')).at(1));
         await tester.pump();
 
-        await tester.tap(find.byKey(Key('action delete button')));
-        await tester.pump();
+        await tester.tap(find.byKey(Key('action details menu button')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(Key('action details delete menu item')));
+        await tester.pumpAndSettle();
 
         expect(find.byKey(Key('deletion confirmation dialog')), findsOneWidget);
 
         await tester.tap(find.byKey(Key('delete confirmation yes button')));
-        await tester.pump();
+        await tester.pumpAndSettle();
 
         expect(find.byKey(Key('deletion confirmation dialog')), findsNothing);
         expect(find.byKey(Key('action details page')), findsNothing);
@@ -1125,8 +1131,10 @@ void main() {
         await tester.tap(find.byKey(Key('action card')).at(1));
         await tester.pump();
 
-        await tester.tap(find.byKey(Key('action delete button')));
-        await tester.pump();
+        await tester.tap(find.byKey(Key('action details menu button')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(Key('action details delete menu item')));
+        await tester.pumpAndSettle();
 
         when(_termineService.deleteAction(any, any))
             .thenThrow(RestFehler('message'));
@@ -1152,8 +1160,10 @@ void main() {
         await tester.tap(find.byKey(Key('action card')).at(1));
         await tester.pump();
 
-        await tester.tap(find.byKey(Key('action delete button')));
-        await tester.pump();
+        await tester.tap(find.byKey(Key('action details menu button')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(Key('action details delete menu item')));
+        await tester.pumpAndSettle();
 
         when(_termineService.deleteAction(any, any))
             .thenThrow(AuthFehler('message'));
