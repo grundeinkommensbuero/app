@@ -7,6 +7,7 @@ import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+
 import 'TerminCard.dart';
 
 class ActionList extends StatefulWidget {
@@ -64,7 +65,7 @@ class ActionListState extends State<ActionList> {
           !termin.isEvaluated(evaluations!)) {
         snackbarTimer = Timer(
             Duration(seconds: 2),
-            () => Scaffold.of(context).showSnackBar(SnackBar(
+            () => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text('Dein Bericht zu einer Aktion fehlt noch'.tr(),
                     style: TextStyle(color: Colors.black87)),
                 behavior: SnackBarBehavior.floating,
@@ -73,7 +74,6 @@ class ActionListState extends State<ActionList> {
                 action: SnackBarAction(
                     label: 'Zur Aktion'.tr(),
                     onPressed: () => widget.openActionDetails(termin)))));
-
         break;
       }
     }

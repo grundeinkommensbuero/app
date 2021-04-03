@@ -107,7 +107,9 @@ class TermineSeiteState extends State<TermineSeite>
       mapController: mapController,
     );
 
-    return Scaffold(
+    return ScaffoldMessenger(
+        // um Snackbar oberhalb der Footer-Buttons zu zeigen
+        child: Scaffold(
       body: Container(
           decoration: DweTheme.happyHouseBackground,
           child: Stack(
@@ -139,7 +141,7 @@ class TermineSeiteState extends State<TermineSeite>
               label: 'Karte'.tr())
         ],
       ),
-    );
+    ));
   }
 
   swithPage(index) async {
@@ -278,7 +280,7 @@ class TermineSeiteState extends State<TermineSeite>
   Future<void> saveAction(Termin editedAction) async {
     try {
       String? token = await storageService!.loadActionToken(editedAction.id!);
-      if(token == null) throw Exception('Fehlende Authorisierung zu Aktion');
+      if (token == null) throw Exception('Fehlende Authorisierung zu Aktion');
       await termineService!.saveAction(editedAction, token);
       setState(() => updateAction(editedAction, false));
     } catch (e, s) {
@@ -319,8 +321,7 @@ class TermineSeiteState extends State<TermineSeite>
   afterActionEvaluation(Evaluation evaluation) async {
     Navigator.pop(context, false);
 
-    //TODO Dart 4.12
-    Scaffold.of(context).showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('Vielen Dank, dass Du Eure Erfahrungen geteilt hast.'.tr(),
           style: TextStyle(color: Colors.black87)),
       behavior: SnackBarBehavior.floating,
@@ -342,10 +343,10 @@ class TermineSeiteState extends State<TermineSeite>
   }
 
   Future<void> deleteAction(Termin action) async {
-    if(action.id == null) return;
+    if (action.id == null) return;
     String? token = await storageService!.loadActionToken(action.id!);
     try {
-      if(token == null) throw Exception('Fehlende Authorisierung zu Aktion');
+      if (token == null) throw Exception('Fehlende Authorisierung zu Aktion');
       await termineService?.deleteAction(action, token);
       storageService!.deleteActionToken(action.id!);
       setState(() => updateAction(action, true));
@@ -398,7 +399,7 @@ class TermineSeiteState extends State<TermineSeite>
   }
 
   Future<void> joinAction(Termin action) async {
-    if(action.id == null || me == null) return;
+    if (action.id == null || me == null) return;
     await termineService?.joinAction(action.id!);
     setState(() {
       (termine as List<Termin?>)
@@ -409,7 +410,7 @@ class TermineSeiteState extends State<TermineSeite>
   }
 
   Future<void> leaveAction(Termin action) async {
-    if(action.id == null || me == null) return;
+    if (action.id == null || me == null) return;
     await termineService?.leaveAction(action.id!);
     setState(() {
       var actionFromList = termine.firstWhere((t) => t.id == action.id);
