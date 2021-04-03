@@ -147,9 +147,24 @@ void main() {
 
       expect(actionMarker.length, 3);
 
-      expect(actionMarker[0].style!.backgroundColor, DweTheme.greenLight);
-      expect(actionMarker[2].style!.backgroundColor, DweTheme.yellowBright);
-      expect(actionMarker[1].style!.backgroundColor, DweTheme.blueBright);
+      expect(
+          actionMarker[0]
+              .style!
+              .backgroundColor!
+              .resolve({MaterialState.hovered***REMOVED***),
+          DweTheme.greenLight);
+      expect(
+          actionMarker[2]
+              .style!
+              .backgroundColor!
+              .resolve({MaterialState.hovered***REMOVED***),
+          DweTheme.yellowBright);
+      expect(
+          actionMarker[1]
+              .style!
+              .backgroundColor!
+              .resolve({MaterialState.hovered***REMOVED***),
+          DweTheme.blueBright);
     ***REMOVED***);
 
     testWidgets('are higlighted for joined actions',
@@ -185,9 +200,24 @@ void main() {
 
       expect(actionMarker.length, 3);
 
-      expect(actionMarker[0].style!.backgroundColor, DweTheme.yellowBright);
-      expect(actionMarker[1].style!.backgroundColor, DweTheme.greenLight);
-      expect(actionMarker[2].style!.backgroundColor, DweTheme.yellowBright);
+      expect(
+          actionMarker[0]
+              .style!
+              .backgroundColor!
+              .resolve({MaterialState.hovered***REMOVED***),
+          DweTheme.yellowBright);
+      expect(
+          actionMarker[1]
+              .style!
+              .backgroundColor!
+              .resolve({MaterialState.hovered***REMOVED***),
+          DweTheme.greenLight);
+      expect(
+          actionMarker[2]
+              .style!
+              .backgroundColor!
+              .resolve({MaterialState.hovered***REMOVED***),
+          DweTheme.yellowBright);
     ***REMOVED***);
 
     testWidgets('react to tap', (WidgetTester tester) async {
