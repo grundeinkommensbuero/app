@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
@@ -78,15 +79,18 @@ class FilterWidgetState extends State<FilterWidget>
           SizedBox(
               width: double.infinity,
               height: 50.0,
-              child: RaisedButton(
+              child: ElevatedButton(
                 key: Key('filter button'),
-                color: Color.fromARGB(255, 129, 28, 98),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.vertical(
-                        top: Radius.zero,
-                        bottom: Radius.elliptical(15.0, 20.0))),
-                textColor: Colors.amberAccent,
-                materialTapTargetSize: _zeroPadding,
+                style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(DweTheme.purple),
+                    shape: MaterialStateProperty.all<OutlinedBorder>(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                                top: Radius.zero,
+                                bottom: Radius.elliptical(15.0, 20.0)))),
+                    tapTargetSize: _zeroPadding,
+                    foregroundColor:
+                        MaterialStateProperty.all(DweTheme.yellow)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -121,9 +125,10 @@ class FilterWidgetState extends State<FilterWidget>
         ],
       ),
       !expanded
-          ? FlatButton(
-              splashColor: Colors.transparent,
-              textColor: DweTheme.yellow,
+          ? TextButton(
+              style: ButtonStyle(
+                  overlayColor: MaterialStateProperty.all(DweTheme.purple),
+                  foregroundColor: MaterialStateProperty.all(DweTheme.yellow)),
               onPressed: onApply,
               child: Text(loading ? '' : 'Aktualisieren', textScaleFactor: 1.2)
                   .tr())
@@ -201,8 +206,7 @@ class FilterWidgetState extends State<FilterWidget>
       'Plakatieren',
       'Kundgebung'
     ];
-    List<String> ausgewTypen = []
-      ..addAll(filter.typen);
+    List<String> ausgewTypen = []..addAll(filter.typen);
     bool nurEigene = filter.nurEigene == true;
     bool immerEigene = filter.immerEigene == true;
 
@@ -217,7 +221,7 @@ class FilterWidgetState extends State<FilterWidget>
                   title: AppBar(
                       leading: null,
                       automaticallyImplyLeading: false,
-                      title: const Text('Wähle Aktions-Arten').tr()),
+                      title: const Text('Wähle Aktions-Art').tr()),
                   children: [
                     SwitchListTile(
                         activeColor: DweTheme.purple,
@@ -258,7 +262,7 @@ class FilterWidgetState extends State<FilterWidget>
                                 ***REMOVED***);
                               ***REMOVED***,
                             ))))
-                    ..add(RaisedButton(
+                    ..add(ElevatedButton(
                         child: Text('Fertig').tr(),
                         onPressed: () => Navigator.pop(context))));
             ***REMOVED***));
@@ -329,18 +333,20 @@ class FilterElement extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
         width: double.infinity,
-        child: FlatButton(
-            color: Color.fromARGB(255, 149, 48, 118),
-            textColor: Colors.amberAccent,
-            shape: Border(),
-            materialTapTargetSize: _zeroPadding,
-            padding: EdgeInsetsDirectional.zero,
+        child: TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(DweTheme.purpleLight),
+              foregroundColor: MaterialStateProperty.all(DweTheme.yellow),
+              tapTargetSize: _zeroPadding,
+              padding: MaterialStateProperty.all(EdgeInsetsDirectional.zero),
+            ),
             onPressed: selectionFunction,
             child: Container(
-              color: Color.fromARGB(255, 149, 48, 118),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+              color: DweTheme.purpleLight,
+              child: IntrinsicHeight(
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
                     Expanded(
                         child: Padding(
                             padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -354,18 +360,23 @@ class FilterElement extends StatelessWidget {
                                     size: 18.0,
                                   )
                                 ]))),
-                    FlatButton(
-                      textColor: Colors.amberAccent,
-                      shape: Border(
-                          left: BorderSide(width: 2.0, color: DweTheme.purple)),
-                      materialTapTargetSize: _zeroPadding,
+                    VerticalDivider(thickness: 2, width: 2),
+                    TextButton(
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(DweTheme.purpleLight),
+                          foregroundColor:
+                              MaterialStateProperty.all(DweTheme.yellow),
+                          tapTargetSize: _zeroPadding,
+                          padding: MaterialStateProperty.all(
+                              EdgeInsetsDirectional.zero)),
                       onPressed: resetFunction,
                       child: Icon(
                         Icons.clear,
                         size: 18.0,
                       ),
                     )
-                  ]),
+                  ])),
             )));
   ***REMOVED***
 ***REMOVED***

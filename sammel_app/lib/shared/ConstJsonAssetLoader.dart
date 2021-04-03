@@ -69,7 +69,7 @@ const Map<String, dynamic> en = {
   "Alle Aktions-Arten,": "All event types,",
   "jederzeit": "all times",
   "überall": "everywhere",
-  "Wähle Aktions-Arten": "Choose the event type",
+  "Wähle Aktions-Art": "Choose the event type",
   "Fertig": "Finish",
   "Treffpunkt": "Meeting point",
   "Wähle auf der Karte einen Treffpunkt aus.":
@@ -381,7 +381,7 @@ const Map<String, dynamic> ru = {
   "Alle Aktions-Arten,": "Все виды акций,",
   "jederzeit": "в любое время",
   "überall": "везде",
-  "Wähle Aktions-Arten": "Выбери виды акций",
+  "Wähle Aktions-Art": "Выбери виды акций",
   "Fertig": "Готово",
   "Treffpunkt": "Место встречи",
   "Wähle auf der Karte einen Treffpunkt aus.": "Выбери на карте место встречи.",
@@ -685,7 +685,7 @@ const Map<String, dynamic> fr = {
   "Alle Aktions-Arten,": "Tous types d'actions,",
   "jederzeit": "toujours",
   "überall": "partout",
-  "Wähle Aktions-Arten": "Choisis les types d'actions",
+  "Wähle Aktions-Art": "Choisis les types d'actions",
   "Fertig": "Terminé",
   "Treffpunkt": "Point de rencontre",
   "Wähle auf der Karte einen Treffpunkt aus.":
@@ -998,7 +998,7 @@ const Map<String, dynamic> de = {
   "Alle Aktions-Arten,": "Alle Aktions-Arten,",
   "jederzeit": "jederzeit",
   "überall": "überall",
-  "Wähle Aktions-Arten": "Wähle Aktions-Arten",
+  "Wähle Aktions-Art": "Wähle Aktions-Art",
   "Fertig": "Fertig",
   "Treffpunkt": "Treffpunkt",
   "Wähle auf der Karte einen Treffpunkt aus.":

@@ -259,7 +259,8 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                       zoom: 15,
                       interactive: false,
                       onTap: (_) {
-                        return Navigator.pop(context, TerminDetailsCommand.FOCUS);
+                        return Navigator.pop(
+                            context, TerminDetailsCommand.FOCUS);
                       ***REMOVED***),
                   layers: [
                     TileLayerOptions(
@@ -271,16 +272,13 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                 ),
               ),
             ])),
-        persistentFooterButtons:
-          determineActionButton()
+        persistentFooterButtons: determineActionButton()
           ..add(SizedBox(
-              child: RaisedButton(
+              child: ElevatedButton(
             key: Key('action details close button'),
-            padding: EdgeInsets.all(8.0),
             child: Text('Schließen').tr(),
             onPressed: () => Navigator.pop(context, TerminDetailsCommand.CLOSE),
-          )))
-        );
+          ))));
   ***REMOVED***
 
   PopupMenuButton menuButton(
@@ -372,57 +370,39 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                 ChatWindow(messageChannel, widget.action, true)));
   ***REMOVED***
 
-  SizedBox editButton() {
-    return SizedBox(
-        width: 50.0,
-        child: RaisedButton(
-          key: Key('action edit button'),
-          padding: EdgeInsets.all(5.0),
-          child: Icon(Icons.edit),
-          onPressed: () => editAction(),
-        ));
-  ***REMOVED***
-
-  SizedBox deleteButton() {
-    return SizedBox(
-        width: 50.0,
-        child: RaisedButton(
-            key: Key('action delete button'),
-            padding: EdgeInsets.all(5.0),
-            color: DweTheme.red,
-            child: Icon(Icons.delete),
-            onPressed: () => deleteAction()));
-  ***REMOVED***
-
   List<Widget> determineActionButton() {
     if (isPastAction(widget.action) &&
         iAmParticipant &&
         !widget.action.isEvaluated(myEvaluations))
-      return [RaisedButton(
-          key: Key('action evaluate button'),
-          padding: EdgeInsets.all(8.0),
-          color: DweTheme.purple,
-          child: Text('Feedback'),
-          onPressed: () => evaluateAction())];
+      return [
+        ElevatedButton(
+            key: Key('action evaluate button'),
+            child: Text('Feedback'),
+            onPressed: () => evaluateAction())
+      ];
 
     if (iAmParticipant)
-      return [RaisedButton(
-          textColor: DweTheme.yellow,
-          padding: EdgeInsets.all(8.0),
-          key: Key('open chat window'),
-          child: Row(children: [
-            Icon(Icons.message, size: 20),
-            SizedBox(width: 10),
-            Text('Zum Chat').tr()
-          ]),
-          onPressed: () => openChatWindow())];
+      return [
+        ElevatedButton(
+            style: ButtonStyle(
+                foregroundColor:
+                    MaterialStateProperty.all<Color>(DweTheme.yellow)),
+            key: Key('open chat window'),
+            child: Row(children: [
+              Icon(Icons.message, size: 20),
+              SizedBox(width: 10),
+              Text('Zum Chat').tr()
+            ]),
+            onPressed: () => openChatWindow())
+      ];
 
     if (!isPastAction(widget.action))
-      return [RaisedButton(
-          key: Key('join action button'),
-          padding: EdgeInsets.all(8.0),
-          child: Text('Mitmachen').tr(),
-          onPressed: () => joinAction())];
+      return [
+        ElevatedButton(
+            key: Key('join action button'),
+            child: Text('Mitmachen').tr(),
+            onPressed: () => joinAction())
+      ];
 
     // default
     return [];

@@ -210,14 +210,14 @@ class ActionEditorState extends State<ActionEditor>
               color: DweTheme.yellow),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            RaisedButton(
+            ElevatedButton(
                 key: Key('action editor cancel button'),
                 child: Text('Abbrechen').tr(),
                 onPressed: () {
                   resetAction();
                   Navigator.maybePop(context);
                 ***REMOVED***),
-            RaisedButton(
+                ElevatedButton(
                 key: Key('action editor finish button'),
                 child: Text('Fertig').tr(),
                 onPressed: () => finishPressed())
@@ -310,13 +310,13 @@ class ActionEditorState extends State<ActionEditor>
               ]))
             : inputField,
         actions: [
-          FlatButton(
+          TextButton(
             child: Text("Abbrechen").tr(),
             onPressed: () {
               Navigator.pop(context, initialValue);
             ***REMOVED***,
           ),
-          FlatButton(
+          TextButton(
             key: Key('action editor text input accept button'),
             child: Text("Fertig").tr(),
             onPressed: () => Navigator.pop(context, currentValue),
@@ -343,7 +343,7 @@ class ActionEditorState extends State<ActionEditor>
                   key: Key('type selection dialog'),
                   contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
                   titlePadding: EdgeInsets.all(15.0),
-                  title: const Text('Wähle Aktions-Arten').tr(),
+                  title: const Text('Wähle Aktions-Art').tr(),
                   children: []
                     ..addAll(moeglicheTypen.map((typ) => RadioListTile(
                           groupValue: ausgewTyp,
@@ -355,7 +355,7 @@ class ActionEditorState extends State<ActionEditor>
                             ***REMOVED***);
                           ***REMOVED***,
                         )))
-                    ..add(RaisedButton(
+                    ..add(ElevatedButton(
                         child: Text('Fertig').tr(),
                         onPressed: () => Navigator.pop(context))));
             ***REMOVED***));
@@ -588,11 +588,11 @@ class ActionEditorState extends State<ActionEditor>
                     'Du hast $anzahl Tage ausgewählt. Soll für jeden eine Aktion erstellt werden?'
                         .tr(namedArgs: {'anzahl': anzahl.toString()***REMOVED***)),
                 actions: <Widget>[
-                  RaisedButton(
+                  ElevatedButton(
                     child: Text('Zurück').tr(),
                     onPressed: () => Navigator.pop(context, false),
                   ),
-                  RaisedButton(
+                  ElevatedButton(
                     child: Text('Ja').tr(),
                     onPressed: () => Navigator.pop(context, true),
                   ),

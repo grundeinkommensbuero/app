@@ -82,7 +82,7 @@ class KiezPicker {
                             layers: layers,
                             mapController: mapController,
                           )),
-                          RaisedButton(
+                          ElevatedButton(
                               child: Text('Auswahl übernehmen').tr(),
                               onPressed: () =>
                                   Navigator.pop(context, selectedKieze))

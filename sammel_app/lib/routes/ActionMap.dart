@@ -159,14 +159,20 @@ class ActionMarker extends Marker {
               decoration: BoxDecoration(boxShadow: [
                 BoxShadow(offset: Offset(-2.0, 2.0), blurRadius: 4.0)
               ], shape: BoxShape.circle),
-              child: FlatButton(
+              child: TextButton(
                   key: Key('action marker'),
                   onPressed: () => onTap(action),
-                  color:
-                      DweTheme.actionColor(action.ende, ownAction, participant),
-                  shape: CircleBorder(
-                      side: BorderSide(color: DweTheme.purple, width: 1.0)),
-                  padding: EdgeInsets.all(0),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        DweTheme.actionColor(
+                            action.ende, ownAction, participant)),
+                    shape: MaterialStateProperty.all<OutlinedBorder>(
+                        CircleBorder(
+                            side: BorderSide(
+                                color: DweTheme.purple, width: 1.0))),
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                        EdgeInsets.all(0)),
+                  ),
                   child: Image.asset(action.getAsset(centered: true),
                       alignment: Alignment.center))),
         );
@@ -177,11 +183,15 @@ class ListLocationMarker extends Marker {
       : super(
           anchorPos: AnchorPos.align(AnchorAlign.top),
           point: LatLng(listLocation.latitude, listLocation.longitude),
-          builder: (context) => FlatButton(
+          builder: (context) => TextButton(
               key: Key('list location marker'),
-              color: Colors.transparent,
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.transparent),
+                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                    EdgeInsets.all(0)),
+              ),
               onPressed: () => showListLocationDialog(context, listLocation),
-              padding: EdgeInsets.all(0),
               child: Icon(
                 Icons.edit_location,
                 color: DweTheme.purple,
