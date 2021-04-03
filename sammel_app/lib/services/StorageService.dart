@@ -6,6 +6,8 @@ import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'ErrorService.dart';
+
 class StorageService {
   late Future<SharedPreferences> _prefs;
 
@@ -42,12 +44,17 @@ class StorageService {
   Future<bool> saveChatChannel(ChatChannel channel) => prefs.then((prefs) =>
       prefs.setString('$_CHANNEL:${channel.id}', jsonEncode(channel.toJson())));
 
-  FutureOr<ChatChannel?> loadChatChannel(String id) async =>
-      prefs.then((prefs) {
+  FutureOr<ChatChannel?> loadChatChannel(String id) async {
+    try {
+      return prefs.then((prefs) {
         var json = prefs.getString('$_CHANNEL:$id');
         if (json == null) return null;
         return ChatChannel.fromJSON(jsonDecode(json));
       });
+    } catch (e) {
+      ErrorService.handleError(e, StackTrace.current);
+    }
+  }
 
   markActionIdAsStored(int id) => prefs.then((prefs) => _getActionList().then(
       (list) => prefs.setStringList(_ACTIONLIST, list..add(id.toString()))));

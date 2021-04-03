@@ -2,7 +2,6 @@ import 'package:collection/collection.dart';
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/routes/ChatWindow.dart';
-import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 
 class ChatChannel {
@@ -61,9 +60,7 @@ class ChatChannel {
         return ParticipationMessage.fromJson(jsonMsg);
       if (type == PushDataTypes.simpleChatMessage)
         return ChatMessage.fromJson(jsonMsg);
-      ErrorService.handleError(
-          UnkownMessageTypeError('Unbekannter Nachrichtentyp abgespeichert'),
-          StackTrace.current); // TODO
+      throw UnkownMessageTypeError('Unbekannter Nachrichtentyp abgespeichert');
     }).toList();
     this
         .channelMessages
