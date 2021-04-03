@@ -1,7 +1,7 @@
 class ServerHealth {
-  String status;
-  String minClient;
-  String version;
+  String status = '';
+  String minClient = '';
+  String version = '';
 
   ServerHealth.fromJson(Map<String, dynamic> json) {
     status = json['status'];

@@ -1,54 +1,56 @@
 import 'dart:async';
-import 'dart:io';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/PushUpdateService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/Crypter.dart';
-import 'package:validators/validators.dart';
 
 import 'BackendService.dart';
 import 'ErrorService.dart';
 
 abstract class AbstractPushNotificationManager {
-  void register_message_callback(String id, PushNotificationListener callback);
+  void registerMessageCallback(String id, PushNotificationListener callback);
 
   void unsubscribeFromKiezActionTopics(List<String> kieze, String interval);
 
   void subscribeToKiezActionTopics(List<String> kieze, String interval);
 
-  Future<String> get pushToken;
+  Future<String?> get pushToken;
 
-  onTap(Map<String, Map<String, dynamic>> map);
+  onTap(RemoteMessage message);
 
   updateMessages() {***REMOVED***
 ***REMOVED***
 
 abstract class PushNotificationListener {
-  void receive_message(Map<String, dynamic> data) {***REMOVED***
+  void receiveMessage(Map<String, dynamic> data) {***REMOVED***
 
-  void handleNotificationTap(Map<dynamic, dynamic> data) {***REMOVED***
+  void handleNotificationTap(Map<String, dynamic> data) {***REMOVED***
 
   void updateMessages(List<Map<String, dynamic>> data) {***REMOVED***
 ***REMOVED***
 
 class PushNotificationManager implements AbstractPushNotificationManager {
-  PushReceiveService listener;
-  StorageService storageService;
-  AbstractUserService userService;
-  PushUpdateService updateService;
+  late PushReceiveService listener;
+  late StorageService storageService;
+  late AbstractUserService userService;
+  late PushUpdateService updateService;
 
   @override
-  Future<String> pushToken;
+  late Future<String?> pushToken;
 
   PushNotificationManager(this.storageService, this.userService,
       FirebaseReceiveService firebaseService, Backend backend) {
     var listener = createPushListener(firebaseService, backend);
-    pushToken = listener.then((listener) => listener.token);
     updateService = PushUpdateService(userService, backend);
-    updateMessages();
+
+    listener.then((listener) {
+      pushToken = listener.token;
+      updateMessages();
+    ***REMOVED***);
   ***REMOVED***
 
   Future<PushReceiveService> createPushListener(
@@ -57,7 +59,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
       listener = PullService(userService, backend);
     else {
       pushToken = firebaseService.token;
-      if (isNull(await pushToken) || (await pushToken).isEmpty) {
+      if ((await pushToken) == null || (await pushToken)!.isEmpty) {
         ErrorService.pushError(
             'Problem beim Einrichten von Push-Nachrichten',
             'Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. '
@@ -76,29 +78,29 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     return listener;
   ***REMOVED***
 
-  Map<String, PushNotificationListener> callback_map = Map();
+  Map<String, PushNotificationListener> callbackMap = Map();
 
-  Future<dynamic> onReceived(Map<dynamic, dynamic> message) async {
-    final data = extractData(message);
+  onReceived(RemoteMessage message) async {
+    final data = await decrypt(message.data);
 
     try {
       if (data.containsKey('type'))
-        callback_map[data['type']]?.receive_message(data);
+        callbackMap[data['type']]?.receiveMessage(data);
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s);
     ***REMOVED***
   ***REMOVED***
 
-  Future<dynamic> onTap(Map<dynamic, dynamic> message) async {
+  onTap(RemoteMessage message) async {
     print(
-        'onTap: Push-Nachricht empfangen: $message \nund Callback-Map für: ${callback_map.keys***REMOVED***');
-    final data = extractData(message);
+        'onTap: Push-Nachricht empfangen: $message \nund Callback-Map für: ${callbackMap.keys***REMOVED***');
+    final data = await decrypt(message.data);
 
     try {
       if (data.containsKey('type')) {
         String type = data['type'];
-        if (callback_map.containsKey(type)) {
-          callback_map[type].handleNotificationTap(data);
+        if (callbackMap.containsKey(type)) {
+          callbackMap[type]?.handleNotificationTap(data);
         ***REMOVED***
       ***REMOVED***
     ***REMOVED*** catch (e, s) {
@@ -106,17 +108,9 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     ***REMOVED***
   ***REMOVED***
 
-  Map<String, dynamic> extractData(Map message) {
-    // iOS sendet nur Data, Android verpackt es
-    if (Platform.isAndroid)
-      return decrypt(message['data']);
-    else
-      return decrypt(message);
-  ***REMOVED***
-
   @override
-  void register_message_callback(String id, PushNotificationListener callback) {
-    this.callback_map[id] = callback;
+  void registerMessageCallback(String id, PushNotificationListener callback) {
+    this.callbackMap[id] = callback;
   ***REMOVED***
 
   @override
@@ -135,15 +129,18 @@ class PushNotificationManager implements AbstractPushNotificationManager {
   Future<void> updateMessages() async {
     final messages = await updateService.getLatestPushMessages();
     if (messages == null) return;
-    final decrypted =
-        messages.map((message) => decrypt(message['data'])).toList();
+    List<Map<String, dynamic>> decrypted = [];
+    for (var message in messages) {
+      final decryptedMessage = await decrypt(message['data']);
+      decrypted.add(decryptedMessage);
+    ***REMOVED***
     final messageMap = sortMessagesByType(decrypted);
 
     if (listener is PullService)
       return; // im Pull-Modus sollen Push-Nachrichten regulär vom Timer geladen werden
     try {
       messageMap.forEach((type, messages) {
-        callback_map[type]?.updateMessages(messages);
+        callbackMap[type]?.updateMessages(messages);
       ***REMOVED***);
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s);
@@ -154,26 +151,23 @@ class PushNotificationManager implements AbstractPushNotificationManager {
 Map<String, List<Map<String, dynamic>>> sortMessagesByType(
         List<Map<String, dynamic>> messages) =>
     messages
-        .where((message) => message != null)
-        .where((data) => data != null && data['type'] != null)
+        .where((data) => data['type'] != null)
         .fold(Map<String, List<Map<String, dynamic>>>(), (typeMap, data) {
       if (typeMap[data['type']] == null) typeMap[data['type']] = [];
-      typeMap[data['type']].add(data);
+      typeMap[data['type']]?.add(data);
       return typeMap;
     ***REMOVED***);
 
 class DemoPushNotificationManager implements AbstractPushNotificationManager {
   DemoPushSendService pushService;
-  PushNotificationListener callback;
 
   DemoPushNotificationManager(this.pushService);
 
   @override
-  void register_message_callback(
-      String type, PushNotificationListener callback) {
+  void registerMessageCallback(String type, PushNotificationListener callback) {
     pushService.stream
         .where((data) => data.type == type)
-        .listen((data) => callback.receive_message(data.toJson()));
+        .listen((data) => callback.receiveMessage(data.toJson()));
   ***REMOVED***
 
   // Ignore
@@ -189,9 +183,7 @@ class DemoPushNotificationManager implements AbstractPushNotificationManager {
 
   // Ignore - no Push-Messages in Demo-Mode
   @override
-  onTap(Map<String, Map<String, dynamic>> map) {
-    throw UnimplementedError();
-  ***REMOVED***
+  onTap(RemoteMessage message) => throw UnimplementedError();
 
   // Ignore - no Push-Messages in Demo-Mode
   @override

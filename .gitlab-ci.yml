@@ -30,9 +30,9 @@ unit_tests_app:
     # erster run für test-ergebnisse
     - cd ..
     - flutter pub get
-    - flutter test --machine | tojunit --output TEST-app.xml
+    - flutter test --machine --no-sound-null-safety | tojunit --output TEST-app.xml
     # zweiter run für coverage
-    - - flutter test --coverage
+    - - flutter test --coverage --no-sound-null-safety
     - lcov --list coverage/lcov.info
     - lcov --remove 'coverage/lcov.info' -o coverage/lcov.info '**/BackendService.dart' '**/main.dart' # untestbares entfernen
     - genhtml coverage/lcov.info --output=coverage
@@ -48,7 +48,7 @@ build_android_apk:
   stage: build_and_test
   script:
     - cd sammel_app
-    - flutter build apk --debug
+    - flutter build apk --debug --no-sound-null-safety
     - mkdir ../downloads/
     - mkdir ../downloads/sammel_app/
     - cp build/app/outputs/apk/debug/app-debug.apk ../downloads/sammel_app/sammel-app-nightly.apk

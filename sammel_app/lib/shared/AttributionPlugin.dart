@@ -86,7 +86,7 @@ class AttributionLayer extends StatelessWidget {
                             ),
                           ),
                           actions: [
-                            FlatButton(
+                            TextButton(
                                 child: Text("OK"),
                                 onPressed: () {
                                   Navigator.of(context).pop();
@@ -105,7 +105,7 @@ class AttributionPlugin extends MapPlugin {
   @override
   Widget createLayer(
       LayerOptions options, MapState mapState, Stream<void> stream) {
-    return AttributionLayer(options, mapState, stream);
+    return AttributionLayer(options as AttributionOptions, mapState, stream);
   ***REMOVED***
 
   @override

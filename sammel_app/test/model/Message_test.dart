@@ -20,7 +20,7 @@ void main() {
     group('toJson', () {
       test('serializes corretly', () {
         var message = ParticipationMessage(
-            false, DateTime(2020, 12, 12, 23, 58), 'Karl Marx', true);
+            DateTime(2020, 12, 12, 23, 58), 'Karl Marx', true);
 
         var json = message.toJson();
         expect(json['type'], 'ParticipationMessage');
@@ -31,8 +31,8 @@ void main() {
       ***REMOVED***);
 
       test('serializes null username', () {
-        var message = ParticipationMessage(
-            false, DateTime(2020, 12, 12, 23, 58), null, true);
+        var message =
+            ParticipationMessage(DateTime(2020, 12, 12, 23, 58), null, true);
         var json = message.toJson();
         expect(json['type'], 'ParticipationMessage');
         expect(json['obtained_from_server'], isFalse);
@@ -54,7 +54,7 @@ void main() {
 
         var message = ParticipationMessage.fromJson(json);
         expect(message.type, 'ParticipationMessage');
-        expect(message.obtained_from_server, isFalse);
+        expect(message.obtainedFromServer, isFalse);
         expect(message.timestamp.toString(), '2020-12-12 23:58:00.000');
         expect(message.username, 'Karl Marx');
         expect(message.joins, isTrue);
@@ -73,16 +73,6 @@ void main() {
         expect(message.username, isNull);
       ***REMOVED***);
 
-      test('fromJson expects timestamp', () async {
-        var json = {
-          'type': 'ParticipationMessage',
-          'obtained_from_server': false,
-          'username': 'Karl Marx',
-          'joins': true
-        ***REMOVED***
-        expect(() => ParticipationMessage.fromJson(json), throwsAssertionError);
-      ***REMOVED***);
-
       test('fromJson expects joins', () async {
         var json = {
           'type': 'ParticipationMessage',
@@ -90,24 +80,25 @@ void main() {
           'timestamp': '2020-12-12 23:58:00.000',
           'username': 'Karl Marx',
         ***REMOVED***
-        expect(() => ParticipationMessage.fromJson(json), throwsAssertionError);
+        expect(() => ParticipationMessage.fromJson(json),
+            throwsA((e) => e is TypeError));
       ***REMOVED***);
     ***REMOVED***);
     group('isMessageEqual', () {
       test('idntifies equal values', () {
         var user1 = ParticipationMessage(
-            false, DateTime(2020, 1, 11, 04, 18), 'Karl Marx', true);
+            DateTime(2020, 1, 11, 04, 18), 'Karl Marx', true);
         var user2 = ParticipationMessage(
-            false, DateTime(2020, 1, 11, 04, 18), 'Karl Marx', true);
+            DateTime(2020, 1, 11, 04, 18), 'Karl Marx', true);
 
         expect(user1.isMessageEqual(user2), isTrue);
       ***REMOVED***);
 
       test('ignores different obtained_from_server values', () {
         var user1 = ParticipationMessage(
-            true, DateTime(2020, 1, 11, 04, 18), 'Karl Marx', true);
+            DateTime(2020, 1, 11, 04, 18), 'Karl Marx', true, true);
         var user2 = ParticipationMessage(
-            false, DateTime(2020, 1, 11, 04, 18), 'Karl Marx', true);
+            DateTime(2020, 1, 11, 04, 18), 'Karl Marx', true);
 
         expect(user1.isMessageEqual(user2), isTrue);
       ***REMOVED***);

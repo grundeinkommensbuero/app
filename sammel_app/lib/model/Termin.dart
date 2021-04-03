@@ -5,15 +5,15 @@ import 'Kiez.dart';
 import 'TerminDetails.dart';
 
 class Termin {
-  int id;
+  int? id;
   DateTime beginn;
   DateTime ende;
   Kiez ort;
   String typ;
-  double latitude;
-  double longitude;
-  List<User> participants;
-  TerminDetails details;
+  double? latitude;
+  double? longitude;
+  List<User>? participants;
+  TerminDetails? details;
 
   Termin(this.id, this.beginn, this.ende, this.ort, this.typ, this.latitude,
       this.longitude, this.participants, this.details);
@@ -26,9 +26,9 @@ class Termin {
         typ = json['typ'] ?? 'Termin',
         latitude = json['latitude'] ?? null,
         longitude = json['longitude'] ?? null,
-        participants = (json['participants'] as List)
+        participants = (json['participants'] as List?)
             ?.map((user) => User.fromJSON(user))
-            ?.toList(),
+            .toList(),
         details = json['details'] != null
             ? TerminDetails.fromJSON(json['details'])
             : null;
@@ -37,15 +37,15 @@ class Termin {
         'id': id,
         'beginn': beginn.toIso8601String(),
         'ende': ende.toIso8601String(),
-        'ort': ort == null ? null : ort.toJson(),
+        'ort': ort.toJson(),
         'typ': typ,
         'latitude': latitude,
         'longitude': longitude,
-        'participants': participants?.map((user) => user.toJson())?.toList(),
-        'details': details == null ? null : details.toJson(),
+        'participants': participants?.map((user) => user.toJson()).toList(),
+        'details': details == null ? null : details?.toJson(),
       ***REMOVED***
 
-  bool isEvaluated(List<int> evaluatedActionIds) {
+  bool isEvaluated(List<int>? evaluatedActionIds) {
     if (this.typ != 'Sammeln') return true;
     if (evaluatedActionIds == null) return false;
     if (evaluatedActionIds.contains(this.id)) return true;
@@ -79,8 +79,8 @@ class Termin {
 ***REMOVED***
 
 class ActionWithToken {
-  final Termin action;
-  final String token;
+  final Termin? action;
+  final String? token;
 
   ActionWithToken(this.action, this.token);
 

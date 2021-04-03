@@ -41,12 +41,7 @@ class Kiez {
   String ortsteil;
   List<LatLng> polygon;
 
-  Kiez(String name, String region, String ortsteil, List<LatLng> polygon) {
-    this.name = name;
-    this.region = region;
-    this.ortsteil = ortsteil;
-    this.polygon = polygon;
-  ***REMOVED***
+  Kiez(this.name, this.region, this.ortsteil, this.polygon);
 
   Kiez.fromJson(Map<String, dynamic> json)
       : name = json['properties']['BEZIRKSREG'],

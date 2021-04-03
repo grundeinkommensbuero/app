@@ -4,7 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 
 class ConstJsonAssetLoader extends AssetLoader {
   @override
-  Future<Map<String, dynamic>> load(String _, Locale locale) async =>
+  Future<Map<String, dynamic>?> load(String _, Locale locale) async =>
       languages[locale.languageCode];
 ***REMOVED***
 
@@ -69,7 +69,7 @@ const Map<String, dynamic> en = {
   "Alle Aktions-Arten,": "All event types,",
   "jederzeit": "all times",
   "überall": "everywhere",
-  "Wähle Aktions-Arten": "Choose the event type",
+  "Wähle Aktions-Art": "Choose the event type",
   "Fertig": "Finish",
   "Treffpunkt": "Meeting point",
   "Wähle auf der Karte einen Treffpunkt aus.":
@@ -321,7 +321,8 @@ const Map<String, dynamic> en = {
   "Nur eigene Aktionen anzeigen": "Only show my actions",
   "Eigene Aktionen immer anzeigen": "Always show my actions",
   "Eigene Aktionen": "Own actions",
-  "lade...": "loading..."
+  "lade...": "loading...",
+  "Na gut": "Allright",
 ***REMOVED***
 
 const Map<String, dynamic> ru = {
@@ -381,7 +382,7 @@ const Map<String, dynamic> ru = {
   "Alle Aktions-Arten,": "Все виды акций,",
   "jederzeit": "в любое время",
   "überall": "везде",
-  "Wähle Aktions-Arten": "Выбери виды акций",
+  "Wähle Aktions-Art": "Выбери виды акций",
   "Fertig": "Готово",
   "Treffpunkt": "Место встречи",
   "Wähle auf der Karte einen Treffpunkt aus.": "Выбери на карте место встречи.",
@@ -626,6 +627,7 @@ const Map<String, dynamic> ru = {
   // "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
   //     "If you want to change Notifications to silent or disable certain notification categories, just press the three dots on a received notification. You will then be guided to the notification preferences for this app.",
   // "Kundgebung": "Manifestation",
+  "Na gut": "Закрыть",
 ***REMOVED***
 
 const Map<String, dynamic> fr = {
@@ -685,7 +687,7 @@ const Map<String, dynamic> fr = {
   "Alle Aktions-Arten,": "Tous types d'actions,",
   "jederzeit": "toujours",
   "überall": "partout",
-  "Wähle Aktions-Arten": "Choisis les types d'actions",
+  "Wähle Aktions-Art": "Choisis les types d'actions",
   "Fertig": "Terminé",
   "Treffpunkt": "Point de rencontre",
   "Wähle auf der Karte einen Treffpunkt aus.":
@@ -939,6 +941,7 @@ const Map<String, dynamic> fr = {
   "Kundgebung": "Manifestation",
   // "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
   //     "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.",
+  "Na gut": "Fermer",
 ***REMOVED***
 
 const Map<String, dynamic> de = {
@@ -998,7 +1001,7 @@ const Map<String, dynamic> de = {
   "Alle Aktions-Arten,": "Alle Aktions-Arten,",
   "jederzeit": "jederzeit",
   "überall": "überall",
-  "Wähle Aktions-Arten": "Wähle Aktions-Arten",
+  "Wähle Aktions-Art": "Wähle Aktions-Art",
   "Fertig": "Fertig",
   "Treffpunkt": "Treffpunkt",
   "Wähle auf der Karte einen Treffpunkt aus.":
@@ -1254,5 +1257,6 @@ const Map<String, dynamic> de = {
   "Nur eigene Aktionen anzeigen": "Nur eigene Aktionen anzeigen",
   "Eigene Aktionen immer anzeigen": "Eigene Aktionen immer anzeigen",
   "Eigene Aktionen": "Eigene Aktionen",
-  "lade...": "lade..."
+  "lade...": "lade...",
+  "Na gut": "Na gut",
 ***REMOVED***

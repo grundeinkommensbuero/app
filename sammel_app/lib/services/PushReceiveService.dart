@@ -1,9 +1,9 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'dart:async';
-import 'dart:convert';
-
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http_server/http_server.dart';
 import 'package:sammel_app/Provisioning.dart';
@@ -14,29 +14,29 @@ import 'ErrorService.dart';
 
 abstract class PushReceiveService {
   void subscribe(
-      {MessageHandler onMessage,
-      MessageHandler onResume,
-      MessageHandler onLaunch,
-      MessageHandler onBackgroundMessage***REMOVED***);
+      {Function(RemoteMessage)? onMessage,
+      Function(RemoteMessage)? onResume,
+      Function(RemoteMessage)? onLaunch,
+      Function(RemoteMessage)? onBackgroundMessage***REMOVED***);
 
   void subscribeToTopics(List<String> topics);
 
   void unsubscribeFromTopics(List<String> topic);
 
-  Future<String> token;
+  abstract Future<String?> token;
 ***REMOVED***
 
 class FirebaseReceiveService implements PushReceiveService {
-  static FirebaseMessaging firebaseMessaging = FirebaseMessaging();
-  static StreamController<String> _tokenStreamController =
+  static FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+  static StreamController<String?> _tokenStreamController =
       StreamController.broadcast();
   @override
-  Future<String> token = _tokenStreamController.stream.first;
+  Future<String?> token = _tokenStreamController.stream.first;
 
   final bool pullMode;
 
   FirebaseReceiveService(
-      [this.pullMode = false, FirebaseMessaging firebaseMock]) {
+      [this.pullMode = false, FirebaseMessaging? firebaseMock]) {
     if (firebaseMock != null)
       firebaseMessaging = firebaseMock;
     else if (pullMode) {
@@ -47,13 +47,14 @@ class FirebaseReceiveService implements PushReceiveService {
   ***REMOVED***
 
   initializeFirebase() async {
+    await Firebase.initializeApp();
     await firebaseMessaging
         .getToken()
         .timeout(Duration(seconds: 5), onTimeout: () => null)
         .then((token) => _tokenStreamController.add(token));
 
     // For iOS request permission first.
-    firebaseMessaging.requestNotificationPermissions();
+    firebaseMessaging.requestPermission();
 
     if (await token != null) {
       var topicEnc = Uri.encodeComponent('${topicPrefix***REMOVED***global');
@@ -66,11 +67,16 @@ class FirebaseReceiveService implements PushReceiveService {
   @override
   void subscribe({onMessage, onResume, onLaunch, onBackgroundMessage***REMOVED***) {
     if (Platform.isIOS) onBackgroundMessage = null;
-    firebaseMessaging.configure(
-        onMessage: onMessage,
-        onResume: onResume,
-        onLaunch: onLaunch,
-        onBackgroundMessage: onBackgroundMessage);
+    if (onMessage != null)
+      FirebaseMessaging.onMessage.listen((message) => onMessage(message));
+    if (onResume != null)
+      FirebaseMessaging.onMessageOpenedApp
+          .listen((message) => onResume(message));
+    if (onLaunch != null)
+      firebaseMessaging.getInitialMessage().then((message) => onLaunch);
+    if (onBackgroundMessage != null)
+      FirebaseMessaging.onBackgroundMessage(
+          (message) => onBackgroundMessage!(message));
   ***REMOVED***
 
   @override
@@ -91,8 +97,8 @@ class FirebaseReceiveService implements PushReceiveService {
 ***REMOVED***
 
 class PullService extends BackendService implements PushReceiveService {
-  Timer timer;
-  MessageHandler onMessage = (_) async => Map();
+  late Timer timer;
+  Function(RemoteMessage) onMessage = (_) => Future.value({***REMOVED***);
 
   PullService(AbstractUserService userService, Backend backend)
       : super(userService, backend) {
@@ -102,7 +108,7 @@ class PullService extends BackendService implements PushReceiveService {
   @override
   void subscribe({onMessage, onResume, onLaunch, onBackgroundMessage***REMOVED***) {
     // ignore onResume, onLaunch and onBackgroundMessage, since they are not happening in Pull Mode
-    this.onMessage = onMessage;
+    if (onMessage != null) this.onMessage = onMessage;
   ***REMOVED***
 
   Future<void> pull() async {
@@ -140,5 +146,5 @@ class PullService extends BackendService implements PushReceiveService {
   ***REMOVED***
 
   @override
-  Future<String> token = Future.value('Pull-Modus');
+  Future<String?> token = Future.value('Pull-Modus');
 ***REMOVED***

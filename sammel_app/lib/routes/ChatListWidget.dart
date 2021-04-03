@@ -1,28 +1,21 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'dart:async';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/User.dart';
-import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/services/UserService.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
+import 'package:sammel_app/shared/DweTheme.dart';
 
 import 'ChatWindow.dart';
 
 class ChatListWidget extends StatefulWidget {
-  ChatChannel channel;
+  final ChatChannel channel;
 
-
-  ChatListWidget(this.channel, {Key key***REMOVED***) : super(key: key)
-  {
-
-  ***REMOVED***
+  ChatListWidget(this.channel, {Key? key***REMOVED***) : super(key: key);
 
   @override
   ChatListState createState() => ChatListState(this.channel);
@@ -31,14 +24,12 @@ class ChatListWidget extends StatefulWidget {
 class ChatListState extends State<ChatListWidget>
     implements ChannelChangeListener {
   ChatChannel channel;
-  User user;
-  bool force_scrolling = false;
+  User? user;
+  late bool forceScrolling = false;
 
-  ChatListState(ChatChannel channel) {
-    this.channel = channel;
-    this.channel.register_channel_change_listener(this);
-   // widget.scroll_controller.addListener(() {widget.position = widget.scroll_controller.hasClients ? widget.scroll_controller.position.extentBefore : 0; ***REMOVED***);
-
+  ChatListState(this.channel) {
+    this.channel.registerChannelChangeListener(this);
+    // widget.scroll_controller.addListener(() {widget.position = widget.scroll_controller.hasClients ? widget.scroll_controller.position.extentBefore : 0; ***REMOVED***);
   ***REMOVED***
 
   Widget build(context) {
@@ -49,24 +40,27 @@ class ChatListState extends State<ChatListWidget>
           .listen((user) => setState(() => this.user = user));
     ***REMOVED***
 
-    var item_list = buildListMessage();
-    var list_view = Container(
+    var itemList = buildListMessage();
+    var listView = Container(
         decoration: DweTheme.happyHouseBackground,
-        child: ListView(children: item_list.reversed.toList(),reverse: true,));
+        child: ListView(
+          children: itemList.reversed.toList(),
+          reverse: true,
+        ));
 
     /*
     Timer(
         Duration(milliseconds: 500),
             () => widget.scroll_controller
             .jumpTo(widget.scroll_controller.position.maxScrollExtent));*/
-    return list_view;
+    return listView;
   ***REMOVED***
 
   @override
   void channelChanged(ChatChannel channel) {
-    force_scrolling = true;
+    forceScrolling = true;
     setState(() {
-      widget.channel = channel;
+      this.channel = channel;
     ***REMOVED***);
     //we need this hack to enable scrolling to the end of the list on message received
     /*
@@ -77,20 +71,19 @@ class ChatListState extends State<ChatListWidget>
   ***REMOVED***
 
   List<Widget> buildListMessage() {
-    List<Message> message_list = widget.channel.channel_messages;
-    if (message_list == null) return <Widget>[];
-    List<Widget> message_list_widgets = List();
-    for (Message message in message_list) {
+    List<Message> messageList = widget.channel.channelMessages;
+    List<Widget> messageListWidgets = [];
+    for (Message message in messageList) {
       if (message is ChatMessage)
-        message_list_widgets.add(createChatMessageWidget(message));
+        messageListWidgets.add(createChatMessageWidget(message));
       if (message is ParticipationMessage)
-        message_list_widgets.add(createParticipationMessageWidget(message));
+        messageListWidgets.add(createParticipationMessageWidget(message));
     ***REMOVED***
-    return message_list_widgets;
+    return messageListWidgets;
   ***REMOVED***
 
   Widget createChatMessageWidget(ChatMessage message) {
-    final own = message.user_id == user?.id;
+    final own = message.userId == user?.id;
     return Align(
         alignment: own ? Alignment.topRight : Alignment.topLeft,
         child: Container(
@@ -98,7 +91,7 @@ class ChatListState extends State<ChatListWidget>
                 margin: own
                     ? EdgeInsets.fromLTRB(80, 5, 8, 5)
                     : EdgeInsets.fromLTRB(5, 5, 80, 5),
-                color: message.message_color,
+                color: message.messageColor,
                 child: Padding(
                     padding: EdgeInsets.only(
                         left: 10.0, top: 8.0, right: 10.0, bottom: 8.0),
@@ -111,13 +104,13 @@ class ChatListState extends State<ChatListWidget>
                           own
                               ? SizedBox()
                               : Text(
-                                  message.sender_name,
+                                  message.senderName ?? '',
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 ),
                           Padding(
                               padding: EdgeInsets.only(top: 3.0, bottom: 5.0),
                               child: SelectableText(
-                                message.text,
+                                message.text ?? '',
                                 textScaleFactor: 1.2,
                               )),
                           Row(
@@ -125,7 +118,9 @@ class ChatListState extends State<ChatListWidget>
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 Text(
-                                  ChronoHelfer.formatDateTime(message.timestamp),
+                                  ChronoHelfer.formatDateTime(
+                                          message.timestamp) ??
+                                      '',
                                   textScaleFactor: 0.8,
                                 ),
                                 SizedBox(
@@ -134,7 +129,7 @@ class ChatListState extends State<ChatListWidget>
                                 )
                               ]..addAll(own
                                   ? [
-                                      message.obtained_from_server
+                                      message.obtainedFromServer
                                           ? Icon(
                                               Icons.check_circle,
                                               size: 12,
@@ -147,10 +142,10 @@ class ChatListState extends State<ChatListWidget>
   ***REMOVED***
 
   Widget createParticipationMessageWidget(ParticipationMessage message) {
-    var title = message.joins
+    var title = message.joins == true
         ? ' ist der Aktion beigetreten'
         : ' hat die Aktion verlassen';
-    var subtitle = message.joins
+    var subtitle = message.joins == true
         ? '\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen'.tr()
         : '';
     return RichText(

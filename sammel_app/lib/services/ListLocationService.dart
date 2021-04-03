@@ -13,14 +13,14 @@ abstract class AbstractListLocationService extends BackendService {
 ***REMOVED***
 
 class ListLocationService extends AbstractListLocationService {
-  List<ListLocation> cache;
+  List<ListLocation>? cache;
 
   ListLocationService(AbstractUserService userService, Backend backend)
       : super(userService, backend);
 
   @override
   Future<List<ListLocation>> getActiveListLocations() async {
-    if (cache != null) return cache;
+    if (cache != null) return cache!;
     HttpClientResponseBody response;
     try {
       response = await get('/service/listlocations/actives');

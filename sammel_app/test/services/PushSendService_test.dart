@@ -3,17 +3,20 @@ import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/services/PushSendService.dart';
-import 'package:sammel_app/services/UserService.dart';
 
-import '../shared/Mocks.dart';
+import '../shared/mocks.trainer.dart';
+import '../shared/mocks.costumized.dart';
+import '../shared/mocks.mocks.dart';
 
 main() {
-  UserService userService = ConfiguredUserServiceMock();
+  var userService = MockUserService();
+  trainUserService(userService);
 
-  var backendMock = BackendMock();
+  var backendMock = MockBackend();
+  trainBackend(backendMock);
 
   group('PushService', () {
-    PushSendService service;
+    late PushSendService service;
     setUp(() {
       reset(backendMock);
       service = PushSendService(userService, backendMock);
@@ -34,20 +37,20 @@ main() {
     test('pushToDevices sendet Push-Nachricht an Server', () async {
       when(backendMock.post(any, any, any)).thenAnswer((_) async =>
           Future<HttpClientResponseBody>.value(
-              HttpClientResponseBodyMock(null, 200)));
+              trainHttpResponse(MockHttpClientResponseBody(), 200, null)));
       await service.pushToDevices(
           ['Empfänger'], PushData(), PushNotification('Titel', 'Inhalt'));
 
       verify(backendMock.post(
           'service/push/devices',
-          '{"recipients":["Empfänger"],"data":{"type":null***REMOVED***,"notification":{"title":"Titel","body":"Inhalt"***REMOVED******REMOVED***',
+          '{"recipients":["Empfänger"],"data":{"type":"general"***REMOVED***,"notification":{"title":"Titel","body":"Inhalt"***REMOVED******REMOVED***',
           any,
           any));
     ***REMOVED***);
   ***REMOVED***);
 
   group('DemoPushService', () {
-    DemoPushSendService service;
+    late DemoPushSendService service;
 
     setUp(() {
       reset(backendMock);

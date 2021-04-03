@@ -6,12 +6,12 @@ import 'package:latlong/latlong.dart';
 import 'BackendService.dart';
 
 class GeoService {
-  HttpClient httpClient;
+  late HttpClient httpClient;
 
   String host = 'nominatim.openstreetmap.org';
   int port = 443;
 
-  GeoService({HttpClient httpMock***REMOVED***) {
+  GeoService({HttpClient? httpMock***REMOVED***) {
     if (httpMock == null) httpClient = HttpClient();
   ***REMOVED***
 
@@ -48,9 +48,9 @@ class GeoService {
 ***REMOVED***
 
 class GeoData {
-  String name;
-  String street;
-  String number;
+  String? name;
+  String? street;
+  String? number;
 
   GeoData([this.name, this.street, this.number]);
 
@@ -62,7 +62,7 @@ class GeoData {
 
   String get description => [
         name,
-        [(street ?? ''), (number ?? '')].where((e) => e != null).join(' ')
+        [(street), (number)].where((e) => e != null).join(' ')
       ].where((e) => e != null).join(', ');
 ***REMOVED***
 

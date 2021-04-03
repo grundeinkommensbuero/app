@@ -6,21 +6,31 @@ import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/UserService.dart';
 
-import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';
+import '../shared/mocks.costumized.dart';
+import '../shared/mocks.mocks.dart';
+import '../shared/mocks.trainer.dart';
 
 main() {
-  AbstractUserService userService = ConfiguredUserServiceMock();
+  MockUserService userService = MockUserService();
+  HttpClientResponseBody http200Mock =
+      trainHttpResponse(MockHttpClientResponseBody(), 200, null);
+  final mockFirebaseReceiveService = MockFirebaseReceiveService();
 
   group('BackendService', () {
-    BackendMock backend;
+    late MockBackend backend;
 
     setUp(() {
-      backend = BackendMock();
+      reset(mockFirebaseReceiveService);
+      when(mockFirebaseReceiveService.token)
+          .thenAnswer((_) async => 'firebase-token');
+      reset(userService);
+      trainUserService(userService);
+      backend = MockBackend();
     ***REMOVED***);
 
     group('authentication', () {
-      BackendService service;
+      late BackendService service;
 
       setUp(() {
         service = BackendService(userService, backend);
@@ -32,29 +42,27 @@ main() {
       ***REMOVED***);
 
       test('needs UserService and throws error if missing', () {
-        expect(() => BackendService(null, BackendMock()),
+        expect(() => BackendService(null, MockBackend()),
             throwsA((e) => e is ArgumentError));
       ***REMOVED***);
 
       test('needs no UserService if it is UserService', () {
-        var storageServiceMock = StorageServiceMock();
+        var storageServiceMock = MockStorageService();
         when(storageServiceMock.loadUser()).thenAnswer((_) async => karl());
         when(storageServiceMock.loadSecret()).thenAnswer((_) async => "secret");
-        var service = UserService(
-            storageServiceMock, FirebaseReceiveServiceMock(), BackendMock());
+        var service = UserService(storageServiceMock,
+            mockFirebaseReceiveService, trainBackend(MockBackend()));
         expect(service, isNotNull);
       ***REMOVED***);
 
       group('uses app credentials if appAuth flag is set', () {
         setUp(() {
-          var httpClientResponseBodyMock =
-              HttpClientResponseBodyMock(null, 200);
-          when(backend.get(any, any)).thenAnswer((_) =>
-              Future<HttpClientResponseBody>.value(httpClientResponseBodyMock));
-          when(backend.post(any, any, any)).thenAnswer((_) =>
-              Future<HttpClientResponseBody>.value(httpClientResponseBodyMock));
-          when(backend.delete(any, any, any)).thenAnswer((_) =>
-              Future<HttpClientResponseBody>.value(httpClientResponseBodyMock));
+          when(backend.get(any, any)).thenAnswer(
+              (_) => Future<HttpClientResponseBody>.value(http200Mock));
+          when(backend.post(any, any, any)).thenAnswer(
+              (_) => Future<HttpClientResponseBody>.value(http200Mock));
+          when(backend.delete(any, any, any)).thenAnswer(
+              (_) => Future<HttpClientResponseBody>.value(http200Mock));
         ***REMOVED***);
 
         test('with get requests', () async {
@@ -64,29 +72,28 @@ main() {
         ***REMOVED***);
 
         test('with post requests', () async {
-          await service.post('anyUrl', null, appAuth: true);
+          await service.post('anyUrl', '', appAuth: true);
 
-          verify(backend.post('anyUrl', null, BackendService.appHeaders));
+          verify(backend.post('anyUrl', '', BackendService.appHeaders));
         ***REMOVED***);
 
         test('with delete requests', () async {
-          await service.delete('anyUrl', null, appAuth: true);
+          await service.delete('anyUrl', '', appAuth: true);
 
-          verify(backend.delete('anyUrl', null, BackendService.appHeaders));
+          verify(backend.delete('anyUrl', '', BackendService.appHeaders));
         ***REMOVED***);
       ***REMOVED***);
 
       group('uses user credentials if appAuth flag is not set or false', () {
         setUp(() {
-          when(backend.get(any, any)).thenAnswer((_) =>
-              Future<HttpClientResponseBody>.value(
-                  HttpClientResponseBodyMock(null, 200)));
-          when(backend.post(any, any, any)).thenAnswer((_) =>
-              Future<HttpClientResponseBody>.value(
-                  HttpClientResponseBodyMock(null, 200)));
-          when(backend.delete(any, any, any)).thenAnswer((_) =>
-              Future<HttpClientResponseBody>.value(
-                  HttpClientResponseBodyMock(null, 200)));
+          var response200 =
+              trainHttpResponse(MockHttpClientResponseBody(), 200, null);
+          when(backend.get(any, any)).thenAnswer(
+              (_) => Future<HttpClientResponseBody>.value(response200));
+          when(backend.post(any, any, any)).thenAnswer(
+              (_) => Future<HttpClientResponseBody>.value(response200));
+          when(backend.delete(any, any, any)).thenAnswer(
+              (_) => Future<HttpClientResponseBody>.value(response200));
         ***REMOVED***);
 
         test('with get requests', () async {
@@ -97,54 +104,52 @@ main() {
         ***REMOVED***);
 
         test('with post requests', () async {
-          await service.post('anyUrl', null);
+          await service.post('anyUrl', '');
           var userHeaders = {'Authorization': 'userCreds'***REMOVED***
 
-          verify(backend.post('anyUrl', null, userHeaders));
+          verify(backend.post('anyUrl', '', userHeaders));
         ***REMOVED***);
 
         test('with delete requests', () async {
-          await service.delete('anyUrl', null, appAuth: false);
+          await service.delete('anyUrl', '', appAuth: false);
           var userHeaders = {'Authorization': 'userCreds'***REMOVED***
 
-          verify(backend.delete('anyUrl', null, userHeaders));
+          verify(backend.delete('anyUrl', '', userHeaders));
         ***REMOVED***);
       ***REMOVED***);
 
       test(
-          'authHeaders throws Error if appAuth flag is not set but no user credentials can be determined in 10 seconds',
+          'authHeaders throws Error if appAuth flag is not set but no user credentials can be determined in 20 seconds',
           () async {
-        final userService = UserServiceMock();
+        final userService = MockUserService();
         when(userService.user).thenAnswer((_) => Stream.value(karl()));
         when(userService.userHeaders).thenAnswer((_) => Future.delayed(
-            Duration(seconds: 11), () => {'Authorization': 'my creds'***REMOVED***));
+            Duration(seconds: 21), () => {'Authorization': 'my creds'***REMOVED***));
 
-        final service = BackendService(userService, BackendMock());
+        final service = BackendService(userService, MockBackend());
 
         expect(service.authHeaders(false), throwsA(NoUserAuthException));
       ***REMOVED***);
     ***REMOVED***);
 
     group('uses backend mock', () {
-      BackendService service;
-      Backend mock;
+      late BackendService service;
+      late MockBackend mock;
       setUp(() {
-        mock = BackendMock();
+        mock = MockBackend();
         service = BackendService(userService, mock);
       ***REMOVED***);
 
       test('for get', () async {
-        when(mock.get(any, any)).thenAnswer((_) =>
-            Future<HttpClientResponseBody>.value(
-                HttpClientResponseBodyMock('response', 200)));
+        when(mock.get('any URL', {'Authorization': 'userCreds'***REMOVED***)).thenAnswer(
+            (_) => Future<HttpClientResponseBody>.value(http200Mock));
         await service.get('any URL');
         verify(mock.get('any URL', any)).called(1);
       ***REMOVED***);
 
       test('for post', () async {
-        when(mock.post(any, any, any)).thenAnswer((_) =>
-            Future<HttpClientResponseBody>.value(
-                HttpClientResponseBodyMock('response', 200)));
+        when(mock.post(any, any, any)).thenAnswer(
+            (_) => Future<HttpClientResponseBody>.value(http200Mock));
         await service.post('any URL', 'any data');
         verify(mock.post('any URL', 'any data', any)).called(1);
       ***REMOVED***);
@@ -152,7 +157,7 @@ main() {
       test('for delete', () async {
         when(mock.delete(any, any, any)).thenAnswer((_) =>
             Future<HttpClientResponseBody>.value(
-                HttpClientResponseBodyMock('response', 200)));
+                trainHttpResponse(MockHttpClientResponseBody(), 200, null)));
         await service.delete('any URL', 'any data');
         verify(mock.delete('any URL', 'any data', any)).called(1);
       ***REMOVED***);
@@ -175,25 +180,28 @@ main() {
     ***REMOVED***);
   ***REMOVED***);
   group('error handling', () {
-    BackendService service;
-    Backend mock;
+    late BackendService service;
+    late MockBackend mock = MockBackend();
+
     setUp(() {
-      mock = BackendMock();
+      trainBackend(mock);
       service = BackendService(userService, mock);
     ***REMOVED***);
 
     test('throws rest error on non-200 and non-403 status code', () {
-      when(mock.get(any, any)).thenAnswer((_) =>
-          Future<HttpClientResponseBody>.value(
-              HttpClientResponseBodyMock('Dies ist ein Fehler', 400)));
+      when(mock.get(any, any)).thenAnswer((_) {
+        return Future<HttpClientResponseBody>.value(trainHttpResponse(
+            MockHttpClientResponseBody(), 400, 'Dies ist ein Fehler'));
+      ***REMOVED***);
 
       expect(() => service.get('anyUrl'), throwsA((e) => e is RestFehler));
     ***REMOVED***);
 
     test('throws auth error on 403 status code', () {
-      when(mock.get(any, any)).thenAnswer((_) =>
-          Future<HttpClientResponseBody>.value(
-              HttpClientResponseBodyMock('Dies ist ein Fehler', 403)));
+      when(mock.get(any, any)).thenAnswer((_) {
+        return Future<HttpClientResponseBody>.value(trainHttpResponse(
+            MockHttpClientResponseBody(), 403, 'Dies ist ein Fehler'));
+      ***REMOVED***);
 
       expect(() => service.get('anyUrl'), throwsA((e) => e is AuthFehler));
     ***REMOVED***);

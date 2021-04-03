@@ -6,13 +6,14 @@ import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 
-import '../shared/Mocks.dart';
+import '../shared/mocks.trainer.dart';
+import '../shared/mocks.mocks.dart';
 
 void main() {
-  mockTranslation();
+  trainTranslation(MockTranslations());
 
   setUp(() {
-    ErrorService.errorQueue = List<List<String>>();
+    ErrorService.errorQueue = [];
     ErrorService.setContext(null);
     ErrorService.displayedTypes = [];
   ***REMOVED***);
@@ -33,7 +34,7 @@ void main() {
           child: Builder(builder: (BuildContext context) {
             ErrorService.setContext(context);
             return Center(
-              child: RaisedButton(
+              child: ElevatedButton(
                   key: Key('starter'),
                   child: const Text('Starter'),
                   onPressed: () async => await ErrorService.showErrorDialog(
@@ -103,7 +104,7 @@ void main() {
           child: Builder(builder: (BuildContext context) {
             ErrorService.setContext(context);
             return Center(
-              child: RaisedButton(
+              child: ElevatedButton(
                   key: Key('starter'),
                   child: const Text('Starter'),
                   onPressed: () async => await ErrorService.showErrorDialog(
@@ -133,7 +134,7 @@ void main() {
   ***REMOVED***);
 
   group('setContext', () {
-    BuildContext context;
+    late BuildContext context;
     setUpUI((WidgetTester tester) async {
       await tester.pumpWidget(MaterialApp(home: Material(
         child: Builder(builder: (BuildContext newContext) {

@@ -2,17 +2,18 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quiver/strings.dart';
+import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
-Future<String> showUsernameDialog(
-        {BuildContext context, bool hideHint = false***REMOVED***) =>
+Future<String?> showUsernameDialog(
+        {required BuildContext context, bool hideHint = false***REMOVED***) =>
     showDialog(
       context: context,
-      child: UsernameDialog(hideHint),
+      builder: (context) => UsernameDialog(hideHint),
     );
 
 class UsernameDialog extends StatefulWidget {
-  bool hideHint;
+  final bool hideHint;
 
   UsernameDialog(this.hideHint) : super(key: Key('username dialog'));
 
@@ -21,7 +22,7 @@ class UsernameDialog extends StatefulWidget {
 ***REMOVED***
 
 class UsernameDialogState extends State<UsernameDialog> {
-  String username;
+  String? username;
 
   UsernameDialogState();
 
@@ -34,9 +35,9 @@ class UsernameDialogState extends State<UsernameDialog> {
           child: Column(children: [
         (widget.hideHint
             ? SizedBox()
-            : Text(
-                'Um diese Aktion auszuführen musst du dir einen Benutzer*in-Name geben',
-                key: Key('username dialog hint')).tr()),
+            : Text('Um diese Aktion auszuführen musst du dir einen Benutzer*in-Name geben',
+                    key: Key('username dialog hint'))
+                .tr()),
         TextField(
           key: Key('user name input'),
           autofocus: true,
@@ -45,12 +46,12 @@ class UsernameDialogState extends State<UsernameDialog> {
         ),
       ])),
       actions: [
-        FlatButton(
+        TextButton(
           key: Key('username dialog cancel button'),
           child: Text("Abbrechen").tr(),
           onPressed: () => Navigator.pop(context, null),
         ),
-        FlatButton(
+        TextButton(
           key: Key('username dialog finish button'),
           child: Text("Fertig").tr(),
           onPressed: isValid() ? () => changeUserNameAndClose() : null,
@@ -59,11 +60,13 @@ class UsernameDialogState extends State<UsernameDialog> {
     );
   ***REMOVED***
 
-  Future<void> changeUserNameAndClose() async {
+  changeUserNameAndClose() async {
     try {
-      await Provider.of<AbstractUserService>(context).updateUsername(username);
+      await Provider.of<AbstractUserService>(context, listen: false)
+          .updateUsername(username!);
       Navigator.pop(context, username);
     ***REMOVED*** catch (e) {
+      ErrorService.handleError(e, StackTrace.current);
       Navigator.pop(context, null);
     ***REMOVED***
   ***REMOVED***

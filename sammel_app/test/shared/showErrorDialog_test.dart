@@ -4,10 +4,11 @@ import 'package:flutter_test_ui/flutter_test_ui.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/shared/showErrorDialog.dart';
 
-import 'Mocks.dart';
+import 'mocks.trainer.dart';
+import '../shared/mocks.mocks.dart';
 
 main() {
-  mockTranslation();
+  trainTranslation(MockTranslations());
 
   setUpUI((WidgetTester tester) async {
     final error = RestFehler('there is a reason for everything');
@@ -15,7 +16,7 @@ main() {
       home: Material(
         child: Builder(builder: (BuildContext context) {
           return Center(
-            child: RaisedButton(
+            child: ElevatedButton(
                 key: Key('starter'),
                 child: const Text('Starter'),
                 onPressed: () async => await showErrorDialog(

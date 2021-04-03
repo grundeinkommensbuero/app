@@ -141,13 +141,13 @@ void main() {
               '"ort":"Frankfurter Allee Nord",'
               '"typ":"Sammeln"***REMOVED***'),
           [ffAlleeNord()].toSet());
-      expect(termin.details.treffpunkt, "Weltzeituhr");
-      expect(termin.details.beschreibung,
+      expect(termin.details?.treffpunkt, "Weltzeituhr");
+      expect(termin.details?.beschreibung,
           "wir stellen uns an die Ubhf-Eingänge. ihr erkennt mich an der DWE-Weste");
-      expect(termin.details.kontakt, "kalle@revo.de");
-      expect(termin.participants.single.id, 11);
-      expect(termin.participants.single.name, 'Karl Marx');
-      expect(termin.participants.single.color.value, Colors.red.value);
+      expect(termin.details?.kontakt, "kalle@revo.de");
+      expect(termin.participants?.single.id, 11);
+      expect(termin.participants?.single.name, 'Karl Marx');
+      expect(termin.participants?.single.color?.value, Colors.red.value);
     ***REMOVED***);
   ***REMOVED***);
 
@@ -218,13 +218,13 @@ void main() {
 
     test('returns true for any Action that is not Sammeln', () {
       final infova = TerminTestDaten.einTermin()..typ = 'Infoveranstaltung';
-      expect(infova.isEvaluated([infova.id]), true);
+      expect(infova.isEvaluated([infova.id!]), true);
 
       final ws = TerminTestDaten.einTermin()..typ = 'Workshop';
-      expect(ws.isEvaluated([ws.id]), true);
+      expect(ws.isEvaluated([ws.id!]), true);
 
       final plakatieren = TerminTestDaten.einTermin()..typ = 'Plakatieren';
-      expect(plakatieren.isEvaluated([plakatieren.id]), true);
+      expect(plakatieren.isEvaluated([plakatieren.id!]), true);
     ***REMOVED***);
 
     test('returns false if action is not in list', () {

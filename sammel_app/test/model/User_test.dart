@@ -67,7 +67,7 @@ void main() {
 
       expect(user.id, 11);
       expect(user.name, 'Karl Marx');
-      expect(user.color.value, Colors.red.value);
+      expect(user.color?.value, Colors.red.value);
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***

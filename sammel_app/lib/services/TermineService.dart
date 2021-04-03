@@ -57,9 +57,9 @@ class TermineService extends AbstractTermineService
       this.localNotificationService,
       this.actionPageKey)
       : super(stammdatenService, userService, backend) {
-    manager.register_message_callback(PushDataTypes.NewKiezActions, this);
-    manager.register_message_callback(PushDataTypes.ActionChanged, this);
-    manager.register_message_callback(PushDataTypes.ActionDeleted, this);
+    manager.registerMessageCallback(PushDataTypes.newKiezActions, this);
+    manager.registerMessageCallback(PushDataTypes.actionChanged, this);
+    manager.registerMessageCallback(PushDataTypes.actionDeleted, this);
   ***REMOVED***
 
   Future<List<Termin>> loadActions(TermineFilter filter) async {
@@ -116,40 +116,40 @@ class TermineService extends AbstractTermineService
   ***REMOVED***
 
   @override
-  void handleNotificationTap(Map<dynamic, dynamic> data) async {
+  void handleNotificationTap(Map<String, dynamic> data) async {
     final actionData =
         ActionListPushData.fromJson(data, await stammdatenService.kieze);
     actionData.actions..sort(Termin.compareByStart);
 
     if (actionData.type ==
-        PushDataTypes.NewKiezActions) if (actionData.actions.length == 1)
-      this.actionPageKey.currentState.openTerminDetails(actionData.actions[0]);
+        PushDataTypes.newKiezActions) if (actionData.actions.length == 1)
+      this.actionPageKey.currentState!.openTerminDetails(actionData.actions[0]);
     else {
-      actionPageKey.currentState
+      actionPageKey.currentState!
           .zeigeAktionen('Neue Aktionen', actionData.actions);
     ***REMOVED***
 
-    if (actionData.type == PushDataTypes.ActionChanged) {
-      actionPageKey.currentState.openTerminDetails(actionData.actions[0]);
+    if (actionData.type == PushDataTypes.actionChanged) {
+      actionPageKey.currentState!.openTerminDetails(actionData.actions[0]);
     ***REMOVED***
 
-    if (actionData.type == PushDataTypes.ActionDeleted) {
+    if (actionData.type == PushDataTypes.actionDeleted) {
       actionData.actions[0].id = null;
-      actionPageKey.currentState
+      actionPageKey.currentState!
           .zeigeAktionen('Gelöschte Aktionen', actionData.actions);
     ***REMOVED***
   ***REMOVED***
 
   @override
-  void receive_message(Map<String, dynamic> data) async {
+  void receiveMessage(Map<String, dynamic> data) async {
     final kieze = await stammdatenService.kieze;
     final message = ActionListPushData.fromJson(data, kieze);
 
-    if(message.type == PushDataTypes.NewKiezActions)
+    if(message.type == PushDataTypes.newKiezActions)
       localNotificationService.sendNewActionsNotification(message);
-    if(message.type == PushDataTypes.ActionDeleted)
+    if(message.type == PushDataTypes.actionDeleted)
       localNotificationService.sendActionDeletedNotification(message);
-    if(message.type == PushDataTypes.ActionChanged)
+    if(message.type == PushDataTypes.actionChanged)
       localNotificationService.sendActionChangedNotification(message);
   ***REMOVED***
 
@@ -166,6 +166,9 @@ class TermineService extends AbstractTermineService
 ***REMOVED***
 
 class DemoTermineService extends AbstractTermineService {
+  static var heute = DateTime.now();
+  late Future<List<Termin>> termine;
+
   DemoTermineService(
       StammdatenService stammdatenService, AbstractUserService userService)
       : super(stammdatenService, userService, DemoBackend()) {
@@ -227,13 +230,10 @@ class DemoTermineService extends AbstractTermineService {
         ]);
   ***REMOVED***
 
-  static var heute = DateTime.now();
-  Future<List<Termin>> termine;
-
   @override
   Future<List<Termin>> loadActions(TermineFilter filter) async {
     return (await termine).where((termin) {
-      var von = DateTime(termin.beginn?.year, termin.beginn.month,
+      var von = DateTime(termin.beginn.year, termin.beginn.month,
           termin.beginn.day, filter.von?.hour ?? 0, filter.von?.minute ?? 0);
       var bis = DateTime(termin.beginn.year, termin.beginn.month,
           termin.beginn.day, filter.bis?.hour ?? 0, filter.bis?.minute ?? 0);
@@ -241,30 +241,30 @@ class DemoTermineService extends AbstractTermineService {
           DateTime(termin.beginn.year, termin.beginn.month, termin.beginn.day);
       return (filter.von == null ? true : termin.ende.isAfter(von)) &&
           (filter.bis == null ? true : termin.beginn.isBefore(bis)) &&
-          (filter.tage == null || filter.tage.isEmpty
+          (filter.tage.isEmpty
               ? true
               : filter.tage.contains(datum)) &&
-          (filter.tage == null || filter.tage.isEmpty
+          (filter.tage.isEmpty
               ? true
               : filter.tage.contains(datum)) &&
-          (filter.orte == null || filter.orte.isEmpty
+          (filter.orte.isEmpty
               ? true
               : filter.orte.contains(termin.ort.name)) &&
-          (filter.typen == null || filter.typen.isEmpty
+          (filter.typen.isEmpty
               ? true
               : filter.typen.contains(termin.typ)) &&
-          (filter.nurEigene == null || filter.nurEigene == false
+          (filter.nurEigene == false
               ? true
-              : termin.participants.map((u) => u.id).contains(13)) ||
-          (filter.immerEigene == null || filter.immerEigene == true
-              ? termin.participants.map((u) => u.id).contains(13)
+              : termin.participants!.map((u) => u.id).contains(13)) ||
+          (filter.immerEigene == true
+              ? termin.participants!.map((u) => u.id).contains(13)
               : false);
     ***REMOVED***).toList();
   ***REMOVED***
 
   @override
   Future<Termin> createAction(Termin termin, String token) async {
-    int highestId = (await termine).map((termin) => termin.id).reduce(max);
+    int highestId = (await termine).map((termin) => termin.id!).reduce(max);
     termin.id = highestId + 1;
     (await termine).add(termin);
     return termin;
@@ -290,14 +290,14 @@ class DemoTermineService extends AbstractTermineService {
 
   joinAction(int id) async {
     var stored = (await termine).firstWhere((a) => a.id == id);
-    if (!stored.participants.map((e) => e.id).contains(1))
-      stored.participants.add(User(11, 'Ich', Colors.red));
+    if (!stored.participants!.map((e) => e.id).contains(1))
+      stored.participants!.add(User(11, 'Ich', Colors.red));
   ***REMOVED***
 
   leaveAction(int id) async {
     var stored = (await termine).firstWhere((a) => a.id == id);
-    if (stored.participants.map((e) => e.id).contains(1))
-      stored.participants.remove(User(11, 'Ich', Colors.red));
+    if (stored.participants!.map((e) => e.id).contains(1))
+      stored.participants!.remove(User(11, 'Ich', Colors.red));
   ***REMOVED***
 
   @override

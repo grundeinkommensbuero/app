@@ -8,19 +8,19 @@ import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 
 class ChatPage extends StatefulWidget {
-  bool active = false;
+  final bool active;
 
-  ChatPage({this.active***REMOVED***);
+  ChatPage({this.active = false***REMOVED***);
 
   @override
   State<StatefulWidget> createState() => ChatPageState();
 ***REMOVED***
 
 class ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
-  AbstractPushNotificationManager pushManager;
-  ChatMessageService chatMessageService;
-  TopicChatWindow chat_window;
-  ChatChannel topicChannel;
+  AbstractPushNotificationManager? pushManager;
+  ChatMessageService? chatMessageService;
+  TopicChatWindow? chatWindow;
+  ChatChannel? topicChannel;
 
   ChatPageState();
 
@@ -35,13 +35,13 @@ class ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
     ***REMOVED***
     if (!widget.active) {
       // navigiert weg
-      chat_window = null;
+      chatWindow = null;
       topicChannel?.disposeListener();
     ***REMOVED*** else if (topicChannel != null) {
       // ist bereit
-      if (chat_window == null)
-        chat_window = TopicChatWindow(topicChannel, false);
-      return chat_window;
+      if (chatWindow == null)
+        chatWindow = TopicChatWindow(topicChannel!, false);
+      return chatWindow!;
     ***REMOVED***
     // navigiert hin, ist aber noch nicht bereit
     return Center(
@@ -54,19 +54,21 @@ class ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this); // for didChangeAppLifecycleState
+    // for didChangeAppLifecycleState
+    WidgetsBinding.instance?.addObserver(this);
+    super.initState();
   ***REMOVED***
 
   @override
   void dispose() {
-    WidgetsBinding.instance
-        .removeObserver(this); // for didChangeAppLifecycleState
+    // for didChangeAppLifecycleState
+    WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
   ***REMOVED***
 
 // Lade verpasste Push-Nachrichten vom Server nach
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) pushManager.updateMessages();
+    if (state == AppLifecycleState.resumed) pushManager?.updateMessages();
   ***REMOVED***
 ***REMOVED***

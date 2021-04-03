@@ -1,11 +1,11 @@
 class Evaluation {
-  int terminId;
-  int teilnehmer;
-  int unterschriften;
-  int bewertung;
-  double stunden;
-  String kommentar;
-  String situation;
+  int? terminId;
+  int? teilnehmer;
+  int? unterschriften;
+  int? bewertung;
+  double? stunden;
+  String? kommentar;
+  String? situation;
   bool ausgefallen = false;
 
   Evaluation(this.terminId, this.teilnehmer, this.unterschriften,

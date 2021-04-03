@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -10,19 +12,22 @@ import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
 import '../model/Termin_test.dart';
-import '../shared/Mocks.dart';
+import '../shared/mocks.costumized.dart';
+import '../shared/mocks.mocks.dart';
+import '../shared/mocks.trainer.dart';
 
-final storageServiceMock = StorageServiceMock();
+final storageServiceMock = MockStorageService();
 
 main() {
-  Widget widget;
+  late Widget widget;
 
   Function(Termin) joinAction = (_) {***REMOVED***
   Function(Termin) leaveAction = (_) {***REMOVED***
 
-  mockTranslation();
+  trainTranslation(MockTranslations());
 
   setUp(() async {
+    HttpOverrides.global = MapHttpOverrides();
     reset(storageServiceMock);
     when(storageServiceMock.loadAllStoredEvaluations())
         .thenAnswer((_) async => []);
@@ -31,11 +36,11 @@ main() {
 
     widget = MultiProvider(
         providers: [
-          Provider<AbstractTermineService>.value(value: TermineServiceMock()),
-          Provider<ChatMessageService>.value(value: ChatMessageServiceMock()),
+          Provider<AbstractTermineService>.value(value: MockTermineService()),
+          Provider<ChatMessageService>.value(value: MockChatMessageService()),
           Provider<StorageService>.value(value: storageServiceMock),
           Provider<AbstractUserService>.value(
-              value: ConfiguredUserServiceMock()),
+              value: trainUserService(MockUserService())),
         ],
         child: MaterialApp(
             home: Dialog(

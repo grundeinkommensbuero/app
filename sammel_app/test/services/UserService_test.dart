@@ -6,25 +6,26 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/User.dart';
-import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
-import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
-import '../shared/Mocks.dart';
+import '../shared/mocks.trainer.dart';
 import '../shared/TestdatenVorrat.dart';
+import '../shared/mocks.costumized.dart';
+import '../shared/mocks.mocks.dart';
 
 void main() {
-  StorageService storageService;
-  FirebaseReceiveService firebase;
-  Backend backendMock;
-  mockTranslation();
+  MockStorageService storageService = MockStorageService();
+  FirebaseReceiveService firebase = MockFirebaseReceiveService();
+  MockBackend backendMock = MockBackend();
+  trainTranslation(MockTranslations());
 
   group('UserService', () {
     setUp(() {
-      storageService = StorageServiceMock();
-      backendMock = BackendMock();
-      firebase = FirebaseReceiveServiceMock();
+      reset(storageService);
+      reset(backendMock);
+      trainBackend(backendMock);
+      reset(firebase);
 
       //defaults
       when(storageService.loadUser())
@@ -33,10 +34,12 @@ void main() {
       when(firebase.token).thenAnswer((_) async => 'firebaseToken');
       when(backendMock.post('service/benutzer/authentifiziere', any, any))
           .thenAnswer((_) => Future<HttpClientResponseBody>.value(
-              HttpClientResponseBodyMock(true, 200)));
+              trainHttpResponse(MockHttpClientResponseBody(), 200, true)));
       when(backendMock.post('service/benutzer/neu', any, any)).thenAnswer((_) =>
-          Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
-              User(11, '', Colors.red).toJson(), 200)));
+          Future<HttpClientResponseBody>.value(trainHttpResponse(
+              MockHttpClientResponseBody(),
+              200,
+              User(11, '', Colors.red).toJson())));
     ***REMOVED***);
 
     group('user streams', () {
@@ -135,8 +138,6 @@ void main() {
         var service = UserService(storageService, firebase, backendMock);
         var userHeaders = await service.userHeaders;
 
-        print(await userHeaders);
-
         expect(service.userService, service);
         expect(userHeaders['Authorization'], 'Basic MTE6c2VjcmV0');
       ***REMOVED***);
@@ -214,7 +215,7 @@ void main() {
       test('registers new user if authentication to server fails', () async {
         when(backendMock.post('service/benutzer/authentifiziere', any, any))
             .thenAnswer((_) => Future<HttpClientResponseBody>.value(
-                HttpClientResponseBodyMock(false, 200)));
+                trainHttpResponse(MockHttpClientResponseBody(), 200, false)));
 
         UserService(storageService, firebase, backendMock);
 
@@ -258,13 +259,13 @@ void main() {
 
       var users = await user.toList();
       expect(users.map((user) => user.name),
-          containsAll([null, 'neuer Name', 'neuerer Name']));
-      expect(service.latestUser.name, 'neuerer Name');
+          containsAll(['Ich', 'neuer Name', 'neuerer Name']));
+      expect(service.latestUser!.name, 'neuerer Name');
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***
 
 bool equals(User user1, User user2) =>
-    user1.id == user2?.id &&
-    user1.name == user2?.name &&
-    user1.color?.value == user2?.color?.value;
+    user1.id == user2.id &&
+    user1.name == user2.name &&
+    user1.color?.value == user2.color?.value;
