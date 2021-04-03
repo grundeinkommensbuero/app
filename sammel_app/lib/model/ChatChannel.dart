@@ -62,8 +62,7 @@ class ChatChannel {
       if (type == PushDataTypes.simpleChatMessage)
         return ChatMessage.fromJson(jsonMsg);
       ErrorService.handleError(
-          throw UnkownMessageTypeError(
-              'Unbekannter Nachrichtentyp abgespeichert'),
+          UnkownMessageTypeError('Unbekannter Nachrichtentyp abgespeichert'),
           StackTrace.current); // TODO
     }).toList();
     this

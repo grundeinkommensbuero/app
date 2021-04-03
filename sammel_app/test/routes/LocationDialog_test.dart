@@ -310,7 +310,7 @@ class LocationDialogTester extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
+    return TextButton(
         key: Key('open location dialog'),
         child: Text('Klick mich'),
         onPressed: () => showLocationDialog(

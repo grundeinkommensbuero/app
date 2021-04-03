@@ -194,14 +194,14 @@ class EvaluationFormState extends State<EvaluationForm> {
               color: DweTheme.yellow),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-            RaisedButton(
+            ElevatedButton(
                 key: Key('evaluation editor cancel button'),
                 child: Text('Abbrechen').tr(),
                 onPressed: () {
                   setState(() => evaluation = EvaluationData());
                   Navigator.maybePop(context);
                 }),
-            RaisedButton(
+            ElevatedButton(
                 key: Key('evaluation editor finish button'),
                 child: Text('Fertig').tr(),
                 onPressed: () => finishPressed())
@@ -249,13 +249,13 @@ class EvaluationFormState extends State<EvaluationForm> {
       inputWidget = inputField;
     }
 
-    Widget cancelButton = FlatButton(
+    Widget cancelButton = TextButton(
       child: Text("Abbrechen").tr(),
       onPressed: () {
         Navigator.pop(context, initialValue);
       },
     );
-    Widget continueButton = FlatButton(
+    Widget continueButton = TextButton(
       child: Text("Fertig").tr(),
       onPressed: () {
         Navigator.pop(context, currentValue);
@@ -314,11 +314,11 @@ class EvaluationFormState extends State<EvaluationForm> {
                   title: Text(title).tr(),
                   content: input,
                   actions: [
-                    FlatButton(
+                    TextButton(
                       child: Text("Abbrechen").tr(),
                       onPressed: () => Navigator.pop(context, init),
                     ),
-                    FlatButton(
+                    TextButton(
                       child: Text("Fertig").tr(),
                       onPressed: () => Navigator.pop(context, value),
                     ),
@@ -622,13 +622,13 @@ Future<int?> showIntegerInputDialog(BuildContext context, int? init,
             title: Text(title).tr(),
             content: content,
             actions: [
-              FlatButton(
+              TextButton(
                 child: Text("Abbrechen").tr(),
                 onPressed: () {
                   Navigator.pop(context, init);
                 },
               ),
-              FlatButton(
+              TextButton(
                 child: Text("Fertig").tr(),
                 onPressed: () {
                   Navigator.pop(context, int.tryParse(controller.text));

@@ -196,7 +196,7 @@ class TermineSeiteState extends State<TermineSeite>
               title: Text('Aktion konnte nicht angelegt werden').tr(),
               content: SelectableText(e.message),
               actions: <Widget>[
-                RaisedButton(
+                ElevatedButton(
                   child: Text('Okay...').tr(),
                   onPressed: () => Navigator.pop(context),
                 )
@@ -451,12 +451,12 @@ AlertDialog confirmDeleteDialog(BuildContext context) => AlertDialog(
         title: Text('Aktion Löschen').tr(),
         content: Text('Möchtest du diese Aktion wirklich löschen?').tr(),
         actions: [
-          RaisedButton(
+          ElevatedButton(
               key: Key('delete confirmation yes button'),
-              color: DweTheme.red,
+              style: ButtonStyle(backgroundColor: DweTheme.red),
               child: Text('Ja').tr(),
               onPressed: () => Navigator.pop(context, true)),
-          RaisedButton(
+          ElevatedButton(
             key: Key('delete confirmation no button'),
             child: Text('Nein').tr(),
             onPressed: () => Navigator.pop(context, false),
