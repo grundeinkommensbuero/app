@@ -245,8 +245,6 @@ void main() {
                 isMyAction: (_) => false,
                 openActionDetails: (_) {***REMOVED***))));
 
-    ActionMap map = tester.widget<ActionMap>(find.byKey(Key('action map')));
-
     expect(find.byKey(Key('list location marker')), findsNothing);
   ***REMOVED***);
 
