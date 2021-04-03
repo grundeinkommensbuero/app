@@ -30,7 +30,7 @@ void main() {
           child: Builder(
             builder: (BuildContext context) {
               return Center(
-                  child: RaisedButton(
+                  child: ElevatedButton(
                       child: const Text('X'),
                       onPressed: () async => result = await showUsernameDialog(
                           context: context, hideHint: hideHint)));

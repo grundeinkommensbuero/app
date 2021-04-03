@@ -102,7 +102,7 @@ class ErrorService {
                 Text(message),
               ]),
               actions: <Widget>[
-                RaisedButton(
+                ElevatedButton(
                   key: Key('error dialog close button'),
                   child: Text('Okay...'),
                   onPressed: () => Navigator.pop(_context!),

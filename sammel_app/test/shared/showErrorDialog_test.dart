@@ -16,7 +16,7 @@ main() {
       home: Material(
         child: Builder(builder: (BuildContext context) {
           return Center(
-            child: RaisedButton(
+            child: ElevatedButton(
                 key: Key('starter'),
                 child: const Text('Starter'),
                 onPressed: () async => await showErrorDialog(
