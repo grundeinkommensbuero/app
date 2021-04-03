@@ -133,7 +133,7 @@ class LocationDialogState extends State<LocationDialog> {
         ),
       ])),
       actions: [
-        FlatButton(
+        TextButton(
           child: Text("Abbrechen").tr(),
           onPressed: () {
             Navigator.pop(
@@ -142,7 +142,7 @@ class LocationDialogState extends State<LocationDialog> {
                     widget.initKiez));
           },
         ),
-        FlatButton(
+        TextButton(
           key: Key('venue dialog finish button'),
           child: Text("Fertig").tr(),
           onPressed: () {

@@ -15,7 +15,7 @@ Widget createWidgetWithMultipleDatePicker(List<DateTime> previousSelection,
     locale: Locale('en'),
     home: Builder(builder: (BuildContext context) {
       return Center(
-        child: RaisedButton(
+        child: ElevatedButton(
           child: const Text('X'),
           onPressed: () async {
             result(await showMultipleDatePicker(previousSelection, context,

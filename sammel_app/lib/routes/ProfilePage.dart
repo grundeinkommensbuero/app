@@ -260,7 +260,7 @@ showNotificationInfoDialog(BuildContext context) {
                             ? 'Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.'
                             : 'Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.')
                         .tr()),
-                FlatButton(
+                TextButton(
                     child: Text('Okay', textAlign: TextAlign.end).tr(),
                     onPressed: () => Navigator.pop(context))
               ]));
@@ -284,7 +284,7 @@ showPrivacyDialog(BuildContext context) {
                     child: Text(
                             'Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an app@dwenteignen.de.')
                         .tr()),
-                FlatButton(
+                TextButton(
                     child: Text('Okay', textAlign: TextAlign.end).tr(),
                     onPressed: () => Navigator.pop(context))
               ]));
@@ -304,8 +304,7 @@ class ProfileItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-        padding: EdgeInsets.all(1.0),
+    return TextButton(
         onPressed: () => onPressed(context),
         child: Container(
             padding: EdgeInsets.only(

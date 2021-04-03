@@ -34,7 +34,7 @@ void main() {
           child: Builder(builder: (BuildContext context) {
             ErrorService.setContext(context);
             return Center(
-              child: RaisedButton(
+              child: ElevatedButton(
                   key: Key('starter'),
                   child: const Text('Starter'),
                   onPressed: () async => await ErrorService.showErrorDialog(
@@ -104,7 +104,7 @@ void main() {
           child: Builder(builder: (BuildContext context) {
             ErrorService.setContext(context);
             return Center(
-              child: RaisedButton(
+              child: ElevatedButton(
                   key: Key('starter'),
                   child: const Text('Starter'),
                   onPressed: () async => await ErrorService.showErrorDialog(

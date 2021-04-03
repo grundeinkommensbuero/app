@@ -321,7 +321,8 @@ const Map<String, dynamic> en = {
   "Nur eigene Aktionen anzeigen": "Only show my actions",
   "Eigene Aktionen immer anzeigen": "Always show my actions",
   "Eigene Aktionen": "Own actions",
-  "lade...": "loading..."
+  "lade...": "loading...",
+  "Na gut": "Allright",
 };
 
 const Map<String, dynamic> ru = {
@@ -626,6 +627,7 @@ const Map<String, dynamic> ru = {
   // "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
   //     "If you want to change Notifications to silent or disable certain notification categories, just press the three dots on a received notification. You will then be guided to the notification preferences for this app.",
   // "Kundgebung": "Manifestation",
+  "Na gut": "Закрыть",
 };
 
 const Map<String, dynamic> fr = {
@@ -939,6 +941,7 @@ const Map<String, dynamic> fr = {
   "Kundgebung": "Manifestation",
   // "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
   //     "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.",
+  "Na gut": "Fermer",
 };
 
 const Map<String, dynamic> de = {
@@ -1254,5 +1257,6 @@ const Map<String, dynamic> de = {
   "Nur eigene Aktionen anzeigen": "Nur eigene Aktionen anzeigen",
   "Eigene Aktionen immer anzeigen": "Eigene Aktionen immer anzeigen",
   "Eigene Aktionen": "Eigene Aktionen",
-  "lade...": "lade..."
+  "lade...": "lade...",
+  "Na gut": "Na gut",
 };

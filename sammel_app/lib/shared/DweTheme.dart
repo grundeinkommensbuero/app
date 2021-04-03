@@ -12,6 +12,7 @@ class DweTheme {
   static final Color green = Color.fromARGB(255, 125, 244, 107);
   static final Color blueLight = Color.fromARGB(255, 150, 200, 255);
   static final Color blueBright = Color.fromARGB(255, 220, 235, 255);
+  static final Color disabledGrey = Colors.black45;
 
   static ThemeData themeData = ThemeData(
     // button text color
@@ -30,7 +31,10 @@ class DweTheme {
     )),
     textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
-      foregroundColor: MaterialStateProperty.all<Color>(DweTheme.purple),
+      foregroundColor: MaterialStateProperty.resolveWith((state) =>
+          state.contains(MaterialState.disabled)
+              ? DweTheme.disabledGrey
+              : DweTheme.purple),
     )),
     iconTheme: IconThemeData(color: purple),
     fontFamily: 'Raleway',

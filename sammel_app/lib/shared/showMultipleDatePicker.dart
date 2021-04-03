@@ -28,9 +28,10 @@ Future<List<DateTime>?> showMultipleDatePicker(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Flexible(
-                            child: RaisedButton(
+                            child: ElevatedButton(
                           key: Key('previous month button'),
-                          shape: CircleBorder(),
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all(CircleBorder())),
                           child: Icon(Icons.arrow_left),
                           onPressed: () => setDialogState(() => displayedMonth =
                               (Jiffy(displayedMonth)..subtract(months: 1))
@@ -49,9 +50,10 @@ Future<List<DateTime>?> showMultipleDatePicker(
                           ]),
                         ),
                         Flexible(
-                            child: RaisedButton(
+                            child: ElevatedButton(
                           key: Key('next month button'),
-                          shape: CircleBorder(),
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all(CircleBorder())),
                           child: Icon(Icons.arrow_right),
                           onPressed: () => setDialogState(() => displayedMonth =
                               (Jiffy(displayedMonth)..add(months: 1)).dateTime),
@@ -82,12 +84,12 @@ Future<List<DateTime>?> showMultipleDatePicker(
                         },
                       )),
                   ButtonBar(alignment: MainAxisAlignment.center, children: [
-                    RaisedButton(
+                    ElevatedButton(
                       key: Key('days dialog cancel button'),
                       child: Text("Abbrechen").tr(),
                       onPressed: () => Navigator.pop(context, initDates),
                     ),
-                    RaisedButton(
+                    ElevatedButton(
                       key: Key('days dialog accept button'),
                       child: Text("Auswählen").tr(),
                       onPressed: () {
@@ -197,8 +199,8 @@ showTooManyDatesDialog(context, maxTage) {
                 'Bitte wähle {maxTage} Tage oder weniger aus.'
                     .tr(namedArgs: {'maxTage': maxTage.toString()})),
             actions: <Widget>[
-              RaisedButton(
-                child: Text('Schließen').tr(),
+              TextButton(
+                child: Text('Na gut').tr(),
                 onPressed: () => Navigator.pop(context),
               )
             ],

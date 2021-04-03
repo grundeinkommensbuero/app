@@ -46,12 +46,12 @@ class UsernameDialogState extends State<UsernameDialog> {
         ),
       ])),
       actions: [
-        FlatButton(
+        TextButton(
           key: Key('username dialog cancel button'),
           child: Text("Abbrechen").tr(),
           onPressed: () => Navigator.pop(context, null),
         ),
-        FlatButton(
+        TextButton(
           key: Key('username dialog finish button'),
           child: Text("Fertig").tr(),
           onPressed: isValid() ? () => changeUserNameAndClose() : null,
