@@ -14,7 +14,6 @@ import org.mockito.junit.MockitoRule
 import javax.persistence.EntityManager
 import javax.persistence.TypedQuery
 import kotlin.test.assertEquals
-import kotlin.test.assertSame
 
 class FAQDaoTest {
     @Rule
