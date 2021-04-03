@@ -7,7 +7,6 @@ import 'package:sammel_app/services/PushUpdateService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/Crypter.dart';
-import 'package:validators/validators.dart';
 
 import 'BackendService.dart';
 import 'ErrorService.dart';
@@ -60,7 +59,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
       listener = PullService(userService, backend);
     else {
       pushToken = firebaseService.token;
-      if (isNull(await pushToken) || (await pushToken)!.isEmpty) {
+      if ((await pushToken) == null || (await pushToken)!.isEmpty) {
         ErrorService.pushError(
             'Problem beim Einrichten von Push-Nachrichten',
             'Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. '

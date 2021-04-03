@@ -25,7 +25,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   http: ^0.13.0 # nur für sendToTopic
-  quiver: '>=2.0.0 <3.0.0' # bei nächster Gelegenheit hochziehen wegen null-safety
+  quiver: '>=2.0.0 <3.0.0' # null-safety muss auf flutter_map warten
   flutter_local_notifications: ^5.0.0-nullsafety.1
   date_format: ^1.0.6
   http_server: ^1.0.0
@@ -34,10 +34,9 @@ dependencies:
   calendarro: ^1.2.0 # null-safety sieht schlecht aus. es gibt aber forks: https://github.com/ProbablyRational/calendarro
   jiffy: ^4.0.0
   shared_preferences: ^2.0.4
-  validators: ^2.0.0 # höhere version kollidiert irgendwie mit http
   uuid: ^3.0.1
-  flutter_map: ^0.11.0 # sabotiert das Hochziehen von quiver # null-safety kommt bald
-  flutter_map_marker_cluster: ^0.3.4
+  flutter_map: ^0.11.0 # null-safety kommt bald; sabotiert das Hochziehen von quiver
+  flutter_map_marker_cluster: ^0.3.4 # null-safety - warte auf antwort: https://github.com/lpongetti/flutter_map_marker_cluster/issues/67
   latlng: ^0.1.0
   url_launcher: ^6.0.2
   firebase_messaging: ^9.0.0
@@ -47,7 +46,7 @@ dependencies:
   google_sign_in: ^4.4.4 #why though?
   # user_location: any
   permission_handler: ^6.0.1+1
-  poly: ^1.0.5 # am besten ersetzen TODO
+  poly: ^1.0.5 # Pull-Request: https://github.com/Sacchid/poly/pull/2
   connectivity: ^3.0.2
   cryptography: ^2.0.1
   loading_indicator: ^2.0.1
@@ -62,6 +61,11 @@ dependencies:
 dependency_overrides:
   calendarro: #https://github.com/adamstyrc/calendarro/pull/46 DateUtils and ancestorStateOfType fixes
     git: https://github.com/ProbablyRational/calendarro.git
+# sieht leider verwaist aus. Alternativen:
+# https://pub.dev/packages/flutter_calendar_carousel (null-safe)
+# https://pub.dev/packages/table_calendar (null-safety auf dem weg)
+# notwendige features: Multi-Selection, Internationalisierung,
+# oder forken und selbst null-safe machen
 
 dev_dependencies:
   flutter_test:
@@ -69,7 +73,7 @@ dev_dependencies:
   test: ^1.5.1
   flutter_launcher_icons: ^0.9.0
   mockito: ^5.0.1
-  flutter_test_ui: ^1.0.0
+  flutter_test_ui: ^1.0.0 # auf dem weg: https://github.com/spkersten/flutter_test_ui/tree/null-safety
   build_runner: ^1.10.0
 
 # For information on the generic Dart part of this file, see the

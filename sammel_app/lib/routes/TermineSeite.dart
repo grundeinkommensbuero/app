@@ -402,6 +402,7 @@ class TermineSeiteState extends State<TermineSeite>
     if (action.id == null || me == null) return;
     await termineService?.joinAction(action.id!);
     setState(() {
+      // ignore: unnecessary_cast
       (termine as List<Termin?>)
           .firstWhere((t) => t!.id == action.id, orElse: () => null)
           ?.participants
