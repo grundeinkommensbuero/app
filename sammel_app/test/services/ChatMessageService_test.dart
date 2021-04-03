@@ -2,15 +2,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
-import 'package:sammel_app/services/PushNotificationManager.dart';
-import 'package:sammel_app/services/StorageService.dart';
 
-import '../shared/Mocks.dart';
+import '../shared/mocks.mocks.dart';
 
 void main() {
-  ChatMessageService service;
-  StorageService storageService = StorageServiceMock();
-  PushNotificationManager manager = PushNotificationManagerMock();
+  late ChatMessageService service;
+  MockStorageService storageService = MockStorageService();
+  MockPushNotificationManager manager = MockPushNotificationManager();
 
   setUp(() {
     reset(storageService);

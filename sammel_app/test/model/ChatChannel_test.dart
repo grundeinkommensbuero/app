@@ -8,14 +8,14 @@ void main() {
 
   group('fromJson', () {
     final participationMessage =
-        ParticipationMessage(true, timestamp, 'Karl Marx', true);
+        ParticipationMessage(timestamp, 'Karl Marx', true, true);
     final chatMessage = ChatMessage(
         text: 'This is my last resort',
-        sender_name: 'Karl Marx',
+        senderName: 'Karl Marx',
         timestamp: timestamp,
-        message_color: Colors.red,
-        obtained_from_server: true,
-        user_id: 1);
+        messageColor: Colors.red,
+        obtainedFromServer: true,
+        userId: 1);
 
     test('deserializes ParticipationMessages', () {
       var channel = ChatChannel.fromJSON({
@@ -23,8 +23,8 @@ void main() {
         'messages': [participationMessage.toJson()]
       });
 
-      expect(channel.channel_messages.length, 1);
-      expect(channel.channel_messages[0] is ParticipationMessage, true);
+      expect(channel.channelMessages.length, 1);
+      expect(channel.channelMessages[0] is ParticipationMessage, true);
     });
 
     test('deserializes ChatMessages', () {
@@ -33,8 +33,8 @@ void main() {
         'messages': [chatMessage.toJson()]
       });
 
-      expect(channel.channel_messages.length, 1);
-      expect(channel.channel_messages[0] is ChatMessage, true);
+      expect(channel.channelMessages.length, 1);
+      expect(channel.channelMessages[0] is ChatMessage, true);
     });
 
     test('deserializes throws Error on unknown message type', () {
@@ -54,9 +54,9 @@ void main() {
         'messages': [chatMessage.toJson(), participationMessage.toJson()]
       });
 
-      expect(channel.channel_messages.length, 2);
-      expect(channel.channel_messages[0] is ChatMessage, true);
-      expect(channel.channel_messages[1] is ParticipationMessage, true);
+      expect(channel.channelMessages.length, 2);
+      expect(channel.channelMessages[0] is ChatMessage, true);
+      expect(channel.channelMessages[1] is ParticipationMessage, true);
     });
   });
 }

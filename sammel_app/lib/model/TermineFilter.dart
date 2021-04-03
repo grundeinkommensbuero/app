@@ -5,11 +5,11 @@ import 'package:sammel_app/shared/ChronoHelfer.dart';
 class TermineFilter {
   List<String> typen;
   List<DateTime> tage;
-  TimeOfDay von;
-  TimeOfDay bis;
+  TimeOfDay? von;
+  TimeOfDay? bis;
   List<String> orte;
-  bool nurEigene;
-  bool immerEigene;
+  bool? nurEigene;
+  bool? immerEigene;
 
   TermineFilter(this.typen, this.tage, this.von, this.bis, this.orte,
       this.nurEigene, this.immerEigene);
@@ -43,11 +43,11 @@ class TermineFilter {
       };
 
   get isEmpty =>
-      (tage == null || tage.isEmpty) &&
-      (bis == null) &&
+      tage.isEmpty &&
+      bis == null &&
       von == null &&
-      (orte == null || orte.isEmpty) &&
-      (typen == null || typen.isEmpty) &&
-      (nurEigene == null || nurEigene == false) &&
-      (immerEigene == null || immerEigene);
+      orte.isEmpty &&
+      typen.isEmpty &&
+      nurEigene != true &&
+      immerEigene != false;
 }

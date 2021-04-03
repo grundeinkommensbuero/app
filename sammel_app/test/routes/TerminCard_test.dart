@@ -5,11 +5,12 @@ import 'package:intl/intl.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:test/test.dart';
 
-import '../shared/Mocks.dart';
+import '../shared/mocks.trainer.dart';
 import '../shared/TestdatenVorrat.dart';
+import '../shared/mocks.mocks.dart';
 
 void main() {
-  mockTranslation();
+  trainTranslation(MockTranslations());
   initializeDateFormatting('en');
 
   group('erzeugeDatumZeile berechnet Dauer', () {

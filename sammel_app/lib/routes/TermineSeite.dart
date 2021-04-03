@@ -3,34 +3,33 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
-import 'package:uuid/uuid.dart';
 import 'package:provider/provider.dart';
-
+import 'package:sammel_app/model/Evaluation.dart';
 import 'package:sammel_app/model/ListLocation.dart';
+import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
-import 'package:sammel_app/routes/EvaluationForm.dart';
-import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/model/Evaluation.dart';
 import 'package:sammel_app/routes/ActionMap.dart';
+import 'package:sammel_app/routes/EvaluationForm.dart';
+import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
-import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:uuid/uuid.dart';
 
-import 'ActionEditor.dart';
-import 'ActionMap.dart';
-import 'ActionList.dart';
-import 'FilterWidget.dart';
 import 'ActionDetailsPage.dart';
+import 'ActionEditor.dart';
+import 'ActionList.dart';
+import 'ActionMap.dart';
+import 'FilterWidget.dart';
 
 class TermineSeite extends StatefulWidget {
-  TermineSeite({Key key}) : super(key: key ?? Key('action page'));
+  TermineSeite({Key? key}) : super(key: key ?? Key('action page'));
 
   @override
   TermineSeiteState createState() => TermineSeiteState();
@@ -39,28 +38,28 @@ class TermineSeite extends StatefulWidget {
 class TermineSeiteState extends State<TermineSeite>
     with SingleTickerProviderStateMixin {
   static var filterKey = GlobalKey();
-  AbstractTermineService termineService;
-  StorageService storageService;
-  ChatMessageService chatMessageService;
+  AbstractTermineService? termineService;
+  StorageService? storageService;
+  ChatMessageService? chatMessageService;
   static final TextStyle style = TextStyle(
     color: Color.fromARGB(255, 129, 28, 98),
     fontSize: 15.0,
   );
-  static MapController mapController = MapController();
+  final MapController mapController = MapController();
   bool _initialized = false;
 
   List<Termin> termine = [];
   List<ListLocation> listLocations = [];
 
-  FilterWidget filterWidget;
+  FilterWidget? filterWidget;
 
   List<int> myActions = [];
-  User me;
+  User? me;
 
   int navigation = 0;
-  AnimationController _animationController;
-  Animation<Offset> _slide;
-  Animation<double> _fade;
+  late AnimationController _animationController;
+  Animation<Offset>? _slide;
+  Animation<double>? _fade;
   bool swipeLeft = false;
 
   @override
@@ -82,7 +81,6 @@ class TermineSeiteState extends State<TermineSeite>
   @override
   Widget build(BuildContext context) {
     if (!_initialized) intialize(context);
-    // TODO: Memory-Leak beheben
 
     _slide = Tween<Offset>(
       begin: Offset.zero,
@@ -109,22 +107,24 @@ class TermineSeiteState extends State<TermineSeite>
       mapController: mapController,
     );
 
-    return Scaffold(
+    return ScaffoldMessenger(
+        // um Snackbar oberhalb der Footer-Buttons zu zeigen
+        child: Scaffold(
       body: Container(
           decoration: DweTheme.happyHouseBackground,
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
               FadeTransition(
-                opacity: _fade,
+                opacity: _fade!,
                 child: SlideTransition(
-                  position: _slide,
+                  position: _slide!,
                   child: IndexedStack(
                       children: [actionListView, actionMapView],
                       index: navigation),
                 ),
               ),
-              filterWidget
+              filterWidget!
             ],
           )),
       bottomNavigationBar: BottomNavigationBar(
@@ -141,7 +141,7 @@ class TermineSeiteState extends State<TermineSeite>
               label: 'Karte'.tr())
         ],
       ),
-    );
+    ));
   }
 
   swithPage(index) async {
@@ -164,7 +164,7 @@ class TermineSeiteState extends State<TermineSeite>
     chatMessageService = Provider.of<ChatMessageService>(context);
     filterWidget = FilterWidget(ladeTermine, key: filterKey);
 
-    storageService
+    storageService!
         .loadAllStoredActionIds()
         .then((ids) => setState(() => myActions = ids));
 
@@ -183,7 +183,7 @@ class TermineSeiteState extends State<TermineSeite>
   }
 
   Future<void> ladeTermine(TermineFilter filter) async {
-    await termineService
+    await termineService!
         .loadActions(filter)
         .then((termine) =>
             setState(() => this.termine = termine..sort(Termin.compareByStart)))
@@ -194,22 +194,23 @@ class TermineSeiteState extends State<TermineSeite>
   void showRestError(RestFehler e) {
     showDialog(
         context: context,
-        child: AlertDialog(
-          title: Text('Aktion konnte nicht angelegt werden').tr(),
-          content: SelectableText(e.message),
-          actions: <Widget>[
-            RaisedButton(
-              child: Text('Okay...').tr(),
-              onPressed: () => Navigator.pop(context),
-            )
-          ],
-        ));
+        builder: (context) => AlertDialog(
+              title: Text('Aktion konnte nicht angelegt werden').tr(),
+              content: SelectableText(e.message),
+              actions: <Widget>[
+                ElevatedButton(
+                  child: Text('Okay...').tr(),
+                  onPressed: () => Navigator.pop(context),
+                )
+              ],
+            ));
   }
 
   openTerminDetails(Termin termin) async {
+    if (termin.id == null) return;
     try {
       var terminMitDetails =
-          await termineService.getActionWithDetails(termin.id);
+          await termineService!.getActionWithDetails(termin.id!);
       TerminDetailsCommand command = await showActionDetailsPage(
           context,
           terminMitDetails,
@@ -235,12 +236,12 @@ class TermineSeiteState extends State<TermineSeite>
     }
   }
 
-  bool isMyAction(Termin action) => myActions?.contains(action.id);
+  bool isMyAction(Termin action) => myActions.contains(action.id);
 
   bool iAmParticipant(Termin action) =>
-      action.participants.map((e) => e.id).contains(me?.id);
+      action.participants?.map((e) => e.id).contains(me?.id) ?? false;
 
-  Future<List<Termin>> editAction(BuildContext context, Termin termin) async {
+  editAction(BuildContext context, Termin termin) async {
     await showDialog(
         context: context,
         barrierDismissible: false,
@@ -278,8 +279,9 @@ class TermineSeiteState extends State<TermineSeite>
 
   Future<void> saveAction(Termin editedAction) async {
     try {
-      String token = await storageService.loadActionToken(editedAction.id);
-      await termineService.saveAction(editedAction, token);
+      String? token = await storageService!.loadActionToken(editedAction.id!);
+      if (token == null) throw Exception('Fehlende Authorisierung zu Aktion');
+      await termineService!.saveAction(editedAction, token);
       setState(() => updateAction(editedAction, false));
     } catch (e, s) {
       ErrorService.handleError(e, s,
@@ -298,11 +300,12 @@ class TermineSeiteState extends State<TermineSeite>
                 leading: null,
                 automaticallyImplyLeading: false,
                 title: Text('Über Aktion berichten',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22.0,
-                        color: Color.fromARGB(255, 129, 28, 98))).tr(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22.0,
+                            color: Color.fromARGB(255, 129, 28, 98)))
+                    .tr(),
               ),
               children: <Widget>[
                 Container(
@@ -318,7 +321,7 @@ class TermineSeiteState extends State<TermineSeite>
   afterActionEvaluation(Evaluation evaluation) async {
     Navigator.pop(context, false);
 
-    Scaffold.of(context).showSnackBar(SnackBar(
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('Vielen Dank, dass Du Eure Erfahrungen geteilt hast.'.tr(),
           style: TextStyle(color: Colors.black87)),
       behavior: SnackBarBehavior.floating,
@@ -330,8 +333,8 @@ class TermineSeiteState extends State<TermineSeite>
 
   Future<void> saveEvaluation(Evaluation evaluation) async {
     try {
-      await termineService.saveEvaluation(evaluation);
-      await storageService.markActionIdAsEvaluated(evaluation.terminId);
+      await termineService?.saveEvaluation(evaluation);
+      await storageService?.markActionIdAsEvaluated(evaluation.terminId!);
     } catch (e, s) {
       ErrorService.handleError(e, s,
           context: 'Evaluation konnte nicht gespeichert werden.');
@@ -340,10 +343,12 @@ class TermineSeiteState extends State<TermineSeite>
   }
 
   Future<void> deleteAction(Termin action) async {
-    String token = await storageService.loadActionToken(action.id);
+    if (action.id == null) return;
+    String? token = await storageService!.loadActionToken(action.id!);
     try {
-      await termineService.deleteAction(action, token);
-      storageService.deleteActionToken(action.id);
+      if (token == null) throw Exception('Fehlende Authorisierung zu Aktion');
+      await termineService?.deleteAction(action, token);
+      storageService!.deleteActionToken(action.id!);
       setState(() => updateAction(action, true));
     } catch (e, s) {
       ErrorService.handleError(e, s,
@@ -369,7 +374,7 @@ class TermineSeiteState extends State<TermineSeite>
   createAndAddAction(Termin action) async {
     try {
       Termin actionWithId = await createNewAction(action);
-      myActions.add(actionWithId.id);
+      myActions.add(actionWithId.id!);
       setState(() {
         termine
           ..add(actionWithId)
@@ -383,38 +388,39 @@ class TermineSeiteState extends State<TermineSeite>
 
   Future<Termin> createNewAction(Termin action) async {
     String uuid = Uuid().v1();
-    Termin actionWithId = await termineService.createAction(action, uuid);
-    storageService.saveActionToken(actionWithId.id, uuid);
+    Termin actionWithId = await termineService!.createAction(action, uuid);
+    storageService?.saveActionToken(actionWithId.id!, uuid);
     return actionWithId;
   }
 
   void showActionOnMap(Termin action) {
+    setState(() => navigation = 1);
     mapController.move(LatLng(action.latitude, action.longitude), 15.0);
-    setState(() {
-      navigation = 1; // change to map view
-    });
   }
 
-  Future<void> joinAction(Termin termin) async {
-    await termineService.joinAction(termin.id);
+  Future<void> joinAction(Termin action) async {
+    if (action.id == null || me == null) return;
+    await termineService?.joinAction(action.id!);
     setState(() {
-      termine
-          .firstWhere((t) => t.id == termin.id, orElse: () => null)
+      // ignore: unnecessary_cast
+      (termine as List<Termin?>)
+          .firstWhere((t) => t!.id == action.id, orElse: () => null)
           ?.participants
-          ?.add(me);
+          ?.add(me!);
     });
   }
 
-  Future<void> leaveAction(Termin termin) async {
-    await termineService.leaveAction(termin.id);
+  Future<void> leaveAction(Termin action) async {
+    if (action.id == null || me == null) return;
+    await termineService?.leaveAction(action.id!);
     setState(() {
-      var actionFromList = termine.firstWhere((t) => t.id == termin.id);
-      actionFromList.participants.removeWhere((user) => user.id == me.id);
+      var actionFromList = termine.firstWhere((t) => t.id == action.id);
+      actionFromList.participants?.removeWhere((user) => user.id == me!.id);
     });
   }
 
-  participant(Termin termin) =>
-      termin.participants.map((e) => e.id).contains(me?.id);
+  bool participant(Termin termin) =>
+      termin.participants?.map((e) => e.id).contains(me?.id) ?? false;
 
   void zeigeAktionen(String title, List<Termin> actions) {
     Navigator.push(
@@ -428,9 +434,9 @@ class TermineSeiteState extends State<TermineSeite>
 }
 
 class ButtonRow extends StatelessWidget {
-  List<Widget> widgets;
+  final List<Widget> widgets;
 
-  ButtonRow(List<Widget> this.widgets);
+  ButtonRow(this.widgets);
 
   @override
   Widget build(BuildContext context) {
@@ -447,12 +453,12 @@ AlertDialog confirmDeleteDialog(BuildContext context) => AlertDialog(
         title: Text('Aktion Löschen').tr(),
         content: Text('Möchtest du diese Aktion wirklich löschen?').tr(),
         actions: [
-          RaisedButton(
+          ElevatedButton(
               key: Key('delete confirmation yes button'),
-              color: DweTheme.red,
+              style: ButtonStyle(backgroundColor: DweTheme.red),
               child: Text('Ja').tr(),
               onPressed: () => Navigator.pop(context, true)),
-          RaisedButton(
+          ElevatedButton(
             key: Key('delete confirmation no button'),
             child: Text('Nein').tr(),
             onPressed: () => Navigator.pop(context, false),

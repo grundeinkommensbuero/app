@@ -16,35 +16,39 @@ class ChronoHelfer {
     return false;
   }
 
-  static String dateTimeToStringHHmmss(DateTime time) =>
-      timeToStringHHmmss(TimeOfDay.fromDateTime(time));
+  static String? dateTimeToStringHHmmss(DateTime? time) {
+    if(time == null) return null;
+    return timeToStringHHmmss(TimeOfDay.fromDateTime(time));
+  }
 
-  static String timeToStringHHmmss(TimeOfDay time) {
+  static String? timeToStringHHmmss(TimeOfDay? time) {
     if (time == null) return null;
     return _dateFormatHHmmss
         .format(DateTime(0, 1, 1, time.hour, time.minute, 0));
   }
 
-  static String dateTimeToStringHHmm(DateTime time) =>
-      timeToStringHHmm(TimeOfDay.fromDateTime(time));
+  static String? dateTimeToStringHHmm(DateTime? time) {
+    if(time == null) return null;
+    return timeToStringHHmm(TimeOfDay.fromDateTime(time));
+  }
 
-  static String timeToStringHHmm(TimeOfDay time) {
+  static String? timeToStringHHmm(TimeOfDay? time) {
     if (time == null) return null;
     return _dateFormatHHmm.format(DateTime(0, 1, 1, time.hour, time.minute, 0));
   }
 
-  static String formatDateOfDateTimeMitWochentag(DateTime date,
-      [Locale locale]) {
+  static String formatDateOfDateTimeMitWochentag(DateTime? date,
+      [Locale? locale]) {
     if (date == null) return '';
     return DateFormat('EEEE, d. MMMM yyyy', locale?.languageCode).format(date);
   }
 
-  static String formatDateOfDateTime(DateTime date) {
+  static String formatDateOfDateTime(DateTime? date) {
     if (date == null) return '';
     return DateFormat('d. MMMM yyyy').format(date);
   }
 
-  static String formatFromToTimeOfDateTimes(DateTime start, DateTime end) {
+  static String formatFromToTimeOfDateTimes(DateTime? start, DateTime? end) {
     if (start == null || end == null) return '';
     return 'von '.tr() +
         '${dateTimeToStringHHmm(start)}' +
@@ -64,14 +68,16 @@ class ChronoHelfer {
         json['time']['second']);
   }
 
-  static String formatDateTime(DateTime date) {
-    Duration message_sent = DateTime.now().difference(date);
-    if (message_sent < Duration(minutes: 1))
+  static String? formatDateTime(DateTime? date) {
+    if(date == null) return null;
+
+    Duration messageSent = DateTime.now().difference(date);
+    if (messageSent < Duration(minutes: 1))
       return 'gerade eben'.tr();
-    else if (message_sent < Duration(hours: 1))
-      return '{} Minuten'.plural(message_sent.inMinutes);
-    else if (message_sent < Duration(hours: 12))
-      return '{} Stunden'.plural(message_sent.inHours);
+    else if (messageSent < Duration(hours: 1))
+      return '{} Minuten'.plural(messageSent.inMinutes);
+    else if (messageSent < Duration(hours: 12))
+      return '{} Stunden'.plural(messageSent.inHours);
     else if (DateTime.now().difference(date) < Duration(days: 1))
       return ChronoHelfer.dateTimeToStringHHmm(date);
     else if (DateTime.now().difference(date) < Duration(days: 7)) {
@@ -80,4 +86,16 @@ class ChronoHelfer {
 
     return DateFormat('MMM d, hh:mm').format(date);
   }
+}
+
+bool equalTimestamps(DateTime? timestamp1, DateTime? timestamp2) =>
+    timestamp1 == null
+        ? timestamp2 == null
+        : timestamp2 != null && timestamp1.isAtSameMomentAs(timestamp2);
+
+int compareTimestamp(DateTime? timestamp1, DateTime? timestamp2) {
+  if (timestamp1 == null && timestamp2 == null) return 0;
+  if (timestamp1 == null) return -1;
+  if (timestamp2 == null) return 1;
+  return timestamp1.compareTo(timestamp2);
 }

@@ -1,7 +1,11 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_test_ui/flutter_test_ui.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
@@ -17,23 +21,32 @@ import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 
 import '../model/Termin_test.dart';
-import '../shared/Mocks.dart';
+import '../shared/mocks.costumized.dart';
+import '../shared/mocks.trainer.dart';
+import '../shared/mocks.mocks.dart';
 import 'ActionEditor_test.dart';
 
-final _stammdatenService = StammdatenServiceMock();
-final _termineService = TermineServiceMock();
-final _listLocationService = ListLocationServiceMock();
-final _storageService = StorageServiceMock();
-final _pushService = PushSendServiceMock();
-final _userService = ConfiguredUserServiceMock();
-final _chatService = ChatMessageServiceMock();
-final _pushManager = PushNotificationManagerMock();
+final _stammdatenService = MockStammdatenService();
+final _termineService = MockTermineService();
+final _listLocationService = MockListLocationService();
+final _storageService = MockStorageService();
+final _pushService = MockPushSendService();
+final _userService = MockUserService();
+final _chatService = MockChatMessageService();
+final _pushManager = MockPushNotificationManager();
 
 void main() {
-  mockTranslation();
+  trainTranslation(MockTranslations());
+  trainUserService(_userService);
+  trainStammdatenService(_stammdatenService);
+  trainChatMessageService(_chatService);
+  trainStorageService(_storageService);
+  initializeDateFormatting('de');
+
+  setUp(() => HttpOverrides.global = MapHttpOverrides());
 
   group('Navigation', () {
-    Navigation navigation;
+    late Navigation navigation;
     var actionPage = GlobalKey(debugLabel: 'action page');
 
     setUpUI((WidgetTester tester) async {

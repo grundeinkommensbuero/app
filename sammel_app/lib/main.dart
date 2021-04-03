@@ -1,31 +1,29 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sammel_app/Provisioning.dart';
 import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
+import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
+import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
-import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/shared/ConstJsonAssetLoader.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
-import 'package:sammel_app/services/PushNotificationManager.dart';
-import 'package:sammel_app/Provisioning.dart';
 
 import 'services/BackendService.dart';
 import 'services/LocalNotificationService.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   runApp(EasyLocalization(
-      preloaderWidget: Container(
-          color: DweTheme.yellow,
-          child: Image.asset('assets/images/logo_transparent.png')),
       supportedLocales: [
         Locale('en'),
         Locale('de'),
@@ -54,15 +52,20 @@ class MyApp extends StatelessWidget {
       ? DemoPushSendService(userService)
       : PushSendService(userService, backend);
   static var pushNotificationManager = demoMode
-      ? DemoPushNotificationManager(pushService)
+      ? DemoPushNotificationManager(pushService as DemoPushSendService)
       : PushNotificationManager(
           storageService, userService, firebaseService, backend);
   static var localNotificationService =
       LocalNotificationService(pushNotificationManager);
-  var termineService = demoMode
+  static var termineService = demoMode
       ? DemoTermineService(stammdatenService, userService)
-      : TermineService(stammdatenService, userService, backend,
-          pushNotificationManager, localNotificationService, actionPageKey);
+      : TermineService(
+          stammdatenService,
+          userService,
+          backend,
+          pushNotificationManager as PushNotificationManager,
+          localNotificationService,
+          actionPageKey);
   static var listLocationService = demoMode
       ? DemoListLocationService(userService)
       : ListLocationService(userService, backend);

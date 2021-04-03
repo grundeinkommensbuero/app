@@ -3,28 +3,33 @@ import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/PushMessage.dart';
-import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StorageService.dart';
-import 'package:sammel_app/services/UserService.dart';
 
-import '../shared/Mocks.dart';
+import '../shared/mocks.costumized.dart';
+import '../shared/mocks.mocks.dart';
+import '../shared/mocks.trainer.dart';
 
 main() {
-  PushNotificationManager manager;
-  StorageService storageService = StorageServiceMock();
-  FirebaseReceiveService firebaseMock = FirebaseReceiveServiceMock();
-  Backend backend = BackendMock();
-  UserService userService = ConfiguredUserServiceMock();
+  StorageService storageService = MockStorageService();
+  FirebaseReceiveService firebaseMock = MockFirebaseReceiveService();
+  MockBackend backend = MockBackend();
+  MockUserService userService = MockUserService();
+  trainUserService(userService);
+  late PushNotificationManager manager;
 
   setUp(() {
     reset(backend);
+    trainBackend(backend);
+    when(backend.get('service/push/pull', any)).thenAnswer((_) =>
+        Future.value(trainHttpResponse(MockHttpClientResponseBody(), 200, [])));
     reset(storageService);
     reset(firebaseMock);
     when(firebaseMock.token).thenAnswer((_) async => "firebase-token");
     when(storageService.isPullMode()).thenAnswer((_) async => false);
+
     manager = PushNotificationManager(
         storageService, userService, firebaseMock, backend);
   });
@@ -39,6 +44,8 @@ main() {
     });
 
     test('hinterlegt Firebase-Service, wenn Token nicht null ist', () async {
+      when(firebaseMock.token).thenAnswer((_) async => "firebase-token");
+
       await manager.createPushListener(firebaseMock, backend);
 
       expect(true, manager.listener is FirebaseReceiveService);
@@ -46,6 +53,7 @@ main() {
 
     test('erzeugt PullService, wenn Token null ist', () async {
       when(firebaseMock.token).thenAnswer((_) async => null);
+
       await manager.createPushListener(firebaseMock, backend);
 
       expect(true, manager.listener is PullService);
@@ -53,6 +61,7 @@ main() {
 
     test('speichert als Pull-Modus, wenn Token null ist', () async {
       when(firebaseMock.token).thenAnswer((_) async => null);
+
       await manager.createPushListener(firebaseMock, backend);
 
       verify(storageService.markPullMode()).called(1);
@@ -60,10 +69,10 @@ main() {
   });
 
   group('DemoPushNotificationManager', () {
-    DemoPushSendService pushSendService = DemoPushSendServiceMock();
+    DemoPushSendService pushSendService = MockDemoPushSendService();
     DemoPushNotificationManager service =
         DemoPushNotificationManager(pushSendService);
-    StreamController<PushData> controller;
+    late StreamController<PushData> controller;
 
     setUp(() {
       reset(pushSendService);
@@ -74,8 +83,8 @@ main() {
     test('serves push messages to correct listener', () async {
       var listener1 = TestListener();
       var listener2 = TestListener();
-      service.register_message_callback('type1', listener1);
-      service.register_message_callback('type2', listener2);
+      service.registerMessageCallback('type1', listener1);
+      service.registerMessageCallback('type2', listener2);
 
       var data1 = TestPushData('type1');
       var data2 = TestPushData('type1');
@@ -105,13 +114,12 @@ class TestListener implements PushNotificationListener {
   List<Map<String, dynamic>> nachrichten = [];
 
   @override
-  void receive_message(Map<dynamic, dynamic> data) {
+  void receiveMessage(Map<String, dynamic> data) {
     nachrichten.add(data);
   }
 
   @override
-  void handleNotificationTap(Map<dynamic, dynamic> data) {
-  }
+  void handleNotificationTap(Map<dynamic, dynamic> data) {}
 
   @override
   void updateMessages(List<Map<String, dynamic>> data) {}

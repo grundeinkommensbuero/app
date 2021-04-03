@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_server/http_server.dart';
@@ -8,26 +9,29 @@ import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
-import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/TermineService.dart';
-import 'package:sammel_app/services/UserService.dart';
 
 import '../model/Termin_test.dart';
-import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';
+import '../shared/mocks.costumized.dart';
+import '../shared/mocks.mocks.dart';
+import '../shared/mocks.trainer.dart';
 
 void main() {
-  UserService userService;
-  PushNotificationManager pushManager = PushNotificationManagerMock();
-  StammdatenService stammdatenService = StammdatenServiceMock();
-  final localNotificationService = LocalNotificationServiceMock();
+  PushNotificationManager pushManager = MockPushNotificationManager();
+  MockStammdatenService stammdatenService = MockStammdatenService();
+  final localNotificationService = MockLocalNotificationService();
+  final userService = MockUserService();
 
   setUp(() {
-    userService = ConfiguredUserServiceMock();
+    reset(userService);
+    trainUserService(userService);
+    reset(stammdatenService);
+    trainStammdatenService(stammdatenService);
   });
 
   group('DemoTermineService', () {
-    DemoTermineService service;
+    late DemoTermineService service;
     setUp(() {
       service = DemoTermineService(stammdatenService, userService);
     });
@@ -44,7 +48,7 @@ void main() {
           Termin(
               null,
               DateTime.now(),
-              Jiffy(DateTime.now()).add(days: 1),
+              (Jiffy(DateTime.now())..add(days: 1)).dateTime,
               ffAlleeNord(),
               'Sammeln',
               52.52116,
@@ -78,7 +82,7 @@ void main() {
       var termine = await service.termine;
       expect(termine[0].typ, 'Sammeln');
       expect(termine[0].ort.name, 'Frankfurter Allee Nord');
-      expect(termine[0].details.kontakt, 'Ruft mich an unter 01234567');
+      expect(termine[0].details!.kontakt, 'Ruft mich an unter 01234567');
 
       await service.saveAction(
           TerminTestDaten.einTermin()
@@ -91,7 +95,7 @@ void main() {
       termine = await service.termine;
       expect(termine[0].typ, 'Infoveranstaltung');
       expect(termine[0].ort.name, 'Plänterwald');
-      expect(termine[0].details.kontakt, 'Test123');
+      expect(termine[0].details!.kontakt, 'Test123');
     });
 
     test('joinAction adds user to action', () async {
@@ -101,7 +105,7 @@ void main() {
       await service.joinAction(1);
 
       termine = await service.termine;
-      expect(termine[0].participants.map((e) => e.id), containsAll([11, 12]));
+      expect(termine[0].participants!.map((e) => e.id), containsAll([11, 12]));
     });
 
     test('joinAction ignores if user already partakes', () async {
@@ -111,7 +115,7 @@ void main() {
       await service.joinAction(1);
 
       termine = await service.termine;
-      expect(termine[0].participants.map((e) => e.id), containsAll([11, 12]));
+      expect(termine[0].participants!.map((e) => e.id), containsAll([11, 12]));
     });
 
     test('leaveAction removes user from action', () async {
@@ -121,7 +125,7 @@ void main() {
       await service.leaveAction(1);
 
       termine = await service.termine;
-      expect(termine[0].participants.map((e) => e.id), containsAll([12]));
+      expect(termine[0].participants!.map((e) => e.id), containsAll([12]));
     });
 
     test('leaveAction ignores if user doesnt partake', () async {
@@ -131,26 +135,27 @@ void main() {
       await service.leaveAction(1);
 
       termine = await service.termine;
-      expect(termine[0].participants.map((e) => e.id), containsAll([12]));
+      expect(termine[0].participants!.map((e) => e.id), containsAll([12]));
     });
   });
 
   group('TermineService', () {
-    Backend backend;
-    TermineService service;
+    late MockBackend backend;
+    late TermineService service;
 
     setUp(() {
-      backend = BackendMock();
+      backend = MockBackend();
+      trainBackend(backend);
       service = TermineService(stammdatenService, userService, backend,
-          pushManager, localNotificationService, null);
+          pushManager, localNotificationService, GlobalKey());
       service.userService = userService;
     });
 
     test('loadActions calls right path and serializes Filter correctly',
         () async {
       when(backend.post('service/termine', any, any)).thenAnswer((_) =>
-          Future<HttpClientResponseBody>.value(
-              HttpClientResponseBodyMock([], 200)));
+          Future.value(
+              trainHttpResponse(MockHttpClientResponseBody(), 200, [])));
 
       await service.loadActions(einFilter());
 
@@ -162,17 +167,19 @@ void main() {
               '"von":"15:00:00",'
               '"bis":"18:30:00",'
               '"orte":["Frankfurter Allee Nord"],'
-              '"ids":[]'
+              '"nurEigene":false,'
+              '"immerEigene":false'
               '}',
           any));
     });
 
     test('loadActions deserializes actions correctly', () async {
       when(backend.post('service/termine', any, any)).thenAnswer((_) =>
-          Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock([
+          Future<HttpClientResponseBody>.value(
+              trainHttpResponse(MockHttpClientResponseBody(), 200, [
             TerminTestDaten.einTerminMitTeilisUndDetails().toJson(),
             TerminTestDaten.einTerminOhneTeilisMitDetails().toJson()
-          ], 200)));
+          ])));
 
       var actions = await service.loadActions(einFilter());
 
@@ -186,14 +193,14 @@ void main() {
       expect(actions[0].typ, 'Sammeln');
       expect(actions[0].latitude, 52.52116);
       expect(actions[0].longitude, 13.41331);
-      expect(actions[0].participants.length, 1);
-      expect(actions[0].participants[0].id, 11);
-      expect(actions[0].participants[0].name, 'Karl Marx');
-      expect(actions[0].participants[0].color.value, Colors.red.value);
-      expect(actions[0].details.beschreibung,
+      expect(actions[0].participants!.length, 1);
+      expect(actions[0].participants![0].id, 11);
+      expect(actions[0].participants![0].name, 'Karl Marx');
+      expect(actions[0].participants![0].color?.value, Colors.red.value);
+      expect(actions[0].details!.beschreibung,
           'Bringe Westen und Klämmbretter mit');
-      expect(actions[0].details.treffpunkt, 'Weltzeituhr');
-      expect(actions[0].details.kontakt, 'Ruft an unter 012345678');
+      expect(actions[0].details!.treffpunkt, 'Weltzeituhr');
+      expect(actions[0].details!.kontakt, 'Ruft an unter 012345678');
       expect(actions[1].id, 0);
       expect(actions[1].beginn, DateTime(2019, 11, 4, 17, 9, 0));
       expect(actions[1].ende, DateTime(2019, 11, 4, 18, 9, 0));
@@ -203,19 +210,21 @@ void main() {
       expect(actions[1].typ, 'Sammeln');
       expect(actions[1].latitude, 52.52116);
       expect(actions[1].longitude, 13.41331);
-      expect(actions[1].participants.length, 0);
-      expect(actions[1].details.beschreibung,
+      expect(actions[1].participants!.length, 0);
+      expect(actions[1].details!.beschreibung,
           'Bringe Westen und Klämmbretter mit');
-      expect(actions[1].details.treffpunkt, 'Weltzeituhr');
-      expect(actions[1].details.kontakt, 'Ruft an unter 012345678');
+      expect(actions[1].details!.treffpunkt, 'Weltzeituhr');
+      expect(actions[1].details!.kontakt, 'Ruft an unter 012345678');
     });
 
     test(
         'createTermin calls right path and serializes action and token correctly',
         () async {
       when(backend.post('service/termine/neu', any, any)).thenAnswer((_) =>
-          Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
-              TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200)));
+          Future<HttpClientResponseBody>.value(trainHttpResponse(
+              MockHttpClientResponseBody(),
+              200,
+              TerminTestDaten.einTerminMitTeilisUndDetails().toJson())));
 
       await service.createAction(
           TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
@@ -247,8 +256,10 @@ void main() {
 
     test('createTermin deserializes action correctly', () async {
       when(backend.post('service/termine/neu', any, any)).thenAnswer((_) =>
-          Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
-              TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200)));
+          Future<HttpClientResponseBody>.value(trainHttpResponse(
+              MockHttpClientResponseBody(),
+              200,
+              TerminTestDaten.einTerminMitTeilisUndDetails().toJson())));
 
       var action = await service.createAction(
           TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
@@ -262,19 +273,22 @@ void main() {
       expect(action.typ, 'Sammeln');
       expect(action.latitude, 52.52116);
       expect(action.longitude, 13.41331);
-      expect(action.participants.length, 1);
-      expect(action.participants[0].id, 11);
-      expect(action.participants[0].name, 'Karl Marx');
-      expect(action.participants[0].color.value, Colors.red.value);
-      expect(action.details.beschreibung, 'Bringe Westen und Klämmbretter mit');
-      expect(action.details.treffpunkt, 'Weltzeituhr');
-      expect(action.details.kontakt, 'Ruft an unter 012345678');
+      expect(action.participants!.length, 1);
+      expect(action.participants![0].id, 11);
+      expect(action.participants![0].name, 'Karl Marx');
+      expect(action.participants![0].color?.value, Colors.red.value);
+      expect(
+          action.details!.beschreibung, 'Bringe Westen und Klämmbretter mit');
+      expect(action.details!.treffpunkt, 'Weltzeituhr');
+      expect(action.details!.kontakt, 'Ruft an unter 012345678');
     });
 
     test('getActionWithDetails calls right path', () async {
       when(backend.get('service/termine/termin?id=0', any)).thenAnswer((_) =>
-          Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
-              TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200)));
+          Future<HttpClientResponseBody>.value(trainHttpResponse(
+              MockHttpClientResponseBody(),
+              200,
+              TerminTestDaten.einTerminMitTeilisUndDetails().toJson())));
 
       await service.getActionWithDetails(0);
 
@@ -283,8 +297,10 @@ void main() {
 
     test('getActionWithDetails deserializes action correctly', () async {
       when(backend.get('service/termine/termin?id=0', any)).thenAnswer((_) =>
-          Future<HttpClientResponseBody>.value(HttpClientResponseBodyMock(
-              TerminTestDaten.einTerminMitTeilisUndDetails().toJson(), 200)));
+          Future<HttpClientResponseBody>.value(trainHttpResponse(
+              MockHttpClientResponseBody(),
+              200,
+              TerminTestDaten.einTerminMitTeilisUndDetails().toJson())));
 
       var action = await service.getActionWithDetails(0);
 
@@ -297,21 +313,22 @@ void main() {
       expect(action.typ, 'Sammeln');
       expect(action.latitude, 52.52116);
       expect(action.longitude, 13.41331);
-      expect(action.participants.length, 1);
-      expect(action.participants[0].id, 11);
-      expect(action.participants[0].name, 'Karl Marx');
-      expect(action.participants[0].color.value, Colors.red.value);
-      expect(action.details.beschreibung, 'Bringe Westen und Klämmbretter mit');
-      expect(action.details.treffpunkt, 'Weltzeituhr');
-      expect(action.details.kontakt, 'Ruft an unter 012345678');
+      expect(action.participants!.length, 1);
+      expect(action.participants![0].id, 11);
+      expect(action.participants![0].name, 'Karl Marx');
+      expect(action.participants![0].color?.value, Colors.red.value);
+      expect(
+          action.details!.beschreibung, 'Bringe Westen und Klämmbretter mit');
+      expect(action.details!.treffpunkt, 'Weltzeituhr');
+      expect(action.details!.kontakt, 'Ruft an unter 012345678');
     });
 
     test(
         'saveAction calls right path and serialises action and token correctly',
         () async {
       when(backend.post('service/termine/termin', any, any)).thenAnswer((_) =>
-          Future<HttpClientResponseBody>.value(
-              HttpClientResponseBodyMock('response', 200)));
+          Future<HttpClientResponseBody>.value(trainHttpResponse(
+              MockHttpClientResponseBody(), 200, 'response')));
 
       await service.saveAction(
           TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
@@ -345,8 +362,8 @@ void main() {
         'deleteAction calls right path and serialises action and token correctly',
         () async {
       when(backend.delete('service/termine/termin', any, any)).thenAnswer((_) =>
-          Future<HttpClientResponseBody>.value(
-              HttpClientResponseBodyMock('response', 200)));
+          Future<HttpClientResponseBody>.value(trainHttpResponse(
+              MockHttpClientResponseBody(), 200, 'response')));
 
       await service.deleteAction(
           TerminTestDaten.einTerminMitTeilisUndDetails(), 'Token');
@@ -379,7 +396,7 @@ void main() {
     test('joinAction calls correct path with parameters', () async {
       when(backend.post(any, any, any, any)).thenAnswer((_) =>
           Future<HttpClientResponseBody>.value(
-              HttpClientResponseBodyMock(null, 202)));
+              trainHttpResponse(MockHttpClientResponseBody(), 202, null)));
 
       await service.joinAction(0);
 
@@ -394,7 +411,7 @@ void main() {
     test('leaveAction calls correct path with parameters', () async {
       when(backend.post(any, any, any, any)).thenAnswer((_) =>
           Future<HttpClientResponseBody>.value(
-              HttpClientResponseBodyMock(null, 202)));
+              trainHttpResponse(MockHttpClientResponseBody(), 200, null)));
 
       await service.leaveAction(0);
 

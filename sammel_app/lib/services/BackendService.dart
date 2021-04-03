@@ -1,8 +1,8 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'dart:async';
 import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart';
 import 'package:http_server/http_server.dart';
 import 'package:package_info/package_info.dart';
@@ -17,14 +17,12 @@ import 'AuthFehler.dart';
 import 'RestFehler.dart';
 
 class BackendService {
-  Backend backend;
-  AbstractUserService userService;
+  final Backend backend;
+  late AbstractUserService userService;
 
   static Map<String, String> appHeaders = {'Authorization': 'Basic $appAuth'};
 
-  BackendService.userService();
-
-  BackendService(AbstractUserService userService, this.backend) {
+  BackendService(AbstractUserService? userService, this.backend) {
     // UserService ist sein eigener UserService
     if (!(this is AbstractUserService)) {
       if (userService == null) throw ArgumentError.notNull('userService');
@@ -32,11 +30,11 @@ class BackendService {
     }
   }
 
-  Future<HttpClientResponseBody> get(String url, {bool appAuth}) async {
+  Future<HttpClientResponseBody> get(String url, {bool? appAuth}) async {
     try {
-      var response = await backend.get(url, await authHeaders(appAuth)).timeout(
-          Duration(seconds: 5),
-          onTimeout: () async => await checkConnectivity());
+      var response = await backend
+          .get(url, await authHeaders(appAuth))
+          .timeout(Duration(seconds: 5), onTimeout: () => checkConnectivity());
 
       if (response.response.statusCode >= 200 &&
           response.response.statusCode < 300) return response;
@@ -47,17 +45,17 @@ class BackendService {
       // else
       throw RestFehler(response.body.toString());
     } on SocketException catch (e) {
-      await checkConnectivity(originalError: e);
+      return await checkConnectivity(originalError: e);
     }
   }
 
   Future<HttpClientResponseBody> post(String url, String data,
-      {Map<String, String> parameters, bool appAuth}) async {
+      {Map<String, String>? parameters, bool? appAuth}) async {
     try {
-      var post = backend
-          .post(url, data, await authHeaders(appAuth), parameters)
-          .timeout(Duration(seconds: 10),
-              onTimeout: () async => await checkConnectivity());
+      Future<HttpClientResponseBody> post = backend
+          .post(url, data, await authHeaders(appAuth), parameters);
+      FutureOr<HttpClientResponseBody> Function() checker = () => checkConnectivity();
+      post.timeout(Duration(seconds: 10), onTimeout: checker);
       var response = await post;
 
       if (response.response.statusCode >= 200 &&
@@ -69,12 +67,12 @@ class BackendService {
       // else
       throw RestFehler(response.body.toString());
     } on SocketException catch (e) {
-      await checkConnectivity(originalError: e);
+      return await checkConnectivity(originalError: e);
     }
   }
 
   Future<HttpClientResponseBody> delete(String url, String data,
-      {bool appAuth}) async {
+      {bool? appAuth}) async {
     try {
       var response = await backend
           .delete(url, data, await authHeaders(appAuth))
@@ -90,11 +88,11 @@ class BackendService {
       // else
       throw RestFehler(response.body.toString());
     } on SocketException catch (e) {
-      await checkConnectivity(originalError: e);
+      return await checkConnectivity(originalError: e);
     }
   }
 
-  Future<Map<String, String>> authHeaders(bool appAuth) {
+  Future<Map<String, String>> authHeaders(bool? appAuth) {
     if (appAuth != null && appAuth)
       return Future.value(appHeaders);
     else
@@ -156,8 +154,6 @@ class NoUserAuthException implements Exception {
 }
 
 class Backend {
-  PackageInfo version;
-
   final Future<void> zertifikatGeladen = ladeZertifikat().timeout(
       Duration(seconds: 10),
       onTimeout: () =>
@@ -172,9 +168,9 @@ class Backend {
   };
 
   Backend() {
-    PackageInfo.fromPlatform().then((info) => version = info);
-    var serverHealth = getServerHealth();
-    serverHealth.then((health) {
+    Future.wait([getServerHealth(), PackageInfo.fromPlatform()]).then((values) {
+      final health = values[0] as ServerHealth;
+      final version = values[1] as PackageInfo;
       if (!health.alive)
         ErrorService.handleError(
             WarningException("Der Server meldet Probleme: ${health.status}"),
@@ -236,7 +232,7 @@ class Backend {
 
   Future<HttpClientResponseBody> post(
       String url, String data, Map<String, String> headers,
-      [Map<String, String> parameters]) async {
+      [Map<String, String>? parameters]) async {
     await zertifikatGeladen;
     return await client
         .postUrl(Uri.https('$host:$port', url, parameters))
@@ -324,7 +320,7 @@ class DemoBackend implements Backend {
   @override
   Future<HttpClientResponseBody> post(
           String url, String data, Map<String, String> headers,
-          [Map<String, String> parameters]) =>
+          [Map<String, String>? parameters]) =>
       throw DemoBackendShouldNeverBeUsedError();
 
   @override
@@ -334,17 +330,7 @@ class DemoBackend implements Backend {
   getServerHealth() => throw UnimplementedError();
 
   @override
-  bool compareVersions(String version, String minClient) =>
-      throw UnimplementedError();
-
-  @override
-  PackageInfo get version => throw UnimplementedError();
-
-  @override
   Future<void> get zertifikatGeladen => throw UnimplementedError();
-
-  @override
-  void set version(PackageInfo _version) => throw UnimplementedError();
 }
 
 class DemoBackendShouldNeverBeUsedError {}

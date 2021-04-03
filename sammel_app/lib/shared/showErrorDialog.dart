@@ -11,7 +11,7 @@ Future showErrorDialog(BuildContext context, String title, RestFehler error,
             title: Text(title),
             content: Text(error.message),
             actions: <Widget>[
-              RaisedButton(
+              ElevatedButton(
                 key: Key('error dialog close button'),
                 child: Text('Okay...').tr(),
                 onPressed: () => Navigator.pop(context),

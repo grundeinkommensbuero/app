@@ -1,7 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_map/src/map/flutter_map_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_test_ui/flutter_test_ui.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:latlong/latlong.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +14,7 @@ import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/AuthFehler.dart';
+import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
@@ -21,27 +24,35 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
-import 'package:sammel_app/services/ChatMessageService.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../model/Termin_test.dart';
-import '../shared/Mocks.dart';
 import '../shared/TestdatenVorrat.dart';
+import '../shared/mocks.costumized.dart';
+import '../shared/mocks.mocks.dart';
+import '../shared/mocks.trainer.dart';
 
-final _stammdatenService = StammdatenServiceMock();
-final _termineService = TermineServiceMock();
-final _listLocationService = ListLocationServiceMock();
-final _storageService = StorageServiceMock();
-final _pushService = PushSendServiceMock();
-final _userService = ConfiguredUserServiceMock();
-final _chatMessageService = ChatMessageServiceMock();
-final _pushManager = PushNotificationManagerMock();
+final _stammdatenService = MockStammdatenService();
+final _termineService = MockTermineService();
+final _listLocationService = MockListLocationService();
+final _storageService = MockStorageService();
+final _pushService = MockPushSendService();
+final _userService = MockUserService();
+final _chatMessageService = MockChatMessageService();
+final _pushManager = MockPushNotificationManager();
 
 void main() {
-  mockTranslation();
+  trainTranslation(MockTranslations());
+  trainUserService(_userService);
+  trainStammdatenService(_stammdatenService);
+  trainStorageService(_storageService);
+  trainChatMessageService(_chatMessageService);
+  initializeDateFormatting('de');
 
-  MultiProvider termineSeiteWidget;
+  late MultiProvider termineSeiteWidget;
 
   setUp(() {
+    HttpOverrides.global = MapHttpOverrides();
     when(_storageService.loadFilter()).thenAnswer((_) async => null);
     when(_storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
     when(_storageService.loadMyKiez()).thenAnswer((_) async => []);
@@ -50,6 +61,7 @@ void main() {
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
     when(_termineService.loadActions(any)).thenAnswer((_) async => []);
+    when(_termineService.deleteAction(any, any)).thenReturn(null);
     when(_pushManager.pushToken).thenAnswer((_) => Future.value('Token'));
     ErrorService.displayedTypes = [];
 
@@ -77,7 +89,7 @@ void main() {
       var yesterday = today.subtract(Duration(days: 1));
       var me = karl();
 
-      var userService = UserServiceMock();
+      var userService = MockUserService();
       when(userService.user).thenAnswer((_) => Stream.value(me));
 
       when(_termineService.loadActions(any)).thenAnswer((_) async => [
@@ -133,9 +145,14 @@ void main() {
       await tester.pump();
 
       // no buttons at first action
-      expect(find.byKey(Key('action delete button')), findsNothing);
-      expect(find.byKey(Key('action edit button')), findsNothing);
+      await tester.tap(find.byKey(Key('action details menu button')));
+      await tester.pump();
 
+      expect(find.byKey(Key('action details delete menu item')), findsNothing);
+      expect(find.byKey(Key('action details edit menu item')), findsNothing);
+
+      await tester.tap(find.byKey(Key('action details menu button')));
+      await tester.pump();
       await tester.tap(find.byKey(Key('action details close button')));
       await tester.pump();
 
@@ -143,9 +160,15 @@ void main() {
       await tester.tap(find.byKey(Key('action card')).at(1));
       await tester.pump();
 
-      expect(find.byKey(Key('action delete button')), findsOneWidget);
-      expect(find.byKey(Key('action edit button')), findsOneWidget);
+      await tester.tap(find.byKey(Key('action details menu button')));
+      await tester.pump();
 
+      expect(
+          find.byKey(Key('action details delete menu item')), findsOneWidget);
+      expect(find.byKey(Key('action details edit menu item')), findsOneWidget);
+
+      await tester.tap(find.byKey(Key('action details menu button')));
+      await tester.pump();
       await tester.tap(find.byKey(Key('action details close button')));
       await tester.pump();
 
@@ -153,8 +176,11 @@ void main() {
       await tester.tap(find.byKey(Key('action card')).at(2));
       await tester.pump();
 
-      expect(find.byKey(Key('action delete button')), findsNothing);
-      expect(find.byKey(Key('action edit button')), findsNothing);
+      await tester.tap(find.byKey(Key('action details menu button')));
+      await tester.pump();
+
+      expect(find.byKey(Key('action details delete menu item')), findsNothing);
+      expect(find.byKey(Key('action details edit menu item')), findsNothing);
     });
   });
 
@@ -282,11 +308,11 @@ void main() {
 
     testWidgets('switches to map view and centers at action on tap at map',
         (WidgetTester tester) async {
-      when(_termineService.loadActions(any)).thenAnswer((_) async => [
+      when(_termineService.loadActions(any)).thenAnswer((_) => Future.value([
             TerminTestDaten.einTermin(),
-          ]);
+          ]));
       when(_termineService.getActionWithDetails(any)).thenAnswer(
-          (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
+          (_) => Future.value(TerminTestDaten.einTerminMitTeilisUndDetails()));
 
       await tester.pumpWidget(termineSeiteWidget);
       // Warten bis asynchron Termine geladen wurden
@@ -303,13 +329,12 @@ void main() {
 
       expect(page.navigation, 1);
       expect(find.byKey(Key('action map map')), findsOneWidget);
-      FlutterMapState mapState =
-          tester.state(find.byKey(Key('action map map'))) as FlutterMapState;
       var actionPosition = LatLng(TerminTestDaten.einTermin().latitude,
           TerminTestDaten.einTermin().longitude);
-      expect(mapState.mapState.center, actionPosition);
-      expect(mapState.mapState.zoom, 15);
-    });
+      TermineSeiteState actionPage = tester.state(find.byKey(Key('action page')));
+      expect(actionPage.mapController.zoom, 15);
+      expect(actionPage.mapController.center, actionPosition);
+        });
 
     testWidgets(
         'triggers server call and highlihgts action with tap on join button',
@@ -319,9 +344,12 @@ void main() {
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
           ]);
-      var action = TerminTestDaten.einTerminOhneTeilisMitDetails();
+      var action = TerminTestDaten.einTerminOhneTeilisMitDetails()
+        ..beginn = DateTime.now().add(new Duration(hours: 24))
+        ..ende = DateTime.now().add(new Duration(hours: 26));
       when(_termineService.getActionWithDetails(any))
           .thenAnswer((_) async => action);
+      when(_termineService.joinAction(any)).thenAnswer((_) => null);
 
       await tester.pumpWidget(termineSeiteWidget);
 
@@ -337,10 +365,10 @@ void main() {
       await tester.tap(find.byKey(Key('join action button')));
       await tester.pump();
 
-      verify(_termineService.joinAction(action.id)).called(1);
-      expect(state.termine[0].participants, containsAll([_userService.me]));
+      verify(_termineService.joinAction(action.id!)).called(1);
+      expect(state.termine[0].participants![0].name, equals('Karl Marx'));
       expect(find.byKey(Key('join action button')), findsNothing);
-      expect(find.byKey(Key('leave action button')), findsOneWidget);
+      expect(find.byKey(Key('open chat window')), findsOneWidget);
     });
 
     testWidgets(
@@ -352,9 +380,12 @@ void main() {
             TerminTestDaten.einTermin(),
             TerminTestDaten.einTermin(),
           ]);
-      var action = TerminTestDaten.einTerminMitTeilisUndDetails();
+      var action = TerminTestDaten.einTerminMitTeilisUndDetails()
+        ..beginn = DateTime.now().add(new Duration(hours: 24))
+        ..ende = DateTime.now().add(new Duration(hours: 26));
       when(_termineService.getActionWithDetails(any))
           .thenAnswer((_) async => action);
+      when(_termineService.leaveAction(any)).thenAnswer((_) => null);
 
       await tester.pumpWidget(termineSeiteWidget);
 
@@ -367,12 +398,13 @@ void main() {
       var state = tester.state<TermineSeiteState>(find.byType(TermineSeite));
       expect(state.termine[0].participants, containsAll([me]));
 
-      await tester.tap(find.byKey(Key('leave action button')));
-      await tester.pump();
+      await tester.tap(find.byKey(Key('action details menu button')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(Key('action details menu leave item')));
+      await tester.pumpAndSettle();
 
-      verify(_termineService.leaveAction(action.id)).called(1);
+      verify(_termineService.leaveAction(action.id!)).called(1);
       expect(state.termine[0].participants, isEmpty);
-      expect(find.byKey(Key('leave action button')), findsNothing);
       expect(find.byKey(Key('join action button')), findsOneWidget);
     });
   });
@@ -411,7 +443,9 @@ void main() {
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
           tempVorstadt(),
           [today],
-          TerminDetails('test1', 'test2', 'test3'),
+          'test1',
+          'test2',
+          'test3',
           LatLng(52.49653, 13.43762));
 
       when(_termineService.createAction(any, any)).thenAnswer((_) async =>
@@ -424,7 +458,10 @@ void main() {
               52.52116,
               13.41331,
               [],
-              editorState.action.terminDetails));
+              TerminDetails(
+                  editorState.action.treffpunkt!,
+                  editorState.action.beschreibung!,
+                  editorState.action.kontakt!)));
 
       await tester.tap(find.byKey(Key('action editor finish button')));
       await tester.pumpAndSettle();
@@ -473,7 +510,9 @@ void main() {
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
           tempVorstadt(),
           [today],
-          TerminDetails('test1', 'test2', 'test3'),
+          'test1',
+          'test2',
+          'test3',
           LatLng(52.49653, 13.43762));
 
       when(_termineService.createAction(any, any)).thenAnswer(
@@ -486,7 +525,8 @@ void main() {
             52.52116,
             13.41331,
             [],
-            editorState.action.terminDetails),
+            TerminDetails(editorState.action.treffpunkt!,
+                editorState.action.beschreibung!, editorState.action.kontakt!)),
       );
 
       await tester.tap(find.byKey(Key('action editor finish button')));
@@ -536,7 +576,9 @@ void main() {
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
           tempVorstadt(),
           [today],
-          TerminDetails('test1', 'test2', 'test3'),
+          'test1',
+          'test2',
+          'test3',
           LatLng(52.49653, 13.43762));
 
       when(_termineService.createAction(any, any)).thenAnswer((_) async =>
@@ -549,7 +591,10 @@ void main() {
               52.52116,
               13.41331,
               [],
-              editorState.action.terminDetails));
+              TerminDetails(
+                  editorState.action.treffpunkt!,
+                  editorState.action.beschreibung!,
+                  editorState.action.kontakt!)));
 
       await tester.tap(find.byKey(Key('action editor finish button')));
       await tester.pumpAndSettle();
@@ -598,7 +643,9 @@ void main() {
           TimeOfDay.fromDateTime(today.add(Duration(hours: 2))),
           tempVorstadt(),
           [today],
-          TerminDetails('test1', 'test2', 'test3'),
+          'test1',
+          'test2',
+          'test3',
           LatLng(52.49653, 13.43762));
 
       when(_termineService.createAction(any, any))
@@ -644,11 +691,16 @@ void main() {
     });
 
     testUI('closes after action edit', (WidgetTester tester) async {
+      when(_storageService.loadActionToken(any))
+          .thenAnswer((_) async => '1234');
+
       await tester.tap(find.byKey(Key('action card')).first);
       await tester.pump();
 
-      await tester.tap(find.byKey(Key('action edit button')));
-      await tester.pump();
+      await tester.tap(find.byKey(Key('action details menu button')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(Key('action details edit menu item')));
+      await tester.pumpAndSettle();
 
       expect(find.byKey(Key('action editor')), findsOneWidget);
 
@@ -726,11 +778,10 @@ void main() {
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
 
-      var listView = find.byType(ListView);
+      var list = find.byType(ScrollablePositionedList);
 
-      List<String> keys = tester
-          .widgetList(
-              find.descendant(of: listView, matching: find.byType(Text)))
+      List<String?> keys = tester
+          .widgetList(find.descendant(of: list, matching: find.byType(Text)))
           .map((widget) => (widget as Text).data)
           .where((key) => key == 'Sammeln' || key == 'Jetzt')
           .toList();
@@ -786,11 +837,10 @@ void main() {
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
 
-      var listView = find.byType(ListView);
+      var list = find.byType(ScrollablePositionedList);
 
-      List<String> keys = tester
-          .widgetList(
-              find.descendant(of: listView, matching: find.byType(Text)))
+      List<String?> keys = tester
+          .widgetList(find.descendant(of: list, matching: find.byType(Text)))
           .map((widget) => (widget as Text).data)
           .where((key) => key == 'Sammeln' || key == 'Jetzt')
           .toList();
@@ -835,11 +885,10 @@ void main() {
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
 
-      var listView = find.byType(ListView);
+      var list = find.byType(ScrollablePositionedList);
 
-      List<String> keys = tester
-          .widgetList(
-              find.descendant(of: listView, matching: find.byType(Text)))
+      List<String?> keys = tester
+          .widgetList(find.descendant(of: list, matching: find.byType(Text)))
           .map((widget) => (widget as Text).data)
           .where((key) => key == 'Sammeln' || key == 'Jetzt')
           .toList();
@@ -874,8 +923,10 @@ void main() {
       await tester.tap(find.byKey(Key('action card')).first);
       await tester.pump();
 
-      await tester.tap(find.byKey(Key('action delete button')));
-      await tester.pump();
+      await tester.tap(find.byKey(Key('action details menu button')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(Key('action details delete menu item')));
+      await tester.pumpAndSettle();
 
       expect(find.byKey(Key('deletion confirmation dialog')), findsOneWidget);
     });
@@ -898,11 +949,13 @@ void main() {
       await tester.tap(find.byKey(Key('action card')).first);
       await tester.pump();
 
-      await tester.tap(find.byKey(Key('action delete button')));
-      await tester.pump();
+      await tester.tap(find.byKey(Key('action details menu button')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(Key('action details delete menu item')));
+      await tester.pumpAndSettle();
 
       await tester.tap(find.byKey(Key('delete confirmation no button')));
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       expect(find.byKey(Key('deletion confirmation dialog')), findsNothing);
     });
@@ -930,8 +983,10 @@ void main() {
 
       expect(find.byKey(Key('action details page')), findsOneWidget);
 
-      await tester.tap(find.byKey(Key('action delete button')));
-      await tester.pump();
+      await tester.tap(find.byKey(Key('action details menu button')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(Key('action details delete menu item')));
+      await tester.pumpAndSettle();
 
       expect(find.byKey(Key('deletion confirmation dialog')), findsOneWidget);
 
@@ -975,6 +1030,9 @@ void main() {
       });
 
       testWidgets('deletes action in backend', (WidgetTester tester) async {
+        when(_storageService.loadActionToken(any))
+            .thenAnswer((_) async => '1234');
+
         await tester.pumpWidget(termineSeiteWidget);
 
         // Warten bis asynchron Termine geladen wurden
@@ -983,8 +1041,10 @@ void main() {
         await tester.tap(find.text('Infoveranstaltung'));
         await tester.pump();
 
-        await tester.tap(find.byKey(Key('action delete button')));
-        await tester.pump();
+        await tester.tap(find.byKey(Key('action details menu button')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(Key('action details delete menu item')));
+        await tester.pumpAndSettle();
 
         expect(find.byKey(Key('deletion confirmation dialog')), findsOneWidget);
 
@@ -1004,8 +1064,10 @@ void main() {
         await tester.tap(find.byKey(Key('action card')).at(1));
         await tester.pump();
 
-        await tester.tap(find.byKey(Key('action delete button')));
-        await tester.pump();
+        await tester.tap(find.byKey(Key('action details menu button')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(Key('action details delete menu item')));
+        await tester.pumpAndSettle();
 
         expect(find.byKey(Key('deletion confirmation dialog')), findsOneWidget);
 
@@ -1026,8 +1088,10 @@ void main() {
         await tester.tap(find.byKey(Key('action card')).at(1));
         await tester.pump();
 
-        await tester.tap(find.byKey(Key('action delete button')));
-        await tester.pump();
+        await tester.tap(find.byKey(Key('action details menu button')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(Key('action details delete menu item')));
+        await tester.pumpAndSettle();
 
         expect(find.byKey(Key('deletion confirmation dialog')), findsOneWidget);
 
@@ -1048,13 +1112,15 @@ void main() {
         await tester.tap(find.byKey(Key('action card')).at(1));
         await tester.pump();
 
-        await tester.tap(find.byKey(Key('action delete button')));
-        await tester.pump();
+        await tester.tap(find.byKey(Key('action details menu button')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(Key('action details delete menu item')));
+        await tester.pumpAndSettle();
 
         expect(find.byKey(Key('deletion confirmation dialog')), findsOneWidget);
 
         await tester.tap(find.byKey(Key('delete confirmation yes button')));
-        await tester.pump();
+        await tester.pumpAndSettle();
 
         expect(find.byKey(Key('deletion confirmation dialog')), findsNothing);
         expect(find.byKey(Key('action details page')), findsNothing);
@@ -1071,8 +1137,10 @@ void main() {
         await tester.tap(find.byKey(Key('action card')).at(1));
         await tester.pump();
 
-        await tester.tap(find.byKey(Key('action delete button')));
-        await tester.pump();
+        await tester.tap(find.byKey(Key('action details menu button')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(Key('action details delete menu item')));
+        await tester.pumpAndSettle();
 
         when(_termineService.deleteAction(any, any))
             .thenThrow(RestFehler('message'));
@@ -1081,7 +1149,9 @@ void main() {
         await tester.pumpAndSettle(Duration(seconds: 10));
 
         expect(find.byKey(Key('error dialog')), findsOneWidget);
-        expect(find.text('Aktion konnte nicht gelöscht werden. message \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an app@dwenteignen.de'),
+        expect(
+            find.text(
+                'Aktion konnte nicht gelöscht werden. message \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an app@dwenteignen.de'),
             findsOneWidget);
       });
 
@@ -1096,8 +1166,10 @@ void main() {
         await tester.tap(find.byKey(Key('action card')).at(1));
         await tester.pump();
 
-        await tester.tap(find.byKey(Key('action delete button')));
-        await tester.pump();
+        await tester.tap(find.byKey(Key('action details menu button')));
+        await tester.pumpAndSettle();
+        await tester.tap(find.byKey(Key('action details delete menu item')));
+        await tester.pumpAndSettle();
 
         when(_termineService.deleteAction(any, any))
             .thenThrow(AuthFehler('message'));
@@ -1107,13 +1179,15 @@ void main() {
 
         expect(find.byKey(Key('error dialog')), findsOneWidget);
         expect(
-            find.text('Aktion konnte nicht gelöscht werden. message \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an app@dwenteignen.de'), findsOneWidget);
+            find.text(
+                'Aktion konnte nicht gelöscht werden. message \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an app@dwenteignen.de'),
+            findsOneWidget);
       });
     });
   });
 
   group('action token', () {
-    TermineSeiteState actionPageState;
+    late TermineSeiteState actionPageState;
     setUp(() {
       actionPageState = TermineSeiteState();
       actionPageState.storageService = _storageService;
@@ -1149,7 +1223,7 @@ void main() {
           .thenAnswer((_) async => 'storedToken1');
       when(_storageService.loadActionToken(2))
           .thenAnswer((_) async => 'storedToken2');
-      when(_termineService.saveAction(any, any)).thenAnswer((_) => null);
+      when(_termineService.saveAction(any, any)).thenAnswer((_) async => null);
 
       await actionPageState.saveAction(action1);
       await actionPageState.saveAction(action2);
@@ -1239,7 +1313,7 @@ void main() {
   });
 
   group('createAndAddAction', () {
-    TermineSeiteState state;
+    late TermineSeiteState state;
     setUpUI((tester) async {
       await tester.pumpWidget(termineSeiteWidget);
 

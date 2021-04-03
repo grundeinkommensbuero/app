@@ -13,28 +13,26 @@ import 'package:sammel_app/shared/NoRotation.dart';
 import 'DweTheme.dart';
 
 class KiezPicker {
-  Set<Kiez> selectedKieze = {};
+  Set<Kiez> selectedKieze;
   var mapController = MapController();
   List<Polygon> visiblePolygons = [];
 
-  double KIEZE_THRESHOLD = 12;
-  double REGIONEN_THRESHOLD = 11;
+  double KIEZE_THRESHOLD = 12; // ignore: non_constant_identifier_names
+  double REGIONEN_THRESHOLD = 11; // ignore: non_constant_identifier_names
 
-  static Set<Kiez> kieze;
-  static Set<Region> regionen;
-  static Set<Ortsteil> ortsteile;
+  static Set<Kiez> kieze = {};
+  static Set<Region> regionen = {};
+  static Set<Ortsteil> ortsteile = {};
 
-  StammdatenService stammdatenService;
+  StammdatenService? stammdatenService;
 
-  KiezPicker(this.selectedKieze) {
-    if (this.selectedKieze == null) this.selectedKieze = {};
-  }
+  KiezPicker(this.selectedKieze);
 
-  Future<Set<Kiez>> showKiezPicker(context) async {
-    stammdatenService = Provider.of<StammdatenService>(context);
-    regionen = await stammdatenService.regionen;
-    kieze = await stammdatenService.kieze;
-    ortsteile = await stammdatenService.ortsteile;
+  Future<Set<Kiez>?> showKiezPicker(context) async {
+    stammdatenService = Provider.of<StammdatenService>(context, listen: false);
+    regionen = await stammdatenService!.regionen;
+    kieze = await stammdatenService!.kieze;
+    ortsteile = await stammdatenService!.ortsteile;
     visiblePolygons = generateOrtsteileOutlines(ortsteile).toList();
 
     return await showDialog(
@@ -84,7 +82,7 @@ class KiezPicker {
                             layers: layers,
                             mapController: mapController,
                           )),
-                          RaisedButton(
+                          ElevatedButton(
                               child: Text('Auswahl übernehmen').tr(),
                               onPressed: () =>
                                   Navigator.pop(context, selectedKieze))
@@ -102,7 +100,7 @@ class KiezPicker {
       this.visiblePolygons = generateOrtsteileOutlines(ortsteile).toList();
 
     selectedKieze.forEach((selected) =>
-        this.visiblePolygons.add(generateKiezeAreas(kieze)[selected]));
+        this.visiblePolygons.add(generateKiezeAreas(kieze)[selected]!));
   }
 
   markKiez(LatLng position) {

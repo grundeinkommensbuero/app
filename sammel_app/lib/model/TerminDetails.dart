@@ -1,5 +1,5 @@
 class TerminDetails {
-  int id;
+  int? id;
   String treffpunkt;
   String beschreibung;
   String kontakt;

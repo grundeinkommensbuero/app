@@ -20,21 +20,25 @@ class ActionMap extends StatefulWidget {
   final Function(Termin) isPastAction;
   final Function(Termin) iAmParticipant;
   final Function(Termin) openActionDetails;
-  final MapController mapController;
+  late final MapController mapController;
 
   // no better way yet: https://github.com/dart-lang/sdk/issues/4596
   static falseFunction(Termin _) => false;
 
+  static emptyFunction(_) {}
+
   ActionMap({
-    Key key,
+    Key? key,
     this.termine = const [],
     this.listLocations = const [],
     this.isMyAction = falseFunction,
-    this.isPastAction,
-    this.openActionDetails,
-    this.mapController,
-    this.iAmParticipant,
-  }) : super(key: key);
+    this.isPastAction = emptyFunction,
+    this.openActionDetails = emptyFunction,
+    this.iAmParticipant = emptyFunction,
+    mapController,
+  }) : super(key: key) {
+    this.mapController = mapController ?? MapController();
+  }
 
   @override
   ActionMapState createState() => ActionMapState();
@@ -54,7 +58,7 @@ class ActionMapState extends State<ActionMap> {
   @override
   Widget build(BuildContext context) {
     var actionMarkers = generateActionMarkers();
-    var plugins = List<MapPlugin>();
+    List<MapPlugin> plugins = [];
     plugins.add(AttributionPlugin());
     plugins.add(MarkerClusterPlugin());
 
@@ -107,7 +111,7 @@ class ActionMapState extends State<ActionMap> {
               (_) => setState(() =>
                   this.listLocationMarkers = generateListLocationMarkers()))),
       layers: layers,
-      mapController: widget.mapController ?? MapController(),
+      mapController: widget.mapController,
     );
   }
 
@@ -124,8 +128,7 @@ class ActionMapState extends State<ActionMap> {
   }
 
   List<Marker> generateListLocationMarkers() {
-    if (widget.mapController == null || widget.mapController.zoom < 13)
-      return [];
+    if (widget.mapController.zoom < 13) return [];
     return widget.listLocations
         .map((listlocation) => ListLocationMarker(listlocation))
         .toList();
@@ -140,9 +143,14 @@ class ActionMapState extends State<ActionMap> {
 class ActionMarker extends Marker {
   bool ownAction = false;
   Function(Termin) onTap;
-  bool participant;
+  bool participant = false;
 
-  ActionMarker(Termin action, {this.ownAction, this.onTap, this.participant})
+  static emptyFunction(_) {}
+
+  ActionMarker(Termin action,
+      {this.ownAction = false,
+      this.onTap = emptyFunction,
+      this.participant = false})
       : super(
           width: 30.0,
           height: 30.0,
@@ -151,14 +159,20 @@ class ActionMarker extends Marker {
               decoration: BoxDecoration(boxShadow: [
                 BoxShadow(offset: Offset(-2.0, 2.0), blurRadius: 4.0)
               ], shape: BoxShape.circle),
-              child: FlatButton(
+              child: TextButton(
                   key: Key('action marker'),
-                  onPressed: onTap != null ? () => onTap(action) : null,
-                  color:
-                      DweTheme.actionColor(action.ende, ownAction, participant),
-                  shape: CircleBorder(
-                      side: BorderSide(color: DweTheme.purple, width: 1.0)),
-                  padding: EdgeInsets.all(0),
+                  onPressed: () => onTap(action),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        DweTheme.actionColor(
+                            action.ende, ownAction, participant)),
+                    shape: MaterialStateProperty.all<OutlinedBorder>(
+                        CircleBorder(
+                            side: BorderSide(
+                                color: DweTheme.purple, width: 1.0))),
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                        EdgeInsets.all(0)),
+                  ),
                   child: Image.asset(action.getAsset(centered: true),
                       alignment: Alignment.center))),
         );
@@ -169,11 +183,15 @@ class ListLocationMarker extends Marker {
       : super(
           anchorPos: AnchorPos.align(AnchorAlign.top),
           point: LatLng(listLocation.latitude, listLocation.longitude),
-          builder: (context) => FlatButton(
+          builder: (context) => TextButton(
               key: Key('list location marker'),
-              color: Colors.transparent,
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.transparent),
+                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                    EdgeInsets.all(0)),
+              ),
               onPressed: () => showListLocationDialog(context, listLocation),
-              padding: EdgeInsets.all(0),
               child: Icon(
                 Icons.edit_location,
                 color: DweTheme.purple,
@@ -188,7 +206,7 @@ class ListLocationMarker extends Marker {
           builder: (context) => SimpleDialog(
                   title: Text(
                       listLocation.name ??
-                          '${listLocation.street} ${listLocation.number}',
+                          '${listLocation.street ?? ''} ${listLocation.number ?? ''}',
                       textAlign: TextAlign.center,
                       style: TextStyle(color: DweTheme.purple)),
                   key: Key('list location info dialog'),

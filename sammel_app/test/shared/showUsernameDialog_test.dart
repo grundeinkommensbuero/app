@@ -6,14 +6,15 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/showUsernameDialog.dart';
 
-import 'Mocks.dart';
+import 'mocks.trainer.dart';
 import 'TestdatenVorrat.dart';
+import '../shared/mocks.mocks.dart';
 
 void main() {
-  mockTranslation();
+  trainTranslation(MockTranslations());
 
-  String result;
-  var _userService = UserServiceMock();
+  String? result;
+  var _userService = MockUserService();
   var hideHint = false;
 
   setUpUI((tester) async {
@@ -29,7 +30,7 @@ void main() {
           child: Builder(
             builder: (BuildContext context) {
               return Center(
-                  child: RaisedButton(
+                  child: ElevatedButton(
                       child: const Text('X'),
                       onPressed: () async => result = await showUsernameDialog(
                           context: context, hideHint: hideHint)));

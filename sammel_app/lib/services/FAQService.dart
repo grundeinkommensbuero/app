@@ -6,7 +6,7 @@ import 'package:sammel_app/model/FAQItem.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 String bullet = "\u2022";
-String text_argumente =
+String textArgumente =
     '''1. weil Deutsche Wohnen und Co die Mieten immer weiter hochtreiben und hohe Mieten ihr Geschäftsziel sind. \n'''
     '''2. weil Deutsche Wohnen und Co mit den Mietsteigerungen auch die lokale Mietspiegel nach oben beeinflussen und andere Vermieter*innen Mietererhöhungen damit rechtfertigen. \n'''
     '''3. weil einige dieser Konzerne Milliardären gehören (Akelius, Covivio, Heimstaden, Pears Global, Grand City Properties), die sich auf Kosten der Berliner Bevölkerung weiter bereichern. \n'''
@@ -18,26 +18,26 @@ String text_argumente =
     '''9. weil Wohnen ein Grundbedürfnis ist und jeder Mensch das Recht haben sollte, keine Angst um die eigene Wohnung zu haben. \n'''
     '''10. weil die Konzerne mit sogenannten "Share Deals" beim Immobilienkauf die Grunderwerbssteuer umgehen und das Berlin jährlich Millionen Euro kostet''';
 
-String text_argumente_short =
+String textArgumenteShort =
     '''1. weil Deutsche Wohnen und Co die Mieten immer weiter hochtreiben und hohe Mieten ihr Geschäftsziel sind. \n'''
     '''2. weil Deutsche Wohnen und Co mit den Mietsteigerungen auch die lokale Mietspiegel nach oben beeinflussen und andere Vermieter*innen Mietererhöhungen damit rechtfertigen. \n'''
     '''...''';
 
-String text_warum_erst_ab_3000 =
+String textWarumErstAb3000 =
     '''Ab ungefähr dieser Schwelle erreichen die Unternehmen eine relevante Stellung auf dem Wohnungsmarkt in Berlin, bei dem die Vergesellschaftung nach Art. 15 GG greifen kann. Ausserdem sind ab dieser Schwelle die Konzerne erfasst, die als Finanzunternehmen agieren, also mit dem Zweck der Vermarktung von Wohnraum auf dem internationalen Finanzmarkt. Kapital aus der ganzen Welt wird in den Berliner Immobilienmarkt, und vor allem in diese Unternehmen investiert, mit der Erwartung von hohen Renditen. Das heißt konkret, sie kaufen Aktien dieser Unternehmen, z.B. Vonovia. Macht Vonovia Gewinn, schütten sie einen Teil davon in Form von Dividenden an die Aktionär*innen aus. So fließt Geld von den Mieter*innen über Vonovia auch an reiche Aktionär*innen. Diese Form der Geldanlage ist besonders attraktiv für große ausländische Fonds.''';
-String text_warum_erst_ab_3000_short =
+String textWarumErstAb3000Short =
     '''Ab ungefähr dieser Schwelle erreichen die Unternehmen eine relevante Stellung auf dem Wohnungsmarkt in Berlin, bei dem die Vergesellschaftung nach Art. 15 GG greifen kann. Ausserdem sind ab dieser Schwelle die Konzerne erfasst, die als Finanzunternehmen agieren...''';
 
-String text_was_kostet_die_vergesellschaftung =
+String textWasKostetSieVergesellschaftung =
     '''Wir schlagen das „Faire-Mieten-Modell“ vor, nach der die Entschädigungshöhe bei acht Milliarden Euro liegt. Klingt viel, ist aber sehr wenig im Vergleich zu den Gewinnen der Konzerne. Allein die Deutsche Wohnen machte 2019 einen Gewinn von 1,6 Milliarden Euro - zumeist auf Kosten der Berliner Mieter*innen.
 Unser Modell geht vom Interesse der Allgemeinheit nach bezahlbaren Wohnraum aus und kalkuliert eine Miethöhe, die sich auch Menschen an der Armutsgrenze leisten können, konkret 3,70€ pro Quadratmeter nettokalt.
 Für die Entschädigungssumme wird ein Kredit aufgenommen, der auf 43,5 Jahre gestreckt von den laufenden Mieteinnahmen refinanziert wird. Der Tilgungszeitraum 43,5 Jahre wird vom Berliner Senat in seiner Kostenschätzung vorgeschlagen.
 In diesem Zeitraum bleibt die AöR handlungsfähig. Die Mieten sind kostendeckend und es können neue Projekte durchgeführt werden, bspw. Renovierungen und der Neubau von Wohnungen.''';
-String text_was_kostet_die_vergesellschaftung_short =
+String textWasKostetDieVergesellschaftungShort =
     '''Wir schlagen das „Faire-Mieten-Modell“ vor, nach der die Entschädigungshöhe bei acht Milliarden Euro liegt. Klingt viel, ist aber sehr wenig im Vergleich zu den Gewinnen der Konzerne. Allein die Deutsche Wohnen machte 2019 einen Gewinn von 1,6 Milliarden Euro - zumeist auf Kosten der Berliner Mieter*innen.
 Unser Modell geht vom Interesse der Allgemeinheit nach bezahlbaren Wohnraum aus und kalkuliert eine Miethöhe...''';
 
-String sammel_tipps_1 =
+String sammelTipps1 =
     '''Ein kurzer und inhaltlich einfacher Satz hat sich oft bewährt.
 
 Ein paar Beispiele:
@@ -50,91 +50,91 @@ Nach kurzer Bedenkzeit der Person kann eine weitere erläuternder Satz nachgesch
 „Wir sind von der Initiative gegen die Deutsche Wohnen und anderer Immobilienunternehmen“ 
 „Wir sind von der Initiative Deutsche Wohnen und Co enteignen.“''';
 
-String sammel_tipps_1_short =
+String sammelTipps1Short =
     '''Ein kurzer und inhaltlich einfacher Satz hat sich oft bewährt.
 
 Ein paar Beispiele...''';
 
-String sammel_tipps_3 =
+String sammelTipps3 =
     '''Einem großen Teil der Bevölkerung sind Begriffe wie „Spekulation“ und „Vergesellschaftung“ nicht ganz klar. Hilfreich sind daher einfachere Formulierungen: "Zurzeit werden einige wenige Unternehmer*innen mit den Mieten superreich, während die meisten Mieter*innen darunter leiden. Wir möchten, dass Wohnungen demokratisch verwaltet werden und zu gerechten Miete verfügbar sind."''';
-String sammel_tipps_3_short =
+String sammelTipps3Short =
     '''Einem großen Teil der Bevölkerung sind Begriffe wie „Spekulation“ und „Vergesellschaftung“ nicht ganz klar...''';
 
-String argumentation_tipps_1 =
+String argumentationTipps1 =
     '''Ja. Wir berufen uns auf Art. 15 des Grundgesetzes, der Vergesellschaftungen grundsätzlich ermöglicht. Es wurden bereits mehrere Gutachten erstellt, drei im Auftrag des Berliner Senats und eins vom wissenschaftlichen Dienst des Bundestages. Alle sagen: Vergesellschaftung ist möglich! Sie unterscheiden sie lediglich bei Fragen zur Entschädigung und Ausführung. 
 Es ist zu erwarten, dass sich die Deutsche Wohnen und Co vor Gericht gegen ihre eigene Vergesellschaftung wehren möchten. Das sollte uns jedoch nicht davon abhalten, weiter politisch dafür zu kämpfen.''';
 
-String argumentation_tipps_1_short =
+String argumentationTipps1Short =
     '''Ja. Wir berufen uns auf Art. 15 des Grundgesetzes, der Vergesellschaftungen grundsätzlich ermöglicht...''';
 
-String beschluss_text =
+String beschlussText =
     '''In seltenen Fällen kann es passieren, dass ihr beim Sammeln auf das Vorzeigen des vollstädnigen Beschlusstext  der Landeswahlleitung angesprochen werdet. Gedruckte Exemplare gibt es im Kampagnenbüro (Graefestr. 14, 10967 Berlin), alternativ könnt ihr ihn auch unter diesem ''';
 
-String text_counter_argument_1 =
+String textCounterArgument1 =
     '''Es werden keine günstigen Mieten garantiert, solange Wohnraum als Kapitalanlage genutzt wird. Beim aktuellen Wohnungsmarkt ist das Ziel nicht günstige Wohnraumversorgung für alle, sondern hoher Profit & Rendite der wenigen Aktionär*innen und Unternehmenseigentümer*innen.
 Die Immobilienunternehmen nutzen die Wohnungsbestände als Kapitalanlage. Je höher also die Miete, desto höher deren Wert und damit der Wert des jeweiligen Unternehmens. Höhere Mieten sind also ihr Geschäftsziel!
 Der Wohnungsneubau von privaten Immobilienunternehmen ist zumeist teuer oder in Form von Eigentumswohnungen, die sich ein Großteil der Bevölkerung nicht leisten kann. Durch die Vergesellschaftung bleiben die Mieten hingegen stabil in gemeinwirtschaftlicher und öffentlicher Hand.''';
-String text_counter_argument_1_short =
+String textCounterArgument1Short =
     '''Es werden keine günstigen Mieten garantiert, solange Wohnraum als Kapitalanlage genutzt wird. Beim aktuellen Wohnungsmarkt ist das Ziel nicht günstige Wohnraumversorgung für alle, sondern hoher Profit & Rendite der wenigen Aktionär*innen und Unternehmenseigentümer*innen.
 Die Immobilienunternehmen...''';
 
-String text_counter_argument_2 =
+String textCounterArgument2 =
     '''Die Vergesellschaftung soll die Stadt Berlin langfristig nichts kosten. Die Kredite trägt die neue Anstalt des öffentlichen Rechts, nicht der Berliner Haushalt. Sie Kredite werden auf 43,5 Jahre gestreckt und von den laufenden Mieteinnahmen getilgt. Die öffentliche Hand verliert nicht Geld, sondern das öffentliche Vermögen wird durch die vergesellschafteten Immobilien langfristig erhöht. 
 DW & Co hingegen nutzen Steuerschlupflöcher, verursachen so Verluste von hunderten Millionen Euro, aber der Staat zahlt einen Teil der Mieten durch Sozialleistungen mit. Wir können uns also die Konzerne nicht leisten.''';
-String text_counter_argument_2_short =
+String textCounterArgument2Short =
     "Die Vergesellschaftung soll die Stadt Berlin langfristig nichts kosten. Die Kredite trägt die neue Anstalt des öffentlichen Rechts, nicht der Berliner Haushalt. Sie Kredite werden auf 43,5 Jahre gestreckt und von den laufenden Mieteinnahmen getilgt...";
 
-String text_counter_argument_3 =
+String textCounterArgument3 =
     '''Enteignungen sind gängige Praxis in Deutschland mit dem Grundgesetz-Artikel 14. Es gibt hunderte Verfahren jedes Jahr. Aber bisher sind nur Familien, Landwirte und sonstige Einzelpersonen betroffen, beispielsweise beim Straßenbau oder für Kohletagebaue. Wir drehen den Spieß um, indem wir die Vergesellschaftung großer profitorientierter Immobilienkonzerne fordern.
 Artikel 15 GG sieht die Vergesellschaftung im Sinne des Gemeinwohls explizit vor. Unser Ziel ist eine Demokratisierung des Wohnungssektors. Wir wollen eine demokratische und dezentrale Verwaltung der Wohnungen in der Anstalt öffentlichen Rechts. Die Mieter*innen sollen durch die Wahl eines Gesamtmieter*innenrat mitentscheiden können.''';
-String text_counter_argument_3_short =
+String textCounterArgument3Short =
     '''Enteignungen sind gängige Praxis in Deutschland mit dem Grundgesetz-Artikel 14. Es gibt hunderte Verfahren jedes Jahr. Aber bisher sind nur Familien, Landwirte und sonstige Einzelpersonen betroffen, beispielsweise beim Straßenbau oder für Kohletagebaue. Wir drehen den Spieß um, indem wir die Vergesellschaftung großer ...''';
 
-String text_counter_argument_4 =
+String textCounterArgument4 =
     '''DW & Co Unternehmen bauen selbst fast keine neuen Wohnungen, sondern kaufen Wohnungen zumeist auf.
 Eine Studie von 2019 zeigt, dass private Konzerne nur einen Bruchteil ihrer Ausgaben (ca. 1-5 %) in Neubau investieren, die Gewobag hingegen (als Beispiel eines landeseigenen Wohnungsunternehmens) 27 %. Einige der privaten Konzerne bauen schlicht gar keine neuen Wohnungen. Genossenschaften und landeseigene Wohnungsunternehmen bauen hingegen mehr und günstigere Wohnungen.
 Langfristig sichern wir mit der Enteignung und Vergesellschaftung günstigen Wohnungsneubau ab. Mit der Anstalt öffentlichen Rechts entsteht ein großer gemeinwohlorientierter Akteur, der Neubau ankurbeln und sozial gestalten kann.''';
-String text_counter_argument_4_short =
+String textCounterArgument4Short =
     '''DW & Co Unternehmen bauen selbst fast keine neuen Wohnungen, sondern kaufen Wohnungen zumeist auf.
  Eine Studie von 2019 zeigt, dass private Konzerne nur einen Bruchteil ihrer Ausgaben (ca. 1-5 %) in Neubau investieren, die Gewobag...''';
 
-String text_climate =
+String textClimate =
     '''Konzerne wie die Deutsche Wohnen nutzen die energetische Modernisierung bisher als Hebel, um die Mieten zu steigern. Diese Mietererhöhungen gelten auch dann weiter, wenn die Dämmung abbezahlt ist. Die gesparten Heizkosten sind oft gering, die verwendeten Materialien oft ökologisch fragwürdig.
 In der Anstalt öffentlichen Rechts könnte diese Praxis sinnvoll angepasst werden: Dämmung nur dort, wo es Heizkosten spart und mit ökologisch verträglichen Materialien, finanziert aus allgemeinen Überschüssen und nicht durch enorme Mieterhöhungen.
 Zusätzlich könnte demokratisch entschieden werden Photovoltaikanlagen auf den Dächern zu installieren, deren Solarstrom zu Vorzugspreisen direkt an die Mieter*innen geliefert wird. So treiben inzwischen auch einige landeseigene Unternehmen die Energiewende voran, ohne den Landeshaushalt zu belasten.
 Die Gemeinwirtschaft im Wohnungsbereich könnte so erheblich zu einer sozial-ökologischen Transformation beitragen.''';
-String text_climate_short =
+String textClimateShort =
     '''Konzerne wie die Deutsche Wohnen nutzen die energetische Modernisierung bisher als Hebel, um die Mieten zu steigern. Diese Mietererhöhungen gelten auch dann weiter, wenn die Dämmung abbezahlt ist. Die gesparten Heizkosten sind oft...''';
 
-String text_senate_numbers =
+String textSenateNumbers =
     '''Die erste Zahl entspricht dem (spekulativ überhöhten) Marktwert der Wohnungsbestände. Das entspräche einem reinen Rückkauf zum Marktpreis. Der Marktpreis enthält die Wette, dass die Mieten in Berlin steigen werden und der hohe Kaufpreis der Wohnungen sich so im Laufe der Zeit für einen neuen Eigentümer lohnt.
 Bei der zweiten Zahl sind zumindest die leistungslosen Wertsteigerungen des Bodens abgezogen.
 Sinn und Zweck der Vergesellschaftung ist jedoch deutlich unter dem Marktwert zu entschädigen.
 Andere Methoden zur Ermittlung der Entschädigungshöhe kommen auf 11 oder 18 Milliarden Euro. Aber selbst bei 18 Mrd. könnten wir eine Durchschnittsmiete von rund 5,50€ nettokalt garantieren.''';
-String text_senate_numbers_short =
+String textSenateNumbersShort =
     'Die erste Zahl entspricht dem (spekulativ überhöhten) Marktwert der Wohnungsbestände. Das entspräche einem reinen Rückkauf zum Marktpreis. Der Marktpreis enthält die Wette, dass die Mieten in Berlin steigen...';
 
-String text_vergesellschaftung_finanziell =
+String textVergesellschaftungFinanziell =
     '''Bisher fließen auch Transferleistungen (Wohngeld, Kosten für Unterkunft bei Arbeitslosengeld, Sozialhilfe) auf das Konto von Immobilienunternehmen und damit an deren wohlhabende Aktionär*innen und die Finanzmärkte.
 Durch die Vergesellschaftung würden die öffentlichen Kassen diese Kosten zum Teil einsparen. Außerdem würde das Geld an die AöR gehen und somit einer gemeinwohlorientierten Wirtschaftsform in Berlin erhalten bleiben.
 Wegen der geringeren Mieten wird der regionale Wirtschaftskreislauf gestärkt. Denn statt für überhöhte Mieten geben die Menschen das Geld in anderen Bereichen aus, bspw. in der Gastronomie, für neue Anschaffungen oder Freizeitaktivitäten.''';
-String text_vergesellschaftung_finanziell_short =
+String textVergesellschaftungFinanziellShort =
     '''Bisher fließen auch Transferleistungen (Wohngeld, Kosten für Unterkunft bei Arbeitslosengeld, Sozialhilfe) auf das Konto von Immobilienunternehmen und damit an deren wohlhabende Aktionär*innen und die Finanzmärkte.
 Durch die Vergesellschaftung würden...''';
 
-String text_warum_aoer_keine_wbg =
+String textWarumAoerKeineWbg =
     '''Die Geschäftsführungen der sechs landeseigenen Wohnungsbaugesellschaften sind nicht gewählt, sondern vom Berliner Senat eingesetzt. Ihre Rechtsformen sind GmbH und Aktiengesellschaft und bedeuten ebenso Geschäftsgeheimnis und Intransparenz. Die Geschäftsvorstände beziehen Jahresgehälter in Höhe von rund 300.000€. Die Verwaltungsentscheidungen werden nicht demokratisch getroffen.
 Deshalb bevorzugen wir die Anstalt öffentlichen Rechts als Rechtsform. Sie kann eine direkte und demokratische Kontrolle der Wohnungsbestände sicherstellen. Im Verwaltungsrat der AöR sollen Mieter*innen und Beschäftigte eine wesentlich größere Entscheidungsbefugnis innehaben als die Senatsvertreter*innen.
 Zudem ist bei einer AöR die Festlegung eines Privatisierungsverbotes möglich.''';
-String text_warum_aoer_keine_wbg_short =
+String textWarumAoerKeineWbgShort =
     '''Die Geschäftsführungen der sechs landeseigenen Wohnungsbaugesellschaften sind nicht gewählt, sondern vom Berliner Senat eingesetzt. Ihre Rechtsformen sind GmbH und Aktiengesellschaft und bedeuten ebenso Geschäftsgeheimnis und Intransparenz. Die Geschäftsvorstände beziehen Jahresgehälter in Höhe von rund 300.000€...''';
 
-String text_warum_aoer =
+String textWarumAoer =
     '''Die Anstalt öffentlichen Rechts (AöR) ist eine eigenständige juristische Person für einen öffentlichen Zweck. Beispiele für Anstalten öffentlichen Rechts sind ZDF & ARD, die Berliner Bäderbetriebe oder öffentliche Krankenhäuser.
 Als eigenständige Rechtspersönlichkeit soll die AöR ihre Aufgabe (günstige Wohnraumversorgung) unabhängig erfüllen. Eine erneute Privatisierung der Wohnungsbestände soll per Satzung ausgeschlossen werden.
 Die Anstalt öffentlichen Rechts ermöglicht eine demokratische Mitbestimmung – wir streben einen Gesamtmieter*innenrat an, über den die Mieter*innen an Entscheidungen beteiligt werden. Das ist bei landeseigenen Wohnungsunternehmen nicht möglich. Die Angestellten der bisherigen Unternehmen behalten ihre Jobs, werden in die Anstalt öffentlichen Rechts übernommen und in die demokratischen Entscheidungsprozesse mit einbezogen.''';
 
-String text_warum_aoer_short =
+String textWarumAoerShort =
     '''Die Anstalt öffentlichen Rechts (AöR) ist eine eigenständige juristische Person für einen öffentlichen Zweck. Beispiele für Anstalten öffentlichen Rechts sind ZDF & ARD, die Berliner Bäderbetriebe oder öffentliche Krankenhäuser.
 Als eigenständige Rechtspersönlichkeit soll die AöR...''';
 
@@ -200,13 +200,13 @@ class FAQService {
     FAQItem.short(
         7,
         'Wie kann ich mich in einem Kiezteam oder in der Initiative einbringen?',
-        create_text_element_with_link('Mehr Infos übers Mitmachen und Kontakte zu den Kiezteams findest du unter: ', 'dwenteignen.de/mitmachen', 'https://www.dwenteignen.de/mitmachen'),
+        createTextElementWithLink('Mehr Infos übers Mitmachen und Kontakte zu den Kiezteams findest du unter: ', 'dwenteignen.de/mitmachen', 'https://www.dwenteignen.de/mitmachen'),
         'Mehr Infos übers Mitmachen und Kontakte zu den Kiezteams findest du unter: ',
         ['Mitmachen', 'Partizipation', 'Kiezteam']),
     FAQItem.short(
         8,
         'Wo gibt es Sammelmaterial?',
-        create_text_element_with_link2(
+        createTextElementWithLink2(
             'Material kannst du im Kampagnenbüro in der Graefestr. 14 und bei einigen solidarischen Orten abholen. Unterschriftenlisten als .pdf zum selber ausdrucken findest du auf ',
             'dwenteignen.de',
             'https://www.dwenteignen.de',
@@ -216,7 +216,7 @@ class FAQService {
     FAQItem.short(
         9,
         'Gibt es eine Übersicht der solidarischen Orte?',
-        create_text_element_with_link(
+        createTextElementWithLink(
             'Ja unter: ',
             'https://sammeln.dwenteignen.de/pages/karte',
             'https://sammeln.dwenteignen.de/pages/karte'),
@@ -275,7 +275,16 @@ class FAQService {
             'Unterschrieben werden kann in jedem Berliner Bezirksamt, in einigen solidarischen Orten und bei unseren Sammler*innen auf der Straße.\n'
             'Auslegungstage und Öffnungszeiten der Bürgerämter:\n\n'),
         'Unterschrieben werden kann in jedem Berliner Bezirksamt, in einigen solidarischen Orten und bei unseren Sammler*innen auf der Straße.',
-        ['wo', 'Unterschriften', 'unterschreiben', 'Listen', 'Orte', 'Bürgeramt', 'Bürgerämter', 'Öffnungszeiten']),
+        [
+          'wo',
+          'Unterschriften',
+          'unterschreiben',
+          'Listen',
+          'Orte',
+          'Bürgeramt',
+          'Bürgerämter',
+          'Öffnungszeiten'
+        ]),
     FAQItem.text(
         11,
         'Kann ich auch digital unterschreiben?',
@@ -306,7 +315,7 @@ class FAQService {
     FAQItem.short(
         15,
         'Wie funktioniert Sammeln in Pandemiezeiten?',
-        create_text_element_with_link(
+        createTextElementWithLink(
             'Die Gesundheit aller Sammler*innen und Unterschreibenden ist uns sehr wichtig. Im Kampagnenbüro gibt es dafür kostenlose FFP2-Masken und Desinfektionsmittel. Unser Hygienekonzept findest du auf ',
             'dwenteignen.de',
             'https://www.dwenteignen.de'),
@@ -319,26 +328,26 @@ class FAQService {
           Text(
               'Wenn du dich noch stärker in die Kampagne und Organisation einbringen willst, '
               'besuch doch eins unserer Kiezteams! Du erreichst sie per Mail:\n\n'),
-          create_mail_element('kiezteam_wilmersdorf@dwenteignen.de'),
-          create_mail_element('kiezteam_zehlendorfsteglitz@dwenteignen.de'),
-          create_mail_element('kiezteam_kreuzberg@dwenteignen.de'),
-          create_mail_element('kiezteam_suedneukoelln@dwenteignen.de'),
-          create_mail_element('kiezteam_suedneukoelln@dwenteignen.de'),
-          create_mail_element('kiezteam_suedneukoelln@dwenteignen.de'),
-          create_mail_element('kiezteam_wedding@dwenteignen.de'),
-          create_mail_element('kiezteam_lichtenberg@dwenteignen.de'),
-          create_mail_element('kiezteam_neukoelln@dwenteignen.de'),
-          create_mail_element('kiezteam_friedrichshain@dwenteignen.de'),
-          create_mail_element('kiezteam_tempelhofschoeneberg@dwenteignen.de'),
-          create_mail_element('kiezteam_charlottenburg@dwenteignen.de'),
-          create_mail_element('kiezteam_moabit@dwenteignen.de'),
-          create_mail_element('kiezteam_prenzlauerberg@dwenteignen.de'),
-          create_mail_element('kiezteam_treptow@dwenteignen.de'),
-          create_mail_element('kiezteam_spandau@dwenteignen.de'),
-          create_mail_element('kiezteam_pankow@dwenteignen.de'),
-          create_mail_element('kiezteam_mitte@dwenteignen.de'),
-          create_mail_element('kiezteam_marzahn@dwenteignen.de'),
-          create_mail_element('hochschulen@dwenteignen.de',
+          createMailElement('kiezteam_wilmersdorf@dwenteignen.de'),
+          createMailElement('kiezteam_zehlendorfsteglitz@dwenteignen.de'),
+          createMailElement('kiezteam_kreuzberg@dwenteignen.de'),
+          createMailElement('kiezteam_suedneukoelln@dwenteignen.de'),
+          createMailElement('kiezteam_suedneukoelln@dwenteignen.de'),
+          createMailElement('kiezteam_suedneukoelln@dwenteignen.de'),
+          createMailElement('kiezteam_wedding@dwenteignen.de'),
+          createMailElement('kiezteam_lichtenberg@dwenteignen.de'),
+          createMailElement('kiezteam_neukoelln@dwenteignen.de'),
+          createMailElement('kiezteam_friedrichshain@dwenteignen.de'),
+          createMailElement('kiezteam_tempelhofschoeneberg@dwenteignen.de'),
+          createMailElement('kiezteam_charlottenburg@dwenteignen.de'),
+          createMailElement('kiezteam_moabit@dwenteignen.de'),
+          createMailElement('kiezteam_prenzlauerberg@dwenteignen.de'),
+          createMailElement('kiezteam_treptow@dwenteignen.de'),
+          createMailElement('kiezteam_spandau@dwenteignen.de'),
+          createMailElement('kiezteam_pankow@dwenteignen.de'),
+          createMailElement('kiezteam_mitte@dwenteignen.de'),
+          createMailElement('kiezteam_marzahn@dwenteignen.de'),
+          createMailElement('hochschulen@dwenteignen.de',
               text:
                   'hochschulen@dwenteignen.de (Mobilisierung an Hochschulen)'),
         ]),
@@ -376,7 +385,7 @@ class FAQService {
             height: 110.0,
           )),
         ),
-        text_was_kostet_die_vergesellschaftung,
+        textWasKostetSieVergesellschaftung,
         [
           "Gewinn",
           "Einsparung",
@@ -385,8 +394,8 @@ class FAQService {
           "Sozialhilfe",
           "Wohngeld"
         ]),
-    FAQItem(19, "10 Kurzargumente - Warum enteignen?", Text(text_argumente),
-        Text(text_argumente_short), text_argumente, [
+    FAQItem(19, "10 Kurzargumente - Warum enteignen?", Text(textArgumente),
+        Text(textArgumenteShort), textArgumente, [
       "hohe Mieten",
       "Sanierung",
       "Neubau",
@@ -418,9 +427,9 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
     FAQItem(
         21,
         "Was kostet uns die Vergesellschaftung?",
-        Text(text_was_kostet_die_vergesellschaftung),
-        Text(text_was_kostet_die_vergesellschaftung_short),
-        text_was_kostet_die_vergesellschaftung, [
+        Text(textWasKostetSieVergesellschaftung),
+        Text(textWasKostetDieVergesellschaftungShort),
+        textWasKostetSieVergesellschaftung, [
       "Finanzierung",
       "Vergesellschaftung",
       "Entschädigung",
@@ -432,9 +441,9 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
     FAQItem(
         22,
         'Ist die Vergesellschaftung rechtlich überhaupt möglich?',
-        Text(argumentation_tipps_1),
-        Text(argumentation_tipps_1_short),
-        argumentation_tipps_1, [
+        Text(argumentationTipps1),
+        Text(argumentationTipps1Short),
+        argumentationTipps1, [
       'Argumentationstipps',
       'Vergesellschaftung',
       'Gutachten',
@@ -443,9 +452,9 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
     FAQItem(
         23,
         'Warum eine Anstalt öffentlichen Rechts und keine neue landeseigene Wohnungsbaugesellschaft?',
-        Text(text_warum_aoer_keine_wbg),
-        Text(text_warum_aoer_keine_wbg_short),
-        text_warum_aoer_keine_wbg, [
+        Text(textWarumAoerKeineWbg),
+        Text(textWarumAoerKeineWbgShort),
+        textWarumAoerKeineWbg, [
       "landeseigen",
       "kommunal",
       "Wohnungsbaugesellschaft",
@@ -456,9 +465,9 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
     FAQItem(
         24,
         'Was ist eine Anstalt öffentlichen Rechts und warum wollen wir diese Form?',
-        Text(text_warum_aoer),
-        Text(text_warum_aoer_short),
-        text_warum_aoer, [
+        Text(textWarumAoer),
+        Text(textWarumAoerShort),
+        textWarumAoer, [
       'AöR',
       'Verstaatlichung',
       'Vergesellschaftung',
@@ -472,7 +481,7 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
       'Mitarbeiter'
     ]),
     FAQItem(25, "Was bringt die Vergesellschaftung für den Klimaschutz?",
-        Text(text_climate), Text(text_climate_short), text_climate, [
+        Text(textClimate), Text(textClimateShort), textClimate, [
       "Klima",
       "Umwelt",
       "ökologisch",
@@ -484,9 +493,9 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
     FAQItem(
         26,
         "Warum soll die Vergesellschaftung Unternehmen erst ab 3000 Wohnungen in Berlin betreffen?",
-        Text(text_warum_erst_ab_3000),
-        Text(text_warum_erst_ab_3000_short),
-        text_warum_erst_ab_3000, [
+        Text(textWarumErstAb3000),
+        Text(textWarumErstAb3000Short),
+        textWarumErstAb3000, [
       "3000",
       "Konzern",
       "Unternehmen",
@@ -516,9 +525,9 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
     FAQItem(
         29,
         "Was bringt uns die Vergesellschaftung finanziell?",
-        Text(text_vergesellschaftung_finanziell),
-        Text(text_vergesellschaftung_finanziell_short),
-        text_vergesellschaftung_finanziell, [
+        Text(textVergesellschaftungFinanziell),
+        Text(textVergesellschaftungFinanziellShort),
+        textVergesellschaftungFinanziell, [
       "Gewinn",
       "Einsparung",
       "Sozialleistung",
@@ -541,12 +550,12 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
     FAQItem(
         32,
         'Sammeltipps: Erste Ansprache',
-        Text(sammel_tipps_1),
-        Text(sammel_tipps_1_short),
-        sammel_tipps_1,
+        Text(sammelTipps1),
+        Text(sammelTipps1Short),
+        sammelTipps1,
         ["Sammeltipps", "ansprechen", "sammeln", "erster Satz", "Ansprache"]),
     FAQItem(33, 'Sammeltipps: Niedrigschwellig argumentieren',
-        Text(sammel_tipps_3), Text(sammel_tipps_3_short), sammel_tipps_3, [
+        Text(sammelTipps3), Text(sammelTipps3Short), sammelTipps3, [
       "Sammeltipps",
       'Vergesellschaftung',
       'Mieten',
@@ -556,9 +565,9 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
     FAQItem(
         34,
         "Gegenargument: „Es muss einfach mehr gebaut werden!“ ",
-        Text(text_counter_argument_1),
-        Text(text_counter_argument_1_short),
-        text_counter_argument_1, [
+        Text(textCounterArgument1),
+        Text(textCounterArgument1Short),
+        textCounterArgument1, [
       "Gemeinwohl",
       "Neubau",
       "Eigentum",
@@ -569,9 +578,9 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
     FAQItem(
         35,
         "Gegenargument: „Die Vergesellschaftung ist zu teuer und Berlin kann sich das nicht leisten.“ ",
-        Text(text_counter_argument_2),
-        Text(text_counter_argument_2_short),
-        text_counter_argument_2, [
+        Text(textCounterArgument2),
+        Text(textCounterArgument2Short),
+        textCounterArgument2, [
       "Finanzierung",
       "Vergesellschaftung",
       "Entschädigung",
@@ -585,9 +594,9 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
     FAQItem(
         36,
         "Gegenargument: „Enteignungen – wie in der DDR!“ ",
-        Text(text_counter_argument_3),
-        Text(text_counter_argument_3_short),
-        text_counter_argument_3, [
+        Text(textCounterArgument3),
+        Text(textCounterArgument3Short),
+        textCounterArgument3, [
       "Recht",
       "DDR",
       "Grundgesetz",
@@ -600,9 +609,9 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
     FAQItem(
         37,
         "Gegenargument: „Durch Enteignung entsteht keine einzige neue Wohnung.“ ",
-        Text(text_counter_argument_4),
-        Text(text_counter_argument_4_short),
-        text_counter_argument_4, [
+        Text(textCounterArgument4),
+        Text(textCounterArgument4Short),
+        textCounterArgument4, [
       "Bauen",
       "Neubau",
       "Wohnungen",
@@ -614,9 +623,9 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
     FAQItem(
         38,
         'Der Senat spricht aber von 36, später von 29 Milliarden Euro! Woher dieser Unterschied?',
-        Text(text_senate_numbers),
-        Text(text_senate_numbers_short),
-        text_senate_numbers, [
+        Text(textSenateNumbers),
+        Text(textSenateNumbersShort),
+        textSenateNumbers, [
       "Senat",
       "Kostenschätzung",
       "Finanzierung",
@@ -628,30 +637,30 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
     FAQItem.short(
         39,
         "Wo finde ich den Beschlusstext?",
-        create_text_element_with_link2(
-            beschluss_text,
+        createTextElementWithLink2(
+            beschlussText,
             "Link",
             "https://www.berlin.de/landesverwaltungsamt/_assets/logistikservice/amtsblatt-fuer-berlin/abl_2021_06_0365_0436_online.pdf",
             " (S. 367-371) einsehen."),
-        beschluss_text,
+        beschlussText,
         ["Beschlusstext"]),
   ];
 
-  static Text create_text_element_with_link(
-      String text, String link_text, String link) {
+  static Text createTextElementWithLink(
+      String text, String linkText, String link) {
     return Text.rich(
-        TextSpan(text: text, children: [create_link_element(link_text, link)]));
+        TextSpan(text: text, children: [createLinkElement(linkText, link)]));
   }
 
-  static Text create_text_element_with_link2(
-      String text, String link_text, String link, String text_after_link) {
+  static Text createTextElementWithLink2(
+      String text, String linkText, String link, String textAfterLink) {
     return Text.rich(TextSpan(text: text, children: [
-      create_link_element(link_text, link),
-      TextSpan(text: text_after_link)
+      createLinkElement(linkText, link),
+      TextSpan(text: textAfterLink)
     ]));
   }
 
-  static TextSpan create_link_element(String text, String link) {
+  static TextSpan createLinkElement(String text, String link) {
     return TextSpan(
         text: text,
         style: TextStyle(
@@ -659,7 +668,7 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
         recognizer: TapGestureRecognizer()..onTap = () => launch(link));
   }
 
-  static Text create_mail_element(String link, {String text}) {
+  static Text createMailElement(String link, {String? text}) {
     return Text.rich(TextSpan(
         text: text ?? link,
         style: TextStyle(
@@ -849,7 +858,7 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
         'filter'
       ]);
 
-  static List<FAQItem> loadItems(String search) {
+  static List<FAQItem> loadItems(String? search) {
     if (search == null) search = '';
 
     if (search == '') {
@@ -873,7 +882,8 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
       items.forEach((item) {
         for (var tag in item.tags) {
           if (tag.toLowerCase().contains(word)) {
-            weight[item] += 100; // Schlagwörter haben schweres Gewicht
+            // Schlagwörter haben schweres Gewicht
+            weight[item] = weight[item]! + 100;
             break; // nicht mehrere Treffer pro Stichwort
           }
         }
@@ -884,7 +894,8 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
     searchWords.forEach((word) {
       items.forEach((item) {
         if (item.title.toLowerCase().contains(word))
-          weight[item] += 10; // Titel-Treffer haben mittleres Gewicht
+          // Titel-Treffer haben mittleres Gewicht
+          weight[item] = weight[item]! + 10;
       });
     });
 
@@ -892,13 +903,14 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
     searchWords.forEach((word) {
       items.forEach((item) {
         if (item.plainText.toLowerCase().contains(word))
-          weight[item] += 1; // Text-Treffer haben niedriges Gewicht
+          // niedriges Gewicht für Text-Treffer
+          weight[item] = weight[item]! + 1;
       });
     });
 
     List<FAQItem> orderedItems = List<FAQItem>.of(items); // Kopie zum sortieren
     orderedItems.sort((item1, item2) =>
-        Comparable.compare(weight[item1], weight[item2]) * -1);
+        Comparable.compare(weight[item1]!, weight[item2]!) * -1);
 
     return orderedItems;
   }

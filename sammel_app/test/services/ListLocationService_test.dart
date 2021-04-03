@@ -1,19 +1,21 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
-import 'package:sammel_app/services/UserService.dart';
 
 import '../TestdataStorage.dart';
-import '../shared/Mocks.dart';
+import '../shared/mocks.trainer.dart';
+import '../shared/mocks.costumized.dart';
+import '../shared/mocks.mocks.dart';
 
 void main() {
-  UserService userService = ConfiguredUserServiceMock();
+  MockUserService userService = MockUserService();
+  trainUserService(userService);
 
   test('ListLocationService returns list locations', () async {
-    var backend = BackendMock();
+    var backend = MockBackend();
+    trainBackend(backend);
     var service = ListLocationService(userService, backend);
 
     var cafeKottiJson = {
@@ -33,9 +35,9 @@ void main() {
       'longitude': 13.4655402
     };
     List<Map<String, dynamic>> listlocations = [cafeKottiJson, zukunftJson];
-    HttpClientResponseBody response = HttpClientResponseBodyMock(listlocations, 200);
-    when(backend.get('/service/listlocations/actives', any))
-        .thenAnswer((_) async => response);
+    when(backend.get('/service/listlocations/actives', any)).thenAnswer(
+        (_) async => trainHttpResponse(
+            MockHttpClientResponseBody(), 200, listlocations));
 
     List<ListLocation> ergebnis = await service.getActiveListLocations();
 

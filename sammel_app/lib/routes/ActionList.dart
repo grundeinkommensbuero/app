@@ -7,6 +7,7 @@ import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+
 import 'TerminCard.dart';
 
 class ActionList extends StatefulWidget {
@@ -18,7 +19,7 @@ class ActionList extends StatefulWidget {
 
   ActionList(this.termine, this.isMyAction, this.isPastAction,
       this.iAmParticipant, this.openActionDetails,
-      {Key key})
+      {Key? key})
       : super(key: key);
 
   @override
@@ -28,28 +29,28 @@ class ActionList extends StatefulWidget {
 class ActionListState extends State<ActionList> {
   ItemScrollController _scrollController = ItemScrollController();
 
-  Timer snackbarTimer;
+  Timer? snackbarTimer;
 
-  List<int> evaluations;
+  List<int>? evaluations;
 
   @override
   Widget build(BuildContext context) {
     if (snackbarTimer == null) maybeShowEvaluationSnackBar(context);
-    var index_of_now = getIndexOfNow();
+    var indexOfNow = getIndexOfNow();
 
     var scrollableList = ScrollablePositionedList.builder(
         itemScrollController: _scrollController,
         itemCount: widget.termine.length,
         itemBuilder: cardListBuilder,
-        initialScrollIndex: index_of_now);
-    if (index_of_now > 0 && _scrollController.isAttached) {
+        initialScrollIndex: indexOfNow);
+    if (indexOfNow > 0 && _scrollController.isAttached) {
       Timer(
           Duration(milliseconds: 100),
           () => _scrollController.scrollTo(
-              index: index_of_now,
+              index: indexOfNow,
               alignment: 0,
               curve: Curves.easeOutCubic,
-              duration: Duration(milliseconds: index_of_now * 75)));
+              duration: Duration(milliseconds: indexOfNow * 75)));
     }
     return scrollableList;
   }
@@ -61,10 +62,10 @@ class ActionListState extends State<ActionList> {
     for (Termin termin in widget.termine) {
       if (widget.isPastAction(termin) &&
           widget.iAmParticipant(termin) &&
-          !termin.isEvaluated(evaluations)) {
+          !termin.isEvaluated(evaluations!)) {
         snackbarTimer = Timer(
             Duration(seconds: 2),
-            () => Scaffold.of(context).showSnackBar(SnackBar(
+            () => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 content: Text('Dein Bericht zu einer Aktion fehlt noch'.tr(),
                     style: TextStyle(color: Colors.black87)),
                 behavior: SnackBarBehavior.floating,
@@ -73,7 +74,6 @@ class ActionListState extends State<ActionList> {
                 action: SnackBarAction(
                     label: 'Zur Aktion'.tr(),
                     onPressed: () => widget.openActionDetails(termin)))));
-
         break;
       }
     }

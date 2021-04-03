@@ -3,18 +3,19 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 
-import 'Mocks.dart';
+import 'mocks.trainer.dart';
+import '../shared/mocks.mocks.dart';
 
 void main() {
   initializeDateFormatting('de');
   group('timeToString', () {
     setUp(() {
-      mockTranslation();
+      trainTranslation(MockTranslations());
     });
 
     test('ergaenzt 00 Sekunden', () {
       var string =
-          ChronoHelfer.timeToStringHHmmss(TimeOfDay(hour: 1, minute: 2));
+          ChronoHelfer.timeToStringHHmmss(TimeOfDay(hour: 1, minute: 2))!;
       expect(string.endsWith(":00"), true);
     });
 

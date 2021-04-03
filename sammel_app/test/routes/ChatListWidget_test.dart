@@ -1,23 +1,23 @@
-import 'package:easy_localization/src/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_test_ui/flutter_test_ui.dart';
 import 'package:provider/provider.dart';
-import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/ChatChannel.dart';
+import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/routes/ChatListWidget.dart';
 import 'package:sammel_app/services/UserService.dart';
 
-import '../shared/Mocks.dart';
+import '../shared/mocks.trainer.dart';
+import '../shared/mocks.mocks.dart';
 
 void main() {
-  Widget widget;
+  trainTranslation(MockTranslations());
+  late Widget widget;
   UserService _userService;
-  ChatChannel channel;
+  late ChatChannel channel;
 
   setUpUI((tester) async {
-    Localization.load(Locale('en'), translations: TranslationsMock());
-    _userService = ConfiguredUserServiceMock();
+    _userService = trainUserService(MockUserService());
     channel = ChatChannel('action:1');
     widget = Provider<AbstractUserService>(
         create: (context) => _userService,
@@ -30,7 +30,7 @@ void main() {
       expect(find.byType(RichText), findsNothing);
 
       channel.pushParticipationMessage(ParticipationMessage(
-          true, DateTime(2020, 12, 13, 11, 22), 'Karl Marx', true));
+          DateTime(2020, 12, 13, 11, 22), 'Karl Marx', true, true));
       await tester.pump(Duration(minutes: 5));
 
       expect(
@@ -46,7 +46,7 @@ void main() {
       expect(find.byType(RichText), findsNothing);
 
       channel.pushParticipationMessage(ParticipationMessage(
-          true, DateTime(2020, 12, 13, 11, 22), null, true));
+          DateTime(2020, 12, 13, 11, 22), null, true, true));
       await tester.pump(Duration(minutes: 5));
 
       expect(
@@ -62,7 +62,7 @@ void main() {
       expect(find.byType(RichText), findsNothing);
 
       channel.pushParticipationMessage(ParticipationMessage(
-          true, DateTime(2020, 12, 13, 11, 22), 'Karl Marx', false));
+          DateTime(2020, 12, 13, 11, 22), 'Karl Marx', false, true));
       await tester.pump(Duration(minutes: 5));
 
       expect(
@@ -78,7 +78,7 @@ void main() {
       expect(find.byType(RichText), findsNothing);
 
       channel.pushParticipationMessage(ParticipationMessage(
-          true, DateTime(2020, 12, 13, 11, 22), null, false));
+          DateTime(2020, 12, 13, 11, 22), null, false, true));
       await tester.pump(Duration(minutes: 5));
 
       expect(

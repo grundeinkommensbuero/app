@@ -81,10 +81,11 @@ open class PushService {
 
     open fun sendePushNachrichtAnTopic(nachricht: PushMessageDto, topic: String) {
         val topicInModus = "$PREFIX$topic"
+        LOG.info("Pushe Nachricht zu Topic $PREFIX$topic")
         val verschluesselt = verschluessele(nachricht.data)
         firebase.sendePushNachrichtAnTopic(nachricht.notification, verschluesselt, topicInModus)
 
-        val subscribers = subscriptionDao.getSubscribersForTopic(topicInModus)
+        val subscribers = subscriptionDao.getSubscribersForTopic(topic)
         val subscribedBenutzer = benutzerDao.getBenutzer(subscribers)
         if (subscribedBenutzer.isNotEmpty())
             pushDao.speicherePushMessageFuerEmpfaenger(nachricht.notification, verschluesselt, subscribedBenutzer)
