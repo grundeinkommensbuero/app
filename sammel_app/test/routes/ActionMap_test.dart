@@ -86,16 +86,31 @@ void main() {
                   iAmParticipant: (_) => false,
                   openActionDetails: (_) {***REMOVED***))));
 
-      List<FlatButton> actionMarker = tester
+      List<TextButton> actionMarker = tester
           .widgetList(find.byKey(Key('action marker')))
-          .map((widget) => widget as FlatButton)
+          .map((widget) => widget as TextButton)
           .toList();
 
       expect(actionMarker.length, 3);
 
-      expect(actionMarker[0].color, DweTheme.yellowLight);
-      expect(actionMarker[1].color, DweTheme.blueLight);
-      expect(actionMarker[2].color, DweTheme.yellowLight);
+      expect(
+          actionMarker[0]
+              .style!
+              .backgroundColor!
+              .resolve({MaterialState.hovered***REMOVED***),
+          DweTheme.yellowLight);
+      expect(
+          actionMarker[1]
+              .style!
+              .backgroundColor!
+              .resolve({MaterialState.hovered***REMOVED***),
+          DweTheme.blueLight);
+      expect(
+          actionMarker[2]
+              .style!
+              .backgroundColor!
+              .resolve({MaterialState.hovered***REMOVED***),
+          DweTheme.yellowLight);
     ***REMOVED***);
 
     testWidgets('are higlighted for past actions', (WidgetTester tester) async {
@@ -125,16 +140,16 @@ void main() {
                   iAmParticipant: iAmParticipant,
                   openActionDetails: (_) {***REMOVED***))));
 
-      List<FlatButton> actionMarker = tester
+      List<TextButton> actionMarker = tester
           .widgetList(find.byKey(Key('action marker')))
-          .map((widget) => widget as FlatButton)
+          .map((widget) => widget as TextButton)
           .toList();
 
       expect(actionMarker.length, 3);
 
-      expect(actionMarker[0].color, DweTheme.greenLight);
-      expect(actionMarker[2].color, DweTheme.yellowBright);
-      expect(actionMarker[1].color, DweTheme.blueBright);
+      expect(actionMarker[0].style!.backgroundColor, DweTheme.greenLight);
+      expect(actionMarker[2].style!.backgroundColor, DweTheme.yellowBright);
+      expect(actionMarker[1].style!.backgroundColor, DweTheme.blueBright);
     ***REMOVED***);
 
     testWidgets('are higlighted for joined actions',
@@ -163,16 +178,16 @@ void main() {
                   iAmParticipant: iAmParticipant,
                   openActionDetails: (_) {***REMOVED***))));
 
-      List<FlatButton> actionMarker = tester
+      List<TextButton> actionMarker = tester
           .widgetList(find.byKey(Key('action marker')))
-          .map((widget) => widget as FlatButton)
+          .map((widget) => widget as TextButton)
           .toList();
 
       expect(actionMarker.length, 3);
 
-      expect(actionMarker[0].color, DweTheme.yellowBright);
-      expect(actionMarker[1].color, DweTheme.greenLight);
-      expect(actionMarker[2].color, DweTheme.yellowBright);
+      expect(actionMarker[0].style!.backgroundColor, DweTheme.yellowBright);
+      expect(actionMarker[1].style!.backgroundColor, DweTheme.greenLight);
+      expect(actionMarker[2].style!.backgroundColor, DweTheme.yellowBright);
     ***REMOVED***);
 
     testWidgets('react to tap', (WidgetTester tester) async {
