@@ -1,8 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:sammel_app/model/FAQItem.dart';
 import 'package:sammel_app/services/FAQService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FAQ extends StatefulWidget {
   FAQ() : super(key: Key('faq page'));
@@ -13,7 +16,7 @@ class FAQ extends StatefulWidget {
 
 class FAQState extends State<FAQ> {
   final searchInputController = TextEditingController();
-  int? opened;
+  double? opened;
   List<FAQItem> items = FAQService.loadItems('');
   ScrollController? controller;
 
@@ -63,14 +66,14 @@ class FAQState extends State<FAQ> {
             itemCount: items.length,
             itemBuilder: (BuildContext context, int index) => InkWell(
                 onTap: () => setState(() {
-                      if (opened == items[index].id)
+                      if (opened == items[index].order)
                         opened = null;
                       else
-                        opened = items[index].id;
+                        opened = items[index].order;
                       primaryFocus?.unfocus();
                     ***REMOVED***),
                 child: FAQTile(items[index],
-                    extended: opened == items[index].id))),
+                    extended: opened == items[index].order))),
       )
     ]));
   ***REMOVED***
@@ -110,7 +113,16 @@ class FAQTile extends StatelessWidget {
           SizedBox(
             height: 10.0,
           ),
-          extended ? item.content : item.shortContent
+          MarkdownBody(
+              data: extended ? item.full : item.teaser,
+              onTapLink: (_1, link, _2) => launch(link ?? ''),
+              selectable: true,
+              styleSheet: MarkdownStyleSheet(
+                  a: TextStyle(
+                      color: DweTheme.purple,
+                      decoration: TextDecoration.underline),
+                  blockquoteDecoration:
+                      BoxDecoration(color: DweTheme.yellowBright)))
         ]),
       ),
     );

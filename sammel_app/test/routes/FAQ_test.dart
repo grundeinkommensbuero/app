@@ -5,8 +5,8 @@ import 'package:sammel_app/routes/FAQ.dart';
 import 'package:sammel_app/services/FAQService.dart';
 
 import '../services/FAQService_test.dart';
-import '../shared/mocks.trainer.dart';
 import '../shared/mocks.mocks.dart';
+import '../shared/mocks.trainer.dart';
 
 main() {
   trainTranslation(MockTranslations());
@@ -23,42 +23,41 @@ main() {
     ***REMOVED***);
 
     testUI('shows all items', (WidgetTester _) async {
-      expect(find.byKey(Key('item tile')),
-          findsNWidgets(FAQService.items.length));
+      expect(
+          find.byKey(Key('item tile')), findsNWidgets(FAQService.items.length));
     ***REMOVED***);
 
     testUI('initially shows all items closed', (WidgetTester tester) async {
       var itemTiles = tester.widgetList<FAQTile>(find.byKey(Key('item tile')));
 
       itemTiles.forEach((tile) => expect(tile.extended, isFalse));
-      FAQService.items.forEach(
-          (item) => expect(find.byWidget(item.shortContent), findsOneWidget));
       FAQService.items
-          .forEach((item) => expect(find.byWidget(item.content), findsNothing));
+          .forEach((item) => expect(find.text(item.teaser), findsOneWidget));
+      FAQService.items
+          .forEach((item) => expect(find.text(item.rest!), findsNothing));
     ***REMOVED***);
   ***REMOVED***);
 
   group('open/close', () {
     testUI('opens on tap at tile', (WidgetTester tester) async {
-      await tester.tap(find.byWidget(FAQService.items[0].shortContent));
+      await tester.tap(find.text(FAQService.items[0].title));
       await tester.pump();
 
-      expect(find.byWidget(FAQService.items[0].shortContent), findsNothing);
-      expect(find.byWidget(FAQService.items[0].content), findsOneWidget);
+      expect(find.text(FAQService.items[0].full), findsOneWidget);
     ***REMOVED***);
 
     testUI('closes on second tap at tile', (WidgetTester tester) async {
-      await tester.tap(find.byWidget(FAQService.items[1].shortContent));
+      await tester.tap(find.text(FAQService.items[1].title));
       await tester.pump();
 
-      expect(find.byWidget(FAQService.items[1].shortContent), findsNothing);
-      expect(find.byWidget(FAQService.items[1].content), findsOneWidget);
+      expect(find.text(FAQService.items[1].teaser), findsNothing);
+      expect(find.text(FAQService.items[1].full), findsOneWidget);
 
-      await tester.tap(find.byWidget(FAQService.items[1].content));
+      await tester.tap(find.text(FAQService.items[1].title));
       await tester.pump();
 
-      expect(find.byWidget(FAQService.items[1].shortContent), findsOneWidget);
-      expect(find.byWidget(FAQService.items[1].content), findsNothing);
+      expect(find.text(FAQService.items[1].teaser), findsOneWidget);
+      expect(find.text(FAQService.items[1].full), findsNothing);
     ***REMOVED***);
   ***REMOVED***);
 
@@ -118,12 +117,15 @@ main() {
       await tester.pump();
 
       titlesInOrder =
-      tester.widgetList<FAQTile>(itemTiles).map((tile) => tile.item.title);
+          tester.widgetList<FAQTile>(itemTiles).map((tile) => tile.item.title);
 
       expect(
           titlesInOrder,
-          containsAllInOrder(
-              ['Camponotus Ligniperdus', 'Lasius Niger', 'Messor Barbarus', ]));
+          containsAllInOrder([
+            'Camponotus Ligniperdus',
+            'Lasius Niger',
+            'Messor Barbarus',
+          ]));
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sammel_app/model/FAQItem.dart';
 import 'package:sammel_app/services/FAQService.dart';
@@ -125,22 +124,22 @@ var testItems = [
   FAQItem(
       1,
       'Camponotus Ligniperdus',
-      Text('Anzeige-Text'),
-      Text('Kurztext'),
-      'Die dickste Ameise in Mitteleuropa',
+      'Die dickste Ameise',
+      ' in Mitteleuropa',
+      1.0,
       ['Holz', 'Ameise', 'rot', 'schwarz']),
   FAQItem(
       2,
       'Lasius Niger',
-      Text('Anzeige-Text'),
-      Text('Kurztext'),
-      'Die unscheinbaren Herrscher der Krabbelwelt',
+      'Die unscheinbaren Herrscher',
+      ' der Krabbelwelt',
+      2.0,
       ['Räuber', 'Erdnester', 'schwarz']),
   FAQItem(
       3,
       'Messor Barbarus',
-      Text('Anzeige-Text'),
-      Text('Kurztext'),
-      'Netter als ihr Name vermuten lässt. Fleißig und friedlich.',
+      'Netter als ihr Name vermuten lässt.',
+      ' Fleißig und friedlich.',
+      3.0,
       ['Sammler', 'Erdnester', 'rot', 'schwarz']),
 ];
