@@ -1,8 +1,20 @@
+import 'dart:convert';
+
 import 'package:quiver/strings.dart';
 import 'package:sammel_app/model/FAQItem.dart';
+import 'package:sammel_app/services/BackendService.dart';
+import 'package:sammel_app/services/ErrorService.dart';
+import 'package:sammel_app/services/StorageService.dart';
+import 'package:sammel_app/services/UserService.dart';
 
-class FAQService {
-  static List<FAQItem> loadItems(String? search) {
+abstract class AbstractFAQService {
+  abstract Future<List<FAQItem>> faqItems;
+
+  Future<List<FAQItem>> getSortedFAQ(String? search);
+***REMOVED***
+
+mixin FAQSorter {
+  Future<List<FAQItem>> sortItems(String? search, List<FAQItem> items) async {
     if (search == null) search = '';
 
     if (search == '') {
@@ -58,9 +70,47 @@ class FAQService {
 
     return orderedItems;
   ***REMOVED***
+***REMOVED***
 
+class FAQService extends BackendService
+    with FAQSorter
+    implements AbstractFAQService {
+  StorageService storageService;
 
-  static List<FAQItem> items = [
+  @override
+  late Future<List<FAQItem>> faqItems;
+
+  FAQService(
+      this.storageService, AbstractUserService userService, Backend backend)
+      : super(userService, backend) {
+    faqItems = storageService.loadFAQ().then((value) => value ?? []); // TODO
+    updateFAQfromServer();
+  ***REMOVED***
+
+  @override
+  Future<List<FAQItem>> getSortedFAQ(String? search) async =>
+      super.sortItems(search, await faqItems);
+
+  updateFAQfromServer() async {
+    try {
+      final response = await get('services/faq', appAuth: true);
+      final faqFromServer = (jsonDecode(response.body as String) as List)
+          .map((item) => FAQItem.fromJson(item))
+          .toList();
+      storageService.saveFAQ(faqFromServer);
+    ***REMOVED*** catch (e) {
+      ErrorService.handleError(e, StackTrace.current);
+    ***REMOVED***
+  ***REMOVED***
+***REMOVED***
+
+class DemoFAQService with FAQSorter implements AbstractFAQService {
+  @override
+  Future<List<FAQItem>> getSortedFAQ(String? search) async =>
+      sortItems(search, await faqItems);
+
+  @override
+  Future<List<FAQItem>> faqItems = Future.value([
     FAQItem.short(
         1,
         'Wann geht\'s los?',
@@ -110,5 +160,5 @@ Nach kurzer Bedenkzeit der Person kann eine weitere erläuternder Satz nachgesch
         '''Wenn du eine Fehler gefunden hast oder uns anderes Feedback zur App melden willst, dann schreib uns doch [per Mail](mailto:app@dwenteignen.de) oder öffne ein Bug-Ticket auf [der App-Webseite](https://www.gitlab.com/kybernetik/sammel-app)''',
         4.0,
         ['Start', 'Beginn', 'Sammelphase']),
-  ];
+  ]);
 ***REMOVED***

@@ -16,6 +16,7 @@ import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/AuthFehler.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
+import 'package:sammel_app/services/FAQService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/PushSendService.dart';
@@ -27,6 +28,7 @@ import 'package:sammel_app/services/UserService.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../model/Termin_test.dart';
+import '../services/FAQService_test.dart';
 import '../shared/TestdatenVorrat.dart';
 import '../shared/mocks.costumized.dart';
 import '../shared/mocks.mocks.dart';
@@ -40,6 +42,7 @@ final _pushService = MockPushSendService();
 final _userService = MockUserService();
 final _chatMessageService = MockChatMessageService();
 final _pushManager = MockPushNotificationManager();
+final _faqService = MockFAQService();
 
 void main() {
   trainTranslation(MockTranslations());
@@ -63,6 +66,8 @@ void main() {
     when(_termineService.loadActions(any)).thenAnswer((_) async => []);
     when(_termineService.deleteAction(any, any)).thenReturn(null);
     when(_pushManager.pushToken).thenAnswer((_) => Future.value('Token'));
+    when(_faqService.getSortedFAQ(any))
+        .thenAnswer((_) => Future.value(testItems));
     ErrorService.displayedTypes = [];
 
     termineSeiteWidget = MultiProvider(
@@ -331,10 +336,11 @@ void main() {
       expect(find.byKey(Key('action map map')), findsOneWidget);
       var actionPosition = LatLng(TerminTestDaten.einTermin().latitude,
           TerminTestDaten.einTermin().longitude);
-      TermineSeiteState actionPage = tester.state(find.byKey(Key('action page')));
+      TermineSeiteState actionPage =
+          tester.state(find.byKey(Key('action page')));
       expect(actionPage.mapController.zoom, 15);
       expect(actionPage.mapController.center, actionPosition);
-        ***REMOVED***);
+    ***REMOVED***);
 
     testWidgets(
         'triggers server call and highlihgts action with tap on join button',
@@ -1408,6 +1414,7 @@ _pumpNavigation(WidgetTester tester) async {
         Provider<AbstractPushSendService>.value(value: _pushService),
         Provider<ChatMessageService>.value(value: _chatMessageService),
         Provider<AbstractPushNotificationManager>.value(value: _pushManager),
+        Provider<AbstractFAQService>.value(value: _faqService),
       ],
       child: MaterialApp(
         home: Navigation(GlobalKey(debugLabel: 'action page')),

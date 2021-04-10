@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class FAQItem {
   int id;
   String title;
@@ -12,4 +14,21 @@ class FAQItem {
       : this(id, title, content, null, order, tags);
 
   String get full => '$teaser${rest ?? ''***REMOVED***';
+
+  FAQItem.fromJson(json) :
+      id = json['id'],
+      title = json['title'],
+      teaser = json['teaser'],
+      rest = json['rest'],
+      order = json['order'],
+      tags = (json['tags'] as List).map((tag) => tag as String).toList();
+
+  toJson() => {
+    "id": id,
+    "title": title,
+    "teaser": teaser,
+    "rest": rest,
+    "order": order,
+    "tags": tags
+  ***REMOVED***
 ***REMOVED***

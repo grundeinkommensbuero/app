@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:provider/provider.dart';
 import 'package:sammel_app/model/FAQItem.dart';
 import 'package:sammel_app/services/FAQService.dart';
 import 'package:sammel_app/shared/DweTheme.dart';
@@ -17,8 +18,10 @@ class FAQ extends StatefulWidget {
 class FAQState extends State<FAQ> {
   final searchInputController = TextEditingController();
   double? opened;
-  List<FAQItem> items = FAQService.loadItems('');
+  List<FAQItem>? items;
   ScrollController? controller;
+
+  late AbstractFAQService faqService;
 
   @override
   void initState() {
@@ -28,6 +31,11 @@ class FAQState extends State<FAQ> {
 
   @override
   Widget build(BuildContext context) {
+    if (items == null) {
+      this.faqService = Provider.of<AbstractFAQService>(context);
+      faqService.getSortedFAQ(null).then((faq) => setState(() => items = faq));
+    ***REMOVED***
+
     return Scaffold(
         body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
       Container(
@@ -44,10 +52,12 @@ class FAQState extends State<FAQ> {
                 suffixIcon: IconButton(
                     key: Key('faq search clear button'),
                     icon: Icon(Icons.clear, color: DweTheme.purple),
-                    onPressed: () => setState(() {
-                          searchInputController.clear();
-                          items = FAQService.loadItems('');
-                        ***REMOVED***)),
+                    onPressed: () => faqService
+                        .getSortedFAQ(null)
+                        .then((faq) => setState(() {
+                              searchInputController.clear();
+                              items = faq;
+                            ***REMOVED***))),
                 contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
                 border: OutlineInputBorder(
                     borderSide: BorderSide.none,
@@ -55,26 +65,30 @@ class FAQState extends State<FAQ> {
                 hintText: 'Durchsuchen'.tr()),
             onChanged: (text) {
               controller?.jumpTo(0);
-              setState(() => items = FAQService.loadItems(text));
+              faqService
+                  .getSortedFAQ(text)
+                  .then((faq) => setState(() => items = faq));
             ***REMOVED***,
           ),
         ),
       ),
-      Expanded(
-        child: ListView.builder(
-            controller: controller,
-            itemCount: items.length,
-            itemBuilder: (BuildContext context, int index) => InkWell(
-                onTap: () => setState(() {
-                      if (opened == items[index].order)
-                        opened = null;
-                      else
-                        opened = items[index].order;
-                      primaryFocus?.unfocus();
-                    ***REMOVED***),
-                child: FAQTile(items[index],
-                    extended: opened == items[index].order))),
-      )
+      items == null
+          ? Text('Lade...')
+          : Expanded(
+              child: ListView.builder(
+                  controller: controller,
+                  itemCount: items!.length,
+                  itemBuilder: (BuildContext context, int index) => InkWell(
+                      onTap: () => setState(() {
+                            if (opened == items![index].order)
+                              opened = null;
+                            else
+                              opened = items![index].order;
+                            primaryFocus?.unfocus();
+                          ***REMOVED***),
+                      child: FAQTile(items![index],
+                          extended: opened == items![index].order))),
+            )
     ]));
   ***REMOVED***
 ***REMOVED***

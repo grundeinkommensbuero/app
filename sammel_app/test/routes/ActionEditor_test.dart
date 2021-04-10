@@ -14,6 +14,7 @@ import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
+import 'package:sammel_app/services/FAQService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/PushSendService.dart';
@@ -23,6 +24,7 @@ import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
 import '../model/Termin_test.dart';
+import '../services/FAQService_test.dart';
 import '../shared/TestdatenVorrat.dart';
 import '../shared/mocks.costumized.dart';
 import '../shared/mocks.mocks.dart';
@@ -36,6 +38,7 @@ late MockPushSendService _pushService = MockPushSendService();
 late MockUserService _userService = MockUserService();
 late MockChatMessageService _chatService = MockChatMessageService();
 late MockPushNotificationManager _pushManager = MockPushNotificationManager();
+late MockFAQService _faqService = MockFAQService();
 
 void main() {
   trainTranslation(MockTranslations());
@@ -51,6 +54,7 @@ void main() {
     reset(_pushManager);
     reset(_chatService);
     reset(_stammdatenService);
+    reset(_faqService);
     when(_storageService.loadFilter()).thenAnswer((_) async => null);
     when(_storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
     when(_storageService.loadMyKiez()).thenAnswer((_) async => []);
@@ -67,6 +71,8 @@ void main() {
         .thenAnswer((_) async => []);
     when(_stammdatenService.kieze).thenAnswer(
         (_) => Future.value({ffAlleeNord(), plaenterwald(), tempVorstadt()***REMOVED***));
+    when(_faqService.getSortedFAQ(any))
+        .thenAnswer((_) => Future.value(testItems));
   ***REMOVED***);
 
   testWidgets('Navigation opens CreateTerminDialog',
@@ -85,6 +91,7 @@ void main() {
             Provider<AbstractPushNotificationManager>.value(
                 value: _pushManager),
             Provider<ChatMessageService>.value(value: _chatService),
+            Provider<AbstractFAQService>.value(value: _faqService),
           ],
           child: MaterialApp(
             home: Navigation(GlobalKey(debugLabel: 'action page')),

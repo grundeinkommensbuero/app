@@ -11,6 +11,8 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/Navigation.dart';
+import 'package:sammel_app/services/ChatMessageService.dart';
+import 'package:sammel_app/services/FAQService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/PushSendService.dart';
@@ -18,12 +20,12 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
-import 'package:sammel_app/services/ChatMessageService.dart';
 
 import '../model/Termin_test.dart';
+import '../services/FAQService_test.dart';
 import '../shared/mocks.costumized.dart';
-import '../shared/mocks.trainer.dart';
 import '../shared/mocks.mocks.dart';
+import '../shared/mocks.trainer.dart';
 import 'ActionEditor_test.dart';
 
 final _stammdatenService = MockStammdatenService();
@@ -34,6 +36,7 @@ final _pushService = MockPushSendService();
 final _userService = MockUserService();
 final _chatService = MockChatMessageService();
 final _pushManager = MockPushNotificationManager();
+final _faqService = MockFAQService();
 
 void main() {
   trainTranslation(MockTranslations());
@@ -62,6 +65,8 @@ void main() {
           .thenAnswer((_) async => TermineFilter.leererFilter());
       when(_termineService.loadActions(any)).thenAnswer((_) async => []);
       when(_pushManager.pushToken).thenAnswer((_) async => 'Token');
+      when(_faqService.getSortedFAQ(any))
+          .thenAnswer((_) => Future.value(testItems));
 
       await tester.pumpWidget(MultiProvider(providers: [
         Provider<StammdatenService>.value(value: _stammdatenService),
@@ -73,6 +78,7 @@ void main() {
         Provider<AbstractUserService>.value(value: _userService),
         Provider<ChatMessageService>.value(value: _chatService),
         Provider<AbstractPushNotificationManager>.value(value: _pushManager),
+        Provider<AbstractFAQService>.value(value: _faqService),
       ], child: MaterialApp(home: navigation)));
     ***REMOVED***);
 
@@ -102,48 +108,48 @@ void main() {
     ***REMOVED***);
 
     testUI('switches to Action Creator with tap on Create Action Button',
-            (WidgetTester tester) async {
-          NavigationState state = tester.state(find.byWidget(navigation));
-          expect(state.navigation, isNot(1));
+        (WidgetTester tester) async {
+      NavigationState state = tester.state(find.byWidget(navigation));
+      expect(state.navigation, isNot(1));
 
-          await tester.tap(find.byIcon(Icons.menu));
-          await tester.pumpAndSettle();
-          await tester.tap(find.byKey(Key('action creator navigation button')));
-          await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.menu));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(Key('action creator navigation button')));
+      await tester.pumpAndSettle();
 
-          expect(state.navigation, 1);
-          expect(find.byKey(Key('action creator')), findsOneWidget);
-          expect(find.text('Zum Sammeln einladen'), findsOneWidget);
-        ***REMOVED***);
+      expect(state.navigation, 1);
+      expect(find.byKey(Key('action creator')), findsOneWidget);
+      expect(find.text('Zum Sammeln einladen'), findsOneWidget);
+    ***REMOVED***);
 
     testUI('switches to FAQ page with tap on FAQ Button',
-            (WidgetTester tester) async {
-          NavigationState state = tester.state(find.byWidget(navigation));
-          expect(state.navigation, isNot(2));
+        (WidgetTester tester) async {
+      NavigationState state = tester.state(find.byWidget(navigation));
+      expect(state.navigation, isNot(2));
 
-          await tester.tap(find.byIcon(Icons.menu));
-          await tester.pumpAndSettle();
-          await tester.tap(find.byKey(Key('faq navigation button')));
-          await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.menu));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(Key('faq navigation button')));
+      await tester.pumpAndSettle();
 
-          expect(state.navigation, 2);
-          expect(find.byKey(Key('faq page')), findsOneWidget);
-          expect(find.text('Tipps und Argumente'), findsOneWidget);
-        ***REMOVED***);
+      expect(state.navigation, 2);
+      expect(find.byKey(Key('faq page')), findsOneWidget);
+      expect(find.text('Tipps und Argumente'), findsOneWidget);
+    ***REMOVED***);
 
     testUI('returns to same ActionPage page with tap on Actions-Button',
-            (WidgetTester tester) async {
-          NavigationState state = tester.state(find.byWidget(navigation));
-          state.navigation = 1;
-          await tester.pump();
+        (WidgetTester tester) async {
+      NavigationState state = tester.state(find.byWidget(navigation));
+      state.navigation = 1;
+      await tester.pump();
 
-          expect(state.navigation, isNot(0));
+      expect(state.navigation, isNot(0));
 
-          await openActionPage(tester);
+      await openActionPage(tester);
 
-          expect(state.navigation, 0);
-          expect(find.byKey(actionPage), findsOneWidget);
-        ***REMOVED***);
+      expect(state.navigation, 0);
+      expect(find.byKey(actionPage), findsOneWidget);
+    ***REMOVED***);
 
     testUI('stores navigation history', (WidgetTester tester) async {
       await openActionCreator(tester);
@@ -154,47 +160,46 @@ void main() {
     ***REMOVED***);
 
     testUI('returns to last page and pops history with back button',
-            (WidgetTester tester) async {
-          await openActionCreator(tester);
-          await openActionPage(tester);
+        (WidgetTester tester) async {
+      await openActionCreator(tester);
+      await openActionPage(tester);
 
-          NavigationState state = tester.state(find.byWidget(navigation));
-          expect(state.history, [0, 1]);
+      NavigationState state = tester.state(find.byWidget(navigation));
+      expect(state.history, [0, 1]);
 
-          await maybePop(state, tester);
+      await maybePop(state, tester);
 
-          expect(state.navigation, 1);
-          expect(state.history, [0]);
+      expect(state.navigation, 1);
+      expect(state.history, [0]);
 
-          await maybePop(state, tester);
+      await maybePop(state, tester);
 
-          expect(state.navigation, 0);
-          expect(state.history, isEmpty);
+      expect(state.navigation, 0);
+      expect(state.history, isEmpty);
 
-          await maybePop(state, tester);
+      await maybePop(state, tester);
 
-          // Test auf Schließen der App scheint nicht möglich
-          expect(state.navigation, 0);
-          expect(state.history, isEmpty);
-        ***REMOVED***);
+      // Test auf Schließen der App scheint nicht möglich
+      expect(state.navigation, 0);
+      expect(state.history, isEmpty);
+    ***REMOVED***);
 
     testUI('returns action page after action creation',
-            (WidgetTester tester) async {
-          when(_termineService.createAction(any, any))
-              .thenAnswer((_) async => TerminTestDaten.einTermin());
-          await openActionCreator(tester);
+        (WidgetTester tester) async {
+      when(_termineService.createAction(any, any))
+          .thenAnswer((_) async => TerminTestDaten.einTermin());
+      await openActionCreator(tester);
 
-          ActionEditorState editor =
+      ActionEditorState editor =
           tester.state(find.byKey(Key('action creator')));
-          editor.action = testActionData();
+      editor.action = testActionData();
 
-          await tester.tap(find.byKey(Key('action editor finish button')));
-          await tester.pumpAndSettle();
+      await tester.tap(find.byKey(Key('action editor finish button')));
+      await tester.pumpAndSettle();
 
-          NavigationState navigation = tester.state(
-              find.byKey(Key('navigation')));
-          expect(navigation.navigation, 0);
-        ***REMOVED***);
+      NavigationState navigation = tester.state(find.byKey(Key('navigation')));
+      expect(navigation.navigation, 0);
+    ***REMOVED***);
   ***REMOVED***);
 
   group('menuEntry', () {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_test_ui/flutter_test_ui.dart';
+import 'package:provider/provider.dart';
 import 'package:sammel_app/routes/FAQ.dart';
 import 'package:sammel_app/services/FAQService.dart';
 
@@ -10,11 +11,14 @@ import '../shared/mocks.trainer.dart';
 
 main() {
   trainTranslation(MockTranslations());
-  var faq = FAQ();
+  final service = DemoFAQService();
+  final faq = FAQ();
 
   setUpUI((WidgetTester tester) async {
-    FAQService.items = testItems;
-    await tester.pumpWidget(MaterialApp(home: faq));
+    service.faqItems = Future.value(testItems);
+    await tester.pumpWidget(MaterialApp(
+        home: Provider<AbstractFAQService>.value(value: service, child: faq)));
+    await tester.pumpAndSettle();
   ***REMOVED***);
 
   group('visualisation', () {
@@ -22,42 +26,40 @@ main() {
       expect(find.byKey(Key('faq page')), findsOneWidget);
     ***REMOVED***);
 
-    testUI('shows all items', (WidgetTester _) async {
-      expect(
-          find.byKey(Key('item tile')), findsNWidgets(FAQService.items.length));
+    testUI('shows all items', (WidgetTester tester) async {
+      expect(find.byKey(Key('item tile')), findsNWidgets(testItems.length));
     ***REMOVED***);
 
     testUI('initially shows all items closed', (WidgetTester tester) async {
       var itemTiles = tester.widgetList<FAQTile>(find.byKey(Key('item tile')));
 
       itemTiles.forEach((tile) => expect(tile.extended, isFalse));
-      FAQService.items
+      testItems
           .forEach((item) => expect(find.text(item.teaser), findsOneWidget));
-      FAQService.items
-          .forEach((item) => expect(find.text(item.rest!), findsNothing));
+      testItems.forEach((item) => expect(find.text(item.rest!), findsNothing));
     ***REMOVED***);
   ***REMOVED***);
 
   group('open/close', () {
     testUI('opens on tap at tile', (WidgetTester tester) async {
-      await tester.tap(find.text(FAQService.items[0].title));
+      await tester.tap(find.text(testItems[0].title));
       await tester.pump();
 
-      expect(find.text(FAQService.items[0].full), findsOneWidget);
+      expect(find.text(testItems[0].full), findsOneWidget);
     ***REMOVED***);
 
     testUI('closes on second tap at tile', (WidgetTester tester) async {
-      await tester.tap(find.text(FAQService.items[1].title));
+      await tester.tap(find.text(testItems[1].title));
       await tester.pump();
 
-      expect(find.text(FAQService.items[1].teaser), findsNothing);
-      expect(find.text(FAQService.items[1].full), findsOneWidget);
+      expect(find.text(testItems[1].teaser), findsNothing);
+      expect(find.text(testItems[1].full), findsOneWidget);
 
-      await tester.tap(find.text(FAQService.items[1].title));
+      await tester.tap(find.text(testItems[1].title));
       await tester.pump();
 
-      expect(find.text(FAQService.items[1].teaser), findsOneWidget);
-      expect(find.text(FAQService.items[1].full), findsNothing);
+      expect(find.text(testItems[1].teaser), findsOneWidget);
+      expect(find.text(testItems[1].full), findsNothing);
     ***REMOVED***);
   ***REMOVED***);
 
@@ -108,6 +110,7 @@ main() {
       var titlesInOrder =
           tester.widgetList<FAQTile>(itemTiles).map((tile) => tile.item.title);
 
+      print('### titlesInOrder = $titlesInOrder');
       expect(
           titlesInOrder,
           containsAllInOrder(

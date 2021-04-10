@@ -2,6 +2,7 @@ import 'package:easy_localization/src/translations.dart';
 import 'package:mockito/annotations.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
+import 'package:sammel_app/services/FAQService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/LocalNotificationService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
@@ -24,6 +25,7 @@ import 'package:sammel_app/services/UserService.dart';
   Translations,
   DemoPushSendService,
   StammdatenService,
+  FAQService,
 ], customMocks: [
   MockSpec<StorageService>(returnNullOnMissingStub: true),
   MockSpec<FirebaseReceiveService>(returnNullOnMissingStub: true)

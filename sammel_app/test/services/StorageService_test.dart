@@ -8,6 +8,7 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../shared/TestdatenVorrat.dart';
+import 'FAQService_test.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -262,6 +263,27 @@ void main() async {
       var secret = await service.loadContact();
 
       expect(secret, 'Ick bin ein Berliner');
+    ***REMOVED***);
+  ***REMOVED***);
+
+  group('faq', () {
+    test('loadFAQ returns stored list of FAQItems', () async {
+      _prefs.setStringList(
+          'faq', testItems.map((item) => jsonEncode(item.toJson())).toList());
+
+      var result = await service.loadFAQ();
+
+      expect(result, isNotNull);
+      expect(result!.length, 3);
+      expect(result[0].id, 1);
+      expect(result[1].id, 2);
+      expect(result[2].id, 3);
+    ***REMOVED***);
+
+    test('loadFAQ returns null if no faq is stored', () async {
+      var result = await service.loadFAQ();
+
+      expect(result, isNull);
     ***REMOVED***);
   ***REMOVED***);
 

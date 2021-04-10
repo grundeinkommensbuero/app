@@ -13,6 +13,7 @@ import 'package:mockito/mockito.dart' as _i2;
 import 'package:sammel_app/model/ActionListPushData.dart' as _i28;
 import 'package:sammel_app/model/ChatChannel.dart' as _i13;
 import 'package:sammel_app/model/Evaluation.dart' as _i21;
+import 'package:sammel_app/model/FAQItem.dart' as _i32;
 import 'package:sammel_app/model/Health.dart' as _i15;
 import 'package:sammel_app/model/Kiez.dart' as _i30;
 import 'package:sammel_app/model/ListLocation.dart' as _i23;
@@ -23,6 +24,7 @@ import 'package:sammel_app/model/User.dart' as _i12;
 import 'package:sammel_app/routes/TermineSeite.dart' as _i20;
 import 'package:sammel_app/services/BackendService.dart' as _i5;
 import 'package:sammel_app/services/ChatMessageService.dart' as _i26;
+import 'package:sammel_app/services/FAQService.dart' as _i31;
 import 'package:sammel_app/services/ListLocationService.dart' as _i22;
 import 'package:sammel_app/services/LocalNotificationService.dart' as _i3;
 import 'package:sammel_app/services/PushNotificationManager.dart' as _i16;
@@ -855,6 +857,88 @@ class MockStammdatenService extends _i2.Mock implements _i4.StammdatenService {
           as _i11.Future<Set<_i30.Ortsteil>>);
 ***REMOVED***
 
+/// A class which mocks [FAQService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFAQService extends _i2.Mock implements _i31.FAQService {
+  MockFAQService() {
+    _i2.throwOnMissingStub(this);
+  ***REMOVED***
+
+  @override
+  _i9.StorageService get storageService =>
+      (super.noSuchMethod(Invocation.getter(#storageService),
+          returnValue: _FakeStorageService()) as _i9.StorageService);
+  @override
+  set storageService(_i9.StorageService? _storageService) =>
+      super.noSuchMethod(Invocation.setter(#storageService, _storageService),
+          returnValueForMissingStub: null);
+  @override
+  _i11.Future<List<_i32.FAQItem>> get faqItems =>
+      (super.noSuchMethod(Invocation.getter(#faqItems),
+              returnValue: Future.value(<_i32.FAQItem>[]))
+          as _i11.Future<List<_i32.FAQItem>>);
+  @override
+  set faqItems(_i11.Future<List<_i32.FAQItem>>? _faqItems) =>
+      super.noSuchMethod(Invocation.setter(#faqItems, _faqItems),
+          returnValueForMissingStub: null);
+  @override
+  _i5.Backend get backend => (super.noSuchMethod(Invocation.getter(#backend),
+      returnValue: _FakeBackend()) as _i5.Backend);
+  @override
+  _i6.AbstractUserService get userService =>
+      (super.noSuchMethod(Invocation.getter(#userService),
+          returnValue: _FakeAbstractUserService()) as _i6.AbstractUserService);
+  @override
+  set userService(_i6.AbstractUserService? _userService) =>
+      super.noSuchMethod(Invocation.setter(#userService, _userService),
+          returnValueForMissingStub: null);
+  @override
+  _i11.Future<List<_i32.FAQItem>> getSortedFAQ(String? search) =>
+      (super.noSuchMethod(Invocation.method(#getSortedFAQ, [search]),
+              returnValue: Future.value(<_i32.FAQItem>[]))
+          as _i11.Future<List<_i32.FAQItem>>);
+  @override
+  _i11.Future<List<_i32.FAQItem>> sortItems(
+          String? search, List<_i32.FAQItem>? items) =>
+      (super.noSuchMethod(Invocation.method(#sortItems, [search, items]),
+              returnValue: Future.value(<_i32.FAQItem>[]))
+          as _i11.Future<List<_i32.FAQItem>>);
+  @override
+  _i11.Future<_i8.HttpClientResponseBody> get(String? url, {bool? appAuth***REMOVED***) =>
+      (super.noSuchMethod(Invocation.method(#get, [url], {#appAuth: appAuth***REMOVED***),
+              returnValue: Future.value(_FakeHttpClientResponseBody()))
+          as _i11.Future<_i8.HttpClientResponseBody>);
+  @override
+  _i11.Future<_i8.HttpClientResponseBody> post(String? url, String? data,
+          {Map<String, String>? parameters, bool? appAuth***REMOVED***) =>
+      (super.noSuchMethod(
+              Invocation.method(#post, [url, data],
+                  {#parameters: parameters, #appAuth: appAuth***REMOVED***),
+              returnValue: Future.value(_FakeHttpClientResponseBody()))
+          as _i11.Future<_i8.HttpClientResponseBody>);
+  @override
+  _i11.Future<_i8.HttpClientResponseBody> delete(String? url, String? data,
+          {bool? appAuth***REMOVED***) =>
+      (super.noSuchMethod(
+              Invocation.method(#delete, [url, data], {#appAuth: appAuth***REMOVED***),
+              returnValue: Future.value(_FakeHttpClientResponseBody()))
+          as _i11.Future<_i8.HttpClientResponseBody>);
+  @override
+  _i11.Future<Map<String, String>> authHeaders(bool? appAuth) =>
+      (super.noSuchMethod(Invocation.method(#authHeaders, [appAuth]),
+              returnValue: Future.value(<String, String>{***REMOVED***))
+          as _i11.Future<Map<String, String>>);
+  @override
+  _i11.Future<_i8.HttpClientResponseBody> checkConnectivity(
+          {dynamic originalError***REMOVED***) =>
+      (super.noSuchMethod(
+              Invocation.method(
+                  #checkConnectivity, [], {#originalError: originalError***REMOVED***),
+              returnValue: Future.value(_FakeHttpClientResponseBody()))
+          as _i11.Future<_i8.HttpClientResponseBody>);
+***REMOVED***
+
 /// A class which mocks [StorageService].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -966,6 +1050,15 @@ class MockStorageService extends _i2.Mock implements _i9.StorageService {
   _i11.Future<String?> loadContact() =>
       (super.noSuchMethod(Invocation.method(#loadContact, []),
           returnValue: Future.value('')) as _i11.Future<String?>);
+  @override
+  _i11.Future<bool> saveFAQ(List<_i32.FAQItem>? faq) =>
+      (super.noSuchMethod(Invocation.method(#saveFAQ, [faq]),
+          returnValue: Future.value(false)) as _i11.Future<bool>);
+  @override
+  _i11.Future<List<_i32.FAQItem>?> loadFAQ() =>
+      (super.noSuchMethod(Invocation.method(#loadFAQ, []),
+              returnValue: Future.value(<_i32.FAQItem>[]))
+          as _i11.Future<List<_i32.FAQItem>?>);
 ***REMOVED***
 
 /// A class which mocks [FirebaseReceiveService].

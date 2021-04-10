@@ -5,6 +5,7 @@ import 'package:sammel_app/Provisioning.dart';
 import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
+import 'package:sammel_app/services/FAQService.dart';
 import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
@@ -72,6 +73,9 @@ class MyApp extends StatelessWidget {
   static var chatMessageService =
       ChatMessageService(storageService, pushNotificationManager, navigatorKey);
   static var geoService = GeoService();
+  static AbstractFAQService faqService = demoMode
+      ? DemoFAQService() as AbstractFAQService
+      : FAQService(storageService, userService, backend);
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +94,7 @@ class MyApp extends StatelessWidget {
           Provider<GeoService>.value(value: geoService),
           Provider<LocalNotificationService>.value(
               value: localNotificationService),
+          Provider<AbstractFAQService>.value(value: faqService),
         ],
         child: MaterialApp(
           title: 'DW & Co. Enteignen',
