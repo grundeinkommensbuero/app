@@ -121,6 +121,29 @@ main() {
           ]));
     ***REMOVED***);
   ***REMOVED***);
+
+  group('DemoFAQService', () {
+    test('delivers demo faq items', () async {
+      var faq = await DemoFAQService().getSortedFAQ(null);
+
+      expect(faq, isNotNull);
+      expect(faq.length, 4);
+      expect(faq[0].title, 'Wann geht\'s los?');
+      expect(faq[1].title, 'Was sind die Stufen des Volksbegehrens?');
+      expect(faq[2].title, 'Sammeltipps');
+      expect(faq[3].title, 'Feedback und Fehlermeldungen');
+    ***REMOVED***);
+
+    test('uses sorter', () async {
+      var faqUnsorted = await DemoFAQService().getSortedFAQ(null);
+      var faqSorted = await DemoFAQService().getSortedFAQ('Erfolg');
+
+      expect(faqSorted.map((e) => e.id).toList(),
+          containsAll(faqUnsorted.map((e) => e.id)));
+      expect(faqSorted.map((e) => e.id).toList(),
+          isNot(containsAllInOrder(faqUnsorted.map((e) => e.id))));
+    ***REMOVED***);
+  ***REMOVED***);
 ***REMOVED***
 
 var testItems = [

@@ -153,12 +153,12 @@ Nach kurzer Bedenkzeit der Person kann eine weitere erläuternder Satz nachgesch
 > „Wir sind von der Initiative gegen die Deutsche Wohnen und anderer Immobilienunternehmen“
 > „Wir sind von der Initiative Deutsche Wohnen und Co enteignen.“''',
         3.0,
-        ['Start', 'Beginn', 'Sammelphase']),
+        ['Tipps', 'Sammeln', 'Hinweise', 'Ansprechen']),
     FAQItem.short(
         4,
         'Feedback und Fehlermeldungen',
         '''Wenn du eine Fehler gefunden hast oder uns anderes Feedback zur App melden willst, dann schreib uns doch [per Mail](mailto:app@dwenteignen.de) oder öffne ein Bug-Ticket auf [der App-Webseite](https://www.gitlab.com/kybernetik/sammel-app)''',
         4.0,
-        ['Start', 'Beginn', 'Sammelphase']),
+        ['Bugs', 'Kontakt', 'Webseite', 'Email', 'E-Mail']),
   ]);
 ***REMOVED***
