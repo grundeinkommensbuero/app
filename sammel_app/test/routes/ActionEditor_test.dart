@@ -24,7 +24,6 @@ import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
 import '../model/Termin_test.dart';
-import '../services/FAQService_test.dart';
 import '../shared/TestdatenVorrat.dart';
 import '../shared/mocks.costumized.dart';
 import '../shared/mocks.mocks.dart';
@@ -71,8 +70,7 @@ void main() {
         .thenAnswer((_) async => []);
     when(_stammdatenService.kieze).thenAnswer(
         (_) => Future.value({ffAlleeNord(), plaenterwald(), tempVorstadt()***REMOVED***));
-    when(_faqService.getSortedFAQ(any))
-        .thenAnswer((_) => Future.value(testItems));
+    trainFAQService(_faqService);
   ***REMOVED***);
 
   testWidgets('Navigation opens CreateTerminDialog',

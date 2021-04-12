@@ -28,7 +28,6 @@ import 'package:sammel_app/services/UserService.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../model/Termin_test.dart';
-import '../services/FAQService_test.dart';
 import '../shared/TestdatenVorrat.dart';
 import '../shared/mocks.costumized.dart';
 import '../shared/mocks.mocks.dart';
@@ -66,8 +65,8 @@ void main() {
     when(_termineService.loadActions(any)).thenAnswer((_) async => []);
     when(_termineService.deleteAction(any, any)).thenReturn(null);
     when(_pushManager.pushToken).thenAnswer((_) => Future.value('Token'));
-    when(_faqService.getSortedFAQ(any))
-        .thenAnswer((_) => Future.value(testItems));
+    trainFAQService(_faqService);
+
     ErrorService.displayedTypes = [];
 
     termineSeiteWidget = MultiProvider(

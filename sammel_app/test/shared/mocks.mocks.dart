@@ -874,13 +874,22 @@ class MockFAQService extends _i2.Mock implements _i31.FAQService {
       super.noSuchMethod(Invocation.setter(#storageService, _storageService),
           returnValueForMissingStub: null);
   @override
-  _i11.Future<List<_i32.FAQItem>> get faqItems =>
-      (super.noSuchMethod(Invocation.getter(#faqItems),
-              returnValue: Future.value(<_i32.FAQItem>[]))
-          as _i11.Future<List<_i32.FAQItem>>);
+  _i11.StreamController<List<_i32.FAQItem>?> get controller =>
+      (super.noSuchMethod(Invocation.getter(#controller),
+              returnValue: _FakeStreamController<List<_i32.FAQItem>?>())
+          as _i11.StreamController<List<_i32.FAQItem>?>);
   @override
-  set faqItems(_i11.Future<List<_i32.FAQItem>>? _faqItems) =>
-      super.noSuchMethod(Invocation.setter(#faqItems, _faqItems),
+  set controller(_i11.StreamController<List<_i32.FAQItem>?>? _controller) =>
+      super.noSuchMethod(Invocation.setter(#controller, _controller),
+          returnValueForMissingStub: null);
+  @override
+  _i11.Stream<List<_i32.FAQItem>?> get stream =>
+      (super.noSuchMethod(Invocation.getter(#stream),
+              returnValue: Stream<List<_i32.FAQItem>?>.empty())
+          as _i11.Stream<List<_i32.FAQItem>?>);
+  @override
+  set stream(_i11.Stream<List<_i32.FAQItem>?>? _stream) =>
+      super.noSuchMethod(Invocation.setter(#stream, _stream),
           returnValueForMissingStub: null);
   @override
   _i5.Backend get backend => (super.noSuchMethod(Invocation.getter(#backend),
@@ -894,16 +903,15 @@ class MockFAQService extends _i2.Mock implements _i31.FAQService {
       super.noSuchMethod(Invocation.setter(#userService, _userService),
           returnValueForMissingStub: null);
   @override
-  _i11.Future<List<_i32.FAQItem>> getSortedFAQ(String? search) =>
+  _i11.Stream<List<_i32.FAQItem>?> getSortedFAQ(String? search) =>
       (super.noSuchMethod(Invocation.method(#getSortedFAQ, [search]),
-              returnValue: Future.value(<_i32.FAQItem>[]))
-          as _i11.Future<List<_i32.FAQItem>>);
+              returnValue: Stream<List<_i32.FAQItem>?>.empty())
+          as _i11.Stream<List<_i32.FAQItem>?>);
   @override
-  _i11.Future<List<_i32.FAQItem>> sortItems(
-          String? search, List<_i32.FAQItem>? items) =>
-      (super.noSuchMethod(Invocation.method(#sortItems, [search, items]),
+  _i11.Future<List<_i32.FAQItem>?> updateFAQfromServer() =>
+      (super.noSuchMethod(Invocation.method(#updateFAQfromServer, []),
               returnValue: Future.value(<_i32.FAQItem>[]))
-          as _i11.Future<List<_i32.FAQItem>>);
+          as _i11.Future<List<_i32.FAQItem>?>);
   @override
   _i11.Future<_i8.HttpClientResponseBody> get(String? url, {bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(Invocation.method(#get, [url], {#appAuth: appAuth***REMOVED***),

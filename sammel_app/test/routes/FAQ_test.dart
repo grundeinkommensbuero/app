@@ -15,7 +15,7 @@ main() {
   final faq = FAQ();
 
   setUpUI((WidgetTester tester) async {
-    service.faqItems = Future.value(testItems);
+    service.faqItems = testItems;
     await tester.pumpWidget(MaterialApp(
         home: Provider<AbstractFAQService>.value(value: service, child: faq)));
     await tester.pumpAndSettle();
@@ -110,7 +110,6 @@ main() {
       var titlesInOrder =
           tester.widgetList<FAQTile>(itemTiles).map((tile) => tile.item.title);
 
-      print('### titlesInOrder = $titlesInOrder');
       expect(
           titlesInOrder,
           containsAllInOrder(

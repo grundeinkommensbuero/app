@@ -22,7 +22,6 @@ import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
 import '../model/Termin_test.dart';
-import '../services/FAQService_test.dart';
 import '../shared/mocks.costumized.dart';
 import '../shared/mocks.mocks.dart';
 import '../shared/mocks.trainer.dart';
@@ -65,8 +64,7 @@ void main() {
           .thenAnswer((_) async => TermineFilter.leererFilter());
       when(_termineService.loadActions(any)).thenAnswer((_) async => []);
       when(_pushManager.pushToken).thenAnswer((_) async => 'Token');
-      when(_faqService.getSortedFAQ(any))
-          .thenAnswer((_) => Future.value(testItems));
+      trainFAQService(_faqService);
 
       await tester.pumpWidget(MultiProvider(providers: [
         Provider<StammdatenService>.value(value: _stammdatenService),

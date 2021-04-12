@@ -33,7 +33,7 @@ class FAQState extends State<FAQ> {
   Widget build(BuildContext context) {
     if (items == null) {
       this.faqService = Provider.of<AbstractFAQService>(context);
-      faqService.getSortedFAQ(null).then((faq) => setState(() => items = faq));
+      listenToFAQ();
     ***REMOVED***
 
     return Scaffold(
@@ -52,12 +52,10 @@ class FAQState extends State<FAQ> {
                 suffixIcon: IconButton(
                     key: Key('faq search clear button'),
                     icon: Icon(Icons.clear, color: DweTheme.purple),
-                    onPressed: () => faqService
-                        .getSortedFAQ(null)
-                        .then((faq) => setState(() {
-                              searchInputController.clear();
-                              items = faq;
-                            ***REMOVED***))),
+                    onPressed: () {
+                      listenToFAQ(search: null);
+                      setState(() => searchInputController.clear());
+                    ***REMOVED***),
                 contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
                 border: OutlineInputBorder(
                     borderSide: BorderSide.none,
@@ -65,9 +63,7 @@ class FAQState extends State<FAQ> {
                 hintText: 'Durchsuchen'.tr()),
             onChanged: (text) {
               controller?.jumpTo(0);
-              faqService
-                  .getSortedFAQ(text)
-                  .then((faq) => setState(() => items = faq));
+              listenToFAQ(search: text);
             ***REMOVED***,
           ),
         ),
@@ -91,6 +87,10 @@ class FAQState extends State<FAQ> {
             )
     ]));
   ***REMOVED***
+
+  listenToFAQ({String? search***REMOVED***) => faqService
+      .getSortedFAQ(search)
+      .listen((faq) => setState(() => items = faq));
 ***REMOVED***
 
 // ignore: must_be_immutable
@@ -129,7 +129,7 @@ class FAQTile extends StatelessWidget {
           ),
           MarkdownBody(
               data: extended ? item.full : item.teaser,
-              onTapLink: (_1, link, _2) => launch(link ?? ''),
+              onTapLink: (_a, link, _b) => launch(link ?? ''),
               selectable: true,
               styleSheet: MarkdownStyleSheet(
                   a: TextStyle(

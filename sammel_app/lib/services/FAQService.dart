@@ -1,20 +1,20 @@
-import 'dart:convert';
+import 'dart:async';
 
 import 'package:quiver/strings.dart';
 import 'package:sammel_app/model/FAQItem.dart';
 import 'package:sammel_app/services/BackendService.dart';
-import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
-abstract class AbstractFAQService {
-  abstract Future<List<FAQItem>> faqItems;
+import 'ErrorService.dart';
 
-  Future<List<FAQItem>> getSortedFAQ(String? search);
+abstract class AbstractFAQService {
+  Stream<List<FAQItem>?> getSortedFAQ(String? search);
 ***REMOVED***
 
 mixin FAQSorter {
-  Future<List<FAQItem>> sortItems(String? search, List<FAQItem> items) async {
+  List<FAQItem>? sortItems(String? search, List<FAQItem>? items) {
+    if (items == null) return null;
     if (search == null) search = '';
 
     if (search == '') {
@@ -77,40 +77,55 @@ class FAQService extends BackendService
     implements AbstractFAQService {
   StorageService storageService;
 
-  @override
-  late Future<List<FAQItem>> faqItems;
+  StreamController<List<FAQItem>?> controller = StreamController();
+  late Stream<List<FAQItem>?> stream;
+  List<FAQItem>? latest;
 
   FAQService(
       this.storageService, AbstractUserService userService, Backend backend)
       : super(userService, backend) {
-    faqItems = storageService.loadFAQ().then((value) => value ?? []); // TODO
-    updateFAQfromServer();
+    stream = controller.stream;
+    storageService
+        .loadFAQ()
+        .then((value) => value ?? List<FAQItem>.empty())
+        .then((faq) => controller.add(faq));
+    updateFAQfromServer().then((faq) {
+      controller.add(faq);
+      controller.close();
+    ***REMOVED***);
   ***REMOVED***
 
   @override
-  Future<List<FAQItem>> getSortedFAQ(String? search) async =>
-      super.sortItems(search, await faqItems);
+  Stream<List<FAQItem>?> getSortedFAQ(String? search) {
+    // ignore: close_sinks
+    StreamController<List<FAQItem>?> sortedController =
+        StreamController.broadcast();
+    sortedController.add(latest);
+    sortedController.addStream(stream).whenComplete(() => controller.close());
+    return sortedController.stream.map((items) => sortItems(search, items));
+  ***REMOVED***
 
-  updateFAQfromServer() async {
+  Future<List<FAQItem>?> updateFAQfromServer() async {
     try {
-      final response = await get('services/faq', appAuth: true);
-      final faqFromServer = (jsonDecode(response.body as String) as List)
+      final response = await get('service/faq', appAuth: true);
+      final faqFromServer = (response.body as List)
           .map((item) => FAQItem.fromJson(item))
           .toList();
       storageService.saveFAQ(faqFromServer);
+      return faqFromServer;
     ***REMOVED*** catch (e) {
       ErrorService.handleError(e, StackTrace.current);
+      rethrow;
     ***REMOVED***
   ***REMOVED***
 ***REMOVED***
 
 class DemoFAQService with FAQSorter implements AbstractFAQService {
   @override
-  Future<List<FAQItem>> getSortedFAQ(String? search) async =>
-      sortItems(search, await faqItems);
+  Stream<List<FAQItem>?> getSortedFAQ(String? search) =>
+      Stream.value(sortItems(search, faqItems));
 
-  @override
-  Future<List<FAQItem>> faqItems = Future.value([
+  List<FAQItem> faqItems = [
     FAQItem.short(
         1,
         'Wann geht\'s los?',
@@ -160,5 +175,5 @@ Nach kurzer Bedenkzeit der Person kann eine weitere erläuternder Satz nachgesch
         '''Wenn du eine Fehler gefunden hast oder uns anderes Feedback zur App melden willst, dann schreib uns doch [per Mail](mailto:app@dwenteignen.de) oder öffne ein Bug-Ticket auf [der App-Webseite](https://www.gitlab.com/kybernetik/sammel-app)''',
         4.0,
         ['Bugs', 'Kontakt', 'Webseite', 'Email', 'E-Mail']),
-  ]);
+  ];
 ***REMOVED***
