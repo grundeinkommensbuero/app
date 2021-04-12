@@ -21,8 +21,8 @@ main() {
     trainBackend(_backend);
     when(_storageService.loadFAQ()).thenAnswer((_) => Future.value(testItems));
     when(_backend.get('service/faq', any)).thenAnswer((_) =>
-    Future<HttpClientResponseBody>.value(
-        trainHttpResponse(MockHttpClientResponseBody(), 200, [
+        Future<HttpClientResponseBody>.value(
+            trainHttpResponse(MockHttpClientResponseBody(), 200, [
           {
             "id": 4,
             "title": "Myrmica Ruginodis",
@@ -34,6 +34,10 @@ main() {
   ***REMOVED***);
 
   group('mixin', () {
+    test('returns null with missing faqs', () async {
+      expect(TestFAQSorter().sortItems(null, null), isNull);
+    ***REMOVED***);
+
     test('orders by number of hits in tags', () async {
       List<FAQItem> orderedItems =
           TestFAQSorter().sortItems('Ameise rot Holz', testItems)!;
