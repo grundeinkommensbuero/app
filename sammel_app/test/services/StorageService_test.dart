@@ -285,6 +285,38 @@ void main() async {
 
       expect(result, isNull);
     ***REMOVED***);
+
+    test('saveFAQ saves faq to storage', () async {
+      expect(_prefs.getString('faqTimestamp'), isNull);
+
+      await service.saveFAQ(testItems);
+
+      expect(_prefs.getString('faqTimestamp'), isNotNull);
+    ***REMOVED***);
+  ***REMOVED***);
+
+  group('faq timestamp', () {
+    test('loadFAQTimestamp returns stored timestamp', () async {
+      _prefs.setString('faqTimestamp', '2021-04-12 17:00:00');
+
+      var result = await service.loadFAQTimestamp();
+
+      expect(result, isNotNull);
+      expect(result, isNotNull);
+    ***REMOVED***);
+
+    test('loadFAQTimestamp returns null if no faq is stored', () async {
+      var result = await service.loadFAQ();
+
+      expect(result, isNull);
+    ***REMOVED***);
+
+    test('saveFAQTimestamp stores timestamp', () async {
+      DateTime timestamp = DateTime.parse('2021-04-12 17:05:00');
+      var result = await service.saveFAQTimestamp(timestamp);
+
+      expect(_prefs.getString('faqTimestamp'), '2021-04-12 17:05:00.000');
+    ***REMOVED***);
   ***REMOVED***);
 
   test('clearAllPreferences clears whole storage', () async {

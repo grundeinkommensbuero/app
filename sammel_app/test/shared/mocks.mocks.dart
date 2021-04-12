@@ -87,6 +87,8 @@ class _FakeSharedPreferences extends _i2.Fake
 
 class _FakeTermineFilter extends _i2.Fake implements _i18.TermineFilter {***REMOVED***
 
+class _FakeDateTime extends _i2.Fake implements DateTime {***REMOVED***
+
 /// A class which mocks [TermineService].
 ///
 /// See the documentation for Mockito's code generation for more information.
@@ -908,11 +910,6 @@ class MockFAQService extends _i2.Mock implements _i31.FAQService {
               returnValue: Stream<List<_i32.FAQItem>?>.empty())
           as _i11.Stream<List<_i32.FAQItem>?>);
   @override
-  _i11.Future<List<_i32.FAQItem>?> updateFAQfromServer() =>
-      (super.noSuchMethod(Invocation.method(#updateFAQfromServer, []),
-              returnValue: Future.value(<_i32.FAQItem>[]))
-          as _i11.Future<List<_i32.FAQItem>?>);
-  @override
   _i11.Future<_i8.HttpClientResponseBody> get(String? url, {bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(Invocation.method(#get, [url], {#appAuth: appAuth***REMOVED***),
               returnValue: Future.value(_FakeHttpClientResponseBody()))
@@ -1067,6 +1064,14 @@ class MockStorageService extends _i2.Mock implements _i9.StorageService {
       (super.noSuchMethod(Invocation.method(#loadFAQ, []),
               returnValue: Future.value(<_i32.FAQItem>[]))
           as _i11.Future<List<_i32.FAQItem>?>);
+  @override
+  _i11.Future<bool> saveFAQTimestamp(DateTime? timestamp) =>
+      (super.noSuchMethod(Invocation.method(#saveFAQTimestamp, [timestamp]),
+          returnValue: Future.value(false)) as _i11.Future<bool>);
+  @override
+  _i11.Future<DateTime?> loadFAQTimestamp() => (super.noSuchMethod(
+      Invocation.method(#loadFAQTimestamp, []),
+      returnValue: Future.value(_FakeDateTime())) as _i11.Future<DateTime?>);
 ***REMOVED***
 
 /// A class which mocks [FirebaseReceiveService].

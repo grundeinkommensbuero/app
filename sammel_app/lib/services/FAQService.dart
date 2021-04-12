@@ -89,10 +89,7 @@ class FAQService extends BackendService
         .loadFAQ()
         .then((value) => value ?? List<FAQItem>.empty())
         .then((faq) => controller.add(faq));
-    updateFAQfromServer().then((faq) {
-      controller.add(faq);
-      controller.close();
-    ***REMOVED***);
+    updateFAQfromServer();
   ***REMOVED***
 
   @override
@@ -105,17 +102,25 @@ class FAQService extends BackendService
     return sortedController.stream.map((items) => sortItems(search, items));
   ***REMOVED***
 
-  Future<List<FAQItem>?> updateFAQfromServer() async {
+  updateFAQfromServer() async {
+    var serverTimestamp = (await backend.getServerHealth()).faqTimestamp;
+    var localTimestamp = await storageService.loadFAQTimestamp();
+
+    if (localTimestamp != null &&
+        (serverTimestamp == null || localTimestamp.isAfter(serverTimestamp)))
+      return;
+
     try {
       final response = await get('service/faq', appAuth: true);
       final faqFromServer = (response.body as List)
           .map((item) => FAQItem.fromJson(item))
           .toList();
       storageService.saveFAQ(faqFromServer);
-      return faqFromServer;
+      storageService.saveFAQTimestamp(DateTime.now());
+      controller.add(faqFromServer);
+      controller.close();
     ***REMOVED*** catch (e) {
       ErrorService.handleError(e, StackTrace.current);
-      rethrow;
     ***REMOVED***
   ***REMOVED***
 ***REMOVED***

@@ -6,6 +6,7 @@ import 'package:easy_localization/src/translations.dart';
 import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/ChatChannel.dart';
+import 'package:sammel_app/model/Health.dart';
 
 import '../services/FAQService_test.dart';
 import '../shared/mocks.costumized.dart';
@@ -53,6 +54,7 @@ MockBackend trainBackend(MockBackend mock) {
     return Future<HttpClientResponseBody>.value(
         trainHttpResponse(MockHttpClientResponseBody(), 200, true));
   ***REMOVED***);
+  when(mock.getServerHealth()).thenAnswer((_) => Future.value(ServerHealth()));
   return mock;
 ***REMOVED***
 

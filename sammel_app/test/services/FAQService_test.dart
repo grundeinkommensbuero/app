@@ -1,7 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http_server/http_server.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/FAQItem.dart';
+import 'package:sammel_app/model/Health.dart';
 import 'package:sammel_app/services/FAQService.dart';
 
 import '../shared/mocks.costumized.dart';
@@ -194,7 +196,9 @@ main() {
       verify(_storageService.loadFAQ()).called(1);
     ***REMOVED***);
 
-    test('retrieves and returns new faq from server on start', () async {
+    test(
+        'retrieves and returns new faq from server on start when local timestamp is null',
+        () async {
       var faqService = FAQService(_storageService, _userService, _backend);
 
       List<FAQItem>? faq;
@@ -207,7 +211,8 @@ main() {
       expect(faq![0].id, 4);
     ***REMOVED***);
 
-    test('stores new faq from server in storage', () async {
+    test('stores new faq from server in storage when local timestamp is null',
+        () async {
       var faqService = FAQService(_storageService, _userService, _backend);
 
       faqService.getSortedFAQ(null);
@@ -219,8 +224,58 @@ main() {
       expect((faq[0] as List<FAQItem>)[0].id, 4);
       expect((faq[0] as List<FAQItem>)[0].title, 'Myrmica Ruginodis');
     ***REMOVED***);
+
+    test(
+        'does not retrieve new faq from server in storage when local timestamp is not null, but servers is',
+        () async {
+      when(_storageService.loadFAQTimestamp())
+          .thenAnswer((_) => Future.value(_today()));
+      var faqService = FAQService(_storageService, _userService, _backend);
+
+      faqService.getSortedFAQ(null);
+      await Future.delayed(Duration(milliseconds: 100));
+
+      verifyNever(_backend.get('service/faq', any));
+      verifyNever(_storageService.saveFAQ(captureAny));
+    ***REMOVED***);
+
+    test(
+        'does not retrieve new faq from server in storage when local timestamp is newer then servers',
+        () async {
+      when(_storageService.loadFAQTimestamp())
+          .thenAnswer((_) => Future.value(_today()));
+      when(_backend.getServerHealth()).thenAnswer(
+          (_) => Future.value(ServerHealth()..faqTimestamp = _yesterday()));
+      var faqService = FAQService(_storageService, _userService, _backend);
+
+      faqService.getSortedFAQ(null);
+      await Future.delayed(Duration(milliseconds: 100));
+
+      verifyNever(_backend.get('service/faq', any));
+      verifyNever(_storageService.saveFAQ(captureAny));
+    ***REMOVED***);
+
+    test(
+        'does not retrieve new faq from server in storage when local timestamp is newer then servers',
+        () async {
+      when(_storageService.loadFAQTimestamp())
+          .thenAnswer((_) => Future.value(_yesterday()));
+      when(_backend.getServerHealth()).thenAnswer(
+          (_) => Future.value(ServerHealth()..faqTimestamp = _today()));
+      var faqService = FAQService(_storageService, _userService, _backend);
+
+      faqService.getSortedFAQ(null);
+      await Future.delayed(Duration(milliseconds: 100));
+
+      verify(_backend.get('service/faq', any)).called(1);
+      verify(_storageService.saveFAQ(captureAny)).called(1);
+    ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***
+
+DateTime _today() => DateTime.now();
+
+DateTime _yesterday() => Jiffy(DateTime.now()).subtract(days: 1).dateTime;
 
 var testItems = [
   FAQItem(1, 'Camponotus Ligniperdus', 'Die dickste Ameise', ' in Mitteleuropa',

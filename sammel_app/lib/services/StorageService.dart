@@ -27,6 +27,7 @@ class StorageService {
   static const String _NOTIF_INTERVAL = 'notifInterval';
   static const String _CONTACT = 'contact';
   static const String _FAQ = 'faq';
+  static const String _FAQ_Timestamp = 'faqTimestamp';
 
   StorageService() {
     _prefs = SharedPreferences.getInstance();
@@ -169,6 +170,15 @@ class StorageService {
         return storedFAQ
             ?.map((faq) => FAQItem.fromJson(jsonDecode(faq)))
             .toList();
+      ***REMOVED***);
+
+  Future<bool> saveFAQTimestamp(DateTime timestamp) => prefs.then(
+      (prefs) => prefs.setString(_FAQ_Timestamp, timestamp.toString()));
+
+  Future<DateTime?> loadFAQTimestamp() => prefs.then((prefs) async {
+        var timestamp = prefs.getString(_FAQ_Timestamp);
+        if (timestamp == null) return null;
+        return DateTime.parse(timestamp);
       ***REMOVED***);
 
   // for Debugging only
