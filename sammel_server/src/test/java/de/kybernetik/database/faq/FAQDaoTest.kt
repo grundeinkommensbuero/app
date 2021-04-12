@@ -94,8 +94,8 @@ open class FAQBuilder {
         return this
     ***REMOVED***
 
-    open fun withTitel(titel: String): FAQBuilder {
-        faq.titel = titel
+    open fun withTitle(title: String): FAQBuilder {
+        faq.title = title
         return this
     ***REMOVED***
 
@@ -121,7 +121,7 @@ open class FAQBuilder {
 
     open fun withGenericValues(offset: Long): FAQBuilder {
         faq.id = offset
-        faq.titel = "Titel ${offset***REMOVED***"
+        faq.title = "Titel ${offset***REMOVED***"
         faq.teaser = "Teaser ${offset***REMOVED***"
         faq.rest = "Rest ${offset***REMOVED***"
         faq.order = offset.toDouble()

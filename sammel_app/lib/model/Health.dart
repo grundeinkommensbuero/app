@@ -10,7 +10,7 @@ class ServerHealth {
     status = json['status'];
     minClient = json['minClient'];
     version = json['version'];
-    faqTimestamp = DateTime.tryParse(json['faqTimestamp']);
+    faqTimestamp = DateTime.tryParse(json['faqTimestamp'] ?? '');
   ***REMOVED***
 
   get alive => status == 'lebendig';

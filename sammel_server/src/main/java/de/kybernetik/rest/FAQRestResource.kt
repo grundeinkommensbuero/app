@@ -26,19 +26,19 @@ open class FAQRestResource {
     @Produces(MediaType.APPLICATION_JSON)
     open fun getAllFAQs(): List<FAQDto> {
         LOG.info("Lade FAQs")
-        val faqs = dao.getAllFAQ()
-        return faqs.map { FAQDto.convertFromFAQ(it) ***REMOVED***
+        return dao.getAllFAQ().map { FAQDto.convertFromFAQ(it) ***REMOVED***
     ***REMOVED***
 ***REMOVED***
 
 data class FAQDto(
-    var titel: String,
+    var id: Long,
+    var title: String,
     var teaser: String,
     var rest: String? = null,
     var order: Double? = null,
     var tags: List<String>? = null
 ) {
     companion object {
-        fun convertFromFAQ(faq: FAQ): FAQDto = FAQDto(faq.titel, faq.teaser, faq.rest, faq.order, faq.tags)
+        fun convertFromFAQ(faq: FAQ): FAQDto = FAQDto(faq.id, faq.title, faq.teaser, faq.rest, faq.order, faq.tags)
     ***REMOVED***
 ***REMOVED***

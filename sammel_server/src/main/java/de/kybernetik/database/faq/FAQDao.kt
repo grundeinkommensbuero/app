@@ -19,7 +19,7 @@ open class FAQDao {
 
     open fun getAllFAQ(): List<FAQ> {
         val faqs = entityManager.createQuery("from FAQ", FAQ::class.java).resultList
-        LOG.debug("${faqs.size***REMOVED*** FAQ-Einträge gefunden: ${faqs.map { it.titel ***REMOVED******REMOVED***")
+        LOG.debug("${faqs.size***REMOVED*** FAQ-Einträge gefunden: ${faqs.map { it.title ***REMOVED******REMOVED***")
         return faqs
     ***REMOVED***
 

@@ -1,7 +1,7 @@
 create table FAQ
 (
     id            int   unique  not null,
-    titel         char(120)          not null,
+    title         char(120)          not null,
     teaser        text          not null,
     rest          text          null,
     order_nr      double        not null,

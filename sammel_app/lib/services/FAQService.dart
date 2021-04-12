@@ -77,7 +77,7 @@ class FAQService extends BackendService
     implements AbstractFAQService {
   StorageService storageService;
 
-  StreamController<List<FAQItem>?> controller = StreamController();
+  StreamController<List<FAQItem>?> controller = StreamController.broadcast();
   late Stream<List<FAQItem>?> stream;
   List<FAQItem>? latest;
 
@@ -85,6 +85,7 @@ class FAQService extends BackendService
       this.storageService, AbstractUserService userService, Backend backend)
       : super(userService, backend) {
     stream = controller.stream;
+    stream.listen((faq) => latest = faq);
     storageService
         .loadFAQ()
         .then((value) => value ?? List<FAQItem>.empty())

@@ -162,8 +162,8 @@ class StorageService {
   Future<String?> loadContact() =>
       prefs.then((prefs) => prefs.getString(_CONTACT));
 
-  Future<bool> saveFAQ(List<FAQItem> faq) =>
-      prefs.then((prefs) => prefs.setString(_FAQ, jsonEncode(faq)));
+  Future<bool> saveFAQ(List<FAQItem> faq) => prefs.then((prefs) =>
+      prefs.setStringList(_FAQ, faq.map((item) => jsonEncode(item)).toList()));
 
   Future<List<FAQItem>?> loadFAQ() => prefs.then((prefs) async {
         var storedFAQ = prefs.getStringList(_FAQ);
@@ -172,8 +172,8 @@ class StorageService {
             .toList();
       ***REMOVED***);
 
-  Future<bool> saveFAQTimestamp(DateTime timestamp) => prefs.then(
-      (prefs) => prefs.setString(_FAQ_Timestamp, timestamp.toString()));
+  Future<bool> saveFAQTimestamp(DateTime timestamp) => prefs
+      .then((prefs) => prefs.setString(_FAQ_Timestamp, timestamp.toString()));
 
   Future<DateTime?> loadFAQTimestamp() => prefs.then((prefs) async {
         var timestamp = prefs.getString(_FAQ_Timestamp);

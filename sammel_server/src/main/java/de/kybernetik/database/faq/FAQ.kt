@@ -8,10 +8,10 @@ import javax.persistence.FetchType.EAGER
 class FAQ @Suppress("unused") constructor() {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
+    var id: Long = 0
 
     @Column
-    lateinit var titel: String
+    lateinit var title: String
 
     @Column
     lateinit var teaser: String

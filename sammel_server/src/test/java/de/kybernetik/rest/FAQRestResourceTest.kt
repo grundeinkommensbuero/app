@@ -42,14 +42,14 @@ class FAQRestResourceTest {
 
         verify(dao, times(1)).getAllFAQ()
         assertEquals(faqDtos.size, 3)
-        assertEquals(faqDtos[0].titel, "Titel 1")
+        assertEquals(faqDtos[0].title, "Titel 1")
         assertEquals(faqDtos[0].teaser, "Teaser 1")
         assertEquals(faqDtos[0].rest, "Rest 1")
         assertEquals(faqDtos[0].order, 1.0)
         assertEquals(faqDtos[0].tags?.size, 1)
         assertEquals(faqDtos[0].tags!![0], "tag 1")
 
-        assertEquals(faqDtos[1].titel, "Titel 2")
+        assertEquals(faqDtos[1].title, "Titel 2")
         assertEquals(faqDtos[1].teaser, "Teaser 2")
         assertEquals(faqDtos[1].rest, "Rest 2")
         assertEquals(faqDtos[1].order, 2.0)
@@ -57,7 +57,7 @@ class FAQRestResourceTest {
         assertEquals(faqDtos[1].tags!![0], "tag 1")
         assertEquals(faqDtos[1].tags!![1], "tag 2")
 
-        assertEquals(faqDtos[2].titel, "Titel 3")
+        assertEquals(faqDtos[2].title, "Titel 3")
         assertEquals(faqDtos[2].teaser, "Teaser 3")
         assertEquals(faqDtos[2].rest, "Rest 3")
         assertEquals(faqDtos[2].order, 3.0)

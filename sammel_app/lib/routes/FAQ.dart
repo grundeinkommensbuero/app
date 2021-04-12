@@ -102,6 +102,7 @@ class FAQTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('Zeichne FAQTile: ${item.toJson()***REMOVED***');
     return ListTile(
       contentPadding: EdgeInsets.only(bottom: 2.0),
       title: Container(

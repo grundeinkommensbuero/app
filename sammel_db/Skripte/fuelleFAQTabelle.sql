@@ -1,4 +1,4 @@
-insert into FAQ (id, titel, teaser, rest, order_nr) values (
+insert into FAQ (id, title, teaser, rest, order_nr) values (
 1,
 'Wann geht''s los?',
 'Am 26. Februar ist Sammelbeginn.',
@@ -10,7 +10,7 @@ insert into FAQ_Tags (faq, tag) values (1, 'Start');
 insert into FAQ_Tags (faq, tag) values (1, 'Beginn');
 insert into FAQ_Tags (faq, tag) values (1, 'Sammelphase');
 
-insert into FAQ (id, titel, teaser, rest, order_nr) values (
+insert into FAQ (id, title, teaser, rest, order_nr) values (
 2,
 'Wie lange wird gesammelt?',
 'Die Sammelphase geht vom 26. Februar bis 25. Juni 2021, also vier Monate. **Dieser Zeitraum ist nicht verlängerbar.**',
@@ -23,7 +23,7 @@ insert into FAQ_Tags (faq, tag) values (2, 'Deadline');
 insert into FAQ_Tags (faq, tag) values (2, 'Dauer');
 insert into FAQ_Tags (faq, tag) values (2, 'Sammelphase');
 
-insert into FAQ (id, titel, teaser, rest, order_nr) values (
+insert into FAQ (id, title, teaser, rest, order_nr) values (
 3,
 'Wessen Unterschrift ist gültig?',
 'Wahlberechtigt sind alle Berliner\*innen mit deutschem Pass, die mindestens drei Monate in Berlin gemeldet und mindestens 18 Jahre alt sind. Die Unterschriften eines großen Teils der Einwohner\*innen Berlins, werden also für ungültig erklärt. Das ist unserer Meinung nach höchst undemokratisch und ein politischer Skandal. Wir freuen uns jedoch über jede Unterstützung und finden es deshalb gut, wenn auch Personen unterschreiben, die nicht wahlberechtigt sind.',
