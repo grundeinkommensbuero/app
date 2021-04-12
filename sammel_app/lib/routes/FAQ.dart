@@ -88,9 +88,11 @@ class FAQState extends State<FAQ> {
     ]));
   ***REMOVED***
 
-  listenToFAQ({String? search***REMOVED***) => faqService
-      .getSortedFAQ(search)
-      .listen((faq) => setState(() => items = faq));
+  listenToFAQ({String? search***REMOVED***) =>
+      faqService.getSortedFAQ(search).listen((faq) => setState(() {
+            print('### neue FAQ im Page-Stream: ${faq?.map((e) => e.title)***REMOVED***');
+            items = faq;
+          ***REMOVED***));
 ***REMOVED***
 
 // ignore: must_be_immutable

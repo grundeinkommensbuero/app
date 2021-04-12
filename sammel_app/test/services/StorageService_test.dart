@@ -287,11 +287,11 @@ void main() async {
     ***REMOVED***);
 
     test('saveFAQ saves faq to storage', () async {
-      expect(_prefs.getString('faqTimestamp'), isNull);
+      expect(_prefs.getStringList('faq'), isNull);
 
       await service.saveFAQ(testItems);
 
-      expect(_prefs.getString('faqTimestamp'), isNotNull);
+      expect(_prefs.getStringList('faq'), isNotNull);
     ***REMOVED***);
   ***REMOVED***);
 
@@ -313,7 +313,7 @@ void main() async {
 
     test('saveFAQTimestamp stores timestamp', () async {
       DateTime timestamp = DateTime.parse('2021-04-12 17:05:00');
-      var result = await service.saveFAQTimestamp(timestamp);
+      await service.saveFAQTimestamp(timestamp);
 
       expect(_prefs.getString('faqTimestamp'), '2021-04-12 17:05:00.000');
     ***REMOVED***);
