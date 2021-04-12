@@ -38,3 +38,5 @@ insert into FAQ (id, titel, teaser, rest, order_nr) values (
 insert into FAQ_Tags (faq, tag) values (3, 'Gültigkeit');
 insert into FAQ_Tags (faq, tag) values (3, 'Unterschriften');
 insert into FAQ_Tags (faq, tag) values (3, 'Wer');
+
+insert into FAQ_Timestamp (timestamp) values ('2021-04-12 16:00:00')

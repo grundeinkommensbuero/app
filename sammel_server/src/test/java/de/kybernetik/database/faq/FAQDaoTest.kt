@@ -11,7 +11,9 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
+import java.time.LocalDateTime
 import javax.persistence.EntityManager
+import javax.persistence.NoResultException
 import javax.persistence.TypedQuery
 import kotlin.test.assertEquals
 
@@ -25,6 +27,9 @@ class FAQDaoTest {
 
     @Mock
     private lateinit var typedQuery: TypedQuery<FAQ>
+
+    @Mock
+    private lateinit var typedQueryTimestamp: TypedQuery<FAQTimestamp>
 
     @InjectMocks
     private lateinit var dao: FAQDao
@@ -55,6 +60,28 @@ class FAQDaoTest {
         assertEquals(faqs[2], response[2])
 
         verify(entityManager, times(1)).createQuery("from FAQ", FAQ::class.java)
+    ***REMOVED***
+
+    @Test
+    fun `getFAQTimestamp returns existing timestamp`() {
+        val faqTimestamp = FAQTimestamp()
+        faqTimestamp.timestamp = LocalDateTime.of(2021, 4, 12, 16, 35, 0)
+        whenever(entityManager.createQuery(ArgumentMatchers.anyString(), ArgumentMatchers.any<Class<FAQTimestamp>>()))
+            .thenReturn(typedQueryTimestamp)
+        whenever(typedQueryTimestamp.singleResult)
+            .thenReturn(faqTimestamp)
+
+        assertEquals(dao.getFAQTimestamp(), faqTimestamp.timestamp)
+    ***REMOVED***
+
+    @Test
+    fun `getFAQTimestamp returns null on missing timestamp`() {
+        whenever(entityManager.createQuery(ArgumentMatchers.anyString(), ArgumentMatchers.any<Class<FAQTimestamp>>()))
+            .thenReturn(typedQueryTimestamp)
+        whenever(typedQueryTimestamp.singleResult)
+            .thenThrow(NoResultException::class.java)
+
+        assertEquals(dao.getFAQTimestamp(), null)
     ***REMOVED***
 ***REMOVED***
 

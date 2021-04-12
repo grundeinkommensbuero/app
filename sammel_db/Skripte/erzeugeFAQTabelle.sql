@@ -14,3 +14,10 @@ create table FAQ_Tags
     faq           int                   not null,
     tag           char(40)              not null
 );
+
+create table FAQ_Timestamp
+(
+    timestamp     datetime              not null,
+    constraint FAQ_pk
+        primary key (timestamp)
+);
