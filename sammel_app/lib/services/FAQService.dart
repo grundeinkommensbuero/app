@@ -143,11 +143,11 @@ class DemoFAQService with FAQSorter implements AbstractFAQService {
         '''Jedes Volksbegehren läuft in 3 Stufen ab.
 Diese sind:''',
         '''\n\n
-        | **Stufe** | **Erfolg** | **Zeitraum** |
-| ------------ | ------------ | ------------ |
-| Volksinitiative  | 50.000 Unterschriften  |   |
-| Volksbegehren  | 170.000 Unterschriften  |   |
-| Volksentscheid  | 613.000 Ja-Stimmen  |   |
+| **Stufe** | **Erfolg** |
+| ------------ | ------------ |
+| Volksinitiative  | 50.000 Unterschriften  |
+| Volksbegehren  | 170.000 Unterschriften  |
+| Volksentscheid  | 613.000 Ja-Stimmen  |
 ''',
         2.0,
         [

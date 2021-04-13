@@ -14,7 +14,7 @@ insert into FAQ (id, title, teaser, rest, order_nr) values (
 'Was sind die Stufen des Volksbegehrens?',
 'Jedes Volksbegehren läuft in 3 Stufen ab.
 Diese sind:',
-        '''
+'
 
 
 | **Stufe** | **Erfolg** |
