@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/FAQItem.dart';
 import 'package:sammel_app/services/FAQService.dart';
@@ -69,8 +70,14 @@ class FAQState extends State<FAQ> {
         ),
       ),
       items == null
-          ? Text('Lade...')
-          : Expanded(
+          ? Expanded(child: Center(
+              child: SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: LoadingIndicator(
+                      indicatorType: Indicator.ballRotateChase,
+                      color: DweTheme.purple)))
+)          : Expanded(
               child: ListView.builder(
                   controller: controller,
                   itemCount: items!.length,
@@ -88,11 +95,9 @@ class FAQState extends State<FAQ> {
     ]));
   ***REMOVED***
 
-  listenToFAQ({String? search***REMOVED***) =>
-      faqService.getSortedFAQ(search).listen((faq) => setState(() {
-            print('### neue FAQ im Page-Stream: ${faq?.map((e) => e.title)***REMOVED***');
-            items = faq;
-          ***REMOVED***));
+  listenToFAQ({String? search***REMOVED***) => faqService
+      .getSortedFAQ(search)
+      .listen((faq) => setState(() => items = faq));
 ***REMOVED***
 
 // ignore: must_be_immutable
@@ -104,7 +109,6 @@ class FAQTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('Zeichne FAQTile: ${item.toJson()***REMOVED***');
     return ListTile(
       contentPadding: EdgeInsets.only(bottom: 2.0),
       title: Container(
@@ -139,7 +143,13 @@ class FAQTile extends StatelessWidget {
                       color: DweTheme.purple,
                       decoration: TextDecoration.underline),
                   blockquoteDecoration:
-                      BoxDecoration(color: DweTheme.yellowBright)))
+                      BoxDecoration(color: DweTheme.yellowBright))),
+          (item.rest != null && !extended
+              ? Text(
+                  'Weiterlesen',
+                  style: TextStyle(color: DweTheme.purple),
+                ).tr()
+              : Container())
         ]),
       ),
     );

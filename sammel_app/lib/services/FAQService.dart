@@ -97,7 +97,7 @@ class FAQService extends BackendService
   Stream<List<FAQItem>?> getSortedFAQ(String? search) {
     // ignore: close_sinks
     StreamController<List<FAQItem>?> sortedController = StreamController();
-    if(latest != null) sortedController.add(latest);
+    if (latest != null) sortedController.add(latest);
     sortedController.addStream(stream).whenComplete(() => controller.close());
     return sortedController.stream.map((items) => sortItems(search, items));
   ***REMOVED***
