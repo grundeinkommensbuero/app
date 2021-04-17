@@ -34,9 +34,8 @@ class GeoService {
       ***REMOVED***
     ***REMOVED***);
 
-    if (response.response.statusCode < 200 &&
-            response.response.statusCode >= 300 ||
-        response.body == null)
+    if (response.response.statusCode < 200 ||
+        response.response.statusCode >= 300)
       throw OsmResponseException(response.body.toString());
 
     var geodata = response.body;
