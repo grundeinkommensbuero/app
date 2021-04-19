@@ -121,6 +121,7 @@ pages_owasp:
     - if: '$TIMED == "owasp"'
       when: always
   script:
+    - mkdir public/owasp/
     - mv sammel_server/target/dependency-check-report.html public/owasp/dependency-check-report.html
   dependencies:
     - owasp
