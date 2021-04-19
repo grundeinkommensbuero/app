@@ -120,7 +120,7 @@ pages_owasp:
     - if: '$TIMED == "owasp"'
       when: always
   script:
-    - mv sammel_server/dependency-check-report.html public/owasp/dependency-check-report.html
+    - mv sammel_server/target/dependency-check-report.html public/owasp/dependency-check-report.html
   artifacts:
     paths:
       - public
