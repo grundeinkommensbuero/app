@@ -90,7 +90,7 @@ pages:
   image: alpine
   stage: deploy_coverage
   rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$TIMED == "" && $CI_COMMIT_BRANCH == "master"'
   dependencies:
     - unit_tests_app
     - test_server
