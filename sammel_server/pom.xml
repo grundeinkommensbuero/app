@@ -25,7 +25,7 @@
                         <artifactId>dependency-check-maven</artifactId>
                         <version>6.1.5</version>
                         <configuration>
-                            <failBuildOnCVSS>5</failBuildOnCVSS>
+<!--                            <failBuildOnCVSS>5</failBuildOnCVSS>-->
                         </configuration>
                         <executions>
                             <execution>
