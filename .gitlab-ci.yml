@@ -121,6 +121,8 @@ pages_owasp:
       when: always
   script:
     - mv sammel_server/target/dependency-check-report.html public/owasp/dependency-check-report.html
+  dependencies:
+    - owasp
   artifacts:
     paths:
       - public
