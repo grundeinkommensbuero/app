@@ -13,6 +13,7 @@ variables:
 
 stages:
   - build_and_test
+  - vulnerabilities
   - deploy_coverage
   - deploy_backend
 
@@ -21,6 +22,8 @@ stages:
 unit_tests_app:
   image: cirrusci/flutter:latest
   stage: build_and_test
+  rules:
+    - if: '$TIMED == false'
   script:
     # tojunit-Parser herunterladen und aktivieren
     - cd sammel_app/build_dependencies
@@ -46,6 +49,8 @@ unit_tests_app:
 build_android_apk:
   image: cirrusci/flutter:latest
   stage: build_and_test
+  rules:
+    - if: '$TIMED == false'
   script:
     - cd sammel_app
     - flutter build apk --debug --no-sound-null-safety
@@ -60,6 +65,8 @@ build_android_apk:
 test_server:
   image: maven:latest
   stage: build_and_test
+  rules:
+    - if: '$TIMED == false'
   script:
     - cd sammel_server
     - mvn verify --fail-at-end --no-transfer-progress
@@ -69,15 +76,6 @@ test_server:
         - sammel_server/target/surefire-reports/TEST*.xml
     paths:
       - sammel_server/target/site/jacoco
-
-#  image: maven:latest
-#  stage: build_and_test
-#  script:
-#    - cd sammel_server
-#    - mvn install -DskipTests
-#  artifacts:
-#    paths:
-#      - sammel_server/target
 
 #push_server:
 #  image: docker:latest
@@ -91,6 +89,8 @@ test_server:
 pages:
   image: alpine
   stage: deploy_coverage
+  rules:
+    - if: '$TIMED == false'
   dependencies:
     - unit_tests_app
     - test_server
@@ -104,3 +104,24 @@ pages:
       - public
   only:
     - master
+
+owasp:
+  image: maven:latest
+  stage: vulnerabilities
+  script: mvn clean verify -Powasp-dependency-check -DskipTests
+  rules:
+    - if: '$TIMED == "owasp"'
+  artifacts:
+    paths:
+      - sammel_server/target/dependency-check-report.html
+
+pages_owasp:
+  image: alpine
+  stage: deploy_coverage
+  rules:
+    - if: '$TIMED == "owasp"'
+  script:
+    - mv sammel_server/dependency-check-report.html public/owasp/dependency-check-report.html
+  artifacts:
+    paths:
+      - public
