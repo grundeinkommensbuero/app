@@ -90,10 +90,11 @@ pages:
   image: alpine
   stage: deploy_coverage
   rules:
-    - if: '$TIMED == null && $CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_BRANCH == "master"'
   dependencies:
     - unit_tests_app
     - test_server
+    - owasp
   script:
     - mkdir public
     - mkdir public/coverage
@@ -113,19 +114,3 @@ owasp:
     when: always
     paths:
       - sammel_server/target/dependency-check-report.html
-
-pages_owasp:
-  image: alpine
-  stage: deploy_coverage
-  rules:
-    - if: '$TIMED == "owasp"'
-      when: always
-  script:
-    - mkdir public/
-    - mkdir public/owasp/
-    - mv sammel_server/target/dependency-check-report.html public/owasp/dependency-check-report.html
-  dependencies:
-    - owasp
-  artifacts:
-    paths:
-      - public
