@@ -23,7 +23,7 @@ unit_tests_app:
   image: cirrusci/flutter:latest
   stage: build_and_test
   rules:
-    - if: '$TIMED == false'
+    - if: '$TIMED == ""'
   script:
     # tojunit-Parser herunterladen und aktivieren
     - cd sammel_app/build_dependencies
@@ -50,7 +50,7 @@ build_android_apk:
   image: cirrusci/flutter:latest
   stage: build_and_test
   rules:
-    - if: '$TIMED == false'
+    - if: '$TIMED == ""'
   script:
     - cd sammel_app
     - flutter build apk --debug --no-sound-null-safety
@@ -66,7 +66,7 @@ test_server:
   image: maven:latest
   stage: build_and_test
   rules:
-    - if: '$TIMED == false'
+    - if: '$TIMED == ""'
   script:
     - cd sammel_server
     - mvn verify --fail-at-end --no-transfer-progress
@@ -90,7 +90,7 @@ pages:
   image: alpine
   stage: deploy_coverage
   rules:
-    - if: '$TIMED == false'
+    - if: '$TIMED == ""'
   dependencies:
     - unit_tests_app
     - test_server
