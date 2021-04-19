@@ -118,6 +118,7 @@ pages_owasp:
   stage: deploy_coverage
   rules:
     - if: '$TIMED == "owasp"'
+      when: always
   script:
     - mv sammel_server/dependency-check-report.html public/owasp/dependency-check-report.html
   artifacts:
