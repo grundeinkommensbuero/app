@@ -110,6 +110,7 @@ owasp:
   rules:
     - if: '$TIMED == "owasp"'
   artifacts:
+    when: always
     paths:
       - sammel_server/target/dependency-check-report.html
 
