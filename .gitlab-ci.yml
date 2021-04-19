@@ -13,9 +13,9 @@ variables:
 
 stages:
   - build_and_test
-  - vulnerabilities
   - deploy_coverage
   - deploy_backend
+  - vulnerability-check
 
 # flutter test wird möglicherweise gerade erweitert, um --coverage und --machine gleichzeitig zuzulassen
 # https://github.com/flutter/flutter/issues/30108
@@ -90,11 +90,10 @@ pages:
   image: alpine
   stage: deploy_coverage
   rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$TIMED == null && $CI_COMMIT_BRANCH == "master"'
   dependencies:
     - unit_tests_app
     - test_server
-    - owasp
   script:
     - mkdir public
     - mkdir public/coverage
@@ -106,7 +105,7 @@ pages:
 
 owasp:
   image: maven:latest
-  stage: vulnerabilities
+  stage: vulnerability-check
   script: mvn -Powasp-dependency-check org.owasp:dependency-check-maven:check
   rules:
     - if: '$TIMED == "owasp"'
