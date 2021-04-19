@@ -106,7 +106,7 @@ pages:
 owasp:
   image: maven:latest
   stage: vulnerabilities
-  script: mvn clean verify -Powasp-dependency-check -DskipTests
+  script: mvn -Powasp-dependency-check org.owasp:dependency-check-maven:check
   rules:
     - if: '$TIMED == "owasp"'
   artifacts:
