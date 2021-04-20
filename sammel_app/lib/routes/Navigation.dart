@@ -10,7 +10,7 @@ import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StorageService.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 
 import 'ChatPage.dart';
 import 'FAQ.dart';
@@ -100,7 +100,7 @@ class NavigationState extends State<Navigation>
             ],
           )),
           body: Container(
-            color: DweTheme.yellowLight,
+            color: CampaignTheme.primaryLight,
             child: FadeTransition(
               opacity: _fade!,
               child: SlideTransition(
@@ -131,7 +131,7 @@ class NavigationState extends State<Navigation>
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     stops: [0.5, 1.0],
-                    colors: <Color>[DweTheme.yellow, Colors.yellowAccent],
+                    colors: <Color>[CampaignTheme.primary, Colors.yellowAccent],
                   ),
                 ),
                 child: ListView(
@@ -181,13 +181,13 @@ class NavigationState extends State<Navigation>
         key: key,
         padding: EdgeInsets.symmetric(vertical: selected ? 15.0 : 10.0),
         decoration: BoxDecoration(
-            color: selected ? DweTheme.purple : Colors.transparent),
+            color: selected ? CampaignTheme.secondary : Colors.transparent),
         child: ListTile(
             title: Text(
               title,
               style: selected
-                  ? DweTheme.menuCaptionSelected
-                  : DweTheme.menuCaption,
+                  ? CampaignTheme.menuCaptionSelected
+                  : CampaignTheme.menuCaption,
             ),
             subtitle: Text(
               subtitle,

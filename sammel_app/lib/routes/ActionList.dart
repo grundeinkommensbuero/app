@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/services/StorageService.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import 'TerminCard.dart';
@@ -124,7 +124,7 @@ class ActionListState extends State<ActionList> {
         Text(
           'Jetzt',
           key: Key('action list now line'),
-          style: TextStyle(color: DweTheme.purple, fontSize: 16.0),
+          style: TextStyle(color: CampaignTheme.secondary, fontSize: 16.0),
         ).tr(),
       ]);
     return tile;

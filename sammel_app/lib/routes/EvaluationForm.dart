@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:quiver/strings.dart';
 import 'package:sammel_app/model/Evaluation.dart';
 import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 
 enum ValidationState { not_validated, error, ok, pressed, unpressed }
 
@@ -69,7 +69,7 @@ class EvaluationFormState extends State<EvaluationForm> {
     return Scaffold(
         extendBody: true,
         body: Container(
-          decoration: BoxDecoration(color: DweTheme.yellowLight),
+          decoration: BoxDecoration(color: CampaignTheme.primaryLight),
           child: ListView(
               padding: EdgeInsets.only(
                   left: 20.0, right: 20.0, top: 15.0, bottom: 50.0),
@@ -191,7 +191,7 @@ class EvaluationFormState extends State<EvaluationForm> {
           padding: EdgeInsets.symmetric(vertical: 5.0),
           decoration: BoxDecoration(
               boxShadow: [BoxShadow(blurRadius: 5.0, color: Colors.black38)],
-              color: DweTheme.yellow),
+              color: CampaignTheme.primary),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             ElevatedButton(
@@ -348,7 +348,7 @@ class EvaluationFormState extends State<EvaluationForm> {
       text = Text('{} Teilnehmer').plural(evaluation.teilnehmer ?? 0);
     } else {
       text = Text('Wie viele Leute haben teilgenommen?',
-              style: TextStyle(color: DweTheme.purple))
+              style: TextStyle(color: CampaignTheme.secondary))
           .tr();
     }
     return buildTextRow(text, this.evaluation.validated['teilnehmer']!);
@@ -374,7 +374,7 @@ class EvaluationFormState extends State<EvaluationForm> {
       text = Text('{} Unterschriften').plural(evaluation.unterschriften!);
     } else {
       text = Text('Wie viel hast Du gesammelt?',
-              style: TextStyle(color: DweTheme.purple))
+              style: TextStyle(color: CampaignTheme.secondary))
           .tr();
     }
     return buildTextRow(text, this.evaluation.validated['unterschriften']!);
@@ -398,7 +398,7 @@ class EvaluationFormState extends State<EvaluationForm> {
       text = Text(evaluation.bewertung!).tr();
     } else {
       text = Text('Wie fandest Du die Aktion?',
-              style: TextStyle(color: DweTheme.purple))
+              style: TextStyle(color: CampaignTheme.secondary))
           .tr();
     }
     return buildTextRow(text, this.evaluation.validated['bewertung']!);
@@ -424,7 +424,7 @@ class EvaluationFormState extends State<EvaluationForm> {
       text = Text('{} Stunden').plural(evaluation.stunden ?? 0);
     } else {
       text = Text('Wie viele Stunden habt ihr gesammelt?',
-              style: TextStyle(color: DweTheme.purple))
+              style: TextStyle(color: CampaignTheme.secondary))
           .tr();
     }
     return buildTextRow(text, this.evaluation.validated['stunden']!);
@@ -448,7 +448,7 @@ class EvaluationFormState extends State<EvaluationForm> {
       text = Text(evaluation.kommentar!);
     } else {
       text = Text('Optional: Muss man noch etwas zu den Angaben wissen?',
-              style: TextStyle(color: DweTheme.purple))
+              style: TextStyle(color: CampaignTheme.secondary))
           .tr();
     }
     return buildTextRow(text, this.evaluation.validated['kommentar']!);
@@ -472,7 +472,7 @@ class EvaluationFormState extends State<EvaluationForm> {
       text = Text(evaluation.situation!);
     } else {
       text = Text('Optional: Wie war die Situation?',
-              style: TextStyle(color: DweTheme.purple))
+              style: TextStyle(color: CampaignTheme.secondary))
           .tr();
     }
     return buildTextRow(text, this.evaluation.validated['situation']!);

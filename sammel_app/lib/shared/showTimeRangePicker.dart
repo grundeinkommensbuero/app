@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 
 Future<TimeRange> showTimeRangePicker(
     BuildContext context, TimeOfDay? initialFrom, TimeOfDay? initialTo) async {
@@ -31,17 +31,17 @@ Future<TimeOfDay?> showSingleTimePicker(
             // explizit gestylt werden
             child: TimePickerTheme(
                 data: TimePickerTheme.of(context).copyWith(
-                    backgroundColor: DweTheme.yellowLight,
-                    dialBackgroundColor: DweTheme.yellowBright,
-                    dialHandColor: DweTheme.purple,
-                    hourMinuteTextColor: DweTheme.purple,
+                    backgroundColor: CampaignTheme.primaryLight,
+                    dialBackgroundColor: CampaignTheme.primaryBright,
+                    dialHandColor: CampaignTheme.secondary,
+                    hourMinuteTextColor: CampaignTheme.secondary,
                     helpTextStyle: TextStyle(
-                        color: DweTheme.purple, fontWeight: FontWeight.bold)),
+                        color: CampaignTheme.secondary, fontWeight: FontWeight.bold)),
                 child: Theme(
                     data: Theme.of(context).copyWith(
                         textButtonTheme: TextButtonThemeData(
                             style: TextButton.styleFrom(
-                                primary: DweTheme.purple))),
+                                primary: CampaignTheme.secondary))),
                     child: timePicker!)));
       });
 }
