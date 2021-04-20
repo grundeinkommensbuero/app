@@ -8,7 +8,7 @@ import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 
 import 'ChatWindow.dart';
 
@@ -42,7 +42,7 @@ class ChatListState extends State<ChatListWidget>
 
     var itemList = buildListMessage();
     var listView = Container(
-        decoration: DweTheme.happyHouseBackground,
+        decoration: CampaignTheme.background,
         child: ListView(
           children: itemList.reversed.toList(),
           reverse: true,
@@ -153,7 +153,7 @@ class ChatListState extends State<ChatListWidget>
         textAlign: TextAlign.center,
         text: TextSpan(
             text: message.username ?? 'Jemand'.tr(),
-            style: TextStyle(color: DweTheme.purple),
+            style: TextStyle(color: CampaignTheme.secondary),
             children: [
               TextSpan(text: title, style: TextStyle(color: Colors.black)),
               TextSpan(

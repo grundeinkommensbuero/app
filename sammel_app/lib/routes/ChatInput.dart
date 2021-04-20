@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 
 class ChatInputWidget extends StatefulWidget {
   final Function(TextEditingController) onSendMessage;
@@ -30,7 +30,7 @@ class ChatInputState extends State<ChatInputWidget> {
                 child: TextField(
                   autofocus: false,
                   // key: _formKey,
-                  style: TextStyle(color: DweTheme.purple, fontSize: 15.0),
+                  style: TextStyle(color: CampaignTheme.secondary, fontSize: 15.0),
                   controller: widget.textEditingController,
                   minLines: 1,
                   maxLines: 5,
@@ -57,7 +57,7 @@ class ChatInputState extends State<ChatInputWidget> {
                   onPressed: () {
                     return widget.onSendMessage(widget.textEditingController);
                   ***REMOVED***,
-                  color: DweTheme.purple,
+                  color: CampaignTheme.secondary,
                 ),
               ),
               color: Colors.white,
@@ -73,7 +73,7 @@ class ChatInputState extends State<ChatInputWidget> {
           ? Container(
               height: 20,
               decoration: BoxDecoration(
-                  color: DweTheme.yellow,
+                  color: CampaignTheme.primary,
                   boxShadow: [BoxShadow(blurRadius: 5, color: Colors.grey)]))
           : SizedBox()
     ]);

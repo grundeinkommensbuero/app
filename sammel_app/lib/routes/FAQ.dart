@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:sammel_app/model/FAQItem.dart';
 import 'package:sammel_app/services/FAQService.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 
 class FAQ extends StatefulWidget {
   FAQ() : super(key: Key('faq page'));
@@ -29,7 +29,7 @@ class FAQState extends State<FAQ> {
         body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
       Container(
         padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 35.0),
-        color: DweTheme.purple,
+        color: CampaignTheme.secondary,
         child: SizedBox(
           child: TextField(
             controller: searchInputController,
@@ -40,7 +40,7 @@ class FAQState extends State<FAQ> {
                 fillColor: Colors.white,
                 suffixIcon: IconButton(
                     key: Key('faq search clear button'),
-                    icon: Icon(Icons.clear, color: DweTheme.purple),
+                    icon: Icon(Icons.clear, color: CampaignTheme.secondary),
                     onPressed: () => setState(() {
                           searchInputController.clear();
                           items = FAQService.loadItems('');
@@ -90,7 +90,7 @@ class FAQTile extends StatelessWidget {
       title: Container(
         padding: EdgeInsets.all(10.0),
         decoration: BoxDecoration(
-            color: extended ? DweTheme.yellowLight : DweTheme.yellowBright,
+            color: extended ? CampaignTheme.primaryLight : CampaignTheme.primaryBright,
             boxShadow: [
               BoxShadow(
                   color: Colors.grey,
@@ -102,7 +102,7 @@ class FAQTile extends StatelessWidget {
           Text(
             item.title,
             style: TextStyle(
-                color: DweTheme.purple,
+                color: CampaignTheme.secondary,
                 fontWeight: FontWeight.bold,
                 fontSize: 20.0),
             textAlign: TextAlign.start,

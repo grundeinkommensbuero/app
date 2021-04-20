@@ -19,7 +19,7 @@ import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 import 'package:uuid/uuid.dart';
 
 import 'ActionDetailsPage.dart';
@@ -111,7 +111,7 @@ class TermineSeiteState extends State<TermineSeite>
         // um Snackbar oberhalb der Footer-Buttons zu zeigen
         child: Scaffold(
       body: Container(
-          decoration: DweTheme.happyHouseBackground,
+          decoration: CampaignTheme.background,
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
@@ -130,7 +130,7 @@ class TermineSeiteState extends State<TermineSeite>
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: navigation,
         onTap: swithPage,
-        backgroundColor: DweTheme.purple,
+        backgroundColor: CampaignTheme.secondary,
         items: [
           BottomNavigationBarItem(
               icon: Icon(Icons.view_list,
@@ -455,7 +455,7 @@ AlertDialog confirmDeleteDialog(BuildContext context) => AlertDialog(
         actions: [
           ElevatedButton(
               key: Key('delete confirmation yes button'),
-              style: ButtonStyle(backgroundColor: DweTheme.red),
+              style: ButtonStyle(backgroundColor: CampaignTheme.red),
               child: Text('Ja').tr(),
               onPressed: () => Navigator.pop(context, true)),
           ElevatedButton(

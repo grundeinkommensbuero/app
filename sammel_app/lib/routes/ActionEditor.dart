@@ -13,7 +13,7 @@ import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 import 'package:sammel_app/shared/showMultipleDatePicker.dart';
 import 'package:sammel_app/shared/showTimeRangePicker.dart';
 import 'package:sammel_app/shared/showUsernameDialog.dart';
@@ -112,7 +112,7 @@ class ActionEditorState extends State<ActionEditor>
     return Scaffold(
         extendBody: true,
         body: Container(
-          decoration: BoxDecoration(color: DweTheme.yellowLight),
+          decoration: BoxDecoration(color: CampaignTheme.primaryLight),
           child: ListView(
               padding: EdgeInsets.only(
                   left: 20.0, right: 20.0, top: 15.0, bottom: 50.0),
@@ -207,7 +207,7 @@ class ActionEditorState extends State<ActionEditor>
           padding: EdgeInsets.symmetric(vertical: 5.0),
           decoration: BoxDecoration(
               boxShadow: [BoxShadow(blurRadius: 5.0, color: Colors.black38)],
-              color: DweTheme.yellow),
+              color: CampaignTheme.primary),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             ElevatedButton(
@@ -409,7 +409,7 @@ class ActionEditorState extends State<ActionEditor>
     Text text;
     if (this.action.validated['tage'] == ValidationState.error ||
         this.action.validated['tage'] == ValidationState.not_validated) {
-      text = Text("Wähle einen Tag", style: TextStyle(color: DweTheme.purple))
+      text = Text("Wähle einen Tag", style: TextStyle(color: CampaignTheme.secondary))
           .tr();
     ***REMOVED*** else {
       text = Text('am '.tr() +
@@ -429,7 +429,7 @@ class ActionEditorState extends State<ActionEditor>
         this.action.validated['venue'] == ValidationState.not_validated) {
       text = Text(
         'Gib einen Treffpunkt an',
-        style: TextStyle(color: DweTheme.purple),
+        style: TextStyle(color: CampaignTheme.secondary),
       ).tr();
     ***REMOVED*** else {
       text =
@@ -450,7 +450,7 @@ class ActionEditorState extends State<ActionEditor>
       val = ValidationState.ok;
     ***REMOVED*** else {
       text = Text('Ein paar Worte über dich',
-              style: TextStyle(color: DweTheme.purple))
+              style: TextStyle(color: CampaignTheme.secondary))
           .tr();
       val = ValidationState.error;
     ***REMOVED***
@@ -464,7 +464,7 @@ class ActionEditorState extends State<ActionEditor>
           .tr(namedArgs: {'beschreibung': termin.beschreibung!***REMOVED***);
     ***REMOVED*** else {
       text = Text('Beschreibe die Aktion kurz',
-              style: TextStyle(color: DweTheme.purple))
+              style: TextStyle(color: CampaignTheme.secondary))
           .tr();
     ***REMOVED***
     return buildTextRow(text, this.action.validated['beschreibung']!);
@@ -476,7 +476,7 @@ class ActionEditorState extends State<ActionEditor>
       text = Text(this.action.typ).tr();
     ***REMOVED*** else {
       text = Text('Wähle die Art der Aktion',
-              style: TextStyle(color: DweTheme.purple))
+              style: TextStyle(color: CampaignTheme.secondary))
           .tr();
     ***REMOVED***
     return buildTextRow(text, this.action.validated['typ']!);
@@ -493,7 +493,7 @@ class ActionEditorState extends State<ActionEditor>
     if (beschriftung.isEmpty) {
       val = ValidationState.error;
       text =
-          Text('Wähle eine Uhrzeit', style: TextStyle(color: DweTheme.purple))
+          Text('Wähle eine Uhrzeit', style: TextStyle(color: CampaignTheme.secondary))
               .tr();
     ***REMOVED*** else {
       val = ValidationState.ok;

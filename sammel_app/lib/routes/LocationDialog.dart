@@ -9,7 +9,7 @@ import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/shared/AttributionPlugin.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 import 'package:sammel_app/shared/NoRotation.dart';
 
 import '../Provisioning.dart';
@@ -72,7 +72,7 @@ class LocationDialogState extends State<LocationDialog> {
         ),
         Container(
             decoration: BoxDecoration(
-                border: Border.all(color: DweTheme.purple, width: 1.0)),
+                border: Border.all(color: CampaignTheme.secondary, width: 1.0)),
             child: SizedBox(
                 height: 300.0,
                 width: 300.0,
@@ -107,7 +107,7 @@ class LocationDialogState extends State<LocationDialog> {
             location.kiez != null
                 ? '${location.kiez!.name***REMOVED*** in ${location.kiez!.region***REMOVED***'
                 : '',
-            style: TextStyle(fontSize: 13, color: DweTheme.purple),
+            style: TextStyle(fontSize: 13, color: CampaignTheme.secondary),
             softWrap: false,
             overflow: TextOverflow.fade),
         SizedBox(
@@ -191,7 +191,7 @@ class LocationMarker extends Marker {
                 key: Key('location marker'),
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: DweTheme.yellow,
+                    color: CampaignTheme.primary,
                     boxShadow: [
                       BoxShadow(blurRadius: 4.0, offset: Offset(-2.0, 2.0))
                     ]),
