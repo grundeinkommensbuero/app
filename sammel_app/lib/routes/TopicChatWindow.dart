@@ -7,7 +7,7 @@ import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/routes/ChatWindow.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 
 class TopicChatWindow extends StatefulWidget {
   final ChatChannel channel;
@@ -37,7 +37,7 @@ class TopicChatWindowState extends State<TopicChatWindow>
     return Scaffold(
         appBar: widget.buildHeader ? AppBar(title: Text(title)) : null,
         body: Container(
-            decoration: DweTheme.happyHouseBackground,
+            decoration: CampaignTheme.background,
             child: Padding(
                 child: ListView(
                   children: messages.reversed
