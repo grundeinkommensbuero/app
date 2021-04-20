@@ -5,7 +5,7 @@ import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/routes/TopicChatWindow.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 
 class ChatPage extends StatefulWidget {
   final bool active;
@@ -46,7 +46,7 @@ class ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
     // navigiert hin, ist aber noch nicht bereit
     return Center(
         child: Container(
-            decoration: DweTheme.happyHouseBackground,
+            decoration: CampaignTheme.background,
             height: 100,
             width: 100,
             child: Container(color: Colors.white)));

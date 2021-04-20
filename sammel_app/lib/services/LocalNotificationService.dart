@@ -6,7 +6,7 @@ import 'package:sammel_app/model/ActionListPushData.dart';
 import 'package:sammel_app/model/PushMessage.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 
 // Siehe https://pub.dev/packages/flutter_local_notifications
 
@@ -15,7 +15,7 @@ AndroidNotificationChannel participationChannel = AndroidNotificationChannel(
   'Teilnahmen und Absagen', // title
   'Benachrichtigungen über Mitstreiter*innen bei Aktionen an denen du teilnimmst',
   playSound: false,
-  ledColor: DweTheme.purple,
+  ledColor: CampaignTheme.secondary,
 );
 
 AndroidNotificationChannel changesChannel = AndroidNotificationChannel(
@@ -23,14 +23,14 @@ AndroidNotificationChannel changesChannel = AndroidNotificationChannel(
   'Änderungen an Aktionen', // title
   'Benachrichtigungen wenn sich Aktionen geändert haben oder abgesagt wurden an denen du teilnimmst',
   playSound: true,
-  ledColor: DweTheme.purple,
+  ledColor: CampaignTheme.secondary,
 );
 
 AndroidNotificationChannel actionChatChannel = AndroidNotificationChannel(
   'Aktionen-Chats', // id
   'Aktionen-Chats', // title
   'Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst',
-  ledColor: DweTheme.purple,
+  ledColor: CampaignTheme.secondary,
 );
 
 AndroidNotificationChannel newActionsChannel = AndroidNotificationChannel(
@@ -38,7 +38,7 @@ AndroidNotificationChannel newActionsChannel = AndroidNotificationChannel(
   'Aktionen im Kiez', // title
   'Benachrichtigungen über neue Aktionen in deinem Kiez',
   playSound: true,
-  ledColor: DweTheme.purple,
+  ledColor: CampaignTheme.secondary,
 );
 
 AndroidNotificationChannel topicChatChannel = AndroidNotificationChannel(
@@ -52,7 +52,7 @@ AndroidNotificationChannel defaultChannel = AndroidNotificationChannel(
   'Infos', // title
   'Allgemeine Infos',
   playSound: false,
-  ledColor: DweTheme.purple,
+  ledColor: CampaignTheme.secondary,
 );
 
 Future<FlutterLocalNotificationsPlugin> initializeLocalNotifications(
@@ -104,7 +104,7 @@ class LocalNotificationService {
             'Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst',
             ticker:
                 'Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst',
-            color: DweTheme.purple,
+            color: CampaignTheme.secondary,
             playSound: false);
 
     NotificationDetails platformChannelSpecifics =
@@ -128,7 +128,7 @@ class LocalNotificationService {
             'Benachrichtigungen über Mitstreiter*innen bei Aktionen an denen du teilnimmst',
             ticker:
                 'Benachrichtigungen über Mitstreiter*innen bei Aktionen an denen du teilnimmst',
-            color: DweTheme.purple,
+            color: CampaignTheme.secondary,
             playSound: false);
 
     NotificationDetails platformChannelSpecifics =
@@ -153,7 +153,7 @@ class LocalNotificationService {
         AndroidNotificationDetails('Aktionen im Kiez', 'Aktionen im Kiez',
             'Benachrichtigungen über neue Aktionen in deinem Kiez',
             ticker: 'Benachrichtigungen über neue Aktionen in deinem Kiez',
-            color: DweTheme.purple,
+            color: CampaignTheme.secondary,
             playSound: true);
 
     NotificationDetails platformChannelSpecifics =
@@ -182,7 +182,7 @@ class LocalNotificationService {
             'Benachrichtigungen wenn sich Aktionen geändert haben oder abgesagt wurden an denen du teilnimmst',
             ticker:
                 'Benachrichtigungen wenn sich Aktionen geändert haben oder abgesagt wurden an denen du teilnimmst',
-            color: DweTheme.purple,
+            color: CampaignTheme.secondary,
             playSound: true);
 
     NotificationDetails platformChannelSpecifics =
@@ -207,7 +207,7 @@ class LocalNotificationService {
             'Benachrichtigungen wenn sich Aktionen geändert haben oder abgesagt wurden an denen du teilnimmst',
             ticker:
                 'Benachrichtigungen wenn sich Aktionen geändert haben oder abgesagt wurden an denen du teilnimmst',
-            color: DweTheme.purple,
+            color: CampaignTheme.secondary,
             playSound: true);
 
     NotificationDetails platformChannelSpecifics =
@@ -228,7 +228,7 @@ class LocalNotificationService {
     AndroidNotificationDetails androidPlatformChannelSpecifics =
         AndroidNotificationDetails('Infos', 'Infos', 'Allgemeine Infos',
             ticker: 'Allgemeine Infos',
-            color: DweTheme.purple,
+            color: CampaignTheme.secondary,
             playSound: true);
 
     NotificationDetails platformChannelSpecifics =

@@ -13,7 +13,7 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 import 'package:sammel_app/shared/ExpandableConstrainedBox.dart';
 
 import 'ChatWindow.dart';
@@ -90,7 +90,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
       initialized = true;
     }
 
-    final color = DweTheme.actionColor(
+    final color = CampaignTheme.actionColor(
         widget.action.ende, isMyAction, this.iAmParticipant);
 
     PopupMenuButton menu =
@@ -147,7 +147,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                       isPastAction(widget.action)
                           ? Text('diese Aktion ist beendet',
                                   style: TextStyle(
-                                      color: DweTheme.purple,
+                                      color: CampaignTheme.secondary,
                                       fontWeight: FontWeight.bold))
                               .tr()
                           : SizedBox()
@@ -250,7 +250,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                 height: 150.0,
                 width: 250.0,
                 decoration: BoxDecoration(
-                    border: Border.all(color: DweTheme.purple, width: 1.0)),
+                    border: Border.all(color: CampaignTheme.secondary, width: 1.0)),
                 child: FlutterMap(
                   key: Key('action details map'),
                   options: MapOptions(
@@ -348,7 +348,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
 
     return PopupMenuButton(
         key: Key('action details menu button'),
-        color: DweTheme.yellowLight,
+        color: CampaignTheme.primaryLight,
         itemBuilder: (BuildContext context) => items,
         onSelected: (command) {
           if (command == 'Mitmachen') joinAction();
@@ -386,7 +386,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
         ElevatedButton(
             style: ButtonStyle(
                 foregroundColor:
-                    MaterialStateProperty.all<Color>(DweTheme.yellow)),
+                    MaterialStateProperty.all<Color>(CampaignTheme.primary)),
             key: Key('open chat window'),
             child: Row(children: [
               Icon(Icons.message, size: 20),

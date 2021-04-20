@@ -15,7 +15,7 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ConstJsonAssetLoader.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 
 import 'services/BackendService.dart';
 import 'services/LocalNotificationService.dart';
@@ -93,7 +93,7 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
           title: 'DW & Co. Enteignen',
-          theme: DweTheme.themeData,
+          theme: CampaignTheme.themeData,
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
           locale: context.locale,

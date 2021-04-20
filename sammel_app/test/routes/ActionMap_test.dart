@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong/latlong.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/routes/ActionMap.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 
 import '../TestdataStorage.dart';
 import '../model/Termin_test.dart';
@@ -98,19 +98,19 @@ void main() {
               .style!
               .backgroundColor!
               .resolve({MaterialState.hovered}),
-          DweTheme.yellowLight);
+          CampaignTheme.primaryLight);
       expect(
           actionMarker[1]
               .style!
               .backgroundColor!
               .resolve({MaterialState.hovered}),
-          DweTheme.blueLight);
+          CampaignTheme.altSecondaryLight);
       expect(
           actionMarker[2]
               .style!
               .backgroundColor!
               .resolve({MaterialState.hovered}),
-          DweTheme.yellowLight);
+          CampaignTheme.primaryLight);
     });
 
     testWidgets('are higlighted for past actions', (WidgetTester tester) async {
@@ -152,19 +152,19 @@ void main() {
               .style!
               .backgroundColor!
               .resolve({MaterialState.hovered}),
-          DweTheme.greenLight);
+          CampaignTheme.altPrimaryLight);
       expect(
           actionMarker[2]
               .style!
               .backgroundColor!
               .resolve({MaterialState.hovered}),
-          DweTheme.yellowBright);
+          CampaignTheme.primaryBright);
       expect(
           actionMarker[1]
               .style!
               .backgroundColor!
               .resolve({MaterialState.hovered}),
-          DweTheme.blueBright);
+          CampaignTheme.altSecondaryBright);
     });
 
     testWidgets('are higlighted for joined actions',
@@ -205,19 +205,19 @@ void main() {
               .style!
               .backgroundColor!
               .resolve({MaterialState.hovered}),
-          DweTheme.yellowBright);
+          CampaignTheme.primaryBright);
       expect(
           actionMarker[1]
               .style!
               .backgroundColor!
               .resolve({MaterialState.hovered}),
-          DweTheme.greenLight);
+          CampaignTheme.altPrimaryLight);
       expect(
           actionMarker[2]
               .style!
               .backgroundColor!
               .resolve({MaterialState.hovered}),
-          DweTheme.yellowBright);
+          CampaignTheme.primaryBright);
     });
 
     testWidgets('react to tap', (WidgetTester tester) async {

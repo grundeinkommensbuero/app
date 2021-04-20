@@ -13,7 +13,7 @@ import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 import 'package:sammel_app/shared/showUsernameDialog.dart';
 
 import 'ChatInput.dart';
@@ -90,7 +90,7 @@ class ChatWindowState extends State<ChatWindow> {
                 TextSpan(
                     text: termin.ort.name,
                     style: TextStyle(fontWeight: FontWeight.bold)),
-              ], style: TextStyle(color: DweTheme.purple, fontSize: 13.0)),
+              ], style: TextStyle(color: CampaignTheme.secondary, fontSize: 13.0)),
               softWrap: false,
               overflow: TextOverflow.fade),
           Text(

@@ -12,7 +12,7 @@ import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 import 'package:sammel_app/shared/KiezPicker.dart';
 import 'package:sammel_app/shared/showUsernameDialog.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -64,7 +64,7 @@ class ProfilePageState extends State<ProfilePage> {
 
     return Scaffold(
         body: Container(
-            decoration: DweTheme.happyHouseBackground,
+            decoration: CampaignTheme.background,
             padding: EdgeInsets.all(20.0),
             child: ListView(
               children: [
@@ -167,7 +167,7 @@ class ProfilePageState extends State<ProfilePage> {
             )),
         floatingActionButton: FloatingActionButton(
             child: Icon(Icons.info_outline_rounded,
-                size: 40.0, color: DweTheme.yellow),
+                size: 40.0, color: CampaignTheme.primary),
             onPressed: () => showAboutDialog(context)));
   }
 
@@ -310,9 +310,9 @@ class ProfileItem extends StatelessWidget {
             padding: EdgeInsets.only(
                 top: 5.0, left: 10.0, right: 10.0, bottom: 20.0),
             decoration: BoxDecoration(
-                border: Border.all(color: DweTheme.purple),
+                border: Border.all(color: CampaignTheme.secondary),
                 borderRadius: BorderRadius.circular(10.0),
-                color: DweTheme.yellowLight,
+                color: CampaignTheme.primaryLight,
                 boxShadow: [
                   BoxShadow(
                       color: Colors.grey,

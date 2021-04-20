@@ -9,7 +9,7 @@ import 'package:sammel_app/Provisioning.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/shared/AttributionPlugin.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 import 'package:sammel_app/shared/NoRotation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -72,7 +72,7 @@ class ActionMapState extends State<ActionMap> {
         markers: actionMarkers,
         maxClusterRadius: 50,
         polygonOptions:
-            PolygonOptions(color: DweTheme.yellow.withOpacity(0.12)),
+            PolygonOptions(color: CampaignTheme.primary.withOpacity(0.12)),
         fitBoundsOptions:
             FitBoundsOptions(padding: EdgeInsets.fromLTRB(40, 90, 40, 100)),
         builder: (context, markers) {
@@ -85,8 +85,8 @@ class ActionMapState extends State<ActionMap> {
                   markers.length.toString(),
                   style: TextStyle(fontSize: 18),
                 ),
-                backgroundColor: DweTheme.yellow,
-                foregroundColor: DweTheme.purple,
+                backgroundColor: CampaignTheme.primary,
+                foregroundColor: CampaignTheme.secondary,
                 shape: CircleBorder(
                     side: BorderSide(color: Colors.black, width: 1.0)),
                 onPressed: null,
@@ -164,12 +164,12 @@ class ActionMarker extends Marker {
                   onPressed: () => onTap(action),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
-                        DweTheme.actionColor(
+                        CampaignTheme.actionColor(
                             action.ende, ownAction, participant)),
                     shape: MaterialStateProperty.all<OutlinedBorder>(
                         CircleBorder(
                             side: BorderSide(
-                                color: DweTheme.purple, width: 1.0))),
+                                color: CampaignTheme.secondary, width: 1.0))),
                     padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                         EdgeInsets.all(0)),
                   ),
@@ -194,7 +194,7 @@ class ListLocationMarker extends Marker {
               onPressed: () => showListLocationDialog(context, listLocation),
               child: Icon(
                 Icons.edit_location,
-                color: DweTheme.purple,
+                color: CampaignTheme.secondary,
                 size: 30.0,
               )),
         );
@@ -208,7 +208,7 @@ class ListLocationMarker extends Marker {
                       listLocation.name ??
                           '${listLocation.street ?? ''} ${listLocation.number ?? ''}',
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: DweTheme.purple)),
+                      style: TextStyle(color: CampaignTheme.secondary)),
                   key: Key('list location info dialog'),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0)),
