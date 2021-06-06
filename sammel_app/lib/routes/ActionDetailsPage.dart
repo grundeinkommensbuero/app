@@ -314,7 +314,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
             children: [
               Icon(Icons.calendar_today_outlined),
               SizedBox(width: 8),
-              Text('In den Kalender', textScaleFactor: 0.8)
+              Text('In den Kalender', textScaleFactor: 0.8).tr()
             ],
           ),
           value: 'In den Kalender'));
