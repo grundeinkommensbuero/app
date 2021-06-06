@@ -323,6 +323,7 @@ const Map<String, dynamic> en = {
   "Eigene Aktionen": "Own actions",
   "lade...": "loading...",
   "Na gut": "Allright",
+  "In den Kalender": "Add to Calendar",
 ***REMOVED***
 
 const Map<String, dynamic> ru = {
@@ -628,6 +629,7 @@ const Map<String, dynamic> ru = {
   //     "If you want to change Notifications to silent or disable certain notification categories, just press the three dots on a received notification. You will then be guided to the notification preferences for this app.",
   // "Kundgebung": "Manifestation",
   "Na gut": "Закрыть",
+  "In den Kalender": "In den Kalender",
 ***REMOVED***
 
 const Map<String, dynamic> fr = {
@@ -942,6 +944,7 @@ const Map<String, dynamic> fr = {
   // "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
   //     "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.",
   "Na gut": "Fermer",
+  "In den Kalender": "In den Kalender",
 ***REMOVED***
 
 const Map<String, dynamic> de = {
@@ -1259,4 +1262,5 @@ const Map<String, dynamic> de = {
   "Eigene Aktionen": "Eigene Aktionen",
   "lade...": "lade...",
   "Na gut": "Na gut",
+  "In den Kalender": "In den Kalender",
 ***REMOVED***
