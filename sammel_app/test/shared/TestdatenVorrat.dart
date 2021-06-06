@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/model/User.dart';
 

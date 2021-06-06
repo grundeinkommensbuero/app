@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 
 class Ortsteil {
   String name;

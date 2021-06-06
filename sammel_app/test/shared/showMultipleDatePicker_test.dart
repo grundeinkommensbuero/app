@@ -40,7 +40,7 @@ void main() {
         await tester.pumpAndSettle();
 
         var calendarro = tester.widget(find.byType(Calendarro)) as Calendarro;
-        expect(calendarro.state.isDateSelected(DateTime.now()), true);
+        expect(calendarro.state!.isDateSelected(DateTime.now()), true);
       ***REMOVED***);
 
   testWidgets('Days Selection selects no days when filter is empty',

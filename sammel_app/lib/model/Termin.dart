@@ -10,8 +10,8 @@ class Termin {
   DateTime ende;
   Kiez ort;
   String typ;
-  double? latitude;
-  double? longitude;
+  double latitude;
+  double longitude;
   List<User>? participants;
   TerminDetails? details;
 

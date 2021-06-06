@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:http_server/http_server.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 
 import 'BackendService.dart';
 

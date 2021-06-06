@@ -110,9 +110,9 @@ Future<List<DateTime>?> showMultipleDatePicker(
 
 class DweDayTileBuilder extends DayTileBuilder {
   @override
-  Widget build(BuildContext context, DateTime date, DateTimeCallback onTap) {
+  Widget build(BuildContext context, DateTime date, DateTimeCallback? onTap) {
     return DweCalendarroDayItem(
-        date: date, calendarroState: Calendarro.of(context), onTap: onTap);
+        date: date, calendarroState: Calendarro.of(context)!, onTap: onTap);
   ***REMOVED***
 ***REMOVED***
 
@@ -135,7 +135,7 @@ class DweCalendarroDayItem extends CalendarroDayItem {
     if (daySelected) textColor = CampaignTheme.primary;
     var fontWeight = isWeekend ? FontWeight.bold : FontWeight.normal;
     bool isToday = cal.DateUtils.isToday(date);
-    calendarroState = Calendarro.of(context);
+    calendarroState = Calendarro.of(context)!;
 
     BoxDecoration? boxDecoration;
     if (daySelected) {
