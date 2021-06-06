@@ -455,7 +455,10 @@ class TermineSeiteState extends State<TermineSeite>
     print('### Pfad ${uri.path***REMOVED***');
     print('### aktion-Parameter ${uri.queryParameters['aktion']***REMOVED***');
     final int? id = int.tryParse(uri.queryParameters['aktion']!);
-    if (id == null) return;
+    if (id == null) {
+      ErrorService.pushError("Ungültige Aktions-ID", "Die Nummer der Aktion in dem Link ist ungültig. Möglicherweise wurde die Aktion bereits gelöscht.");
+      return;
+    ***REMOVED***
     termineService!.loadAndShowAction(id);
   ***REMOVED***
 ***REMOVED***
