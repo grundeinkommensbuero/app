@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
   static var localNotificationService =
       LocalNotificationService(pushNotificationManager);
   static var termineService = demoMode
-      ? DemoTermineService(stammdatenService, userService)
+      ? DemoTermineService(stammdatenService, userService, actionPageKey)
       : TermineService(
           stammdatenService,
           userService,

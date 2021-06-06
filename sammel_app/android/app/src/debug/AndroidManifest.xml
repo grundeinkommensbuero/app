@@ -29,22 +29,22 @@
                 <data
                         android:scheme="https"
                             android:host="www.dwenteignen.de"
-                        android:pathPrefix="/die-sammel-app/"
+                        android:pathPrefix="/die-sammel-app"
                 />
                 <data
                         android:scheme="https"
                             android:host="dwenteignen.de"
-                        android:pathPrefix="/die-sammel-app/"
+                        android:pathPrefix="/die-sammel-app"
                 />
                 <data
                         android:scheme="http"
                         android:host="www.dwenteignen.de"
-                        android:pathPrefix="/die-sammel-app/"
+                        android:pathPrefix="/die-sammel-app"
                 />
                 <data
                         android:scheme="http"
                         android:host="dwenteignen.de"
-                        android:pathPrefix="/die-sammel-app/"
+                        android:pathPrefix="/die-sammel-app"
                 />
             </intent-filter>
         </activity>

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,7 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
+import 'package:uni_links/uni_links.dart';
 import 'package:uuid/uuid.dart';
 
 import 'ActionDetailsPage.dart';
@@ -178,6 +181,8 @@ class TermineSeiteState extends State<TermineSeite>
     Provider.of<AbstractUserService>(context)
         .user
         .listen((user) => setState(() => me = user));
+
+    checkAppLinks();
 
     _initialized = true;
   }
@@ -430,6 +435,28 @@ class TermineSeiteState extends State<TermineSeite>
                 appBar: AppBar(title: Text(title)),
                 body: ActionList(actions, isMyAction, isPastAction,
                     iAmParticipant, openTerminDetails))));
+  }
+
+  Future<void> checkAppLinks() async {
+    try {
+      final uri = await getInitialUri();
+      print('### Starte mit Pfad ${uri}');
+      if (uri?.queryParameters['aktion'] != null) executePath(uri!);
+    } on FormatException {}
+
+    // TODO Stream abräumen
+    uriLinkStream.listen((final Uri? uri) {
+      print('### Lade Pfad ${uri}');
+      if (uri?.queryParameters['aktion'] != null) executePath(uri!);
+    });
+  }
+
+  void executePath(Uri uri) {
+    print('### Pfad ${uri.path}');
+    print('### aktion-Parameter ${uri.queryParameters['aktion']}');
+    final int? id = int.tryParse(uri.queryParameters['aktion']!);
+    if (id == null) return;
+    termineService!.loadAndShowAction(id);
   }
 }
 
