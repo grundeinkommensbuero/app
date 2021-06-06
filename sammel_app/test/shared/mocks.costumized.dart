@@ -11,7 +11,7 @@ import 'package:firebase_messaging_platform_interface/src/remote_message.dart'
     as _i20;
 import 'package:http_server/http_server.dart';
 import 'package:http_server/src/http_body.dart' as _i8;
-import 'package:latlong/latlong.dart' as _i31;
+import 'package:latlong2/latlong.dart' as _i31;
 import 'package:mockito/mockito.dart' as _i2;
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/services/GeoService.dart' as _i18;

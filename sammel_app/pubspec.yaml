@@ -25,25 +25,25 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
   http: ^0.13.0 # nur für sendToTopic
-  quiver: '>=2.0.0 <3.0.0' # null-safety muss auf flutter_map warten
+  quiver: ^3.0.1
   flutter_local_notifications: ^5.0.0-nullsafety.1
   date_format: ^1.0.6
   http_server: ^1.0.0
   provider: ^5.0.0
   intl: ^0.17.0
-  calendarro: ^1.2.0 # null-safety sieht schlecht aus. es gibt aber forks: https://github.com/ProbablyRational/calendarro
+  calendarro: ^1.2.0 # sieht schlecht aus, siehe unten
   jiffy: ^4.0.0
   shared_preferences: ^2.0.4
   uuid: ^3.0.1
-  flutter_map: ^0.11.0 # null-safety kommt bald; sabotiert das Hochziehen von quiver
-  flutter_map_marker_cluster: ^0.3.4 # null-safety - warte auf antwort: https://github.com/lpongetti/flutter_map_marker_cluster/issues/67
-  latlng: ^0.1.0
+  flutter_map: ^0.13.0
+  #flutter_map_marker_cluster: ^0.3.4 # null-safety - warte auf antwort: https://github.com/lpongetti/flutter_map_marker_cluster/issues/67
+  latlong2: ^0.8.0
   url_launcher: ^6.0.2
-  firebase_messaging: ^9.0.0
-  firebase_core: ^1.0.1
-  firebase_auth: ^1.0.1
-  cloud_firestore: ^1.0.1
-  google_sign_in: ^4.4.4 #why though?
+  firebase_messaging: ^10.0.1
+  firebase_core: ^1.2.1
+  firebase_auth: ^1.3.0
+  cloud_firestore: ^2.2.1
+  google_sign_in: ^5.0.4 #why though?
   # user_location: any
   permission_handler: ^6.0.1+1
   poly: ^1.0.5 # Pull-Request: https://github.com/Sacchid/poly/pull/2
@@ -51,21 +51,23 @@ dependencies:
   cryptography: ^2.0.1
   loading_indicator: ^2.0.1
   easy_localization: ^3.0.0
-  scrollable_positioned_list: ^0.1.10 # null-safety auf dem weg: 0.2.0-nullsafety.0
+  scrollable_positioned_list: ^0.2.0-nullsafety.0
   after_layout: ^1.0.7+2
   package_info: ^2.0.0
   flutter_markdown: 0.6.0
   collection: ^1.15.0
 
-# FIXME remove after officially released
+# FIXME
 dependency_overrides:
   calendarro: #https://github.com/adamstyrc/calendarro/pull/46 DateUtils and ancestorStateOfType fixes
-    git: https://github.com/ProbablyRational/calendarro.git
-# sieht leider verwaist aus. Alternativen:
+    git: https://github.com/kitwtnb/calendarro.git
+# sieht leider verwaist aus
+# zwei Forks:
+# * https://github.com/kitwtnb/calendarro.git (Null-Safety)
+# * https://github.com/ProbablyRational/calendarro.git (Bugfixes)
+# 2 Alternativen (Notwendige Funktionen: Multi-Selection, Internationalisierung):
 # https://pub.dev/packages/flutter_calendar_carousel (null-safe)
 # https://pub.dev/packages/table_calendar (null-safety auf dem weg)
-# notwendige features: Multi-Selection, Internationalisierung,
-# oder forken und selbst null-safe machen
 
 dev_dependencies:
   flutter_test:

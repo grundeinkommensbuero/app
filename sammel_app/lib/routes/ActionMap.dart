@@ -3,8 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:sammel_app/Provisioning.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Termin.dart';
@@ -48,7 +47,8 @@ class ActionMapState extends State<ActionMap> {
   ActionMapState();
 
   var locationPermissionGranted = false;
-  List<Marker> listLocationMarkers = [];
+  List<Marker> markers = [];
+  var initialized = false;
 
   @override
   void initState() {
@@ -57,46 +57,19 @@ class ActionMapState extends State<ActionMap> {
 
   @override
   Widget build(BuildContext context) {
-    var actionMarkers = generateActionMarkers();
+    var markers = generateMarkers();
     List<MapPlugin> plugins = [];
     plugins.add(AttributionPlugin());
-    plugins.add(MarkerClusterPlugin());
 
     var layers = [
       TileLayerOptions(
           urlTemplate: "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
           subdomains: ['a', 'b', 'c']),
-      MarkerLayerOptions(markers: listLocationMarkers),
-      MarkerClusterLayerOptions(
-        disableClusteringAtZoom: 14,
-        markers: actionMarkers,
-        maxClusterRadius: 50,
-        polygonOptions:
-            PolygonOptions(color: CampaignTheme.primary.withOpacity(0.12)),
-        fitBoundsOptions:
-            FitBoundsOptions(padding: EdgeInsets.fromLTRB(40, 90, 40, 100)),
-        builder: (context, markers) {
-          return DecoratedBox(
-              decoration: BoxDecoration(boxShadow: [
-                BoxShadow(offset: Offset(-2.0, 2.0), blurRadius: 4.0)
-              ], shape: BoxShape.circle),
-              child: FloatingActionButton(
-                child: Text(
-                  markers.length.toString(),
-                  style: TextStyle(fontSize: 18),
-                ),
-                backgroundColor: CampaignTheme.primary,
-                foregroundColor: CampaignTheme.secondary,
-                shape: CircleBorder(
-                    side: BorderSide(color: Colors.black, width: 1.0)),
-                onPressed: null,
-              ));
-        },
-      ),
+      MarkerLayerOptions(markers: markers),
     ];
     layers.add(AttributionOptions());
 
-    return FlutterMap(
+    var flutterMap = FlutterMap(
       key: Key('action map map'),
       options: MapOptions(
           plugins: plugins,
@@ -109,10 +82,12 @@ class ActionMapState extends State<ActionMap> {
           minZoom: geo.zoomMin,
           onPositionChanged: (position, _) => widget.mapController.onReady.then(
               (_) => setState(() =>
-                  this.listLocationMarkers = generateListLocationMarkers()))),
+                  this.markers = generateListLocationMarkers()))),
       layers: layers,
       mapController: widget.mapController,
     );
+    initialized = true;
+    return flutterMap;
   }
 
   List<ActionMarker> generateActionMarkers() {
@@ -128,11 +103,15 @@ class ActionMapState extends State<ActionMap> {
   }
 
   List<Marker> generateListLocationMarkers() {
-    if (widget.mapController.zoom < 13) return [];
+    if (!initialized || widget.mapController.zoom < 13) return [];
     return widget.listLocations
         .map((listlocation) => ListLocationMarker(listlocation))
         .toList();
   }
+
+  List<Marker> generateMarkers() => <Marker>[]
+    ..addAll(generateListLocationMarkers())
+    ..addAll(generateActionMarkers());
 
   Color generateColor(String bezirk) {
     return Color.fromARGB(150, bezirk.hashCode * 10, bezirk.hashCode * 100,

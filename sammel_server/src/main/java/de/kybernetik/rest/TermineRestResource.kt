@@ -14,6 +14,7 @@ import org.jboss.logging.Logger
 import de.kybernetik.rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithoutDetails
 import de.kybernetik.services.NeueAktionenNotification
 import de.kybernetik.services.PushService
+import de.kybernetik.shared.UnzureichendeDatenException
 import org.wildfly.security.http.HttpConstants.FORBIDDEN
 import java.time.LocalDateTime
 import java.time.ZonedDateTime.now
@@ -350,8 +351,8 @@ open class TermineRestResource {
         var ende: LocalDateTime? = null,
         var ort: String? = null,
         var typ: String? = null,
-        var latitude: Double? = null,
-        var longitude: Double? = null,
+        var latitude: Double,
+        var longitude: Double,
         var participants: List<BenutzerDto>? = emptyList(),
         var details: TerminDetailsDto? = TerminDetailsDto()
     ) {
@@ -377,15 +378,21 @@ open class TermineRestResource {
                 return terminDto
             }
 
-            fun convertFromTerminWithoutDetails(termin: Termin): TerminDto = TerminDto(
-                termin.id,
-                termin.beginn,
-                termin.ende,
-                termin.ort,
-                termin.typ,
-                termin.latitude,
-                termin.longitude,
-                termin.teilnehmer.map { BenutzerDto.convertFromBenutzer(it) })
+            fun convertFromTerminWithoutDetails(termin: Termin): TerminDto {
+                if (termin.latitude == null || termin.longitude == null)
+                    throw UnzureichendeDatenException(
+                        "Aktion ohne Koordinaten! Aktion ${termin.id} hat Koordinate (${termin.latitude}, ${termin.longitude})"
+                    )
+                return TerminDto(
+                    termin.id,
+                    termin.beginn,
+                    termin.ende,
+                    termin.ort,
+                    termin.typ,
+                    termin.latitude!!,
+                    termin.longitude!!,
+                    termin.teilnehmer.map { BenutzerDto.convertFromBenutzer(it) })
+            }
         }
     }
 
