@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Termin.dart';
@@ -33,6 +34,8 @@ main() {
         .thenAnswer((_) async => []);
 
     Termin termin = TerminTestDaten.einTerminMitTeilisUndDetails();
+    termin.beginn = Jiffy(DateTime.now()).add(days: 1).dateTime;
+    termin.ende = Jiffy(DateTime.now()).add(days: 1, hours: 1).dateTime;
 
     widget = MultiProvider(
         providers: [
@@ -70,5 +73,23 @@ main() {
 
     expect(find.byKey(Key('action details map')), findsOneWidget);
     expect(find.byKey(Key('action details map marker')), findsOneWidget);
+  });
+
+  testWidgets('shows calender menu button only if participatating',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(widget);
+
+    await tester.tap(find.byKey(Key('action details menu button')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(Key('action details calendar menu item')), findsNothing);
+
+    await tester.tap(find.byKey(Key('action details join menu item')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(Key('action details menu button')));
+    await tester.pumpAndSettle();
+
+    expect(
+        find.byKey(Key('action details calendar menu item')), findsOneWidget);
   });
 }

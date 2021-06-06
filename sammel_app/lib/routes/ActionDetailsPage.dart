@@ -1,3 +1,4 @@
+import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -250,7 +251,8 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                 height: 150.0,
                 width: 250.0,
                 decoration: BoxDecoration(
-                    border: Border.all(color: CampaignTheme.secondary, width: 1.0)),
+                    border:
+                        Border.all(color: CampaignTheme.secondary, width: 1.0)),
                 child: FlutterMap(
                   key: Key('action details map'),
                   options: MapOptions(
@@ -291,7 +293,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           child: Row(children: [
             Icon(Icons.assignment_turned_in_outlined),
             SizedBox(width: 8),
-            Text('Mitmachen').tr()
+            Text('Mitmachen', textScaleFactor: 0.8).tr()
           ]),
           value: 'Mitmachen'));
 
@@ -301,9 +303,21 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           child: Row(children: [
             Icon(Icons.assignment_return_outlined),
             SizedBox(width: 8),
-            Text('Verlassen').tr()
+            Text('Verlassen', textScaleFactor: 0.8).tr()
           ]),
           value: 'Verlassen'));
+
+    if (iAmParticipant)
+      items.add(PopupMenuItem(
+          key: Key('action details calendar menu item'),
+          child: Row(
+            children: [
+              Icon(Icons.calendar_today_outlined),
+              SizedBox(width: 8),
+              Text('In den Kalender', textScaleFactor: 0.8)
+            ],
+          ),
+          value: 'In den Kalender'));
 
     if (iAmParticipant)
       items.add(PopupMenuItem(
@@ -311,7 +325,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           child: Row(children: [
             Icon(Icons.message_outlined),
             SizedBox(width: 8),
-            Text('Zum Chat').tr()
+            Text('Zum Chat', textScaleFactor: 0.8).tr()
           ]),
           value: 'Zum Chat'));
 
@@ -323,7 +337,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           child: Row(children: [
             Icon(Icons.rss_feed_outlined),
             SizedBox(width: 8),
-            Text('Feedback').tr()
+            Text('Feedback', textScaleFactor: 0.8).tr()
           ]),
           value: 'Feedback'));
 
@@ -333,7 +347,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           child: Row(children: [
             Icon(Icons.edit),
             SizedBox(width: 8),
-            Text('Bearbeiten').tr()
+            Text('Bearbeiten', textScaleFactor: 0.8).tr()
           ]),
           value: 'Bearbeiten'));
       items.add(PopupMenuItem(
@@ -341,7 +355,9 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           child: Row(children: [
             Icon(Icons.delete, color: Colors.red),
             SizedBox(width: 8),
-            Text('Löschen', style: TextStyle(color: Colors.red)).tr()
+            Text('Löschen',
+                    textScaleFactor: 0.8, style: TextStyle(color: Colors.red))
+                .tr()
           ]),
           value: 'Löschen'));
     }
@@ -353,6 +369,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
         onSelected: (command) {
           if (command == 'Mitmachen') joinAction();
           if (command == 'Verlassen') leaveAction();
+          if (command == 'In den Kalender') calendarAction();
           if (command == 'Zum Chat') openChatWindow()();
           if (command == 'Feedback') evaluateAction();
           if (command == 'Bearbeiten') editAction();
@@ -424,6 +441,16 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           widget.action.participants?.firstWhere((u) => u.id == me?.id));
       iAmParticipant = false;
     });
+  }
+
+  void calendarAction() {
+    final Event event = Event(
+        title: '${widget.action.typ} in ${widget.action.ort.ortsteil}',
+        description: widget.action.details!.beschreibung,
+        location: widget.action.details!.treffpunkt,
+        startDate: widget.action.beginn,
+        endDate: widget.action.ende);
+    Add2Calendar.addEvent2Cal(event);
   }
 
   void evaluateAction() =>
