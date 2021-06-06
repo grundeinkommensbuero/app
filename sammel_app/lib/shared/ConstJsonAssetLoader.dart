@@ -324,6 +324,10 @@ const Map<String, dynamic> en = {
   "lade...": "loading...",
   "Na gut": "Allright",
   "In den Kalender": "Add to Calendar",
+  '{typ***REMOVED*** in {ortsteil***REMOVED***': '{typ***REMOVED*** at {ortsteil***REMOVED***',
+  "Teilen": "Share",
+  '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***':
+      '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** at {zeitpunkt***REMOVED***\n{url***REMOVED***',
 ***REMOVED***
 
 const Map<String, dynamic> ru = {
@@ -630,6 +634,10 @@ const Map<String, dynamic> ru = {
   // "Kundgebung": "Manifestation",
   "Na gut": "Закрыть",
   "In den Kalender": "In den Kalender",
+  '{typ***REMOVED*** in {ortsteil***REMOVED***': '{typ***REMOVED*** in {ortsteil***REMOVED***',
+  "Teilen": "Teilen",
+  '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***':
+      '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** at {zeitpunkt***REMOVED***\n{url***REMOVED***',
 ***REMOVED***
 
 const Map<String, dynamic> fr = {
@@ -944,7 +952,11 @@ const Map<String, dynamic> fr = {
   // "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
   //     "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.",
   "Na gut": "Fermer",
-  "In den Kalender": "In den Kalender",
+  "In den Kalender": "Dans le calendrier",
+  '{typ***REMOVED*** in {ortsteil***REMOVED***': '{typ***REMOVED*** à {ortsteil***REMOVED***',
+  "Teilen": "Partagez",
+  '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***':
+      '{typ***REMOVED*** à {ortsteil***REMOVED***, {treffpunkt***REMOVED*** à {zeitpunkt***REMOVED***\n{url***REMOVED***',
 ***REMOVED***
 
 const Map<String, dynamic> de = {
@@ -1263,4 +1275,8 @@ const Map<String, dynamic> de = {
   "lade...": "lade...",
   "Na gut": "Na gut",
   "In den Kalender": "In den Kalender",
+  "Teilen": "Teilen",
+  '{typ***REMOVED*** in {ortsteil***REMOVED***': '{typ***REMOVED*** in {ortsteil***REMOVED***',
+  '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***':
+      '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***',
 ***REMOVED***

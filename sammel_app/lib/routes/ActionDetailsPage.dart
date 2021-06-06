@@ -16,6 +16,7 @@ import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
 import 'package:sammel_app/shared/ExpandableConstrainedBox.dart';
+import 'package:share/share.dart';
 
 import 'ChatWindow.dart';
 
@@ -321,6 +322,18 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
 
     if (iAmParticipant)
       items.add(PopupMenuItem(
+          key: Key('action details share menu item'),
+          child: Row(
+            children: [
+              Icon(Icons.share),
+              SizedBox(width: 8),
+              Text('Teilen', textScaleFactor: 0.8).tr()
+            ],
+          ),
+          value: 'Teilen'));
+
+    if (iAmParticipant)
+      items.add(PopupMenuItem(
           key: Key('action details chat menu item'),
           child: Row(children: [
             Icon(Icons.message_outlined),
@@ -370,6 +383,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           if (command == 'Mitmachen') joinAction();
           if (command == 'Verlassen') leaveAction();
           if (command == 'In den Kalender') calendarAction();
+          if (command == 'Teilen') shareAction();
           if (command == 'Zum Chat') openChatWindow()();
           if (command == 'Feedback') evaluateAction();
           if (command == 'Bearbeiten') editAction();
@@ -445,12 +459,28 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
 
   void calendarAction() {
     final Event event = Event(
-        title: '${widget.action.typ***REMOVED*** in ${widget.action.ort.ortsteil***REMOVED***',
+        title: '{typ***REMOVED*** in {ortsteil***REMOVED***'.tr(namedArgs: {
+          'typ': widget.action.typ.tr(),
+          'ortsteil': widget.action.ort.ortsteil
+        ***REMOVED***),
         description: widget.action.details!.beschreibung,
         location: widget.action.details!.treffpunkt,
         startDate: widget.action.beginn,
         endDate: widget.action.ende);
     Add2Calendar.addEvent2Cal(event);
+  ***REMOVED***
+
+  void shareAction() {
+    Share.share('{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***'
+        .tr(namedArgs: {
+      'typ': widget.action.typ.tr(),
+      'ortsteil': widget.action.ort.ortsteil,
+      'treffpunkt': widget.action.details!.treffpunkt,
+      'zeitpunkt': ''
+          '${DateFormat.MMMd(Localizations.localeOf(context).languageCode).format(widget.action.beginn)***REMOVED***,'
+          '${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(widget.action.beginn)***REMOVED***',
+      'url': 'www.dwenteignen.de/die-sammel-app/${widget.action.id***REMOVED***'
+    ***REMOVED***));
   ***REMOVED***
 
   void evaluateAction() =>

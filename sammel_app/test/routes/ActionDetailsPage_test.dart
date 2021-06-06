@@ -92,4 +92,22 @@ main() {
     expect(
         find.byKey(Key('action details calendar menu item')), findsOneWidget);
   ***REMOVED***);
+
+  testWidgets('shows share menu button only if participatating',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(widget);
+
+    await tester.tap(find.byKey(Key('action details menu button')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(Key('action details share menu item')), findsNothing);
+
+    await tester.tap(find.byKey(Key('action details join menu item')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(Key('action details menu button')));
+    await tester.pumpAndSettle();
+
+    expect(
+        find.byKey(Key('action details share menu item')), findsOneWidget);
+  ***REMOVED***);
 ***REMOVED***
