@@ -42,6 +42,8 @@ abstract class AbstractTermineService extends BackendService {
   leaveAction(int id);
 
   Future<void> saveEvaluation(Evaluation evaluation);
+
+  void loadAndShowAction(int id) {***REMOVED***
 ***REMOVED***
 
 class TermineService extends AbstractTermineService
@@ -141,15 +143,21 @@ class TermineService extends AbstractTermineService
   ***REMOVED***
 
   @override
+  loadAndShowAction(int id) async {
+    var action = await getActionWithDetails(id);
+    actionPageKey.currentState!.openTerminDetails(action);
+  ***REMOVED***
+
+  @override
   void receiveMessage(Map<String, dynamic> data) async {
     final kieze = await stammdatenService.kieze;
     final message = ActionListPushData.fromJson(data, kieze);
 
-    if(message.type == PushDataTypes.newKiezActions)
+    if (message.type == PushDataTypes.newKiezActions)
       localNotificationService.sendNewActionsNotification(message);
-    if(message.type == PushDataTypes.actionDeleted)
+    if (message.type == PushDataTypes.actionDeleted)
       localNotificationService.sendActionDeletedNotification(message);
-    if(message.type == PushDataTypes.actionChanged)
+    if (message.type == PushDataTypes.actionChanged)
       localNotificationService.sendActionChangedNotification(message);
   ***REMOVED***
 
@@ -169,8 +177,10 @@ class DemoTermineService extends AbstractTermineService {
   static var heute = DateTime.now();
   late Future<List<Termin>> termine;
 
-  DemoTermineService(
-      StammdatenService stammdatenService, AbstractUserService userService)
+  GlobalKey<TermineSeiteState> actionPageKey;
+
+  DemoTermineService(StammdatenService stammdatenService,
+      AbstractUserService userService, this.actionPageKey)
       : super(stammdatenService, userService, DemoBackend()) {
     termine = stammdatenService.kieze.then((kieze) => [
           Termin(
@@ -240,22 +250,18 @@ class DemoTermineService extends AbstractTermineService {
       DateTime datum =
           DateTime(termin.beginn.year, termin.beginn.month, termin.beginn.day);
       return (filter.von == null ? true : termin.ende.isAfter(von)) &&
-          (filter.bis == null ? true : termin.beginn.isBefore(bis)) &&
-          (filter.tage.isEmpty
-              ? true
-              : filter.tage.contains(datum)) &&
-          (filter.tage.isEmpty
-              ? true
-              : filter.tage.contains(datum)) &&
-          (filter.orte.isEmpty
-              ? true
-              : filter.orte.contains(termin.ort.name)) &&
-          (filter.typen.isEmpty
-              ? true
-              : filter.typen.contains(termin.typ)) &&
-          (filter.nurEigene == false
-              ? true
-              : termin.participants!.map((u) => u.id).contains(13)) ||
+              (filter.bis == null ? true : termin.beginn.isBefore(bis)) &&
+              (filter.tage.isEmpty ? true : filter.tage.contains(datum)) &&
+              (filter.tage.isEmpty ? true : filter.tage.contains(datum)) &&
+              (filter.orte.isEmpty
+                  ? true
+                  : filter.orte.contains(termin.ort.name)) &&
+              (filter.typen.isEmpty
+                  ? true
+                  : filter.typen.contains(termin.typ)) &&
+              (filter.nurEigene == false
+                  ? true
+                  : termin.participants!.map((u) => u.id).contains(13)) ||
           (filter.immerEigene == true
               ? termin.participants!.map((u) => u.id).contains(13)
               : false);
@@ -304,5 +310,13 @@ class DemoTermineService extends AbstractTermineService {
   Future<void> saveEvaluation(Evaluation evaluation) async {
     // hier muss man nix machen, es wird sowieso lokal gespeichert, dass man eine Evaluation abgegeben hat
     return;
+  ***REMOVED***
+
+  @override
+  void loadAndShowAction(int id) async {
+    print('### Lade Aktion $id');
+    var action = await getActionWithDetails(id);
+    print('### Zeige Aktion ${jsonEncode(action)***REMOVED***');
+    actionPageKey.currentState!.openTerminDetails(action);
   ***REMOVED***
 ***REMOVED***

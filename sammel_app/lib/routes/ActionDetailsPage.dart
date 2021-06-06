@@ -479,7 +479,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
       'zeitpunkt': ''
           '${DateFormat.MMMd(Localizations.localeOf(context).languageCode).format(widget.action.beginn)***REMOVED***,'
           '${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(widget.action.beginn)***REMOVED***',
-      'url': 'www.dwenteignen.de/die-sammel-app/${widget.action.id***REMOVED***'
+      'url': 'www.dwenteignen.de/die-sammel-app?aktion=${widget.action.id***REMOVED***'
     ***REMOVED***));
   ***REMOVED***
 
