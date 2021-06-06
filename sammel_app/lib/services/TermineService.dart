@@ -144,8 +144,13 @@ class TermineService extends AbstractTermineService
 
   @override
   loadAndShowAction(int id) async {
-    var action = await getActionWithDetails(id);
-    actionPageKey.currentState!.openTerminDetails(action);
+    try {
+      var action = await getActionWithDetails(id);
+      actionPageKey.currentState!.openTerminDetails(action);
+    } on Exception catch (e) {
+      ErrorService.handleError(e, StackTrace.current,
+          context: 'Die Aktion konnte nicht angezeigt werden');
+    }
   }
 
   @override
@@ -315,8 +320,12 @@ class DemoTermineService extends AbstractTermineService {
   @override
   void loadAndShowAction(int id) async {
     print('### Lade Aktion $id');
-    var action = await getActionWithDetails(id);
-    print('### Zeige Aktion ${jsonEncode(action)}');
-    actionPageKey.currentState!.openTerminDetails(action);
+    try {
+      var action = await getActionWithDetails(id);
+      print('### Zeige Aktion ${jsonEncode(action)}');
+      actionPageKey.currentState!.openTerminDetails(action);
+    } on Exception catch (e) {
+      ErrorService.handleError(e, StackTrace.current);
+    }
   }
 }
