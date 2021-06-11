@@ -75,7 +75,7 @@ main() {
     expect(find.byKey(Key('action details map marker')), findsOneWidget);
   ***REMOVED***);
 
-  testWidgets('shows calender menu button only if participatating',
+  testWidgets('shows calender menu button only if participating',
       (WidgetTester tester) async {
     await tester.pumpWidget(widget);
 
@@ -93,7 +93,7 @@ main() {
         find.byKey(Key('action details calendar menu item')), findsOneWidget);
   ***REMOVED***);
 
-  testWidgets('shows share menu button only if participatating',
+  testWidgets('shows share menu button only if participating',
       (WidgetTester tester) async {
     await tester.pumpWidget(widget);
 
