@@ -35,7 +35,7 @@ dependencies:
   jiffy: ^4.0.0
   shared_preferences: ^2.0.4
   uuid: ^3.0.1
-  flutter_map: ^0.13.0
+  flutter_map: ^0.13.1
   #flutter_map_marker_cluster: ^0.3.4 # null-safety - warte auf antwort: https://github.com/lpongetti/flutter_map_marker_cluster/issues/67
   latlong2: ^0.8.0
   url_launcher: ^6.0.2
