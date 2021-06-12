@@ -449,18 +449,13 @@ class TermineSeiteState extends State<TermineSeite>
   }
 
   showAction(Uri? uri) {
-    print('### Zeige Aktion');
     if (uri?.queryParameters['aktion'] == null) return;
-    print('### Parameter existiert');
     final int? id = int.tryParse(uri!.queryParameters['aktion']!);
-    print('### ID ist nicht Null');
     if (id == null) {
-      print('### Fehler');
       ErrorService.pushError("Ungültige Aktions-ID",
           "Die Nummer der Aktion in dem Link ist ungültig. Möglicherweise wurde die Aktion bereits gelöscht.");
       return;
     }
-    print('### Zeige Aktion $id');
     termineService!.loadAndShowAction(id);
   }
 
