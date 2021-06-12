@@ -184,7 +184,7 @@ class TermineSeiteState extends State<TermineSeite>
         .user
         .listen((user) => setState(() => me = user));
 
-    checkAppLinks(getInitialUri());
+    checkDeepLinks();
 
     _initialized = true;
   ***REMOVED***
@@ -439,23 +439,28 @@ class TermineSeiteState extends State<TermineSeite>
                     iAmParticipant, openTerminDetails))));
   ***REMOVED***
 
-  Future<void> checkAppLinks(Future<Uri?> initialUri) async {
-    try {
-      final uri = await initialUri;
-      if (uri?.queryParameters['aktion'] != null) showAction(uri!);
-    ***REMOVED*** on FormatException {***REMOVED***
-
-    uniLinkListener = uriLinkStream.listen((final Uri? uri) {
-      if (uri?.queryParameters['aktion'] != null) showAction(uri!);
-    ***REMOVED***);
+  checkDeepLinks() async {
+    registerUriListener(uriLinkStream);
+    showAction(await getInitialUri());
   ***REMOVED***
 
-  void showAction(Uri uri) {
-    final int? id = int.tryParse(uri.queryParameters['aktion']!);
+  registerUriListener(Stream<Uri?> linkStream) {
+    uniLinkListener = linkStream.listen((final Uri? uri) => showAction(uri));
+  ***REMOVED***
+
+  showAction(Uri? uri) {
+    print('### Zeige Aktion');
+    if (uri?.queryParameters['aktion'] == null) return;
+    print('### Parameter existiert');
+    final int? id = int.tryParse(uri!.queryParameters['aktion']!);
+    print('### ID ist nicht Null');
     if (id == null) {
-      ErrorService.pushError("Ungültige Aktions-ID", "Die Nummer der Aktion in dem Link ist ungültig. Möglicherweise wurde die Aktion bereits gelöscht.");
+      print('### Fehler');
+      ErrorService.pushError("Ungültige Aktions-ID",
+          "Die Nummer der Aktion in dem Link ist ungültig. Möglicherweise wurde die Aktion bereits gelöscht.");
       return;
     ***REMOVED***
+    print('### Zeige Aktion $id');
     termineService!.loadAndShowAction(id);
   ***REMOVED***
 
@@ -463,7 +468,8 @@ class TermineSeiteState extends State<TermineSeite>
   void dispose() {
     try {
       uniLinkListener.cancel();
-    ***REMOVED***  catch (_) {***REMOVED***
+    ***REMOVED*** catch (_) {***REMOVED***
+    ;
     super.dispose();
   ***REMOVED***
 ***REMOVED***
