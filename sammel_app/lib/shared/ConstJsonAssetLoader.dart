@@ -633,11 +633,11 @@ const Map<String, dynamic> ru = {
   //     "If you want to change Notifications to silent or disable certain notification categories, just press the three dots on a received notification. You will then be guided to the notification preferences for this app.",
   // "Kundgebung": "Manifestation",
   "Na gut": "Закрыть",
-  "In den Kalender": "In den Kalender",
-  '{typ***REMOVED*** in {ortsteil***REMOVED***': '{typ***REMOVED*** in {ortsteil***REMOVED***',
-  "Teilen": "Teilen",
+  "In den Kalender": "Добавить в календарь",
+  '{typ***REMOVED*** in {ortsteil***REMOVED***': '{typ***REMOVED*** в {ortsteil***REMOVED***',
+  "Teilen": "Поделиться",
   '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***':
-      '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** at {zeitpunkt***REMOVED***\n{url***REMOVED***',
+      '{typ***REMOVED*** в {ortsteil***REMOVED***, {treffpunkt***REMOVED*** {zeitpunkt***REMOVED***\n{url***REMOVED***',
 ***REMOVED***
 
 const Map<String, dynamic> fr = {
