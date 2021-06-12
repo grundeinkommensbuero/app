@@ -409,22 +409,6 @@ class FAQService {
       "Share Deals"
     ]),
     FAQItem(
-        20,
-        'Wir haben den Mietendeckel, ist da die Vergesellschaftung überhaupt noch notwendig?',
-        Text(
-            '''Der Mietendeckel ist (leider) rechtlich unsicher. Das Bundesverfassungsgericht könnte ihn kippen. Zudem gilt er nur für fünf Jahre und schon jetzt hat die SPD-Führung angekündigt, ihn nicht verlängern zu wollen. Dann drohen massenhaft Mieterhöhungen.
-Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen: Der Mietendeckel reguliert, Vergesellschaftung denkt Wohnen neu, denn mit Mieten soll kein Profit mehr gemacht werden!'''),
-        Text(
-            '''Der Mietendeckel ist (leider) rechtlich unsicher. Das Bundesverfassungsgericht könnte ihn kippen. Zudem gilt er nur für fünf Jahre und schon jetzt hat die SPD-Führung angekündigt, ihn nicht verlängern zu wollen. Dann drohen massenhaft Mieterhöhungen.
-Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen: Der Mietendeckel...'''),
-        '''Der Mietendeckel ist (leider) rechtlich unsicher. Das Bundesverfassungsgericht könnte ihn kippen. Zudem gilt er nur für fünf Jahre und schon jetzt hat die SPD-Führung angekündigt, ihn nicht verlängern zu wollen...''',
-        [
-          'Mietendeckel',
-          'Vergesellschaftung',
-          'Mieterhöhung',
-          'Mietenstopp',
-        ]),
-    FAQItem(
         21,
         "Was kostet uns die Vergesellschaftung?",
         Text(textWasKostetSieVergesellschaftung),
@@ -704,6 +688,8 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
         Text('• deine Teilnahme an Aktionen ankündigen\n'
             '• Zum Aktions-Chat gelangen\n'
             '• deine Teilnahme an Aktionen absagen\n'
+            '• die Aktion in deinen Handy-Kalender übertragen'
+            '• die Aktion teilen und als Link verschicken, der die App öffnet un die Aktion anzeigt'
             '• Bericht zu vergangenen AKtionen abgeben (mit wichtigen Infos für die Kiezteams)\n'
             '• und eigene Aktionen bearbeiten\n'
             '• oder löschen\n'),
@@ -797,6 +783,8 @@ Beide Gesetze, Mietendeckel und Vergesellschaftung, können nebeneinander stehen
           '• deine Teilnahme an Aktionen ankündigen\n'
           '• Zum Aktions-Chat gelangen\n'
           '• deine Teilnahme an Aktionen absagen\n'
+          '• die Aktion in deinen Handy-Kalender übertragen'
+          '• die Aktion teilen und als Link verschicken, der die App öffnet un die Aktion anzeigt'
           '• Bericht zu vergangenen AKtionen abgeben (mit wichtigen Infos für die Kiezteams)\n'
           '• und eigene Aktionen bearbeiten\n'
           '• oder löschen '
