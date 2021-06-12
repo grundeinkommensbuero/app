@@ -461,7 +461,9 @@ class TermineSeiteState extends State<TermineSeite>
 
   @override
   void dispose() {
-    uniLinkListener.cancel();
+    try {
+      uniLinkListener.cancel();
+    }  catch (_) {};
     super.dispose();
   }
 }
