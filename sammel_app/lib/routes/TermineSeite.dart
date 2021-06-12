@@ -65,6 +65,8 @@ class TermineSeiteState extends State<TermineSeite>
   Animation<double>? _fade;
   bool swipeLeft = false;
 
+  late StreamSubscription<Uri?> uniLinkListener;
+
   @override
   void initState() {
     super.initState();
@@ -182,7 +184,7 @@ class TermineSeiteState extends State<TermineSeite>
         .user
         .listen((user) => setState(() => me = user));
 
-    checkAppLinks();
+    checkAppLinks(getInitialUri());
 
     _initialized = true;
   }
@@ -437,29 +439,30 @@ class TermineSeiteState extends State<TermineSeite>
                     iAmParticipant, openTerminDetails))));
   }
 
-  Future<void> checkAppLinks() async {
+  Future<void> checkAppLinks(Future<Uri?> initialUri) async {
     try {
-      final uri = await getInitialUri();
-      print('### Starte mit Pfad ${uri}');
-      if (uri?.queryParameters['aktion'] != null) executePath(uri!);
+      final uri = await initialUri;
+      if (uri?.queryParameters['aktion'] != null) showAction(uri!);
     } on FormatException {}
 
-    // TODO Stream abräumen
-    uriLinkStream.listen((final Uri? uri) {
-      print('### Lade Pfad ${uri}');
-      if (uri?.queryParameters['aktion'] != null) executePath(uri!);
+    uniLinkListener = uriLinkStream.listen((final Uri? uri) {
+      if (uri?.queryParameters['aktion'] != null) showAction(uri!);
     });
   }
 
-  void executePath(Uri uri) {
-    print('### Pfad ${uri.path}');
-    print('### aktion-Parameter ${uri.queryParameters['aktion']}');
+  void showAction(Uri uri) {
     final int? id = int.tryParse(uri.queryParameters['aktion']!);
     if (id == null) {
       ErrorService.pushError("Ungültige Aktions-ID", "Die Nummer der Aktion in dem Link ist ungültig. Möglicherweise wurde die Aktion bereits gelöscht.");
       return;
     }
     termineService!.loadAndShowAction(id);
+  }
+
+  @override
+  void dispose() {
+    uniLinkListener.cancel();
+    super.dispose();
   }
 }
 

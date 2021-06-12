@@ -22,9 +22,10 @@ import 'UserService.dart';
 
 abstract class AbstractTermineService extends BackendService {
   StammdatenService stammdatenService;
+  GlobalKey<TermineSeiteState> actionPageKey;
 
-  AbstractTermineService(
-      this.stammdatenService, AbstractUserService userService, Backend backend)
+  AbstractTermineService(this.stammdatenService,
+      AbstractUserService userService, this.actionPageKey, Backend backend)
       : super(userService, backend);
 
   Future<List<Termin>> loadActions(TermineFilter filter);
@@ -43,12 +44,18 @@ abstract class AbstractTermineService extends BackendService {
 
   Future<void> saveEvaluation(Evaluation evaluation);
 
-  void loadAndShowAction(int id) {}
+  Future<void> loadAndShowAction(int id) async {
+    try {
+      var action = await getActionWithDetails(id);
+      actionPageKey.currentState!.openTerminDetails(action);
+    } on Exception catch (e) {
+      ErrorService.handleError(e, StackTrace.current);
+    }
+  }
 }
 
 class TermineService extends AbstractTermineService
     implements PushNotificationListener {
-  GlobalKey<TermineSeiteState> actionPageKey;
   LocalNotificationService localNotificationService;
 
   TermineService(
@@ -57,8 +64,8 @@ class TermineService extends AbstractTermineService
       Backend backend,
       PushNotificationManager manager,
       this.localNotificationService,
-      this.actionPageKey)
-      : super(stammdatenService, userService, backend) {
+      GlobalKey<TermineSeiteState> actionPageKey)
+      : super(stammdatenService, userService, actionPageKey, backend) {
     manager.registerMessageCallback(PushDataTypes.newKiezActions, this);
     manager.registerMessageCallback(PushDataTypes.actionChanged, this);
     manager.registerMessageCallback(PushDataTypes.actionDeleted, this);
@@ -182,11 +189,9 @@ class DemoTermineService extends AbstractTermineService {
   static var heute = DateTime.now();
   late Future<List<Termin>> termine;
 
-  GlobalKey<TermineSeiteState> actionPageKey;
-
   DemoTermineService(StammdatenService stammdatenService,
-      AbstractUserService userService, this.actionPageKey)
-      : super(stammdatenService, userService, DemoBackend()) {
+      AbstractUserService userService, actionPageKey)
+      : super(stammdatenService, userService, actionPageKey, DemoBackend()) {
     termine = stammdatenService.kieze.then((kieze) => [
           Termin(
               1,
@@ -315,17 +320,5 @@ class DemoTermineService extends AbstractTermineService {
   Future<void> saveEvaluation(Evaluation evaluation) async {
     // hier muss man nix machen, es wird sowieso lokal gespeichert, dass man eine Evaluation abgegeben hat
     return;
-  }
-
-  @override
-  void loadAndShowAction(int id) async {
-    print('### Lade Aktion $id');
-    try {
-      var action = await getActionWithDetails(id);
-      print('### Zeige Aktion ${jsonEncode(action)}');
-      actionPageKey.currentState!.openTerminDetails(action);
-    } on Exception catch (e) {
-      ErrorService.handleError(e, StackTrace.current);
-    }
   }
 }
