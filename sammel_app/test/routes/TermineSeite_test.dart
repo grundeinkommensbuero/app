@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -60,6 +61,7 @@ void main() {
         .thenAnswer((_) async => 'nie');
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
+    reset(_termineService);
     when(_termineService.loadActions(any)).thenAnswer((_) async => []);
     when(_termineService.deleteAction(any, any)).thenReturn(null);
     when(_pushManager.pushToken).thenAnswer((_) => Future.value('Token'));
@@ -331,13 +333,14 @@ void main() {
       expect(find.byKey(Key('action map map')), findsOneWidget);
       var actionPosition = LatLng(TerminTestDaten.einTermin().latitude,
           TerminTestDaten.einTermin().longitude);
-      TermineSeiteState actionPage = tester.state(find.byKey(Key('action page')));
+      TermineSeiteState actionPage =
+          tester.state(find.byKey(Key('action page')));
       expect(actionPage.mapController.zoom, 15);
       expect(actionPage.mapController.center, actionPosition);
-        });
+    });
 
     testWidgets(
-        'triggers server call and highlihgts action with tap on join button',
+        'triggers server call and highlights action with tap on join button',
         (WidgetTester tester) async {
       when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
@@ -1391,6 +1394,58 @@ void main() {
 
       TermineSeiteState state = tester.state(find.byKey(Key('action page')));
       expect(state.navigation, 1);
+    });
+  });
+
+  group('unilink processing', () {
+    testUI('shows action on start', (tester) async {
+      await tester.pumpWidget(termineSeiteWidget);
+
+      TermineSeiteState state = tester.state(find.byKey(Key('action page')));
+      await state.showAction(Uri(
+          scheme: 'https',
+          host: 'dwenteignen.de',
+          queryParameters: {"aktion": "4"}));
+
+      print('### Vorbei 3!');
+      verify(_termineService.loadAndShowAction(4)).called(1);
+    });
+
+    testUI('ignores path without action parameter', (tester) async {
+      await tester.pumpWidget(termineSeiteWidget);
+
+      TermineSeiteState state = tester.state(find.byKey(Key('action page')));
+      await state.showAction(Uri(scheme: 'https', host: 'dwenteignen.de'));
+
+      verifyNever(_termineService.loadAndShowAction(any));
+    });
+
+    testUI('ignores path with invalid action parameter', (tester) async {
+      await tester.pumpWidget(termineSeiteWidget);
+
+      TermineSeiteState state = tester.state(find.byKey(Key('action page')));
+      await state.showAction(Uri(
+          scheme: 'https',
+          host: 'dwenteignen.de',
+          queryParameters: {"aktion": "vier"}));
+
+      verifyNever(_termineService.loadAndShowAction(any));
+    });
+
+    testUI('shows action while running', (tester) async {
+      var controller = StreamController<Uri?>();
+      await tester.pumpWidget(termineSeiteWidget);
+
+      TermineSeiteState state = tester.state(find.byKey(Key('action page')));
+      state.registerUriListener(controller.stream);
+      controller.add(Uri(
+          scheme: 'https',
+          host: 'dwenteignen.de',
+          queryParameters: {"aktion": "4"}));
+
+      await tester.pumpAndSettle();
+
+      verify(_termineService.loadAndShowAction(4)).called(1);
     });
   });
 }
