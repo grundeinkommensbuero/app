@@ -1,5 +1,6 @@
 import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -276,12 +277,11 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
               ),
             ])),
         persistentFooterButtons: determineActionButton()
-          ..add(SizedBox(
-              child: ElevatedButton(
+          ..add(ElevatedButton(
             key: Key('action details close button'),
             child: Text('Schließen').tr(),
             onPressed: () => Navigator.pop(context, TerminDetailsCommand.CLOSE),
-          ))));
+          )));
   ***REMOVED***
 
   PopupMenuButton menuButton(
@@ -419,7 +419,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                 foregroundColor:
                     MaterialStateProperty.all<Color>(CampaignTheme.primary)),
             key: Key('open chat window'),
-            child: Row(children: [
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
               Icon(Icons.message, size: 20),
               SizedBox(width: 10),
               Text('Zum Chat').tr()
