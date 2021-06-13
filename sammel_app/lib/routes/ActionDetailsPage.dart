@@ -96,7 +96,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
     final color = CampaignTheme.actionColor(
         widget.action.ende, isMyAction, this.iAmParticipant);
 
-    PopupMenuButton menu =
+    PopupMenuButton? menu =
         menuButton(widget.action, isMyAction, iAmParticipant);
 
     Locale? locale;
@@ -124,7 +124,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                               color: Color.fromARGB(255, 129, 28, 98)))
                       .tr()),
             ]),
-            actions: [menu]),
+            actions: menu == null ? [SizedBox(width: 30.0,)] : [menu]),
         body: SingleChildScrollView(
             padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
             child: Column(key: Key('action details page'), children: [
@@ -284,7 +284,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           )));
   ***REMOVED***
 
-  PopupMenuButton menuButton(
+  PopupMenuButton? menuButton(
       Termin action, bool isMyAction, bool iAmParticipant) {
     final List<PopupMenuItem> items = [];
 
@@ -374,6 +374,8 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           ]),
           value: 'Löschen'));
     ***REMOVED***
+
+    if(items.isEmpty) return null;
 
     return PopupMenuButton(
         key: Key('action details menu button'),
