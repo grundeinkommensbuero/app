@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_test_ui/flutter_test_ui.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
@@ -132,8 +133,9 @@ void main() {
             TerminTestDaten.einTermin()..id = 2,
             TerminTestDaten.einTermin()..id = 3,
           ]);
-      when(_termineService.getActionWithDetails(any)).thenAnswer(
-          (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
+      when(_termineService.getActionWithDetails(any)).thenAnswer((_) async =>
+          TerminTestDaten.einTerminMitTeilisUndDetails()
+            ..ende = Jiffy(DateTime.now()).add(days: 1).dateTime);
 
       when(_storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [2]);
