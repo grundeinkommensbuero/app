@@ -133,6 +133,7 @@ class TermineSeiteState extends State<TermineSeite>
             ],
           )),
       bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: CampaignTheme.primary,
         currentIndex: navigation,
         onTap: swithPage,
         backgroundColor: CampaignTheme.secondary,
