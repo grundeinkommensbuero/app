@@ -134,6 +134,7 @@ class TermineSeiteState extends State<TermineSeite>
           )),
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: CampaignTheme.primary,
+        unselectedItemColor: Colors.black,
         currentIndex: navigation,
         onTap: swithPage,
         backgroundColor: CampaignTheme.secondary,
