@@ -48,8 +48,10 @@ abstract class AbstractTermineService extends BackendService {
     try {
       var action = await getActionWithDetails(id);
       actionPageKey.currentState!.openTerminDetails(action);
-    } on Exception catch (e) {
-      ErrorService.handleError(e, StackTrace.current);
+    } on Error catch (e) {
+      ErrorService.handleError(e, StackTrace.current,
+          context:
+              'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.');
     }
   }
 }

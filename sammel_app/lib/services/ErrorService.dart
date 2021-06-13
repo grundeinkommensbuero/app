@@ -90,7 +90,7 @@ class ErrorService {
         context: _context!,
         builder: (_) => AlertDialog(
               key: key,
-              title: Text(title),
+              title: Text(title).tr(),
               content: Column(mainAxisSize: MainAxisSize.min, children: [
                 Container(
                     height: 150,
