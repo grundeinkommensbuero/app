@@ -124,7 +124,13 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                               color: Color.fromARGB(255, 129, 28, 98)))
                       .tr()),
             ]),
-            actions: menu == null ? [SizedBox(width: 30.0,)] : [menu]),
+            actions: menu == null
+                ? [
+                    SizedBox(
+                      width: 30.0,
+                    )
+                  ]
+                : [menu]),
         body: SingleChildScrollView(
             padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
             child: Column(key: Key('action details page'), children: [
@@ -375,7 +381,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           value: 'Löschen'));
     }
 
-    if(items.isEmpty) return null;
+    if (items.isEmpty) return null;
 
     return PopupMenuButton(
         key: Key('action details menu button'),
@@ -465,7 +471,8 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           'typ': widget.action.typ.tr(),
           'ortsteil': widget.action.ort.ortsteil
         }),
-        description: widget.action.details!.beschreibung,
+        description:
+            '${widget.action.details!.beschreibung}\n${CampaignTheme.actionUrl(widget.action.id)}',
         location: widget.action.details!.treffpunkt,
         startDate: widget.action.beginn,
         endDate: widget.action.ende);
@@ -481,7 +488,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
       'zeitpunkt': ''
           '${DateFormat.MMMd(Localizations.localeOf(context).languageCode).format(widget.action.beginn)},'
           '${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(widget.action.beginn)}',
-      'url': 'www.dwenteignen.de/die-sammel-app?aktion=${widget.action.id}'
+      'url': CampaignTheme.actionUrl(widget.action.id),
     }));
   }
 
