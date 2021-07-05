@@ -392,7 +392,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           if (command == 'Verlassen') leaveAction();
           if (command == 'In den Kalender') calendarAction();
           if (command == 'Teilen') shareAction();
-          if (command == 'Zum Chat') openChatWindow()();
+          if (command == 'Zum Chat') openChatWindow();
           if (command == 'Feedback') evaluateAction();
           if (command == 'Bearbeiten') editAction();
           if (command == 'Löschen') deleteAction();
