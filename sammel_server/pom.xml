@@ -15,38 +15,38 @@
     </properties>
 
     <!-- Ausführen mit mvn -Powasp-dependency-check org.owasp:dependency-check-maven:check -->
-    <profiles>
-        <profile>
-            <id>owasp-dependency-check</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.owasp</groupId>
-                        <artifactId>dependency-check-maven</artifactId>
-                        <version>6.1.5</version>
-                        <configuration>
-<!--                            <failBuildOnCVSS>5</failBuildOnCVSS>-->
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+<!--    <profiles>-->
+<!--        <profile>-->
+<!--            <id>owasp-dependency-check</id>-->
+<!--            <build>-->
+<!--                <plugins>-->
+<!--                    <plugin>-->
+<!--                        <groupId>org.owasp</groupId>-->
+<!--                        <artifactId>dependency-check-maven</artifactId>-->
+<!--                        <version>6.1.5</version>-->
+<!--                        <configuration>-->
+<!--&lt;!&ndash;                            <failBuildOnCVSS>5</failBuildOnCVSS>&ndash;&gt;-->
+<!--                        </configuration>-->
+<!--                        <executions>-->
+<!--                            <execution>-->
+<!--                                <goals>-->
+<!--                                    <goal>check</goal>-->
+<!--                                </goals>-->
+<!--                            </execution>-->
+<!--                        </executions>-->
+<!--                    </plugin>-->
+<!--                </plugins>-->
+<!--            </build>-->
+<!--        </profile>-->
+<!--    </profiles>-->
 
     <dependencies>
-        <dependency>
-            <groupId>org.owasp</groupId>
-            <artifactId>dependency-check-maven</artifactId>
-            <version>6.1.5</version>
-            <type>maven-plugin</type>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.owasp</groupId>-->
+<!--            <artifactId>dependency-check-maven</artifactId>-->
+<!--            <version>6.1.5</version>-->
+<!--            <type>maven-plugin</type>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
