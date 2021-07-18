@@ -1291,4 +1291,7 @@ const Map<String, dynamic> de = {
   'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
       'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.',
   'Ein Fehler ist aufgetreten': 'Ein Fehler ist aufgetreten',
+  'Haustürgespräch': 'Haustürgespräch' ,
+  'Straßengespräche & Flyern': 'Straßengespräche & Flyern',
+  'Kiezfest': 'Kiezfest'
 ***REMOVED***
