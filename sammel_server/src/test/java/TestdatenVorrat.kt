@@ -1,8 +1,10 @@
 import de.kybernetik.database.benutzer.Benutzer
+import de.kybernetik.database.besuchteshaus.BesuchtesHaus
 import de.kybernetik.database.listlocations.ListLocation
 import de.kybernetik.database.termine.Termin
 import de.kybernetik.database.termine.TerminDetails
 import de.kybernetik.rest.TermineRestResource
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalDateTime.now
 
@@ -100,6 +102,12 @@ class TestdatenVorrat {
         fun zukunft(): ListLocation = ListLocation("1", "Zukunft", "Laskerstraße", "5", 52.5016524, 13.4655402)
 
         fun sampleListLocations() = listOf(curry36(), cafeKotti(), zukunft())
+
+        fun kanzlerinamt() = BesuchtesHaus(1, 52.52014, 13.36911, "Willy-Brandt-Straße 1, Tiergarten, Mitte, Berlin, 10557", "Westflügel", LocalDate.of(2021,7,18), 11)
+
+        fun hausundgrund() = BesuchtesHaus(2,  52.4964133, 13.3617511, "Potsdamer Straße 143, 10783 Berlin", null, LocalDate.of(2021,7,17), 12)
+
+        fun konradadenauerhaus() = BesuchtesHaus(3, 52.5065, 13.35125, "Klingelhöferstraße 8,Botschaftsviertel, Tiergarten, Mitte, Berlin, 10785", "Haupteingang", LocalDate.of(2021,7,19), 11)
     }
 
     @Suppress("unused")
