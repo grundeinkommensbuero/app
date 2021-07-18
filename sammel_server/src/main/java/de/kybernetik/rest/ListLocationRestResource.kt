@@ -2,6 +2,7 @@ package de.kybernetik.rest
 
 import de.kybernetik.database.listlocations.ListLocation
 import de.kybernetik.database.listlocations.ListLocationDao
+import org.jboss.logging.Logger
 import javax.annotation.security.RolesAllowed
 import javax.ejb.EJB
 import javax.ejb.Stateless
@@ -13,6 +14,7 @@ import javax.ws.rs.core.Response
 @Path("listlocations")
 @Stateless
 open class ListLocationRestResource {
+    private val LOG = Logger.getLogger(ListLocationRestResource::class.java)
 
     @EJB
     private lateinit var dao: ListLocationDao
@@ -22,6 +24,11 @@ open class ListLocationRestResource {
     @RolesAllowed("app")
     @Produces("application/json")
     open fun getActiveListLocations(): Response {
+        if (System.getProperty("de.kybernetik.listlocations.secret")?.toBoolean() == true) {
+            LOG.debug("Lade keine Solidarischen Orte, weil diese geheim gehalten werden")
+            return Response.status(200).entity(emptyList<ListLocation>()).build()
+        }
+
         val listLocations: List<ListLocation>? = dao.getActiveListLocations()
         val listLocationDtos =
                 listLocations
