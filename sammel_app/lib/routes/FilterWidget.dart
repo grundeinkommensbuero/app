@@ -12,6 +12,7 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
 import 'package:sammel_app/shared/KiezPicker.dart';
+import 'package:sammel_app/shared/action_types.dart';
 import 'package:sammel_app/shared/showMultipleDatePicker.dart';
 import 'package:sammel_app/shared/showTimeRangePicker.dart';
 
@@ -199,13 +200,6 @@ class FilterWidgetState extends State<FilterWidget>
   ***REMOVED***
 
   typeSelection() async {
-    List<String> moeglicheTypen = [
-      'Sammeln',
-      'Infoveranstaltung',
-      'Workshop',
-      'Plakatieren',
-      'Kundgebung'
-    ];
     List<String> ausgewTypen = []..addAll(filter.typen);
     bool nurEigene = filter.nurEigene == true;
     bool immerEigene = filter.immerEigene == true;
@@ -214,7 +208,7 @@ class FilterWidgetState extends State<FilterWidget>
         context: context,
         builder: (context) =>
             StatefulBuilder(builder: (context, setDialogState) {
-              return SimpleDialog(
+              return AlertDialog(
                   key: Key('type selection dialog'),
                   contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
                   titlePadding: EdgeInsets.zero,
@@ -222,49 +216,52 @@ class FilterWidgetState extends State<FilterWidget>
                       leading: null,
                       automaticallyImplyLeading: false,
                       title: const Text('Wähle Aktions-Art').tr()),
-                  children: [
-                    SwitchListTile(
-                        activeColor: CampaignTheme.secondary,
-                        inactiveThumbColor: CampaignTheme.primary,
-                        value: nurEigene,
-                        title: Text('Nur eigene Aktionen anzeigen').tr(),
-                        onChanged: (neuerWert) {
-                          setDialogState(() {
-                            nurEigene = neuerWert;
-                          ***REMOVED***);
-                        ***REMOVED***),
-                    SwitchListTile(
-                        activeColor: CampaignTheme.secondary,
-                        inactiveThumbColor: CampaignTheme.primary,
-                        value: immerEigene,
-                        title: Text('Eigene Aktionen immer anzeigen').tr(),
-                        onChanged: (neuerWert) {
-                          setDialogState(() {
-                            immerEigene = neuerWert;
-                          ***REMOVED***);
-                        ***REMOVED***),
-                  ]
-                    ..add(Divider(
-                        indent: 16, endIndent: 16, thickness: 1, height: 8))
-                    ..addAll(
-                        List.of(moeglicheTypen.map((typ) => CheckboxListTile(
+                  content: Container(padding: EdgeInsets.all(0), width: double.maxFinite, child: Column(mainAxisSize: MainAxisSize.min,
+                      children: [SwitchListTile(
+                      activeColor: CampaignTheme.secondary,
+                      inactiveThumbColor: CampaignTheme.primary,
+                      value: nurEigene,
+                      title: Text('Nur eigene Aktionen anzeigen').tr(),
+                      onChanged: (neuerWert) {
+                        setDialogState(() {
+                          nurEigene = neuerWert;
+                        ***REMOVED***);
+                      ***REMOVED***),
+                      SwitchListTile(
+                          activeColor: CampaignTheme.secondary,
+                          inactiveThumbColor: CampaignTheme.primary,
+                          value: immerEigene,
+                          title: Text('Eigene Aktionen immer anzeigen').tr(),
+                          onChanged: (neuerWert) {
+                            setDialogState(() {
+                              immerEigene = neuerWert;
+                            ***REMOVED***);
+                          ***REMOVED***),
+                      Divider(
+                          indent: 16, endIndent: 16, thickness: 1, height: 8),
+                  Flexible(child: ListView.builder( itemCount: moeglicheTypen.length, shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) =>
+                        CheckboxListTile(
                               checkColor: Colors.black,
                               activeColor: CampaignTheme.primaryLight,
-                              value: ausgewTypen.contains(typ),
-                              title: Text(typ).tr(),
+                              value: ausgewTypen.contains(moeglicheTypen[index]),
+                              title: Text(moeglicheTypen[index]).tr(),
                               onChanged: (bool? neuerWert) {
                                 setDialogState(() {
                                   if (neuerWert == true) {
-                                    ausgewTypen.add(typ);
+                                    ausgewTypen.add(moeglicheTypen[index]);
                                   ***REMOVED*** else {
-                                    ausgewTypen.remove(typ);
+                                    ausgewTypen.remove(moeglicheTypen[index]);
                                   ***REMOVED***
                                 ***REMOVED***);
                               ***REMOVED***,
-                            ))))
-                    ..add(ElevatedButton(
-                        child: Text('Fertig').tr(),
-                        onPressed: () => Navigator.pop(context))));
+                            ))),
+                        Divider(
+                            indent: 16, endIndent: 16, thickness: 1, height: 8),
+                      SizedBox(width: double.maxFinite, child: ElevatedButton(
+                          child: Text('Fertig').tr(),
+                          onPressed: () => Navigator.pop(context))
+                      )])));
             ***REMOVED***));
 
     setState(() {
