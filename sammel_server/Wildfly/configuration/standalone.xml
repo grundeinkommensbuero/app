@@ -41,6 +41,7 @@
         <property name="de.kybernetik.action-age" value="7"/> <!-- in Tagen -->
         <property name="de.kybernetik.shared.path" value="/opt/shared"/>
         <property name="de.kybernetik.plakate.secret" value="true"/>
+        <property name="de.kybernetik.listlocations.secret" value="true"/>
     </system-properties>
     <management>
         <security-realms>
