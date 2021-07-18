@@ -1,0 +1,6 @@
+GET http://127.0.0.1:18080/service/besuchteHaeuser
+Accept: application/json
+Content-Type: application/json
+Authorization: Basic MTpiOTdjNzU5Ny1mNjY5LTRmZWItOWJhMi0zMjE0YzE4MjIzMzk=
+
+###
