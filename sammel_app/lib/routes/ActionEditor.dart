@@ -14,6 +14,7 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
+import 'package:sammel_app/shared/action_types.dart';
 import 'package:sammel_app/shared/showMultipleDatePicker.dart';
 import 'package:sammel_app/shared/showTimeRangePicker.dart';
 import 'package:sammel_app/shared/showUsernameDialog.dart';
@@ -327,13 +328,6 @@ class ActionEditorState extends State<ActionEditor>
   ***REMOVED***
 
   typeSelection() async {
-    List<String> moeglicheTypen = [
-      'Sammeln',
-      'Infoveranstaltung',
-      'Workshop',
-      'Plakatieren',
-      'Kundgebung'
-    ];
     String? ausgewTyp = action.typ;
     await showDialog<String>(
         context: context,
