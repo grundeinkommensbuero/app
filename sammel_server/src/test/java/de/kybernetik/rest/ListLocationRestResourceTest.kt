@@ -15,7 +15,6 @@ import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import de.kybernetik.rest.ListLocationRestResource.ListLocationDto
 import de.kybernetik.rest.ListLocationRestResource.ListLocationDto.Companion.convertFromListLocation
-import org.apache.http.auth.BasicUserPrincipal
 import org.junit.Before
 
 class ListLocationRestResourceTest {
