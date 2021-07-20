@@ -62,13 +62,13 @@ class PlacardsService extends AbstractPlacardsService {
 ***REMOVED***
 
 class DemoPlacardsService extends AbstractPlacardsService {
-  DemoPlacardsService(AbstractUserService userService, Backend backend)
-      : super(userService, backend) {***REMOVED***
+  DemoPlacardsService(AbstractUserService userService)
+      : super(userService, DemoBackend()) {***REMOVED***
   List<Placard> placards = [
     Placard(
         1, 52.4722460, 13.3277830, '12161, Friedrich-Wilhelm-Platz 57', 11),
     Placard(2, 52.47102, 13.3282, "12161, Bundesallee 76", 12),
-    Placard(3, 52.4709, 13.32744, "12161, Goßlerstraße 29", 11)
+    Placard(3, 52.4709, 13.32744, "12161, Goßlerstraße 29", 13)
   ];
 
   @override
