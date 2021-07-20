@@ -3,6 +3,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/model/Placard.dart';
 import 'package:sammel_app/model/User.dart';
+import 'package:sammel_app/services/VisitedHousesService.dart';
 
 User karl() => User(11, 'Karl Marx', Colors.red);
 
@@ -2205,11 +2206,34 @@ Ortsteil koepenick() => Ortsteil('Köpenick', [
       LatLng(13.5712698, 52.4140597)
     ]);
 
-Placard placard1() => Placard(
-    1, 52.4722460, 13.3277830, '12161, Friedrich-Wilhelm-Platz 57', 11);
+Placard placard1() =>
+    Placard(1, 52.4722460, 13.3277830, '12161, Friedrich-Wilhelm-Platz 57', 11);
 
 Placard placard2() =>
     Placard(2, 52.47102, 13.3282, "12161, Bundesallee 76", 12);
 
 Placard placard3() =>
     Placard(3, 52.4709, 13.32744, "12161, Goßlerstraße 29", 11);
+
+VisitedHouseDummy kanzlerinamt() => VisitedHouseDummy(
+    1,
+    52.52014,
+    13.36911,
+    'Willy-Brandt-Straße 1, Tiergarten, Mitte, Berlin, 10557',
+    'Westflügel',
+    DateTime(2021, 7, 18),
+    11,
+    '');
+
+VisitedHouseDummy hausundgrund() => VisitedHouseDummy(2, 52.4964133, 13.3617511,
+    'Potsdamer Straße 143, 10783 Berlin', null, DateTime(2021, 7, 17), 12, '');
+
+VisitedHouseDummy konradadenauerhaus() => VisitedHouseDummy(
+    3,
+    52.5065,
+    13.35125,
+    'Klingelhöferstraße 8,Botschaftsviertel, Tiergarten, Mitte, Berlin, 10785',
+    'Haupteingang',
+    DateTime(2021, 7, 19),
+    11,
+    '');
