@@ -82,19 +82,20 @@ class ActionMapState extends State<ActionMap> {
     var flutterMap = FlutterMap(
       key: Key('action map map'),
       options: MapOptions(
-          onLongPress: (LatLng point) => widget.mapAction(point),
-          plugins: plugins,
-          center: LatLng(geo.initCenterLat, geo.initCenterLong),
-          swPanBoundary: LatLng(geo.boundLatMin, geo.boundLongMin),
-          nePanBoundary: LatLng(geo.boundLatMax, geo.boundLongMax),
-          zoom: geo.initZoom,
-          interactiveFlags: noRotation,
-          maxZoom: geo.zoomMax,
-          minZoom: geo.zoomMin,
-          onTap: (position) => showTapDialog(position),
-          onPositionChanged: (position, _) => widget.mapController.onReady.then(
-              (_) => setState(() =>
-                  this.markers = generateListLocationMarkers())),),
+        onLongPress: (LatLng point) => widget.mapAction(point),
+        plugins: plugins,
+        center: LatLng(geo.initCenterLat, geo.initCenterLong),
+        swPanBoundary: LatLng(geo.boundLatMin, geo.boundLongMin),
+        nePanBoundary: LatLng(geo.boundLatMax, geo.boundLongMax),
+        zoom: geo.initZoom,
+        interactiveFlags: noRotation,
+        maxZoom: geo.zoomMax,
+        minZoom: geo.zoomMin,
+        onTap: (position) => showTapDialog(position),
+        onPositionChanged: (position, _) => widget.mapController.onReady.then(
+            (_) =>
+                setState(() => this.markers = generateListLocationMarkers())),
+      ),
       layers: layers,
       mapController: widget.mapController,
     );
@@ -102,13 +103,14 @@ class ActionMapState extends State<ActionMap> {
     return flutterMap;
   ***REMOVED***
 
-  showTapDialog(LatLng position)
-  {
+  showTapDialog(LatLng position) {
     //TODO: now it takes always the same distance around tap point
     var show_distance_in_m = 30.0;
-    var long_diff = DistanceHelper.getLongDiffFromM(position, show_distance_in_m);
+    var long_diff =
+        DistanceHelper.getLongDiffFromM(position, show_distance_in_m);
     var lat_diff = DistanceHelper.getLatDiffFromM(position, show_distance_in_m);
-    var building_view = Provider.of<AbstractBuildingService>.getBuildingsInArea();
+    var building_view =
+        Provider.of<AbstractBuildingService>.getBuildingsInArea();
     showAddBuildingDialog();
   ***REMOVED***
 
@@ -137,8 +139,8 @@ class ActionMapState extends State<ActionMap> {
         .where(
             (placard) => placard.latitude != null && placard.longitude != null)
         .map((placard) => PlacardMarker(placard,
-        mine: placard.benutzer == widget.myUserId,
-        onTap: widget.openPlacardDialog))
+            mine: placard.benutzer == widget.myUserId,
+            onTap: widget.openPlacardDialog))
         .toList()
         .reversed
         .toList();
