@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:sammel_app/model/Kiez.dart';
+import 'package:sammel_app/model/Placard.dart';
 import 'package:sammel_app/model/User.dart';
 
 User karl() => User(11, 'Karl Marx', Colors.red);
@@ -2203,3 +2204,12 @@ Ortsteil koepenick() => Ortsteil('Köpenick', [
       LatLng(13.5726143, 52.4130672),
       LatLng(13.5712698, 52.4140597)
     ]);
+
+Placard placard1() => Placard(
+    1, 52.4722460, 13.3277830, '12161, Friedrich-Wilhelm-Platz 57', 11);
+
+Placard placard2() =>
+    Placard(2, 52.47102, 13.3282, "12161, Bundesallee 76", 12);
+
+Placard placard3() =>
+    Placard(3, 52.4709, 13.32744, "12161, Goßlerstraße 29", 11);

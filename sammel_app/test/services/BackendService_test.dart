@@ -78,7 +78,7 @@ main() {
         });
 
         test('with delete requests', () async {
-          await service.delete('anyUrl', '', appAuth: true);
+          await service.delete('anyUrl', data: '', appAuth: true);
 
           verify(backend.delete('anyUrl', '', BackendService.appHeaders));
         });
@@ -111,7 +111,7 @@ main() {
         });
 
         test('with delete requests', () async {
-          await service.delete('anyUrl', '', appAuth: false);
+          await service.delete('anyUrl', data: '', appAuth: false);
           var userHeaders = {'Authorization': 'userCreds'};
 
           verify(backend.delete('anyUrl', '', userHeaders));
@@ -158,7 +158,7 @@ main() {
         when(mock.delete(any, any, any)).thenAnswer((_) =>
             Future<HttpClientResponseBody>.value(
                 trainHttpResponse(MockHttpClientResponseBody(), 200, null)));
-        await service.delete('any URL', 'any data');
+        await service.delete('any URL', data: 'any data');
         verify(mock.delete('any URL', 'any data', any)).called(1);
       });
     });
