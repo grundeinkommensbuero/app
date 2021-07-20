@@ -1,13 +1,13 @@
-class Placcard {
+class Placard {
   int? id;
   double? latitude;
   double? longitude;
   String? adresse;
   int? benutzer;
 
-  Placcard(this.id, this.latitude, this.longitude, this.adresse, this.benutzer);
+  Placard(this.id, this.latitude, this.longitude, this.adresse, this.benutzer);
 
-  Placcard.fromJson(Map<dynamic, dynamic> json) {
+  Placard.fromJson(Map<dynamic, dynamic> json) {
     id = json['id'];
     latitude = json['latitude'];
     longitude = json['longitude'];

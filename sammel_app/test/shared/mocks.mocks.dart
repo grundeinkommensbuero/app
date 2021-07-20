@@ -223,13 +223,13 @@ class MockTermineService extends _i1.Mock implements _i20.TermineService {
               _FakeHttpClientResponseBody())) as _i11
           .Future<_i8.HttpClientResponseBody>);
   @override
-  _i11.Future<_i8.HttpClientResponseBody> delete(String? url, String? data,
-          {bool? appAuth***REMOVED***) =>
+  _i11.Future<_i8.HttpClientResponseBody> delete(String? url,
+          {String? data, bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(
-              Invocation.method(#delete, [url, data], {#appAuth: appAuth***REMOVED***),
-              returnValue: Future<_i8.HttpClientResponseBody>.value(
-                  _FakeHttpClientResponseBody()))
-          as _i11.Future<_i8.HttpClientResponseBody>);
+          Invocation.method(#delete, [url], {#data: data, #appAuth: appAuth***REMOVED***),
+          returnValue: Future<_i8.HttpClientResponseBody>.value(
+              _FakeHttpClientResponseBody())) as _i11
+          .Future<_i8.HttpClientResponseBody>);
   @override
   _i11.Future<Map<String, String>> authHeaders(bool? appAuth) =>
       (super.noSuchMethod(Invocation.method(#authHeaders, [appAuth]),
@@ -293,13 +293,13 @@ class MockListLocationService extends _i1.Mock
               _FakeHttpClientResponseBody())) as _i11
           .Future<_i8.HttpClientResponseBody>);
   @override
-  _i11.Future<_i8.HttpClientResponseBody> delete(String? url, String? data,
-          {bool? appAuth***REMOVED***) =>
+  _i11.Future<_i8.HttpClientResponseBody> delete(String? url,
+          {String? data, bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(
-              Invocation.method(#delete, [url, data], {#appAuth: appAuth***REMOVED***),
-              returnValue: Future<_i8.HttpClientResponseBody>.value(
-                  _FakeHttpClientResponseBody()))
-          as _i11.Future<_i8.HttpClientResponseBody>);
+          Invocation.method(#delete, [url], {#data: data, #appAuth: appAuth***REMOVED***),
+          returnValue: Future<_i8.HttpClientResponseBody>.value(
+              _FakeHttpClientResponseBody())) as _i11
+          .Future<_i8.HttpClientResponseBody>);
   @override
   _i11.Future<Map<String, String>> authHeaders(bool? appAuth) =>
       (super.noSuchMethod(Invocation.method(#authHeaders, [appAuth]),
@@ -362,13 +362,13 @@ class MockPushSendService extends _i1.Mock implements _i25.PushSendService {
               _FakeHttpClientResponseBody())) as _i11
           .Future<_i8.HttpClientResponseBody>);
   @override
-  _i11.Future<_i8.HttpClientResponseBody> delete(String? url, String? data,
-          {bool? appAuth***REMOVED***) =>
+  _i11.Future<_i8.HttpClientResponseBody> delete(String? url,
+          {String? data, bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(
-              Invocation.method(#delete, [url, data], {#appAuth: appAuth***REMOVED***),
-              returnValue: Future<_i8.HttpClientResponseBody>.value(
-                  _FakeHttpClientResponseBody()))
-          as _i11.Future<_i8.HttpClientResponseBody>);
+          Invocation.method(#delete, [url], {#data: data, #appAuth: appAuth***REMOVED***),
+          returnValue: Future<_i8.HttpClientResponseBody>.value(
+              _FakeHttpClientResponseBody())) as _i11
+          .Future<_i8.HttpClientResponseBody>);
   @override
   _i11.Future<Map<String, String>> authHeaders(bool? appAuth) =>
       (super.noSuchMethod(Invocation.method(#authHeaders, [appAuth]),
@@ -475,13 +475,13 @@ class MockUserService extends _i1.Mock implements _i6.UserService {
               _FakeHttpClientResponseBody())) as _i11
           .Future<_i8.HttpClientResponseBody>);
   @override
-  _i11.Future<_i8.HttpClientResponseBody> delete(String? url, String? data,
-          {bool? appAuth***REMOVED***) =>
+  _i11.Future<_i8.HttpClientResponseBody> delete(String? url,
+          {String? data, bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(
-              Invocation.method(#delete, [url, data], {#appAuth: appAuth***REMOVED***),
-              returnValue: Future<_i8.HttpClientResponseBody>.value(
-                  _FakeHttpClientResponseBody()))
-          as _i11.Future<_i8.HttpClientResponseBody>);
+          Invocation.method(#delete, [url], {#data: data, #appAuth: appAuth***REMOVED***),
+          returnValue: Future<_i8.HttpClientResponseBody>.value(
+              _FakeHttpClientResponseBody())) as _i11
+          .Future<_i8.HttpClientResponseBody>);
   @override
   _i11.Future<Map<String, String>> authHeaders(bool? appAuth) =>
       (super.noSuchMethod(Invocation.method(#authHeaders, [appAuth]),
@@ -888,13 +888,13 @@ class MockDemoPushSendService extends _i1.Mock
               _FakeHttpClientResponseBody())) as _i11
           .Future<_i8.HttpClientResponseBody>);
   @override
-  _i11.Future<_i8.HttpClientResponseBody> delete(String? url, String? data,
-          {bool? appAuth***REMOVED***) =>
+  _i11.Future<_i8.HttpClientResponseBody> delete(String? url,
+          {String? data, bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(
-              Invocation.method(#delete, [url, data], {#appAuth: appAuth***REMOVED***),
-              returnValue: Future<_i8.HttpClientResponseBody>.value(
-                  _FakeHttpClientResponseBody()))
-          as _i11.Future<_i8.HttpClientResponseBody>);
+          Invocation.method(#delete, [url], {#data: data, #appAuth: appAuth***REMOVED***),
+          returnValue: Future<_i8.HttpClientResponseBody>.value(
+              _FakeHttpClientResponseBody())) as _i11
+          .Future<_i8.HttpClientResponseBody>);
   @override
   _i11.Future<Map<String, String>> authHeaders(bool? appAuth) =>
       (super.noSuchMethod(Invocation.method(#authHeaders, [appAuth]),
