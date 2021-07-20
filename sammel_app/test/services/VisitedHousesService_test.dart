@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:sammel_app/model/Building.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/VisitedHousesService.dart';
 import '../shared/TestdatenVorrat.dart';
@@ -126,7 +127,7 @@ void main() {
       expect(visitedHousesService.visitedHouses.length, 3);
 
       var newHouse = await visitedHousesService.createVisitedHouse(
-          VisitedHouseDummy(
+          Building(
               0,
               52.47541,
               13.30508,
@@ -144,7 +145,7 @@ void main() {
     test('createVisitedHouse adds house with original id', () {
       expect(visitedHousesService.visitedHouses.length, 3);
 
-      visitedHousesService.createVisitedHouse(VisitedHouseDummy(
+      visitedHousesService.createVisitedHouse(Building(
           10,
           52.47541,
           13.30508,

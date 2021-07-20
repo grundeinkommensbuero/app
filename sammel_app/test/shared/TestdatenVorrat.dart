@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:sammel_app/model/Building.dart';
 import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/model/Placard.dart';
 import 'package:sammel_app/model/User.dart';
@@ -2215,7 +2216,7 @@ Placard placard2() =>
 Placard placard3() =>
     Placard(3, 52.4709, 13.32744, "12161, Goßlerstraße 29", 11);
 
-VisitedHouseDummy kanzlerinamt() => VisitedHouseDummy(
+Building kanzlerinamt() => Building(
     1,
     52.52014,
     13.36911,
@@ -2225,10 +2226,10 @@ VisitedHouseDummy kanzlerinamt() => VisitedHouseDummy(
     11,
     '');
 
-VisitedHouseDummy hausundgrund() => VisitedHouseDummy(2, 52.4964133, 13.3617511,
+Building hausundgrund() => Building(2, 52.4964133, 13.3617511,
     'Potsdamer Straße 143, 10783 Berlin', null, DateTime(2021, 7, 17), 12, '');
 
-VisitedHouseDummy konradadenauerhaus() => VisitedHouseDummy(
+Building konradadenauerhaus() => Building(
     3,
     52.5065,
     13.35125,
