@@ -11,6 +11,7 @@ import 'package:sammel_app/shared/AttributionPlugin.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
 import 'package:sammel_app/shared/NoRotation.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../shared/DistanceHelper.dart';
 
 class ActionMap extends StatefulWidget {
   final List<Termin> termine;
@@ -80,14 +81,25 @@ class ActionMapState extends State<ActionMap> {
           interactiveFlags: noRotation,
           maxZoom: geo.zoomMax,
           minZoom: geo.zoomMin,
+          onTap: (position) => showTapDialog(position),
           onPositionChanged: (position, _) => widget.mapController.onReady.then(
               (_) => setState(() =>
-                  this.markers = generateListLocationMarkers()))),
+                  this.markers = generateListLocationMarkers())),),
       layers: layers,
       mapController: widget.mapController,
     );
     initialized = true;
     return flutterMap;
+  ***REMOVED***
+
+  showTapDialog(LatLng position)
+  {
+    //TODO: now it takes always the same distance around tap point
+    var show_distance_in_m = 30.0;
+    var long_diff = DistanceHelper.getLongDiffFromM(position, show_distance_in_m);
+    var lat_diff = DistanceHelper.getLatDiffFromM(position, show_distance_in_m);
+    var building_view = Provider.of<AbstractBuildingService>.getBuildingsInArea();
+    showAddBuildingDialog();
   ***REMOVED***
 
   List<ActionMarker> generateActionMarkers() {

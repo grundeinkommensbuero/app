@@ -1,14 +1,18 @@
 import 'dart:io';
+import 'dart:math';
 
+import 'package:flutter_map/flutter_map.dart';
 import 'package:http_server/http_server.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:sammel_app/model/Building.dart';
+
 
 import 'BackendService.dart';
 
 class GeoService {
   late HttpClient httpClient;
 
-  String host = 'nominatim.openstreetmap.org';
+  String nominatim_host = 'nominatim.openstreetmap.org';
   int port = 443;
 
   GeoService({HttpClient? httpMock***REMOVED***) {
@@ -16,11 +20,12 @@ class GeoService {
   ***REMOVED***
 
   Future<GeoData> getDescriptionToPoint(LatLng point) async {
-    Uri url = Uri.https(host, 'reverse', {
+    Uri url = Uri.https(nominatim_host, 'interpreter', {
       'lat': point.latitude.toString(),
       'lon': point.longitude.toString(),
       'format': 'jsonv2'
     ***REMOVED***);
+
     var response = await httpClient
         .getUrl(url)
         .then((request) => request.close())
@@ -44,6 +49,9 @@ class GeoService {
 
     return GeoData.fromJson(geodata);
   ***REMOVED***
+
+
+
 ***REMOVED***
 
 class GeoData {
