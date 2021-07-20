@@ -58,6 +58,8 @@ class GeoData {
   String? name;
   String? street;
   String? number;
+  String? postcode;
+  String? city;
 
   GeoData([this.name, this.street, this.number]);
 
@@ -65,12 +67,19 @@ class GeoData {
     name = json['name'];
     street = json['address'] != null ? json['address']['road'] : null;
     number = json['address'] != null ? json['address']['house_number'] : null;
+    postcode = json['address'] != null ? json['address']['postcode'] : null;
+    city = json['address'] != null ? json['address']['city'] : null;
   ***REMOVED***
 
   String get description => [
         name,
         [(street), (number)].where((e) => e != null).join(' ')
       ].where((e) => e != null).join(', ');
+
+  String get fullAdress => '${[
+        (street),
+        (number)
+      ].where((e) => e != null).join(' ')***REMOVED***, $postcode $city';
 ***REMOVED***
 
 class OsmResponseException implements Exception {
