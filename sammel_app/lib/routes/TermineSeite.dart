@@ -26,6 +26,7 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
+import 'package:sammel_app/shared/DistanceHelper.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:uuid/uuid.dart';
 
@@ -532,7 +533,14 @@ class TermineSeiteState extends State<TermineSeite>
   ***REMOVED***
 
   void createNewVisitedHouse(LatLng point) {
-    //TODO
+    //TODO: now it takes always the same distance around tap point
+    var show_distance_in_m = 30.0;
+    var long_diff =
+    DistanceHelper.getLongDiffFromM(point, show_distance_in_m);
+    var lat_diff = DistanceHelper.getLatDiffFromM(point, show_distance_in_m);
+    var building_view =
+    Provider.of<AbstractBuildingService>.getBuildingsInArea();
+    showAddBuildingDialog();
   ***REMOVED***
 
   @override

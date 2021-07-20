@@ -91,7 +91,6 @@ class ActionMapState extends State<ActionMap> {
         interactiveFlags: noRotation,
         maxZoom: geo.zoomMax,
         minZoom: geo.zoomMin,
-        onTap: (position) => showTapDialog(position),
         onPositionChanged: (position, _) => widget.mapController.onReady.then(
             (_) =>
                 setState(() => this.markers = generateListLocationMarkers())),
@@ -101,17 +100,6 @@ class ActionMapState extends State<ActionMap> {
     );
     initialized = true;
     return flutterMap;
-  ***REMOVED***
-
-  showTapDialog(LatLng position) {
-    //TODO: now it takes always the same distance around tap point
-    var show_distance_in_m = 30.0;
-    var long_diff =
-        DistanceHelper.getLongDiffFromM(position, show_distance_in_m);
-    var lat_diff = DistanceHelper.getLatDiffFromM(position, show_distance_in_m);
-    var building_view =
-        Provider.of<AbstractBuildingService>.getBuildingsInArea();
-    showAddBuildingDialog();
   ***REMOVED***
 
   List<ActionMarker> generateActionMarkers() {
