@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sammel_app/model/Placcard.dart';
+import 'package:sammel_app/model/Placard.dart';
 
 void main() {
   group('deserialises', () {
-    test('empty Placcard', () {
+    test('empty Placard', () {
       expect(
-          jsonEncode(Placcard(null, null, null, null, null).toJson()),
+          jsonEncode(Placard(null, null, null, null, null).toJson()),
           '{'
           '"id":null,'
           '"latitude":null,'
@@ -17,7 +17,7 @@ void main() {
           '***REMOVED***');
 
       expect(
-          jsonEncode(Placcard(0, null, null, '', 0).toJson()),
+          jsonEncode(Placard(0, null, null, '', 0).toJson()),
           '{'
           '"id":0,'
           '"latitude":null,'
@@ -27,9 +27,9 @@ void main() {
           '***REMOVED***');
     ***REMOVED***);
 
-    test('filled Placcard', () {
+    test('filled Placard', () {
       expect(
-          jsonEncode(Placcard(1, 52.472246, 13.327783,
+          jsonEncode(Placard(1, 52.472246, 13.327783,
                   '12161, Friedrich-Wilhelm-Platz 57', 11)
               .toJson()),
           '{'
@@ -44,7 +44,7 @@ void main() {
 
   group('deserialises', () {
     test('empty user', () {
-      Placcard user = Placcard.fromJson(jsonDecode('{'
+      Placard user = Placard.fromJson(jsonDecode('{'
           '"id":null,'
           '"latitude":null,'
           '"longitude":null,'
@@ -58,7 +58,7 @@ void main() {
       expect(user.adresse, isNull);
       expect(user.benutzer, isNull);
 
-      user = Placcard.fromJson(jsonDecode('{'
+      user = Placard.fromJson(jsonDecode('{'
           '"id":0,'
           '"latitude":null,'
           '"longitude":null,'
@@ -74,7 +74,7 @@ void main() {
     ***REMOVED***);
 
     test('filled user', () {
-      Placcard user = Placcard.fromJson(jsonDecode('{'
+      Placard user = Placard.fromJson(jsonDecode('{'
           '"id":null,'
           '"latitude":null,'
           '"longitude":null,'
@@ -88,7 +88,7 @@ void main() {
       expect(user.adresse, isNull);
       expect(user.benutzer, isNull);
 
-      user = Placcard.fromJson(jsonDecode('{'
+      user = Placard.fromJson(jsonDecode('{'
           '"id":1,'
           '"latitude":52.472246,'
           '"longitude":13.327783,'
