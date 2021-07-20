@@ -108,11 +108,10 @@ void main() {
   });
 
   group('DemoPlacardsService', () {
-    DemoPlacardsService placardService =
-        DemoPlacardsService(userService, DemoBackend());
+    DemoPlacardsService placardService = DemoPlacardsService(userService);
 
     setUp(() {
-      placardService = DemoPlacardsService(userService, DemoBackend());
+      placardService = DemoPlacardsService(userService);
     });
 
     test('createPlacard stores placard with new id and returns it', () async {

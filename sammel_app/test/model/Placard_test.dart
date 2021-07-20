@@ -5,25 +5,15 @@ import 'package:sammel_app/model/Placard.dart';
 
 void main() {
   group('deserialises', () {
-    test('empty Placard', () {
+    test('Placard without id', () {
       expect(
-          jsonEncode(Placard(null, null, null, null, null).toJson()),
+          jsonEncode(Placard(null, 52.472246, 13.327783, '12161, Friedrich-Wilhelm-Platz 57', 13).toJson()),
           '{'
           '"id":null,'
-          '"latitude":null,'
-          '"longitude":null,'
-          '"adresse":null,'
-          '"benutzer":null'
-          '}');
-
-      expect(
-          jsonEncode(Placard(0, null, null, '', 0).toJson()),
-          '{'
-          '"id":0,'
-          '"latitude":null,'
-          '"longitude":null,'
-          '"adresse":"",'
-          '"benutzer":0'
+          '"latitude":52.472246,'
+          '"longitude":13.327783,'
+          '"adresse":"12161, Friedrich-Wilhelm-Platz 57",'
+          '"benutzer":13'
           '}');
     });
 

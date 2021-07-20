@@ -6,6 +6,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:sammel_app/Provisioning.dart';
 import 'package:sammel_app/model/ListLocation.dart';
+import 'package:sammel_app/model/Placard.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/shared/AttributionPlugin.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
@@ -15,10 +16,14 @@ import 'package:url_launcher/url_launcher.dart';
 class ActionMap extends StatefulWidget {
   final List<Termin> termine;
   final List<ListLocation> listLocations;
+  final List<Placard> placards;
+  final int? myUserId;
   final Function(Termin) isMyAction;
   final Function(Termin) isPastAction;
   final Function(Termin) iAmParticipant;
   final Function(Termin) openActionDetails;
+  final Function(Placard) openPlacardDialog;
+  final Function(LatLng point) mapAction;
   late final MapController mapController;
 
   // no better way yet: https://github.com/dart-lang/sdk/issues/4596
@@ -30,10 +35,14 @@ class ActionMap extends StatefulWidget {
     Key? key,
     this.termine = const [],
     this.listLocations = const [],
+    this.placards = const [],
+    this.myUserId,
     this.isMyAction = falseFunction,
     this.isPastAction = emptyFunction,
     this.openActionDetails = emptyFunction,
+    this.openPlacardDialog = emptyFunction,
     this.iAmParticipant = emptyFunction,
+    this.mapAction = emptyFunction,
     mapController,
   }) : super(key: key) {
     this.mapController = mapController ?? MapController();
@@ -63,7 +72,7 @@ class ActionMapState extends State<ActionMap> {
 
     var layers = [
       TileLayerOptions(
-          urlTemplate: "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
+          urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
           subdomains: ['a', 'b', 'c']),
       MarkerLayerOptions(markers: markers),
     ];
@@ -72,6 +81,7 @@ class ActionMapState extends State<ActionMap> {
     var flutterMap = FlutterMap(
       key: Key('action map map'),
       options: MapOptions(
+          onLongPress: (LatLng point) => widget.mapAction(point),
           plugins: plugins,
           center: LatLng(geo.initCenterLat, geo.initCenterLong),
           swPanBoundary: LatLng(geo.boundLatMin, geo.boundLongMin),
@@ -81,8 +91,8 @@ class ActionMapState extends State<ActionMap> {
           maxZoom: geo.zoomMax,
           minZoom: geo.zoomMin,
           onPositionChanged: (position, _) => widget.mapController.onReady.then(
-              (_) => setState(() =>
-                  this.markers = generateListLocationMarkers()))),
+              (_) => setState(
+                  () => this.markers = generateListLocationMarkers()))),
       layers: layers,
       mapController: widget.mapController,
     );
@@ -109,9 +119,23 @@ class ActionMapState extends State<ActionMap> {
         .toList();
   }
 
+  List<PlacardMarker> generatePlacardMarkers() {
+    if (!initialized || widget.mapController.zoom < 15) return [];
+    return widget.placards
+        .where(
+            (placard) => placard.latitude != null && placard.longitude != null)
+        .map((placard) => PlacardMarker(placard,
+        mine: placard.benutzer == widget.myUserId,
+        onTap: widget.openPlacardDialog))
+        .toList()
+        .reversed
+        .toList();
+  }
+
   List<Marker> generateMarkers() => <Marker>[]
     ..addAll(generateListLocationMarkers())
-    ..addAll(generateActionMarkers());
+    ..addAll(generateActionMarkers())
+    ..addAll(generatePlacardMarkers());
 
   Color generateColor(String bezirk) {
     return Color.fromARGB(150, bezirk.hashCode * 10, bezirk.hashCode * 100,
@@ -154,6 +178,43 @@ class ActionMarker extends Marker {
                   ),
                   child: Image.asset(action.getAsset(centered: true),
                       alignment: Alignment.center))),
+        );
+}
+
+class PlacardMarker extends Marker {
+  bool mine = false;
+  Function(Placard) onTap;
+
+  static emptyFunction(_) {}
+
+  PlacardMarker(Placard placard,
+      {this.mine = false, this.onTap = emptyFunction})
+      : super(
+          width: 30.0,
+          height: 30.0,
+          point: LatLng(placard.latitude, placard.longitude),
+          builder: (context) => DecoratedBox(
+              decoration: BoxDecoration(boxShadow: [
+                BoxShadow(offset: Offset(-2.0, 2.0), blurRadius: 4.0)
+              ], shape: BoxShape.rectangle),
+              child: TextButton(
+                  key: Key('action marker'),
+                  onPressed: () => mine ? onTap(placard) : null,
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        CampaignTheme.placardColor(mine)),
+                    shape: MaterialStateProperty.all<OutlinedBorder>(
+                        RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            side: BorderSide(
+                                color: CampaignTheme.secondary, width: 1.0))),
+                    padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                        EdgeInsets.all(0)),
+                  ),
+                  child: Icon(
+                    Icons.assistant_sharp,
+                    color: CampaignTheme.primary,
+                  ))),
         );
 }
 
