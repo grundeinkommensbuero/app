@@ -2,10 +2,9 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:http_server/http_server.dart';
-import 'package:intl/intl.dart';
+import 'package:sammel_app/model/Building.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/UserService.dart';
-import 'package:sammel_app/shared/ChronoHelfer.dart';
 
 import 'ErrorService.dart';
 
@@ -13,9 +12,9 @@ abstract class AbstractVisitedHousesService extends BackendService {
   AbstractVisitedHousesService(AbstractUserService userService, Backend backend)
       : super(userService, backend);
 
-  Future<List<VisitedHouseDummy>> loadVisitedHouses();
+  Future<List<Building>> loadVisitedHouses();
 
-  Future<VisitedHouseDummy?> createVisitedHouse(VisitedHouseDummy house);
+  Future<Building?> createVisitedHouse(Building house);
 
   deleteVisitedHouse(int id);
 ***REMOVED***
@@ -25,11 +24,11 @@ class VisitedHousesService extends AbstractVisitedHousesService {
       : super(userService, backend) {***REMOVED***
 
   @override
-  Future<VisitedHouseDummy?> createVisitedHouse(VisitedHouseDummy house) async {
+  Future<Building?> createVisitedHouse(Building house) async {
     try {
       var response =
           await post('service/besuchteHaeuser/neu', jsonEncode(house));
-      return VisitedHouseDummy.fromJson(response.body);
+      return Building.fromJson(response.body);
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
           context: 'Eintragen von Besuchtem Haus ist fehlgeschlagen.');
@@ -47,7 +46,7 @@ class VisitedHousesService extends AbstractVisitedHousesService {
   ***REMOVED***
 
   @override
-  Future<List<VisitedHouseDummy>> loadVisitedHouses() async {
+  Future<List<Building>> loadVisitedHouses() async {
     HttpClientResponseBody response;
     try {
       response = await get('service/besuchteHaeuser');
@@ -57,7 +56,7 @@ class VisitedHousesService extends AbstractVisitedHousesService {
       return [];
     ***REMOVED***
     final houses = (response.body as List)
-        .map((jsonHouse) => VisitedHouseDummy.fromJson(jsonHouse))
+        .map((jsonHouse) => Building.fromJson(jsonHouse))
         .toList();
     return houses;
   ***REMOVED***
@@ -66,8 +65,8 @@ class VisitedHousesService extends AbstractVisitedHousesService {
 class DemoVisitedHousesService extends AbstractVisitedHousesService {
   DemoVisitedHousesService(AbstractUserService userService, Backend backend)
       : super(userService, backend) {***REMOVED***
-  List<VisitedHouseDummy> visitedHouses = [
-    VisitedHouseDummy(
+  List<Building> visitedHouses = [
+    Building(
         1,
         52.52014,
         13.36911,
@@ -76,7 +75,7 @@ class DemoVisitedHousesService extends AbstractVisitedHousesService {
         DateTime(2021, 7, 18),
         11,
         ''),
-    VisitedHouseDummy(
+    Building(
         2,
         52.4964133,
         13.3617511,
@@ -85,7 +84,7 @@ class DemoVisitedHousesService extends AbstractVisitedHousesService {
         DateTime(2021, 7, 17),
         12,
         ''),
-    VisitedHouseDummy(
+    Building(
         3,
         52.5065,
         13.35125,
@@ -97,7 +96,7 @@ class DemoVisitedHousesService extends AbstractVisitedHousesService {
   ];
 
   @override
-  Future<VisitedHouseDummy> createVisitedHouse(VisitedHouseDummy houses) {
+  Future<Building> createVisitedHouse(Building houses) {
     var maxId = visitedHouses
         .map((p) => p.id)
         .fold(0, (int? v, int? e) => max(v!, e == null ? 0 : e));
@@ -115,40 +114,6 @@ class DemoVisitedHousesService extends AbstractVisitedHousesService {
   ***REMOVED***
 
   @override
-  Future<List<VisitedHouseDummy>> loadVisitedHouses() =>
+  Future<List<Building>> loadVisitedHouses() =>
       Future.value(visitedHouses);
-***REMOVED***
-
-class VisitedHouseDummy {
-  int? id;
-  double latitude;
-  double longitude;
-  String adresse;
-  String? hausteil;
-  DateTime datum;
-  int benutzer;
-  String? polygon;
-
-  VisitedHouseDummy(this.id, this.latitude, this.longitude, this.adresse,
-      this.hausteil, this.datum, this.benutzer, this.polygon);
-
-  VisitedHouseDummy.fromJson(Map<dynamic, dynamic> json) :
-    id = json['id'],
-    latitude = json['latitude'],
-    longitude = json['longitude'],
-    adresse = json['adresse'],
-    hausteil = json['hausteil'],
-    datum = ChronoHelfer.deserializeJsonDateTime(json['datum']),
-    benutzer = json['benutzer'],
-    polygon = '';
-
-  Map<dynamic, dynamic> toJson() => {
-        'id': id,
-        'latitude': latitude,
-        'longitude': longitude,
-        'adresse': adresse,
-        'hausteil': hausteil,
-        'datum': DateFormat('yyyy-MM-dd').format(datum),
-        'benutzer': benutzer
-      ***REMOVED***
 ***REMOVED***

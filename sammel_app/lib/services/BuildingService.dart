@@ -139,7 +139,7 @@ class BuildingService extends AbstractBuildingService
       return null;
     ***REMOVED***
     else{
-      return Building(building_data['id'], '${geo_data.street***REMOVED*** ${geo_data.number***REMOVED***' , null, null, null, point.latitude, point.longitude,
+      return Building(building_data['id'], point.latitude, point.longitude, '${geo_data.street***REMOVED*** ${geo_data.number***REMOVED***' , null, null, null,
           poly.Polygon(building_data['geometry'].map((latlng) =>
           (poly.Point<num>(latlng['lat'], latlng['lon']))).cast<poly.Point<num>>().toList()));
     ***REMOVED***
