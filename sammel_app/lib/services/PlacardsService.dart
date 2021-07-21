@@ -65,25 +65,26 @@ class DemoPlacardsService extends AbstractPlacardsService {
   DemoPlacardsService(AbstractUserService userService)
       : super(userService, DemoBackend()) {}
   List<Placard> placards = [
-    Placard(
-        1, 52.4722460, 13.3277830, '12161, Friedrich-Wilhelm-Platz 57', 11),
+    Placard(1, 52.4722460, 13.3277830, '12161, Friedrich-Wilhelm-Platz 57', 11),
     Placard(2, 52.47102, 13.3282, "12161, Bundesallee 76", 12),
     Placard(3, 52.4709, 13.32744, "12161, Goßlerstraße 29", 13)
   ];
 
   @override
   Future<Placard> createPlacard(Placard placard) {
-    var maxId = placards
-        .map((p) => p.id)
-        .fold(0, (int? v, int? e) => max(v!, e == null ? 0 : e));
-    if (placard.id == null || placard.id == 0) placard.id = maxId + 1;
+    if (placard.id == null || placard.id == 0) {
+      var maxId = placards
+          .map((p) => p.id)
+          .fold(0, (int? v, int? e) => max(v!, e == null ? 0 : e));
+      placard.id = maxId + 1;
+    }
     placards.add(placard);
     return Future.value(placard);
   }
 
   @override
   deletePlacard(int id) {
-    if(!placards.map((e) => e.id).contains(id)) return;
+    if (!placards.map((e) => e.id).contains(id)) return;
 
     var placard = placards.firstWhere((pl) => pl.id == id);
     placards.remove(placard);

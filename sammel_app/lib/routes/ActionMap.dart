@@ -125,8 +125,8 @@ class ActionMapState extends State<ActionMap> {
         .where(
             (placard) => placard.latitude != null && placard.longitude != null)
         .map((placard) => PlacardMarker(placard,
-        mine: placard.benutzer == widget.myUserId,
-        onTap: widget.openPlacardDialog))
+            mine: placard.benutzer == widget.myUserId,
+            onTap: widget.openPlacardDialog))
         .toList()
         .reversed
         .toList();
@@ -207,7 +207,7 @@ class PlacardMarker extends Marker {
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(5)),
                             side: BorderSide(
-                                color: CampaignTheme.secondary, width: 1.0))),
+                                color: CampaignTheme.secondary, width: 0))),
                     padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                         EdgeInsets.all(0)),
                   ),
