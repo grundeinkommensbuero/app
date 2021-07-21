@@ -15,6 +15,7 @@ import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
+import 'package:sammel_app/services/PlacardsService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
@@ -36,6 +37,7 @@ late MockPushSendService _pushService = MockPushSendService();
 late MockUserService _userService = MockUserService();
 late MockChatMessageService _chatService = MockChatMessageService();
 late MockPushNotificationManager _pushManager = MockPushNotificationManager();
+late MockPlacardsService _placardService = MockPlacardsService();
 
 void main() {
   trainTranslation(MockTranslations());
@@ -67,6 +69,8 @@ void main() {
         .thenAnswer((_) async => []);
     when(_stammdatenService.kieze).thenAnswer(
         (_) => Future.value({ffAlleeNord(), plaenterwald(), tempVorstadt()}));
+    when(_placardService.loadPlacards())
+        .thenAnswer((_) async => Future.value([]));
   });
 
   testWidgets('Navigation opens CreateTerminDialog',
@@ -85,6 +89,7 @@ void main() {
             Provider<AbstractPushNotificationManager>.value(
                 value: _pushManager),
             Provider<ChatMessageService>.value(value: _chatService),
+            Provider<AbstractPlacardsService>.value(value: _placardService),
           ],
           child: MaterialApp(
             home: Navigation(GlobalKey(debugLabel: 'action page')),
@@ -912,6 +917,7 @@ _pumpActionPage(WidgetTester tester) async {
         Provider<AbstractUserService>.value(value: _userService),
         Provider<PushSendService>.value(value: _pushService),
         Provider<ChatMessageService>.value(value: _chatService),
+        Provider<AbstractPlacardsService>.value(value: _placardService),
       ],
       child: MaterialApp(
         home: TermineSeite(),
