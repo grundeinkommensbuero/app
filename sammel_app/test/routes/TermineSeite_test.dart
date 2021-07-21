@@ -45,6 +45,9 @@ final _chatMessageService = MockChatMessageService();
 final _pushManager = MockPushNotificationManager();
 final _placardsService = MockPlacardsService();
 
+final actionCreatorKey =
+    GlobalKey<ActionEditorState>(debugLabel: 'action creator');
+
 void main() {
   trainTranslation(MockTranslations());
   trainUserService(_userService);
@@ -445,7 +448,7 @@ void main() {
       await tester.pumpAndSettle();
 
       ActionEditorState editorState =
-          tester.state(find.byKey(Key('action creator')));
+          tester.state(find.byKey(actionCreatorKey));
 
       editorState.action = ActionData(
           'Infoveranstaltung',
@@ -512,7 +515,7 @@ void main() {
       await tester.pumpAndSettle();
 
       ActionEditorState editorState =
-          tester.state(find.byKey(Key('action creator')));
+          tester.state(find.byKey(actionCreatorKey));
 
       editorState.action = ActionData(
           'Sammeln',
@@ -578,7 +581,7 @@ void main() {
       await tester.pumpAndSettle();
 
       ActionEditorState editorState =
-          tester.state(find.byKey(Key('action creator')));
+          tester.state(find.byKey(actionCreatorKey));
 
       editorState.action = ActionData(
           'Infoveranstaltung',
@@ -645,7 +648,7 @@ void main() {
       await tester.pumpAndSettle();
 
       ActionEditorState editorState =
-          tester.state(find.byKey(Key('action creator')));
+          tester.state(find.byKey(actionCreatorKey));
 
       editorState.action = ActionData(
           'Infoveranstaltung',
@@ -1474,7 +1477,8 @@ _pumpNavigation(WidgetTester tester) async {
         Provider<AbstractPlacardsService>.value(value: _placardsService),
       ],
       child: MaterialApp(
-        home: Navigation(GlobalKey(debugLabel: 'action page')),
+        home:
+            Navigation(GlobalKey(debugLabel: 'action page'), actionCreatorKey),
       )));
   await tester.pumpAndSettle();
 ***REMOVED***

@@ -73,42 +73,6 @@ void main() {
         .thenAnswer((_) async => Future.value([]));
   ***REMOVED***);
 
-  testWidgets('Navigation opens CreateTerminDialog',
-      (WidgetTester tester) async {
-    await (WidgetTester tester) async {
-      await tester.pumpWidget(MultiProvider(
-          providers: [
-            Provider<StammdatenService>.value(value: _stammdatenService),
-            Provider<AbstractTermineService>.value(value: _terminService),
-            Provider<StorageService>.value(value: _storageService),
-            Provider<AbstractListLocationService>(
-                create: (context) => _listLocationService),
-            Provider<AbstractPushSendService>.value(value: _pushService),
-            Provider<AbstractUserService>.value(value: _userService),
-            Provider<ChatMessageService>.value(value: _chatService),
-            Provider<AbstractPushNotificationManager>.value(
-                value: _pushManager),
-            Provider<ChatMessageService>.value(value: _chatService),
-            Provider<AbstractPlacardsService>.value(value: _placardService),
-          ],
-          child: MaterialApp(
-            home: Navigation(GlobalKey(debugLabel: 'action page')),
-          )));
-    ***REMOVED***(tester);
-
-    var nav = tester.state<NavigationState>(find.byKey(Key('navigation')));
-
-    expect(nav.navigation, isNot(1));
-
-    await tester.tap(find.byIcon(Icons.menu));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byKey(Key('action creator navigation button')));
-    await tester.pumpAndSettle();
-
-    expect(find.byKey(Key('action creator')), findsOneWidget);
-    expect(nav.navigation, 1);
-  ***REMOVED***);
-
   group('shows all data', () {
     setUp(() async {
       when(_terminService.loadActions(any)).thenAnswer((_) async => [

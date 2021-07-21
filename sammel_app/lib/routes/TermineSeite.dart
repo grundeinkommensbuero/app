@@ -37,7 +37,10 @@ import 'FilterWidget.dart';
 import 'MapActionDialog.dart';
 
 class TermineSeite extends StatefulWidget {
-  TermineSeite({Key? key***REMOVED***) : super(key: key ?? Key('action page'));
+  Function(LatLng)? switchToActionCreator;
+
+  TermineSeite({Key? key, this.switchToActionCreator***REMOVED***)
+      : super(key: key ?? Key('action page'));
 
   @override
   TermineSeiteState createState() => TermineSeiteState();
@@ -513,9 +516,8 @@ class TermineSeiteState extends State<TermineSeite>
     if (placard != null) setState(() => placards.add(placard));
   ***REMOVED***
 
-  void switchToActionCreator(LatLng point) {
-    //TODO
-  ***REMOVED***
+  void switchToActionCreator(LatLng point) =>
+      widget.switchToActionCreator!(point);
 
   void createNewVisitedHouse(LatLng point) {
     //TODO

@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:latlong2/latlong.dart';
 import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/shared/FileReader.dart';
+import 'package:poly/poly.dart' as poly;
 
 class StammdatenService {
   static var fileReader = FileReader();
@@ -34,5 +36,17 @@ class StammdatenService {
     return (jsonDecode(json)['features'] as List)
         .map((json) => Ortsteil.fromJson(json))
         .toSet();
+  ***REMOVED***
+
+  Future<Kiez?> getKiezAtLocation(LatLng point) async {
+    return (await kieze)
+        .map((kiez) => kiez as Kiez?) // nötig wegen orElse => null
+        .firstWhere(
+            (kiez) => poly.Polygon(kiez!.polygon
+            .map((latlng) =>
+            poly.Point<num>(latlng.latitude, latlng.longitude))
+            .toList())
+            .contains(point.latitude, point.longitude),
+        orElse: () => null);
   ***REMOVED***
 ***REMOVED***
