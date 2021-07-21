@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/model/Termin.dart';
@@ -18,9 +19,10 @@ import 'TermineSeite.dart';
 
 class Navigation extends StatefulWidget {
   final clearButton;
-  final GlobalKey actionPage;
+  final GlobalKey<TermineSeiteState> actionPage;
+  final GlobalKey<ActionEditorState> actionEditorPage;
 
-  Navigation(this.actionPage, [this.clearButton = false])
+  Navigation(this.actionPage, this.actionEditorPage, [this.clearButton = false])
       : super(key: Key('navigation'));
 
   @override
@@ -63,8 +65,10 @@ class NavigationState extends State<Navigation>
   @override
   Widget build(BuildContext context) {
     var pages = [
-      TermineSeite(key: widget.actionPage),
-      ActionEditor(onFinish: newActionCreated, key: Key('action creator')),
+      TermineSeite(
+          key: widget.actionPage,
+          switchToActionCreator: this.navigateToActionCreator),
+      ActionEditor(key: widget.actionEditorPage, onFinish: newActionCreated),
       faq = FAQ(),
       chatPage = ChatPage(active: navigation == chatPageIndex),
       ProfilePage()
@@ -244,6 +248,13 @@ class NavigationState extends State<Navigation>
   void navigateToActionPage() {
     switchPage(0);
     history.removeLast();
+  }
+
+  void navigateToActionCreator(LatLng position) {
+    switchPage(1);
+    (widget.actionEditorPage.currentState as ActionEditorState)
+        .setPosition(position);
+    history.add(navigation);
   }
 
   maybeDispose(ChatChannel value) {

@@ -10,6 +10,9 @@ import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/User.dart';
+import 'package:sammel_app/services/ErrorService.dart';
+import 'package:sammel_app/services/GeoService.dart';
+import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
@@ -66,8 +69,7 @@ class ActionEditor extends StatefulWidget {
   final Termin? initAction;
   late Function onFinish;
 
-  ActionEditor(
-      {this.initAction, required this.onFinish, Key? key})
+  ActionEditor({this.initAction, required this.onFinish, Key? key})
       : super(key: key);
 
   @override
@@ -218,7 +220,7 @@ class ActionEditorState extends State<ActionEditor>
                   resetAction();
                   Navigator.maybePop(context);
                 }),
-                ElevatedButton(
+            ElevatedButton(
                 key: Key('action editor finish button'),
                 child: Text('Fertig').tr(),
                 onPressed: () => finishPressed())
@@ -239,14 +241,19 @@ class ActionEditorState extends State<ActionEditor>
         ).tr()
       ]);
 
-  void locationSelection() async {
+  void locationSelection({LatLng? initPosition}) async {
     Location? ergebnis = await showLocationDialog(
         context: context,
         initDescription: action.treffpunkt,
-        initCoordinates: action.coordinates,
+        initCoordinates: action.coordinates ?? initPosition,
         initKiez: action.ort,
         center: determineMapCenter(action));
 
+    setNewLocation(ergebnis);
+  }
+
+  void setNewLocation(Location? ergebnis) {
+    
     setState(() {
       action.treffpunkt = ergebnis?.description;
       action.coordinates = ergebnis?.coordinates;
@@ -403,7 +410,8 @@ class ActionEditorState extends State<ActionEditor>
     Text text;
     if (this.action.validated['tage'] == ValidationState.error ||
         this.action.validated['tage'] == ValidationState.not_validated) {
-      text = Text("Wähle einen Tag", style: TextStyle(color: CampaignTheme.secondary))
+      text = Text("Wähle einen Tag",
+              style: TextStyle(color: CampaignTheme.secondary))
           .tr();
     } else {
       text = Text('am '.tr() +
@@ -486,9 +494,9 @@ class ActionEditorState extends State<ActionEditor>
     Text text;
     if (beschriftung.isEmpty) {
       val = ValidationState.error;
-      text =
-          Text('Wähle eine Uhrzeit', style: TextStyle(color: CampaignTheme.secondary))
-              .tr();
+      text = Text('Wähle eine Uhrzeit',
+              style: TextStyle(color: CampaignTheme.secondary))
+          .tr();
     } else {
       val = ValidationState.ok;
       text = Text(beschriftung);
@@ -662,6 +670,24 @@ class ActionEditorState extends State<ActionEditor>
     final contact = action.kontakt;
     setState(() => action = ActionData()..kontakt = contact);
     validateContact();
+  }
+
+  setPosition(LatLng position) async {
+    setNewLocation(await getDescriptionAndKiezToPoint(position));
+  }
+
+  Future<Location> getDescriptionAndKiezToPoint(LatLng point) async {
+    var geodata = await Provider.of<GeoService>(context, listen: false)
+        .getDescriptionToPoint(point)
+        .catchError((e, s) {
+      ErrorService.handleError(e, s);
+      return GeoData('', '', '');
+    });
+
+    Kiez? kiez = await Provider.of<StammdatenService>(context, listen: false)
+        .getKiezAtLocation(point);
+
+    return Location(geodata.description, point, kiez);
   }
 
   Row buildTextRow(Text text, ValidationState valState) {
