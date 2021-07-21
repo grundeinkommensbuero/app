@@ -49,7 +49,7 @@ class TermineSeiteState extends State<TermineSeite>
   AbstractTermineService? termineService;
   StorageService? storageService;
   ChatMessageService? chatMessageService;
-  AbstractPlacardsService? placardService;
+  late AbstractPlacardsService placardService;
   static final TextStyle style = TextStyle(
     color: Color.fromARGB(255, 129, 28, 98),
     fontSize: 15.0,
@@ -124,42 +124,42 @@ class TermineSeiteState extends State<TermineSeite>
     );
 
     return ScaffoldMessenger(
-      // um Snackbar oberhalb der Footer-Buttons zu zeigen
+        // um Snackbar oberhalb der Footer-Buttons zu zeigen
         child: Scaffold(
-          body: Container(
-              decoration: CampaignTheme.background,
-              child: Stack(
-                alignment: Alignment.topCenter,
-                children: [
-                  FadeTransition(
-                    opacity: _fade!,
-                    child: SlideTransition(
-                      position: _slide!,
-                      child: IndexedStack(
-                          children: [actionListView, actionMapView],
-                          index: navigation),
-                    ),
-                  ),
-                  filterWidget!
-                ],
-              )),
-          bottomNavigationBar: BottomNavigationBar(
-            selectedItemColor: CampaignTheme.primary,
-            unselectedItemColor: Colors.black,
-            currentIndex: navigation,
-            onTap: swithPage,
-            backgroundColor: CampaignTheme.secondary,
-            items: [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.view_list,
-                      key: Key('list view navigation button')),
-                  label: 'Liste'.tr()),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.map, key: Key('map view navigation button')),
-                  label: 'Karte'.tr())
+      body: Container(
+          decoration: CampaignTheme.background,
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              FadeTransition(
+                opacity: _fade!,
+                child: SlideTransition(
+                  position: _slide!,
+                  child: IndexedStack(
+                      children: [actionListView, actionMapView],
+                      index: navigation),
+                ),
+              ),
+              filterWidget!
             ],
-          ),
-        ));
+          )),
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: CampaignTheme.primary,
+        unselectedItemColor: Colors.black,
+        currentIndex: navigation,
+        onTap: swithPage,
+        backgroundColor: CampaignTheme.secondary,
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.view_list,
+                  key: Key('list view navigation button')),
+              label: 'Liste'.tr()),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.map, key: Key('map view navigation button')),
+              label: 'Karte'.tr())
+        ],
+      ),
+    ));
   ***REMOVED***
 
   swithPage(index) async {
@@ -180,7 +180,7 @@ class TermineSeiteState extends State<TermineSeite>
     termineService = Provider.of<AbstractTermineService>(context);
     storageService = Provider.of<StorageService>(context);
     chatMessageService = Provider.of<ChatMessageService>(context);
-    filterWidget = FilterWidget(ladeTermine, key: filterKey);
+    filterWidget = FilterWidget(loadActionsAndPlacards, key: filterKey);
 
     storageService!
         .loadAllStoredActionIds()
@@ -195,12 +195,8 @@ class TermineSeiteState extends State<TermineSeite>
     ***REMOVED***);
 
     placardService = Provider.of<AbstractPlacardsService>(context);
-    placardService!
-        .loadPlacards()
-        .then((placards) => setState(() => this.placards = placards));
 
-    Provider
-        .of<AbstractUserService>(context)
+    Provider.of<AbstractUserService>(context)
         .user
         .listen((user) => setState(() => me = user));
 
@@ -209,21 +205,25 @@ class TermineSeiteState extends State<TermineSeite>
     _initialized = true;
   ***REMOVED***
 
-  Future<void> ladeTermine(TermineFilter filter) async {
-    await termineService!
+  Future loadActionsAndPlacards(TermineFilter filter) async {
+    Future wait4Actions = termineService!
         .loadActions(filter)
         .then((termine) =>
-        setState(() => this.termine = termine..sort(Termin.compareByStart)))
-        .catchError((e, s) =>
-        ErrorService.handleError(e, s,
+            setState(() => this.termine = termine..sort(Termin.compareByStart)))
+        .catchError((e, s) => ErrorService.handleError(e, s,
             context: 'Aktionen konnten nicht geladen werden.'));
+
+    Future wait4placards = placardService
+        .loadPlacards()
+        .then((placards) => setState(() => this.placards = placards));
+
+    await Future.wait([wait4Actions, wait4placards]);
   ***REMOVED***
 
   void showRestError(RestFehler e) {
     showDialog(
         context: context,
-        builder: (context) =>
-            AlertDialog(
+        builder: (context) => AlertDialog(
               title: Text('Aktion konnte nicht angelegt werden').tr(),
               content: SelectableText(e.message),
               actions: <Widget>[
@@ -239,7 +239,7 @@ class TermineSeiteState extends State<TermineSeite>
     if (termin.id == null) return;
     try {
       var terminMitDetails =
-      await termineService!.getActionWithDetails(termin.id!);
+          await termineService!.getActionWithDetails(termin.id!);
       TerminDetailsCommand command = await showActionDetailsPage(
           context,
           terminMitDetails,
@@ -281,23 +281,17 @@ class TermineSeiteState extends State<TermineSeite>
                 leading: null,
                 automaticallyImplyLeading: false,
                 title: Text('Deine Aktion bearbeiten',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22.0,
-                        color: Color.fromARGB(255, 129, 28, 98)))
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22.0,
+                            color: Color.fromARGB(255, 129, 28, 98)))
                     .tr(),
               ),
               children: <Widget>[
                 Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.8,
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.8,
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.height * 0.8,
                   child: ActionEditor(
                       initAction: termin,
                       onFinish: afterActionEdit,
@@ -335,23 +329,17 @@ class TermineSeiteState extends State<TermineSeite>
                 leading: null,
                 automaticallyImplyLeading: false,
                 title: Text('Über Aktion berichten',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22.0,
-                        color: Color.fromARGB(255, 129, 28, 98)))
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22.0,
+                            color: Color.fromARGB(255, 129, 28, 98)))
                     .tr(),
               ),
               children: <Widget>[
                 Container(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.8,
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    height: MediaQuery.of(context).size.height * 0.8,
                     child: EvaluationForm(termin,
                         onFinish: afterActionEvaluation,
                         key: Key('evaluation editor')))
@@ -399,7 +387,7 @@ class TermineSeiteState extends State<TermineSeite>
 
   updateAction(Termin updatedAction, bool remove) {
     var index =
-    termine.indexWhere((Termin action) => action.id == updatedAction.id);
+        termine.indexWhere((Termin action) => action.id == updatedAction.id);
 
     if (index == -1) return;
 
@@ -467,11 +455,10 @@ class TermineSeiteState extends State<TermineSeite>
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                Scaffold(
-                    appBar: AppBar(title: Text(title)),
-                    body: ActionList(actions, isMyAction, isPastAction,
-                        iAmParticipant, openTerminDetails))));
+            builder: (context) => Scaffold(
+                appBar: AppBar(title: Text(title)),
+                body: ActionList(actions, isMyAction, isPastAction,
+                    iAmParticipant, openTerminDetails))));
   ***REMOVED***
 
   checkDeepLinks() async {
@@ -503,7 +490,7 @@ class TermineSeiteState extends State<TermineSeite>
   ***REMOVED***
 
   void deletePlacard(Placard placard) {
-    placardService!.deletePlacard(placard.id!);
+    placardService.deletePlacard(placard.id!);
     setState(() => placards.remove(placard));
   ***REMOVED***
 
@@ -521,10 +508,9 @@ class TermineSeiteState extends State<TermineSeite>
 
     if (me?.id == null) return;
 
-    var placard = Placard(
-        null, point.latitude, point.longitude, geoData.fullAdress, me!.id!);
-    placardService?.createPlacard(placard);
-    setState(() => placards.add(placard));
+    final placard = await placardService.createPlacard(Placard(
+        null, point.latitude, point.longitude, geoData.fullAdress, me!.id!));
+    if (placard != null) setState(() => placards.add(placard));
   ***REMOVED***
 
   void switchToActionCreator(LatLng point) {
@@ -560,8 +546,7 @@ class ButtonRow extends StatelessWidget {
   ***REMOVED***
 ***REMOVED***
 
-AlertDialog confirmDeleteDialog(BuildContext context) =>
-    AlertDialog(
+AlertDialog confirmDeleteDialog(BuildContext context) => AlertDialog(
         key: Key('deletion confirmation dialog'),
         title: Text('Aktion Löschen').tr(),
         content: Text('Möchtest du diese Aktion wirklich löschen?').tr(),

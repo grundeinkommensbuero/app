@@ -47,6 +47,7 @@ class PlacardsService extends AbstractPlacardsService {
   @override
   Future<List<Placard>> loadPlacards() async {
     HttpClientResponseBody response;
+    print('### Lade Plakate');
     try {
       response = await get('service/plakate');
     ***REMOVED*** catch (e, s) {
