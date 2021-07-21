@@ -12,6 +12,7 @@ import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
+import 'package:sammel_app/services/PlacardsService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
@@ -33,6 +34,7 @@ final _storageService = MockStorageService();
 final _pushService = MockPushSendService();
 final _userService = MockUserService();
 final _chatService = MockChatMessageService();
+final _placardService = MockPlacardsService();
 final _pushManager = MockPushNotificationManager();
 
 void main() {
@@ -62,6 +64,8 @@ void main() {
           .thenAnswer((_) async => TermineFilter.leererFilter());
       when(_termineService.loadActions(any)).thenAnswer((_) async => []);
       when(_pushManager.pushToken).thenAnswer((_) async => 'Token');
+      when(_placardService.loadPlacards())
+          .thenAnswer((_) async => Future.value([]));
 
       await tester.pumpWidget(MultiProvider(providers: [
         Provider<StammdatenService>.value(value: _stammdatenService),
@@ -73,6 +77,7 @@ void main() {
         Provider<AbstractUserService>.value(value: _userService),
         Provider<ChatMessageService>.value(value: _chatService),
         Provider<AbstractPushNotificationManager>.value(value: _pushManager),
+        Provider<AbstractPlacardsService>.value(value: _placardService),
       ], child: MaterialApp(home: navigation)));
     ***REMOVED***);
 

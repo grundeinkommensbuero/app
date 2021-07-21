@@ -19,6 +19,7 @@ import 'package:sammel_app/services/AuthFehler.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
+import 'package:sammel_app/services/PlacardsService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
@@ -42,6 +43,7 @@ final _pushService = MockPushSendService();
 final _userService = MockUserService();
 final _chatMessageService = MockChatMessageService();
 final _pushManager = MockPushNotificationManager();
+final _placardsService = MockPlacardsService();
 
 void main() {
   trainTranslation(MockTranslations());
@@ -66,6 +68,8 @@ void main() {
     when(_termineService.loadActions(any)).thenAnswer((_) async => []);
     when(_termineService.deleteAction(any, any)).thenReturn(null);
     when(_pushManager.pushToken).thenAnswer((_) => Future.value('Token'));
+    when(_placardsService.loadPlacards())
+        .thenAnswer((_) async => Future.value([]));
     ErrorService.displayedTypes = [];
 
     termineSeiteWidget = MultiProvider(
@@ -77,6 +81,7 @@ void main() {
           Provider<StorageService>.value(value: _storageService),
           Provider<AbstractUserService>.value(value: _userService),
           Provider<ChatMessageService>.value(value: _chatMessageService),
+          Provider<AbstractPlacardsService>.value(value: _placardsService),
         ],
         child: MaterialApp(home: Builder(builder: (BuildContext context) {
           ErrorService.setContext(context);
@@ -1465,6 +1470,8 @@ _pumpNavigation(WidgetTester tester) async {
         Provider<AbstractPushSendService>.value(value: _pushService),
         Provider<ChatMessageService>.value(value: _chatMessageService),
         Provider<AbstractPushNotificationManager>.value(value: _pushManager),
+        Provider<AbstractPlacardsService>.value(value: _placardsService),
+        Provider<AbstractPlacardsService>.value(value: _placardsService),
       ],
       child: MaterialApp(
         home: Navigation(GlobalKey(debugLabel: 'action page')),
