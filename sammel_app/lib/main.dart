@@ -102,7 +102,7 @@ class MyApp extends StatelessWidget {
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
           locale: context.locale,
-          home: Navigation(actionPageKey, GlobalKey<ActionEditorState>(debugLabel: 'action creator'), clearButton),
+          home: Navigation(actionPageKey, GlobalKey(), clearButton),
           navigatorKey: navigatorKey,
         ));
   ***REMOVED***

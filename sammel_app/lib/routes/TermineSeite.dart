@@ -509,7 +509,11 @@ class TermineSeiteState extends State<TermineSeite>
     final geoData = await Provider.of<GeoService>(context, listen: false)
         .getDescriptionToPoint(point);
 
-    if (me?.id == null) return;
+    if (me?.id == null) {
+      ErrorService.pushError('Plakat kann nicht erstellt werden',
+          'Die App hat noch kein Benutzer*inprofil für dich erzeugt. Versuche es bitte später nochmal');
+      return;
+    ***REMOVED***
 
     final placard = await placardService.createPlacard(Placard(
         null, point.latitude, point.longitude, geoData.fullAdress, me!.id!));
