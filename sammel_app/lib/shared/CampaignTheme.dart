@@ -61,7 +61,7 @@ class CampaignTheme {
 
   static Color placardColor(bool owner) {
     if (owner) return altSecondaryLight;
-    return secondaryLight;
+    return Colors.transparent;
   }
 
   static final BoxDecoration background = BoxDecoration(

@@ -70,6 +70,14 @@ class Termin {
         return centered
             ? 'assets/images/Kundgebung_centered.png'
             : 'assets/images/Kundgebung.png';
+      case 'Haustürgespräche':
+        return 'assets/images/Haustuergespraeche.png';
+      case 'Straßengespräche & Flyern':
+        return 'assets/images/StrassengespraecheUndFlyern.png';
+      case 'Kiezfest':
+        return 'assets/images/Kiezfest.png';
+      case 'Plakate aufhängen':
+        return 'assets/images/PlakateAufhaengen.png';
     }
     return 'assets/images/logo_transparent.png'; // Platzhalter
   }

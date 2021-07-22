@@ -9,7 +9,8 @@ enum MapActionType { NewAction, NewPlacard, NewVisitedHouse }
 Future<MapActionType> showMapActionDialog(BuildContext context) async =>
     await showDialog(
         context: context,
-        builder: (_) => AlertDialog(
+        builder: (_) =>
+            AlertDialog(
                 key: Key('delete placard dialog'),
                 title: Text('Eintragen').tr(),
                 content: Column(mainAxisSize: MainAxisSize.min, children: [
@@ -19,7 +20,7 @@ Future<MapActionType> showMapActionDialog(BuildContext context) async =>
                       child: Container(
                           alignment: Alignment.center,
                           child: Row(children: [
-                            Image.asset('assets/images/Sammeln.png', width: 20),
+                            Image.asset('assets/images/Flyern.png', width: 25),
                             SizedBox(width: 5),
                             Expanded(
                                 child: Text('Zu einer Aktion aufrufen').tr())
@@ -27,7 +28,7 @@ Future<MapActionType> showMapActionDialog(BuildContext context) async =>
                           padding: EdgeInsets.all(15),
                           decoration: BoxDecoration(
                               border:
-                                  Border.all(color: CampaignTheme.secondary),
+                              Border.all(color: CampaignTheme.secondary),
                               borderRadius: BorderRadius.circular(10.0),
                               color: CampaignTheme.primary,
                               boxShadow: [
@@ -43,14 +44,15 @@ Future<MapActionType> showMapActionDialog(BuildContext context) async =>
                   TextButton(
                       child: Container(
                           child: Row(children: [
-                            Icon(Icons.assistant_sharp),
+                            Image.asset('assets/images/PlakateAufhaengen.png',
+                                width: 25),
                             SizedBox(width: 5),
                             Expanded(child: Text('Ein Plakat eintragen').tr())
                           ]),
                           padding: EdgeInsets.all(15),
                           decoration: BoxDecoration(
                               border:
-                                  Border.all(color: CampaignTheme.secondary),
+                              Border.all(color: CampaignTheme.secondary),
                               borderRadius: BorderRadius.circular(10.0),
                               color: CampaignTheme.primary,
                               boxShadow: [
@@ -66,16 +68,17 @@ Future<MapActionType> showMapActionDialog(BuildContext context) async =>
                   TextButton(
                       child: Container(
                           child: Row(children: [
-                            Icon(Icons.house),
+                            Image.asset('assets/images/HausBesucht.png',
+                                width: 25),
                             SizedBox(width: 5),
                             Expanded(
                                 child:
-                                    Text('Ein besuchtes Haus markieren').tr())
+                                Text('Ein besuchtes Haus markieren').tr())
                           ]),
                           padding: EdgeInsets.all(15),
                           decoration: BoxDecoration(
                               border:
-                                  Border.all(color: CampaignTheme.secondary),
+                              Border.all(color: CampaignTheme.secondary),
                               borderRadius: BorderRadius.circular(10.0),
                               color: CampaignTheme.primary,
                               boxShadow: [

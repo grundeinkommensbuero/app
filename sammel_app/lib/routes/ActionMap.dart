@@ -194,27 +194,20 @@ class PlacardMarker extends Marker {
           height: 30.0,
           point: LatLng(placard.latitude, placard.longitude),
           builder: (context) => DecoratedBox(
-              decoration: BoxDecoration(boxShadow: [
-                BoxShadow(offset: Offset(-2.0, 2.0), blurRadius: 4.0)
-              ], shape: BoxShape.rectangle),
+              decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(offset: Offset(0.0, 0.0), blurRadius: 6, spreadRadius: 3,
+                        color: CampaignTheme.placardColor(mine))
+                  ],
+                  shape: BoxShape.circle),
               child: TextButton(
-                  key: Key('action marker'),
+                  key: Key('placard marker'),
                   onPressed: () => mine ? onTap(placard) : null,
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        CampaignTheme.placardColor(mine)),
-                    shape: MaterialStateProperty.all<OutlinedBorder>(
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            side: BorderSide(
-                                color: CampaignTheme.secondary, width: 0))),
                     padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                         EdgeInsets.all(0)),
                   ),
-                  child: Icon(
-                    Icons.assistant_sharp,
-                    color: CampaignTheme.primary,
-                  ))),
+                  child: Image.asset('assets/images/Plakat.png'))),
         );
 }
 

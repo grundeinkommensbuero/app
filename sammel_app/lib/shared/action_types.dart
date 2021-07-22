@@ -4,7 +4,8 @@ List<String> moeglicheTypen = [
   'Workshop',
   'Plakatieren',
   'Kundgebung',
-  'Haustürgespräch',
+  'Haustürgespräche',
   'Straßengespräche & Flyern',
-  'Kiezfest'
+  'Kiezfest',
+  'Plakate aufhängen',
 ];
