@@ -4,7 +4,7 @@ import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 
-import '../TestdataStorage.dart';
+import '../shared/TestdatenVorrat.dart';
 import '../shared/mocks.trainer.dart';
 import '../shared/mocks.costumized.dart';
 import '../shared/mocks.mocks.dart';

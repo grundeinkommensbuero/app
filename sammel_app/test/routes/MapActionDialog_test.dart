@@ -55,4 +55,11 @@ main() {
 
     expect(returnValue, MapActionType.NewVisitedHouse);
   ***REMOVED***);
+
+  testUI('abort button closes dialog withn null value', (tester) async {
+    await tester.tap(find.byKey(Key('map action dialog abort button')));
+    await tester.pump();
+
+    expect(returnValue, isNull);
+  ***REMOVED***);
 ***REMOVED***
