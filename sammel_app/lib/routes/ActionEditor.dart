@@ -253,7 +253,6 @@ class ActionEditorState extends State<ActionEditor>
   ***REMOVED***
 
   void setNewLocation(Location? ergebnis) {
-    
     setState(() {
       action.treffpunkt = ergebnis?.description;
       action.coordinates = ergebnis?.coordinates;
@@ -672,9 +671,8 @@ class ActionEditorState extends State<ActionEditor>
     validateContact();
   ***REMOVED***
 
-  setPosition(LatLng position) async {
-    setNewLocation(await getDescriptionAndKiezToPoint(position));
-  ***REMOVED***
+  setPosition(LatLng position) async =>
+      setNewLocation(await getDescriptionAndKiezToPoint(position));
 
   Future<Location> getDescriptionAndKiezToPoint(LatLng point) async {
     var geodata = await Provider.of<GeoService>(context, listen: false)

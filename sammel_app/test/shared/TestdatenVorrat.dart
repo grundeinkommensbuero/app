@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:sammel_app/model/Kiez.dart';
+import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Placard.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/services/VisitedHousesService.dart';
@@ -2237,3 +2238,14 @@ VisitedHouseDummy konradadenauerhaus() => VisitedHouseDummy(
     DateTime(2021, 7, 19),
     11,
     '');
+
+ListLocation curry36() =>
+    ListLocation('1', 'Curry 36', 'Mehringdamm', '36', 52.4935584, 13.3877282);
+
+ListLocation cafeKotti() => ListLocation(
+    "2", 'Café Kotti', 'Adalbertstraße', '96', 52.5001477, 13.4181523);
+
+ListLocation zukunft() =>
+    ListLocation('3', "Zukunft", 'Laskerstraße', '5', 52.5016524, 13.4655402);
+
+List<ListLocation> sampleListLocations() => [curry36(), cafeKotti(), zukunft()];
