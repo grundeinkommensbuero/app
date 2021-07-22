@@ -6,12 +6,14 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_test_ui/flutter_test_ui.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
+import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/PlacardsService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
@@ -23,6 +25,7 @@ import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 
 import '../model/Termin_test.dart';
+import '../shared/TestdatenVorrat.dart';
 import '../shared/mocks.costumized.dart';
 import '../shared/mocks.trainer.dart';
 import '../shared/mocks.mocks.dart';
@@ -37,6 +40,7 @@ final _userService = MockUserService();
 final _chatService = MockChatMessageService();
 final _placardService = MockPlacardsService();
 final _pushManager = MockPushNotificationManager();
+final _geoService = MockGeoService();
 
 void main() {
   trainTranslation(MockTranslations());
@@ -81,6 +85,7 @@ void main() {
         Provider<ChatMessageService>.value(value: _chatService),
         Provider<AbstractPushNotificationManager>.value(value: _pushManager),
         Provider<AbstractPlacardsService>.value(value: _placardService),
+        Provider<GeoService>.value(value: _geoService),
       ], child: MaterialApp(home: navigation)));
     });
 
@@ -192,8 +197,7 @@ void main() {
           .thenAnswer((_) async => TerminTestDaten.einTermin());
       await openActionCreator(tester);
 
-      ActionEditorState editor =
-          tester.state(find.byKey(actionCreatorKey));
+      ActionEditorState editor = tester.state(find.byKey(actionCreatorKey));
       editor.action = testActionData();
 
       await tester.tap(find.byKey(Key('action editor finish button')));
@@ -201,6 +205,26 @@ void main() {
 
       NavigationState navigation = tester.state(find.byKey(Key('navigation')));
       expect(navigation.navigation, 0);
+    });
+
+    testUI('navigateToActionCreator changes page to ActionCreator',
+        (tester) async {
+      when(_geoService.getDescriptionToPoint(any)).thenAnswer(
+          (_) => Future.value(GeoData('Nightmare', 'Elm Street', '12')));
+      when(_stammdatenService.getKiezAtLocation(any)).thenAnswer(
+          (_) => Future.value(plaenterwald()));
+
+      await openActionCreator(tester);
+
+      NavigationState state = tester.state(find.byType(Navigation));
+      (state).navigateToActionCreator(LatLng(52.5749413, 13.3762427));
+      await tester.pumpAndSettle();
+
+      expect(state.navigation, 1);
+      expect(state.history, containsAll([0]));
+      expect(state.history, containsAll([0]));
+      expect(find.byKey(actionCreatorKey), findsOneWidget);
+      expect(find.text('Zum Sammeln einladen'), findsOneWidget);
     });
   });
 

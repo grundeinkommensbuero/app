@@ -9,15 +9,18 @@ import 'package:jiffy/jiffy.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
+import 'package:sammel_app/model/Placard.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
+import 'package:sammel_app/routes/ActionMap.dart';
 import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/routes/TerminCard.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/AuthFehler.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
+import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/PlacardsService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
@@ -44,6 +47,7 @@ final _userService = MockUserService();
 final _chatMessageService = MockChatMessageService();
 final _pushManager = MockPushNotificationManager();
 final _placardsService = MockPlacardsService();
+final _geoService = MockGeoService();
 
 final actionCreatorKey =
     GlobalKey<ActionEditorState>(debugLabel: 'action creator');
@@ -57,6 +61,10 @@ void main() {
   initializeDateFormatting('de');
 
   late MultiProvider termineSeiteWidget;
+
+  LatLng? switchParameter;
+  Function(LatLng) switchToActionCreator =
+      (parameter) => switchParameter = parameter;
 
   setUp(() {
     HttpOverrides.global = MapHttpOverrides();
@@ -85,10 +93,13 @@ void main() {
           Provider<AbstractUserService>.value(value: _userService),
           Provider<ChatMessageService>.value(value: _chatMessageService),
           Provider<AbstractPlacardsService>.value(value: _placardsService),
+          Provider<GeoService>.value(value: _geoService),
         ],
         child: MaterialApp(home: Builder(builder: (BuildContext context) {
           ErrorService.setContext(context);
-          return TermineSeite();
+          return TermineSeite(
+            switchToActionCreator: switchToActionCreator,
+          );
         })));
   });
 
@@ -1456,6 +1467,139 @@ void main() {
       await tester.pumpAndSettle();
 
       verify(_termineService.loadAndShowAction(4)).called(1);
+    });
+  });
+
+  group('placard delete dialog', () {
+    setUpUI((tester) async {
+      when(_placardsService.loadPlacards())
+          .thenAnswer((_) async => Future.value([placard1()]));
+
+      await tester.pumpWidget(termineSeiteWidget);
+
+      await tester.tap(find.byKey(Key('map view navigation button')));
+      await tester.pump();
+
+      ActionMap map = tester.widget<ActionMap>(find.byKey(Key('action map')));
+      map.mapController
+          .move(LatLng(placard1().latitude, placard1().longitude), 15);
+      await tester.pumpAndSettle();
+    });
+
+    testUI('opens placard dialog on tap at placard', (tester) async {
+      await tester.tap(find.byKey(Key('placard marker')));
+      await tester.pump();
+
+      expect(find.byKey(Key('delete placard dialog')), findsOneWidget);
+    });
+
+    testUI('closes placard dialog on abort and does not delete placard',
+        (tester) async {
+      await tester.tap(find.byKey(Key('placard marker')));
+      await tester.pump();
+
+      expect(find.byKey(Key('delete placard dialog')), findsOneWidget);
+
+      await tester.tap(find.byKey(Key('delete placard dialog abort button')));
+      await tester.pump();
+
+      verifyNever(_placardsService.deletePlacard(any));
+      expect(find.byKey(Key('placard marker')), findsOneWidget);
+    });
+
+    testUI('closes placard dialog on confirm and deletes placard',
+        (tester) async {
+      when(_placardsService.deletePlacard(any))
+          .thenAnswer((_) => Future.value());
+
+      await tester.tap(find.byKey(Key('placard marker')));
+      await tester.pump();
+
+      expect(find.byKey(Key('delete placard dialog')), findsOneWidget);
+
+      await tester.tap(find.byKey(Key('delete placard dialog confirm button')));
+      await tester.pump();
+
+      verify(_placardsService.deletePlacard(1)).called(1);
+      expect(find.byKey(Key('placard marker')), findsNothing);
+    });
+  });
+
+  group('mapAction dialog', () {
+    setUpUI((tester) async {
+      await tester.pumpWidget(termineSeiteWidget);
+
+      await tester.tap(find.byKey(Key('map view navigation button')));
+      await tester.pumpAndSettle();
+
+      ActionMap map = tester.widget<ActionMap>(find.byKey(Key('action map')));
+      map.mapController
+          .move(LatLng(placard1().latitude, placard1().longitude), 15);
+      await tester.pump();
+
+      await tester.longPress(find.byKey(Key('action map map')));
+      await tester.pump();
+    });
+
+    testUI('opens mapAction dialog on long press at map', (tester) async {
+      expect(find.byKey(Key('map action dialog')), findsOneWidget);
+    });
+
+    testUI('closes mapAction dialog on abort and does nothing', (tester) async {
+      await tester.tap(find.byKey(Key('map action dialog abort button')));
+      await tester.pump();
+
+      verifyNever(_placardsService.createPlacard(any));
+      expect(switchParameter, isNull);
+    });
+
+    testUI('closes mapAction dialog and switches to Action Creator',
+        (tester) async {
+      await tester.tap(find.byKey(Key('map action dialog action button')));
+      await tester.pump();
+
+      verifyNever(_placardsService.createPlacard(any));
+      expect(switchParameter?.latitude.floor(), 52);
+      expect(switchParameter?.longitude.floor(), 13);
+    });
+
+    testUI('closes mapAction dialog and creates placard with geo data',
+        (tester) async {
+      when(_placardsService.createPlacard(any))
+          .thenAnswer((_) => Future.value(placard1()));
+      when(_geoService.getDescriptionToPoint(any)).thenAnswer((_) =>
+          Future.value(
+              GeoData('Nightmare', 'Elm Street', '12', '12345', 'Berlin')));
+      await tester.tap(find.byKey(Key('map action dialog placard button')));
+      await tester.pumpAndSettle();
+
+      verify(_geoService.getDescriptionToPoint(any)).called(1);
+      Placard placard =
+          verify(_placardsService.createPlacard(captureAny)).captured.single;
+      expect(placard.id, isNull);
+      expect(placard.latitude.floor(), 52);
+      expect(placard.longitude.floor(), 13);
+      expect(placard.adresse, 'Elm Street 12, 12345 Berlin');
+      expect(placard.benutzer, 11);
+      expect(find.byKey(Key('placard marker')), findsOneWidget);
+    });
+
+    testUI('creates no placard with missing user',
+        (tester) async {
+      when(_placardsService.createPlacard(any))
+          .thenAnswer((_) => Future.value(placard1()));
+      when(_geoService.getDescriptionToPoint(any)).thenAnswer((_) =>
+          Future.value(
+              GeoData('Nightmare', 'Elm Street', '12', '12345', 'Berlin')));
+
+      (tester.state(find.byType(TermineSeite)) as TermineSeiteState).me = null;
+
+      await tester.tap(find.byKey(Key('map action dialog placard button')));
+      await tester.pumpAndSettle();
+
+      verifyNever(_geoService.getDescriptionToPoint(any));
+      verifyNever(_placardsService.createPlacard(any));
+      expect(find.byKey(Key('placard marker')), findsNothing);
     });
   });
 }

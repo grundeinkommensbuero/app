@@ -10,7 +10,7 @@ Future<MapActionType> showMapActionDialog(BuildContext context) async =>
     await showDialog(
         context: context,
         builder: (_) => AlertDialog(
-                key: Key('delete placard dialog'),
+                key: Key('map action dialog'),
                 title: Text('Eintragen').tr(),
                 content: Column(mainAxisSize: MainAxisSize.min, children: [
                   Text('Was möchtest du an dieser Stelle eintragen?').tr(),
@@ -97,6 +97,6 @@ Future<MapActionType> showMapActionDialog(BuildContext context) async =>
                   TextButton(
                     key: Key('map action dialog abort button'),
                     child: Text('Abbrechen').tr(),
-                    onPressed: () => Navigator.pop(context, false),
+                    onPressed: () => Navigator.pop(context, null),
                   )
                 ]));

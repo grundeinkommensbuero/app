@@ -498,7 +498,7 @@ class TermineSeiteState extends State<TermineSeite>
   }
 
   mapAction(LatLng point) async {
-    MapActionType chosenAction = await showMapActionDialog(context);
+    MapActionType? chosenAction = await showMapActionDialog(context);
 
     if (chosenAction == MapActionType.NewAction) switchToActionCreator(point);
     if (chosenAction == MapActionType.NewPlacard) createNewPlacard(point);
@@ -506,14 +506,14 @@ class TermineSeiteState extends State<TermineSeite>
   }
 
   createNewPlacard(LatLng point) async {
-    final geoData = await Provider.of<GeoService>(context, listen: false)
-        .getDescriptionToPoint(point);
-
     if (me?.id == null) {
       ErrorService.pushError('Plakat kann nicht erstellt werden',
           'Die App hat noch kein Benutzer*inprofil für dich erzeugt. Versuche es bitte später nochmal');
       return;
     }
+
+    final geoData = await Provider.of<GeoService>(context, listen: false)
+        .getDescriptionToPoint(point);
 
     final placard = await placardService.createPlacard(Placard(
         null, point.latitude, point.longitude, geoData.fullAdress, me!.id!));
