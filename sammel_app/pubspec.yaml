@@ -112,6 +112,13 @@ flutter:
    - assets/images/aktionen-seite.png
    - assets/images/aktionen-details-seite.png
    - assets/images/chat-seite.png
+   - assets/images/HausBesucht.png
+   - assets/images/Haustuergespraeche.png
+   - assets/images/Kiezfest.png
+   - assets/images/PlakateAufhaengen.png
+   - assets/images/StrassengespraecheUndFlyern.png
+   - assets/images/Plakat.png
+   - assets/images/Flyern.png
    - assets/images/dw_video_enteignen_bezahlen.png
    - assets/security/sammel-server_local.pem
    - assets/security/root-cert.pem
