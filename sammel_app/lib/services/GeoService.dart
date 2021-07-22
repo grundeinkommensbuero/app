@@ -53,7 +53,7 @@ class GeoData {
   String? postcode;
   String? city;
 
-  GeoData([this.name, this.street, this.number]);
+  GeoData([this.name, this.street, this.number, this.postcode, this.city]);
 
   GeoData.fromJson(Map<String, dynamic> json) {
     name = json['name'];

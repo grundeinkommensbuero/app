@@ -7,9 +7,8 @@ import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/routes/ActionMap.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
 
-import '../TestdataStorage.dart';
-import '../model/Termin_test.dart';
 import '../shared/TestdatenVorrat.dart';
+import '../model/Termin_test.dart';
 import '../shared/mocks.costumized.dart';
 import '../shared/mocks.mocks.dart';
 import '../shared/mocks.trainer.dart';
@@ -275,6 +274,23 @@ void main() {
     expect(find.byKey(Key('list location marker')), findsNWidgets(3));
   });
 
+  testWidgets('shows all placards', (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+            body: ActionMap(
+                key: Key('action map'),
+                termine: [],
+                placards: [placard1(), placard2(), placard3()],
+                isMyAction: (_) => false,
+                openActionDetails: (_) {}))));
+
+    ActionMap map = tester.widget<ActionMap>(find.byKey(Key('action map')));
+    map.mapController.move(LatLng(placard1().latitude, placard1().longitude), 15);
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(Key('placard marker')), findsNWidgets(3));
+  });
+
   testWidgets('hides list locations when far away',
       (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(
@@ -313,6 +329,26 @@ void main() {
 
     expect(find.byKey(Key('list location info dialog')), findsOneWidget);
     expect(find.text(curry36().name!), findsOneWidget);
+  });
+
+  testWidgets('trigger mapAction on LongPress', (WidgetTester tester) async {
+    LatLng? mapActionParameter;
+    Function(LatLng) mapAction =
+        (LatLng parameter) => mapActionParameter = parameter;
+    await tester.pumpWidget(MaterialApp(
+        home: Scaffold(
+            body: ActionMap(
+                key: Key('action map'),
+                termine: [],
+                listLocations: [],
+                mapAction: mapAction,
+                openActionDetails: (_) {}))));
+
+    await tester.longPress(find.byKey(Key('action map')));
+    await tester.pumpAndSettle();
+
+    expect(mapActionParameter?.latitude.floor(), 52);
+    expect(mapActionParameter?.longitude.floor(), 13);
   });
 
 //  Funktioniert nicht wegen null-Exception im dispose vom User-Location-Plugin
