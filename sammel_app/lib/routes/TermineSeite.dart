@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
+import 'package:sammel_app/Provisioning.dart';
 import 'package:sammel_app/model/Evaluation.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Placard.dart';
@@ -514,6 +515,8 @@ class TermineSeiteState extends State<TermineSeite>
 
     final geoData = await Provider.of<GeoService>(context, listen: false)
         .getDescriptionToPoint(point);
+
+    print('### geodata: ${geoData.city***REMOVED***');
 
     final placard = await placardService.createPlacard(Placard(
         null, point.latitude, point.longitude, geoData.fullAdress, me!.id!));

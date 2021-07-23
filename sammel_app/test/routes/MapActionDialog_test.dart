@@ -4,7 +4,7 @@ import 'package:flutter_test_ui/flutter_test_ui.dart';
 import 'package:sammel_app/routes/MapActionDialog.dart';
 
 main() {
-  var returnValue;
+  MapActionType? returnValue;
 
   setUpUI((tester) async {
     returnValue = null;

@@ -6,7 +6,7 @@ import 'package:sammel_app/shared/CampaignTheme.dart';
 
 enum MapActionType { NewAction, NewPlacard, NewVisitedHouse ***REMOVED***
 
-Future<MapActionType> showMapActionDialog(BuildContext context) async =>
+Future<MapActionType?> showMapActionDialog(BuildContext context) async =>
     await showDialog(
         context: context,
         builder: (_) => AlertDialog(

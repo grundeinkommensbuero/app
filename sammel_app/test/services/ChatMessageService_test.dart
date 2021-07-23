@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/ChatChannel.dart';
@@ -12,6 +14,9 @@ void main() {
 
   setUp(() {
     reset(storageService);
+    when(storageService.loadActionToken(any)).thenAnswer((_) => Future.value());
+    when(storageService.saveChatChannel(any))
+        .thenAnswer((_) => Future.value(true));
     service = ChatMessageService(storageService, manager, null);
   ***REMOVED***);
 

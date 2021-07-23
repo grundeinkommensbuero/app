@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:sammel_app/shared/DeserialisiationError.dart';
 import 'package:sammel_app/shared/ServerException.dart';
 
 import 'Message.dart';
@@ -53,10 +54,15 @@ class PushData {
 ***REMOVED***
 
 class ChatPushData extends PushData {
-  String channel;
+  late String channel;
   String type = PushDataTypes.chatMessage;
 
-  ChatPushData(this.channel);
+  ChatPushData(String? channel) {
+    if (channel == null)
+      throw DeserialisationError(
+          'Fehlender Kanal für Beteiligungs-Benachrichtigung');
+    this.channel = channel;
+  ***REMOVED***
 
   Message? get message =>
       throw UnimplementedError("Das hier soll abstrakt sein");
@@ -127,7 +133,8 @@ class ParticipationPushData extends ChatPushData {
   late int action;
   final String type = PushDataTypes.participationMessage;
 
-  ParticipationPushData(this.message, this.action, channel) : super(channel);
+  ParticipationPushData(this.message, this.action, String? channel)
+      : super(channel);
 
   toJson() {
     var jsonMessage = message?.toJson() ?? {***REMOVED***
@@ -142,7 +149,8 @@ class ParticipationPushData extends ChatPushData {
     if (json['action'] == null)
       throw UnreadablePushMessage(
           'Unlesbare Teilnahme-Nachricht empfangen: Fehlende Aktions-ID');
-    else this.action = json['action'];
+    else
+      this.action = json['action'];
     this.message = ParticipationMessage.fromJson(json);
   ***REMOVED***
 ***REMOVED***
