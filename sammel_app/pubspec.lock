@@ -254,7 +254,7 @@ packages:
       name: csv
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "4.1.0"
+    version: "5.0.0"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -451,7 +451,7 @@ packages:
       name: flutter_test_ui
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.0"
+    version: "2.0.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -754,10 +754,12 @@ packages:
   poly:
     dependency: "direct main"
     description:
-      name: poly
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.7+2"
+      path: "."
+      ref: HEAD
+      resolved-ref: f1ea858d8370abf2f7738a7a99f921c40628cb55
+      url: "https://github.com/Keatr0n/poly.git"
+    source: git
+    version: "1.1.0"
   pool:
     dependency: transitive
     description:
