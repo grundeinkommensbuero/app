@@ -71,6 +71,8 @@ dependency_overrides:
 # 2 Alternativen (Notwendige Funktionen: Multi-Selection, Internationalisierung):
 # https://pub.dev/packages/flutter_calendar_carousel (null-safe)
 # https://pub.dev/packages/table_calendar (null-safety auf dem weg)
+  poly:
+    git: https://github.com/Keatr0n/poly.git
 
 dev_dependencies:
   flutter_test:
@@ -78,7 +80,7 @@ dev_dependencies:
   test: ^1.5.1
   flutter_launcher_icons: ^0.9.0
   mockito: ^5.0.1
-  flutter_test_ui: ^1.0.0 # auf dem weg: https://github.com/spkersten/flutter_test_ui/tree/null-safety
+  flutter_test_ui: ^2.0.0 # auf dem weg: https://github.com/spkersten/flutter_test_ui/tree/null-safety
   build_runner: ^1.10.0
 
 # For information on the generic Dart part of this file, see the
@@ -120,6 +122,7 @@ flutter:
    - assets/images/Plakat.png
    - assets/images/Flyern.png
    - assets/images/dw_video_enteignen_bezahlen.png
+   - assets/images/eintragen.png
    - assets/security/sammel-server_local.pem
    - assets/security/root-cert.pem
    - assets/geodata/bezirksregion_generalized.geojson
