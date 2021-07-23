@@ -29,7 +29,7 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSAppleMusicUsageDescription</key>
+    <key>NSAppleMusicUsageDescription</key>
 	<string>Diese App benutzt keine Musik, keine Ahnung warum Apple das glaubt. Wenn du diese Nachricht siehst, melde das bitte als Bug.</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>Diese App benutzt keine Kalenderdaten, keine Ahnung warum Apple das glaubt. Wenn du diese Nachricht siehst, melde das bitte als Bug.</string>
