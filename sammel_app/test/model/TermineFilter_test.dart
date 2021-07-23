@@ -123,7 +123,7 @@ void main() {
           false);
     });
 
-    test('seralizes properly', () {
+    test('seralizes properly with default values', () {
       var termineFilter = TermineFilter.fromJSON(jsonDecode('{'
           '"typen":[],'
           '"tage":[],'
@@ -132,7 +132,7 @@ void main() {
           '"orte":[]'
           '}'));
       expect(jsonEncode(termineFilter),
-          '{"typen":[],"tage":[],"von":null,"bis":null,"orte":[],"nurEigene":null,"immerEigene":null}');
+          '{"typen":[],"tage":[],"von":null,"bis":null,"orte":[],"nurEigene":false,"immerEigene":true}');
     });
   });
 }

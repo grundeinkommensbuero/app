@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sammel_app/model/Message.dart';
 import 'package:sammel_app/model/PushMessage.dart';
+import 'package:sammel_app/shared/DeserialisiationError.dart';
 
 import '../routes/TerminCard_test.dart';
 
@@ -16,10 +17,13 @@ void main() {
         expect(json['channel'], 'my channel');
       });
 
-      test('serializes with missing channel', () {
-        var pushData = ParticipationPushData(message(), 1, null);
-        var json = pushData.toJson();
-        expect(json['channel'], null);
+      test('throws error on missing channel', () {
+        expect(
+            () => ParticipationPushData(message(), 1, null),
+            throwsA((e) =>
+                e is DeserialisationError &&
+                e.message ==
+                    'Fehlender Kanal für Beteiligungs-Benachrichtigung'));
       });
     });
     group('fromJson', () {

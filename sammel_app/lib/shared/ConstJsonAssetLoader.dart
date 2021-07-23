@@ -331,6 +331,18 @@ const Map<String, dynamic> en = {
   'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
       'The action could not been found. Maybe it has been deleted.',
   'Ein Fehler ist aufgetreten': 'An error occured',
+  'Haustürgespräche': 'Haustürgespräche',
+  'Straßengespräche & Flyern': 'Straßengespräche & Flyern',
+  'Kiezfest': 'Kiezfest',
+  'Eintragen': 'Eintragen',
+  'Was möchtest du an dieser Stelle eintragen?':
+      'Was möchtest du an dieser Stelle eintragen?',
+  'Zu einer Aktion aufrufen': 'Zu einer Aktion aufrufen',
+  'Ein Plakat eintragen': 'Ein Plakat eintragen',
+  'Ein besuchtes Haus markieren': 'Ein besuchtes Haus markieren',
+  'Plakat löschen': 'Plakat löschen',
+  'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?':
+      'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?',
 };
 
 const Map<String, dynamic> ru = {
@@ -966,6 +978,18 @@ const Map<String, dynamic> fr = {
   'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
       'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.',
   'Ein Fehler ist aufgetreten': 'Une erreur s\'est produite',
+  'Haustürgespräche': 'Haustürgespräche',
+  'Straßengespräche & Flyern': 'Straßengespräche & Flyern',
+  'Kiezfest': 'Kiezfest',
+  'Eintragen': 'Eintragen',
+  'Was möchtest du an dieser Stelle eintragen?':
+      'Was möchtest du an dieser Stelle eintragen?',
+  'Zu einer Aktion aufrufen': 'Zu einer Aktion aufrufen',
+  'Ein Plakat eintragen': 'Ein Plakat eintragen',
+  'Ein besuchtes Haus markieren': 'Ein besuchtes Haus markieren',
+  'Plakat löschen': 'Plakat löschen',
+  'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?':
+      'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?',
 };
 
 const Map<String, dynamic> de = {
@@ -1291,7 +1315,16 @@ const Map<String, dynamic> de = {
   'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
       'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.',
   'Ein Fehler ist aufgetreten': 'Ein Fehler ist aufgetreten',
-  'Haustürgespräche': 'Haustürgespräche' ,
+  'Haustürgespräche': 'Haustürgespräche',
   'Straßengespräche & Flyern': 'Straßengespräche & Flyern',
-  'Kiezfest': 'Kiezfest'
+  'Kiezfest': 'Kiezfest',
+  'Eintragen': 'Eintragen',
+  'Was möchtest du an dieser Stelle eintragen?':
+      'Was möchtest du an dieser Stelle eintragen?',
+  'Zu einer Aktion aufrufen': 'Zu einer Aktion aufrufen',
+  'Ein Plakat eintragen': 'Ein Plakat eintragen',
+  'Ein besuchtes Haus markieren': 'Ein besuchtes Haus markieren',
+  'Plakat löschen': 'Plakat löschen',
+  'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?':
+      'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?',
 };

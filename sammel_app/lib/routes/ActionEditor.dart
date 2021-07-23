@@ -615,7 +615,8 @@ class ActionEditorState extends State<ActionEditor>
         }
         User me = await Provider.of<AbstractUserService>(context, listen: false)
             .user
-            .first;
+            .first
+            .timeout(Duration(seconds: 5), onTimeout: () => throw Exception());
         termine.add(Termin(
             widget.initAction?.id,
             begin,

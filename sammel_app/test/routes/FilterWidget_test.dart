@@ -34,7 +34,8 @@ void main() {
 
   group('ui', () {
     setUpUI((WidgetTester tester) async {
-      when(_storageService.loadFilter()).thenAnswer((_) async => null);
+      when(_storageService.loadFilter()).thenAnswer((_) async => Future.value(null));
+      when(_storageService.saveFilter(any)).thenAnswer((_) async => Future.value(true));
       await pumpFilterWidget(tester);
     });
 
@@ -331,7 +332,7 @@ void main() {
 
     testUI('initializes filter with default values if no storage is found',
             (WidgetTester tester) async {
-          when(_storageService.loadFilter()).thenAnswer((_) async => null);
+          when(_storageService.loadFilter()).thenAnswer((_) async => Future.value(null));
 
           await pumpFilterWidget(tester);
 
