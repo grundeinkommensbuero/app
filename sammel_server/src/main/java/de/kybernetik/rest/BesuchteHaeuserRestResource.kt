@@ -102,6 +102,8 @@ data class BesuchtesHausDto(
     var longitude: Double? = null,
     var adresse: String? = null,
     var hausteil: String? = null,
+    var shape: String? = null,
+    var osmId: String? = null,
     var datum: LocalDate? = null,
     var benutzer: Long? = null
 ) {
@@ -115,7 +117,7 @@ data class BesuchtesHausDto(
             throw FehlenderWertException("benutzer")
 
         return BesuchtesHaus(
-            id ?: 0, latitude!!, longitude!!, adresse ?: "", hausteil, datum ?: LocalDate.now(),
+            id ?: 0, latitude!!, longitude!!, adresse ?: "", hausteil, shape, osmId, datum ?: LocalDate.now(),
             benutzer!!
         )
     }
@@ -128,6 +130,8 @@ data class BesuchtesHausDto(
                 besuchtesHaus.longitude,
                 besuchtesHaus.adresse,
                 besuchtesHaus.hausteil,
+                besuchtesHaus.polygon,
+                besuchtesHaus.osm_id,
                 besuchtesHaus.datum,
                 besuchtesHaus.user_id
             )
