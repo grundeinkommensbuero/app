@@ -1,7 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http_server/http_server.dart';
 import 'package:mockito/mockito.dart';
-import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:test/test.dart';
 
@@ -14,7 +13,6 @@ main() {
 
   FirebaseMessaging firebaseMock = MockFirebaseMessaging();
   MockUserService userService = MockUserService();
-  PushNotificationManager manager = MockPushNotificationManager();
 
   setUp(() {
     reset(firebaseMock);
@@ -102,10 +100,17 @@ main() {
         var onMessage = (_) async => called++;
         service.subscribe(onMessage: onMessage);
         when(backend.get('service/push/pull', any)).thenAnswer((_) =>
-            Future<HttpClientResponseBody>.value(trainHttpResponse(
-                MockHttpClientResponseBody(),
-                200,
-                [RemoteMessage(), RemoteMessage()])));
+            Future<HttpClientResponseBody>.value(
+                trainHttpResponse(MockHttpClientResponseBody(), 200, [
+              {
+                'notification': {'title': 'Titel', 'body': 'Inhalt'***REMOVED***,
+                'data': <String, dynamic>{***REMOVED***
+              ***REMOVED***,
+              {
+                'notification': {'title': 'Titel', 'body': 'Inhalt'***REMOVED***,
+                'data': <String, dynamic>{***REMOVED***
+              ***REMOVED***
+            ])));
 
         await service.pull();
 
