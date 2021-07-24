@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
-import 'package:sammel_app/Provisioning.dart';
 import 'package:sammel_app/model/Evaluation.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Placard.dart';
@@ -434,13 +433,9 @@ class TermineSeiteState extends State<TermineSeite>
   Future<void> joinAction(Termin action) async {
     if (action.id == null || me == null) return;
     await termineService?.joinAction(action.id!);
-    setState(() {
-      // ignore: unnecessary_cast
-      (termine as List<Termin?>)
-          .firstWhere((t) => t!.id == action.id, orElse: () => null)
-          ?.participants
-          ?.add(me!);
-    ***REMOVED***);
+    setState(() => termine
+        .where((t) => t.id == action.id)
+        .forEach((Termin t) => t.participants?.add(me!)));
   ***REMOVED***
 
   Future<void> leaveAction(Termin action) async {
