@@ -35,15 +35,8 @@ main() {
   });
 
   group('createPushListener', () {
-    test('erzeugt PullService, wenn bereits im Pull-Modus', () async {
-      when(storageService.isPullMode()).thenAnswer((_) async => true);
-
-      await manager.createPushListener(firebaseMock, backend);
-
-      expect(true, manager.listener is PullService);
-    });
-
-    test('hinterlegt Firebase-Service, wenn Token nicht null ist', () async {
+    test('erzeugt Firebase-Service, wenn Token nicht null ist', () async {
+      reset(storageService);
       when(firebaseMock.token).thenAnswer((_) async => "firebase-token");
 
       await manager.createPushListener(firebaseMock, backend);
@@ -51,8 +44,19 @@ main() {
       expect(true, manager.listener is FirebaseReceiveService);
     });
 
+    test('markiert als kein Pull-Modus, wenn Token nicht null ist', () async {
+      reset(storageService);
+      when(firebaseMock.token).thenAnswer((_) async => "firebase-token");
+
+      await manager.createPushListener(firebaseMock, backend);
+
+      verify(storageService.unsetPullMode()).called(1);
+    });
+
     test('erzeugt PullService, wenn Token null ist', () async {
+      reset(storageService);
       when(firebaseMock.token).thenAnswer((_) async => null);
+      when(storageService.isPullMode()).thenAnswer((_) async => false);
 
       await manager.createPushListener(firebaseMock, backend);
 
@@ -60,11 +64,24 @@ main() {
     });
 
     test('speichert als Pull-Modus, wenn Token null ist', () async {
+      reset(storageService);
       when(firebaseMock.token).thenAnswer((_) async => null);
+      when(storageService.isPullMode()).thenAnswer((_) async => false);
 
       await manager.createPushListener(firebaseMock, backend);
 
-      verify(storageService.markPullMode()).called(1);
+      verifyNever(storageService.unsetPullMode());
+      verify(storageService.setPullMode()).called(1);
+    });
+
+    test('setzt Pull-Modus, wenn noch nicht im Pull-Modus', () async {
+      reset(storageService);
+      when(firebaseMock.token).thenAnswer((_) async => null);
+      when(storageService.isPullMode()).thenAnswer((_) async => false);
+
+      await manager.createPushListener(firebaseMock, backend);
+
+      verify(storageService.setPullMode()).called(1);
     });
   });
 
