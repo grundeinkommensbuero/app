@@ -91,11 +91,11 @@ class LocalNotificationService {
   FlutterLocalNotificationsPlugin? plugin;
 
   late AbstractPushNotificationManager pushManager;
-  late Function(String) onTap;
+  late Function(String?) onTap;
 
   LocalNotificationService(this.pushManager) {
-    onTap = (String message) async => await pushManager.onTap(RemoteMessage(
-        data: {'payload': jsonDecode(message), 'encrypted': 'Plain'}));
+    onTap = (String? message) async => await pushManager.onTap(RemoteMessage(
+        data: {'payload': jsonDecode(message ?? ''), 'encrypted': 'Plain'}));
   }
 
   Future sendChatNotification(ActionChatMessagePushData chatMessage) async {
