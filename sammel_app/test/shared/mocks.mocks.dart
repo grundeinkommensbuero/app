@@ -757,11 +757,11 @@ class MockLocalNotificationService extends _i1.Mock
       super.noSuchMethod(Invocation.setter(#pushManager, _pushManager),
           returnValueForMissingStub: null);
   @override
-  dynamic Function(String) get onTap =>
+  dynamic Function(String?) get onTap =>
       (super.noSuchMethod(Invocation.getter(#onTap),
-          returnValue: (String __p0) => null) as dynamic Function(String));
+          returnValue: (String? __p0) => null) as dynamic Function(String?));
   @override
-  set onTap(dynamic Function(String)? _onTap) =>
+  set onTap(dynamic Function(String?)? _onTap) =>
       super.noSuchMethod(Invocation.setter(#onTap, _onTap),
           returnValueForMissingStub: null);
   @override
@@ -1255,8 +1255,13 @@ class MockStorageService extends _i1.Mock implements _i9.StorageService {
           returnValue: Future<void>.value(null),
           returnValueForMissingStub: Future.value()) as _i11.Future<void>);
   @override
-  _i11.Future<void> markPullMode() =>
-      (super.noSuchMethod(Invocation.method(#markPullMode, []),
+  _i11.Future<void> setPullMode() =>
+      (super.noSuchMethod(Invocation.method(#setPullMode, []),
+          returnValue: Future<void>.value(null),
+          returnValueForMissingStub: Future.value()) as _i11.Future<void>);
+  @override
+  _i11.Future<void> unsetPullMode() =>
+      (super.noSuchMethod(Invocation.method(#unsetPullMode, []),
           returnValue: Future<void>.value(null),
           returnValueForMissingStub: Future.value()) as _i11.Future<void>);
   @override
