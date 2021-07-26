@@ -26,9 +26,10 @@ import 'package:flutter/foundation.dart';
 
 abstract class AbstractTermineService extends BackendService {
   StammdatenService stammdatenService;
+  GlobalKey<TermineSeiteState> actionPageKey;
 
-  AbstractTermineService(
-      this.stammdatenService, AbstractUserService userService, Backend backend)
+  AbstractTermineService(this.stammdatenService,
+      AbstractUserService userService, this.actionPageKey, Backend backend)
       : super(userService, backend);
 
   Future<List<Termin>> loadActions(TermineFilter filter);
@@ -46,11 +47,21 @@ abstract class AbstractTermineService extends BackendService {
   leaveAction(int id);
 
   Future<void> saveEvaluation(Evaluation evaluation);
+
+  Future<void> loadAndShowAction(int id) async {
+    try {
+      var action = await getActionWithDetails(id);
+      actionPageKey.currentState!.openTerminDetails(action);
+    } on Error catch (e) {
+      ErrorService.handleError(e, StackTrace.current,
+          context:
+              'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.');
+    }
+  }
 }
 
 class TermineService extends AbstractTermineService
     implements PushNotificationListener {
-  GlobalKey<TermineSeiteState> actionPageKey;
   LocalNotificationService localNotificationService;
 
   TermineService(
@@ -59,8 +70,8 @@ class TermineService extends AbstractTermineService
       Backend backend,
       PushNotificationManager manager,
       this.localNotificationService,
-      this.actionPageKey)
-      : super(stammdatenService, userService, backend) {
+      GlobalKey<TermineSeiteState> actionPageKey)
+      : super(stammdatenService, userService, actionPageKey, backend) {
     manager.registerMessageCallback(PushDataTypes.newKiezActions, this);
     manager.registerMessageCallback(PushDataTypes.actionChanged, this);
     manager.registerMessageCallback(PushDataTypes.actionDeleted, this);
@@ -156,6 +167,17 @@ class TermineService extends AbstractTermineService
   }
 
   @override
+  loadAndShowAction(int id) async {
+    try {
+      var action = await getActionWithDetails(id);
+      actionPageKey.currentState!.openTerminDetails(action);
+    } on Exception catch (e) {
+      ErrorService.handleError(e, StackTrace.current,
+          context: 'Die Aktion konnte nicht angezeigt werden');
+    }
+  }
+
+  @override
   void receiveMessage(Map<String, dynamic> data) async {
     final kieze = await stammdatenService.kieze;
     final message = ActionListPushData.fromJson(data, kieze);
@@ -184,9 +206,9 @@ class DemoTermineService extends AbstractTermineService {
   static var heute = DateTime.now();
   late Future<List<Termin>> termine;
 
-  DemoTermineService(
-      StammdatenService stammdatenService, AbstractUserService userService)
-      : super(stammdatenService, userService, DemoBackend()) {
+  DemoTermineService(StammdatenService stammdatenService,
+      AbstractUserService userService, actionPageKey)
+      : super(stammdatenService, userService, actionPageKey, DemoBackend()) {
     termine = stammdatenService.kieze.then((kieze) => [
           Termin(
               1,

@@ -7,6 +7,7 @@ import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
+import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/TermineService.dart';
@@ -33,7 +34,8 @@ void main() {
   group('DemoTermineService', () {
     late DemoTermineService service;
     setUp(() {
-      service = DemoTermineService(stammdatenService, userService);
+      service = DemoTermineService(
+          stammdatenService, userService, GlobalKey<TermineSeiteState>());
     });
 
     test('uses DemoBackend', () {

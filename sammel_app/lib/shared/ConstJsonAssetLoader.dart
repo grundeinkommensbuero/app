@@ -328,6 +328,9 @@ const Map<String, dynamic> en = {
   "Teilen": "Share",
   '{typ} in {ortsteil}, {treffpunkt} am {zeitpunkt}\n{url}':
       '{typ} in {ortsteil}, {treffpunkt} at {zeitpunkt}\n{url}',
+  'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
+      'The action could not been found. Maybe it has been deleted.',
+  'Ein Fehler ist aufgetreten': 'An error occured',
 };
 
 const Map<String, dynamic> ru = {
@@ -633,11 +636,14 @@ const Map<String, dynamic> ru = {
   //     "If you want to change Notifications to silent or disable certain notification categories, just press the three dots on a received notification. You will then be guided to the notification preferences for this app.",
   // "Kundgebung": "Manifestation",
   "Na gut": "Закрыть",
-  "In den Kalender": "In den Kalender",
-  '{typ} in {ortsteil}': '{typ} in {ortsteil}',
-  "Teilen": "Teilen",
+  "In den Kalender": "Добавить в календарь",
+  '{typ} in {ortsteil}': '{typ} в {ortsteil}',
+  "Teilen": "Поделиться",
   '{typ} in {ortsteil}, {treffpunkt} am {zeitpunkt}\n{url}':
-      '{typ} in {ortsteil}, {treffpunkt} at {zeitpunkt}\n{url}',
+      '{typ} в {ortsteil}, {treffpunkt} {zeitpunkt}\n{url}',
+  'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
+      'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.',
+  'Ein Fehler ist aufgetreten': 'Произошла ошибка',
 };
 
 const Map<String, dynamic> fr = {
@@ -957,6 +963,9 @@ const Map<String, dynamic> fr = {
   "Teilen": "Partagez",
   '{typ} in {ortsteil}, {treffpunkt} am {zeitpunkt}\n{url}':
       '{typ} à {ortsteil}, {treffpunkt} à {zeitpunkt}\n{url}',
+  'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
+      'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.',
+  'Ein Fehler ist aufgetreten': 'Une erreur s\'est produite',
 };
 
 const Map<String, dynamic> de = {
@@ -1279,4 +1288,7 @@ const Map<String, dynamic> de = {
   '{typ} in {ortsteil}': '{typ} in {ortsteil}',
   '{typ} in {ortsteil}, {treffpunkt} am {zeitpunkt}\n{url}':
       '{typ} in {ortsteil}, {treffpunkt} am {zeitpunkt}\n{url}',
+  'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
+      'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.',
+  'Ein Fehler ist aufgetreten': 'Ein Fehler ist aufgetreten',
 };

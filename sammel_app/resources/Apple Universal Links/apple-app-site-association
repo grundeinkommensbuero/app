@@ -1,0 +1,11 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "3TT9J3V8NS.de.kybernetik.sammelApp2",
+                "paths": [ "/die-sammel-app/", "/die-sammel-app"]
+            },
+        ]
+    }
+}

@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_test_ui/flutter_test_ui.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
@@ -60,6 +62,7 @@ void main() {
         .thenAnswer((_) async => 'nie');
     when(_listLocationService.getActiveListLocations())
         .thenAnswer((_) async => []);
+    reset(_termineService);
     when(_termineService.loadActions(any)).thenAnswer((_) async => []);
     when(_termineService.deleteAction(any, any)).thenReturn(null);
     when(_pushManager.pushToken).thenAnswer((_) => Future.value('Token'));
@@ -130,8 +133,9 @@ void main() {
             TerminTestDaten.einTermin()..id = 2,
             TerminTestDaten.einTermin()..id = 3,
           ]);
-      when(_termineService.getActionWithDetails(any)).thenAnswer(
-          (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
+      when(_termineService.getActionWithDetails(any)).thenAnswer((_) async =>
+          TerminTestDaten.einTerminMitTeilisUndDetails()
+            ..ende = Jiffy(DateTime.now()).add(days: 1).dateTime);
 
       when(_storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => [2]);
@@ -331,13 +335,14 @@ void main() {
       expect(find.byKey(Key('action map map')), findsOneWidget);
       var actionPosition = LatLng(TerminTestDaten.einTermin().latitude,
           TerminTestDaten.einTermin().longitude);
-      TermineSeiteState actionPage = tester.state(find.byKey(Key('action page')));
+      TermineSeiteState actionPage =
+          tester.state(find.byKey(Key('action page')));
       expect(actionPage.mapController.zoom, 15);
       expect(actionPage.mapController.center, actionPosition);
-        });
+    });
 
     testWidgets(
-        'triggers server call and highlihgts action with tap on join button',
+        'triggers server call and highlights action with tap on join button',
         (WidgetTester tester) async {
       when(_termineService.loadActions(any)).thenAnswer((_) async => [
             TerminTestDaten.einTermin(),
@@ -1391,6 +1396,58 @@ void main() {
 
       TermineSeiteState state = tester.state(find.byKey(Key('action page')));
       expect(state.navigation, 1);
+    });
+  });
+
+  group('unilink processing', () {
+    testUI('shows action on start', (tester) async {
+      await tester.pumpWidget(termineSeiteWidget);
+
+      TermineSeiteState state = tester.state(find.byKey(Key('action page')));
+      await state.showAction(Uri(
+          scheme: 'https',
+          host: 'dwenteignen.de',
+          queryParameters: {"aktion": "4"}));
+
+      print('### Vorbei 3!');
+      verify(_termineService.loadAndShowAction(4)).called(1);
+    });
+
+    testUI('ignores path without action parameter', (tester) async {
+      await tester.pumpWidget(termineSeiteWidget);
+
+      TermineSeiteState state = tester.state(find.byKey(Key('action page')));
+      await state.showAction(Uri(scheme: 'https', host: 'dwenteignen.de'));
+
+      verifyNever(_termineService.loadAndShowAction(any));
+    });
+
+    testUI('ignores path with invalid action parameter', (tester) async {
+      await tester.pumpWidget(termineSeiteWidget);
+
+      TermineSeiteState state = tester.state(find.byKey(Key('action page')));
+      await state.showAction(Uri(
+          scheme: 'https',
+          host: 'dwenteignen.de',
+          queryParameters: {"aktion": "vier"}));
+
+      verifyNever(_termineService.loadAndShowAction(any));
+    });
+
+    testUI('shows action while running', (tester) async {
+      var controller = StreamController<Uri?>();
+      await tester.pumpWidget(termineSeiteWidget);
+
+      TermineSeiteState state = tester.state(find.byKey(Key('action page')));
+      state.registerUriListener(controller.stream);
+      controller.add(Uri(
+          scheme: 'https',
+          host: 'dwenteignen.de',
+          queryParameters: {"aktion": "4"}));
+
+      await tester.pumpAndSettle();
+
+      verify(_termineService.loadAndShowAction(4)).called(1);
     });
   });
 }

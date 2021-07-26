@@ -1,5 +1,6 @@
 import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -94,7 +95,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
 
     final color = CampaignTheme.primary;
 
-    PopupMenuButton menu =
+    PopupMenuButton? menu =
         menuButton(widget.action, isMyAction, iAmParticipant);
 
     Locale? locale;
@@ -122,7 +123,13 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                               color: CampaignTheme.secondary))
                       .tr()),
             ]),
-            actions: [menu]),
+            actions: menu == null
+                ? [
+                    SizedBox(
+                      width: 30.0,
+                    )
+                  ]
+                : [menu]),
         body: SingleChildScrollView(
             padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
             child: Column(key: Key('action details page'), children: [
@@ -275,15 +282,14 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
               ),
             ])),
         persistentFooterButtons: determineActionButton()
-          ..add(SizedBox(
-              child: ElevatedButton(
+          ..add(ElevatedButton(
             key: Key('action details close button'),
             child: Text('Schließen').tr(),
             onPressed: () => Navigator.pop(context, TerminDetailsCommand.CLOSE),
-          ))));
+          )));
   }
 
-  PopupMenuButton menuButton(
+  PopupMenuButton? menuButton(
       Termin action, bool isMyAction, bool iAmParticipant) {
     final List<PopupMenuItem> items = [];
 
@@ -374,6 +380,8 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           value: 'Löschen'));
     }
 
+    if (items.isEmpty) return null;
+
     return PopupMenuButton(
         key: Key('action details menu button'),
         color: CampaignTheme.primaryLight,
@@ -418,7 +426,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                 foregroundColor:
                     MaterialStateProperty.all<Color>(CampaignTheme.primary)),
             key: Key('open chat window'),
-            child: Row(children: [
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
               Icon(Icons.message, size: 20),
               SizedBox(width: 10),
               Text('Zum Chat').tr()
@@ -462,7 +470,8 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           'typ': widget.action.typ.tr(),
           'ortsteil': widget.action.ort.ortsteil
         }),
-        description: widget.action.details!.beschreibung,
+        description:
+            '${widget.action.details!.beschreibung}\n${CampaignTheme.actionUrl(widget.action.id)}',
         location: widget.action.details!.treffpunkt,
         startDate: widget.action.beginn,
         endDate: widget.action.ende);
@@ -478,7 +487,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
       'zeitpunkt': ''
           '${DateFormat.MMMd(Localizations.localeOf(context).languageCode).format(widget.action.beginn)},'
           '${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(widget.action.beginn)}',
-      'url': 'www.dwenteignen.de/die-sammel-app/${widget.action.id}'
+      'url': CampaignTheme.actionUrl(widget.action.id),
     }));
   }
 

@@ -76,5 +76,21 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>FlutterDeepLinkingEnabled</key>
+    <true/>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleURLName</key>
+        <string>dwenteignen.de/die-sammel-app</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+        <string>http</string>
+        <string>https</string>
+        </array>
+        </dict>
+    </array>
 </dict>
 </plist>
