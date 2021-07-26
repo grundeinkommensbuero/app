@@ -1,4 +1,3 @@
-
 #!/bin/sh
 printf "%s" "waiting for database $DB_URL:$DB_PORT/$DB_SCHEMA to run ..."
 i=1

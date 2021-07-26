@@ -22,6 +22,7 @@ open class TermineDao {
     private lateinit var entityManager: EntityManager
 
     open fun getTermine(filter: TermineFilter, benutzerId: Long?): List<Termin> {
+        LOG.info("benutzer id ${benutzerId}")
         val ergebnisse = erzeugeGetTermineQuery(filter, benutzerId).resultList
         LOG.debug("Gefundene Aktionen: ${ergebnisse.map { it.id }}")
         return ergebnisse

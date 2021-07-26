@@ -53,25 +53,26 @@ class Termin {
   }
 
   String getAsset({bool centered = false}) {
+    // Vali: Centered images will be the same as default ones for now
     switch (typ) {
       case 'Sammeln':
         return centered
-            ? 'assets/images/Sammeln_centered.png'
+            ? 'assets/images/Sammeln.png'
             : 'assets/images/Sammeln.png';
       case 'Infoveranstaltung':
-        return 'assets/images/Infoveranstaltung.png';
+        return 'assets/images/Workshop.png';
       case 'Workshop':
         return centered
-            ? 'assets/images/Workshop_centered.png'
+            ? 'assets/images/Workshop.png'
             : 'assets/images/Workshop.png';
       case 'Plakatieren':
         return 'assets/images/Plakatieren.png';
       case 'Kundgebung':
         return centered
-            ? 'assets/images/Kundgebung_centered.png'
+            ? 'assets/images/Kundgebung.png'
             : 'assets/images/Kundgebung.png';
     }
-    return 'assets/images/logo_transparent.png'; // Platzhalter
+    return 'assets/images/xbge_logo_small.png'; // Platzhalter
   }
 
   static final int Function(Termin a, Termin b) compareByStart =

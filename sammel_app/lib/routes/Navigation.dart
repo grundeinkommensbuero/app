@@ -96,7 +96,7 @@ class NavigationState extends State<Navigation>
             children: <Widget>[
               Flexible(
                   child: Text(titles[navigation], overflow: TextOverflow.fade)),
-              Image.asset('assets/images/logo_transparent.png', width: 50.0)
+              Image.asset('assets/images/xbge_logo_small.png', width: 50.0)
             ],
           )),
           body: Container(
@@ -127,18 +127,13 @@ class NavigationState extends State<Navigation>
         child: Drawer(
             child: Container(
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    stops: [0.5, 1.0],
-                    colors: <Color>[CampaignTheme.primary, Colors.yellowAccent],
-                  ),
+                  color: CampaignTheme.primary
                 ),
                 child: ListView(
                   padding:
                       EdgeInsets.symmetric(vertical: 40.0, horizontal: 0.0),
                   children: <Widget>[
-                    Image.asset("assets/images/dwe.png"),
+                    Image.asset("assets/images/xbge.png"),
                     SizedBox(
                       height: 25.0,
                     ),
@@ -191,7 +186,7 @@ class NavigationState extends State<Navigation>
             ),
             subtitle: Text(
               subtitle,
-              style: TextStyle(color: selected ? Colors.amber : Colors.black54),
+              style: TextStyle(color: selected ? CampaignTheme.primary : Colors.black54),
             ),
             onTap: () {
               if (navigation != index) {

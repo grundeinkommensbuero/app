@@ -236,11 +236,6 @@ void main() {
   group('getAsset', () {
     var infoveranstaltung = TerminTestDaten.einTermin();
 
-    test('returns asset icon path if exists', () {
-      infoveranstaltung.typ = 'Infoveranstaltung';
-      expect(
-          infoveranstaltung.getAsset(), 'assets/images/Infoveranstaltung.png');
-    });
 
     test('returns placeholder when type is unknown', () {
       infoveranstaltung.typ = 'Unbekannt';

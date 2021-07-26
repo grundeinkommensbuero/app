@@ -12,7 +12,6 @@ import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/MessageException.dart';
 import 'package:sammel_app/shared/ServerException.dart';
-
 import 'AuthFehler.dart';
 import 'RestFehler.dart';
 
@@ -52,9 +51,10 @@ class BackendService {
   Future<HttpClientResponseBody> post(String url, String data,
       {Map<String, String>? parameters, bool? appAuth}) async {
     try {
-      Future<HttpClientResponseBody> post = backend
-          .post(url, data, await authHeaders(appAuth), parameters);
-      FutureOr<HttpClientResponseBody> Function() checker = () => checkConnectivity();
+      Future<HttpClientResponseBody> post =
+          backend.post(url, data, await authHeaders(appAuth), parameters);
+      FutureOr<HttpClientResponseBody> Function() checker =
+          () => checkConnectivity();
       post.timeout(Duration(seconds: 10), onTimeout: checker);
       var response = await post;
 

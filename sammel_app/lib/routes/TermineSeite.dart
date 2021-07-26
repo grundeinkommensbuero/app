@@ -42,7 +42,7 @@ class TermineSeiteState extends State<TermineSeite>
   StorageService? storageService;
   ChatMessageService? chatMessageService;
   static final TextStyle style = TextStyle(
-    color: Color.fromARGB(255, 129, 28, 98),
+    color: CampaignTheme.secondary,
     fontSize: 15.0,
   );
   final MapController mapController = MapController();
@@ -131,11 +131,14 @@ class TermineSeiteState extends State<TermineSeite>
         currentIndex: navigation,
         onTap: swithPage,
         backgroundColor: CampaignTheme.secondary,
+        selectedItemColor: CampaignTheme.primary,
+        unselectedItemColor: CampaignTheme.primaryLight,
         items: [
           BottomNavigationBarItem(
               icon: Icon(Icons.view_list,
                   key: Key('list view navigation button')),
-              label: 'Liste'.tr()),
+              label: 'Liste'.tr(),
+          ),
           BottomNavigationBarItem(
               icon: Icon(Icons.map, key: Key('map view navigation button')),
               label: 'Karte'.tr())
@@ -256,7 +259,7 @@ class TermineSeiteState extends State<TermineSeite>
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 22.0,
-                            color: Color.fromARGB(255, 129, 28, 98)))
+                            color: CampaignTheme.secondary))
                     .tr(),
               ),
               children: <Widget>[
@@ -304,7 +307,7 @@ class TermineSeiteState extends State<TermineSeite>
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 22.0,
-                            color: Color.fromARGB(255, 129, 28, 98)))
+                            color: CampaignTheme.secondary))
                     .tr(),
               ),
               children: <Widget>[
