@@ -328,6 +328,9 @@ const Map<String, dynamic> en = {
   "Teilen": "Share",
   '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***':
       '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** at {zeitpunkt***REMOVED***\n{url***REMOVED***',
+  'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
+      'The action could not been found. Maybe it has been deleted.',
+  'Ein Fehler ist aufgetreten': 'An error occured',
 ***REMOVED***
 
 const Map<String, dynamic> ru = {
@@ -633,11 +636,14 @@ const Map<String, dynamic> ru = {
   //     "If you want to change Notifications to silent or disable certain notification categories, just press the three dots on a received notification. You will then be guided to the notification preferences for this app.",
   // "Kundgebung": "Manifestation",
   "Na gut": "Закрыть",
-  "In den Kalender": "In den Kalender",
-  '{typ***REMOVED*** in {ortsteil***REMOVED***': '{typ***REMOVED*** in {ortsteil***REMOVED***',
-  "Teilen": "Teilen",
+  "In den Kalender": "Добавить в календарь",
+  '{typ***REMOVED*** in {ortsteil***REMOVED***': '{typ***REMOVED*** в {ortsteil***REMOVED***',
+  "Teilen": "Поделиться",
   '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***':
-      '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** at {zeitpunkt***REMOVED***\n{url***REMOVED***',
+      '{typ***REMOVED*** в {ortsteil***REMOVED***, {treffpunkt***REMOVED*** {zeitpunkt***REMOVED***\n{url***REMOVED***',
+  'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
+      'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.',
+  'Ein Fehler ist aufgetreten': 'Произошла ошибка',
 ***REMOVED***
 
 const Map<String, dynamic> fr = {
@@ -957,6 +963,9 @@ const Map<String, dynamic> fr = {
   "Teilen": "Partagez",
   '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***':
       '{typ***REMOVED*** à {ortsteil***REMOVED***, {treffpunkt***REMOVED*** à {zeitpunkt***REMOVED***\n{url***REMOVED***',
+  'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
+      'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.',
+  'Ein Fehler ist aufgetreten': 'Une erreur s\'est produite',
 ***REMOVED***
 
 const Map<String, dynamic> de = {
@@ -1279,4 +1288,7 @@ const Map<String, dynamic> de = {
   '{typ***REMOVED*** in {ortsteil***REMOVED***': '{typ***REMOVED*** in {ortsteil***REMOVED***',
   '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***':
       '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***',
+  'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
+      'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.',
+  'Ein Fehler ist aufgetreten': 'Ein Fehler ist aufgetreten',
 ***REMOVED***

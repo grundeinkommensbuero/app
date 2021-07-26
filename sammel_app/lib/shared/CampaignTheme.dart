@@ -29,7 +29,8 @@ class CampaignTheme {
     dialogBackgroundColor: primaryLight,
     elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
-      backgroundColor: MaterialStateProperty.all<Color>(CampaignTheme.secondary),
+      backgroundColor:
+          MaterialStateProperty.all<Color>(CampaignTheme.secondary),
     )),
     textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
@@ -42,7 +43,8 @@ class CampaignTheme {
     fontFamily: 'Ideal',
   );
 
-  static var menuCaption = TextStyle(fontSize: 20.0, color: CampaignTheme.secondary);
+  static var menuCaption =
+      TextStyle(fontSize: 20.0, color: CampaignTheme.secondary);
   static var menuCaptionSelected =
       TextStyle(fontSize: 20.0, color: CampaignTheme.primary);
 
@@ -82,4 +84,7 @@ class CampaignTheme {
           scale: 1.8,
           fit: BoxFit.none,
           alignment: Alignment.topCenter));
+
+  static String actionUrl(int? id) =>
+      'www.dwenteignen.de/die-sammel-app?aktion=$id';
 ***REMOVED***

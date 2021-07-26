@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,7 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
+import 'package:uni_links/uni_links.dart';
 import 'package:uuid/uuid.dart';
 
 import 'ActionDetailsPage.dart';
@@ -61,6 +64,8 @@ class TermineSeiteState extends State<TermineSeite>
   Animation<Offset>? _slide;
   Animation<double>? _fade;
   bool swipeLeft = false;
+
+  late StreamSubscription<Uri?> uniLinkListener;
 
   @override
   void initState() {
@@ -128,6 +133,8 @@ class TermineSeiteState extends State<TermineSeite>
             ],
           )),
       bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: CampaignTheme.primary,
+        unselectedItemColor: Colors.black,
         currentIndex: navigation,
         onTap: swithPage,
         backgroundColor: CampaignTheme.secondary,
@@ -181,6 +188,8 @@ class TermineSeiteState extends State<TermineSeite>
     Provider.of<AbstractUserService>(context)
         .user
         .listen((user) => setState(() => me = user));
+
+    checkDeepLinks();
 
     _initialized = true;
   ***REMOVED***
@@ -433,6 +442,35 @@ class TermineSeiteState extends State<TermineSeite>
                 appBar: AppBar(title: Text(title)),
                 body: ActionList(actions, isMyAction, isPastAction,
                     iAmParticipant, openTerminDetails))));
+  ***REMOVED***
+
+  checkDeepLinks() async {
+    registerUriListener(uriLinkStream);
+    showAction(await getInitialUri());
+  ***REMOVED***
+
+  registerUriListener(Stream<Uri?> linkStream) {
+    uniLinkListener = linkStream.listen((final Uri? uri) => showAction(uri));
+  ***REMOVED***
+
+  showAction(Uri? uri) {
+    if (uri?.queryParameters['aktion'] == null) return;
+    final int? id = int.tryParse(uri!.queryParameters['aktion']!);
+    if (id == null) {
+      ErrorService.pushError("Ungültige Aktions-ID",
+          "Die Nummer der Aktion in dem Link ist ungültig. Möglicherweise wurde die Aktion bereits gelöscht.");
+      return;
+    ***REMOVED***
+    termineService!.loadAndShowAction(id);
+  ***REMOVED***
+
+  @override
+  void dispose() {
+    try {
+      uniLinkListener.cancel();
+    ***REMOVED*** catch (_) {***REMOVED***
+    ;
+    super.dispose();
   ***REMOVED***
 ***REMOVED***
 
