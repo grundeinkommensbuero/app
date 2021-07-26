@@ -7,11 +7,6 @@ import 'package:sammel_app/shared/CampaignTheme.dart';
 
 class TerminCard extends StatelessWidget {
   final Termin termin;
-  static final TextStyle style = TextStyle(
-    color: Color.fromARGB(255, 129, 28, 98),
-    fontSize: 15.0,
-  );
-
   final bool myAction;
   final bool participant;
 
@@ -57,19 +52,26 @@ class TerminCard extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 129, 28, 98)),
+                          color: CampaignTheme.actionColorHeading(myAction, participant)),
                     ).tr()),
                     SizedBox(width: 45.0)
                   ]),
                   Text(
                     erzeugeOrtText(termin.ort),
                     textAlign: TextAlign.start,
-                    style: style,
+                    style: TextStyle(
+                      color: CampaignTheme.actionColorText(myAction, participant),
+                      fontSize: 15.0,
+                    ),
                   ),
                   Text(
                     erzeugeDatumText(termin.beginn, termin.ende,
                         Localizations.localeOf(context)),
                     textAlign: TextAlign.start,
+                    style: TextStyle(
+                      color: CampaignTheme.actionColorText(myAction, participant),
+                      fontSize: 15.0,
+                    ),
                   ),
                 ])),
           ]),

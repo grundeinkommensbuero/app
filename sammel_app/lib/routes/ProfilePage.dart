@@ -136,7 +136,7 @@ class ProfilePageState extends State<ProfilePage> {
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                          Text('Benachrichtigungen einstellen',
+                          Text('Benachrichtigungen \neinstellen',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: Colors.black, fontSize: 20.0))
@@ -250,10 +250,6 @@ showNotificationInfoDialog(BuildContext context) {
               titlePadding: EdgeInsets.all(15.0),
               title: Text('Benachrichtigungs-Einstellungen').tr(),
               children: [
-                Image.asset(
-                  'assets/images/housy_info.png',
-                  height: 250,
-                ),
                 Container(
                     padding: EdgeInsets.all(10),
                     child: Text(Platform.isIOS
@@ -275,12 +271,9 @@ showPrivacyDialog(BuildContext context) {
               titlePadding: EdgeInsets.all(15.0),
               title: Text('Datenschutz').tr(),
               children: [
-                Image.asset(
-                  'assets/images/housy_info.png',
-                  height: 250,
-                ),
                 Container(
                     padding: EdgeInsets.all(10),
+                    // TODO: Update text
                     child: Text(
                             'Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an app@dwenteignen.de.')
                         .tr()),
@@ -349,16 +342,15 @@ showAboutDialog(BuildContext context) async {
   showDialog(
       context: context,
       builder: (context) => AboutDialog(
-            applicationName: 'Deutsche Wohnen & Co. Enteignen',
-            applicationIcon:
-                Image.asset('assets/images/logo_transparent.png', width: 40.0),
+            applicationName: 'Expedition Grundeinkommen',
             applicationVersion:
                 '${packageInfo.version***REMOVED*** (${packageInfo.buildNumber***REMOVED***)',
             children: [
               SizedBox(
                   height: 230,
-                  child: Image.asset('assets/images/housy_info.png')),
+                  child: Image.asset('assets/images/xbge.png')),
               SizedBox(height: 15.0),
+              // TODO: update text
               Text('Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.')
                   .tr(),
               SizedBox(height: 15.0),

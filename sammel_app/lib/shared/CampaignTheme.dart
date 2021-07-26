@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
 class CampaignTheme {
-  static final Color primary = Color.fromARGB(255, 253, 216, 22);
-  static final Color primaryLight = Color.fromARGB(255, 255, 230, 40);
-  static final Color primaryBright = Color.fromARGB(255, 255, 255, 130);
-  static final Color secondary = Color.fromARGB(255, 128, 28, 98);
-  static final Color secondaryLight = Color.fromARGB(255, 149, 48, 118);
+  static final Color primary = Color.fromRGBO(255, 255, 255, 1);
+  static final Color primaryLight = Color.fromRGBO(236, 234, 247, 1);
+  static final Color primaryBright = Color.fromRGBO(255, 255, 255, 1);
+  static final Color secondary = Color.fromRGBO(120, 95, 255, 1);
+  static final Color secondaryLight = Color.fromRGBO(174, 159, 255, 1);
   static final MaterialStateProperty<Color> red =
-      MaterialStateProperty.all(Color.fromARGB(255, 204, 36, 36));
-  static final Color altPrimaryLight = Color.fromARGB(255, 213, 252, 207);
-  static final Color altPrimary = Color.fromARGB(255, 125, 244, 107);
-  static final Color altSecondaryLight = Color.fromARGB(255, 150, 200, 255);
-  static final Color altSecondaryBright = Color.fromARGB(255, 220, 235, 255);
+      MaterialStateProperty.all(Color.fromRGBO(255, 70, 100, 1));
+  //static final Color altPrimaryLight = Color.fromRGBO(255, 70, 100, 0.8);
+  // static final Color altPrimary = Color.fromRGBO(255, 70, 100, 1);
+  static final Color altPrimary = Color.fromRGBO(70, 180, 180, 1);
+  static final Color altPrimaryLight = Color.fromRGBO(144, 210, 210, 1);
+  static final Color altSecondaryLight = Color.fromRGBO(229, 181, 200, 1);
+  static final Color altSecondaryBright = Color.fromRGBO(229, 181, 200, 1);
   static final Color disabled = Colors.black45;
 
   static ThemeData themeData = ThemeData(
@@ -37,7 +39,7 @@ class CampaignTheme {
               : CampaignTheme.secondary),
     )),
     iconTheme: IconThemeData(color: secondary),
-    fontFamily: 'Raleway',
+    fontFamily: 'Ideal',
   );
 
   static var menuCaption = TextStyle(fontSize: 20.0, color: CampaignTheme.secondary);
@@ -47,21 +49,36 @@ class CampaignTheme {
   static Color actionColor(DateTime ende, bool owner, bool participant) {
     final past = ende.isBefore(DateTime.now());
 
-    if (owner && past) return CampaignTheme.altSecondaryBright;
-    if (owner) return CampaignTheme.altSecondaryLight;
+    if(past) return primaryLight;
 
-    if (participant && past) return CampaignTheme.altPrimaryLight;
-    if (participant) return CampaignTheme.altPrimary;
+    // if (owner && past) return CampaignTheme.altSecondaryBright;
+    // Proposition Tatiana: white on green
+    if (owner) return altPrimary;
 
-    if (past) return primaryBright;
-    return primaryLight;
+    // Proposition Tatiana: white on blue
+    // if (participant && past) return CampaignTheme.altPrimaryLight;
+    if (participant) return secondary;
+
+    return primary;
+  ***REMOVED***
+
+  static Color actionColorText(bool owner, bool participant){
+    if(owner || participant) return primary;
+
+    return Colors.black54;
+  ***REMOVED***
+
+  static Color actionColorHeading(bool owner, bool participant){
+    if(owner || participant) return CampaignTheme.primary;
+
+    return secondary;
   ***REMOVED***
 
   static final BoxDecoration background = BoxDecoration(
       image: DecorationImage(
           colorFilter: ColorFilter.mode(
               Color.fromARGB(220, 255, 255, 250), BlendMode.srcOver),
-          image: AssetImage('assets/images/housy_happy.png'),
+          image: AssetImage('assets/images/keyvisual.png'),
           scale: 1.8,
           fit: BoxFit.none,
           alignment: Alignment.topCenter));

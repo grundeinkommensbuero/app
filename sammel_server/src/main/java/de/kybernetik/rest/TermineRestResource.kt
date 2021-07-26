@@ -14,7 +14,6 @@ import org.jboss.logging.Logger
 import de.kybernetik.rest.TermineRestResource.TerminDto.Companion.convertFromTerminWithoutDetails
 import de.kybernetik.services.NeueAktionenNotification
 import de.kybernetik.services.PushService
-import de.kybernetik.shared.UnzureichendeDatenException
 import org.wildfly.security.http.HttpConstants.FORBIDDEN
 import java.time.LocalDateTime
 import java.time.ZonedDateTime.now
@@ -60,8 +59,10 @@ open class TermineRestResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun getTermine(filter: TermineFilter?): Response {
-        LOG.debug("Lade Aktionen mit Filter ${filter?.typen***REMOVED***, ${filter?.tage***REMOVED***, ${filter?.von***REMOVED***, ${filter?.bis***REMOVED***, ${filter?.orte***REMOVED***, ${filter?.nurEigene***REMOVED***, ${filter?.immerEigene***REMOVED***")
+        LOG.info("filter: ${filter***REMOVED***");
+        LOG.info("Lade Aktionen mit Filter ${filter?.typen***REMOVED***, ${filter?.tage***REMOVED***, ${filter?.von***REMOVED***, ${filter?.bis***REMOVED***, ${filter?.orte***REMOVED***, ${filter?.nurEigene***REMOVED***, ${filter?.immerEigene***REMOVED***")
         val termine = dao.getTermine(filter ?: TermineFilter(), context.userPrincipal.name.toLong())
+        LOG.info("termine: ${termine***REMOVED***")
         return Response
             .ok()
             .entity(termine.map { termin -> convertFromTerminWithoutDetails(termin) ***REMOVED***)
@@ -351,8 +352,8 @@ open class TermineRestResource {
         var ende: LocalDateTime? = null,
         var ort: String? = null,
         var typ: String? = null,
-        var latitude: Double,
-        var longitude: Double,
+        var latitude: Double? = null,
+        var longitude: Double? = null,
         var participants: List<BenutzerDto>? = emptyList(),
         var details: TerminDetailsDto? = TerminDetailsDto()
     ) {
@@ -378,21 +379,15 @@ open class TermineRestResource {
                 return terminDto
             ***REMOVED***
 
-            fun convertFromTerminWithoutDetails(termin: Termin): TerminDto {
-                if (termin.latitude == null || termin.longitude == null)
-                    throw UnzureichendeDatenException(
-                        "Aktion ohne Koordinaten! Aktion ${termin.id***REMOVED*** hat Koordinate (${termin.latitude***REMOVED***, ${termin.longitude***REMOVED***)"
-                    )
-                return TerminDto(
-                    termin.id,
-                    termin.beginn,
-                    termin.ende,
-                    termin.ort,
-                    termin.typ,
-                    termin.latitude!!,
-                    termin.longitude!!,
-                    termin.teilnehmer.map { BenutzerDto.convertFromBenutzer(it) ***REMOVED***)
-            ***REMOVED***
+            fun convertFromTerminWithoutDetails(termin: Termin): TerminDto = TerminDto(
+                termin.id,
+                termin.beginn,
+                termin.ende,
+                termin.ort,
+                termin.typ,
+                termin.latitude,
+                termin.longitude,
+                termin.teilnehmer.map { BenutzerDto.convertFromBenutzer(it) ***REMOVED***)
         ***REMOVED***
     ***REMOVED***
 

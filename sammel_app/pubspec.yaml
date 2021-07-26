@@ -93,15 +93,16 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-   - assets/images/dwe.png
+   - assets/images/xbge.png
+   - assets/images/xbge_logo_small.png
    - assets/images/logo.png
+   - assets/images/keyvisual.png
    - assets/images/logo_ios.png
    - assets/images/logo_transparent.png
    - assets/images/Sammeln.png
    - assets/images/Sammeln_centered.png
    - assets/images/Workshop.png
    - assets/images/Workshop_centered.png
-   - assets/images/Infoveranstaltung.png
    - assets/images/Plakatieren.png
    - assets/images/Kundgebung.png
    - assets/images/Kundgebung_centered.png
@@ -130,12 +131,12 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Raleway
+    - family: Ideal
       fonts:
-        - asset: fonts/Raleway-Medium.ttf
-        - asset: fonts/Raleway-Italic.ttf
+        - asset: fonts/ideal-regular.ttf
+        - asset: fonts/ideal-regular.ttf
           style: italic
-        - asset: fonts/Raleway-Bold.ttf
+        - asset: fonts/ideal-bold.ttf
           weight: 700
   #   - family: Trajan Pro
   #     fonts:

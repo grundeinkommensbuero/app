@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -19,6 +20,9 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'ErrorService.dart';
 import 'LocalNotificationService.dart';
 import 'UserService.dart';
+
+import 'dart:developer' as developer;
+import 'package:flutter/foundation.dart';
 
 abstract class AbstractTermineService extends BackendService {
   StammdatenService stammdatenService;
@@ -65,6 +69,17 @@ class TermineService extends AbstractTermineService
   Future<List<Termin>> loadActions(TermineFilter filter) async {
     HttpClientResponseBody response =
         await post('service/termine', jsonEncode(filter));
+
+    developer.log('body $response');
+    debugPrint('body $response');
+    print('body $response');
+    stdout.writeln('body $response');
+
+    developer.log(
+    'body',
+    name: 'response',
+    error: jsonEncode(response),
+  );
     var kieze = await stammdatenService.kieze;
     final termine = (response.body as List)
         .map((jsonTermin) => Termin.fromJson(jsonTermin, kieze))
@@ -145,11 +160,11 @@ class TermineService extends AbstractTermineService
     final kieze = await stammdatenService.kieze;
     final message = ActionListPushData.fromJson(data, kieze);
 
-    if(message.type == PushDataTypes.newKiezActions)
+    if (message.type == PushDataTypes.newKiezActions)
       localNotificationService.sendNewActionsNotification(message);
-    if(message.type == PushDataTypes.actionDeleted)
+    if (message.type == PushDataTypes.actionDeleted)
       localNotificationService.sendActionDeletedNotification(message);
-    if(message.type == PushDataTypes.actionChanged)
+    if (message.type == PushDataTypes.actionChanged)
       localNotificationService.sendActionChangedNotification(message);
   ***REMOVED***
 
@@ -240,22 +255,18 @@ class DemoTermineService extends AbstractTermineService {
       DateTime datum =
           DateTime(termin.beginn.year, termin.beginn.month, termin.beginn.day);
       return (filter.von == null ? true : termin.ende.isAfter(von)) &&
-          (filter.bis == null ? true : termin.beginn.isBefore(bis)) &&
-          (filter.tage.isEmpty
-              ? true
-              : filter.tage.contains(datum)) &&
-          (filter.tage.isEmpty
-              ? true
-              : filter.tage.contains(datum)) &&
-          (filter.orte.isEmpty
-              ? true
-              : filter.orte.contains(termin.ort.name)) &&
-          (filter.typen.isEmpty
-              ? true
-              : filter.typen.contains(termin.typ)) &&
-          (filter.nurEigene == false
-              ? true
-              : termin.participants!.map((u) => u.id).contains(13)) ||
+              (filter.bis == null ? true : termin.beginn.isBefore(bis)) &&
+              (filter.tage.isEmpty ? true : filter.tage.contains(datum)) &&
+              (filter.tage.isEmpty ? true : filter.tage.contains(datum)) &&
+              (filter.orte.isEmpty
+                  ? true
+                  : filter.orte.contains(termin.ort.name)) &&
+              (filter.typen.isEmpty
+                  ? true
+                  : filter.typen.contains(termin.typ)) &&
+              (filter.nurEigene == false
+                  ? true
+                  : termin.participants!.map((u) => u.id).contains(13)) ||
           (filter.immerEigene == true
               ? termin.participants!.map((u) => u.id).contains(13)
               : false);
