@@ -8,15 +8,19 @@ import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Evaluation.dart';
 import 'package:sammel_app/model/ListLocation.dart';
+import 'package:sammel_app/model/Placard.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/ActionMap.dart';
 import 'package:sammel_app/routes/EvaluationForm.dart';
+import 'package:sammel_app/routes/PlacardDeleteDialog.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
+import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
+import 'package:sammel_app/services/PlacardsService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
@@ -30,9 +34,13 @@ import 'ActionEditor.dart';
 import 'ActionList.dart';
 import 'ActionMap.dart';
 import 'FilterWidget.dart';
+import 'MapActionDialog.dart';
 
 class TermineSeite extends StatefulWidget {
-  TermineSeite({Key? key}) : super(key: key ?? Key('action page'));
+  Function(LatLng)? switchToActionCreator;
+
+  TermineSeite({Key? key, this.switchToActionCreator})
+      : super(key: key ?? Key('action page'));
 
   @override
   TermineSeiteState createState() => TermineSeiteState();
@@ -44,6 +52,7 @@ class TermineSeiteState extends State<TermineSeite>
   AbstractTermineService? termineService;
   StorageService? storageService;
   ChatMessageService? chatMessageService;
+  late AbstractPlacardsService placardService;
   static final TextStyle style = TextStyle(
     color: CampaignTheme.secondary,
     fontSize: 15.0,
@@ -53,6 +62,7 @@ class TermineSeiteState extends State<TermineSeite>
 
   List<Termin> termine = [];
   List<ListLocation> listLocations = [];
+  List<Placard> placards = [];
 
   FilterWidget? filterWidget;
 
@@ -105,10 +115,14 @@ class TermineSeiteState extends State<TermineSeite>
       key: Key('action map'),
       termine: termine,
       listLocations: listLocations,
+      placards: placards,
+      myUserId: me?.id,
       isMyAction: isMyAction,
       isPastAction: isPastAction,
       iAmParticipant: iAmParticipant,
       openActionDetails: openTerminDetails,
+      openPlacardDialog: openPlacardDialog,
+      mapAction: mapAction,
       mapController: mapController,
     );
 
@@ -170,18 +184,21 @@ class TermineSeiteState extends State<TermineSeite>
     termineService = Provider.of<AbstractTermineService>(context);
     storageService = Provider.of<StorageService>(context);
     chatMessageService = Provider.of<ChatMessageService>(context);
-    filterWidget = FilterWidget(ladeTermine, key: filterKey);
+    filterWidget = FilterWidget(loadActionsAndPlacards, key: filterKey);
 
     storageService!
         .loadAllStoredActionIds()
         .then((ids) => setState(() => myActions = ids));
 
-    var listLocationService = Provider.of<AbstractListLocationService>(context);
-    listLocationService.getActiveListLocations().then((listLocations) {
+    Provider.of<AbstractListLocationService>(context)
+        .getActiveListLocations()
+        .then((listLocations) {
       setState(() {
         this.listLocations = listLocations;
       });
     });
+
+    placardService = Provider.of<AbstractPlacardsService>(context);
 
     Provider.of<AbstractUserService>(context)
         .user
@@ -192,13 +209,19 @@ class TermineSeiteState extends State<TermineSeite>
     _initialized = true;
   }
 
-  Future<void> ladeTermine(TermineFilter filter) async {
-    await termineService!
+  Future loadActionsAndPlacards(TermineFilter filter) async {
+    Future wait4Actions = termineService!
         .loadActions(filter)
         .then((termine) =>
             setState(() => this.termine = termine..sort(Termin.compareByStart)))
         .catchError((e, s) => ErrorService.handleError(e, s,
             context: 'Aktionen konnten nicht geladen werden.'));
+
+    Future wait4placards = placardService
+        .loadPlacards()
+        .then((placards) => setState(() => this.placards = placards));
+
+    await Future.wait([wait4Actions, wait4placards]);
   }
 
   void showRestError(RestFehler e) {
@@ -411,13 +434,9 @@ class TermineSeiteState extends State<TermineSeite>
   Future<void> joinAction(Termin action) async {
     if (action.id == null || me == null) return;
     await termineService?.joinAction(action.id!);
-    setState(() {
-      // ignore: unnecessary_cast
-      (termine as List<Termin?>)
-          .firstWhere((t) => t!.id == action.id, orElse: () => null)
-          ?.participants
-          ?.add(me!);
-    });
+    setState(() => termine
+        .where((t) => t.id == action.id)
+        .forEach((Termin t) => t.participants?.add(me!)));
   }
 
   Future<void> leaveAction(Termin action) async {
@@ -460,6 +479,51 @@ class TermineSeiteState extends State<TermineSeite>
       return;
     }
     termineService!.loadAndShowAction(id);
+  }
+
+  openPlacardDialog(Placard placard) async {
+    if (placard.id == null) return;
+
+    bool confirmed = await showPlacardDeleteDialog(context);
+
+    if (confirmed) deletePlacard(placard);
+  }
+
+  void deletePlacard(Placard placard) {
+    placardService.deletePlacard(placard.id!);
+    setState(() => placards.remove(placard));
+  }
+
+  mapAction(LatLng point) async {
+    MapActionType? chosenAction = await showMapActionDialog(context);
+
+    if (chosenAction == MapActionType.NewAction) switchToActionCreator(point);
+    if (chosenAction == MapActionType.NewPlacard) createNewPlacard(point);
+    if (chosenAction == MapActionType.NewPlacard) createNewVisitedHouse(point);
+  }
+
+  createNewPlacard(LatLng point) async {
+    if (me?.id == null) {
+      ErrorService.pushError('Plakat kann nicht erstellt werden',
+          'Die App hat noch kein Benutzer*inprofil für dich erzeugt. Versuche es bitte später nochmal');
+      return;
+    }
+
+    final geoData = await Provider.of<GeoService>(context, listen: false)
+        .getDescriptionToPoint(point);
+
+    print('### geodata: ${geoData.city}');
+
+    final placard = await placardService.createPlacard(Placard(
+        null, point.latitude, point.longitude, geoData.fullAdress, me!.id!));
+    if (placard != null) setState(() => placards.add(placard));
+  }
+
+  void switchToActionCreator(LatLng point) =>
+      widget.switchToActionCreator!(point);
+
+  void createNewVisitedHouse(LatLng point) {
+    //TODO
   }
 
   @override

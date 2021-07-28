@@ -681,7 +681,12 @@ class FAQService {
             'Die Aktionen kannst du dir außerdem noch einmal in einer '
             'Karten-Ansicht anschauen. Dort siehst du auch die "Solidarischen Orte", '
             'an denen Unterschriftenlisten ausliegen.\n\n'
-            'Wenn du auf eine Aktion tippst, öffnet sich ein Fenster, das die '
+            'Wenn du lange auf einen Punkt auf der Karte tippst, kannst du:\n'
+            '• eine neue Aktion erstellen\n'
+            '• ein Plakat eintragen\n'
+            '• ein Haus markieren, das du bei einer Haustürgesrächsaktion besucht hast.\n'),
+        Image.asset('assets/images/eintragen.png', width: 250),
+        Text('\nWenn du auf eine Aktion tippst, öffnet sich ein Fenster, das die '
             'Details der Aktion anzeigt.\n'),
         Image.asset('assets/images/aktionen-details-seite.png', width: 250),
         Text('\nHier kannst du:\n'),
@@ -703,7 +708,7 @@ class FAQService {
             'In der Chat-Ansicht kannst du auch die Liste der Aktions-Teilnehmer*innen'
             'sehen, mithilfe des Teilnehmer*innen-Knopfs oben rechts.\n'),
         Text(
-            'Wenn du in der Startansicht auf den Menü-Knopf in der oberen rechten '
+            'Wenn du in der Startansicht auf den Menü-Knopf in der oberen linken '
             'Ecke tippst, gelangst du zum Menü. Dort kannst du die weiteren Seiten:\n'
             '• Zum Sammeln aufrufen\n'
             '• Fragen und Antworten\n'

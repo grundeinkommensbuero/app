@@ -1,0 +1,15 @@
+POST http://127.0.0.1:18080/service/besuchteHaeuser/neu
+Accept: application/json
+Content-Type: application/json
+Authorization: Basic MTE6YWM0MzA5NjAtMDVlYi0xMWViLThhMjYtZmRjNzY4M2E4NGJj
+
+{
+  "latitude": 52.47541,
+  "longitude": 13.30508,
+  "adresse": "Mecklenburgische Straße 57, Wilmersdorf, Charlottenburg-Wilmersdorf, Berlin, 14197",
+  "hausteil": "Haupteingang",
+  "datum": "2021-07-18",
+  "benutzer": 11
+}
+
+###

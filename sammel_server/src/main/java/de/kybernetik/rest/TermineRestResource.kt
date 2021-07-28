@@ -29,7 +29,6 @@ import javax.ws.rs.core.MediaType.APPLICATION_JSON
 import javax.ws.rs.core.Response
 import javax.ws.rs.core.SecurityContext
 
-
 @Stateless
 @Path("termine")
 open class TermineRestResource {
@@ -355,7 +354,7 @@ open class TermineRestResource {
         var latitude: Double? = null,
         var longitude: Double? = null,
         var participants: List<BenutzerDto>? = emptyList(),
-        var details: TerminDetailsDto? = TerminDetailsDto()
+        var details: TerminDetailsDto? = null
     ) {
 
         fun convertToTermin(): Termin {

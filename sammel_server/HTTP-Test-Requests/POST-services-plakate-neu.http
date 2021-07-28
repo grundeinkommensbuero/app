@@ -1,0 +1,13 @@
+POST http://127.0.0.1:18080/service/plakate/neu
+Accept: application/json
+Content-Type: application/json
+Authorization: Basic MTE6YWM0MzA5NjAtMDVlYi0xMWViLThhMjYtZmRjNzY4M2E4NGJj
+
+{
+  "latitude": 52.47065,
+  "longitude": 13.3285,
+  "adresse": "12161, Bundesallee 129",
+  "benutzer": 11
+}
+
+###

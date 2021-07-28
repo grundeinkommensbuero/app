@@ -225,10 +225,16 @@ void main() async {
   });
 
   group('pullMode', () {
-    test('markPullMode sets pullMode to true', () async {
-      await service.markPullMode();
+    test('setPullMode sets pullMode to true', () async {
+      await service.setPullMode();
 
       expect(_prefs.getBool('pullMode'), true);
+    });
+
+    test('unsetPullMode sets pullMode to false', () async {
+      await service.unsetPullMode();
+
+      expect(_prefs.getBool('pullMode'), false);
     });
 
     test('isPullMode returns false, if not set', () async {

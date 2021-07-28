@@ -119,8 +119,8 @@ class TermineService extends AbstractTermineService
   }
 
   deleteAction(Termin action, String token) async {
-    await delete(
-        'service/termine/termin', jsonEncode(ActionWithToken(action, token)));
+    await delete('service/termine/termin',
+        data: jsonEncode(ActionWithToken(action, token)));
   }
 
   joinAction(int id) async {
