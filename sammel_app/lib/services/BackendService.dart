@@ -71,8 +71,8 @@ class BackendService {
     ***REMOVED***
   ***REMOVED***
 
-  Future<HttpClientResponseBody> delete(String url, String data,
-      {bool? appAuth***REMOVED***) async {
+  Future<HttpClientResponseBody> delete(String url,
+      {String? data, bool? appAuth***REMOVED***) async {
     try {
       var response = await backend
           .delete(url, data, await authHeaders(appAuth))
@@ -258,7 +258,7 @@ class Backend {
   ***REMOVED***
 
   Future<HttpClientResponseBody> delete(
-      String url, String data, Map<String, String> headers) async {
+      String url, String? data, Map<String, String> headers) async {
     await zertifikatGeladen;
     return await client
         .deleteUrl(Uri.https('$host:$port', url))
@@ -310,7 +310,7 @@ class ConnectivityException implements Exception {
 class DemoBackend implements Backend {
   @override
   Future<HttpClientResponseBody> delete(
-          String url, String data, Map<String, String> headers) =>
+          String url, String? data, Map<String, String> headers) =>
       throw DemoBackendShouldNeverBeUsedError();
 
   @override

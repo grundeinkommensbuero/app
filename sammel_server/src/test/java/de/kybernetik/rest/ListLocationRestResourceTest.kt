@@ -15,6 +15,7 @@ import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import de.kybernetik.rest.ListLocationRestResource.ListLocationDto
 import de.kybernetik.rest.ListLocationRestResource.ListLocationDto.Companion.convertFromListLocation
+import org.junit.Before
 
 class ListLocationRestResourceTest {
     @Rule
@@ -26,6 +27,11 @@ class ListLocationRestResourceTest {
 
     @InjectMocks
     private lateinit var resource: ListLocationRestResource
+
+    @Before
+    fun setUp() {
+        System.setProperty("de.kybernetik.listlocations.secret", "false")
+    ***REMOVED***
 
     @Test
     fun `converts ListLocation to ListLocationDto`() {
@@ -53,6 +59,17 @@ class ListLocationRestResourceTest {
         assertEquals(listLocationDto.number, "")
         assertEquals(listLocationDto.latitude, null)
         assertEquals(listLocationDto.longitude, null)
+    ***REMOVED***
+
+    @Test
+    @Suppress("UNCHECKED_CAST")
+    fun `getActiveListLocations returns empty list if secret`() {
+        System.setProperty("de.kybernetik.listlocations.secret", "true")
+
+        val result = resource.getActiveListLocations()
+        val list: List<ListLocationDto> = result.entity as List<ListLocationDto>
+
+        assertTrue(list.isEmpty())
     ***REMOVED***
 
     @Test

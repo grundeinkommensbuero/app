@@ -30,23 +30,23 @@ class CampaignTheme {
     elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
       backgroundColor:
-          MaterialStateProperty.all<Color>(CampaignTheme.secondary),
+          MaterialStateProperty.all<Color>(secondary),
     )),
     textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
       foregroundColor: MaterialStateProperty.resolveWith((state) =>
           state.contains(MaterialState.disabled)
-              ? CampaignTheme.disabled
-              : CampaignTheme.secondary),
+              ? disabled
+              : secondary),
     )),
     iconTheme: IconThemeData(color: secondary),
     fontFamily: 'Ideal',
   );
 
   static var menuCaption =
-      TextStyle(fontSize: 20.0, color: CampaignTheme.secondary);
+      TextStyle(fontSize: 20.0, color: secondary);
   static var menuCaptionSelected =
-      TextStyle(fontSize: 20.0, color: CampaignTheme.primary);
+      TextStyle(fontSize: 20.0, color: primary);
 
   static Color actionColor(DateTime ende, bool owner, bool participant) {
     final past = ende.isBefore(DateTime.now());
@@ -74,6 +74,11 @@ class CampaignTheme {
     if(owner || participant) return CampaignTheme.primary;
 
     return secondary;
+  ***REMOVED***
+
+  static Color placardColor(bool owner) {
+    if (owner) return altSecondaryLight;
+    return Colors.transparent;
   ***REMOVED***
 
   static final BoxDecoration background = BoxDecoration(

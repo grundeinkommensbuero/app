@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:poly/poly.dart' as poly;
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/services/ErrorService.dart';
@@ -154,32 +153,31 @@ class LocationDialogState extends State<LocationDialog> {
   ***REMOVED***
 
   locationSelected(LatLng point) async {
+    Location newLocation = await getDescriptionAndKiezToPoint(point);
+
+    if (newLocation.kiez == null || newLocation.coordinates == null) return;
+
+    setState(() {
+      location.kiez = newLocation.kiez;
+      location.coordinates = point;
+      venueController.text = newLocation.description!;
+      location.description = newLocation.description;
+      marker = LocationMarker(point);
+    ***REMOVED***);
+  ***REMOVED***
+
+  Future<Location> getDescriptionAndKiezToPoint(LatLng point) async {
     var geodata = await Provider.of<GeoService>(context, listen: false)
         .getDescriptionToPoint(point)
         .catchError((e, s) {
       ErrorService.handleError(e, s);
       return GeoData('', '', '');
     ***REMOVED***);
-    Kiez? kiez = (await Provider.of<StammdatenService>(context, listen: false)
-            .kieze)
-        // ignore: unnecessary_cast
-        .map((kiez) => kiez as Kiez?) // nötig wegen orElse => null
-        .firstWhere(
-            (kiez) => poly.Polygon(kiez!.polygon
-                    .map((latlng) =>
-                        poly.Point<num>(latlng.latitude, latlng.longitude))
-                    .toList())
-                .contains(point.latitude, point.longitude),
-            orElse: () => null);
 
-    if (kiez == null) return;
-    setState(() {
-      location.kiez = kiez;
-      location.coordinates = point;
-      venueController.text = geodata.description;
-      location.description = geodata.description;
-      marker = LocationMarker(point);
-    ***REMOVED***);
+    Kiez? kiez = await Provider.of<StammdatenService>(context, listen: false)
+        .getKiezAtLocation(point);
+
+    return Location(geodata.description, point, kiez);
   ***REMOVED***
 ***REMOVED***
 

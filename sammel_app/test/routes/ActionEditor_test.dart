@@ -11,11 +11,11 @@ import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
-import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
+import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
-import 'package:sammel_app/services/PushNotificationManager.dart';
+import 'package:sammel_app/services/PlacardsService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
@@ -36,6 +36,8 @@ late MockPushSendService _pushService = MockPushSendService();
 late MockUserService _userService = MockUserService();
 late MockChatMessageService _chatService = MockChatMessageService();
 late MockPushNotificationManager _pushManager = MockPushNotificationManager();
+late MockPlacardsService _placardService = MockPlacardsService();
+late MockGeoService _geoService = MockGeoService();
 
 void main() {
   trainTranslation(MockTranslations());
@@ -67,41 +69,8 @@ void main() {
         .thenAnswer((_) async => []);
     when(_stammdatenService.kieze).thenAnswer(
         (_) => Future.value({ffAlleeNord(), plaenterwald(), tempVorstadt()***REMOVED***));
-  ***REMOVED***);
-
-  testWidgets('Navigation opens CreateTerminDialog',
-      (WidgetTester tester) async {
-    await (WidgetTester tester) async {
-      await tester.pumpWidget(MultiProvider(
-          providers: [
-            Provider<StammdatenService>.value(value: _stammdatenService),
-            Provider<AbstractTermineService>.value(value: _terminService),
-            Provider<StorageService>.value(value: _storageService),
-            Provider<AbstractListLocationService>(
-                create: (context) => _listLocationService),
-            Provider<AbstractPushSendService>.value(value: _pushService),
-            Provider<AbstractUserService>.value(value: _userService),
-            Provider<ChatMessageService>.value(value: _chatService),
-            Provider<AbstractPushNotificationManager>.value(
-                value: _pushManager),
-            Provider<ChatMessageService>.value(value: _chatService),
-          ],
-          child: MaterialApp(
-            home: Navigation(GlobalKey(debugLabel: 'action page')),
-          )));
-    ***REMOVED***(tester);
-
-    var nav = tester.state<NavigationState>(find.byKey(Key('navigation')));
-
-    expect(nav.navigation, isNot(1));
-
-    await tester.tap(find.byIcon(Icons.menu));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byKey(Key('action creator navigation button')));
-    await tester.pumpAndSettle();
-
-    expect(find.byKey(Key('action creator')), findsOneWidget);
-    expect(nav.navigation, 1);
+    when(_placardService.loadPlacards())
+        .thenAnswer((_) async => Future.value([]));
   ***REMOVED***);
 
   group('shows all data', () {
@@ -667,6 +636,7 @@ void main() {
       expect(action.participants![0].color?.value, 4294198070);
     ***REMOVED***);
   ***REMOVED***);
+
   group('finish button', () {
     testWidgets('fires onFinish', (WidgetTester tester) async {
       bool fired = false;
@@ -884,6 +854,51 @@ void main() {
       verify(_storageService.saveContact('Ick bin ein Berliner'));
     ***REMOVED***);
   ***REMOVED***);
+
+  group('setPosition', () {
+    setUp(() {
+      reset(_geoService);
+      reset(_terminService);
+      when(_geoService.getDescriptionToPoint(any)).thenAnswer(
+          (_) => Future.value(GeoData('Nightmare', 'Elm Street', '12')));
+      when(_stammdatenService.getKiezAtLocation(any))
+          .thenAnswer((_) => Future.value(plaenterwald()));
+    ***REMOVED***);
+
+    testWidgets('changes coordinates', (WidgetTester tester) async {
+      var actionEditorState = await _pumpActionEditor(tester);
+
+      expect(52.52116, actionEditorState.action.coordinates!.latitude);
+      expect(13.41331, actionEditorState.action.coordinates!.longitude);
+
+      await actionEditorState.setPosition(LatLng(52.48756, 13.46336));
+
+      expect(52.48756, actionEditorState.action.coordinates!.latitude);
+      expect(13.46336, actionEditorState.action.coordinates!.longitude);
+    ***REMOVED***);
+
+    testWidgets('determines geo data', (WidgetTester tester) async {
+      var actionEditorState = await _pumpActionEditor(tester);
+
+      expect('Frankfurter Allee Nord', actionEditorState.action.ort!.name);
+      expect(13.41331, actionEditorState.action.coordinates!.longitude);
+
+      var newPosition = LatLng(52.48756, 13.46336);
+      await actionEditorState.setPosition(newPosition);
+      await tester.pump();
+
+      verify(_geoService.getDescriptionToPoint(newPosition)).called(1);
+      verify(_stammdatenService.getKiezAtLocation(newPosition)).called(1);
+
+      expect('Plänterwald', actionEditorState.action.ort!.name);
+      expect('Nightmare, Elm Street 12', actionEditorState.action.treffpunkt);
+
+      expect(
+          find.text(
+              'Plänterwald in Treptow\n Treffpunkt: Nightmare, Elm Street 12'),
+          findsOneWidget);
+    ***REMOVED***);
+  ***REMOVED***);
 ***REMOVED***
 
 Future<ActionEditorState> _pumpActionCreator(WidgetTester tester) async {
@@ -912,6 +927,7 @@ _pumpActionPage(WidgetTester tester) async {
         Provider<AbstractUserService>.value(value: _userService),
         Provider<PushSendService>.value(value: _pushService),
         Provider<ChatMessageService>.value(value: _chatService),
+        Provider<AbstractPlacardsService>.value(value: _placardService),
       ],
       child: MaterialApp(
         home: TermineSeite(),
@@ -942,6 +958,8 @@ Future<ActionEditorState> _pumpActionEditor(WidgetTester tester,
   await tester.pumpWidget(MultiProvider(providers: [
     Provider<StorageService>.value(value: _storageService),
     Provider<AbstractUserService>.value(value: userService ?? _userService),
+    Provider<GeoService>.value(value: _geoService),
+    Provider<StammdatenService>.value(value: _stammdatenService),
   ], child: MaterialApp(home: actionEditor)));
 
   ActionEditorState state = tester.state(find.byWidget(actionEditor));

@@ -44,7 +44,7 @@ class ChatMessage implements Message {
     senderName = jsonMessageData['sender_name'];
     timestamp = DateTime.parse(jsonMessageData['timestamp']);
     messageColor = Color(int.parse(jsonMessageData['color'].toString()));
-    obtainedFromServer = jsonMessageData['from_server'];
+    obtainedFromServer = jsonMessageData['from_server'] ?? false;
     userId = jsonMessageData['user_id'] == null
         ? null
         : int.tryParse(jsonMessageData['user_id'].toString());

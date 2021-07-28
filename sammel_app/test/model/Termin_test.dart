@@ -139,6 +139,8 @@ void main() {
               '"ende":"2020-02-05T12:00:00",'
               '"id":1,'
               '"ort":"Frankfurter Allee Nord",'
+              '"latitude":52.48612,'
+              '"longitude":13.47192,'
               '"typ":"Sammeln"***REMOVED***'),
           [ffAlleeNord()].toSet());
       expect(termin.details?.treffpunkt, "Weltzeituhr");

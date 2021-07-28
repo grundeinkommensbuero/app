@@ -104,7 +104,8 @@ class ChatMessageService implements PushNotificationListener {
       if (cls != null) {
         Navigator.pop(cls.context);
       ***REMOVED***
-      Provider.of<AbstractTermineService>(navigatorKey!.currentContext!)
+      Provider.of<AbstractTermineService>(navigatorKey!.currentContext!,
+              listen: false)
           .getActionWithDetails(terminId)
           .then((value) => navigatorKey!.currentState!.push(MaterialPageRoute(
               builder: (context) => ChatWindow(channel, value, true))));

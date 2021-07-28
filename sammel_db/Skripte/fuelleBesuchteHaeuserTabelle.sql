@@ -1,0 +1,3 @@
+INSERT INTO BesuchteHaeuser (id, latitude, longitude, adresse, hausteil, polygon, osm_id, datum, user_id) VALUES (1, 52.52014, 13.36911, 'Willy-Brandt-Straße 1, Tiergarten, Mitte, Berlin, 10557', 'Westflügel', '', '157390075', '2021-7-18', 11);
+INSERT INTO BesuchteHaeuser (id, latitude, longitude, adresse, hausteil, polygon, osm_id, datum, user_id) VALUES (2, 52.4964133, 13.3617511, 'Potsdamer Straße 143, 10783 Berlin', null, '', '114431795', '2021-7-17', 12);
+INSERT INTO BesuchteHaeuser (id, latitude, longitude, adresse, hausteil, polygon, osm_id, datum, user_id) VALUES (3, 52.5065, 13.35125, 'Klingelhöferstraße 8,Botschaftsviertel, Tiergarten, Mitte, Berlin, 10785', 'Haupteingang', '', '25999445', '2021-7-19', 11)
