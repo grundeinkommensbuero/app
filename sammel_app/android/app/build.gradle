@@ -48,7 +48,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "de.kybernetik.sammel_app"
+        applicationId "de.xbge.sammel_app"
         minSdkVersion 16
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()

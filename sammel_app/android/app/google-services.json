@@ -1,42 +1,34 @@
 {
   "project_info": {
-    "project_number": "516901323778",
-    "firebase_url": "https://sammel-app.firebaseio.com",
-    "project_id": "sammel-app",
-    "storage_bucket": "sammel-app.appspot.com"
+    "project_number": "34078750980",
+    "project_id": "expedition-grundeinkommen-app",
+    "storage_bucket": "expedition-grundeinkommen-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:516901323778:android:12f26eaa74e43deda7d31b",
+        "mobilesdk_app_id": "1:34078750980:android:aaa967b2d49178e8d1b851",
         "android_client_info": {
-          "package_name": "de.kybernetik.sammel_app"
+          "package_name": "de.xbge.sammel_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "516901323778-eon1fmnd1c5vgdp83qmg0vmd6k4mkueo.apps.googleusercontent.com",
+          "client_id": "34078750980-cl765vaiud8l97laee6l4gapmu5e3voa.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD9eA4m_n9Bz0-VYV4pG_gAaEe-n3_-ieo"
+          "current_key": "AIzaSyDwgbiT8iKrRoL45ljPOO6IYaClQqSJhhA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "516901323778-eon1fmnd1c5vgdp83qmg0vmd6k4mkueo.apps.googleusercontent.com",
+              "client_id": "34078750980-cl765vaiud8l97laee6l4gapmu5e3voa.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "516901323778-ffceqgbqqaki62m9533r4um5bq2069ph.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "de.kybernetik.sammelApp9292"
-              }
             }
           ]
         }
