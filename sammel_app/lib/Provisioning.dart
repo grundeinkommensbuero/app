@@ -1,4 +1,4 @@
-const Mode mode = Mode.DEMO;
+const Mode mode = Mode.PROD;
 
 // Debug
 const bool pullMode = false;
@@ -34,7 +34,7 @@ const hostMap = {
   Mode.DEMO: 'none',
   Mode.LOCAL: '10.0.2.2',
   Mode.TEST: 'dwe.idash.org',
-  Mode.PROD: 'dwenteignen.party',
+  Mode.PROD: 'app-server.xbge.de',
 };
 
 const portMap = {
