@@ -81,16 +81,6 @@ class TermineService extends AbstractTermineService
     HttpClientResponseBody response =
         await post('service/termine', jsonEncode(filter));
 
-    developer.log('body $response');
-    debugPrint('body $response');
-    print('body $response');
-    stdout.writeln('body $response');
-
-    developer.log(
-    'body',
-    name: 'response',
-    error: jsonEncode(response),
-  );
     var kieze = await stammdatenService.kieze;
     final termine = (response.body as List)
         .map((jsonTermin) => Termin.fromJson(jsonTermin, kieze))
