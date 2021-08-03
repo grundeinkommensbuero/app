@@ -511,8 +511,6 @@ class TermineSeiteState extends State<TermineSeite>
     final geoData = await Provider.of<GeoService>(context, listen: false)
         .getDescriptionToPoint(point);
 
-    print('### geodata: ${geoData.city***REMOVED***');
-
     final placard = await placardService.createPlacard(Placard(
         null, point.latitude, point.longitude, geoData.fullAdress, me!.id!));
     if (placard != null) setState(() => placards.add(placard));
