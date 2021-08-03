@@ -10,7 +10,7 @@ Future<bool> showPlacardDeleteDialog(BuildContext context) async =>
               key: Key('delete placard dialog'),
               title: Text('Plakat löschen').tr(),
               content: Text(
-                  'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?'),
+                  'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?').tr(),
               actions: <Widget>[
                 ElevatedButton(
                   key: Key('delete placard dialog abort button'),
