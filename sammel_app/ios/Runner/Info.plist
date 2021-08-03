@@ -43,6 +43,10 @@
 	<string>Diese App benutzt keine Sensordaten, keine Ahnung warum Apple das glaubt. Wenn du diese Nachricht siehst, melde das bitte als Bug.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Diese App benutzt keine Spracherkennung, keine Ahnung warum Apple das glaubt. Wenn du diese Nachricht siehst, melde das bitte als Bug.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>Diese App benutzt kein Bluetooth, keine Ahnung warum Apple das glaubt. Wenn du diese Nachricht siehst, melde das bitte als Bug.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Diese App benutzt kein Bluetooth, keine Ahnung warum Apple das glaubt. Wenn du diese Nachricht siehst, melde das bitte als Bug.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
