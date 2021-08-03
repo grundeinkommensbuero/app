@@ -331,18 +331,18 @@ const Map<String, dynamic> en = {
   'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
       'The action could not been found. Maybe it has been deleted.',
   'Ein Fehler ist aufgetreten': 'An error occured',
-  'Haustürgespräche': 'Haustürgespräche',
-  'Straßengespräche & Flyern': 'Straßengespräche & Flyern',
-  'Kiezfest': 'Kiezfest',
-  'Eintragen': 'Eintragen',
+  'Haustürgespräche': 'Door-to-door conversations',
+  'Straßengespräche & Flyern': 'Street conversations and flyering',
+  'Kiezfest': 'Kiez-party',
+  'Eintragen': 'Enter',
   'Was möchtest du an dieser Stelle eintragen?':
-      'Was möchtest du an dieser Stelle eintragen?',
-  'Zu einer Aktion aufrufen': 'Zu einer Aktion aufrufen',
-  'Ein Plakat eintragen': 'Ein Plakat eintragen',
-  'Ein besuchtes Haus markieren': 'Ein besuchtes Haus markieren',
-  'Plakat löschen': 'Plakat löschen',
+      'What would you like to enter at this location?',
+  'Zu einer Aktion aufrufen': 'Call for an action',
+  'Ein Plakat eintragen': 'Enter a poster',
+  'Ein besuchtes Haus markieren': 'Mark a visited building',
+  'Plakat löschen': 'Delete poster',
   'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?':
-      'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?',
+      'You entered this poster. Would you like to delete it again?',
 ***REMOVED***
 
 const Map<String, dynamic> ru = {
@@ -656,6 +656,18 @@ const Map<String, dynamic> ru = {
   'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
       'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.',
   'Ein Fehler ist aufgetreten': 'Произошла ошибка',
+  'Haustürgespräche': 'Haustürgespräche',
+  'Straßengespräche & Flyern': 'Straßengespräche & Flyern',
+  'Kiezfest': 'Kiezfest',
+  'Eintragen': 'Eintragen',
+  'Was möchtest du an dieser Stelle eintragen?':
+      'Was möchtest du an dieser Stelle eintragen?',
+  'Zu einer Aktion aufrufen': 'Zu einer Aktion aufrufen',
+  'Ein Plakat eintragen': 'Ein Plakat eintragen',
+  'Ein besuchtes Haus markieren': 'Ein besuchtes Haus markieren',
+  'Plakat löschen': 'Plakat löschen',
+  'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?':
+      'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?',
 ***REMOVED***
 
 const Map<String, dynamic> fr = {
