@@ -34,8 +34,10 @@ void main() {
 
   group('ui', () {
     setUpUI((WidgetTester tester) async {
-      when(_storageService.loadFilter()).thenAnswer((_) async => Future.value(null));
-      when(_storageService.saveFilter(any)).thenAnswer((_) async => Future.value(true));
+      when(_storageService.loadFilter())
+          .thenAnswer((_) => Future.value(null));
+      when(_storageService.saveFilter(any))
+          .thenAnswer((_) => Future.value(true));
       await pumpFilterWidget(tester);
     ***REMOVED***);
 
@@ -88,15 +90,15 @@ void main() {
     ***REMOVED***);
 
     testUI('Filter opens Type selection with click at type button',
-            (WidgetTester tester) async {
-          await tester.tap(find.byIcon(Icons.filter_alt_sharp));
-          await tester.pump();
+        (WidgetTester tester) async {
+      await tester.tap(find.byIcon(Icons.filter_alt_sharp));
+      await tester.pump();
 
-          await tester.tap(find.byKey(Key('type button')));
-          await tester.pump();
+      await tester.tap(find.byKey(Key('type button')));
+      await tester.pump();
 
-          expect(find.byKey(Key('type selection dialog')), findsOneWidget);
-        ***REMOVED***);
+      expect(find.byKey(Key('type selection dialog')), findsOneWidget);
+    ***REMOVED***);
 
     testUI('Type Selection shows all types', (WidgetTester tester) async {
       await tester.tap(find.byIcon(Icons.filter_alt_sharp));
@@ -111,73 +113,73 @@ void main() {
     ***REMOVED***);
 
     testUI('Type Selection selects initially types from filter',
-            (WidgetTester tester) async {
-          FilterWidgetState filterState = tester.state(find.byKey(Key('filter')));
+        (WidgetTester tester) async {
+      FilterWidgetState filterState = tester.state(find.byKey(Key('filter')));
 
-          filterState.filter.typen = ['Sammeln'];
+      filterState.filter.typen = ['Sammeln'];
 
-          await tester.tap(find.byIcon(Icons.filter_alt_sharp));
-          await tester.pump();
+      await tester.tap(find.byIcon(Icons.filter_alt_sharp));
+      await tester.pump();
 
-          await tester.tap(find.byKey(Key('type button')));
-          await tester.pump();
+      await tester.tap(find.byKey(Key('type button')));
+      await tester.pump();
 
-          var checkboxTiles =
+      var checkboxTiles =
           tester.widgetList<CheckboxListTile>(find.byType(CheckboxListTile));
-          var sammelTermin = checkboxTiles
-              .firstWhere((ct) => (ct.title as Text).data == 'Sammeln');
-          var andere = checkboxTiles.where((ct) => ct != sammelTermin);
+      var sammelTermin = checkboxTiles
+          .firstWhere((ct) => (ct.title as Text).data == 'Sammeln');
+      var andere = checkboxTiles.where((ct) => ct != sammelTermin);
 
-          expect(sammelTermin.value, isTrue);
-          expect(andere.every((ct) => ct.value == false), true);
-        ***REMOVED***);
+      expect(sammelTermin.value, isTrue);
+      expect(andere.every((ct) => ct.value == false), true);
+    ***REMOVED***);
 
     testUI('Type Selection selects initially nothing if filter is empty',
-            (WidgetTester tester) async {
-          await tester.tap(find.byIcon(Icons.filter_alt_sharp));
-          await tester.pump();
+        (WidgetTester tester) async {
+      await tester.tap(find.byIcon(Icons.filter_alt_sharp));
+      await tester.pump();
 
-          await tester.tap(find.byKey(Key('type button')));
-          await tester.pump();
+      await tester.tap(find.byKey(Key('type button')));
+      await tester.pump();
 
-          var checkboxTiles =
+      var checkboxTiles =
           tester.widgetList<CheckboxListTile>(find.byType(CheckboxListTile));
 
-          expect(checkboxTiles.every((ct) => ct.value == false), true);
-        ***REMOVED***);
+      expect(checkboxTiles.every((ct) => ct.value == false), true);
+    ***REMOVED***);
 
     testUI('Type Selection saves selected types to filter',
-            (WidgetTester tester) async {
-          FilterWidgetState filterState = tester.state(find.byKey(Key('filter')));
+        (WidgetTester tester) async {
+      FilterWidgetState filterState = tester.state(find.byKey(Key('filter')));
 
-          await tester.tap(find.byIcon(Icons.filter_alt_sharp));
-          await tester.pump();
+      await tester.tap(find.byIcon(Icons.filter_alt_sharp));
+      await tester.pump();
 
-          await tester.tap(find.byKey(Key('type button')));
-          await tester.pump();
+      await tester.tap(find.byKey(Key('type button')));
+      await tester.pump();
 
-          await tester.tap(find.text('Sammeln'));
-          await tester.pump();
+      await tester.tap(find.text('Sammeln'));
+      await tester.pump();
 
-          await tester.tap(find.text('Fertig'));
-          await tester.pump();
+      await tester.tap(find.text('Fertig'));
+      await tester.pump();
 
-          await tester.tap(find.byKey(Key('filter button')));
-          await tester.pump();
+      await tester.tap(find.byKey(Key('filter button')));
+      await tester.pump();
 
-          expect(filterState.filter.typen, containsAll(['Sammeln']));
-        ***REMOVED***);
+      expect(filterState.filter.typen, containsAll(['Sammeln']));
+    ***REMOVED***);
 
     testUI('Filter opens Days selection with click at days button',
-            (WidgetTester tester) async {
-          await tester.tap(find.byIcon(Icons.filter_alt_sharp));
-          await tester.pump();
+        (WidgetTester tester) async {
+      await tester.tap(find.byIcon(Icons.filter_alt_sharp));
+      await tester.pump();
 
-          await tester.tap(find.byKey(Key('days button')));
-          await tester.pump();
+      await tester.tap(find.byKey(Key('days button')));
+      await tester.pump();
 
-          expect(find.byKey(Key('days selection dialog')), findsOneWidget);
-        ***REMOVED***);
+      expect(find.byKey(Key('days selection dialog')), findsOneWidget);
+    ***REMOVED***);
 
     // FIXME
     /*testUI('Filter opens Locations selection with click at locations button',
@@ -206,72 +208,72 @@ void main() {
     ***REMOVED***);*/
 
     testUI('Filter opens From Time selection with click at Zeit button',
-            (WidgetTester tester) async {
-          await tester.tap(find.byIcon(Icons.filter_alt_sharp));
-          await tester.pump();
+        (WidgetTester tester) async {
+      await tester.tap(find.byIcon(Icons.filter_alt_sharp));
+      await tester.pump();
 
-          await tester.tap(find.byKey(Key('time button')));
-          await tester.pump();
+      await tester.tap(find.byKey(Key('time button')));
+      await tester.pump();
 
-          expect(find.text('Startzeit'), findsOneWidget);
-          expect(find.byKey(Key('from time picker')), findsOneWidget);
-        ***REMOVED***);
+      expect(find.text('Startzeit'), findsOneWidget);
+      expect(find.byKey(Key('from time picker')), findsOneWidget);
+    ***REMOVED***);
 
     testUI('Filter opens To Time selection when From Time selection is closed',
-            (WidgetTester tester) async {
-          await tester.tap(find.byIcon(Icons.filter_alt_sharp));
-          await tester.pump();
+        (WidgetTester tester) async {
+      await tester.tap(find.byIcon(Icons.filter_alt_sharp));
+      await tester.pump();
 
-          await tester.tap(find.byKey(Key('time button')));
-          await tester.pump();
+      await tester.tap(find.byKey(Key('time button')));
+      await tester.pump();
 
-          await tester.tap(find.text('Weiter'));
-          await tester.pump();
+      await tester.tap(find.text('Weiter'));
+      await tester.pump();
 
-          expect(find.text('Endzeit'), findsOneWidget);
-          expect(find.byKey(Key('to time picker')), findsOneWidget);
-        ***REMOVED***);
+      expect(find.text('Endzeit'), findsOneWidget);
+      expect(find.byKey(Key('to time picker')), findsOneWidget);
+    ***REMOVED***);
 
     testUI('Filter intially shows time from filter in from time selection',
-            (WidgetTester tester) async {
-          FilterWidgetState filterState = tester.state(find.byKey(Key('filter')));
+        (WidgetTester tester) async {
+      FilterWidgetState filterState = tester.state(find.byKey(Key('filter')));
 
-          filterState.filter.von = TimeOfDay(hour: 19, minute: 15);
-          filterState.filter.bis = TimeOfDay(hour: 20, minute: 21);
+      filterState.filter.von = TimeOfDay(hour: 19, minute: 15);
+      filterState.filter.bis = TimeOfDay(hour: 20, minute: 21);
 
-          await tester.tap(find.byIcon(Icons.filter_alt_sharp));
-          await tester.pump();
+      await tester.tap(find.byIcon(Icons.filter_alt_sharp));
+      await tester.pump();
 
-          await tester.tap(find.byKey(Key('time button')));
-          await tester.pump();
+      await tester.tap(find.byKey(Key('time button')));
+      await tester.pump();
 
-          expect(find.text('19'), findsOneWidget);
-          expect(find.text('15'), findsOneWidget);
+      expect(find.text('19'), findsOneWidget);
+      expect(find.text('15'), findsOneWidget);
 
-          await tester.tap(find.text('Weiter'));
-          await tester.pump();
+      await tester.tap(find.text('Weiter'));
+      await tester.pump();
 
-          expect(find.text('20'), findsOneWidget);
-          expect(find.text('21'), findsOneWidget);
-        ***REMOVED***);
+      expect(find.text('20'), findsOneWidget);
+      expect(find.text('21'), findsOneWidget);
+    ***REMOVED***);
 
     testUI('Filter intially shows default time if filter is empty',
-            (WidgetTester tester) async {
-          await tester.tap(find.byIcon(Icons.filter_alt_sharp));
-          await tester.pump();
+        (WidgetTester tester) async {
+      await tester.tap(find.byIcon(Icons.filter_alt_sharp));
+      await tester.pump();
 
-          await tester.tap(find.byKey(Key('time button')));
-          await tester.pump();
+      await tester.tap(find.byKey(Key('time button')));
+      await tester.pump();
 
-          expect(find.text('12'), findsOneWidget);
-          expect(find.text('00'), findsOneWidget);
+      expect(find.text('12'), findsOneWidget);
+      expect(find.text('00'), findsOneWidget);
 
-          await tester.tap(find.text('Weiter'));
-          await tester.pump();
+      await tester.tap(find.text('Weiter'));
+      await tester.pump();
 
-          expect(find.text('12'), findsOneWidget);
-          expect(find.text('00'), findsOneWidget);
-        ***REMOVED***);
+      expect(find.text('12'), findsOneWidget);
+      expect(find.text('00'), findsOneWidget);
+    ***REMOVED***);
 
     testUI('Filter saves selected time to filter', (WidgetTester tester) async {
       FilterWidgetState filterState = tester.state(find.byKey(Key('filter')));
@@ -331,45 +333,46 @@ void main() {
     setUpUI((WidgetTester tester) async {***REMOVED***);
 
     testUI('initializes filter with default values if no storage is found',
-            (WidgetTester tester) async {
-          when(_storageService.loadFilter()).thenAnswer((_) async => Future.value(null));
+        (WidgetTester tester) async {
+      when(_storageService.loadFilter())
+          .thenAnswer((_) async => Future.value(null));
 
-          await pumpFilterWidget(tester);
+      await pumpFilterWidget(tester);
 
-          FilterWidgetState filterState = tester.state(find.byKey(Key('filter')));
+      FilterWidgetState filterState = tester.state(find.byKey(Key('filter')));
 
-          expect(filterState.filter.typen, []);
-          expect(filterState.filter.tage, []);
-          expect(filterState.filter.von, null);
-          expect(filterState.filter.bis, null);
-          expect(filterState.filter.orte, []);
-        ***REMOVED***);
+      expect(filterState.filter.typen, []);
+      expect(filterState.filter.tage, []);
+      expect(filterState.filter.von, null);
+      expect(filterState.filter.bis, null);
+      expect(filterState.filter.orte, []);
+    ***REMOVED***);
 
     testUI('loads initially filter from storage if found',
-            (WidgetTester tester) async {
-          when(_storageService.loadFilter()).thenAnswer((_) async => TermineFilter(
-              ['Sammeln', 'Infoveranstaltung'],
-              [DateTime(2020, 1, 14), DateTime(2020, 1, 16)],
-              TimeOfDay(hour: 12, minute: 30),
-              TimeOfDay(hour: 15, minute: 0),
-              [ffAlleeNord().name, tempVorstadt().name],
-              false,
-              false));
+        (WidgetTester tester) async {
+      when(_storageService.loadFilter()).thenAnswer((_) async => TermineFilter(
+          ['Sammeln', 'Infoveranstaltung'],
+          [DateTime(2020, 1, 14), DateTime(2020, 1, 16)],
+          TimeOfDay(hour: 12, minute: 30),
+          TimeOfDay(hour: 15, minute: 0),
+          [ffAlleeNord().name, tempVorstadt().name],
+          false,
+          false));
 
-          await pumpFilterWidget(tester);
+      await pumpFilterWidget(tester);
 
-          FilterWidgetState filterState = tester.state(find.byKey(Key('filter')));
-          var filter = filterState.filter;
+      FilterWidgetState filterState = tester.state(find.byKey(Key('filter')));
+      var filter = filterState.filter;
 
-          expect(filter.typen, containsAll(['Sammeln', 'Infoveranstaltung']));
-          expect(filter.tage.length, 2);
-          expect(filter.tage,
-              containsAll([DateTime(2020, 1, 14), DateTime(2020, 1, 16)]));
-          expect(filter.von, TimeOfDay(hour: 12, minute: 30));
-          expect(filter.bis, TimeOfDay(hour: 15, minute: 0));
-          expect(filter.orte,
-              containsAll(['Frankfurter Allee Nord', 'Tempelhofer Vorstadt']));
-        ***REMOVED***);
+      expect(filter.typen, containsAll(['Sammeln', 'Infoveranstaltung']));
+      expect(filter.tage.length, 2);
+      expect(filter.tage,
+          containsAll([DateTime(2020, 1, 14), DateTime(2020, 1, 16)]));
+      expect(filter.von, TimeOfDay(hour: 12, minute: 30));
+      expect(filter.bis, TimeOfDay(hour: 15, minute: 0));
+      expect(filter.orte,
+          containsAll(['Frankfurter Allee Nord', 'Tempelhofer Vorstadt']));
+    ***REMOVED***);
   ***REMOVED***);
 
   trainTranslation(MockTranslations());

@@ -92,6 +92,10 @@ class TestdatenVorrat {
             return TermineRestResource.TerminDto.convertFromTerminWithoutDetails(terminOhneTeilnehmerOhneDetails())
         ***REMOVED***
 
+        fun terminDtoMitDetails(): TermineRestResource.TerminDto {
+            return TermineRestResource.TerminDto.convertFromTerminWithoutDetails(terminOhneTeilnehmerMitDetails())
+        ***REMOVED***
+
         internal fun terminDetails(): TerminDetails {
             return TerminDetails(1, "Weltzeituhr", "Kommt zahlreich", "kalle@revo.de")
         ***REMOVED***

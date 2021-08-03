@@ -3,7 +3,9 @@ package de.kybernetik.rest
 import TestdatenVorrat.Companion.karl
 import TestdatenVorrat.Companion.rosa
 import TestdatenVorrat.Companion.bini
+import TestdatenVorrat.Companion.terminDetails
 import TestdatenVorrat.Companion.terminDto
+import TestdatenVorrat.Companion.terminDtoMitDetails
 import TestdatenVorrat.Companion.terminMitTeilnehmerMitDetails
 import TestdatenVorrat.Companion.terminMitTeilnehmerOhneDetails
 import TestdatenVorrat.Companion.terminOhneTeilnehmerMitDetails
