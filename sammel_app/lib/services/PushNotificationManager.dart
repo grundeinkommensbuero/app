@@ -47,10 +47,8 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     var listener = createPushListener(firebaseService, backend);
     updateService = PushUpdateService(userService, backend);
 
-    listener.then((listener) {
-      pushToken = listener.token;
-      updateMessages();
-    ***REMOVED***);
+    pushToken = listener.then((l) => l.token);
+    listener.then((listener) => updateMessages());
   ***REMOVED***
 
   Future<PushReceiveService> createPushListener(
