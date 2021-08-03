@@ -343,6 +343,7 @@ const Map<String, dynamic> en = {
   'Plakat löschen': 'Delete poster',
   'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?':
       'You entered this poster. Would you like to delete it again?',
+  'Plakate aufhängen': 'Put up posters',
 ***REMOVED***
 
 const Map<String, dynamic> ru = {
@@ -668,6 +669,7 @@ const Map<String, dynamic> ru = {
   'Plakat löschen': 'Plakat löschen',
   'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?':
       'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?',
+  'Plakate aufhängen': 'Plakate aufhängen',
 ***REMOVED***
 
 const Map<String, dynamic> fr = {
@@ -1002,6 +1004,7 @@ const Map<String, dynamic> fr = {
   'Plakat löschen': 'Plakat löschen',
   'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?':
       'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?',
+  'Plakate aufhängen': 'Plakate aufhängen',
 ***REMOVED***
 
 const Map<String, dynamic> de = {
@@ -1339,4 +1342,5 @@ const Map<String, dynamic> de = {
   'Plakat löschen': 'Plakat löschen',
   'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?':
       'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?',
+  'Plakate aufhängen': 'Plakate aufhängen',
 ***REMOVED***
