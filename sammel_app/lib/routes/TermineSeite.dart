@@ -127,42 +127,42 @@ class TermineSeiteState extends State<TermineSeite>
     );
 
     return ScaffoldMessenger(
-        // um Snackbar oberhalb der Footer-Buttons zu zeigen
+      // um Snackbar oberhalb der Footer-Buttons zu zeigen
         child: Scaffold(
-      body: Container(
-          decoration: CampaignTheme.background,
-          child: Stack(
-            alignment: Alignment.topCenter,
-            children: [
-              FadeTransition(
-                opacity: _fade!,
-                child: SlideTransition(
-                  position: _slide!,
-                  child: IndexedStack(
-                      children: [actionListView, actionMapView],
-                      index: navigation),
-                ),
-              ),
-              filterWidget!
+          body: Container(
+              decoration: CampaignTheme.background,
+              child: Stack(
+                alignment: Alignment.topCenter,
+                children: [
+                  FadeTransition(
+                    opacity: _fade!,
+                    child: SlideTransition(
+                      position: _slide!,
+                      child: IndexedStack(
+                          children: [actionListView, actionMapView],
+                          index: navigation),
+                    ),
+                  ),
+                  filterWidget!
+                ],
+              )),
+          bottomNavigationBar: BottomNavigationBar(
+            selectedItemColor: CampaignTheme.primary,
+            unselectedItemColor: Colors.black,
+            currentIndex: navigation,
+            onTap: swithPage,
+            backgroundColor: CampaignTheme.secondary,
+            items: [
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.view_list,
+                      key: Key('list view navigation button')),
+                  label: 'Liste'.tr()),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.map, key: Key('map view navigation button')),
+                  label: 'Karte'.tr())
             ],
-          )),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: CampaignTheme.primary,
-        unselectedItemColor: Colors.black,
-        currentIndex: navigation,
-        onTap: swithPage,
-        backgroundColor: CampaignTheme.secondary,
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.view_list,
-                  key: Key('list view navigation button')),
-              label: 'Liste'.tr()),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.map, key: Key('map view navigation button')),
-              label: 'Karte'.tr())
-        ],
-      ),
-    ));
+          ),
+        ));
   ***REMOVED***
 
   swithPage(index) async {
@@ -199,7 +199,8 @@ class TermineSeiteState extends State<TermineSeite>
 
     placardService = Provider.of<AbstractPlacardsService>(context);
 
-    Provider.of<AbstractUserService>(context)
+    Provider
+        .of<AbstractUserService>(context)
         .user
         .listen((user) => setState(() => me = user));
 
@@ -212,8 +213,9 @@ class TermineSeiteState extends State<TermineSeite>
     Future wait4Actions = termineService!
         .loadActions(filter)
         .then((termine) =>
-            setState(() => this.termine = termine..sort(Termin.compareByStart)))
-        .catchError((e, s) => ErrorService.handleError(e, s,
+        setState(() => this.termine = termine..sort(Termin.compareByStart)))
+        .catchError((e, s) =>
+        ErrorService.handleError(e, s,
             context: 'Aktionen konnten nicht geladen werden.'));
 
     Future wait4placards = placardService
@@ -226,7 +228,8 @@ class TermineSeiteState extends State<TermineSeite>
   void showRestError(RestFehler e) {
     showDialog(
         context: context,
-        builder: (context) => AlertDialog(
+        builder: (context) =>
+            AlertDialog(
               title: Text('Aktion konnte nicht angelegt werden').tr(),
               content: SelectableText(e.message),
               actions: <Widget>[
@@ -242,7 +245,7 @@ class TermineSeiteState extends State<TermineSeite>
     if (termin.id == null) return;
     try {
       var terminMitDetails =
-          await termineService!.getActionWithDetails(termin.id!);
+      await termineService!.getActionWithDetails(termin.id!);
       TerminDetailsCommand command = await showActionDetailsPage(
           context,
           terminMitDetails,
@@ -284,17 +287,23 @@ class TermineSeiteState extends State<TermineSeite>
                 leading: null,
                 automaticallyImplyLeading: false,
                 title: Text('Deine Aktion bearbeiten',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22.0,
-                            color: Color.fromARGB(255, 129, 28, 98)))
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22.0,
+                        color: Color.fromARGB(255, 129, 28, 98)))
                     .tr(),
               ),
               children: <Widget>[
                 Container(
-                  width: MediaQuery.of(context).size.width * 0.8,
-                  height: MediaQuery.of(context).size.height * 0.8,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width * 0.8,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height * 0.8,
                   child: ActionEditor(
                       initAction: termin,
                       onFinish: afterActionEdit,
@@ -332,17 +341,23 @@ class TermineSeiteState extends State<TermineSeite>
                 leading: null,
                 automaticallyImplyLeading: false,
                 title: Text('Über Aktion berichten',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22.0,
-                            color: Color.fromARGB(255, 129, 28, 98)))
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22.0,
+                        color: Color.fromARGB(255, 129, 28, 98)))
                     .tr(),
               ),
               children: <Widget>[
                 Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    height: MediaQuery.of(context).size.height * 0.8,
+                    width: MediaQuery
+                        .of(context)
+                        .size
+                        .width * 0.8,
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height * 0.8,
                     child: EvaluationForm(termin,
                         onFinish: afterActionEvaluation,
                         key: Key('evaluation editor')))
@@ -390,7 +405,7 @@ class TermineSeiteState extends State<TermineSeite>
 
   updateAction(Termin updatedAction, bool remove) {
     var index =
-        termine.indexWhere((Termin action) => action.id == updatedAction.id);
+    termine.indexWhere((Termin action) => action.id == updatedAction.id);
 
     if (index == -1) return;
 
@@ -433,9 +448,10 @@ class TermineSeiteState extends State<TermineSeite>
   Future<void> joinAction(Termin action) async {
     if (action.id == null || me == null) return;
     await termineService?.joinAction(action.id!);
-    setState(() => termine
-        .where((t) => t.id == action.id)
-        .forEach((Termin t) => t.participants?.add(me!)));
+    setState(() =>
+        termine
+            .where((t) => t.id == action.id)
+            .forEach((Termin t) => t.participants?.add(me!)));
   ***REMOVED***
 
   Future<void> leaveAction(Termin action) async {
@@ -454,10 +470,11 @@ class TermineSeiteState extends State<TermineSeite>
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => Scaffold(
-                appBar: AppBar(title: Text(title)),
-                body: ActionList(actions, isMyAction, isPastAction,
-                    iAmParticipant, openTerminDetails))));
+            builder: (context) =>
+                Scaffold(
+                    appBar: AppBar(title: Text(title)),
+                    body: ActionList(actions, isMyAction, isPastAction,
+                        iAmParticipant, openTerminDetails))));
   ***REMOVED***
 
   checkDeepLinks() async {
@@ -513,7 +530,15 @@ class TermineSeiteState extends State<TermineSeite>
 
     final placard = await placardService.createPlacard(Placard(
         null, point.latitude, point.longitude, geoData.fullAdress, me!.id!));
-    if (placard != null) setState(() => placards.add(placard));
+    if (placard != null) {
+      setState(() => placards.add(placard));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Neues Plakat an der Adresse "${placard.adresse***REMOVED***" eingetragen'.tr(),
+              style: TextStyle(color: Colors.black87)),
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 5),
+          backgroundColor: Color.fromARGB(220, 255, 255, 250)));
+    ***REMOVED***
   ***REMOVED***
 
   void switchToActionCreator(LatLng point) =>
@@ -548,7 +573,8 @@ class ButtonRow extends StatelessWidget {
   ***REMOVED***
 ***REMOVED***
 
-AlertDialog confirmDeleteDialog(BuildContext context) => AlertDialog(
+AlertDialog confirmDeleteDialog(BuildContext context) =>
+    AlertDialog(
         key: Key('deletion confirmation dialog'),
         title: Text('Aktion Löschen').tr(),
         content: Text('Möchtest du diese Aktion wirklich löschen?').tr(),
