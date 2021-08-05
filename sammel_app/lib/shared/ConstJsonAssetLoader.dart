@@ -162,7 +162,7 @@ const Map<String, dynamic> en = {
   "Allgemeine Infos": "General info",
   "Nachricht von {name***REMOVED***": "Message from {name***REMOVED***",
   "Problem beim Einrichten von Push-Nachrichten":
-      "Error when opening a push message",
+      "Error on establishing push messages",
   "Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. Das kann der Fall sein, wenn etwa ein Google-freies Betriebssystem genutzt wird. Darum kann die App nur Benachrichtigungen empfangen während sie geöffnet ist.":
       "A connection to the Google Push service could not be established. That can happen if, for example, a Google-free operating system is being used, in which case the app can only receive notifications while it’s open.",
   "Beim Abrufen von Nachrichten ist ein Fehler aufgetreten. Das regelmäßige Abrufen von Nachrichten wird deshalb deaktiviert":
