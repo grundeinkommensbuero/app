@@ -246,7 +246,7 @@ class TermineSeiteState extends State<TermineSeite>
     try {
       var terminMitDetails =
       await termineService!.getActionWithDetails(termin.id!);
-      TerminDetailsCommand command = await showActionDetailsPage(
+      TerminDetailsCommand? command = await showActionDetailsPage(
           context,
           terminMitDetails,
           isMyAction(termin),
