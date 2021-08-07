@@ -85,11 +85,11 @@ class SelectableVisitedHouse extends VisitedHouse {
     this.selected = selected;
   ***REMOVED***
 
-  SelectableVisitedHouse.fromVisitedHouse(VisitedHouse vh)
+  SelectableVisitedHouse.fromVisitedHouse(VisitedHouse vh, {selected: false***REMOVED*** )
   : super(  vh.osm_id, vh.latitude, vh.longitude, vh.adresse,
       vh.shape, vh.visitation_events)
   {
-    selected = false;
+    this.selected = selected;
   ***REMOVED***
 
   SelectableVisitedHouse.clone(SelectableVisitedHouse vh)
@@ -107,7 +107,7 @@ class BuildingColorSelector {
   static var outdated_time_span = Duration(days: 7);
 
 
-  static Color getDrawColor(SelectableVisitedHouse building) {
+  static Color getDrawColorForSelectable(SelectableVisitedHouse building) {
     if (building.selected) {
       return selection_color;
     ***REMOVED***
@@ -121,4 +121,18 @@ class BuildingColorSelector {
       return first_time_color;
     ***REMOVED***
   ***REMOVED***
+
+  static Color getDrawColorForBuilding(VisitedHouse building) {
+    if (building.visitation_events != null && building.visitation_events.length > 0) {
+      if (DateTime.now().difference(building.visitation_events.last.datum) < outdated_time_span) {
+        return recently_visited_color;
+      ***REMOVED*** else {
+        return outdated_color;
+      ***REMOVED***
+    ***REMOVED*** else {
+      return first_time_color;
+    ***REMOVED***
+  ***REMOVED***
+
 ***REMOVED***
+

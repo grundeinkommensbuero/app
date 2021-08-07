@@ -69,22 +69,32 @@ class VisitedHouseView
 
   List<Polygon> buildDrawablePolygonsFromView()
   {
-    List<Polygon> p = buildings.
+    List<SelectableVisitedHouse> b_list = [];
+    if(selected_building != null)
+      {
+        print("### selected building not null");
+        b_list = buildings.where((element) => element.osm_id != selected_building!.osm_id).toList()..add(selected_building!);
+      ***REMOVED***
+    else{
+      b_list = buildings;
+    ***REMOVED***
+    List<Polygon> p = b_list.
     map((building) => Polygon(
-        color: BuildingColorSelector.getDrawColor(building),
+        color: BuildingColorSelector.getDrawColorForSelectable(building),
         borderStrokeWidth: 2.0,
         borderColor: Color.fromARGB(250, CampaignTheme.secondary.red,
             CampaignTheme.secondary.green, CampaignTheme.secondary.blue),
         points: building.shape))
         .toList();
+    /*
     if(selected_building != null && selected_building?.shape != null) {
         p.add(Polygon(
-            color: BuildingColorSelector.getDrawColor(selected_building!),
+            color: BuildingColorSelector.getDrawColorForSelectable(selected_building!),
             borderStrokeWidth: 2.0,
             borderColor: Color.fromARGB(250, CampaignTheme.secondary.red,
                 CampaignTheme.secondary.green, CampaignTheme.secondary.blue),
             points: selected_building!.shape));
-      ***REMOVED***
+      ***REMOVED****/
     return p;
   ***REMOVED***
 ***REMOVED***

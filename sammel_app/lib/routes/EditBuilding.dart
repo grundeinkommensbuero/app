@@ -55,29 +55,29 @@ addNewVisitedHouseEvent(BuildContext context, Future<VisitedHouse?> future_vh) a
    ***REMOVED****/
 ***REMOVED***
 
-showAddBuildingDialog(
+showEditVisitedHouseDialog(
     {required BuildContext context, required VisitedHouseView building_view***REMOVED***) {
   Future<VisitedHouse?> future_vh = showDialog(
     context: context,
-    builder: (context) => AddBuildingDialog(building_view),
+    builder: (context) => EditBuildingDialog(building_view),
   );
   return addNewVisitedHouseEvent(context, future_vh);
 ***REMOVED***
 
-class AddBuildingDialog extends StatefulWidget {
+class EditBuildingDialog extends StatefulWidget {
   late final LatLng? center;
   late final VisitedHouseView building_view;
 
-  AddBuildingDialog(this.building_view)
+  EditBuildingDialog(this.building_view)
       : super(key: Key('add building dialog'));
 
   @override
   State<StatefulWidget> createState() {
-    return AddBuildingDialogState(building_view);
+    return EditBuildingDialogState(building_view);
   ***REMOVED***
 ***REMOVED***
 
-class AddBuildingDialogState extends State<AddBuildingDialog> {
+class EditBuildingDialogState extends State<EditBuildingDialog> {
   LocationMarker? marker;
   late TextEditingController visitedHouseController;
   late TextEditingController visitedHousePartController;
@@ -87,7 +87,7 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
 
   var showLoadingIndicator = false;
 
-  AddBuildingDialogState(VisitedHouseView building_view) {
+  EditBuildingDialogState(VisitedHouseView building_view) {
     this.building_view = building_view;
     this.center = LatLng(
         0.5 * (building_view.bbox.maxLatitude + building_view.bbox.minLatitude),
@@ -116,10 +116,6 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
           key: Key('venue dialog finish button'),
           child: Text("Fertig").tr(),
           onPressed: () {
-            building_view.selected_building?.adresse =
-                visitedHouseController.text;
-            building_view.selected_building?.visitation_events.last.hausteil =
-                visitedHousePartController.text;
             if (Provider.of<AbstractUserService>(context, listen: false)
                     .latestUser ==
                 null) throw ServerException('Couldnt fetch user from server');
@@ -154,32 +150,21 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
         height: 10.0,
       ),
       Text(
-        'Addresse',
+        'Visitation Events',
         textScaleFactor: 0.8,
       ).tr(),
       SizedBox(
         height: 5.0,
-      ),
-      TextFormField(
-        key: Key('visited house adress input'),
-        //  keyboardType: TextInputType.multiline,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(),
-        ),
-        //onChanged: (input) => location.description = input,
-        controller: visitedHouseController,
-      ),
-      Text(
-        'Hausteil: Vorderhaus, Seitenflügel, Hausnummer, Etage'.tr(),
-        textScaleFactor: 0.8,
-      ).tr(),
-      TextFormField(
-        key: Key('visited house part input'),
-        // keyboardType: TextInputType.multiline,
-        //onChanged: (input) => location.description = input,
-        controller: visitedHousePartController,
       )
     ];
+    if (building_view.selected_building != null &&
+        building_view.selected_building!.visitation_events.length > 0) {
+      widgets.addAll(building_view.selected_building!.visitation_events
+          .map((e) => buildVisitationEventItem(e)));
+      //widgets.add(Flexible(child: ListView.builder(shrinkWrap: true,
+      //    itemCount: building_view.selected_building!.visitation_events.length,
+      //    itemBuilder: buildVisitationEventItem)));
+    ***REMOVED***
     return widgets;
   ***REMOVED***
 
@@ -210,38 +195,13 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
                       markers: marker == null ? [] : [marker!]),
                   AttributionOptions(),
                 ]);
-    if(showLoadingIndicator)
-      {
-        return Stack(children: [map, Opacity(opacity: 0.7, child: Container(width: 300, height: 300,color: CampaignTheme.disabled)), Center(child: SizedBox(width: 100, height: 100, child: LoadingIndicator(
-            indicatorType: Indicator.ballRotateChase,
-            color: CampaignTheme.primary)))]);
-      ***REMOVED***
     return map;
   ***REMOVED***
 
   houseSelected(LatLng point) async {
 
-    setState(() {
-      print('### setState');
-      showLoadingIndicator = true;
-    ***REMOVED***);
-
     SelectableVisitedHouse? building = building_view.getBuildingByPoint(point);
     //not in current view
-    if (building == null) {
-      var building_from_server =
-          await Provider.of<AbstractVisitedHousesService>(context,
-                  listen: false)
-              .getVisitedHouseOfPoint(point, true)
-              .catchError((e, s) {
-        ErrorService.handleError(e, s);
-        return null;
-      ***REMOVED***);
-      if (building_from_server != null) {
-        building =
-            SelectableVisitedHouse.fromVisitedHouse(building_from_server);
-      ***REMOVED***
-    ***REMOVED***
     setState(() {
       if (building != null &&
           building_view.selected_building?.osm_id != building.osm_id) {
@@ -262,11 +222,42 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
           visitedHousePartController.text =
               building_view.selected_building!.visitation_events.last.hausteil;
         ***REMOVED***
-        showLoadingIndicator = false;
       ***REMOVED***
       //venueController.text = geodata.description;
       // marker = LocationMarker(point);
     ***REMOVED***);
+  ***REMOVED***
+
+  Widget buildVisitationEventItem(VisitedHouseEvent item) {
+    // VisitedHouseEvent item = building_view.selected_building!
+    //   .visitation_events[index];
+    if (item.benutzer ==
+        Provider.of<AbstractUserService>(context, listen: false)
+            .latestUser!
+            .id) {
+      return Row( children: [
+        Expanded(
+            child: ListTile(
+          title: Text(
+              "${DateFormat("yyyy-MM-dd").format(item.datum)***REMOVED***, ${item.hausteil***REMOVED***"),
+        )),
+
+             IconButton(
+                icon: Icon(Icons.clear),
+                onPressed: () {
+                  // Remove the item from the data source.
+                  setState(() {
+                    building_view.selected_building!.visitation_events
+                        .remove(item);
+                  ***REMOVED***);
+                ***REMOVED***)
+      ]);
+    ***REMOVED*** else {
+      return ListTile(
+        title: Text(
+            "${DateFormat("yyyy-MM-dd").format(item.datum)***REMOVED***, ${item.hausteil***REMOVED***"),
+      );
+    ***REMOVED***
   ***REMOVED***
 ***REMOVED***
 

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
+import 'package:sammel_app/model/Building.dart';
 import 'package:sammel_app/model/Evaluation.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Placard.dart';
@@ -37,6 +38,7 @@ import 'ActionEditor.dart';
 import 'ActionList.dart';
 import 'ActionMap.dart';
 import 'AddBuilding.dart';
+import 'EditBuilding.dart';
 import 'FilterWidget.dart';
 import 'MapActionDialog.dart';
 
@@ -124,6 +126,7 @@ class TermineSeiteState extends State<TermineSeite>
       openActionDetails: openTerminDetails,
       openPlacardDialog: openPlacardDialog,
       mapAction: mapAction,
+      mapTap: mapTap,
       mapController: mapController,
     );
 
@@ -543,10 +546,8 @@ class TermineSeiteState extends State<TermineSeite>
     BoundingBox bbox = BoundingBox(point.latitude-lat_diff, point.longitude-lng_diff,
                                     point.latitude+lat_diff, point.longitude+lng_diff);
     var building_view = Provider.of<AbstractVisitedHousesService>(context, listen: false).getBuildingsInArea(bbox);
-    showAddBuildingDialog(context: context, building_view: building_view);
-//    setState(() {
-//      this.mapController.move(this.mapController.center, this.mapController.zoom);
-//    ***REMOVED***);
+    await showAddBuildingDialog(context: context, building_view: building_view);
+    setState(() {***REMOVED***);
   ***REMOVED***
 
   @override
@@ -556,6 +557,24 @@ class TermineSeiteState extends State<TermineSeite>
     ***REMOVED*** catch (_) {***REMOVED***
     ;
     super.dispose();
+  ***REMOVED***
+
+  mapTap(LatLng point) async {
+    Future<VisitedHouse?> vh_future = Provider.of<AbstractVisitedHousesService>(context, listen: false).getVisitedHouseOfPoint(point, false);
+    VisitedHouse? vh = await vh_future;
+    if(vh != null)
+      {
+        var show_distance_in_m = 30.0;
+        var lng_diff = DistanceHelper.getLongDiffFromM(point, show_distance_in_m);
+        var lat_diff = DistanceHelper.getLatDiffFromM(point, show_distance_in_m);
+        BoundingBox bbox = BoundingBox(point.latitude-lat_diff, point.longitude-lng_diff,
+            point.latitude+lat_diff, point.longitude+lng_diff);
+        var building_view = Provider.of<AbstractVisitedHousesService>(context, listen: false).getBuildingsInArea(bbox);
+        print("### selecting building");
+        building_view.selected_building = SelectableVisitedHouse.fromVisitedHouse(vh, selected: true);
+        await showEditVisitedHouseDialog(context: context, building_view: building_view);
+        setState(() {***REMOVED***);
+      ***REMOVED***
   ***REMOVED***
 ***REMOVED***
 

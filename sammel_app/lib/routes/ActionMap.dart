@@ -6,6 +6,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/Provisioning.dart';
+import 'package:sammel_app/model/Building.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Placard.dart';
 import 'package:sammel_app/model/Termin.dart';
@@ -29,6 +30,7 @@ class ActionMap extends StatefulWidget {
   final Function(Termin) openActionDetails;
   final Function(Placard) openPlacardDialog;
   final Function(LatLng point) mapAction;
+  final Function(LatLng point) mapTap;
   late final MapController mapController;
 
   // no better way yet: https://github.com/dart-lang/sdk/issues/4596
@@ -48,6 +50,7 @@ class ActionMap extends StatefulWidget {
     this.openPlacardDialog = emptyFunction,
     this.iAmParticipant = emptyFunction,
     this.mapAction = emptyFunction,
+    this.mapTap = emptyFunction,
     mapController,
   ***REMOVED***) : super(key: key) {
     this.mapController = mapController ?? MapController();
@@ -63,7 +66,6 @@ class ActionMapState extends State<ActionMap> {
   var locationPermissionGranted = false;
   List<Marker> markers = [];
   var initialized = false;
-  List<Polygon> visibleHouses = [];
 
   @override
   void initState() {
@@ -81,7 +83,7 @@ class ActionMapState extends State<ActionMap> {
           urlTemplate: "https://{s***REMOVED***.tile.openstreetmap.org/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
           subdomains: ['a', 'b', 'c']),
       PolygonLayerOptions(
-          polygons: visibleHouses, polygonCulling: true),
+          polygons: generateVisitedHousePolygons(), polygonCulling: true),
       MarkerLayerOptions(markers: markers),
     ];
     layers.add(AttributionOptions());
@@ -89,6 +91,7 @@ class ActionMapState extends State<ActionMap> {
     var flutterMap = FlutterMap(
       key: Key('action map map'),
       options: MapOptions(
+        onTap: (LatLng point) => widget.mapTap(point),
         onLongPress: (LatLng point) => widget.mapAction(point),
         plugins: plugins,
         center: LatLng(geo.initCenterLat, geo.initCenterLong),
@@ -100,7 +103,7 @@ class ActionMapState extends State<ActionMap> {
         minZoom: geo.zoomMin,
         onPositionChanged: (position, _) => widget.mapController.onReady.then(
             (_) =>
-                setState(() {this.markers = generateListLocationMarkers(); this.visibleHouses = generateVisitedHousePolygons();***REMOVED***)),
+                setState(() {this.markers = generateListLocationMarkers(); ***REMOVED***)),
       ),
       layers: layers,
       mapController: widget.mapController,
@@ -111,8 +114,12 @@ class ActionMapState extends State<ActionMap> {
 
   List<Polygon> generateVisitedHousePolygons()
   {
-    if(!initialized || widget.mapController.zoom > 14)
+    if(initialized && widget.mapController.zoom > 14)
       {
+        print("### creating new visited house list");
+        //return widget.visitedHouses;
+
+
         BoundingBox bbox = BoundingBox(widget.mapController.bounds!.south, widget.mapController.bounds!.west, widget.mapController.bounds!.north,
             widget.mapController.bounds!.east);
         VisitedHouseView vhv = Provider.of<AbstractVisitedHousesService>(context, listen: false).getBuildingsInArea(bbox);

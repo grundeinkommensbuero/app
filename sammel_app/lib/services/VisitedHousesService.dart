@@ -57,6 +57,10 @@ abstract class AbstractVisitedHousesService extends BackendService {
     ***REMOVED***
     return null;
   ***REMOVED***
+
+  getAllHouses() {
+    return localBuildingMap.values.toList();
+  ***REMOVED***
 ***REMOVED***
 
 class VisitedHousesService extends AbstractVisitedHousesService {
@@ -192,12 +196,12 @@ class DemoVisitedHousesService extends AbstractVisitedHousesService {
 
 
   @override
-  Future<VisitedHouse> createVisitedHouse(VisitedHouse houses) {
+  Future<VisitedHouse> createVisitedHouse(VisitedHouse house) {
 
-         VisitedHouse? building =  localBuildingMap[houses.osm_id];
+         VisitedHouse? building =  localBuildingMap[house.osm_id];
          if(building != null)
            {
-             for(VisitedHouseEvent event in houses.visitation_events)
+             for(VisitedHouseEvent event in house.visitation_events)
                {
                  if(event.id == -1) {
                    event.id = maxId;
@@ -205,7 +209,10 @@ class DemoVisitedHousesService extends AbstractVisitedHousesService {
                  ***REMOVED***
                ***REMOVED***
            ***REMOVED***
-         localBuildingMap[houses.osm_id] = houses;
+         if(house.visitation_events.isEmpty)
+           localBuildingMap.remove(house.osm_id);
+         else
+          localBuildingMap[house.osm_id] = house;
 
     /*
     VisitedHouse? vh = localBuildingMap[houses.osm_id];
@@ -217,7 +224,7 @@ class DemoVisitedHousesService extends AbstractVisitedHousesService {
       localBuildingMap[houses.osm_id] = houses;
       vh = houses;
     ***REMOVED****/
-    return Future.value(houses);
+    return Future.value(house);
   ***REMOVED***
   @override
   Future<VisitedHouse?> getVisitedHouseOfPoint(LatLng point, bool check_on_server) async {
@@ -226,6 +233,10 @@ class DemoVisitedHousesService extends AbstractVisitedHousesService {
     {
       return vh_of_point;
     ***REMOVED***
+    if(!check_on_server)
+      {
+        return null;
+      ***REMOVED***
     Future<List> s_future = geoService.getPolygonAndDescriptionOfPoint(point);
     List s = await s_future;
     GeoData gd = s[1];
@@ -238,6 +249,11 @@ class DemoVisitedHousesService extends AbstractVisitedHousesService {
       double lng_5m = DistanceHelper.getLongDiffFromM(point, 5.0);
       shape = [LatLng(point.latitude-lat_5m, point.longitude-lng_5m), LatLng(point.latitude+lat_5m, point.longitude-lng_5m),
         LatLng(point.latitude+lat_5m, point.longitude+lng_5m),LatLng(point.latitude-lat_5m, point.longitude+lng_5m)];
+    ***REMOVED***
+    if(osm_id == null)
+    {
+      //in this case we create the osm id by the center
+      osm_id = point.hashCode;
     ***REMOVED***
     return getBuildingFromJson(osm_id, point, gd, shape);
   ***REMOVED***
