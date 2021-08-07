@@ -1,218 +1,328 @@
-
-
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:poly/poly.dart' as poly;
 import 'package:provider/provider.dart';
+import 'package:sammel_app/model/Building.dart';
 import 'package:sammel_app/model/Kiez.dart';
+import 'package:sammel_app/services/UserService.dart';
+import 'package:sammel_app/services/VisitedHouseView.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
+import 'package:sammel_app/services/VisitedHousesService.dart';
 import 'package:sammel_app/shared/AttributionPlugin.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
+import 'package:sammel_app/shared/ExpandableConstrainedBox.dart';
 import 'package:sammel_app/shared/NoRotation.dart';
+import 'package:sammel_app/shared/ServerException.dart';
 
 import '../Provisioning.dart';
 
-Future<Building?> showAddBuildingDialog(
-    {required BuildContext context,
-      String? initDescription,
-      LatLng? initCoordinates,
-      Kiez? initKiez,
-      LatLng? center***REMOVED***) =>
-    showDialog(
-      context: context,
-      builder: (context) =>
-          LocationDialog(initDescription, initCoordinates, initKiez, center),
-    );
+addNewVisitedHouseEvent(BuildContext context, VisitedHouse? vh) async {
+  if (vh != null) {
+    //the last event is new. register at server
+    var abstractVisitedHousesService =
+        Provider.of<AbstractVisitedHousesService>(context, listen: false);
+    Future<VisitedHouse?> future_new_house =
+        abstractVisitedHousesService.createVisitedHouse(vh);
+  ***REMOVED***
+  /*
+     VisitedHouse? new_house = await future_new_house;
+
+     if(new_house != null)
+       {
+         VisitedHouse? building =  abstractVisitedHousesService.localBuildingMap[new_house.osm_id]
+         if(abstractVisitedHousesService.localBuildingMap.containsKey(new_house.osm_id))
+           {
+             ?.visitation_events.add(new_house.visitation_events.last);
+
+             for(VisitedHouseEvent event in new_house.visitation_events)
+               {
+                 if
+               ***REMOVED***
+           ***REMOVED***
+         else
+           {
+             abstractVisitedHousesService.localBuildingMap[new_house.osm_id] = new_house;
+           ***REMOVED***
+       ***REMOVED***
+   ***REMOVED****/
+***REMOVED***
+
+showAddBuildingDialog(
+    {required BuildContext context, required VisitedHouseView building_view***REMOVED***) {
+  Future<VisitedHouse?> future_vh = showDialog(
+    context: context,
+    builder: (context) => AddBuildingDialog(building_view),
+  );
+  future_vh.then((vh) => {
+        if (future_vh != null) {addNewVisitedHouseEvent(context, vh)***REMOVED***
+      ***REMOVED***);
+***REMOVED***
 
 class AddBuildingDialog extends StatefulWidget {
-  final LatLng? center;
-  final LatLng? initCoordinates;
-  final String? initDescription;
-  final Kiez? initKiez;
+  late final LatLng? center;
+  late final VisitedHouseView building_view;
 
-  LocationDialog(
-      this.initDescription, this.initCoordinates, this.initKiez, this.center)
-      : super(key: Key('location dialog'));
+  AddBuildingDialog(this.building_view)
+      : super(key: Key('add building dialog'));
 
   @override
   State<StatefulWidget> createState() {
-    LocationMarker? initMarker =
-    initCoordinates != null ? LocationMarker(initCoordinates!) : null;
-    var location = Location(initDescription ?? '', initCoordinates, initKiez);
-    return LocationDialogState(location, initMarker, center);
+    return AddBuildingDialogState(building_view);
   ***REMOVED***
 ***REMOVED***
 
-class AddBuildingDialogState extends State<LocationDialog> {
+class AddBuildingDialogState extends State<AddBuildingDialog> {
   LocationMarker? marker;
-  late Location location;
-  late TextEditingController venueController;
-  BuildingView building_view;
+  late TextEditingController visitedHouseController;
+  late TextEditingController visitedHousePartController;
+  @required
+  late VisitedHouseView building_view;
+  late LatLng center;
 
-  AddBuildingDialogState(
-      Location initVenue, LocationMarker? initMarker, LatLng? center, BuildingView building_view) {
-    marker = initMarker;
-    location = initVenue;
+  var showLoadingIndicator = false;
+
+  AddBuildingDialogState(VisitedHouseView building_view) {
     this.building_view = building_view;
-    venueController = TextEditingController(text: location.description);
+    this.center = LatLng(
+        0.5 * (building_view.bbox.maxLatitude + building_view.bbox.minLatitude),
+        0.5 *
+            (building_view.bbox.maxLongitude +
+                building_view.bbox.minLongitude));
+    visitedHouseController = TextEditingController(text: '');
+    visitedHousePartController = TextEditingController(text: '');
   ***REMOVED***
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Treffpunkt').tr(),
+      title: Text('Besuchtes Haus').tr(),
       content: SingleChildScrollView(
-          child: ListBody(children: [
-            Text(
-              'Wähle auf der Karte einen Treffpunkt aus.',
-              textScaleFactor: 0.9,
-            ).tr(),
-            SizedBox(
-              height: 5.0,
-            ),
-            Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: CampaignTheme.secondary, width: 1.0)),
-                child: SizedBox(
-                    height: 300.0,
-                    width: 300.0,
-                    child: FlutterMap(
-                        key: Key('venue map'),
-                        options: MapOptions(
-                            center: widget.center ??
-                                LatLng(geo.initCenterLat, geo.initCenterLong),
-                            zoom: widget.center != null ? geo.initZoom : 10.0,
-                            interactiveFlags: noRotation,
-                            swPanBoundary:
-                            LatLng(building_view.bbox.minLatitude, building_view.bbox.minLongitude),
-                            nePanBoundary:
-                            LatLng(building_view.bbox.maxLatitude, building_view.bbox.maxLongitude),
-                            maxZoom: geo.zoomMax,
-                            minZoom: geo.zoomMin,
-                            onTap: locationSelected,
-                            plugins: [AttributionPlugin()]),
-                        layers: [
-                          TileLayerOptions(
-                              urlTemplate:
-                              "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
-                              subdomains: ['a', 'b', 'c']),
-                          PolygonLayerOptions(
-                              polygons: buildDrablePolygonsFromView(), polygonCulling: true),
-                          MarkerLayerOptions(
-                              markers: marker == null ? [] : [marker!]),
-                          AttributionOptions(),
-                        ]))),
-            SizedBox(
-              height: 5.0,
-            ),
-            Text(
-                location.kiez != null
-                    ? '${location.kiez!.name***REMOVED*** in ${location.kiez!.region***REMOVED***'
-                    : '',
-                style: TextStyle(fontSize: 13, color: CampaignTheme.secondary),
-                softWrap: false,
-                overflow: TextOverflow.fade),
-            SizedBox(
-              height: 10.0,
-            ),
-            Text(
-              'Du kannst eine eigene Beschreibung angeben, '
-                  'z.B. "Unter der Weltzeituhr" oder "Tempelhofer Feld, '
-                  'Eingang Kienitzstraße":',
-              textScaleFactor: 0.8,
-            ).tr(),
-            SizedBox(
-              height: 5.0,
-            ),
-            TextFormField(
-              key: Key('venue description input'),
-              keyboardType: TextInputType.multiline,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-              ),
-              onChanged: (input) => location.description = input,
-              controller: venueController,
-            ),
-          ])),
+          child: Column(
+                  mainAxisSize: MainAxisSize.min, children: build_widgets())),
       actions: [
         TextButton(
           child: Text("Abbrechen").tr(),
           onPressed: () {
-            Navigator.pop(
-                context,
-                Location(widget.initDescription, widget.initCoordinates,
-                    widget.initKiez));
+            Navigator.pop(context, null);
           ***REMOVED***,
         ),
         TextButton(
           key: Key('venue dialog finish button'),
           child: Text("Fertig").tr(),
           onPressed: () {
-            Navigator.pop(context, location);
+            building_view.selected_building?.adresse =
+                visitedHouseController.text;
+            building_view.selected_building?.visitation_events.last.hausteil =
+                visitedHousePartController.text;
+            if (Provider.of<AbstractUserService>(context, listen: false)
+                    .latestUser ==
+                null) throw ServerException('Couldnt fetch user from server');
+            //   building_view.selected_building?.visitation_events.add(VisitedHouseEvent(-1, Provider.of<AbstractUserService>(context, listen: false).latestUser!.id!, DateTime.now()));
+            Navigator.pop(context, building_view.selected_building);
           ***REMOVED***,
         ),
       ],
     );
   ***REMOVED***
 
-  Set<Polygon> buildDrablePolygonsFromView()
-  {
-      return building_view.buildings.
-          .map((building) => Polygon(
-          color: Colors.transparent,
-          borderStrokeWidth: 2.0,
-          borderColor: Color.fromARGB(250, CampaignTheme.secondary.red,
-              CampaignTheme.secondary.green, CampaignTheme.secondary.blue),
-          points: bezirk.polygon))
-          .toSet();
+  List<Widget> build_widgets() {
+    var widgets = [
+      Text(
+        'Wähle das Haus auf der Karte aus.',
+        textScaleFactor: 0.9,
+      ).tr(),
+      SizedBox(
+        height: 5.0,
+      ),
+      Container(
+          decoration: BoxDecoration(
+              border: Border.all(color: CampaignTheme.secondary, width: 1.0)),
+          child: SizedBox(
+              height: 300.0,
+              width: 300.0,
+              child: buildFlutterMap())),
+      SizedBox(
+        height: 5.0,
+      ),
+      SizedBox(
+        height: 10.0,
+      ),
+      Text(
+        'Addresse',
+        textScaleFactor: 0.8,
+      ).tr(),
+      SizedBox(
+        height: 5.0,
+      ),
+      TextFormField(
+        key: Key('visited house adress input'),
+        //  keyboardType: TextInputType.multiline,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+        ),
+        //onChanged: (input) => location.description = input,
+        controller: visitedHouseController,
+      ),
+      Text(
+        'Hausteil: Vorderhaus, Seitenflügel, Hausnummer'.tr(),
+        textScaleFactor: 0.8,
+      ).tr(),
+      TextFormField(
+        key: Key('visited house part input'),
+        // keyboardType: TextInputType.multiline,
+        //onChanged: (input) => location.description = input,
+        controller: visitedHousePartController,
+      )
+    ];
+    if (building_view.selected_building != null &&
+        building_view.selected_building!.visitation_events.length > 0) {
+      widgets.addAll(building_view.selected_building!.visitation_events
+          .map((e) => buildVisitationEventItem(e)));
+      //widgets.add(Flexible(child: ListView.builder(shrinkWrap: true,
+      //    itemCount: building_view.selected_building!.visitation_events.length,
+      //    itemBuilder: buildVisitationEventItem)));
+    ***REMOVED***
+    return widgets;
   ***REMOVED***
 
-  locationSelected(LatLng point) async {
-    var geodata = await Provider.of<GeoService>(context, listen: false)
-        .getDescriptionToPoint(point)
-        .catchError((e, s) {
-      ErrorService.handleError(e, s);
-      return GeoData('', '', '');
-    ***REMOVED***);
-    Kiez? kiez = (await Provider.of<StammdatenService>(context, listen: false)
-        .kieze)
-    // ignore: unnecessary_cast
-        .map((kiez) => kiez as Kiez?) // nötig wegen orElse => null
-        .firstWhere(
-            (kiez) => poly.Polygon(kiez!.polygon
-            .map((latlng) =>
-            poly.Point<num>(latlng.latitude, latlng.longitude))
-            .toList())
-            .contains(point.latitude, point.longitude),
-        orElse: () => null);
+  Widget buildFlutterMap() {
+    var map = FlutterMap(
+                key: Key('venue map'),
+                options: MapOptions(
+                    center: center,
+                    zoom: 17,
+                    interactiveFlags: noRotation,
+                    swPanBoundary: LatLng(building_view.bbox.minLatitude,
+                        building_view.bbox.minLongitude),
+                    nePanBoundary: LatLng(building_view.bbox.maxLatitude,
+                        building_view.bbox.maxLongitude),
+                    maxZoom: geo.zoomMax,
+                    minZoom: geo.zoomMin,
+                    onTap: houseSelected,
+                    plugins: [AttributionPlugin()]),
+                layers: [
+                  TileLayerOptions(
+                      urlTemplate:
+                          "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
+                      subdomains: ['a', 'b', 'c']),
+                  PolygonLayerOptions(
+                      polygons: building_view.buildDrawablePolygonsFromView(),
+                      polygonCulling: false),
+                  MarkerLayerOptions(
+                      markers: marker == null ? [] : [marker!]),
+                  AttributionOptions(),
+                ]);
+    if(showLoadingIndicator)
+      {
+        return Stack(children: [map, Opacity(opacity: 0.7, child: Container(width: 300, height: 300,color: CampaignTheme.disabled)), Center(child: SizedBox(width: 100, height: 100, child: LoadingIndicator(
+            indicatorType: Indicator.ballRotateChase,
+            color: CampaignTheme.primary)))]);
+      ***REMOVED***
+    return map;
+  ***REMOVED***
 
-    if (kiez == null) return;
+  houseSelected(LatLng point) async {
+
     setState(() {
-      location.kiez = kiez;
-      location.coordinates = point;
-      venueController.text = geodata.description;
-      location.description = geodata.description;
-      marker = LocationMarker(point);
+      print('### setState');
+      showLoadingIndicator = true;
     ***REMOVED***);
+
+    SelectableVisitedHouse? building = building_view.getBuildingByPoint(point);
+    //not in current view
+    if (building == null) {
+      print('### Starte Request');
+      var building_from_server =
+          await Provider.of<AbstractVisitedHousesService>(context,
+                  listen: false)
+              .getVisitedHouseOfPoint(point, true)
+              .catchError((e, s) {
+        ErrorService.handleError(e, s);
+        return null;
+      ***REMOVED***);
+      await Future.delayed(Duration(seconds: 5));
+      print('### Beende Request');
+      if (building_from_server != null) {
+        building =
+            SelectableVisitedHouse.fromVisitedHouse(building_from_server);
+      ***REMOVED***
+    ***REMOVED***
+    setState(() {
+      if (building != null &&
+          building_view.selected_building?.osm_id != building.osm_id) {
+        building_view.selected_building =
+            SelectableVisitedHouse.clone(building);
+        building_view.selected_building?.selected = true;
+        var usr_id = Provider.of<AbstractUserService>(context, listen: false)
+            .latestUser!
+            .id;
+        if (usr_id != null)
+          building_view.selected_building?.visitation_events
+              .add(VisitedHouseEvent(-1, "Main", usr_id, DateTime.now()));
+        visitedHouseController.text =
+            '${building_view.selected_building?.adresse***REMOVED***';
+        if (building_view.selected_building == null) {
+          visitedHousePartController.text = '';
+        ***REMOVED*** else {
+          visitedHousePartController.text =
+              building_view.selected_building!.visitation_events.last.hausteil;
+        ***REMOVED***
+        showLoadingIndicator = false;
+      ***REMOVED***
+      //venueController.text = geodata.description;
+      // marker = LocationMarker(point);
+    ***REMOVED***);
+  ***REMOVED***
+
+  Widget buildVisitationEventItem(VisitedHouseEvent item) {
+    // VisitedHouseEvent item = building_view.selected_building!
+    //   .visitation_events[index];
+    if (item.benutzer ==
+        Provider.of<AbstractUserService>(context, listen: false)
+            .latestUser!
+            .id) {
+      return Row( children: [
+        Expanded(
+            child: ListTile(
+          title: Text(
+              "${DateFormat("yyyy-MM-dd").format(item.datum)***REMOVED***, ${item.hausteil***REMOVED***"),
+        )),
+
+             IconButton(
+                icon: Icon(Icons.clear),
+                onPressed: () {
+                  // Remove the item from the data source.
+                  setState(() {
+                    building_view.selected_building!.visitation_events
+                        .remove(item);
+                  ***REMOVED***);
+                ***REMOVED***)
+      ]);
+    ***REMOVED*** else {
+      return ListTile(
+        title: Text(
+            "${DateFormat("yyyy-MM-dd").format(item.datum)***REMOVED***, ${item.hausteil***REMOVED***"),
+      );
+    ***REMOVED***
   ***REMOVED***
 ***REMOVED***
 
 class LocationMarker extends Marker {
   LocationMarker(LatLng point)
       : super(
-      point: point,
-      builder: (context) => DecoratedBox(
-          key: Key('location marker'),
-          decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: CampaignTheme.primary,
-              boxShadow: [
-                BoxShadow(blurRadius: 4.0, offset: Offset(-2.0, 2.0))
-              ]),
-          child: Icon(Icons.supervised_user_circle, size: 30.0)));
+            point: point,
+            builder: (context) => DecoratedBox(
+                key: Key('location marker'),
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: CampaignTheme.primary,
+                    boxShadow: [
+                      BoxShadow(blurRadius: 4.0, offset: Offset(-2.0, 2.0))
+                    ]),
+                child: Icon(Icons.supervised_user_circle, size: 30.0)));
 ***REMOVED***

@@ -4,15 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
 import 'package:sammel_app/Provisioning.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Placard.dart';
 import 'package:sammel_app/model/Termin.dart';
+import 'package:sammel_app/services/VisitedHouseView.dart';
+import 'package:sammel_app/services/VisitedHousesService.dart';
 import 'package:sammel_app/shared/AttributionPlugin.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
 import 'package:sammel_app/shared/NoRotation.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../shared/DistanceHelper.dart';
+import 'AddBuilding.dart';
 
 class ActionMap extends StatefulWidget {
   final List<Termin> termine;
@@ -59,6 +63,7 @@ class ActionMapState extends State<ActionMap> {
   var locationPermissionGranted = false;
   List<Marker> markers = [];
   var initialized = false;
+  List<Polygon> visibleHouses = [];
 
   @override
   void initState() {
@@ -75,6 +80,8 @@ class ActionMapState extends State<ActionMap> {
       TileLayerOptions(
           urlTemplate: "https://{s***REMOVED***.tile.openstreetmap.org/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
           subdomains: ['a', 'b', 'c']),
+      PolygonLayerOptions(
+          polygons: visibleHouses, polygonCulling: true),
       MarkerLayerOptions(markers: markers),
     ];
     layers.add(AttributionOptions());
@@ -93,13 +100,25 @@ class ActionMapState extends State<ActionMap> {
         minZoom: geo.zoomMin,
         onPositionChanged: (position, _) => widget.mapController.onReady.then(
             (_) =>
-                setState(() => this.markers = generateListLocationMarkers())),
+                setState(() {this.markers = generateListLocationMarkers(); this.visibleHouses = generateVisitedHousePolygons();***REMOVED***)),
       ),
       layers: layers,
       mapController: widget.mapController,
     );
     initialized = true;
     return flutterMap;
+  ***REMOVED***
+
+  List<Polygon> generateVisitedHousePolygons()
+  {
+    if(!initialized || widget.mapController.zoom > 14)
+      {
+        BoundingBox bbox = BoundingBox(widget.mapController.bounds!.south, widget.mapController.bounds!.west, widget.mapController.bounds!.north,
+            widget.mapController.bounds!.east);
+        VisitedHouseView vhv = Provider.of<AbstractVisitedHousesService>(context, listen: false).getBuildingsInArea(bbox);
+        return vhv.buildDrawablePolygonsFromView();
+      ***REMOVED***
+    return [];
   ***REMOVED***
 
   List<ActionMarker> generateActionMarkers() {

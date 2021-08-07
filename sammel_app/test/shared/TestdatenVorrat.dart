@@ -2216,7 +2216,7 @@ Placard placard2() =>
 Placard placard3() =>
     Placard(3, 52.4709, 13.32744, "12161, Goßlerstraße 29", 11);
 
-Building kanzlerinamt() => Building(
+VisitedHouse kanzlerinamt() => VisitedHouse(
     1,
     52.52014,
     13.36911,
@@ -2226,10 +2226,10 @@ Building kanzlerinamt() => Building(
     11,
     '');
 
-Building hausundgrund() => Building(2, 52.4964133, 13.3617511,
+VisitedHouse hausundgrund() => VisitedHouse(2, 52.4964133, 13.3617511,
     'Potsdamer Straße 143, 10783 Berlin', null, DateTime(2021, 7, 17), 12, '');
 
-Building konradadenauerhaus() => Building(
+VisitedHouse konradadenauerhaus() => VisitedHouse(
     3,
     52.5065,
     13.35125,

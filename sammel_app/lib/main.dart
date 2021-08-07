@@ -15,6 +15,7 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
+import 'package:sammel_app/services/VisitedHousesService.dart';
 import 'package:sammel_app/shared/ConstJsonAssetLoader.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
 
@@ -76,6 +77,7 @@ class MyApp extends StatelessWidget {
   static var placardService = demoMode
       ? DemoPlacardsService(userService)
       : PlacardsService(userService, backend);
+  static var visitedHouseService = demoMode ? DemoVisitedHousesService(userService, geoService,  backend) : DemoVisitedHousesService(userService, geoService, backend);
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +96,7 @@ class MyApp extends StatelessWidget {
           Provider<GeoService>.value(value: geoService),
           Provider<LocalNotificationService>.value(
               value: localNotificationService),
+          Provider<AbstractVisitedHousesService>.value(value: visitedHouseService),
           Provider(create: (_) => placardService)
         ],
         child: MaterialApp(

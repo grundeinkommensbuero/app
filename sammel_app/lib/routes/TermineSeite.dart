@@ -25,6 +25,8 @@ import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
+import 'package:sammel_app/services/VisitedHouseView.dart';
+import 'package:sammel_app/services/VisitedHousesService.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
 import 'package:sammel_app/shared/DistanceHelper.dart';
 import 'package:uni_links/uni_links.dart';
@@ -34,6 +36,7 @@ import 'ActionDetailsPage.dart';
 import 'ActionEditor.dart';
 import 'ActionList.dart';
 import 'ActionMap.dart';
+import 'AddBuilding.dart';
 import 'FilterWidget.dart';
 import 'MapActionDialog.dart';
 
@@ -513,7 +516,7 @@ class TermineSeiteState extends State<TermineSeite>
 
     if (chosenAction == MapActionType.NewAction) switchToActionCreator(point);
     if (chosenAction == MapActionType.NewPlacard) createNewPlacard(point);
-    if (chosenAction == MapActionType.NewPlacard) createNewVisitedHouse(point);
+    if (chosenAction == MapActionType.NewVisitedHouse) createNewVisitedHouse(point);
   ***REMOVED***
 
   createNewPlacard(LatLng point) async {
@@ -532,15 +535,18 @@ class TermineSeiteState extends State<TermineSeite>
     //TODO
   ***REMOVED***
 
-  void createNewVisitedHouse(LatLng point) {
+  void createNewVisitedHouse(LatLng point) async{
     //TODO: now it takes always the same distance around tap point
     var show_distance_in_m = 30.0;
-    var long_diff =
-    DistanceHelper.getLongDiffFromM(point, show_distance_in_m);
+    var lng_diff = DistanceHelper.getLongDiffFromM(point, show_distance_in_m);
     var lat_diff = DistanceHelper.getLatDiffFromM(point, show_distance_in_m);
-    var building_view =
-    Provider.of<AbstractBuildingService>.getBuildingsInArea();
-    showAddBuildingDialog();
+    BoundingBox bbox = BoundingBox(point.latitude-lat_diff, point.longitude-lng_diff,
+                                    point.latitude+lat_diff, point.longitude+lng_diff);
+    var building_view = Provider.of<AbstractVisitedHousesService>(context, listen: false).getBuildingsInArea(bbox);
+    showAddBuildingDialog(context: context, building_view: building_view);
+//    setState(() {
+//      this.mapController.move(this.mapController.center, this.mapController.zoom);
+//    ***REMOVED***);
   ***REMOVED***
 
   @override

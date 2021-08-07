@@ -1,67 +1,118 @@
 import 'dart:core';
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:intl/intl.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:sammel_app/services/VisitedHouseView.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
+import 'package:poly/poly.dart' as poly;
 
-class Building {
-  int? id;
-  double latitude;
-  double longitude;
-  String adresse;
-  String? hausteil;
-  DateTime datum;
+
+class VisitedHouseEvent
+{
   int benutzer;
-  String? shape;
+  int? id;
+  DateTime datum;
+  String hausteil = "";
 
-  Building(this.id, this.latitude, this.longitude, this.adresse, this.hausteil,
-      this.datum, this.benutzer, this.shape);
+  VisitedHouseEvent(this.id, this.hausteil, this.benutzer, this.datum);
+***REMOVED***
 
-  Building.fromJson(Map<dynamic, dynamic> json)
-      : id = json['id'],
-        latitude = json['latitude'],
-        longitude = json['longitude'],
-        adresse = json['adresse'],
-        hausteil = json['hausteil'],
-        datum = ChronoHelfer.deserializeJsonDateTime(json['datum']),
-        benutzer = json['benutzer'],
-        shape = '';
+class VisitedHouse {
+
+  int osm_id = -1;
+  double latitude = -1.0;
+  double longitude = -1.0;
+  String adresse = '';
+  List<LatLng> shape = [];
+  late BoundingBox bbox;
+  List<VisitedHouseEvent> visitation_events = [];
+
+  VisitedHouse(this.osm_id, this.latitude, this.longitude, this.adresse,
+      this.shape, this.visitation_events)
+  {
+    double minLat = 1000;
+    double maxLat = -1000;
+    double minLng = 1000;
+    double maxLng = -1000;
+    for(LatLng p in this.shape)
+      {
+        minLat = min(minLat, p.latitude);
+        maxLat = max(maxLat, p.latitude);
+        minLng = min(minLng, p.longitude);
+        maxLng = max(maxLng, p.longitude);
+      ***REMOVED***
+    bbox = BoundingBox(minLat, minLng, maxLat, maxLng);
+
+  ***REMOVED***
+
+  VisitedHouse.fromJson(Map<dynamic, dynamic> json) :
+      osm_id = json['osm_id'], latitude = json['latitude'], longitude = json['longitude'],
+      adresse = json['adresse'], shape = json['shape'],
+      visitation_events = [VisitedHouseEvent(json['id'], json['hausteil'], json['benutzer'], ChronoHelfer.deserializeJsonDateTime(json['datum']))];
+
 
   Map<dynamic, dynamic> toJson() => {
-        'id': id,
+        'osm_id': osm_id,
+        'id': visitation_events.last.id,
         'latitude': latitude,
         'longitude': longitude,
         'adresse': adresse,
-        'hausteil': hausteil,
-        'datum': DateFormat('yyyy-MM-dd').format(datum),
-        'benutzer': benutzer
+        'hausteil': visitation_events.last.hausteil,
+        'datum': DateFormat('yyyy-MM-dd').format(visitation_events.last.datum),
+        'benutzer': visitation_events.last.benutzer
       ***REMOVED***
+
+  bool inside(LatLng point) {
+    return poly.Polygon(shape.map((latlng) =>
+    (poly.Point<num>(latlng.latitude, latlng.longitude))).cast<poly.Point<num>>().toList()).contains(point.latitude, point.longitude);
+  ***REMOVED***
+
+  addVisitationEvent(VisitedHouseEvent event)
+  {
+    visitation_events.add(event);
+  ***REMOVED***
+
 ***REMOVED***
 
-class SelectableBuilding extends Building {
+class SelectableVisitedHouse extends VisitedHouse {
   var selected;
 
-  SelectableBuilding(id, adresse, hausteil, benutzer, datum, latitude,
-      longitude, shape, selected)
-      : super(id, latitude, longitude, adresse, hausteil, benutzer, datum,
-            shape) {
+  SelectableVisitedHouse(osm_id, adresse, latitude,
+      longitude, shape, visitation_events, selected)
+      : super(osm_id, latitude, longitude, adresse, shape, visitation_events) {
     this.selected = selected;
+  ***REMOVED***
+
+  SelectableVisitedHouse.fromVisitedHouse(VisitedHouse vh)
+  : super(  vh.osm_id, vh.latitude, vh.longitude, vh.adresse,
+      vh.shape, vh.visitation_events)
+  {
+    selected = false;
+  ***REMOVED***
+
+  SelectableVisitedHouse.clone(SelectableVisitedHouse vh)
+  : super(vh.osm_id, vh.latitude, vh.longitude, vh.adresse, vh.shape, List.from(vh.visitation_events))
+  {
+    selected = vh.selected;
   ***REMOVED***
 ***REMOVED***
 
 class BuildingColorSelector {
-  var selection_color = Color.fromARGB(0, 255, 255, 0);
-  var recently_visited_color = Color.fromARGB(0, 0, 255, 0);
-  var outdated_color = Color.fromARGB(0, 255, 0, 0);
-  var first_time_color = Color.fromARGB(0, 0, 0, 0);
-  var outdated_time_span = Duration(days: 7);
+  static var selection_color = Color.fromARGB(100, 255, 255, 0);
+  static var recently_visited_color = Color.fromARGB(100, 0, 255, 0);
+  static var outdated_color = Color.fromARGB(100, 255, 0, 0);
+  static var first_time_color = Color.fromARGB(100, 0, 0, 0);
+  static var outdated_time_span = Duration(days: 7);
 
-  getDrawColor(building) {
+
+  static Color getDrawColor(SelectableVisitedHouse building) {
     if (building.selected) {
       return selection_color;
     ***REMOVED***
-    if (building.datum != null) {
-      if (DateTime.now().difference(building.datum) < outdated_time_span) {
+    if (building.visitation_events != null && building.visitation_events.length > 0) {
+      if (DateTime.now().difference(building.visitation_events.last.datum) < outdated_time_span) {
         return recently_visited_color;
       ***REMOVED*** else {
         return outdated_color;

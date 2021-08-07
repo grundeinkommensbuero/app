@@ -4,7 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/rendering.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
 
-enum MapActionType { NewAction, NewPlacard, NewVisitedHouse ***REMOVED***
+enum MapActionType { NewAction, NewPlacard, NewVisitedHouse, Cancel ***REMOVED***
 
 Future<MapActionType> showMapActionDialog(BuildContext context) async =>
     await showDialog(
@@ -92,6 +92,6 @@ Future<MapActionType> showMapActionDialog(BuildContext context) async =>
                   TextButton(
                     key: Key('delete placard dialog abort button'),
                     child: Text('Abbrechen').tr(),
-                    onPressed: () => Navigator.pop(context, false),
+                    onPressed: () => Navigator.pop(context, MapActionType.Cancel),
                   )
                 ]));

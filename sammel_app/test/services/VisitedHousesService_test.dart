@@ -127,7 +127,7 @@ void main() {
       expect(visitedHousesService.visitedHouses.length, 3);
 
       var newHouse = await visitedHousesService.createVisitedHouse(
-          Building(
+          VisitedHouse(
               0,
               52.47541,
               13.30508,
@@ -145,7 +145,7 @@ void main() {
     test('createVisitedHouse adds house with original id', () {
       expect(visitedHousesService.visitedHouses.length, 3);
 
-      visitedHousesService.createVisitedHouse(Building(
+      visitedHousesService.createVisitedHouse(VisitedHouse(
           10,
           52.47541,
           13.30508,
