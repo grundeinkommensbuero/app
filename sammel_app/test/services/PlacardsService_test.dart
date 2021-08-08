@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/Placard.dart';
-import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/PlacardsService.dart';
 import '../shared/TestdatenVorrat.dart';
 import '../shared/mocks.costumized.dart';

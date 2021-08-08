@@ -32,7 +32,6 @@ open class VorbehalteRestRessource {
     @RolesAllowed("user")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("neu")
     open fun legeNeueVorbehalteAn(vorbehalte: VorbehalteDto): Response {
         LOG.info("Lege neue Vorbehalte an durch ${context.userPrincipal.name***REMOVED***")
         LOG.debug("Vorbehalte: ${vorbehalte.id***REMOVED***, ${vorbehalte.vorbehalte***REMOVED***, ${vorbehalte.benutzer***REMOVED***, ${vorbehalte.datum***REMOVED***, ${vorbehalte.ort***REMOVED***")
