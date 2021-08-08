@@ -31,14 +31,14 @@ main() {
               MockHttpClientResponseBody(), 200, placard1().toJson())));
 
       await service.createArguments(Arguments(
-          'Genossenschaften', DateTime(2021, 8, 8), ffAlleeNord()));
+          'Genossenschaften', DateTime(2021, 8, 8), '10243'));
 
       verify(backend.post(
           'service/vorbehalte',
           '{'
               '"vorbehalte":"Genossenschaften",'
               '"datum":"2021-08-08",'
-              '"ort":"Frankfurter Allee Nord"'
+              '"ort":"10243"'
               '***REMOVED***',
           any));
     ***REMOVED***);
@@ -47,7 +47,7 @@ main() {
   group('DemoArgumentsService', () {
     test('does nothing', () {
       DemoArgumentsService(userService).createArguments(Arguments(
-          'Genossenschaften', DateTime(2021, 8, 8), ffAlleeNord()));
+          'Genossenschaften', DateTime(2021, 8, 8), '10243'));
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***

@@ -6,25 +6,22 @@ import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Arguments.dart';
 import 'package:sammel_app/routes/ArgumentsDialog.dart';
-import 'package:sammel_app/services/StammdatenService.dart';
+import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 
-import '../shared/TestdatenVorrat.dart';
-import '../shared/mocks.mocks.dart';
+import '../shared/mocks.costumized.dart';
 
 main() {
-  final mockStammdatenService = MockStammdatenService();
+  final mockgGeoService = MockGeoService();
   Arguments? result = null;
 
   setUpUI((tester) async {
-    reset(mockStammdatenService);
-    when(mockStammdatenService.getKiezAtLocation(any))
-        .thenAnswer((_) => Future.value(ffAlleeNord()));
+    reset(mockgGeoService);
+    when(mockgGeoService.getDescriptionToPoint(any)).thenAnswer(
+        (_) => Future.value(GeoData(null, null, null, '10243', null)));
 
     await tester.pumpWidget(MultiProvider(
-        providers: [
-          Provider<StammdatenService>.value(value: mockStammdatenService)
-        ],
+        providers: [Provider<GeoService>.value(value: mockgGeoService)],
         child: MaterialApp(
           home: Material(
             child: Builder(builder: (BuildContext context) {
@@ -32,8 +29,7 @@ main() {
                 child: ElevatedButton(
                     key: Key('starter'),
                     child: const Text('Starter'),
-                    onPressed: () async => result =
-                    await showArgumentsDialog(
+                    onPressed: () async => result = await showArgumentsDialog(
                         context: context,
                         coordinates: LatLng(52.49653, 13.43762))),
               );
@@ -57,19 +53,19 @@ main() {
     await tester.pumpAndSettle();
 
     var today = ChronoHelfer.formatDateOfDateTime(DateTime.now());
-    verify(mockStammdatenService.getKiezAtLocation(LatLng(52.49653, 13.43762)))
+    verify(mockgGeoService.getDescriptionToPoint(LatLng(52.49653, 13.43762)))
         .called(1);
 
-    expect(find.text('Frankfurter Allee Nord am $today'), findsOneWidget);
+    expect(find.text('10243, $today'), findsOneWidget);
   ***REMOVED***);
 
   testUI('shows "Berlin" on start', (tester) async {
-    when(mockStammdatenService.getKiezAtLocation(any))
-        .thenAnswer((_) => Future.value(null));
+    when(mockgGeoService.getDescriptionToPoint(any))
+        .thenAnswer((_) => Future.value(GeoData()));
     await tester.pump();
 
     var today = ChronoHelfer.formatDateOfDateTime(DateTime.now());
-    expect(find.text('Berlin am $today'), findsOneWidget);
+    expect(find.text('Berlin, $today'), findsOneWidget);
   ***REMOVED***);
 
   testUI('returns Arguments on submit button', (tester) async {
@@ -84,7 +80,7 @@ main() {
     expect(result?.date.year, DateTime.now().year);
     expect(result?.date.month, DateTime.now().month);
     expect(result?.date.day, DateTime.now().day);
-    expect(result?.kiez?.name, "Frankfurter Allee Nord");
+    expect(result?.plz, '10243');
   ***REMOVED***);
 
   testUI('returns no Arguments on cancel button', (tester) async {

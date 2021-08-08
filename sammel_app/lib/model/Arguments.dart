@@ -1,18 +1,16 @@
 
 import 'package:easy_localization/easy_localization.dart';
 
-import 'Kiez.dart';
-
 class Arguments {
   String arguments;
   DateTime date;
-  Kiez? kiez;
+  String? plz;
   
-  Arguments(this.arguments, this.date, this.kiez);
+  Arguments(this.arguments, this.date, this.plz);
 
   Map<String, dynamic> toJson() => {
     'vorbehalte': arguments,
     'datum': DateFormat('yyyy-MM-dd').format(date),
-    'ort': kiez?.name,
+    'ort': plz,
   ***REMOVED***
 ***REMOVED***

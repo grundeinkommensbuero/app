@@ -12,9 +12,7 @@ import org.mockito.Mock
 import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import java.time.LocalDate
-import java.util.Calendar.AUGUST
 import javax.persistence.EntityManager
-import kotlin.math.absoluteValue
 
 class VorbehalteDaoTest {
     @Rule
@@ -29,7 +27,7 @@ class VorbehalteDaoTest {
 
     @Test
     fun erzeugeNeueVorbehalteLegtVorbehalteInDbAb() {
-        dao.erzeugeNeueVorbehalte(Vorbehalte(0, "Neubau (2), Kosten", 11, LocalDate.of(2021,8,8), "Frankfurter Allee Nord"))
+        dao.erzeugeNeueVorbehalte(Vorbehalte(0, "Neubau (2), Kosten", 11, LocalDate.of(2021,8,8), "10243"))
 
         val captor = argumentCaptor<Vorbehalte>()
         verify(entityManager, atLeastOnce()).persist(captor.capture())
@@ -37,7 +35,7 @@ class VorbehalteDaoTest {
         assertEquals(0, argument.id)
         assertEquals("Neubau (2), Kosten", argument.vorbehalte)
         assertEquals(11, argument.benutzer)
-        assertEquals("Frankfurter Allee Nord", argument.ort)
+        assertEquals("10243", argument.ort)
         assertEquals(2021, argument.datum?.year)
         assertEquals(8,argument.datum?.month?.value)
         assertEquals(8, argument.datum?.dayOfMonth)

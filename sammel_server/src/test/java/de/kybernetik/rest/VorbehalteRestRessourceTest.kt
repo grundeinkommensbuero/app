@@ -42,7 +42,7 @@ class VorbehalteRestRessourceTest {
                 0,
                 "Neubau (2), Kosten",
                 LocalDate.of(2021, 8, 8),
-                "Frankfurter Allee Nord"
+                "10243"
             )
         )
 
@@ -54,7 +54,7 @@ class VorbehalteRestRessourceTest {
         assertEquals(2021, captor.firstValue.datum?.year)
         assertEquals(8, captor.firstValue.datum?.monthValue)
         assertEquals(8, captor.firstValue.datum?.dayOfMonth)
-        assertEquals("Frankfurter Allee Nord", captor.firstValue.ort)
+        assertEquals("10243", captor.firstValue.ort)
     ***REMOVED***
 
     @Test
@@ -64,7 +64,7 @@ class VorbehalteRestRessourceTest {
                 0,
                 "Neubau (2), Kosten",
                 LocalDate.of(2021, 8, 8),
-                "Frankfurter Allee Nord"
+                "10243"
             )
         )
 
@@ -81,7 +81,7 @@ class VorbehalteRestRessourceTest {
                 0,
                 "Neubau (2), Kosten",
                 null,
-                "Frankfurter Allee Nord"
+                "10243"
             )
         )
 

@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Arguments.dart';
-import 'package:sammel_app/model/Kiez.dart';
-import 'package:sammel_app/services/StammdatenService.dart';
+import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 
@@ -29,7 +28,7 @@ class ArgumentsDialog extends StatefulWidget {
 
 class ArgumentsDialogState extends State<ArgumentsDialog> {
   final LatLng coordinates;
-  Kiez? kiez = null;
+  String? plz = null;
   final DateTime date = DateTime.now();
   String arguments = '';
 
@@ -37,17 +36,17 @@ class ArgumentsDialogState extends State<ArgumentsDialog> {
 
   @override
   Widget build(BuildContext context) {
-    if (kiez == null)
-      Provider.of<StammdatenService>(context)
-          .getKiezAtLocation(coordinates)
-          .then((kiez) => setState(() => this.kiez = kiez));
+    if (plz == null)
+      Provider.of<GeoService>(context)
+          .getDescriptionToPoint(coordinates)
+          .then((geoData) => setState(() => this.plz = geoData.postcode));
 
     return AlertDialog(
       title: Text('Vorbehalte').tr(),
       content: SingleChildScrollView(
           child: ListBody(children: [
         Text(
-          '${kiez != null ? kiez!.name : 'Berlin'***REMOVED*** am ${ChronoHelfer.formatDateOfDateTime(date)***REMOVED***',
+          '${plz != null ? plz : 'Berlin'***REMOVED***, ${ChronoHelfer.formatDateOfDateTime(date)***REMOVED***',
           textScaleFactor: 0.9,
           style: TextStyle(color: CampaignTheme.secondary),
         ).tr(),
@@ -59,6 +58,7 @@ class ArgumentsDialogState extends State<ArgumentsDialog> {
             .tr(),
         SizedBox(height: 10.0),
         TextFormField(
+          maxLines: 3,
           key: Key('arguments input'),
           keyboardType: TextInputType.multiline,
           decoration: InputDecoration(
@@ -80,7 +80,7 @@ class ArgumentsDialogState extends State<ArgumentsDialog> {
           key: Key('arguments dialog submit button'),
           child: Text("Absenden").tr(),
           onPressed: () async =>
-              Navigator.pop(context, Arguments(arguments, date, kiez)),
+              Navigator.pop(context, Arguments(arguments, date, plz)),
         ),
       ],
     );

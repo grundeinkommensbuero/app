@@ -14,7 +14,7 @@ class VorbehalteDtoTest {
             0,
             "Neubau (2), Kosten",
             null,
-            "Frankfurter Allee Nord"
+            "10243"
         ).convertToVorbehalte(11L)
     ***REMOVED***
 
@@ -24,7 +24,7 @@ class VorbehalteDtoTest {
             1L,
             "Neubau (2), Kosten",
             LocalDate.of(2021, 8, 8),
-            "Frankfurter Allee Nord"
+            "10243"
         ).convertToVorbehalte(11L)
 
         assertEquals(1L, vorbehalte.id)
@@ -33,6 +33,7 @@ class VorbehalteDtoTest {
         assertEquals(2021, vorbehalte.datum?.year)
         assertEquals(8, vorbehalte.datum?.month?.value)
         assertEquals(8, vorbehalte.datum?.dayOfMonth)
+        assertEquals("10243", vorbehalte.ort)
     ***REMOVED***
 
     @Test
@@ -56,7 +57,7 @@ class VorbehalteDtoTest {
             "Neubau (2), Kosten",
             11L,
             LocalDate.of(2021, 8, 8),
-            "Frankfurter Allee Nord"
+            "10243"
         ))
 
         assertEquals(1L, vorbehalte.id)
@@ -64,5 +65,6 @@ class VorbehalteDtoTest {
         assertEquals(2021, vorbehalte.datum?.year)
         assertEquals(8, vorbehalte.datum?.month?.value)
         assertEquals(8, vorbehalte.datum?.dayOfMonth)
+        assertEquals("10243", vorbehalte.ort)
     ***REMOVED***
 ***REMOVED***
