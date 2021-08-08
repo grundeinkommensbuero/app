@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Arguments.dart';
 import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 
 Future<Arguments?> showArgumentsDialog(
@@ -46,20 +47,17 @@ class ArgumentsDialogState extends State<ArgumentsDialog> {
       content: SingleChildScrollView(
           child: ListBody(children: [
         Text(
-          'In ${kiez != null ? kiez!.name : 'Berlin'***REMOVED*** am ${ChronoHelfer.formatDateOfDateTime(date)***REMOVED***',
+          '${kiez != null ? kiez!.name : 'Berlin'***REMOVED*** am ${ChronoHelfer.formatDateOfDateTime(date)***REMOVED***',
           textScaleFactor: 0.9,
+          style: TextStyle(color: CampaignTheme.secondary),
         ).tr(),
-        SizedBox(
-          height: 5.0,
-        ),
-        Text('Hilf der Kampagne, indem du in ein paar Schlagworten aufschreibst, was Vorbehalte und Gegenargumente deiner Gesprächspartner*innen waren.\n'
-                'Wenn ein Thema in mehreren Gesprächen wichtig war schreibe die Anzahl in Klammern dahinter.\n'
-                '\n'
-                'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse, sondern nur mit dem Kiez (${kiez?.name***REMOVED***) verknüpft, in dem du unterwegs bist.\n')
+        SizedBox(height: 5.0),
+        Text(
+                'Hilf der Kampagne, indem du in ein paar Schlagworten aufschreibst, was Vorbehalte und Gegenargumente deiner Gesprächspartner*innen waren.\n'
+                'Wenn ein Thema in mehreren Gesprächen wichtig war schreibe die Häufigkeit in Klammern dahinter.\n',
+                style: TextStyle(fontSize: 12))
             .tr(),
-        SizedBox(
-          height: 10.0,
-        ),
+        SizedBox(height: 10.0),
         TextFormField(
           key: Key('arguments input'),
           keyboardType: TextInputType.multiline,
@@ -68,14 +66,18 @@ class ArgumentsDialogState extends State<ArgumentsDialog> {
           ),
           onChanged: (input) => arguments = input,
         ),
+        SizedBox(height: 10.0),
+        Text(
+            'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.\n',
+            style: TextStyle(fontSize: 12))
       ])),
       actions: [
         TextButton(
-            key: Key('arguments cancel button'),
+            key: Key('arguments dialog cancel button'),
             child: Text("Nein danke").tr(),
             onPressed: () => Navigator.pop(context)),
         TextButton(
-          key: Key('arguments dialog finish button'),
+          key: Key('arguments dialog submit button'),
           child: Text("Absenden").tr(),
           onPressed: () async =>
               Navigator.pop(context, Arguments(arguments, date, kiez)),

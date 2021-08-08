@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/Provisioning.dart';
 import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
+import 'package:sammel_app/services/ArgumentsService.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
@@ -76,6 +77,9 @@ class MyApp extends StatelessWidget {
   static var placardService = demoMode
       ? DemoPlacardsService(userService)
       : PlacardsService(userService, backend);
+  static var argumentsService = demoMode
+      ? DemoArgumentsService(userService)
+      : ArgumentsService(userService, backend);
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +98,8 @@ class MyApp extends StatelessWidget {
           Provider<GeoService>.value(value: geoService),
           Provider<LocalNotificationService>.value(
               value: localNotificationService),
-          Provider(create: (_) => placardService)
+          Provider<AbstractPlacardsService>(create: (_) => placardService),
+          Provider<AbstractArgumentsService>(create: (_) => argumentsService)
         ],
         child: MaterialApp(
           title: 'DW & Co. Enteignen',

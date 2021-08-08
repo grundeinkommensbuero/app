@@ -48,8 +48,8 @@ main() {
 
     expect(find.byKey(Key('arguments dialog')), findsOneWidget);
     expect(find.byKey(Key('arguments input')), findsOneWidget);
-    expect(find.byKey(Key('arguments cancel button')), findsOneWidget);
-    expect(find.byKey(Key('arguments dialog finish button')), findsOneWidget);
+    expect(find.byKey(Key('arguments dialog cancel button')), findsOneWidget);
+    expect(find.byKey(Key('arguments dialog submit button')), findsOneWidget);
     expect(find.text('Vorbehalte'), findsOneWidget);
   ***REMOVED***);
 
@@ -60,7 +60,7 @@ main() {
     verify(mockStammdatenService.getKiezAtLocation(LatLng(52.49653, 13.43762)))
         .called(1);
 
-    expect(find.text('In Frankfurter Allee Nord am $today'), findsOneWidget);
+    expect(find.text('Frankfurter Allee Nord am $today'), findsOneWidget);
   ***REMOVED***);
 
   testUI('shows "Berlin" on start', (tester) async {
@@ -69,15 +69,15 @@ main() {
     await tester.pump();
 
     var today = ChronoHelfer.formatDateOfDateTime(DateTime.now());
-    expect(find.text('In Berlin am $today'), findsOneWidget);
+    expect(find.text('Berlin am $today'), findsOneWidget);
   ***REMOVED***);
 
-  testUI('returns Arguments on "Absenden" button', (tester) async {
+  testUI('returns Arguments on submit button', (tester) async {
     await tester.pumpAndSettle();
 
     await tester.enterText(
         find.byKey(Key('arguments input')), 'Abschreckung von Investoren');
-    await tester.tap(find.byKey(Key('arguments dialog finish button')));
+    await tester.tap(find.byKey(Key('arguments dialog submit button')));
     await tester.pump();
 
     expect(result?.arguments, 'Abschreckung von Investoren');
@@ -85,5 +85,16 @@ main() {
     expect(result?.date.month, DateTime.now().month);
     expect(result?.date.day, DateTime.now().day);
     expect(result?.kiez?.name, "Frankfurter Allee Nord");
+  ***REMOVED***);
+
+  testUI('returns no Arguments on cancel button', (tester) async {
+    await tester.pumpAndSettle();
+
+    await tester.enterText(
+        find.byKey(Key('arguments input')), 'Abschreckung von Investoren');
+    await tester.tap(find.byKey(Key('arguments dialog cancel button')));
+    await tester.pump();
+
+    expect(result, isNull);
   ***REMOVED***);
 ***REMOVED***
