@@ -153,19 +153,6 @@ class ActionMapState extends State<ActionMap> {
         .toList();
   ***REMOVED***
 
-  List<PlacardMarker> generatePlacardMarkers() {
-    if (!initialized || widget.mapController.zoom < 15) return [];
-    return widget.placards
-        .where(
-            (placard) => placard.latitude != null && placard.longitude != null)
-        .map((placard) => PlacardMarker(placard,
-            mine: placard.benutzer == widget.myUserId,
-            onTap: widget.openPlacardDialog))
-        .toList()
-        .reversed
-        .toList();
-  ***REMOVED***
-
   List<Marker> generateMarkers() => <Marker>[]
     ..addAll(generateListLocationMarkers())
     ..addAll(generateActionMarkers())

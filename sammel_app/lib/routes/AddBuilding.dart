@@ -229,14 +229,12 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
   houseSelected(LatLng point) async {
 
     setState(() {
-      print('### setState');
       showLoadingIndicator = true;
     ***REMOVED***);
 
     SelectableVisitedHouse? building = building_view.getBuildingByPoint(point);
     //not in current view
     if (building == null) {
-      print('### Starte Request');
       var building_from_server =
           await Provider.of<AbstractVisitedHousesService>(context,
                   listen: false)
@@ -245,8 +243,6 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
         ErrorService.handleError(e, s);
         return null;
       ***REMOVED***);
-      await Future.delayed(Duration(seconds: 5));
-      print('### Beende Request');
       if (building_from_server != null) {
         building =
             SelectableVisitedHouse.fromVisitedHouse(building_from_server);
