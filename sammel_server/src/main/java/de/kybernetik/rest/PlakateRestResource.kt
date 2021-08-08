@@ -61,7 +61,7 @@ open class PlakateRestResource {
             return Response.status(322).entity(RestFehlermeldung(e.message)).build()
         ***REMOVED***
         LOG.info("Neues Plakat ${plakat.id***REMOVED*** durch Benutzer ${context.userPrincipal.name***REMOVED*** erstellt")
-        return Response.ok().entity(plakat).build()
+        return Response.ok().entity(PlakatDto.convertFromPlakat(plakat)).build()
     ***REMOVED***
 
     @DELETE

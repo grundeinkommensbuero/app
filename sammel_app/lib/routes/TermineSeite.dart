@@ -41,7 +41,10 @@ import 'FilterWidget.dart';
 import 'MapActionDialog.dart';
 
 class TermineSeite extends StatefulWidget {
-  TermineSeite({Key? key***REMOVED***) : super(key: key ?? Key('action page'));
+  Function(LatLng)? switchToActionCreator;
+
+  TermineSeite({Key? key, this.switchToActionCreator***REMOVED***)
+      : super(key: key ?? Key('action page'));
 
   @override
   TermineSeiteState createState() => TermineSeiteState();
@@ -53,7 +56,7 @@ class TermineSeiteState extends State<TermineSeite>
   AbstractTermineService? termineService;
   StorageService? storageService;
   ChatMessageService? chatMessageService;
-  AbstractPlacardsService? placardService;
+  late AbstractPlacardsService placardService;
   static final TextStyle style = TextStyle(
     color: Color.fromARGB(255, 129, 28, 98),
     fontSize: 15.0,
@@ -184,7 +187,7 @@ class TermineSeiteState extends State<TermineSeite>
     termineService = Provider.of<AbstractTermineService>(context);
     storageService = Provider.of<StorageService>(context);
     chatMessageService = Provider.of<ChatMessageService>(context);
-    filterWidget = FilterWidget(ladeTermine, key: filterKey);
+    filterWidget = FilterWidget(loadActionsAndPlacards, key: filterKey);
 
     storageService!
         .loadAllStoredActionIds()
@@ -199,9 +202,6 @@ class TermineSeiteState extends State<TermineSeite>
     ***REMOVED***);
 
     placardService = Provider.of<AbstractPlacardsService>(context);
-    placardService!
-        .loadPlacards()
-        .then((placards) => setState(() => this.placards = placards));
 
     Provider
         .of<AbstractUserService>(context)
@@ -213,14 +213,20 @@ class TermineSeiteState extends State<TermineSeite>
     _initialized = true;
   ***REMOVED***
 
-  Future<void> ladeTermine(TermineFilter filter) async {
-    await termineService!
+  Future loadActionsAndPlacards(TermineFilter filter) async {
+    Future wait4Actions = termineService!
         .loadActions(filter)
         .then((termine) =>
         setState(() => this.termine = termine..sort(Termin.compareByStart)))
         .catchError((e, s) =>
         ErrorService.handleError(e, s,
             context: 'Aktionen konnten nicht geladen werden.'));
+
+    Future wait4placards = placardService
+        .loadPlacards()
+        .then((placards) => setState(() => this.placards = placards));
+
+    await Future.wait([wait4Actions, wait4placards]);
   ***REMOVED***
 
   void showRestError(RestFehler e) {
@@ -244,7 +250,7 @@ class TermineSeiteState extends State<TermineSeite>
     try {
       var terminMitDetails =
       await termineService!.getActionWithDetails(termin.id!);
-      TerminDetailsCommand command = await showActionDetailsPage(
+      TerminDetailsCommand? command = await showActionDetailsPage(
           context,
           terminMitDetails,
           isMyAction(termin),
@@ -446,13 +452,10 @@ class TermineSeiteState extends State<TermineSeite>
   Future<void> joinAction(Termin action) async {
     if (action.id == null || me == null) return;
     await termineService?.joinAction(action.id!);
-    setState(() {
-      // ignore: unnecessary_cast
-      (termine as List<Termin?>)
-          .firstWhere((t) => t!.id == action.id, orElse: () => null)
-          ?.participants
-          ?.add(me!);
-    ***REMOVED***);
+    setState(() =>
+        termine
+            .where((t) => t.id == action.id)
+            .forEach((Termin t) => t.participants?.add(me!)));
   ***REMOVED***
 
   Future<void> leaveAction(Termin action) async {
@@ -507,12 +510,12 @@ class TermineSeiteState extends State<TermineSeite>
   ***REMOVED***
 
   void deletePlacard(Placard placard) {
-    placardService!.deletePlacard(placard.id!);
+    placardService.deletePlacard(placard.id!);
     setState(() => placards.remove(placard));
   ***REMOVED***
 
   mapAction(LatLng point) async {
-    MapActionType chosenAction = await showMapActionDialog(context);
+    MapActionType? chosenAction = await showMapActionDialog(context);
 
     if (chosenAction == MapActionType.NewAction) switchToActionCreator(point);
     if (chosenAction == MapActionType.NewPlacard) createNewPlacard(point);
@@ -520,20 +523,30 @@ class TermineSeiteState extends State<TermineSeite>
   ***REMOVED***
 
   createNewPlacard(LatLng point) async {
+    if (me?.id == null) {
+      ErrorService.pushError('Plakat kann nicht erstellt werden',
+          'Die App hat noch kein Benutzer*inprofil für dich erzeugt. Versuche es bitte später nochmal');
+      return;
+    ***REMOVED***
+
     final geoData = await Provider.of<GeoService>(context, listen: false)
         .getDescriptionToPoint(point);
 
-    if (me?.id == null) return;
-
-    var placard = Placard(
-        null, point.latitude, point.longitude, geoData.fullAdress, me!.id!);
-    placardService?.createPlacard(placard);
-    setState(() => placards.add(placard));
+    final placard = await placardService.createPlacard(Placard(
+        null, point.latitude, point.longitude, geoData.fullAdress, me!.id!));
+    if (placard != null) {
+      setState(() => placards.add(placard));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Neues Plakat an der Adresse "${placard.adresse***REMOVED***" eingetragen'.tr(),
+              style: TextStyle(color: Colors.black87)),
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 5),
+          backgroundColor: Color.fromARGB(220, 255, 255, 250)));
+    ***REMOVED***
   ***REMOVED***
 
-  void switchToActionCreator(LatLng point) {
-    //TODO
-  ***REMOVED***
+  void switchToActionCreator(LatLng point) =>
+      widget.switchToActionCreator!(point);
 
   void createNewVisitedHouse(LatLng point) async{
     //TODO: now it takes always the same distance around tap point
@@ -541,7 +554,7 @@ class TermineSeiteState extends State<TermineSeite>
     var lng_diff = DistanceHelper.getLongDiffFromM(point, show_distance_in_m);
     var lat_diff = DistanceHelper.getLatDiffFromM(point, show_distance_in_m);
     BoundingBox bbox = BoundingBox(point.latitude-lat_diff, point.longitude-lng_diff,
-                                    point.latitude+lat_diff, point.longitude+lng_diff);
+        point.latitude+lat_diff, point.longitude+lng_diff);
     var building_view = Provider.of<AbstractVisitedHousesService>(context, listen: false).getBuildingsInArea(bbox);
     showAddBuildingDialog(context: context, building_view: building_view);
 //    setState(() {

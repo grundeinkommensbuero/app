@@ -352,7 +352,7 @@ open class TermineRestResource {
         var latitude: Double? = null,
         var longitude: Double? = null,
         var participants: List<BenutzerDto>? = emptyList(),
-        var details: TerminDetailsDto? = TerminDetailsDto()
+        var details: TerminDetailsDto? = null
     ) {
 
         fun convertToTermin(): Termin {
@@ -511,7 +511,7 @@ open class TermineRestResource {
         val pushMessage = PushMessageDto(
             PushNotificationDto(
                 "Eine Aktion an der du teilnimmst hat sich geändert",
-                "${aktion.typ***REMOVED*** am ${aktion.beginn!!.format(ofPattern("dd.MM."))***REMOVED*** in ${aktion.ort***REMOVED*** (${aktion.details!!.treffpunkt***REMOVED***)",
+                "${aktion.typ***REMOVED*** am ${aktion.beginn!!.format(ofPattern("dd.MM."))***REMOVED*** in ${aktion.ort***REMOVED*** (${aktion.details?.treffpunkt***REMOVED***)",
                 "Änderungen an Aktionen",
                 "action:change:${aktion.id***REMOVED***"
             ),
@@ -531,7 +531,7 @@ open class TermineRestResource {
         val pushMessage = PushMessageDto(
             PushNotificationDto(
                 "Eine Aktion an der du teilnimmst wurde abgesagt",
-                "${aktion.typ***REMOVED*** am ${aktion.beginn!!.format(ofPattern("dd.MM."))***REMOVED*** in ${aktion.ort***REMOVED*** (${aktion.details!!.treffpunkt***REMOVED***) wurde von der Ersteller*in gelöscht",
+                "${aktion.typ***REMOVED*** am ${aktion.beginn!!.format(ofPattern("dd.MM."))***REMOVED*** in ${aktion.ort***REMOVED*** (${aktion.details?.treffpunkt***REMOVED***) wurde von der Ersteller*in gelöscht",
                 "Änderungen an Aktionen",
                 "action:change:${aktion.id***REMOVED***"
             ),

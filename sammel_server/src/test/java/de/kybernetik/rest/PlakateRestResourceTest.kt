@@ -133,6 +133,31 @@ class PlakateRestResourceTest {
     ***REMOVED***
 
     @Test
+    fun erstellePlakatLiefertPlakatDtoVonDBZurueck() {
+        whenever(dao.erstellePlakat(any())).thenReturn(
+            Plakat(
+                0,
+                52.47065,
+                13.3285,
+                "Plakat aus der Datenbank",
+                11
+            )
+        )
+
+        val response = plakateRestResource.erstellePlakat(
+            PlakatDto(
+                0,
+                52.47065,
+                13.3285,
+                "Plakat von der App",
+                12
+            )
+        )
+
+        assertEquals("Plakat aus der Datenbank", (response.entity as PlakatDto).adresse)
+    ***REMOVED***
+
+    @Test
     fun loeschePlakatErwartetIdAlsPathParameter() {
         val response = plakateRestResource.loeschePlakat(null)
 

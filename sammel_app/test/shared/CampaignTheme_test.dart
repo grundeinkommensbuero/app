@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
 
 void main() {
-  group('faerbeVergangeneTermine', () {
+  group('actionColor', () {
     test('colors past actions', () {
       DateTime gestern = DateTime.now().subtract(Duration(days: 1));
       expect(CampaignTheme.actionColor(gestern, false, false),
@@ -85,6 +86,18 @@ void main() {
       DateTime in1Minute = DateTime.now().add(Duration(minutes: 1));
       expect(CampaignTheme.actionColor(in1Minute, false, true),
           equals(CampaignTheme.altPrimary));
+    ***REMOVED***);
+  ***REMOVED***);
+
+  group('placardColor', () {
+    test('colors own placards', () {
+      var color = CampaignTheme.placardColor(true);
+      expect(color, CampaignTheme.altSecondaryLight);
+    ***REMOVED***);
+
+    test('uncolors others placards', () {
+      var color = CampaignTheme.placardColor(false);
+      expect(color, Colors.transparent);
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***
