@@ -34,14 +34,9 @@ open class VorbehalteRestRessource {
     @Produces(MediaType.APPLICATION_JSON)
     open fun legeNeueVorbehalteAn(vorbehalte: VorbehalteDto): Response {
         LOG.info("Lege neue Vorbehalte an durch ${context.userPrincipal.name***REMOVED***")
-        LOG.debug("Vorbehalte: ${vorbehalte.id***REMOVED***, ${vorbehalte.vorbehalte***REMOVED***, ${vorbehalte.benutzer***REMOVED***, ${vorbehalte.datum***REMOVED***, ${vorbehalte.ort***REMOVED***")
-        println("Vorbehalte: ${vorbehalte.id***REMOVED***, ${vorbehalte.vorbehalte***REMOVED***, ${vorbehalte.benutzer***REMOVED***, ${vorbehalte.datum***REMOVED***, ${vorbehalte.ort***REMOVED***")
-        if (context.userPrincipal.name != vorbehalte.benutzer.toString()) {
-            LOG.warn("Benutzer*in ${vorbehalte.benutzer***REMOVED*** der Vorbehalte stimmt nicht überein mit Benutzer*in ${context.userPrincipal.name***REMOVED*** der Request")
-            vorbehalte.benutzer = context.userPrincipal.name.toLong()
-        ***REMOVED***
+        LOG.debug("Vorbehalte: ${vorbehalte.id***REMOVED***, ${vorbehalte.vorbehalte***REMOVED***, ${vorbehalte.datum***REMOVED***, ${vorbehalte.ort***REMOVED***")
         try {
-            dao.erzeugeNeueVorbehalte(vorbehalte.convertToVorbehalte())
+            dao.erzeugeNeueVorbehalte(vorbehalte.convertToVorbehalte(context.userPrincipal.name.toLong()))
         ***REMOVED*** catch (e: FehlenderWertException) {
             LOG.error(e.message)
             return Response.status(322).entity(RestFehlermeldung(e.message)).build()
@@ -53,15 +48,12 @@ open class VorbehalteRestRessource {
 data class VorbehalteDto(
     var id: Long? = null,
     var vorbehalte: String? = null,
-    var benutzer: Long? = null,
     var datum: LocalDate? = null,
     var ort: String? = null
 ) {
-    fun convertToVorbehalte(): Vorbehalte {
-        if (this.benutzer == null) throw FehlenderWertException("Benutzer")
+    fun convertToVorbehalte(benutzer: Long): Vorbehalte {
         if (this.datum == null) throw FehlenderWertException("Datum")
-        if (this.ort == null) throw FehlenderWertException("Ort")
-        return Vorbehalte(id ?: 0, vorbehalte ?: "", benutzer!!, datum!!, ort!!)
+        return Vorbehalte(id ?: 0, vorbehalte ?: "", benutzer, datum!!, ort ?: "Unbekannt")
     ***REMOVED***
 
     companion object {
@@ -69,7 +61,6 @@ data class VorbehalteDto(
             return VorbehalteDto(
                 vorbehalte.id,
                 vorbehalte.vorbehalte,
-                vorbehalte.benutzer,
                 vorbehalte.datum,
                 vorbehalte.ort
             )

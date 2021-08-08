@@ -41,7 +41,6 @@ class VorbehalteRestRessourceTest {
             VorbehalteDto(
                 0,
                 "Neubau (2), Kosten",
-                11,
                 LocalDate.of(2021, 8, 8),
                 "Frankfurter Allee Nord"
             )
@@ -59,12 +58,11 @@ class VorbehalteRestRessourceTest {
     ***REMOVED***
 
     @Test
-    fun `legeNeueVorbehalteAn passt Benutzer an wenn nicht uebereinstimmend`() {
+    fun `legeNeueVorbehalteAn reichert um Benutzer an`() {
         val response = ressource.legeNeueVorbehalteAn(
             VorbehalteDto(
                 0,
                 "Neubau (2), Kosten",
-                12,
                 LocalDate.of(2021, 8, 8),
                 "Frankfurter Allee Nord"
             )
@@ -82,7 +80,6 @@ class VorbehalteRestRessourceTest {
             VorbehalteDto(
                 0,
                 "Neubau (2), Kosten",
-                12,
                 null,
                 "Frankfurter Allee Nord"
             )

@@ -9,36 +9,13 @@ import java.time.LocalDate
 
 class VorbehalteDtoTest {
     @Test(expected = FehlenderWertException::class)
-    fun `convertToVorbehalte wirft Fehler bei fehlendem Benutzer`() {
-        VorbehalteDto(
-            0L,
-            "Neubau (2), Kosten",
-            null,
-            LocalDate.of(2021, 8, 8),
-            "Frankfurter Allee Nord"
-        ).convertToVorbehalte()
-    ***REMOVED***
-
-    @Test(expected = FehlenderWertException::class)
     fun `convertToVorbehalte wirft Fehler bei fehlendem Datum`() {
         VorbehalteDto(
             0,
             "Neubau (2), Kosten",
-            11L,
             null,
             "Frankfurter Allee Nord"
-        ).convertToVorbehalte()
-    ***REMOVED***
-
-    @Test(expected = FehlenderWertException::class)
-    fun `convertToVorbehalte wirft Fehler bei fehlendem Ort`() {
-        VorbehalteDto(
-            0L,
-            "Neubau (2), Kosten",
-            11L,
-            LocalDate.of(2021, 8, 8),
-            null
-        ).convertToVorbehalte()
+        ).convertToVorbehalte(11L)
     ***REMOVED***
 
     @Test
@@ -46,10 +23,9 @@ class VorbehalteDtoTest {
         val vorbehalte = VorbehalteDto(
             1L,
             "Neubau (2), Kosten",
-            11L,
             LocalDate.of(2021, 8, 8),
             "Frankfurter Allee Nord"
-        ).convertToVorbehalte()
+        ).convertToVorbehalte(11L)
 
         assertEquals(1L, vorbehalte.id)
         assertEquals("Neubau (2), Kosten", vorbehalte.vorbehalte)
@@ -64,13 +40,13 @@ class VorbehalteDtoTest {
         val vorbehalte = VorbehalteDto(
             null,
             null,
-            11L,
             LocalDate.of(2021, 8, 8),
-            "Frankfurter Allee Nord"
-        ).convertToVorbehalte()
+            null
+        ).convertToVorbehalte(11L)
 
         assertEquals(0, vorbehalte.id)
         assertEquals("", vorbehalte.vorbehalte)
+        assertEquals("Unbekannt", vorbehalte.ort)
     ***REMOVED***
 
     @Test
@@ -85,7 +61,6 @@ class VorbehalteDtoTest {
 
         assertEquals(1L, vorbehalte.id)
         assertEquals("Neubau (2), Kosten", vorbehalte.vorbehalte)
-        assertEquals(11L, vorbehalte.benutzer)
         assertEquals(2021, vorbehalte.datum?.year)
         assertEquals(8, vorbehalte.datum?.month?.value)
         assertEquals(8, vorbehalte.datum?.dayOfMonth)

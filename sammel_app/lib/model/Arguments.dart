@@ -5,16 +5,14 @@ import 'Kiez.dart';
 
 class Arguments {
   String arguments;
-  int user;
   DateTime date;
-  Kiez kiez;
+  Kiez? kiez;
   
-  Arguments(this.arguments, this.user, this.date, this.kiez);
+  Arguments(this.arguments, this.date, this.kiez);
 
   Map<String, dynamic> toJson() => {
     'vorbehalte': arguments,
-    'benutzer': user,
     'datum': DateFormat('yyyy-MM-dd').format(date),
-    'ort': kiez.name,
+    'ort': kiez?.name,
   ***REMOVED***
 ***REMOVED***
