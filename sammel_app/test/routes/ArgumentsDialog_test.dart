@@ -4,6 +4,7 @@ import 'package:flutter_test_ui/flutter_test_ui.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
+import 'package:sammel_app/model/Arguments.dart';
 import 'package:sammel_app/routes/ArgumentsDialog.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
@@ -13,6 +14,7 @@ import '../shared/mocks.mocks.dart';
 
 main() {
   final mockStammdatenService = MockStammdatenService();
+  Arguments? result = null;
 
   setUpUI((tester) async {
     reset(mockStammdatenService);
@@ -30,7 +32,8 @@ main() {
                 child: ElevatedButton(
                     key: Key('starter'),
                     child: const Text('Starter'),
-                    onPressed: () async => await showArgumentsDialog(
+                    onPressed: () async => result =
+                    await showArgumentsDialog(
                         context: context,
                         coordinates: LatLng(52.49653, 13.43762))),
               );
@@ -60,12 +63,27 @@ main() {
     expect(find.text('In Frankfurter Allee Nord am $today'), findsOneWidget);
   ***REMOVED***);
 
-  testUI('shows "Berlin" when Kiez cannot be determined', (tester) async {
+  testUI('shows "Berlin" on start', (tester) async {
     when(mockStammdatenService.getKiezAtLocation(any))
         .thenAnswer((_) => Future.value(null));
     await tester.pump();
 
     var today = ChronoHelfer.formatDateOfDateTime(DateTime.now());
     expect(find.text('In Berlin am $today'), findsOneWidget);
+  ***REMOVED***);
+
+  testUI('returns Arguments on "Absenden" button', (tester) async {
+    await tester.pumpAndSettle();
+
+    await tester.enterText(
+        find.byKey(Key('arguments input')), 'Abschreckung von Investoren');
+    await tester.tap(find.byKey(Key('arguments dialog finish button')));
+    await tester.pump();
+
+    expect(result?.arguments, 'Abschreckung von Investoren');
+    expect(result?.date.year, DateTime.now().year);
+    expect(result?.date.month, DateTime.now().month);
+    expect(result?.date.day, DateTime.now().day);
+    expect(result?.kiez?.name, "Frankfurter Allee Nord");
   ***REMOVED***);
 ***REMOVED***
