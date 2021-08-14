@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/Provisioning.dart';
 import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
+import 'package:sammel_app/services/ArgumentsService.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
@@ -77,6 +78,9 @@ class MyApp extends StatelessWidget {
   static var placardService = demoMode
       ? DemoPlacardsService(userService)
       : PlacardsService(userService, backend);
+  static var argumentsService = demoMode
+      ? DemoArgumentsService(userService)
+      : ArgumentsService(userService, backend);
   static var visitedHouseService = demoMode ? DemoVisitedHousesService(userService, geoService,  backend) : VisitedHousesService(geoService, userService, backend);
 
   @override
@@ -97,7 +101,9 @@ class MyApp extends StatelessWidget {
           Provider<LocalNotificationService>.value(
               value: localNotificationService),
           Provider<AbstractVisitedHousesService>.value(value: visitedHouseService),
-          Provider(create: (_) => placardService)
+          Provider(create: (_) => placardService),
+          Provider<AbstractPlacardsService>(create: (_) => placardService),
+          Provider<AbstractArgumentsService>(create: (_) => argumentsService)
         ],
         child: MaterialApp(
           title: 'DW & Co. Enteignen',
