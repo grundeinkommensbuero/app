@@ -5,6 +5,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:poly/poly.dart' as poly;
 import 'package:provider/provider.dart';
+import 'package:quiver/iterables.dart';
 import 'package:sammel_app/model/Building.dart';
 import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/services/UserService.dart';
@@ -27,8 +28,8 @@ addNewVisitedHouseEvent(BuildContext context, Future<VisitedHouse?> future_vh) a
     //the last event is new. register at server
     var abstractVisitedHousesService =
         Provider.of<AbstractVisitedHousesService>(context, listen: false);
-    Future<VisitedHouse?> future_new_house =
-        abstractVisitedHousesService.createVisitedHouse(vh);
+    var future_new_house =
+        abstractVisitedHousesService.editVisitedHouse(vh);
     return future_new_house;
   ***REMOVED***
   return null;
@@ -56,19 +57,20 @@ addNewVisitedHouseEvent(BuildContext context, Future<VisitedHouse?> future_vh) a
 ***REMOVED***
 
 showAddBuildingDialog(
-    {required BuildContext context, required VisitedHouseView building_view***REMOVED***) {
+    {required BuildContext context, required VisitedHouseView building_view, required double current_zoom_factor***REMOVED***) {
   Future<VisitedHouse?> future_vh = showDialog(
     context: context,
-    builder: (context) => AddBuildingDialog(building_view),
+    builder: (context) => AddBuildingDialog(building_view, current_zoom_factor),
   );
   return addNewVisitedHouseEvent(context, future_vh);
 ***REMOVED***
 
 class AddBuildingDialog extends StatefulWidget {
   late final LatLng? center;
-  late final VisitedHouseView building_view;
+  final VisitedHouseView building_view;
+  final double current_zoom_factor;
 
-  AddBuildingDialog(this.building_view)
+  AddBuildingDialog(this.building_view, this.current_zoom_factor)
       : super(key: Key('add building dialog'));
 
   @override
@@ -153,19 +155,16 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
       SizedBox(
         height: 10.0,
       ),
-      Text(
+      Align(alignment: Alignment.centerLeft, child: Text(
         'Addresse',
         textScaleFactor: 0.8,
-      ).tr(),
+      ).tr()),
       SizedBox(
         height: 5.0,
       ),
       TextFormField(
         key: Key('visited house adress input'),
         //  keyboardType: TextInputType.multiline,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(),
-        ),
         //onChanged: (input) => location.description = input,
         controller: visitedHouseController,
       ),
@@ -188,7 +187,7 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
                 key: Key('venue map'),
                 options: MapOptions(
                     center: center,
-                    zoom: 17,
+                    zoom: widget.current_zoom_factor < 17 ? 17 : widget.current_zoom_factor,
                     interactiveFlags: noRotation,
                     swPanBoundary: LatLng(building_view.bbox.minLatitude,
                         building_view.bbox.minLongitude),
@@ -242,6 +241,9 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
             SelectableVisitedHouse.fromVisitedHouse(building_from_server);
       ***REMOVED***
     ***REMOVED***
+    if(!mounted)
+      return;
+    
     setState(() {
       if (building != null &&
           building_view.selected_building?.osm_id != building.osm_id) {

@@ -16,9 +16,8 @@ import 'GeoService.dart';
 import 'VisitedHouseView.dart';
 
 abstract class AbstractVisitedHousesService extends BackendService {
-  AbstractVisitedHousesService(AbstractUserService userService, Backend backend)
-      : super(userService, backend);
 
+  late GeoService geoService;
 
   Map<int, VisitedHouse> localBuildingMap = {***REMOVED***
 
@@ -26,9 +25,77 @@ abstract class AbstractVisitedHousesService extends BackendService {
 
   Future<VisitedHouse?> createVisitedHouse(VisitedHouse house);
 
-  deleteVisitedHouse(int id);
+  AbstractVisitedHousesService(AbstractUserService userService, GeoService geoService, Backend backend)
+      : super(userService, backend)
+  {
+    this.geoService = geoService;
+  ***REMOVED***
 
-  Future<VisitedHouse?> getVisitedHouseOfPoint(LatLng point, bool check_on_server);
+  /*
+  deleteVisitedHouse(int id) {
+    for(VisitedHouse vh in localBuildingMap.values)
+    {
+      for(VisitedHouseEvent vhe in vh.visitation_events)
+      {
+        if(id == vhe.id)
+        {
+          if(vh.visitation_events.length == 1)
+          {
+            var res = localBuildingMap.remove(vh.osm_id);
+            print(res);
+          ***REMOVED***
+          else{
+            vh.visitation_events.remove(vhe);
+          ***REMOVED***
+          return;
+        ***REMOVED***
+      ***REMOVED***
+    ***REMOVED***
+  ***REMOVED****/
+
+  @override
+  Future<VisitedHouse?> getVisitedHouseOfPoint(LatLng point, bool check_on_server) async {
+    VisitedHouse? vh_of_point = getBuildingForPointLocal(point);
+    if(vh_of_point != null)
+    {
+      return vh_of_point;
+    ***REMOVED***
+    if(!check_on_server)
+    {
+      return null;
+    ***REMOVED***
+    Future<List> s_future = geoService.getPolygonAndDescriptionOfPoint(point);
+    List s = await s_future;
+    GeoData gd = s[1];
+    List<LatLng>? shape = s[0];
+    var osm_id = s[2];
+    if(shape == null)
+    {
+      //no shape found take small bbox around point. problem is that we want a box that is drawn as square
+      double lat_5m = DistanceHelper.getLatDiffFromM(point, 5.0);
+      double lng_5m = DistanceHelper.getLongDiffFromM(point, 15.0);
+      shape = [LatLng(point.latitude-lat_5m, point.longitude-lng_5m), LatLng(point.latitude+lat_5m, point.longitude-lng_5m),
+        LatLng(point.latitude+lat_5m, point.longitude+lng_5m),LatLng(point.latitude-lat_5m, point.longitude+lng_5m)];
+    ***REMOVED***
+    if(osm_id == null)
+    {
+      //in this case we create the osm id by the center
+      osm_id = point.hashCode;
+    ***REMOVED***
+    return getBuildingFromJson(osm_id, point, gd, shape);
+  ***REMOVED***
+
+  VisitedHouse? getBuildingFromJson(int osm_id, LatLng point, GeoData geo_data, List<LatLng> shape)
+  {
+    if(localBuildingMap.containsKey(osm_id))
+    {
+      return localBuildingMap[osm_id];
+    ***REMOVED***
+    else{
+      //TODO: Change to myself here
+      return VisitedHouse(osm_id, point.latitude, point.longitude, '${geo_data.street***REMOVED*** ${geo_data.number***REMOVED***' , shape,[]);
+    ***REMOVED***
+  ***REMOVED***
 
   VisitedHouseView getBuildingsInArea(BoundingBox bbox)
   {
@@ -58,21 +125,55 @@ abstract class AbstractVisitedHousesService extends BackendService {
     return null;
   ***REMOVED***
 
+  VisitedHouse editVisitedHouse(VisitedHouse house) {
+
+    var add_events = house.visitation_events;
+    var delete_events = Set();
+
+    VisitedHouse? building =  localBuildingMap[house.osm_id];
+
+    if(building != null) {
+      var current_ids = building.visitation_events.map((e) => e.id).toSet();
+      var new_ids = house.visitation_events.map((e) => e.id).toSet();
+      delete_events = current_ids.difference(new_ids);
+      add_events = add_events.where((element) => !current_ids.contains(element.id)).toList();
+    ***REMOVED***
+      for (var delete_event in delete_events) {
+        deleteVisitedHouse(delete_event);
+      ***REMOVED***
+
+      for (var add_event in add_events) {
+        VisitedHouse house_with_event_only = VisitedHouse(house.osm_id, house.latitude, house.longitude,
+                                                          house.adresse, house.shape, [add_event]);
+        var h = createVisitedHouse(house_with_event_only);
+        h.then((value) => add_event.id = value?.visitation_events.last.id);
+      ***REMOVED***
+      if(house.visitation_events.isNotEmpty)
+        {
+          house.visitation_events.sort((a,b) => a.datum.difference(b.datum).inSeconds>0 ? 1 : a.datum.difference(b.datum).inSeconds<0 ? -1 : 0);
+          localBuildingMap[house.osm_id] = house;
+        ***REMOVED***
+      else{
+        localBuildingMap.remove(house.osm_id);
+      ***REMOVED***
+
+    return house;
+  ***REMOVED***
+
   getAllHouses() {
     return localBuildingMap.values.toList();
   ***REMOVED***
+
+  deleteVisitedHouse(int id) async {***REMOVED***
 ***REMOVED***
 
 class VisitedHousesService extends AbstractVisitedHousesService {
 
-  var earth_radius = 6371000;
   late HttpClient httpClient;
   late GeoService geoService;
 
   VisitedHousesService(GeoService geoService, AbstractUserService userService, Backend backend)
-      : super(userService, backend) {
-    this.geoService = geoService;
-  ***REMOVED***
+      : super(userService, geoService, backend);
 
   @override
   Future<VisitedHouse?> createVisitedHouse(VisitedHouse house) async {
@@ -106,51 +207,31 @@ class VisitedHousesService extends AbstractVisitedHousesService {
           context: 'Besuchte Häuser konnten nicht geladen werden.');
       return [];
     ***REMOVED***
+
     final houses = (response.body as List)
         .map((jsonHouse) => VisitedHouse.fromJson(jsonHouse))
         .toList();
-    return houses;
-  ***REMOVED***
 
-  @override
-  Future<VisitedHouse?> getVisitedHouseOfPoint(LatLng point, bool check_on_server) async {
-    VisitedHouse? vh_of_point = super.getBuildingForPointLocal(point);
-    if(vh_of_point != null)
+    for( VisitedHouse house in houses)
       {
-        return vh_of_point;
+        VisitedHouse? local_house = localBuildingMap[house.osm_id];
+        if(local_house != null)
+          {
+            var idx = local_house.visitation_events.indexWhere((element) => element.id == house.visitation_events.first.id);
+            if(idx == -1)
+              {
+                local_house.visitation_events.add(house.visitation_events.first);
+              ***REMOVED***
+            else{
+                local_house.visitation_events[idx] = house.visitation_events.first;
+            ***REMOVED***
+          ***REMOVED***
+        else{
+          localBuildingMap[house.osm_id] = house;
+        ***REMOVED***
       ***REMOVED***
-      Future<List> s_future = geoService.getPolygonAndDescriptionOfPoint(point);
-      List s = await s_future;
-      GeoData gd = s[1];
-      List<LatLng>? shape = s[0];
-      var osm_id = s[2];
-      if(shape == null)
-        {
-          //no shape found take small bbox around point
-          double lat_5m = DistanceHelper.getLatDiffFromM(point, 5.0);
-          double lng_5m = DistanceHelper.getLongDiffFromM(point, 5.0);
-          shape = [LatLng(point.latitude-lat_5m, point.longitude-lng_5m), LatLng(point.latitude+lat_5m, point.longitude-lng_5m),
-            LatLng(point.latitude+lat_5m, point.longitude+lng_5m),LatLng(point.latitude-lat_5m, point.longitude+lng_5m)];
-        ***REMOVED***
-      if(osm_id == null)
-        {
-          //in this case we create the osm id by the center
-          osm_id = point.hashCode;
-        ***REMOVED***
-    return getBuildingFromJson(osm_id, point, gd, shape);
-  ***REMOVED***
 
-  VisitedHouse? getBuildingFromJson(int osm_id, LatLng point, GeoData geo_data, List<LatLng> shape)
-  {
-    if(localBuildingMap.containsKey(osm_id))
-    {
-      return localBuildingMap[osm_id];
-    ***REMOVED***
-    else{
-      //TODO: Change to myself here
-      return VisitedHouse(osm_id, point.latitude, point.longitude, '${geo_data.street***REMOVED*** ${geo_data.number***REMOVED***', shape,
-          []);
-    ***REMOVED***
+    return this.getAllHouses();
   ***REMOVED***
 ***REMOVED***
 
@@ -158,7 +239,6 @@ var s1 = [{'lat': 52.5204094, 'lon': 13.3687217***REMOVED***, {'lat': 52.5204086
 
 class DemoVisitedHousesService extends AbstractVisitedHousesService {
 
-  late GeoService geoService;
   List<VisitedHouse> visitedHouses = [
     VisitedHouse(
         1,
@@ -189,8 +269,7 @@ class DemoVisitedHousesService extends AbstractVisitedHousesService {
   ];
   var maxId = 10;
   DemoVisitedHousesService(AbstractUserService userService, GeoService geoService, Backend backend)
-      : super(userService, backend) {
-    this.geoService = geoService;
+      : super(userService, geoService, backend) {
     localBuildingMap = { for (VisitedHouse v in visitedHouses) v.osm_id: v***REMOVED***
   ***REMOVED***
 
@@ -198,97 +277,9 @@ class DemoVisitedHousesService extends AbstractVisitedHousesService {
   @override
   Future<VisitedHouse> createVisitedHouse(VisitedHouse house) {
 
-         VisitedHouse? building =  localBuildingMap[house.osm_id];
-         if(building != null)
-           {
-             for(VisitedHouseEvent event in house.visitation_events)
-               {
-                 if(event.id == -1) {
-                   event.id = maxId;
-                   maxId += 1;
-                 ***REMOVED***
-               ***REMOVED***
-           ***REMOVED***
-         if(house.visitation_events.isEmpty)
-           localBuildingMap.remove(house.osm_id);
-         else
-          localBuildingMap[house.osm_id] = house;
-
-    /*
-    VisitedHouse? vh = localBuildingMap[houses.osm_id];
-    if(vh != null)
-      {
-        vh.visitation_events.add(houses.visitation_events.last);
-      ***REMOVED***
-    else {
-      localBuildingMap[houses.osm_id] = houses;
-      vh = houses;
-    ***REMOVED****/
+    house.visitation_events.last.id = maxId;
+    maxId += 1;
     return Future.value(house);
-  ***REMOVED***
-  @override
-  Future<VisitedHouse?> getVisitedHouseOfPoint(LatLng point, bool check_on_server) async {
-    VisitedHouse? vh_of_point = super.getBuildingForPointLocal(point);
-    if(vh_of_point != null)
-    {
-      return vh_of_point;
-    ***REMOVED***
-    if(!check_on_server)
-      {
-        return null;
-      ***REMOVED***
-    Future<List> s_future = geoService.getPolygonAndDescriptionOfPoint(point);
-    List s = await s_future;
-    GeoData gd = s[1];
-    List<LatLng>? shape = s[0];
-    var osm_id = s[2];
-    if(shape == null)
-    {
-      //no shape found take small bbox around point
-      double lat_5m = DistanceHelper.getLatDiffFromM(point, 5.0);
-      double lng_5m = DistanceHelper.getLongDiffFromM(point, 5.0);
-      shape = [LatLng(point.latitude-lat_5m, point.longitude-lng_5m), LatLng(point.latitude+lat_5m, point.longitude-lng_5m),
-        LatLng(point.latitude+lat_5m, point.longitude+lng_5m),LatLng(point.latitude-lat_5m, point.longitude+lng_5m)];
-    ***REMOVED***
-    if(osm_id == null)
-    {
-      //in this case we create the osm id by the center
-      osm_id = point.hashCode;
-    ***REMOVED***
-    return getBuildingFromJson(osm_id, point, gd, shape);
-  ***REMOVED***
-
-  VisitedHouse? getBuildingFromJson(int osm_id, LatLng point, GeoData geo_data, List<LatLng> shape)
-  {
-    if(localBuildingMap.containsKey(osm_id))
-    {
-      return localBuildingMap[osm_id];
-    ***REMOVED***
-    else{
-      //TODO: Change to myself here
-      return VisitedHouse(osm_id, point.latitude, point.longitude, '${geo_data.street***REMOVED*** ${geo_data.number***REMOVED***' , shape,[]);
-    ***REMOVED***
-  ***REMOVED***
-
-  @override
-  deleteVisitedHouse(int id) {
-    for(VisitedHouse vh in localBuildingMap.values)
-      {
-        for(VisitedHouseEvent vhe in vh.visitation_events)
-          {
-            if(id == vhe.id)
-              {
-                if(vh.visitation_events.length == 1)
-                  {
-                    localBuildingMap.remove(vh);
-                  ***REMOVED***
-                else{
-                  vh.visitation_events.remove(vhe);
-                ***REMOVED***
-                return;
-              ***REMOVED***
-          ***REMOVED***
-      ***REMOVED***
   ***REMOVED***
 
   @override

@@ -57,8 +57,8 @@ class GeoService {
 
   Future<List> getPolygonAndDescriptionOfPoint(LatLng point) async
   {
-    var two_meter_lat = DistanceHelper.getLatDiffFromM(point, 2.0);//2.0/cos(point.latitude/360).abs()/earth_radius;
-    var two_meter_lng = DistanceHelper.getLongDiffFromM(point, 2.0);//2.0/cos(point.latitude/360).abs()/earth_radius;
+    var two_meter_lat = DistanceHelper.getLatDiffFromM(point, 10.0);
+    var two_meter_lng = DistanceHelper.getLongDiffFromM(point, 10.0);
     var upper_right_lat = point.latitude-two_meter_lat;
     var upper_right_lng = point.longitude-two_meter_lng;
     var lower_left_lat = point.latitude+two_meter_lat;

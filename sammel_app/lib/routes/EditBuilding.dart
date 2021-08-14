@@ -27,8 +27,8 @@ addNewVisitedHouseEvent(BuildContext context, Future<VisitedHouse?> future_vh) a
     //the last event is new. register at server
     var abstractVisitedHousesService =
         Provider.of<AbstractVisitedHousesService>(context, listen: false);
-    Future<VisitedHouse?> future_new_house =
-        abstractVisitedHousesService.createVisitedHouse(vh);
+    VisitedHouse future_new_house =
+        abstractVisitedHousesService.editVisitedHouse(vh);
     return future_new_house;
   ***REMOVED***
   return null;
@@ -56,10 +56,10 @@ addNewVisitedHouseEvent(BuildContext context, Future<VisitedHouse?> future_vh) a
 ***REMOVED***
 
 showEditVisitedHouseDialog(
-    {required BuildContext context, required VisitedHouseView building_view***REMOVED***) {
+    {required BuildContext context, required VisitedHouseView building_view, required double current_zoom_factor***REMOVED***) {
   Future<VisitedHouse?> future_vh = showDialog(
     context: context,
-    builder: (context) => EditBuildingDialog(building_view),
+    builder: (context) => EditBuildingDialog(building_view, current_zoom_factor),
   );
   return addNewVisitedHouseEvent(context, future_vh);
 ***REMOVED***
@@ -67,8 +67,9 @@ showEditVisitedHouseDialog(
 class EditBuildingDialog extends StatefulWidget {
   late final LatLng? center;
   late final VisitedHouseView building_view;
+  late final double current_zoom_factor;
 
-  EditBuildingDialog(this.building_view)
+  EditBuildingDialog(this.building_view, this.current_zoom_factor)
       : super(key: Key('add building dialog'));
 
   @override
@@ -79,8 +80,6 @@ class EditBuildingDialog extends StatefulWidget {
 
 class EditBuildingDialogState extends State<EditBuildingDialog> {
   LocationMarker? marker;
-  late TextEditingController visitedHouseController;
-  late TextEditingController visitedHousePartController;
   @required
   late VisitedHouseView building_view;
   late LatLng center;
@@ -94,8 +93,6 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
         0.5 *
             (building_view.bbox.maxLongitude +
                 building_view.bbox.minLongitude));
-    visitedHouseController = TextEditingController(text: '');
-    visitedHousePartController = TextEditingController(text: '');
   ***REMOVED***
 
   @override
@@ -149,10 +146,10 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
       SizedBox(
         height: 10.0,
       ),
-      Text(
+      Align(alignment: Alignment.centerLeft, child: Text(
         'Visitation Events',
-        textScaleFactor: 0.8,
-      ).tr(),
+        textScaleFactor: 1.2,
+      ).tr()),
       SizedBox(
         height: 5.0,
       )
@@ -173,7 +170,7 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
                 key: Key('venue map'),
                 options: MapOptions(
                     center: center,
-                    zoom: 17,
+                    zoom: widget.current_zoom_factor < 17 ? 17 : widget.current_zoom_factor,
                     interactiveFlags: noRotation,
                     swPanBoundary: LatLng(building_view.bbox.minLatitude,
                         building_view.bbox.minLongitude),
@@ -208,20 +205,6 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
         building_view.selected_building =
             SelectableVisitedHouse.clone(building);
         building_view.selected_building?.selected = true;
-        var usr_id = Provider.of<AbstractUserService>(context, listen: false)
-            .latestUser!
-            .id;
-        if (usr_id != null)
-          building_view.selected_building?.visitation_events
-              .add(VisitedHouseEvent(-1, "Main", usr_id, DateTime.now()));
-        visitedHouseController.text =
-            '${building_view.selected_building?.adresse***REMOVED***';
-        if (building_view.selected_building == null) {
-          visitedHousePartController.text = '';
-        ***REMOVED*** else {
-          visitedHousePartController.text =
-              building_view.selected_building!.visitation_events.last.hausteil;
-        ***REMOVED***
       ***REMOVED***
       //venueController.text = geodata.description;
       // marker = LocationMarker(point);

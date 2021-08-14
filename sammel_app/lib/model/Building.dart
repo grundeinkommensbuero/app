@@ -68,12 +68,6 @@ class VisitedHouse {
     return poly.Polygon(shape.map((latlng) =>
     (poly.Point<num>(latlng.latitude, latlng.longitude))).cast<poly.Point<num>>().toList()).contains(point.latitude, point.longitude);
   ***REMOVED***
-
-  addVisitationEvent(VisitedHouseEvent event)
-  {
-    visitation_events.add(event);
-  ***REMOVED***
-
 ***REMOVED***
 
 class SelectableVisitedHouse extends VisitedHouse {
