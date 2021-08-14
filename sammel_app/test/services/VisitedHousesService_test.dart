@@ -22,7 +22,7 @@ void main() {
     setUp(() {
       backend = MockBackend();
       trainBackend(backend);
-      service = VisitedHousesService(userService, backend);
+      service = VisitedHousesService(MockGeoService(), MockUserService(), backend);
     ***REMOVED***);
 
     test('loadVisitedHouses calls right path', () async {
@@ -115,11 +115,11 @@ void main() {
 
   group('DemoVisitedHousesService', () {
     DemoVisitedHousesService visitedHousesService =
-        DemoVisitedHousesService(userService, DemoBackend());
+        DemoVisitedHousesService(userService, MockGeoService(), DemoBackend());
 
     setUp(() {
       visitedHousesService =
-          DemoVisitedHousesService(userService, DemoBackend());
+          DemoVisitedHousesService(userService, MockGeoService(), DemoBackend());
     ***REMOVED***);
 
     test('createVisitedHouse stores house with new id and returns it',
@@ -182,5 +182,16 @@ void main() {
 
       expect(houses.map((h) => h.id), containsAll([1, 2, 3]));
     ***REMOVED***);
+
+    test('editVisitedHouses', () async {
+      VisitedHouse house = VisitedHouse(4, 53, 11, 'tttt', [], [VisitedHouseEvent(-1, 'hausteil', 3, DateTime(2100))]);
+      visitedHousesService.editVisitedHouse(house);
+
+      expect(visitedHousesService.localBuildingMap.length, 4);
+      expect(visitedHousesService.localBuildingMap[4]!.osm_id , 4);
+      expect(visitedHousesService.localBuildingMap[4]!.visitation_events.length, 1);
+      expect(visitedHousesService.localBuildingMap[4]!.visitation_events[0].id, 4);
+    ***REMOVED***);
+
   ***REMOVED***);
 ***REMOVED***

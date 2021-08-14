@@ -2222,23 +2222,18 @@ VisitedHouse kanzlerinamt() => VisitedHouse(
     52.52014,
     13.36911,
     'Willy-Brandt-Straße 1, Tiergarten, Mitte, Berlin, 10557',
-    'Westflügel',
-    DateTime(2021, 7, 18),
-    11,
-    '');
+    [], [VisitedHouseEvent(1, 'Westflügel', 11, DateTime(2021, 7, 18))]);
+
 
 VisitedHouse hausundgrund() => VisitedHouse(2, 52.4964133, 13.3617511,
-    'Potsdamer Straße 143, 10783 Berlin', null, DateTime(2021, 7, 17), 12, '');
+    'Potsdamer Straße 143, 10783 Berlin', [], [VisitedHouseEvent(2, '', 12, DateTime(2021, 7, 17))]);
 
 VisitedHouse konradadenauerhaus() => VisitedHouse(
     3,
     52.5065,
     13.35125,
     'Klingelhöferstraße 8,Botschaftsviertel, Tiergarten, Mitte, Berlin, 10785',
-    'Haupteingang',
-    DateTime(2021, 7, 19),
-    11,
-    '');
+    [], [VisitedHouseEvent(3, 'Haupteingang', 11, DateTime(2021, 7, 19))]);
 
 ListLocation curry36() =>
     ListLocation('1', 'Curry 36', 'Mehringdamm', '36', 52.4935584, 13.3877282);
