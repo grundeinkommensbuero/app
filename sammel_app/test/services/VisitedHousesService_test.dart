@@ -48,9 +48,9 @@ void main() {
 
       var response = await service.loadVisitedHouses();
 
-      expect(response[0].id, 1);
-      expect(response[1].id, 2);
-      expect(response[2].id, 3);
+      expect(response[0].osm_id, 1);
+      expect(response[1].osm_id, 2);
+      expect(response[2].osm_id, 3);
       expect(response[0].adresse,
           'Willy-Brandt-Straße 1, Tiergarten, Mitte, Berlin, 10557');
       expect(response[1].adresse, 'Potsdamer Straße 143, 10783 Berlin');
@@ -64,7 +64,7 @@ void main() {
               MockHttpClientResponseBody(), 200, kanzlerinamt().toJson())));
 
       var house = kanzlerinamt();
-      house.id = null;
+      house.osm_id = null;
       await service.createVisitedHouse(house);
 
       verify(backend.post(
@@ -132,10 +132,8 @@ void main() {
               52.47541,
               13.30508,
               'Mecklenburgische Straße 57, Wilmersdorf, Charlottenburg-Wilmersdorf, Berlin, 14197',
-              'Haupteingang',
-              DateTime(2021, 7, 18),
-              11,
-              ''));
+              [],
+              [VisitedHouseEvent(0, 'Haupteingang', 11, DateTime(2021, 7, 18))]));
 
       expect(visitedHousesService.visitedHouses.length, 4);
       expect(visitedHousesService.visitedHouses[3].id, 4);
@@ -150,10 +148,8 @@ void main() {
           52.47541,
           13.30508,
           'Mecklenburgische Straße 57, Wilmersdorf, Charlottenburg-Wilmersdorf, Berlin, 14197',
-          'Haupteingang',
-          DateTime(2021, 7, 18),
-          11,
-          ''));
+          [],
+          [VisitedHouseEvent(10, 'Haupteingang', 11, DateTime(2021, 7, 18))]));
 
       expect(visitedHousesService.visitedHouses.length, 4);
       expect(visitedHousesService.visitedHouses[3].id, 10);

@@ -254,7 +254,7 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
             .id;
         if (usr_id != null)
           building_view.selected_building?.visitation_events
-              .add(VisitedHouseEvent(-1, "Main", usr_id, DateTime.now()));
+              .add(VisitedHouseEvent(null, "Main", usr_id, DateTime.now()));
         visitedHouseController.text =
             '${building_view.selected_building?.adresse***REMOVED***';
         if (building_view.selected_building == null) {

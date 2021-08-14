@@ -77,7 +77,7 @@ class MyApp extends StatelessWidget {
   static var placardService = demoMode
       ? DemoPlacardsService(userService)
       : PlacardsService(userService, backend);
-  static var visitedHouseService = demoMode ? DemoVisitedHousesService(userService, geoService,  backend) : DemoVisitedHousesService(userService, geoService, backend);
+  static var visitedHouseService = demoMode ? DemoVisitedHousesService(userService, geoService,  backend) : VisitedHousesService(geoService, userService, backend);
 
   @override
   Widget build(BuildContext context) {

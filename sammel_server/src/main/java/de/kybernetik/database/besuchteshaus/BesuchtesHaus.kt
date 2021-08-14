@@ -24,7 +24,7 @@ class BesuchtesHaus: Serializable {
         adresse: String,
         hausteil: String?,
         polygon: String?,
-        osmId: String?,
+        osmId: Long?,
         datum: LocalDate,
         user_id: Long
     ) {
@@ -59,7 +59,7 @@ class BesuchtesHaus: Serializable {
     var polygon: String? = null
 
     @Column
-    var osm_id: String? = null
+    var osm_id: Long? = null
 
     @Column
     var datum: LocalDate

@@ -6,7 +6,7 @@ create table BesuchteHaeuser
     adresse   varchar(120) not null,
     hausteil  varchar(120) null,
     polygon   text         null,
-    osm_id     varchar(20)  null,
+    osm_id    int  null,
     datum     datetime     not null,
     user_id   int          not null
 );
