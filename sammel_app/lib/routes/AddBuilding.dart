@@ -221,7 +221,6 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
   houseSelected(LatLng point) async {
 
     setState(() {
-      print('### setState');
       showLoadingIndicator = true;
     ***REMOVED***);
 

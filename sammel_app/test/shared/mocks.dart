@@ -5,6 +5,7 @@ import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/LocalNotificationService.dart';
+import 'package:sammel_app/services/PlacardsService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
@@ -26,6 +27,7 @@ import 'package:sammel_app/services/UserService.dart';
   DemoPushSendService,
   StammdatenService,
   FlutterLocalNotificationsPlugin,
+  PlacardsService,
 ], customMocks: [
   MockSpec<StorageService>(returnNullOnMissingStub: true),
   MockSpec<FirebaseReceiveService>(returnNullOnMissingStub: true)

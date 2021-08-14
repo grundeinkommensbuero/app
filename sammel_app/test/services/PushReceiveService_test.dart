@@ -100,10 +100,17 @@ main() {
         var onMessage = (_) async => called++;
         service.subscribe(onMessage: onMessage);
         when(backend.get('service/push/pull', any)).thenAnswer((_) =>
-            Future<HttpClientResponseBody>.value(trainHttpResponse(
-                MockHttpClientResponseBody(),
-                200,
-                [RemoteMessage(), RemoteMessage()])));
+            Future<HttpClientResponseBody>.value(
+                trainHttpResponse(MockHttpClientResponseBody(), 200, [
+              {
+                'notification': {'title': 'Titel', 'body': 'Inhalt'***REMOVED***,
+                'data': <String, dynamic>{***REMOVED***
+              ***REMOVED***,
+              {
+                'notification': {'title': 'Titel', 'body': 'Inhalt'***REMOVED***,
+                'data': <String, dynamic>{***REMOVED***
+              ***REMOVED***
+            ])));
 
         await service.pull();
 

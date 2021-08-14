@@ -73,6 +73,8 @@ class BesuchteHaeuserRestResourceTest {
                 13.30508,
                 "Mecklenburgische Straße 57, Wilmersdorf, Charlottenburg-Wilmersdorf, Berlin, 14197",
                 "Haupteingang",
+                null,
+                null,
                 LocalDate.of(2021, 7, 18),
                 11
             )
@@ -85,6 +87,8 @@ class BesuchteHaeuserRestResourceTest {
                 13.30508,
                 "Mecklenburgische Straße 57, Wilmersdorf, Charlottenburg-Wilmersdorf, Berlin, 14197",
                 "Haupteingang",
+                null,
+                null,
                 LocalDate.of(2021, 7, 18),
                 11
             )
@@ -109,6 +113,8 @@ class BesuchteHaeuserRestResourceTest {
                 13.30508,
                 "Mecklenburgische Straße 57, Wilmersdorf, Charlottenburg-Wilmersdorf, Berlin, 14197",
                 "Haupteingang",
+                null,
+                null,
                 LocalDate.of(2021, 7, 18),
                 11
             )
@@ -121,6 +127,8 @@ class BesuchteHaeuserRestResourceTest {
                 13.30508,
                 "Mecklenburgische Straße 57, Wilmersdorf, Charlottenburg-Wilmersdorf, Berlin, 14197",
                 "Haupteingang",
+                null,
+                null,
                 LocalDate.of(2021, 7, 18),
                 12
             )

@@ -16,6 +16,7 @@ import 'package:sammel_app/shared/AttributionPlugin.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
 import 'package:sammel_app/shared/NoRotation.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_map_location/flutter_map_location.dart';
 import '../shared/DistanceHelper.dart';
 import 'AddBuilding.dart';
 
@@ -68,15 +69,11 @@ class ActionMapState extends State<ActionMap> {
   var initialized = false;
 
   @override
-  void initState() {
-    super.initState();
-  ***REMOVED***
-
-  @override
   Widget build(BuildContext context) {
     var markers = generateMarkers();
     List<MapPlugin> plugins = [];
     plugins.add(AttributionPlugin());
+    plugins.add(LocationPlugin());
 
     var layers = [
       TileLayerOptions(
@@ -87,6 +84,8 @@ class ActionMapState extends State<ActionMap> {
       MarkerLayerOptions(markers: markers),
     ];
     layers.add(AttributionOptions());
+
+    final userLocationLayer = [LocationOptions((_1, _2, _3) => SizedBox())];
 
     var flutterMap = FlutterMap(
       key: Key('action map map'),
@@ -106,6 +105,7 @@ class ActionMapState extends State<ActionMap> {
                 setState(() {this.markers = generateListLocationMarkers(); ***REMOVED***)),
       ),
       layers: layers,
+      nonRotatedLayers: userLocationLayer,
       mapController: widget.mapController,
     );
     initialized = true;
@@ -223,26 +223,20 @@ class PlacardMarker extends Marker {
           point: LatLng(placard.latitude, placard.longitude),
           builder: (context) => DecoratedBox(
               decoration: BoxDecoration(boxShadow: [
-                BoxShadow(offset: Offset(-2.0, 2.0), blurRadius: 4.0)
-              ], shape: BoxShape.rectangle),
+                BoxShadow(
+                    offset: Offset(0.0, 0.0),
+                    blurRadius: 6,
+                    spreadRadius: 3,
+                    color: CampaignTheme.placardColor(mine))
+              ], shape: BoxShape.circle),
               child: TextButton(
-                  key: Key('action marker'),
+                  key: Key('placard marker'),
                   onPressed: () => mine ? onTap(placard) : null,
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                        CampaignTheme.placardColor(mine)),
-                    shape: MaterialStateProperty.all<OutlinedBorder>(
-                        RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            side: BorderSide(
-                                color: CampaignTheme.secondary, width: 1.0))),
                     padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                         EdgeInsets.all(0)),
                   ),
-                  child: Icon(
-                    Icons.assistant_sharp,
-                    color: CampaignTheme.primary,
-                  ))),
+                  child: Image.asset('assets/images/Plakat.png'))),
         );
 ***REMOVED***
 
