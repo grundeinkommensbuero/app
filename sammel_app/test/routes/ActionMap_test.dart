@@ -341,7 +341,7 @@ void main() {
                 key: Key('action map'),
                 termine: [],
                 listLocations: [],
-                mapAction: mapAction,
+                switchToActionCreator: mapAction,
                 openActionDetails: (_) {***REMOVED***))));
 
     await tester.longPress(find.byKey(Key('action map')));

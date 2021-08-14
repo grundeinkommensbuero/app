@@ -10,6 +10,9 @@ import 'package:sammel_app/model/Building.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Placard.dart';
 import 'package:sammel_app/model/Termin.dart';
+import 'package:sammel_app/services/ErrorService.dart';
+import 'package:sammel_app/services/GeoService.dart';
+import 'package:sammel_app/services/PlacardsService.dart';
 import 'package:sammel_app/services/VisitedHouseView.dart';
 import 'package:sammel_app/services/VisitedHousesService.dart';
 import 'package:sammel_app/shared/AttributionPlugin.dart';
@@ -17,21 +20,21 @@ import 'package:sammel_app/shared/CampaignTheme.dart';
 import 'package:sammel_app/shared/NoRotation.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_map_location/flutter_map_location.dart';
+
 import '../shared/DistanceHelper.dart';
-import 'AddBuilding.dart';
+import 'MapActionDialog.dart';
+import 'PlacardDeleteDialog.dart';
 import 'EditBuilding.dart';
 
 class ActionMap extends StatefulWidget {
   final List<Termin> termine;
   final List<ListLocation> listLocations;
-  final List<Placard> placards;
   final int? myUserId;
   final Function(Termin) isMyAction;
   final Function(Termin) isPastAction;
   final Function(Termin) iAmParticipant;
   final Function(Termin) openActionDetails;
-  final Function(Placard) openPlacardDialog;
-  final Function(LatLng point) mapAction;
+  final Function(LatLng point) switchToActionCreator;
   late final MapController mapController;
 
   // no better way yet: https://github.com/dart-lang/sdk/issues/4596
@@ -43,14 +46,12 @@ class ActionMap extends StatefulWidget {
     Key? key,
     this.termine = const [],
     this.listLocations = const [],
-    this.placards = const [],
     this.myUserId,
     this.isMyAction = falseFunction,
     this.isPastAction = emptyFunction,
     this.openActionDetails = emptyFunction,
-    this.openPlacardDialog = emptyFunction,
     this.iAmParticipant = emptyFunction,
-    this.mapAction = emptyFunction,
+    this.switchToActionCreator = emptyFunction,
     mapController,
   ***REMOVED***) : super(key: key) {
     this.mapController = mapController ?? MapController();
@@ -66,11 +67,18 @@ class ActionMapState extends State<ActionMap> {
 
   var locationPermissionGranted = false;
   List<Marker> markers = [];
+  List<Placard> placards = [];
+  late AbstractPlacardsService placardService;
   var initialized = false;
   List<Polygon> house_polygons = [];
 
   @override
   Widget build(BuildContext context) {
+    if (!initialized) {
+      placardService = Provider.of<AbstractPlacardsService>(context);
+      loadPlaccards();
+    ***REMOVED***
+
     var markers = generateMarkers();
     List<MapPlugin> plugins = [];
     plugins.add(AttributionPlugin());
@@ -92,7 +100,7 @@ class ActionMapState extends State<ActionMap> {
       key: Key('action map map'),
       options: MapOptions(
         onTap: (LatLng point) => mapTap(point),
-        onLongPress: (LatLng point) => widget.mapAction(point),
+        onLongPress: (LatLng point) => mapAction(point),
         plugins: plugins,
         center: LatLng(geo.initCenterLat, geo.initCenterLong),
         swPanBoundary: LatLng(geo.boundLatMin, geo.boundLongMin),
@@ -101,9 +109,10 @@ class ActionMapState extends State<ActionMap> {
         interactiveFlags: noRotation,
         maxZoom: geo.zoomMax,
         minZoom: geo.zoomMin,
-        onPositionChanged: (position, _) => widget.mapController.onReady.then(
-            (_) =>
-                setState(() {this.markers = generateListLocationMarkers(); ***REMOVED***)),
+        onPositionChanged: (position, _) =>
+            widget.mapController.onReady.then((_) => setState(() {
+                  this.markers = generateListLocationMarkers();
+                ***REMOVED***)),
       ),
       layers: layers,
       nonRotatedLayers: userLocationLayer,
@@ -113,19 +122,32 @@ class ActionMapState extends State<ActionMap> {
     return flutterMap;
   ***REMOVED***
 
-  List<Polygon> generateVisitedHousePolygons()
-  {
-    if(initialized && widget.mapController.zoom > 14)
-      {
-        print("### creating new visited house list");
-        //return widget.visitedHouses;
+  loadPlaccards() {
+    placardService
+        .loadPlacards()
+        .then((placards) => setState(() => this.placards = placards));
+  ***REMOVED***
 
+  void deletePlacard(Placard placard) {
+    placardService.deletePlacard(placard.id!);
+    setState(() => placards.remove(placard));
+  ***REMOVED***
 
-        BoundingBox bbox = BoundingBox(widget.mapController.bounds!.south, widget.mapController.bounds!.west, widget.mapController.bounds!.north,
-            widget.mapController.bounds!.east);
-        VisitedHouseView vhv = Provider.of<AbstractVisitedHousesService>(context, listen: false).getBuildingsInArea(bbox);
-        return vhv.buildDrawablePolygonsFromView();
-      ***REMOVED***
+  List<Polygon> generateVisitedHousePolygons() {
+    if (initialized && widget.mapController.zoom > 14) {
+      print("### creating new visited house list");
+      //return widget.visitedHouses;
+
+      BoundingBox bbox = BoundingBox(
+          widget.mapController.bounds!.south,
+          widget.mapController.bounds!.west,
+          widget.mapController.bounds!.north,
+          widget.mapController.bounds!.east);
+      VisitedHouseView vhv =
+          Provider.of<AbstractVisitedHousesService>(context, listen: false)
+              .getBuildingsInArea(bbox);
+      return vhv.buildDrawablePolygonsFromView();
+    ***REMOVED***
     return [];
   ***REMOVED***
 
@@ -149,9 +171,51 @@ class ActionMapState extends State<ActionMap> {
     ***REMOVED***
   ***REMOVED***
 
+  openPlacardDialog(Placard placard) async {
+    if (placard.id == null) return;
+
+    bool confirmed = await showPlacardDeleteDialog(context);
+
+    if (confirmed) deletePlacard(placard);
+  ***REMOVED***
+
+  createNewPlacard(LatLng point) async {
+    if (widget.myUserId == null) {
+      ErrorService.pushError('Plakat kann nicht erstellt werden',
+          'Die App hat noch kein Benutzer*inprofil für dich erzeugt. Versuche es bitte später nochmal');
+      return;
+    ***REMOVED***
+
+    final geoData = await Provider.of<GeoService>(context, listen: false)
+        .getDescriptionToPoint(point);
+
+    final placard = await placardService.createPlacard(Placard(null,
+        point.latitude, point.longitude, geoData.fullAdress, widget.myUserId!));
+    if (placard != null) {
+      setState(() => placards.add(placard));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+              'Neues Plakat an der Adresse "${placard.adresse***REMOVED***" eingetragen'
+                  .tr(),
+              style: TextStyle(color: Colors.black87)),
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 5),
+          backgroundColor: Color.fromARGB(220, 255, 255, 250)));
+    ***REMOVED***
+  ***REMOVED***
+
+  mapAction(LatLng point) async {
+    MapActionType? chosenAction = await showMapActionDialog(context);
+
+    if (chosenAction == MapActionType.NewAction)
+      widget.switchToActionCreator(point);
+    if (chosenAction == MapActionType.NewPlacard) createNewPlacard(point);
+    // if (chosenAction == MapActionType.NewVisitedHouse)
+    //   createNewVisitedHouse(point);
+  ***REMOVED***
+
   List<ActionMarker> generateActionMarkers() {
     return widget.termine
-        .where((action) => action.latitude != null && action.longitude != null)
         .map((action) => ActionMarker(action,
             ownAction: widget.isMyAction(action),
             participant: widget.iAmParticipant(action),
@@ -170,12 +234,12 @@ class ActionMapState extends State<ActionMap> {
 
   List<PlacardMarker> generatePlacardMarkers() {
     if (!initialized || widget.mapController.zoom < 15) return [];
-    return widget.placards
+    return placards
         .where(
             (placard) => placard.latitude != null && placard.longitude != null)
         .map((placard) => PlacardMarker(placard,
             mine: placard.benutzer == widget.myUserId,
-            onTap: widget.openPlacardDialog))
+            onTap: openPlacardDialog))
         .toList()
         .reversed
         .toList();
