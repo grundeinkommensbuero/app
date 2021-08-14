@@ -22,10 +22,7 @@ import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
-import 'package:sammel_app/services/VisitedHouseView.dart';
-import 'package:sammel_app/services/VisitedHousesService.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
-import 'package:sammel_app/shared/DistanceHelper.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:uuid/uuid.dart';
 
