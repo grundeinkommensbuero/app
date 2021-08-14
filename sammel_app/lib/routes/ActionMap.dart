@@ -22,6 +22,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_map_location/flutter_map_location.dart';
 
 import '../shared/DistanceHelper.dart';
+import 'AddBuilding.dart';
 import 'MapActionDialog.dart';
 import 'PlacardDeleteDialog.dart';
 import 'EditBuilding.dart';
@@ -222,8 +223,9 @@ class ActionMapState extends State<ActionMap> {
     BoundingBox bbox = BoundingBox(point.latitude-lat_diff, point.longitude-lng_diff,
         point.latitude+lat_diff, point.longitude+lng_diff);
     var building_view = Provider.of<AbstractVisitedHousesService>(context, listen: false).getBuildingsInArea(bbox);
+    await showAddBuildingDialog(context: context, building_view: building_view, current_zoom_factor: widget.mapController.zoom);
     setState(() {
-      showAddBuildingDialog(context: context, building_view: building_view, current_zoom_factor: mapController.zoom);
+      this.house_polygons = generateVisitedHousePolygons();
     ***REMOVED***);
   ***REMOVED***
 
