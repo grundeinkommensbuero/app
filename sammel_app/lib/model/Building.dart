@@ -29,6 +29,10 @@ class VisitedHouse {
 
   VisitedHouse(this.osm_id, this.latitude, this.longitude, this.adresse,
       this.shape, this.visitation_events) {
+    calculateBBox();
+  ***REMOVED***
+
+  void calculateBBox() {
     double minLat = 1000;
     double maxLat = -1000;
     double minLng = 1000;
@@ -43,15 +47,18 @@ class VisitedHouse {
   ***REMOVED***
 
   VisitedHouse.fromJson(Map<dynamic, dynamic> json)
-      : osm_id = json['osm_id'],
+      : osm_id = json['osmId'],
         latitude = json['latitude'],
         longitude = json['longitude'],
         adresse = json['adresse'],
         visitation_events = [
-          VisitedHouseEvent(json['id'], json['hausteil'], json['user_id'],
+          VisitedHouseEvent(json['id'], json['hausteil'], json['benutzer'],
               ChronoHelfer.deserializeJsonDateTime(json['datum']))
         ],
-        shape = jsonDecode(json['polygon']).map((e) => LatLng(e[0], e[1]));
+        shape = List<LatLng>.from(jsonDecode(json['shape']).map((e) => LatLng(e[0], e[1])))
+  {
+    calculateBBox();
+  ***REMOVED***
 
   Map<dynamic, dynamic> toJson() => {
         'osmId': osm_id,

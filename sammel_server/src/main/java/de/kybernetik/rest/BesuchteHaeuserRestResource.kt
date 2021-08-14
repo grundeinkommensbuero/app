@@ -57,7 +57,7 @@ open class BesuchteHaeuserRestResource {
             return Response.status(322).entity(RestFehlermeldung(e.message)).build()
         ***REMOVED***
         LOG.info("Neues Besuchtes Haus ${besuchtesHaus.id***REMOVED*** durch Benutzer ${context.userPrincipal.name***REMOVED*** erstellt")
-        return Response.ok().entity(besuchtesHaus).build()
+        return Response.ok().entity(BesuchtesHausDto.convertFromBesuchtesHaus(besuchtesHaus)).build()
     ***REMOVED***
 
     @DELETE

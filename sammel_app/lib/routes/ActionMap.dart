@@ -229,6 +229,16 @@ class ActionMapState extends State<ActionMap> {
     ***REMOVED***);
   ***REMOVED***
 
+  update() async {
+    placardService
+        .loadPlacards()
+        .then((placards) => setState(() {
+          this.placards = placards;
+        ***REMOVED***));
+    Provider.of<AbstractVisitedHousesService>(context, listen: false).loadVisitedHouses().then(
+            (_) => setState(
+                () => this.house_polygons = this.generateVisitedHousePolygons()));
+  ***REMOVED***
 
   List<ActionMarker> generateActionMarkers() {
     return widget.termine
