@@ -210,9 +210,23 @@ class ActionMapState extends State<ActionMap> {
     if (chosenAction == MapActionType.NewAction)
       widget.switchToActionCreator(point);
     if (chosenAction == MapActionType.NewPlacard) createNewPlacard(point);
-    // if (chosenAction == MapActionType.NewVisitedHouse)
-    //   createNewVisitedHouse(point);
+    if (chosenAction == MapActionType.NewVisitedHouse)
+       createNewVisitedHouse(point);
   ***REMOVED***
+
+  void createNewVisitedHouse(LatLng point) async{
+    //TODO: now it takes always the same distance around tap point
+    var show_distance_in_m = 100.0;
+    var lng_diff = DistanceHelper.getLongDiffFromM(point, show_distance_in_m);
+    var lat_diff = DistanceHelper.getLatDiffFromM(point, show_distance_in_m);
+    BoundingBox bbox = BoundingBox(point.latitude-lat_diff, point.longitude-lng_diff,
+        point.latitude+lat_diff, point.longitude+lng_diff);
+    var building_view = Provider.of<AbstractVisitedHousesService>(context, listen: false).getBuildingsInArea(bbox);
+    setState(() {
+      showAddBuildingDialog(context: context, building_view: building_view, current_zoom_factor: mapController.zoom);
+    ***REMOVED***);
+  ***REMOVED***
+
 
   List<ActionMarker> generateActionMarkers() {
     return widget.termine
