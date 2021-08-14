@@ -6,30 +6,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
-import 'package:sammel_app/model/Building.dart';
 import 'package:sammel_app/model/Evaluation.dart';
 import 'package:sammel_app/model/ListLocation.dart';
-import 'package:sammel_app/model/Placard.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/ActionMap.dart';
 import 'package:sammel_app/routes/EvaluationForm.dart';
-import 'package:sammel_app/routes/PlacardDeleteDialog.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
-import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/PlacardsService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
-import 'package:sammel_app/services/VisitedHouseView.dart';
-import 'package:sammel_app/services/VisitedHousesService.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
-import 'package:sammel_app/shared/DistanceHelper.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:uuid/uuid.dart';
 
@@ -37,15 +30,12 @@ import 'ActionDetailsPage.dart';
 import 'ActionEditor.dart';
 import 'ActionList.dart';
 import 'ActionMap.dart';
-import 'AddBuilding.dart';
-import 'EditBuilding.dart';
 import 'FilterWidget.dart';
-import 'MapActionDialog.dart';
 
 class TermineSeite extends StatefulWidget {
-  Function(LatLng)? switchToActionCreator;
+  final Function(LatLng) switchToActionCreator;
 
-  TermineSeite({Key? key, this.switchToActionCreator***REMOVED***)
+  TermineSeite({Key? key, required this.switchToActionCreator***REMOVED***)
       : super(key: key ?? Key('action page'));
 
   @override
@@ -68,7 +58,6 @@ class TermineSeiteState extends State<TermineSeite>
 
   List<Termin> termine = [];
   List<ListLocation> listLocations = [];
-  List<Placard> placards = [];
 
   FilterWidget? filterWidget;
 
@@ -121,54 +110,52 @@ class TermineSeiteState extends State<TermineSeite>
       key: Key('action map'),
       termine: termine,
       listLocations: listLocations,
-      placards: placards,
       myUserId: me?.id,
       isMyAction: isMyAction,
       isPastAction: isPastAction,
       iAmParticipant: iAmParticipant,
       openActionDetails: openTerminDetails,
-      openPlacardDialog: openPlacardDialog,
-      mapAction: mapAction,
+      switchToActionCreator: widget.switchToActionCreator,
       mapController: mapController,
     );
 
     return ScaffoldMessenger(
-      // um Snackbar oberhalb der Footer-Buttons zu zeigen
+        // um Snackbar oberhalb der Footer-Buttons zu zeigen
         child: Scaffold(
-          body: Container(
-              decoration: CampaignTheme.background,
-              child: Stack(
-                alignment: Alignment.topCenter,
-                children: [
-                  FadeTransition(
-                    opacity: _fade!,
-                    child: SlideTransition(
-                      position: _slide!,
-                      child: IndexedStack(
-                          children: [actionListView, actionMapView],
-                          index: navigation),
-                    ),
-                  ),
-                  filterWidget!
-                ],
-              )),
-          bottomNavigationBar: BottomNavigationBar(
-            selectedItemColor: CampaignTheme.primary,
-            unselectedItemColor: Colors.black,
-            currentIndex: navigation,
-            onTap: swithPage,
-            backgroundColor: CampaignTheme.secondary,
-            items: [
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.view_list,
-                      key: Key('list view navigation button')),
-                  label: 'Liste'.tr()),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.map, key: Key('map view navigation button')),
-                  label: 'Karte'.tr())
+      body: Container(
+          decoration: CampaignTheme.background,
+          child: Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              FadeTransition(
+                opacity: _fade!,
+                child: SlideTransition(
+                  position: _slide!,
+                  child: IndexedStack(
+                      children: [actionListView, actionMapView],
+                      index: navigation),
+                ),
+              ),
+              filterWidget!
             ],
-          ),
-        ));
+          )),
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: CampaignTheme.primary,
+        unselectedItemColor: Colors.black,
+        currentIndex: navigation,
+        onTap: swithPage,
+        backgroundColor: CampaignTheme.secondary,
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(Icons.view_list,
+                  key: Key('list view navigation button')),
+              label: 'Liste'.tr()),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.map, key: Key('map view navigation button')),
+              label: 'Karte'.tr())
+        ],
+      ),
+    ));
   ***REMOVED***
 
   swithPage(index) async {
@@ -189,7 +176,7 @@ class TermineSeiteState extends State<TermineSeite>
     termineService = Provider.of<AbstractTermineService>(context);
     storageService = Provider.of<StorageService>(context);
     chatMessageService = Provider.of<ChatMessageService>(context);
-    filterWidget = FilterWidget(loadActionsAndPlacards, key: filterKey);
+    filterWidget = FilterWidget(loadActions, key: filterKey);
 
     storageService!
         .loadAllStoredActionIds()
@@ -205,8 +192,7 @@ class TermineSeiteState extends State<TermineSeite>
 
     placardService = Provider.of<AbstractPlacardsService>(context);
 
-    Provider
-        .of<AbstractUserService>(context)
+    Provider.of<AbstractUserService>(context)
         .user
         .listen((user) => setState(() => me = user));
 
@@ -215,27 +201,17 @@ class TermineSeiteState extends State<TermineSeite>
     _initialized = true;
   ***REMOVED***
 
-  Future loadActionsAndPlacards(TermineFilter filter) async {
-    Future wait4Actions = termineService!
-        .loadActions(filter)
-        .then((termine) =>
-        setState(() => this.termine = termine..sort(Termin.compareByStart)))
-        .catchError((e, s) =>
-        ErrorService.handleError(e, s,
-            context: 'Aktionen konnten nicht geladen werden.'));
-
-    Future wait4placards = placardService
-        .loadPlacards()
-        .then((placards) => setState(() => this.placards = placards));
-
-    await Future.wait([wait4Actions, wait4placards]);
-  ***REMOVED***
+  Future loadActions(TermineFilter filter) async => await termineService!
+      .loadActions(filter)
+      .then((termine) =>
+          setState(() => this.termine = termine..sort(Termin.compareByStart)))
+      .catchError((e, s) => ErrorService.handleError(e, s,
+          context: 'Aktionen konnten nicht geladen werden.'));
 
   void showRestError(RestFehler e) {
     showDialog(
         context: context,
-        builder: (context) =>
-            AlertDialog(
+        builder: (context) => AlertDialog(
               title: Text('Aktion konnte nicht angelegt werden').tr(),
               content: SelectableText(e.message),
               actions: <Widget>[
@@ -251,7 +227,7 @@ class TermineSeiteState extends State<TermineSeite>
     if (termin.id == null) return;
     try {
       var terminMitDetails =
-      await termineService!.getActionWithDetails(termin.id!);
+          await termineService!.getActionWithDetails(termin.id!);
       TerminDetailsCommand? command = await showActionDetailsPage(
           context,
           terminMitDetails,
@@ -293,23 +269,17 @@ class TermineSeiteState extends State<TermineSeite>
                 leading: null,
                 automaticallyImplyLeading: false,
                 title: Text('Deine Aktion bearbeiten',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22.0,
-                        color: Color.fromARGB(255, 129, 28, 98)))
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22.0,
+                            color: Color.fromARGB(255, 129, 28, 98)))
                     .tr(),
               ),
               children: <Widget>[
                 Container(
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width * 0.8,
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.8,
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.height * 0.8,
                   child: ActionEditor(
                       initAction: termin,
                       onFinish: afterActionEdit,
@@ -347,23 +317,17 @@ class TermineSeiteState extends State<TermineSeite>
                 leading: null,
                 automaticallyImplyLeading: false,
                 title: Text('Über Aktion berichten',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22.0,
-                        color: Color.fromARGB(255, 129, 28, 98)))
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22.0,
+                            color: Color.fromARGB(255, 129, 28, 98)))
                     .tr(),
               ),
               children: <Widget>[
                 Container(
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width * 0.8,
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .height * 0.8,
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    height: MediaQuery.of(context).size.height * 0.8,
                     child: EvaluationForm(termin,
                         onFinish: afterActionEvaluation,
                         key: Key('evaluation editor')))
@@ -411,7 +375,7 @@ class TermineSeiteState extends State<TermineSeite>
 
   updateAction(Termin updatedAction, bool remove) {
     var index =
-    termine.indexWhere((Termin action) => action.id == updatedAction.id);
+        termine.indexWhere((Termin action) => action.id == updatedAction.id);
 
     if (index == -1) return;
 
@@ -454,10 +418,9 @@ class TermineSeiteState extends State<TermineSeite>
   Future<void> joinAction(Termin action) async {
     if (action.id == null || me == null) return;
     await termineService?.joinAction(action.id!);
-    setState(() =>
-        termine
-            .where((t) => t.id == action.id)
-            .forEach((Termin t) => t.participants?.add(me!)));
+    setState(() => termine
+        .where((t) => t.id == action.id)
+        .forEach((Termin t) => t.participants?.add(me!)));
   ***REMOVED***
 
   Future<void> leaveAction(Termin action) async {
@@ -476,11 +439,10 @@ class TermineSeiteState extends State<TermineSeite>
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                Scaffold(
-                    appBar: AppBar(title: Text(title)),
-                    body: ActionList(actions, isMyAction, isPastAction,
-                        iAmParticipant, openTerminDetails))));
+            builder: (context) => Scaffold(
+                appBar: AppBar(title: Text(title)),
+                body: ActionList(actions, isMyAction, isPastAction,
+                    iAmParticipant, openTerminDetails))));
   ***REMOVED***
 
   checkDeepLinks() async {
@@ -503,72 +465,11 @@ class TermineSeiteState extends State<TermineSeite>
     termineService!.loadAndShowAction(id);
   ***REMOVED***
 
-  openPlacardDialog(Placard placard) async {
-    if (placard.id == null) return;
-
-    bool confirmed = await showPlacardDeleteDialog(context);
-
-    if (confirmed) deletePlacard(placard);
-  ***REMOVED***
-
-  void deletePlacard(Placard placard) {
-    placardService.deletePlacard(placard.id!);
-    setState(() => placards.remove(placard));
-  ***REMOVED***
-
-  mapAction(LatLng point) async {
-    MapActionType? chosenAction = await showMapActionDialog(context);
-
-    if (chosenAction == MapActionType.NewAction) switchToActionCreator(point);
-    if (chosenAction == MapActionType.NewPlacard) createNewPlacard(point);
-    if (chosenAction == MapActionType.NewVisitedHouse) createNewVisitedHouse(point);
-  ***REMOVED***
-
-  createNewPlacard(LatLng point) async {
-    if (me?.id == null) {
-      ErrorService.pushError('Plakat kann nicht erstellt werden',
-          'Die App hat noch kein Benutzer*inprofil für dich erzeugt. Versuche es bitte später nochmal');
-      return;
-    ***REMOVED***
-
-    final geoData = await Provider.of<GeoService>(context, listen: false)
-        .getDescriptionToPoint(point);
-
-    final placard = await placardService.createPlacard(Placard(
-        null, point.latitude, point.longitude, geoData.fullAdress, me!.id!));
-    if (placard != null) {
-      setState(() => placards.add(placard));
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Neues Plakat an der Adresse "${placard.adresse***REMOVED***" eingetragen'.tr(),
-              style: TextStyle(color: Colors.black87)),
-          behavior: SnackBarBehavior.floating,
-          duration: Duration(seconds: 5),
-          backgroundColor: Color.fromARGB(220, 255, 255, 250)));
-    ***REMOVED***
-  ***REMOVED***
-
-  void switchToActionCreator(LatLng point) =>
-      widget.switchToActionCreator!(point);
-
-  void createNewVisitedHouse(LatLng point) async{
-    //TODO: now it takes always the same distance around tap point
-    var show_distance_in_m = 100.0;
-    var lng_diff = DistanceHelper.getLongDiffFromM(point, show_distance_in_m);
-    var lat_diff = DistanceHelper.getLatDiffFromM(point, show_distance_in_m);
-    BoundingBox bbox = BoundingBox(point.latitude-lat_diff, point.longitude-lng_diff,
-        point.latitude+lat_diff, point.longitude+lng_diff);
-    var building_view = Provider.of<AbstractVisitedHousesService>(context, listen: false).getBuildingsInArea(bbox);
-    setState(() {
-      showAddBuildingDialog(context: context, building_view: building_view, current_zoom_factor: mapController.zoom);
-    ***REMOVED***);
-  ***REMOVED***
-
   @override
   void dispose() {
     try {
       uniLinkListener.cancel();
     ***REMOVED*** catch (_) {***REMOVED***
-    ;
     super.dispose();
   ***REMOVED***
 ***REMOVED***
@@ -588,8 +489,7 @@ class ButtonRow extends StatelessWidget {
   ***REMOVED***
 ***REMOVED***
 
-AlertDialog confirmDeleteDialog(BuildContext context) =>
-    AlertDialog(
+AlertDialog confirmDeleteDialog(BuildContext context) => AlertDialog(
         key: Key('deletion confirmation dialog'),
         title: Text('Aktion Löschen').tr(),
         content: Text('Möchtest du diese Aktion wirklich löschen?').tr(),

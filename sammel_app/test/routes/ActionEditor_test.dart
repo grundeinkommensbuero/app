@@ -930,7 +930,7 @@ _pumpActionPage(WidgetTester tester) async {
         Provider<AbstractPlacardsService>.value(value: _placardService),
       ],
       child: MaterialApp(
-        home: TermineSeite(),
+        home: TermineSeite(switchToActionCreator: (_) {***REMOVED***),
       )));
   await tester.pumpAndSettle();
 ***REMOVED***
