@@ -19,6 +19,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_map_location/flutter_map_location.dart';
 import '../shared/DistanceHelper.dart';
 import 'AddBuilding.dart';
+import 'EditBuilding.dart';
 
 class ActionMap extends StatefulWidget {
   final List<Termin> termine;
@@ -31,7 +32,6 @@ class ActionMap extends StatefulWidget {
   final Function(Termin) openActionDetails;
   final Function(Placard) openPlacardDialog;
   final Function(LatLng point) mapAction;
-  final Function(LatLng point) mapTap;
   late final MapController mapController;
 
   // no better way yet: https://github.com/dart-lang/sdk/issues/4596
@@ -51,7 +51,6 @@ class ActionMap extends StatefulWidget {
     this.openPlacardDialog = emptyFunction,
     this.iAmParticipant = emptyFunction,
     this.mapAction = emptyFunction,
-    this.mapTap = emptyFunction,
     mapController,
   ***REMOVED***) : super(key: key) {
     this.mapController = mapController ?? MapController();
@@ -62,11 +61,13 @@ class ActionMap extends StatefulWidget {
 ***REMOVED***
 
 class ActionMapState extends State<ActionMap> {
+
   ActionMapState();
 
   var locationPermissionGranted = false;
   List<Marker> markers = [];
   var initialized = false;
+  List<Polygon> house_polygons = [];
 
   @override
   Widget build(BuildContext context) {
@@ -74,13 +75,13 @@ class ActionMapState extends State<ActionMap> {
     List<MapPlugin> plugins = [];
     plugins.add(AttributionPlugin());
     plugins.add(LocationPlugin());
-
+    this.house_polygons = generateVisitedHousePolygons();
     var layers = [
       TileLayerOptions(
           urlTemplate: "https://{s***REMOVED***.tile.openstreetmap.org/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
           subdomains: ['a', 'b', 'c']),
       PolygonLayerOptions(
-          polygons: generateVisitedHousePolygons(), polygonCulling: true),
+          polygons: this.house_polygons, polygonCulling: true),
       MarkerLayerOptions(markers: markers),
     ];
     layers.add(AttributionOptions());
@@ -90,7 +91,7 @@ class ActionMapState extends State<ActionMap> {
     var flutterMap = FlutterMap(
       key: Key('action map map'),
       options: MapOptions(
-        onTap: (LatLng point) => widget.mapTap(point),
+        onTap: (LatLng point) => mapTap(point),
         onLongPress: (LatLng point) => widget.mapAction(point),
         plugins: plugins,
         center: LatLng(geo.initCenterLat, geo.initCenterLong),
@@ -126,6 +127,26 @@ class ActionMapState extends State<ActionMap> {
         return vhv.buildDrawablePolygonsFromView();
       ***REMOVED***
     return [];
+  ***REMOVED***
+
+  mapTap(LatLng point) async {
+    Future<VisitedHouse?> vh_future = Provider.of<AbstractVisitedHousesService>(context, listen: false).getVisitedHouseOfPoint(point, false);
+    VisitedHouse? vh = await vh_future;
+    if(vh != null)
+    {
+      var show_distance_in_m = 100.0;
+      var lng_diff = DistanceHelper.getLongDiffFromM(point, show_distance_in_m);
+      var lat_diff = DistanceHelper.getLatDiffFromM(point, show_distance_in_m);
+      BoundingBox bbox = BoundingBox(point.latitude-lat_diff, point.longitude-lng_diff,
+          point.latitude+lat_diff, point.longitude+lng_diff);
+      var building_view = Provider.of<AbstractVisitedHousesService>(context, listen: false).getBuildingsInArea(bbox);
+      print("### selecting building");
+      building_view.selected_building = SelectableVisitedHouse.clone(SelectableVisitedHouse.fromVisitedHouse(vh, selected: true));
+      await showEditVisitedHouseDialog(context: context, building_view: building_view, current_zoom_factor: widget.mapController.zoom);
+      setState(() {
+        this.house_polygons = generateVisitedHousePolygons();
+      ***REMOVED***);
+    ***REMOVED***
   ***REMOVED***
 
   List<ActionMarker> generateActionMarkers() {

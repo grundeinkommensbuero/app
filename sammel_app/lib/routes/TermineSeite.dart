@@ -129,7 +129,6 @@ class TermineSeiteState extends State<TermineSeite>
       openActionDetails: openTerminDetails,
       openPlacardDialog: openPlacardDialog,
       mapAction: mapAction,
-      mapTap: mapTap,
       mapController: mapController,
     );
 
@@ -571,24 +570,6 @@ class TermineSeiteState extends State<TermineSeite>
     ***REMOVED*** catch (_) {***REMOVED***
     ;
     super.dispose();
-  ***REMOVED***
-
-  mapTap(LatLng point) async {
-    Future<VisitedHouse?> vh_future = Provider.of<AbstractVisitedHousesService>(context, listen: false).getVisitedHouseOfPoint(point, false);
-    VisitedHouse? vh = await vh_future;
-    if(vh != null)
-      {
-        var show_distance_in_m = 100.0;
-        var lng_diff = DistanceHelper.getLongDiffFromM(point, show_distance_in_m);
-        var lat_diff = DistanceHelper.getLatDiffFromM(point, show_distance_in_m);
-        BoundingBox bbox = BoundingBox(point.latitude-lat_diff, point.longitude-lng_diff,
-            point.latitude+lat_diff, point.longitude+lng_diff);
-        var building_view = Provider.of<AbstractVisitedHousesService>(context, listen: false).getBuildingsInArea(bbox);
-        print("### selecting building");
-        building_view.selected_building = SelectableVisitedHouse.clone(SelectableVisitedHouse.fromVisitedHouse(vh, selected: true));
-        showEditVisitedHouseDialog(context: context, building_view: building_view, current_zoom_factor: mapController.zoom);
-        setState(() {***REMOVED***);
-      ***REMOVED***
   ***REMOVED***
 ***REMOVED***
 
