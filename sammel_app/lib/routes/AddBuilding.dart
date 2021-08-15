@@ -3,20 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:loading_indicator/loading_indicator.dart';
-import 'package:poly/poly.dart' as poly;
 import 'package:provider/provider.dart';
-import 'package:quiver/iterables.dart';
 import 'package:sammel_app/model/Building.dart';
-import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/services/VisitedHouseView.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/GeoService.dart';
-import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/VisitedHousesService.dart';
 import 'package:sammel_app/shared/AttributionPlugin.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
-import 'package:sammel_app/shared/ExpandableConstrainedBox.dart';
 import 'package:sammel_app/shared/NoRotation.dart';
 import 'package:sammel_app/shared/ServerException.dart';
 
@@ -33,27 +28,6 @@ addNewVisitedHouseEvent(BuildContext context,
     return future_new_house;
   ***REMOVED***
   return null;
-  /*
-     VisitedHouse? new_house = await future_new_house;
-
-     if(new_house != null)
-       {
-         VisitedHouse? building =  abstractVisitedHousesService.localBuildingMap[new_house.osm_id]
-         if(abstractVisitedHousesService.localBuildingMap.containsKey(new_house.osm_id))
-           {
-             ?.visitation_events.add(new_house.visitation_events.last);
-
-             for(VisitedHouseEvent event in new_house.visitation_events)
-               {
-                 if
-               ***REMOVED***
-           ***REMOVED***
-         else
-           {
-             abstractVisitedHousesService.localBuildingMap[new_house.osm_id] = new_house;
-           ***REMOVED***
-       ***REMOVED***
-   ***REMOVED****/
 ***REMOVED***
 
 showAddBuildingDialog({required BuildContext context,
@@ -230,8 +204,8 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
                 width: 300, height: 300, color: CampaignTheme.disabled)),
         Center(
             child: SizedBox(
-                width: 100,
-                height: 100,
+                width: 50,
+                height: 50,
                 child: LoadingIndicator(
                     indicatorType: Indicator.ballRotateChase,
                     color: CampaignTheme.primary)))
