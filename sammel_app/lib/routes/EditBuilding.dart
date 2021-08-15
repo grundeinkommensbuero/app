@@ -10,6 +10,7 @@ import 'package:sammel_app/services/VisitedHouseView.dart';
 import 'package:sammel_app/services/VisitedHousesService.dart';
 import 'package:sammel_app/shared/AttributionPlugin.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
+import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:sammel_app/shared/NoRotation.dart';
 import 'package:sammel_app/shared/ServerException.dart';
 
@@ -102,7 +103,7 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
               mainAxisSize: MainAxisSize.min, children: build_widgets())),
       actions: [
         TextButton(
-          child: Text("Abbrechen").tr(),
+          child: Text('Abbrechen').tr(),
           onPressed: () {
             Navigator.pop(context, null);
           ***REMOVED***,
@@ -206,11 +207,19 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
   ***REMOVED***
 
   Widget buildVisitationEventItem(VisitedHouseEvent item) {
+    Locale? locale;
+    try {
+      locale = context.locale;
+    ***REMOVED*** catch (_) {
+      print('Konnte Locale nicht ermitteln');
+    ***REMOVED***
+
     final tile = ListTile(
       title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Text('${item.adresse***REMOVED***',
             style: TextStyle(color: CampaignTheme.secondary)),
-        Text('${DateFormat("EEEE, MM.dd hh:mm").format(item.datum)***REMOVED***',
+        Text(
+            '${ChronoHelfer.formatDateOfDateTimeMitWochentagOhneJahr(item.datum, locale)***REMOVED***',
             textScaleFactor: 0.8),
         isEmpty(item.hausteil)
             ? SizedBox()
