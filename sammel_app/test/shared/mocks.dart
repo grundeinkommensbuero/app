@@ -13,6 +13,7 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
+import 'package:sammel_app/services/VisitedHousesService.dart';
 
 @GenerateMocks([
   TermineService,
@@ -28,6 +29,7 @@ import 'package:sammel_app/services/UserService.dart';
   StammdatenService,
   FlutterLocalNotificationsPlugin,
   PlacardsService,
+  VisitedHousesService,
 ], customMocks: [
   MockSpec<StorageService>(returnNullOnMissingStub: true),
   MockSpec<FirebaseReceiveService>(returnNullOnMissingStub: true)

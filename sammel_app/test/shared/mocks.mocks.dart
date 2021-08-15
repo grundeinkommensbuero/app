@@ -4,55 +4,59 @@
 
 import 'dart:async' as _i11;
 
-import 'package:easy_localization/src/translations.dart' as _i34;
+import 'package:easy_localization/src/translations.dart' as _i37;
 import 'package:firebase_messaging_platform_interface/src/remote_message.dart'
-    as _i31;
+    as _i34;
 import 'package:flutter/src/widgets/framework.dart' as _i4;
-import 'package:flutter/src/widgets/navigator.dart' as _i30;
+import 'package:flutter/src/widgets/navigator.dart' as _i33;
 import 'package:flutter_local_notifications/src/flutter_local_notifications_plugin.dart'
-    as _i32;
+    as _i35;
 import 'package:flutter_local_notifications/src/initialization_settings.dart'
-    as _i36;
+    as _i39;
 import 'package:flutter_local_notifications/src/notification_details.dart'
-    as _i38;
+    as _i41;
 import 'package:flutter_local_notifications/src/platform_specifics/ios/enums.dart'
-    as _i40;
-import 'package:flutter_local_notifications/src/typedefs.dart' as _i37;
-import 'package:flutter_local_notifications/src/types.dart' as _i41;
+    as _i43;
+import 'package:flutter_local_notifications/src/typedefs.dart' as _i40;
+import 'package:flutter_local_notifications/src/types.dart' as _i44;
 import 'package:flutter_local_notifications_platform_interface/src/notification_app_launch_details.dart'
     as _i18;
 import 'package:flutter_local_notifications_platform_interface/src/types.dart'
-    as _i42;
+    as _i45;
 import 'package:http_server/src/http_body.dart' as _i8;
-import 'package:latlong2/latlong.dart' as _i35;
+import 'package:latlong2/latlong.dart' as _i38;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:sammel_app/model/ActionListPushData.dart' as _i33;
+import 'package:sammel_app/model/ActionListPushData.dart' as _i36;
+import 'package:sammel_app/model/Building.dart' as _i21;
 import 'package:sammel_app/model/ChatChannel.dart' as _i13;
-import 'package:sammel_app/model/Evaluation.dart' as _i24;
+import 'package:sammel_app/model/Evaluation.dart' as _i27;
 import 'package:sammel_app/model/Health.dart' as _i15;
 import 'package:sammel_app/model/Kiez.dart' as _i17;
-import 'package:sammel_app/model/ListLocation.dart' as _i26;
+import 'package:sammel_app/model/ListLocation.dart' as _i29;
 import 'package:sammel_app/model/Placard.dart' as _i19;
-import 'package:sammel_app/model/PushMessage.dart' as _i28;
+import 'package:sammel_app/model/PushMessage.dart' as _i31;
 import 'package:sammel_app/model/Termin.dart' as _i7;
-import 'package:sammel_app/model/TermineFilter.dart' as _i21;
+import 'package:sammel_app/model/TermineFilter.dart' as _i24;
 import 'package:sammel_app/model/User.dart' as _i12;
-import 'package:sammel_app/routes/TermineSeite.dart' as _i23;
+import 'package:sammel_app/routes/TermineSeite.dart' as _i26;
 import 'package:sammel_app/services/BackendService.dart' as _i5;
-import 'package:sammel_app/services/ChatMessageService.dart' as _i29;
-import 'package:sammel_app/services/ListLocationService.dart' as _i25;
+import 'package:sammel_app/services/ChatMessageService.dart' as _i32;
+import 'package:sammel_app/services/GeoService.dart' as _i20;
+import 'package:sammel_app/services/ListLocationService.dart' as _i28;
 import 'package:sammel_app/services/LocalNotificationService.dart' as _i2;
-import 'package:sammel_app/services/PlacardsService.dart' as _i43;
+import 'package:sammel_app/services/PlacardsService.dart' as _i46;
 import 'package:sammel_app/services/PushNotificationManager.dart' as _i16;
 import 'package:sammel_app/services/PushReceiveService.dart' as _i10;
-import 'package:sammel_app/services/PushSendService.dart' as _i27;
+import 'package:sammel_app/services/PushSendService.dart' as _i30;
 import 'package:sammel_app/services/PushUpdateService.dart' as _i14;
 import 'package:sammel_app/services/StammdatenService.dart' as _i3;
 import 'package:sammel_app/services/StorageService.dart' as _i9;
-import 'package:sammel_app/services/TermineService.dart' as _i22;
+import 'package:sammel_app/services/TermineService.dart' as _i25;
 import 'package:sammel_app/services/UserService.dart' as _i6;
-import 'package:shared_preferences/shared_preferences.dart' as _i20;
-import 'package:timezone/src/date_time.dart' as _i39;
+import 'package:sammel_app/services/VisitedHousesService.dart' as _i47;
+import 'package:sammel_app/services/VisitedHouseView.dart' as _i22;
+import 'package:shared_preferences/shared_preferences.dart' as _i23;
+import 'package:timezone/src/date_time.dart' as _i42;
 
 // ignore_for_file: comment_references
 // ignore_for_file: unnecessary_parenthesis
@@ -110,15 +114,21 @@ class _FakeNotificationAppLaunchDetails extends _i1.Fake
 
 class _FakePlacard extends _i1.Fake implements _i19.Placard {***REMOVED***
 
-class _FakeSharedPreferences extends _i1.Fake
-    implements _i20.SharedPreferences {***REMOVED***
+class _FakeGeoService extends _i1.Fake implements _i20.GeoService {***REMOVED***
 
-class _FakeTermineFilter extends _i1.Fake implements _i21.TermineFilter {***REMOVED***
+class _FakeVisitedHouse extends _i1.Fake implements _i21.VisitedHouse {***REMOVED***
+
+class _FakeVisitedHouseView extends _i1.Fake implements _i22.VisitedHouseView {***REMOVED***
+
+class _FakeSharedPreferences extends _i1.Fake
+    implements _i23.SharedPreferences {***REMOVED***
+
+class _FakeTermineFilter extends _i1.Fake implements _i24.TermineFilter {***REMOVED***
 
 /// A class which mocks [TermineService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTermineService extends _i1.Mock implements _i22.TermineService {
+class MockTermineService extends _i1.Mock implements _i25.TermineService {
   MockTermineService() {
     _i1.throwOnMissingStub(this);
   ***REMOVED***
@@ -144,12 +154,12 @@ class MockTermineService extends _i1.Mock implements _i22.TermineService {
       .noSuchMethod(Invocation.setter(#stammdatenService, _stammdatenService),
           returnValueForMissingStub: null);
   @override
-  _i4.GlobalKey<_i23.TermineSeiteState> get actionPageKey =>
+  _i4.GlobalKey<_i26.TermineSeiteState> get actionPageKey =>
       (super.noSuchMethod(Invocation.getter(#actionPageKey),
-              returnValue: _FakeGlobalKey<_i23.TermineSeiteState>())
-          as _i4.GlobalKey<_i23.TermineSeiteState>);
+              returnValue: _FakeGlobalKey<_i26.TermineSeiteState>())
+          as _i4.GlobalKey<_i26.TermineSeiteState>);
   @override
-  set actionPageKey(_i4.GlobalKey<_i23.TermineSeiteState>? _actionPageKey) =>
+  set actionPageKey(_i4.GlobalKey<_i26.TermineSeiteState>? _actionPageKey) =>
       super.noSuchMethod(Invocation.setter(#actionPageKey, _actionPageKey),
           returnValueForMissingStub: null);
   @override
@@ -164,7 +174,7 @@ class MockTermineService extends _i1.Mock implements _i22.TermineService {
       super.noSuchMethod(Invocation.setter(#userService, _userService),
           returnValueForMissingStub: null);
   @override
-  _i11.Future<List<_i7.Termin>> loadActions(_i21.TermineFilter? filter) =>
+  _i11.Future<List<_i7.Termin>> loadActions(_i24.TermineFilter? filter) =>
       (super.noSuchMethod(Invocation.method(#loadActions, [filter]),
               returnValue: Future<List<_i7.Termin>>.value(<_i7.Termin>[]))
           as _i11.Future<List<_i7.Termin>>);
@@ -210,7 +220,7 @@ class MockTermineService extends _i1.Mock implements _i22.TermineService {
       super.noSuchMethod(Invocation.method(#updateMessages, [data]),
           returnValueForMissingStub: null);
   @override
-  _i11.Future<void> saveEvaluation(_i24.Evaluation? evaluation) =>
+  _i11.Future<void> saveEvaluation(_i27.Evaluation? evaluation) =>
       (super.noSuchMethod(Invocation.method(#saveEvaluation, [evaluation]),
           returnValue: Future<void>.value(null),
           returnValueForMissingStub: Future.value()) as _i11.Future<void>);
@@ -258,13 +268,13 @@ class MockTermineService extends _i1.Mock implements _i22.TermineService {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockListLocationService extends _i1.Mock
-    implements _i25.ListLocationService {
+    implements _i28.ListLocationService {
   MockListLocationService() {
     _i1.throwOnMissingStub(this);
   ***REMOVED***
 
   @override
-  set cache(List<_i26.ListLocation>? _cache) =>
+  set cache(List<_i29.ListLocation>? _cache) =>
       super.noSuchMethod(Invocation.setter(#cache, _cache),
           returnValueForMissingStub: null);
   @override
@@ -279,11 +289,11 @@ class MockListLocationService extends _i1.Mock
       super.noSuchMethod(Invocation.setter(#userService, _userService),
           returnValueForMissingStub: null);
   @override
-  _i11.Future<List<_i26.ListLocation>> getActiveListLocations() =>
+  _i11.Future<List<_i29.ListLocation>> getActiveListLocations() =>
       (super.noSuchMethod(Invocation.method(#getActiveListLocations, []),
               returnValue:
-                  Future<List<_i26.ListLocation>>.value(<_i26.ListLocation>[]))
-          as _i11.Future<List<_i26.ListLocation>>);
+                  Future<List<_i29.ListLocation>>.value(<_i29.ListLocation>[]))
+          as _i11.Future<List<_i29.ListLocation>>);
   @override
   _i11.Future<_i8.HttpClientResponseBody> get(String? url, {bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(Invocation.method(#get, [url], {#appAuth: appAuth***REMOVED***),
@@ -327,7 +337,7 @@ class MockListLocationService extends _i1.Mock
 /// A class which mocks [PushSendService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockPushSendService extends _i1.Mock implements _i27.PushSendService {
+class MockPushSendService extends _i1.Mock implements _i30.PushSendService {
   MockPushSendService() {
     _i1.throwOnMissingStub(this);
   ***REMOVED***
@@ -344,13 +354,13 @@ class MockPushSendService extends _i1.Mock implements _i27.PushSendService {
       super.noSuchMethod(Invocation.setter(#userService, _userService),
           returnValueForMissingStub: null);
   @override
-  dynamic pushToDevices(List<String>? recipients, _i28.PushData? data,
-          _i28.PushNotification? notification) =>
+  dynamic pushToDevices(List<String>? recipients, _i31.PushData? data,
+          _i31.PushNotification? notification) =>
       super.noSuchMethod(
           Invocation.method(#pushToDevices, [recipients, data, notification]));
   @override
-  dynamic pushToAction(int? actionId, _i28.PushData? data,
-          _i28.PushNotification? notification) =>
+  dynamic pushToAction(int? actionId, _i31.PushData? data,
+          _i31.PushNotification? notification) =>
       super.noSuchMethod(
           Invocation.method(#pushToAction, [actionId, data, notification]));
   @override
@@ -510,13 +520,13 @@ class MockUserService extends _i1.Mock implements _i6.UserService {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockChatMessageService extends _i1.Mock
-    implements _i29.ChatMessageService {
+    implements _i32.ChatMessageService {
   MockChatMessageService() {
     _i1.throwOnMissingStub(this);
   ***REMOVED***
 
   @override
-  set navigatorKey(_i4.GlobalKey<_i30.NavigatorState>? _navigatorKey) =>
+  set navigatorKey(_i4.GlobalKey<_i33.NavigatorState>? _navigatorKey) =>
       super.noSuchMethod(Invocation.setter(#navigatorKey, _navigatorKey),
           returnValueForMissingStub: null);
   @override
@@ -537,13 +547,13 @@ class MockChatMessageService extends _i1.Mock
       super.noSuchMethod(Invocation.method(#receiveMessage, [json]),
           returnValueForMissingStub: null);
   @override
-  _i11.Future<_i13.ChatChannel> storeMessage(_i28.ChatPushData? pushData) =>
+  _i11.Future<_i13.ChatChannel> storeMessage(_i31.ChatPushData? pushData) =>
       (super.noSuchMethod(Invocation.method(#storeMessage, [pushData]),
               returnValue: Future<_i13.ChatChannel>.value(_FakeChatChannel()))
           as _i11.Future<_i13.ChatChannel>);
   @override
   _i11.Future<List<_i13.ChatChannel>> storeMessages(
-          List<_i28.ChatPushData>? pushData) =>
+          List<_i31.ChatPushData>? pushData) =>
       (super.noSuchMethod(Invocation.method(#storeMessages, [pushData]),
               returnValue:
                   Future<List<_i13.ChatChannel>>.value(<_i13.ChatChannel>[]))
@@ -658,10 +668,10 @@ class MockPushNotificationManager extends _i1.Mock
               _FakePushReceiveService())) as _i11
           .Future<_i10.PushReceiveService>);
   @override
-  dynamic onReceived(_i31.RemoteMessage? message) =>
+  dynamic onReceived(_i34.RemoteMessage? message) =>
       super.noSuchMethod(Invocation.method(#onReceived, [message]));
   @override
-  dynamic onTap(_i31.RemoteMessage? message) =>
+  dynamic onTap(_i34.RemoteMessage? message) =>
       super.noSuchMethod(Invocation.method(#onTap, [message]));
   @override
   void registerMessageCallback(
@@ -744,7 +754,7 @@ class MockLocalNotificationService extends _i1.Mock
   ***REMOVED***
 
   @override
-  set plugin(_i32.FlutterLocalNotificationsPlugin? _plugin) =>
+  set plugin(_i35.FlutterLocalNotificationsPlugin? _plugin) =>
       super.noSuchMethod(Invocation.setter(#plugin, _plugin),
           returnValueForMissingStub: null);
   @override
@@ -766,34 +776,34 @@ class MockLocalNotificationService extends _i1.Mock
           returnValueForMissingStub: null);
   @override
   _i11.Future<dynamic> sendChatNotification(
-          _i28.ActionChatMessagePushData? chatMessage) =>
+          _i31.ActionChatMessagePushData? chatMessage) =>
       (super.noSuchMethod(
           Invocation.method(#sendChatNotification, [chatMessage]),
           returnValue: Future<dynamic>.value(null)) as _i11.Future<dynamic>);
   @override
   _i11.Future<void> sendParticipationNotification(
-          _i28.ParticipationPushData? data) =>
+          _i31.ParticipationPushData? data) =>
       (super.noSuchMethod(
           Invocation.method(#sendParticipationNotification, [data]),
           returnValue: Future<void>.value(null),
           returnValueForMissingStub: Future.value()) as _i11.Future<void>);
   @override
   _i11.Future<void> sendNewActionsNotification(
-          _i33.ActionListPushData? partMessage) =>
+          _i36.ActionListPushData? partMessage) =>
       (super.noSuchMethod(
           Invocation.method(#sendNewActionsNotification, [partMessage]),
           returnValue: Future<void>.value(null),
           returnValueForMissingStub: Future.value()) as _i11.Future<void>);
   @override
   _i11.Future<void> sendActionDeletedNotification(
-          _i33.ActionListPushData? partMessage) =>
+          _i36.ActionListPushData? partMessage) =>
       (super.noSuchMethod(
           Invocation.method(#sendActionDeletedNotification, [partMessage]),
           returnValue: Future<void>.value(null),
           returnValueForMissingStub: Future.value()) as _i11.Future<void>);
   @override
   _i11.Future<void> sendActionChangedNotification(
-          _i33.ActionListPushData? partMessage) =>
+          _i36.ActionListPushData? partMessage) =>
       (super.noSuchMethod(
           Invocation.method(#sendActionChangedNotification, [partMessage]),
           returnValue: Future<void>.value(null),
@@ -805,7 +815,7 @@ class MockLocalNotificationService extends _i1.Mock
           returnValueForMissingStub: Future.value()) as _i11.Future<void>);
   @override
   void sendTopicChatNotification(
-          _i28.TopicChatMessagePushData? topicChatMessagePushData) =>
+          _i31.TopicChatMessagePushData? topicChatMessagePushData) =>
       super.noSuchMethod(
           Invocation.method(
               #sendTopicChatNotification, [topicChatMessagePushData]),
@@ -815,7 +825,7 @@ class MockLocalNotificationService extends _i1.Mock
 /// A class which mocks [Translations].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTranslations extends _i1.Mock implements _i34.Translations {
+class MockTranslations extends _i1.Mock implements _i37.Translations {
   MockTranslations() {
     _i1.throwOnMissingStub(this);
   ***REMOVED***
@@ -844,18 +854,18 @@ class MockTranslations extends _i1.Mock implements _i34.Translations {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockDemoPushSendService extends _i1.Mock
-    implements _i27.DemoPushSendService {
+    implements _i30.DemoPushSendService {
   MockDemoPushSendService() {
     _i1.throwOnMissingStub(this);
   ***REMOVED***
 
   @override
-  _i11.StreamController<_i28.PushData> get controller =>
+  _i11.StreamController<_i31.PushData> get controller =>
       (super.noSuchMethod(Invocation.getter(#controller),
-              returnValue: _FakeStreamController<_i28.PushData>())
-          as _i11.StreamController<_i28.PushData>);
+              returnValue: _FakeStreamController<_i31.PushData>())
+          as _i11.StreamController<_i31.PushData>);
   @override
-  set controller(_i11.StreamController<_i28.PushData>? _controller) =>
+  set controller(_i11.StreamController<_i31.PushData>? _controller) =>
       super.noSuchMethod(Invocation.setter(#controller, _controller),
           returnValueForMissingStub: null);
   @override
@@ -870,13 +880,13 @@ class MockDemoPushSendService extends _i1.Mock
       super.noSuchMethod(Invocation.setter(#userService, _userService),
           returnValueForMissingStub: null);
   @override
-  dynamic pushToDevices(List<String>? recipients, _i28.PushData? data,
-          _i28.PushNotification? notification) =>
+  dynamic pushToDevices(List<String>? recipients, _i31.PushData? data,
+          _i31.PushNotification? notification) =>
       super.noSuchMethod(
           Invocation.method(#pushToDevices, [recipients, data, notification]));
   @override
-  dynamic pushToAction(int? actionId, _i28.PushData? data,
-          _i28.PushNotification? notification) =>
+  dynamic pushToAction(int? actionId, _i31.PushData? data,
+          _i31.PushNotification? notification) =>
       super.noSuchMethod(
           Invocation.method(#pushToAction, [actionId, data, notification]));
   @override
@@ -943,7 +953,7 @@ class MockStammdatenService extends _i1.Mock implements _i3.StammdatenService {
               returnValue: Future<Set<_i17.Ortsteil>>.value(<_i17.Ortsteil>{***REMOVED***))
           as _i11.Future<Set<_i17.Ortsteil>>);
   @override
-  _i11.Future<_i17.Kiez?> getKiezAtLocation(_i35.LatLng? point) =>
+  _i11.Future<_i17.Kiez?> getKiezAtLocation(_i38.LatLng? point) =>
       (super.noSuchMethod(Invocation.method(#getKiezAtLocation, [point]),
               returnValue: Future<_i17.Kiez?>.value(_FakeKiez()))
           as _i11.Future<_i17.Kiez?>);
@@ -953,15 +963,15 @@ class MockStammdatenService extends _i1.Mock implements _i3.StammdatenService {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFlutterLocalNotificationsPlugin extends _i1.Mock
-    implements _i32.FlutterLocalNotificationsPlugin {
+    implements _i35.FlutterLocalNotificationsPlugin {
   MockFlutterLocalNotificationsPlugin() {
     _i1.throwOnMissingStub(this);
   ***REMOVED***
 
   @override
   _i11.Future<bool?> initialize(
-          _i36.InitializationSettings? initializationSettings,
-          {_i37.SelectNotificationCallback? onSelectNotification***REMOVED***) =>
+          _i39.InitializationSettings? initializationSettings,
+          {_i40.SelectNotificationCallback? onSelectNotification***REMOVED***) =>
       (super.noSuchMethod(
           Invocation.method(#initialize, [initializationSettings],
               {#onSelectNotification: onSelectNotification***REMOVED***),
@@ -975,7 +985,7 @@ class MockFlutterLocalNotificationsPlugin extends _i1.Mock
           as _i11.Future<_i18.NotificationAppLaunchDetails?>);
   @override
   _i11.Future<void> show(int? id, String? title, String? body,
-          _i38.NotificationDetails? notificationDetails, {String? payload***REMOVED***) =>
+          _i41.NotificationDetails? notificationDetails, {String? payload***REMOVED***) =>
       (super.noSuchMethod(
           Invocation.method(#show, [id, title, body, notificationDetails],
               {#payload: payload***REMOVED***),
@@ -997,7 +1007,7 @@ class MockFlutterLocalNotificationsPlugin extends _i1.Mock
           String? title,
           String? body,
           DateTime? scheduledDate,
-          _i38.NotificationDetails? notificationDetails,
+          _i41.NotificationDetails? notificationDetails,
           {String? payload,
           bool? androidAllowWhileIdle = false***REMOVED***) =>
       (super.noSuchMethod(
@@ -1018,13 +1028,13 @@ class MockFlutterLocalNotificationsPlugin extends _i1.Mock
           int? id,
           String? title,
           String? body,
-          _i39.TZDateTime? scheduledDate,
-          _i38.NotificationDetails? notificationDetails,
-          {_i40.UILocalNotificationDateInterpretation?
+          _i42.TZDateTime? scheduledDate,
+          _i41.NotificationDetails? notificationDetails,
+          {_i43.UILocalNotificationDateInterpretation?
               uiLocalNotificationDateInterpretation,
           bool? androidAllowWhileIdle,
           String? payload,
-          _i41.DateTimeComponents? matchDateTimeComponents***REMOVED***) =>
+          _i44.DateTimeComponents? matchDateTimeComponents***REMOVED***) =>
       (super.noSuchMethod(
           Invocation.method(#zonedSchedule, [
             id,
@@ -1046,8 +1056,8 @@ class MockFlutterLocalNotificationsPlugin extends _i1.Mock
           int? id,
           String? title,
           String? body,
-          _i42.RepeatInterval? repeatInterval,
-          _i38.NotificationDetails? notificationDetails,
+          _i45.RepeatInterval? repeatInterval,
+          _i41.NotificationDetails? notificationDetails,
           {String? payload,
           bool? androidAllowWhileIdle = false***REMOVED***) =>
       (super.noSuchMethod(
@@ -1068,8 +1078,8 @@ class MockFlutterLocalNotificationsPlugin extends _i1.Mock
           int? id,
           String? title,
           String? body,
-          _i41.Time? notificationTime,
-          _i38.NotificationDetails? notificationDetails,
+          _i44.Time? notificationTime,
+          _i41.NotificationDetails? notificationDetails,
           {String? payload***REMOVED***) =>
       (super.noSuchMethod(
           Invocation.method(
@@ -1083,9 +1093,9 @@ class MockFlutterLocalNotificationsPlugin extends _i1.Mock
           int? id,
           String? title,
           String? body,
-          _i41.Day? day,
-          _i41.Time? notificationTime,
-          _i38.NotificationDetails? notificationDetails,
+          _i44.Day? day,
+          _i44.Time? notificationTime,
+          _i41.NotificationDetails? notificationDetails,
           {String? payload***REMOVED***) =>
       (super.noSuchMethod(
           Invocation.method(
@@ -1095,18 +1105,18 @@ class MockFlutterLocalNotificationsPlugin extends _i1.Mock
           returnValue: Future<void>.value(null),
           returnValueForMissingStub: Future.value()) as _i11.Future<void>);
   @override
-  _i11.Future<List<_i42.PendingNotificationRequest>>
+  _i11.Future<List<_i45.PendingNotificationRequest>>
       pendingNotificationRequests() => (super.noSuchMethod(
               Invocation.method(#pendingNotificationRequests, []),
-              returnValue: Future<List<_i42.PendingNotificationRequest>>.value(
-                  <_i42.PendingNotificationRequest>[]))
-          as _i11.Future<List<_i42.PendingNotificationRequest>>);
+              returnValue: Future<List<_i45.PendingNotificationRequest>>.value(
+                  <_i45.PendingNotificationRequest>[]))
+          as _i11.Future<List<_i45.PendingNotificationRequest>>);
 ***REMOVED***
 
 /// A class which mocks [PlacardsService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockPlacardsService extends _i1.Mock implements _i43.PlacardsService {
+class MockPlacardsService extends _i1.Mock implements _i46.PlacardsService {
   MockPlacardsService() {
     _i1.throwOnMissingStub(this);
   ***REMOVED***
@@ -1175,16 +1185,134 @@ class MockPlacardsService extends _i1.Mock implements _i43.PlacardsService {
           as _i11.Future<_i8.HttpClientResponseBody>);
 ***REMOVED***
 
+/// A class which mocks [VisitedHousesService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockVisitedHousesService extends _i1.Mock
+    implements _i47.VisitedHousesService {
+  MockVisitedHousesService() {
+    _i1.throwOnMissingStub(this);
+  ***REMOVED***
+
+  @override
+  _i20.GeoService get geoService =>
+      (super.noSuchMethod(Invocation.getter(#geoService),
+          returnValue: _FakeGeoService()) as _i20.GeoService);
+  @override
+  set geoService(_i20.GeoService? _geoService) =>
+      super.noSuchMethod(Invocation.setter(#geoService, _geoService),
+          returnValueForMissingStub: null);
+  @override
+  Map<int, _i21.VisitedHouse> get localBuildingMap => (super.noSuchMethod(
+      Invocation.getter(#localBuildingMap),
+      returnValue: <int, _i21.VisitedHouse>{***REMOVED***) as Map<int, _i21.VisitedHouse>);
+  @override
+  set localBuildingMap(Map<int, _i21.VisitedHouse>? _localBuildingMap) => super
+      .noSuchMethod(Invocation.setter(#localBuildingMap, _localBuildingMap),
+          returnValueForMissingStub: null);
+  @override
+  _i5.Backend get backend => (super.noSuchMethod(Invocation.getter(#backend),
+      returnValue: _FakeBackend()) as _i5.Backend);
+  @override
+  _i6.AbstractUserService get userService =>
+      (super.noSuchMethod(Invocation.getter(#userService),
+          returnValue: _FakeAbstractUserService()) as _i6.AbstractUserService);
+  @override
+  set userService(_i6.AbstractUserService? _userService) =>
+      super.noSuchMethod(Invocation.setter(#userService, _userService),
+          returnValueForMissingStub: null);
+  @override
+  _i11.Future<_i21.VisitedHouse?> createVisitedHouse(
+          _i21.VisitedHouse? house) =>
+      (super.noSuchMethod(Invocation.method(#createVisitedHouse, [house]),
+              returnValue:
+                  Future<_i21.VisitedHouse?>.value(_FakeVisitedHouse()))
+          as _i11.Future<_i21.VisitedHouse?>);
+  @override
+  dynamic deleteVisitedHouse(int? id) =>
+      super.noSuchMethod(Invocation.method(#deleteVisitedHouse, [id]));
+  @override
+  _i11.Future<List<_i21.VisitedHouse>> loadVisitedHouses() =>
+      (super.noSuchMethod(Invocation.method(#loadVisitedHouses, []),
+              returnValue:
+                  Future<List<_i21.VisitedHouse>>.value(<_i21.VisitedHouse>[]))
+          as _i11.Future<List<_i21.VisitedHouse>>);
+  @override
+  _i11.Future<_i21.VisitedHouse?> getVisitedHouseOfPoint(
+          _i38.LatLng? point, bool? checkOnServer) =>
+      (super.noSuchMethod(
+          Invocation.method(#getVisitedHouseOfPoint, [point, checkOnServer]),
+          returnValue:
+              Future<_i21.VisitedHouse?>.value(_FakeVisitedHouse())) as _i11
+          .Future<_i21.VisitedHouse?>);
+  @override
+  _i21.VisitedHouse? getBuildingFromJson(
+          int? osmId, _i38.LatLng? point, List<_i38.LatLng>? shape) =>
+      (super.noSuchMethod(
+              Invocation.method(#getBuildingFromJson, [osmId, point, shape]))
+          as _i21.VisitedHouse?);
+  @override
+  _i22.VisitedHouseView getBuildingsInArea(_i22.BoundingBox? bbox) =>
+      (super.noSuchMethod(Invocation.method(#getBuildingsInArea, [bbox]),
+          returnValue: _FakeVisitedHouseView()) as _i22.VisitedHouseView);
+  @override
+  _i21.VisitedHouse? getBuildingForPointLocal(_i38.LatLng? point) =>
+      (super.noSuchMethod(Invocation.method(#getBuildingForPointLocal, [point]))
+          as _i21.VisitedHouse?);
+  @override
+  _i21.VisitedHouse editVisitedHouse(_i21.VisitedHouse? house) =>
+      (super.noSuchMethod(Invocation.method(#editVisitedHouse, [house]),
+          returnValue: _FakeVisitedHouse()) as _i21.VisitedHouse);
+  @override
+  _i11.Future<_i8.HttpClientResponseBody> get(String? url, {bool? appAuth***REMOVED***) =>
+      (super.noSuchMethod(Invocation.method(#get, [url], {#appAuth: appAuth***REMOVED***),
+              returnValue: Future<_i8.HttpClientResponseBody>.value(
+                  _FakeHttpClientResponseBody()))
+          as _i11.Future<_i8.HttpClientResponseBody>);
+  @override
+  _i11.Future<_i8.HttpClientResponseBody> post(String? url, String? data,
+          {Map<String, String>? parameters, bool? appAuth***REMOVED***) =>
+      (super.noSuchMethod(
+          Invocation.method(
+              #post, [url, data], {#parameters: parameters, #appAuth: appAuth***REMOVED***),
+          returnValue: Future<_i8.HttpClientResponseBody>.value(
+              _FakeHttpClientResponseBody())) as _i11
+          .Future<_i8.HttpClientResponseBody>);
+  @override
+  _i11.Future<_i8.HttpClientResponseBody> delete(String? url,
+          {String? data, bool? appAuth***REMOVED***) =>
+      (super.noSuchMethod(
+          Invocation.method(#delete, [url], {#data: data, #appAuth: appAuth***REMOVED***),
+          returnValue: Future<_i8.HttpClientResponseBody>.value(
+              _FakeHttpClientResponseBody())) as _i11
+          .Future<_i8.HttpClientResponseBody>);
+  @override
+  _i11.Future<Map<String, String>> authHeaders(bool? appAuth) =>
+      (super.noSuchMethod(Invocation.method(#authHeaders, [appAuth]),
+              returnValue:
+                  Future<Map<String, String>>.value(<String, String>{***REMOVED***))
+          as _i11.Future<Map<String, String>>);
+  @override
+  _i11.Future<_i8.HttpClientResponseBody> checkConnectivity(
+          {dynamic originalError***REMOVED***) =>
+      (super.noSuchMethod(
+              Invocation.method(
+                  #checkConnectivity, [], {#originalError: originalError***REMOVED***),
+              returnValue: Future<_i8.HttpClientResponseBody>.value(
+                  _FakeHttpClientResponseBody()))
+          as _i11.Future<_i8.HttpClientResponseBody>);
+***REMOVED***
+
 /// A class which mocks [StorageService].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockStorageService extends _i1.Mock implements _i9.StorageService {
   @override
-  _i11.Future<_i20.SharedPreferences> get prefs => (super.noSuchMethod(
+  _i11.Future<_i23.SharedPreferences> get prefs => (super.noSuchMethod(
           Invocation.getter(#prefs),
           returnValue:
-              Future<_i20.SharedPreferences>.value(_FakeSharedPreferences()))
-      as _i11.Future<_i20.SharedPreferences>);
+              Future<_i23.SharedPreferences>.value(_FakeSharedPreferences()))
+      as _i11.Future<_i23.SharedPreferences>);
   @override
   _i11.Future<bool> saveActionToken(int? id, String? token) =>
       (super.noSuchMethod(Invocation.method(#saveActionToken, [id, token]),
@@ -1223,14 +1351,14 @@ class MockStorageService extends _i1.Mock implements _i9.StorageService {
       Invocation.method(#loadAllStoredEvaluations, []),
       returnValue: Future<List<int>>.value(<int>[])) as _i11.Future<List<int>>);
   @override
-  _i11.Future<bool> saveFilter(_i21.TermineFilter? filter) =>
+  _i11.Future<bool> saveFilter(_i24.TermineFilter? filter) =>
       (super.noSuchMethod(Invocation.method(#saveFilter, [filter]),
           returnValue: Future<bool>.value(false)) as _i11.Future<bool>);
   @override
-  _i11.Future<_i21.TermineFilter?> loadFilter() => (super.noSuchMethod(
+  _i11.Future<_i24.TermineFilter?> loadFilter() => (super.noSuchMethod(
           Invocation.method(#loadFilter, []),
-          returnValue: Future<_i21.TermineFilter?>.value(_FakeTermineFilter()))
-      as _i11.Future<_i21.TermineFilter?>);
+          returnValue: Future<_i24.TermineFilter?>.value(_FakeTermineFilter()))
+      as _i11.Future<_i24.TermineFilter?>);
   @override
   _i11.Future<bool> saveUser(_i12.User? user) =>
       (super.noSuchMethod(Invocation.method(#saveUser, [user]),
@@ -1315,10 +1443,10 @@ class MockFirebaseReceiveService extends _i1.Mock
           as bool);
   @override
   void subscribe(
-          {dynamic Function(_i31.RemoteMessage)? onMessage,
-          dynamic Function(_i31.RemoteMessage)? onResume,
-          dynamic Function(_i31.RemoteMessage)? onLaunch,
-          dynamic Function(_i31.RemoteMessage)? onBackgroundMessage***REMOVED***) =>
+          {dynamic Function(_i34.RemoteMessage)? onMessage,
+          dynamic Function(_i34.RemoteMessage)? onResume,
+          dynamic Function(_i34.RemoteMessage)? onLaunch,
+          dynamic Function(_i34.RemoteMessage)? onBackgroundMessage***REMOVED***) =>
       super.noSuchMethod(
           Invocation.method(#subscribe, [], {
             #onMessage: onMessage,

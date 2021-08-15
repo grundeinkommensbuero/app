@@ -9,7 +9,6 @@ import 'package:jiffy/jiffy.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
-import 'package:sammel_app/model/Placard.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
@@ -30,6 +29,8 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
+import 'package:sammel_app/services/VisitedHouseView.dart';
+import 'package:sammel_app/services/VisitedHousesService.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../model/Termin_test.dart';
@@ -48,6 +49,7 @@ final _chatMessageService = MockChatMessageService();
 final _pushManager = MockPushNotificationManager();
 final _placardsService = MockPlacardsService();
 final _geoService = MockGeoService();
+final _visitedHousesService = MockVisitedHousesService();
 
 final actionCreatorKey =
     GlobalKey<ActionEditorState>(debugLabel: 'action creator');
@@ -69,6 +71,7 @@ void main() {
   setUp(() async {
     HttpOverrides.global = MapHttpOverrides();
     reset(_placardsService);
+    reset(_visitedHousesService);
     when(_placardsService.loadPlacards())
         .thenAnswer((_) async => Future.value([]));
     when(_storageService.loadFilter()).thenAnswer((_) => Future.value(null));
@@ -84,6 +87,10 @@ void main() {
     when(_termineService.deleteAction(any, any))
         .thenAnswer((_) => Future.value(null));
     when(_pushManager.pushToken).thenAnswer((_) => Future.value('Token'));
+    when(_visitedHousesService.loadVisitedHouses())
+        .thenAnswer((_) => Future.value([]));
+    when(_visitedHousesService.getBuildingsInArea(any))
+        .thenReturn(VisitedHouseView(BoundingBox(0, 0, 0, 0), []));
     ErrorService.displayedTypes = [];
 
     termineSeiteWidget = MultiProvider(
@@ -97,6 +104,8 @@ void main() {
           Provider<ChatMessageService>.value(value: _chatMessageService),
           Provider<AbstractPlacardsService>.value(value: _placardsService),
           Provider<GeoService>.value(value: _geoService),
+          Provider<AbstractVisitedHousesService>.value(
+              value: _visitedHousesService),
         ],
         child: MaterialApp(home: Builder(builder: (BuildContext context) {
           ErrorService.setContext(context);
@@ -1483,7 +1492,7 @@ void main() {
       await tester.tap(find.byKey(Key('map view navigation button')));
       await tester.pump();
 
-      ActionMap map = tester.widget<ActionMap>(find.byKey(Key('action map')));
+      ActionMap map = tester.widget<ActionMap>(find.byType(ActionMap));
       map.mapController
           .move(LatLng(placard1().latitude, placard1().longitude), 15);
       await tester.pumpAndSettle();
@@ -1625,6 +1634,8 @@ _pumpNavigation(WidgetTester tester) async {
         Provider<AbstractPushNotificationManager>.value(value: _pushManager),
         Provider<AbstractPlacardsService>.value(value: _placardsService),
         Provider<AbstractPlacardsService>.value(value: _placardsService),
+        Provider<AbstractVisitedHousesService>.value(
+            value: _visitedHousesService),
       ],
       child: MaterialApp(
         home:

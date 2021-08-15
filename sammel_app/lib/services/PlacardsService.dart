@@ -21,7 +21,7 @@ abstract class AbstractPlacardsService extends BackendService {
 
 class PlacardsService extends AbstractPlacardsService {
   PlacardsService(AbstractUserService userService, Backend backend)
-      : super(userService, backend) {***REMOVED***
+      : super(userService, backend);
 
   @override
   Future<Placard?> createPlacard(Placard placard) async {
@@ -63,7 +63,7 @@ class PlacardsService extends AbstractPlacardsService {
 
 class DemoPlacardsService extends AbstractPlacardsService {
   DemoPlacardsService(AbstractUserService userService)
-      : super(userService, DemoBackend()) {***REMOVED***
+      : super(userService, DemoBackend());
   List<Placard> placards = [
     Placard(1, 52.4722460, 13.3277830, '12161, Friedrich-Wilhelm-Platz 57', 11),
     Placard(2, 52.47102, 13.3282, "12161, Bundesallee 76", 12),

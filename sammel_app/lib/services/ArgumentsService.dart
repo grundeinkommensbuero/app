@@ -15,7 +15,7 @@ abstract class AbstractArgumentsService extends BackendService {
 
 class ArgumentsService extends AbstractArgumentsService {
   ArgumentsService(AbstractUserService userService, Backend backend)
-      : super(userService, backend) {***REMOVED***
+      : super(userService, backend);
 
   @override
   Future<void> createArguments(Arguments arguments) async {
@@ -30,7 +30,7 @@ class ArgumentsService extends AbstractArgumentsService {
 
 class DemoArgumentsService extends AbstractArgumentsService {
   DemoArgumentsService(AbstractUserService userService)
-      : super(userService, DemoBackend()) {***REMOVED***
+      : super(userService, DemoBackend());
 
   @override
   Future<void> createArguments(Arguments arguments) async {***REMOVED***

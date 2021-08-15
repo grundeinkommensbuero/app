@@ -7,6 +7,8 @@ import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/MessageException.dart';
 import 'package:sammel_app/shared/ServerException.dart';
 
+import 'GeoService.dart';
+
 class ErrorService {
   static BuildContext? _context;
   static List<List<String>> errorQueue = [];
@@ -52,6 +54,12 @@ class ErrorService {
     if (error is RestFehler) {
       pushError(
           'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten',
+          [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
+      return;
+    ***REMOVED***
+    if (error is OsmResponseException) {
+      pushError(
+          'Bei der Kommunikation mit einem Openstreetmap-Server ist ein Fehler aufgetreten',
           [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
       return;
     ***REMOVED***

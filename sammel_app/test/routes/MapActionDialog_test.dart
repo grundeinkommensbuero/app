@@ -30,7 +30,7 @@ main() {
   testUI('MapActionDialog shows buttons', (tester) async {
     expect(find.byKey(Key('map action dialog action button')), findsOneWidget);
     expect(find.byKey(Key('map action dialog placard button')), findsOneWidget);
-    expect(find.byKey(Key('map action dialog visited house button')),
+    expect(find.byKey(Key('map action dialog house button')),
         findsOneWidget);
     expect(find.byKey(Key('map action dialog abort button')), findsOneWidget);
   ***REMOVED***);
@@ -50,16 +50,16 @@ main() {
   ***REMOVED***);
 
   testUI('visited house button closes dialog with NewAction value', (tester) async {
-    await tester.tap(find.byKey(Key('map action dialog visited house button')));
+    await tester.tap(find.byKey(Key('map action dialog house button')));
     await tester.pump();
 
     expect(returnValue, MapActionType.NewVisitedHouse);
   ***REMOVED***);
 
-  testUI('abort button closes dialog withn null value', (tester) async {
+  testUI('abort button closes dialog with Cancel value', (tester) async {
     await tester.tap(find.byKey(Key('map action dialog abort button')));
     await tester.pump();
 
-    expect(returnValue, isNull);
+    expect(returnValue, MapActionType.Cancel);
   ***REMOVED***);
 ***REMOVED***

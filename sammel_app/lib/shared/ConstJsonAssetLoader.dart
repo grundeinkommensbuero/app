@@ -344,6 +344,18 @@ const Map<String, dynamic> en = {
   'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?':
       'You entered this poster. Would you like to delete it again?',
   'Plakate aufhängen': 'Put up posters',
+  'Besuchtes Haus': 'Visited House',
+  'Wähle das Haus auf der Karte aus.': 'Select the house at the map',
+  'Adresse': 'Address',
+  'Hausteil': 'Part of the house',
+  'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.':
+      'for example Front Building, Side Wing, Staircase B, floor 1-3, etc.',
+  'Nein danke': 'No thanks',
+  'Absenden': 'Submit',
+  'Vorbehalte': 'Arguments',
+  'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.':
+      'Help the campaign by describing the arguments and hesitations of the undecided. Also: What arguments would convince them? If an argumen was important in more then one talk, write the number behind in brackets.',
+  'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.': 'For privacy reasons these data are not connected to an address.',
 ***REMOVED***
 
 const Map<String, dynamic> ru = {
@@ -670,6 +682,18 @@ const Map<String, dynamic> ru = {
   'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?':
       'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?',
   'Plakate aufhängen': 'Plakate aufhängen',
+  'Besuchtes Haus': 'Besuchtes Haus',
+  'Wähle das Haus auf der Karte aus.': 'Wähle das Haus auf der Karte aus.',
+  'Adresse': 'Adresse',
+  'Hausteil': 'Hausteil',
+  'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.':
+  'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.',
+  'Nein danke': 'Nein danke',
+  'Absenden': 'Absenden',
+  'Vorbehalte': 'Vorbehalte',
+  'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.':
+  'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.',
+  'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.': 'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.',
 ***REMOVED***
 
 const Map<String, dynamic> fr = {
@@ -1005,6 +1029,18 @@ const Map<String, dynamic> fr = {
   'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?':
       'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?',
   'Plakate aufhängen': 'Plakate aufhängen',
+  'Besuchtes Haus': 'Besuchtes Haus',
+  'Wähle das Haus auf der Karte aus.': 'Wähle das Haus auf der Karte aus.',
+  'Adresse': 'Adresse',
+  'Hausteil': 'Hausteil',
+  'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.':
+  'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.',
+  'Nein danke': 'Nein danke',
+  'Absenden': 'Absenden',
+  'Vorbehalte': 'Vorbehalte',
+  'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.':
+  'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.',
+  'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.': 'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.',
 ***REMOVED***
 
 const Map<String, dynamic> de = {
@@ -1343,4 +1379,16 @@ const Map<String, dynamic> de = {
   'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?':
       'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?',
   'Plakate aufhängen': 'Plakate aufhängen',
+  'Besuchtes Haus': 'Besuchtes Haus',
+  'Wähle das Haus auf der Karte aus.': 'Wähle das Haus auf der Karte aus.',
+  'Adresse': 'Adresse',
+  'Hausteil': 'Hausteil',
+  'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.':
+  'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.',
+  'Nein danke': 'Nein danke',
+  'Absenden': 'Absenden',
+  'Vorbehalte': 'Vorbehalte',
+  'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.':
+  'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.',
+  'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.': 'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.',
 ***REMOVED***

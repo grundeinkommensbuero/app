@@ -28,11 +28,11 @@ class ArgumentsDialog extends StatefulWidget {
 
 class ArgumentsDialogState extends State<ArgumentsDialog> {
   final LatLng coordinates;
-  String? plz = null;
+  String? plz;
   final DateTime date = DateTime.now();
   String arguments = '';
 
-  ArgumentsDialogState(this.coordinates) {***REMOVED***
+  ArgumentsDialogState(this.coordinates);
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +49,9 @@ class ArgumentsDialogState extends State<ArgumentsDialog> {
           '${plz != null ? plz : 'Berlin'***REMOVED***, ${ChronoHelfer.formatDateOfDateTime(date)***REMOVED***',
           textScaleFactor: 0.9,
           style: TextStyle(color: CampaignTheme.secondary),
-        ).tr(),
+        ),
         SizedBox(height: 5.0),
-        Text(
-                'Hilf der Kampagne, indem du in ein paar Schlagworten aufschreibst, was Vorbehalte und Gegenargumente deiner Gesprächspartner*innen waren.\n'
-                'Wenn ein Thema in mehreren Gesprächen wichtig war schreibe die Häufigkeit in Klammern dahinter.\n',
+        Text('Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.',
                 style: TextStyle(fontSize: 12))
             .tr(),
         SizedBox(height: 10.0),
@@ -68,8 +66,8 @@ class ArgumentsDialogState extends State<ArgumentsDialog> {
         ),
         SizedBox(height: 10.0),
         Text(
-            'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.\n',
-            style: TextStyle(fontSize: 12))
+            'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.',
+            style: TextStyle(fontSize: 12)).tr()
       ])),
       actions: [
         TextButton(
