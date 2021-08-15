@@ -41,7 +41,7 @@ abstract class AbstractVisitedHousesService extends BackendService {
     if (shape == null) {
       //no shape found take small bbox around point. problem is that we want a box that is drawn as square
       double lat5m = DistanceHelper.getLatDiffFromM(point, 5.0);
-      double lng5m = DistanceHelper.getLongDiffFromM(point, 15.0);
+      double lng5m = DistanceHelper.getLongDiffFromM(point, 5.0);
       shape = [
         LatLng(point.latitude - lat5m, point.longitude - lng5m),
         LatLng(point.latitude + lat5m, point.longitude - lng5m),
@@ -97,15 +97,15 @@ abstract class AbstractVisitedHousesService extends BackendService {
           .where((element) => !currentIds.contains(element.id))
           .toList();
     ***REMOVED***
-    for (var delete_event in deleteEvents) {
-      deleteVisitedHouse(delete_event);
+    for (var deleteEvent in deleteEvents) {
+      deleteVisitedHouse(deleteEvent);
     ***REMOVED***
 
-    for (var add_event in addEvents) {
+    for (var addEvent in addEvents) {
       VisitedHouse houseWithWventOnly = VisitedHouse(house.osmId,
-          house.latitude, house.longitude, house.shape, [add_event]);
+          house.latitude, house.longitude, house.shape, [addEvent]);
       var h = createVisitedHouse(houseWithWventOnly);
-      h.then((value) => add_event.id = value?.visitationEvents.last.id);
+      h.then((value) => addEvent.id = value?.visitationEvents.last.id);
     ***REMOVED***
     if (house.visitationEvents.isNotEmpty) {
       house.visitationEvents
