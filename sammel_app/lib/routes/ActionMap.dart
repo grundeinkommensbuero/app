@@ -136,7 +136,6 @@ class ActionMapState extends State<ActionMap> {
 
   List<Polygon> generateVisitedHousePolygons() {
     if (initialized && widget.mapController.zoom > 14) {
-      print("### creating new visited house list");
       //return widget.visitedHouses;
 
       BoundingBox bbox = BoundingBox(
