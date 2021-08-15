@@ -102,6 +102,7 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
 
   @override
   Widget build(BuildContext context) {
+    if(building_view.selected_building == null) houseSelected(this.center);
     return AlertDialog(
       title: Text('Besuchtes Haus').tr(),
       content: SingleChildScrollView(
@@ -168,12 +169,13 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
         //onChanged: (input) => location.description = input,
         controller: visitedHouseController,
       ),
-      Text(
-        'Hausteil: Vorderhaus, Seitenflügel, Hausnummer, Etage'.tr(),
+    Align(alignment: Alignment.centerLeft, child: Text(
+    'Hausteil'.tr(),
         textScaleFactor: 0.8,
-      ).tr(),
+      ).tr()),
       TextFormField(
         key: Key('visited house part input'),
+        decoration: InputDecoration(hintText: 'Vorderhaus, Seitenflügel, Hausnummer, Etage'.tr()),
         // keyboardType: TextInputType.multiline,
         //onChanged: (input) => location.description = input,
         controller: visitedHousePartController,
@@ -254,15 +256,9 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
             .id;
         if (usr_id != null)
           building_view.selected_building?.visitation_events
-              .add(VisitedHouseEvent(null, "Main", usr_id, DateTime.now()));
+              .add(VisitedHouseEvent(null, '', usr_id, DateTime.now()));
         visitedHouseController.text =
             '${building_view.selected_building?.adresse***REMOVED***';
-        if (building_view.selected_building == null) {
-          visitedHousePartController.text = '';
-        ***REMOVED*** else {
-          visitedHousePartController.text =
-              building_view.selected_building!.visitation_events.last.hausteil;
-        ***REMOVED***
         showLoadingIndicator = false;
       ***REMOVED***
       //venueController.text = geodata.description;

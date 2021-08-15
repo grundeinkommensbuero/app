@@ -10,6 +10,8 @@ import 'package:sammel_app/model/Building.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Placard.dart';
 import 'package:sammel_app/model/Termin.dart';
+import 'package:sammel_app/routes/ArgumentsDialog.dart';
+import 'package:sammel_app/services/ArgumentsService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/PlacardsService.dart';
@@ -63,7 +65,6 @@ class ActionMap extends StatefulWidget {
 ***REMOVED***
 
 class ActionMapState extends State<ActionMap> {
-
   ActionMapState();
 
   var locationPermissionGranted = false;
@@ -89,8 +90,7 @@ class ActionMapState extends State<ActionMap> {
       TileLayerOptions(
           urlTemplate: "https://{s***REMOVED***.tile.openstreetmap.org/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
           subdomains: ['a', 'b', 'c']),
-      PolygonLayerOptions(
-          polygons: this.house_polygons, polygonCulling: true),
+      PolygonLayerOptions(polygons: this.house_polygons, polygonCulling: true),
       MarkerLayerOptions(markers: markers),
     ];
     layers.add(AttributionOptions());
@@ -153,19 +153,29 @@ class ActionMapState extends State<ActionMap> {
   ***REMOVED***
 
   mapTap(LatLng point) async {
-    Future<VisitedHouse?> vh_future = Provider.of<AbstractVisitedHousesService>(context, listen: false).getVisitedHouseOfPoint(point, false);
+    Future<VisitedHouse?> vh_future =
+        Provider.of<AbstractVisitedHousesService>(context, listen: false)
+            .getVisitedHouseOfPoint(point, false);
     VisitedHouse? vh = await vh_future;
-    if(vh != null)
-    {
+    if (vh != null) {
       var show_distance_in_m = 100.0;
       var lng_diff = DistanceHelper.getLongDiffFromM(point, show_distance_in_m);
       var lat_diff = DistanceHelper.getLatDiffFromM(point, show_distance_in_m);
-      BoundingBox bbox = BoundingBox(point.latitude-lat_diff, point.longitude-lng_diff,
-          point.latitude+lat_diff, point.longitude+lng_diff);
-      var building_view = Provider.of<AbstractVisitedHousesService>(context, listen: false).getBuildingsInArea(bbox);
+      BoundingBox bbox = BoundingBox(
+          point.latitude - lat_diff,
+          point.longitude - lng_diff,
+          point.latitude + lat_diff,
+          point.longitude + lng_diff);
+      var building_view =
+          Provider.of<AbstractVisitedHousesService>(context, listen: false)
+              .getBuildingsInArea(bbox);
       print("### selecting building");
-      building_view.selected_building = SelectableVisitedHouse.clone(SelectableVisitedHouse.fromVisitedHouse(vh, selected: true));
-      await showEditVisitedHouseDialog(context: context, building_view: building_view, current_zoom_factor: widget.mapController.zoom);
+      building_view.selected_building = SelectableVisitedHouse.clone(
+          SelectableVisitedHouse.fromVisitedHouse(vh, selected: true));
+      await showEditVisitedHouseDialog(
+          context: context,
+          building_view: building_view,
+          current_zoom_factor: widget.mapController.zoom);
       setState(() {
         this.house_polygons = generateVisitedHousePolygons();
       ***REMOVED***);
@@ -212,32 +222,47 @@ class ActionMapState extends State<ActionMap> {
       widget.switchToActionCreator(point);
     if (chosenAction == MapActionType.NewPlacard) createNewPlacard(point);
     if (chosenAction == MapActionType.NewVisitedHouse)
-       createNewVisitedHouse(point);
+      createNewVisitedHouse(point);
   ***REMOVED***
 
-  void createNewVisitedHouse(LatLng point) async{
+  void createNewVisitedHouse(LatLng point) async {
     //TODO: now it takes always the same distance around tap point
     var show_distance_in_m = 100.0;
     var lng_diff = DistanceHelper.getLongDiffFromM(point, show_distance_in_m);
     var lat_diff = DistanceHelper.getLatDiffFromM(point, show_distance_in_m);
-    BoundingBox bbox = BoundingBox(point.latitude-lat_diff, point.longitude-lng_diff,
-        point.latitude+lat_diff, point.longitude+lng_diff);
-    var building_view = Provider.of<AbstractVisitedHousesService>(context, listen: false).getBuildingsInArea(bbox);
-    await showAddBuildingDialog(context: context, building_view: building_view, current_zoom_factor: widget.mapController.zoom);
+    BoundingBox bbox = BoundingBox(
+        point.latitude - lat_diff,
+        point.longitude - lng_diff,
+        point.latitude + lat_diff,
+        point.longitude + lng_diff);
+    var building_view =
+        Provider.of<AbstractVisitedHousesService>(context, listen: false)
+            .getBuildingsInArea(bbox);
+    var newHouseFromServer = await showAddBuildingDialog(
+        context: context,
+        building_view: building_view,
+        current_zoom_factor: widget.mapController.zoom);
+    if (newHouseFromServer == null) return;
+
+    var arguments =
+        await showArgumentsDialog(context: context, coordinates: point);
+    if (arguments != null)
+      Provider.of<AbstractArgumentsService>(context, listen: false)
+          .createArguments(arguments);
+
     setState(() {
       this.house_polygons = generateVisitedHousePolygons();
     ***REMOVED***);
   ***REMOVED***
 
   update() async {
-    placardService
-        .loadPlacards()
-        .then((placards) => setState(() {
+    placardService.loadPlacards().then((placards) => setState(() {
           this.placards = placards;
         ***REMOVED***));
-    Provider.of<AbstractVisitedHousesService>(context, listen: false).loadVisitedHouses().then(
-            (_) => setState(
-                () => this.house_polygons = this.generateVisitedHousePolygons()));
+    Provider.of<AbstractVisitedHousesService>(context, listen: false)
+        .loadVisitedHouses()
+        .then((_) => setState(
+            () => this.house_polygons = this.generateVisitedHousePolygons()));
   ***REMOVED***
 
   List<ActionMarker> generateActionMarkers() {
