@@ -166,6 +166,7 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
         //  keyboardType: TextInputType.multiline,
         //onChanged: (input) => location.description = input,
         controller: visitedHouseController,
+        maxLength: 120,
         decoration: InputDecoration(border: OutlineInputBorder()),
       ),
       SizedBox(
@@ -186,7 +187,8 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
       TextFormField(
           key: Key('visited house part input'),
       controller: visitedHousePartController,
-      decoration: InputDecoration(border: OutlineInputBorder()),
+      maxLength: 120,
+        decoration: InputDecoration(border: OutlineInputBorder()),
       )
     ];
     return widgets;
