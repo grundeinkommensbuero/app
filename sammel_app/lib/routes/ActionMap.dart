@@ -146,10 +146,10 @@ class ActionMapState extends State<ActionMap> {
           widget.mapController.bounds!.west,
           widget.mapController.bounds!.north,
           widget.mapController.bounds!.east);
-      VisitedHouseView vhv =
+      VisitedHouseView houseView =
           Provider.of<AbstractVisitedHousesService>(context, listen: false)
               .getBuildingsInArea(bbox);
-      return vhv.buildDrawablePolygonsFromView();
+      return houseView.buildDrawablePolygonsFromView();
     ***REMOVED***
     return [];
   ***REMOVED***
@@ -219,8 +219,10 @@ class ActionMapState extends State<ActionMap> {
   mapAction(LatLng point) async {
     MapActionType? chosenAction = await showMapActionDialog(context);
 
-    if (chosenAction == MapActionType.NewAction)
+    if (chosenAction == MapActionType.NewAction) {
+      print('### switchToActionCreator ausgelöst');
       widget.switchToActionCreator(point);
+    ***REMOVED***
     if (chosenAction == MapActionType.NewPlacard) createNewPlacard(point);
     if (chosenAction == MapActionType.NewVisitedHouse)
       createNewVisitedHouse(point);

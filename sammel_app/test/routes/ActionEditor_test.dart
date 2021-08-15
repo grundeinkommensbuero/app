@@ -21,6 +21,7 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
+import 'package:sammel_app/services/VisitedHousesService.dart';
 
 import '../model/Termin_test.dart';
 import '../shared/TestdatenVorrat.dart';
@@ -38,6 +39,7 @@ late MockChatMessageService _chatService = MockChatMessageService();
 late MockPushNotificationManager _pushManager = MockPushNotificationManager();
 late MockPlacardsService _placardService = MockPlacardsService();
 late MockGeoService _geoService = MockGeoService();
+late MockVisitedHousesService _visitedHouseService = MockVisitedHousesService();
 
 void main() {
   trainTranslation(MockTranslations());
@@ -53,6 +55,7 @@ void main() {
     reset(_pushManager);
     reset(_chatService);
     reset(_stammdatenService);
+    reset(_visitedHouseService);
     when(_storageService.loadFilter()).thenAnswer((_) async => null);
     when(_storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
     when(_storageService.loadMyKiez()).thenAnswer((_) async => []);
@@ -71,6 +74,8 @@ void main() {
         (_) => Future.value({ffAlleeNord(), plaenterwald(), tempVorstadt()***REMOVED***));
     when(_placardService.loadPlacards())
         .thenAnswer((_) async => Future.value([]));
+    when(_visitedHouseService.loadVisitedHouses())
+        .thenAnswer((_) => Future.value([]));
   ***REMOVED***);
 
   group('shows all data', () {
@@ -928,6 +933,8 @@ _pumpActionPage(WidgetTester tester) async {
         Provider<PushSendService>.value(value: _pushService),
         Provider<ChatMessageService>.value(value: _chatService),
         Provider<AbstractPlacardsService>.value(value: _placardService),
+        Provider<AbstractVisitedHousesService>.value(
+            value: _visitedHouseService),
       ],
       child: MaterialApp(
         home: TermineSeite(switchToActionCreator: (_) {***REMOVED***),

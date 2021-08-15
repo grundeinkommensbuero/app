@@ -10,12 +10,13 @@ Future<MapActionType> showMapActionDialog(BuildContext context) async =>
     await showDialog(
         context: context,
         builder: (_) => AlertDialog(
-                key: Key('delete placard dialog'),
+                key: Key('map action dialog'),
                 title: Text('Eintragen').tr(),
                 content: Column(mainAxisSize: MainAxisSize.min, children: [
                   Text('Was möchtest du an dieser Stelle eintragen?').tr(),
                   SizedBox(height: 10),
                   TextButton(
+                      key: Key('map action dialog action button'),
                       child: Container(
                           alignment: Alignment.center,
                           child: Row(children: [
@@ -41,6 +42,7 @@ Future<MapActionType> showMapActionDialog(BuildContext context) async =>
                           Navigator.pop(context, MapActionType.NewAction)),
                   SizedBox(height: 5),
                   TextButton(
+                      key: Key('map action dialog placard button'),
                       child: Container(
                           child: Row(children: [
                             Icon(Icons.assistant_sharp),
@@ -64,6 +66,7 @@ Future<MapActionType> showMapActionDialog(BuildContext context) async =>
                           Navigator.pop(context, MapActionType.NewPlacard)),
                   SizedBox(height: 5),
                   TextButton(
+                      key: Key('map action dialog house button'),
                       child: Container(
                           child: Row(children: [
                             Icon(Icons.house),
@@ -90,8 +93,9 @@ Future<MapActionType> showMapActionDialog(BuildContext context) async =>
                 ]),
                 actions: <Widget>[
                   TextButton(
-                    key: Key('delete placard dialog abort button'),
+                    key: Key('map action dialog abort button'),
                     child: Text('Abbrechen').tr(),
-                    onPressed: () => Navigator.pop(context, MapActionType.Cancel),
+                    onPressed: () =>
+                        Navigator.pop(context, MapActionType.Cancel),
                   )
                 ]));

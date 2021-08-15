@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:http_server/http_server.dart';
 import 'package:latlong2/latlong.dart';
@@ -131,7 +130,6 @@ abstract class AbstractVisitedHousesService extends BackendService {
 ***REMOVED***
 
 class VisitedHousesService extends AbstractVisitedHousesService {
-  late HttpClient httpClient;
   late GeoService geoService;
 
   VisitedHousesService(
@@ -267,7 +265,7 @@ class DemoVisitedHousesService extends AbstractVisitedHousesService {
           DateTime(2021, 7, 19))
     ])
   ];
-  var maxId = 10;
+  var maxId = 3;
 
   DemoVisitedHousesService(
       AbstractUserService userService, GeoService geoService)

@@ -8,35 +8,34 @@ import '../shared/mocks.mocks.dart';
 import '../shared/mocks.trainer.dart';
 
 void main() {
-  final userService = MockUserService();
+  final _userService = MockUserService();
   setUp(() {
-    reset(userService);
-    trainUserService(userService);
+    reset(_userService);
+    trainUserService(_userService);
   ***REMOVED***);
 
   group('VisitedHousesService', () {
-    late MockBackend backend;
+    late MockBackend _backend;
     late VisitedHousesService service;
 
     setUp(() {
-      backend = MockBackend();
-      trainBackend(backend);
-      service =
-          VisitedHousesService(MockGeoService(), MockUserService(), backend);
+      _backend = MockBackend();
+      trainBackend(_backend);
+      service = VisitedHousesService(MockGeoService(), _userService, _backend);
     ***REMOVED***);
 
     test('loadVisitedHouses calls right path', () async {
-      when(backend.get('service/besuchteHaeuser', any)).thenAnswer((_) =>
+      when(_backend.get('service/besuchteHaeuser', any)).thenAnswer((_) =>
           Future.value(
               trainHttpResponse(MockHttpClientResponseBody(), 200, [])));
 
       await service.loadVisitedHouses();
 
-      verify(backend.get('service/besuchteHaeuser', any));
+      verify(_backend.get('service/besuchteHaeuser', any));
     ***REMOVED***);
 
     test('loadVisitedHouses deserializes Response', () async {
-      when(backend.get('service/besuchteHaeuser', any)).thenAnswer((_) {
+      when(_backend.get('service/besuchteHaeuser', any)).thenAnswer((_) {
         var houses = [
           kanzlerinamt().toJson(),
           hausundgrund().toJson(),
@@ -54,17 +53,18 @@ void main() {
     ***REMOVED***);
 
     test('createVisitedHouse sends serialized house to right path', () async {
-      when(backend.post('service/besuchteHaeuser/neu', any, any)).thenAnswer(
+      when(_backend.post('service/besuchteHaeuser/neu', any, any)).thenAnswer(
           (_) => Future.value(trainHttpResponse(
               MockHttpClientResponseBody(), 200, kanzlerinamt().toJson())));
 
       var house = kanzlerinamt();
-      //house.id = null;
+      house.visitationEvents[0].id = null;
       await service.createVisitedHouse(house);
 
-      verify(backend.post(
+      verify(_backend.post(
           'service/besuchteHaeuser/neu',
           '{'
+              '"osmId":1,'
               '"id":null,'
               '"latitude":52.52014,'
               '"longitude":13.36911,'
@@ -72,12 +72,13 @@ void main() {
               '"hausteil":"Westflügel",'
               '"datum":"2021-07-18",'
               '"benutzer":11'
+              ',"shape":"[]"'
               '***REMOVED***',
           any));
     ***REMOVED***);
 
     test('createVisitedHouse returns house from database with Id', () async {
-      when(backend.post('service/besuchteHaeuser/neu', any, any)).thenAnswer(
+      when(_backend.post('service/besuchteHaeuser/neu', any, any)).thenAnswer(
           (_) => Future.value(trainHttpResponse(
               MockHttpClientResponseBody(), 200, kanzlerinamt().toJson())));
 
@@ -89,7 +90,7 @@ void main() {
     ***REMOVED***);
 
     test('createVisitedHouse returns null on Error', () async {
-      when(backend.post('service/besuchteHaeuser/neu', any, any))
+      when(_backend.post('service/besuchteHaeuser/neu', any, any))
           .thenThrow(Error());
 
       var response = await service.createVisitedHouse(kanzlerinamt());
@@ -98,23 +99,23 @@ void main() {
     ***REMOVED***);
 
     test('deleteVisitedHouse calls right path with id', () async {
-      when(backend.delete('service/besuchteHaeuser/1', any, any)).thenAnswer(
+      when(_backend.delete('service/besuchteHaeuser/1', any, any)).thenAnswer(
           (_) => Future.value(
               trainHttpResponse(MockHttpClientResponseBody(), 200, null)));
 
       await service.deleteVisitedHouse(1);
 
-      verify(backend.delete('service/besuchteHaeuser/1', any, any));
+      verify(_backend.delete('service/besuchteHaeuser/1', any, any));
     ***REMOVED***);
   ***REMOVED***);
 
   group('DemoVisitedHousesService', () {
     DemoVisitedHousesService visitedHousesService =
-        DemoVisitedHousesService(userService, MockGeoService());
+        DemoVisitedHousesService(_userService, MockGeoService());
 
     setUp(() {
       visitedHousesService =
-          DemoVisitedHousesService(userService, MockGeoService());
+          DemoVisitedHousesService(_userService, MockGeoService());
     ***REMOVED***);
 
     test('createVisitedHouse stores house with new id and returns it',
@@ -184,10 +185,10 @@ void main() {
 
       expect(visitedHousesService.localBuildingMap.length, 4);
       expect(visitedHousesService.localBuildingMap[4]!.osmId, 4);
-      expect(visitedHousesService.localBuildingMap[4]!.visitationEvents.length,
-          1);
-      expect(visitedHousesService.localBuildingMap[4]!.visitationEvents[0].id,
-          10);
+      expect(
+          visitedHousesService.localBuildingMap[4]!.visitationEvents.length, 1);
+      expect(
+          visitedHousesService.localBuildingMap[4]!.visitationEvents[0].id, 10);
 
       house = VisitedHouse(4, 53, 11, [],
           [VisitedHouseEvent(null, 'tttt', 'hausteil', 3, DateTime(2100, 3))]);
@@ -195,10 +196,10 @@ void main() {
 
       expect(visitedHousesService.localBuildingMap.length, 4);
       expect(visitedHousesService.localBuildingMap[4]!.osmId, 4);
-      expect(visitedHousesService.localBuildingMap[4]!.visitationEvents.length,
-          2);
-      expect(visitedHousesService.localBuildingMap[4]!.visitationEvents[0].id,
-          11);
+      expect(
+          visitedHousesService.localBuildingMap[4]!.visitationEvents.length, 2);
+      expect(
+          visitedHousesService.localBuildingMap[4]!.visitationEvents[0].id, 11);
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***

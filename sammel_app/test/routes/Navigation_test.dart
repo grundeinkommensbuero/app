@@ -23,6 +23,8 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
+import 'package:sammel_app/services/VisitedHouseView.dart';
+import 'package:sammel_app/services/VisitedHousesService.dart';
 
 import '../model/Termin_test.dart';
 import '../shared/TestdatenVorrat.dart';
@@ -41,6 +43,7 @@ final _chatService = MockChatMessageService();
 final _placardService = MockPlacardsService();
 final _pushManager = MockPushNotificationManager();
 final _geoService = MockGeoService();
+final _visitedHousesService = MockVisitedHousesService();
 
 void main() {
   trainTranslation(MockTranslations());
@@ -60,6 +63,7 @@ void main() {
 
     setUpUI((WidgetTester tester) async {
       navigation = Navigation(actionPageKey, actionCreatorKey);
+      reset(_visitedHousesService);
       when(_storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => []);
       when(_storageService.loadMyKiez()).thenAnswer((_) async => []);
@@ -73,6 +77,10 @@ void main() {
       when(_pushManager.pushToken).thenAnswer((_) async => 'Token');
       when(_placardService.loadPlacards())
           .thenAnswer((_) async => Future.value([]));
+      when(_visitedHousesService.loadVisitedHouses())
+          .thenAnswer((_) => Future.value([]));
+      when(_visitedHousesService.getBuildingsInArea(any))
+          .thenReturn(VisitedHouseView(BoundingBox(0, 0, 0, 0), []));
 
       await tester.pumpWidget(MultiProvider(providers: [
         Provider<StammdatenService>.value(value: _stammdatenService),
@@ -86,6 +94,8 @@ void main() {
         Provider<AbstractPushNotificationManager>.value(value: _pushManager),
         Provider<AbstractPlacardsService>.value(value: _placardService),
         Provider<GeoService>.value(value: _geoService),
+        Provider<AbstractVisitedHousesService>.value(
+            value: _visitedHousesService),
       ], child: MaterialApp(home: navigation)));
     ***REMOVED***);
 
@@ -211,8 +221,8 @@ void main() {
         (tester) async {
       when(_geoService.getDescriptionToPoint(any)).thenAnswer(
           (_) => Future.value(GeoData('Nightmare', 'Elm Street', '12')));
-      when(_stammdatenService.getKiezAtLocation(any)).thenAnswer(
-          (_) => Future.value(plaenterwald()));
+      when(_stammdatenService.getKiezAtLocation(any))
+          .thenAnswer((_) => Future.value(plaenterwald()));
 
       await openActionCreator(tester);
 
