@@ -28,11 +28,11 @@ class ArgumentsDialog extends StatefulWidget {
 
 class ArgumentsDialogState extends State<ArgumentsDialog> {
   final LatLng coordinates;
-  String? plz = null;
+  String? plz;
   final DateTime date = DateTime.now();
   String arguments = '';
 
-  ArgumentsDialogState(this.coordinates) {***REMOVED***
+  ArgumentsDialogState(this.coordinates);
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +66,7 @@ class ArgumentsDialogState extends State<ArgumentsDialog> {
         ),
         SizedBox(height: 10.0),
         Text(
-            'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.\n',
+            'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.',
             style: TextStyle(fontSize: 12)).tr()
       ])),
       actions: [

@@ -280,7 +280,6 @@ void main() {
             body: ActionMap(
                 key: Key('action map'),
                 termine: [],
-                placards: [placard1(), placard2(), placard3()],
                 isMyAction: (_) => false,
                 openActionDetails: (_) {***REMOVED***))));
 

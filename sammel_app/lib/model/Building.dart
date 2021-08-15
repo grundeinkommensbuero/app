@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:sammel_app/services/VisitedHouseView.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:poly/poly.dart' as poly;
 
@@ -21,15 +22,15 @@ class VisitedHouseEvent {
 ***REMOVED***
 
 class VisitedHouse {
-  int osm_id = -1;
+  int osmId = -1;
   double latitude = -1.0;
   double longitude = -1.0;
   List<LatLng> shape = [];
   late BoundingBox bbox;
-  List<VisitedHouseEvent> visitation_events = [];
+  List<VisitedHouseEvent> visitationEvents = [];
 
-  VisitedHouse(this.osm_id,this.latitude, this.longitude,
-      this.shape, this.visitation_events) {
+  VisitedHouse(this.osmId,this.latitude, this.longitude,
+      this.shape, this.visitationEvents) {
     calculateBBox();
   ***REMOVED***
 
@@ -48,10 +49,10 @@ class VisitedHouse {
   ***REMOVED***
 
   VisitedHouse.fromJson(Map<dynamic, dynamic> json)
-      : osm_id = json['osmId'],
+      : osmId = json['osmId'],
         latitude = json['latitude'],
         longitude = json['longitude'],
-        visitation_events = [
+        visitationEvents = [
           VisitedHouseEvent(json['id'],  json['adresse'], json['hausteil'], json['benutzer'],
               ChronoHelfer.deserializeJsonDateTime(json['datum']))
         ],
@@ -61,14 +62,14 @@ class VisitedHouse {
   ***REMOVED***
 
   Map<dynamic, dynamic> toJson() => {
-        'osmId': osm_id,
-        'id': visitation_events.last.id,
+        'osmId': osmId,
+        'id': visitationEvents.last.id,
         'latitude': latitude,
         'longitude': longitude,
-        'adresse': visitation_events.last.adresse,
-        'hausteil': visitation_events.last.hausteil,
-        'datum': DateFormat('yyyy-MM-dd').format(visitation_events.last.datum),
-        'benutzer': visitation_events.last.benutzer,
+        'adresse': visitationEvents.last.adresse,
+        'hausteil': visitationEvents.last.hausteil,
+        'datum': DateFormat('yyyy-MM-dd').format(visitationEvents.last.datum),
+        'benutzer': visitationEvents.last.benutzer,
         'shape':
             '${shape.map((e) => '[${e.latitude***REMOVED***,${e.longitude***REMOVED***]').toList()***REMOVED***'
       ***REMOVED***
@@ -87,62 +88,44 @@ class SelectableVisitedHouse extends VisitedHouse {
   var selected;
 
   SelectableVisitedHouse(
-      osm_id, latitude, longitude, shape, visitation_events, selected)
-      : super(osm_id, latitude, longitude, shape, visitation_events) {
+      osmId, latitude, longitude, shape, visitationEvents, selected)
+      : super(osmId, latitude, longitude, shape, visitationEvents) {
     this.selected = selected;
   ***REMOVED***
 
   SelectableVisitedHouse.fromVisitedHouse(VisitedHouse vh, {selected: false***REMOVED***)
-      : super(vh.osm_id, vh.latitude, vh.longitude, vh.shape,
-            vh.visitation_events) {
+      : super(vh.osmId, vh.latitude, vh.longitude, vh.shape,
+            vh.visitationEvents) {
     this.selected = selected;
   ***REMOVED***
 
   SelectableVisitedHouse.clone(SelectableVisitedHouse vh)
-      : super(vh.osm_id, vh.latitude, vh.longitude, vh.shape,
-            List.from(vh.visitation_events)) {
+      : super(vh.osmId, vh.latitude, vh.longitude, vh.shape,
+            List.from(vh.visitationEvents)) {
     selected = vh.selected;
   ***REMOVED***
 ***REMOVED***
 
 class BuildingColorSelector {
-  static var selection_color = Color.fromARGB(100, 255, 255, 0);
-  static var recently_visited_color = Color.fromARGB(100, 0, 255, 0);
-  static var outdated_color = Color.fromARGB(100, 255, 0, 0);
-  static var first_time_color = Color.fromARGB(100, 0, 0, 0);
-  static var outdated_time_span = Duration(days: 7);
-  static var first_time_visit_color = Color.fromARGB(180, 0, 50, 0);
-  static var second_time_visit_color = Color.fromARGB(180, 0, 150, 0);
-  static var third_time_visit_color = Color.fromARGB(180, 0, 255, 0);
+  static var selectionColor = CampaignTheme.altPrimary;
+  static var firstTimeColor = CampaignTheme.disabled;
+  static var oneVisitColor = CampaignTheme.primaryBright;
+  static var twoVisitsColor = CampaignTheme.primaryLight;
+  static var manyVisitsColor = CampaignTheme.primary;
 
   static Color getDrawColorForSelectable(SelectableVisitedHouse building) {
     if (building.selected) {
-      return selection_color;
+      return selectionColor;
     ***REMOVED***
-    if (building.visitation_events != null &&
-        building.visitation_events.length > 0) {
-      if(building.visitation_events.length == 1)
-        return first_time_visit_color;
-      else if(building.visitation_events.length == 2)
-        return second_time_visit_color;
+    if (building.visitationEvents.length > 0) {
+      if(building.visitationEvents.length == 1)
+        return oneVisitColor;
+      else if(building.visitationEvents.length == 2)
+        return twoVisitsColor;
       else
-        return third_time_visit_color;
+        return manyVisitsColor;
     ***REMOVED*** else {
-      return first_time_color;
-    ***REMOVED***
-  ***REMOVED***
-
-  static Color getDrawColorForBuilding(VisitedHouse building) {
-    if (building.visitation_events != null &&
-        building.visitation_events.length > 0) {
-      if (DateTime.now().difference(building.visitation_events.last.datum) <
-          outdated_time_span) {
-        return recently_visited_color;
-      ***REMOVED*** else {
-        return outdated_color;
-      ***REMOVED***
-    ***REMOVED*** else {
-      return first_time_color;
+      return firstTimeColor;
     ***REMOVED***
   ***REMOVED***
 ***REMOVED***

@@ -27,110 +27,97 @@ abstract class AbstractVisitedHousesService extends BackendService {
     this.geoService = geoService;
   ***REMOVED***
 
-
   @override
   Future<VisitedHouse?> getVisitedHouseOfPoint(
-      LatLng point, bool check_on_server) async {
-    VisitedHouse? vh_of_point = getBuildingForPointLocal(point);
-    if (vh_of_point != null) {
-      return vh_of_point;
-    ***REMOVED***
-    if (!check_on_server) {
-      return null;
-    ***REMOVED***
-    Future<List> s_future = geoService.getPolygonAndDescriptionOfPoint(point);
+      LatLng point, bool checkOnServer) async {
+    VisitedHouse? visitedHousOnPoint = getBuildingForPointLocal(point);
+    if (visitedHousOnPoint != null) return visitedHousOnPoint;
 
-    List s = await s_future;
-    List<LatLng>? shape = s[0];
-    var osm_id = s[1];
-    if(shape == null)
-    {
+    if (!checkOnServer) return null;
+
+    List polygonAndDesc =
+        await geoService.getPolygonAndDescriptionOfPoint(point);
+    List<LatLng>? shape = polygonAndDesc[0];
+    var osmId = polygonAndDesc[1];
+    if (shape == null) {
       //no shape found take small bbox around point. problem is that we want a box that is drawn as square
-      double lat_5m = DistanceHelper.getLatDiffFromM(point, 5.0);
-      double lng_5m = DistanceHelper.getLongDiffFromM(point, 15.0);
+      double lat5m = DistanceHelper.getLatDiffFromM(point, 5.0);
+      double lng5m = DistanceHelper.getLongDiffFromM(point, 15.0);
       shape = [
-        LatLng(point.latitude - lat_5m, point.longitude - lng_5m),
-        LatLng(point.latitude + lat_5m, point.longitude - lng_5m),
-        LatLng(point.latitude + lat_5m, point.longitude + lng_5m),
-        LatLng(point.latitude - lat_5m, point.longitude + lng_5m)
+        LatLng(point.latitude - lat5m, point.longitude - lng5m),
+        LatLng(point.latitude + lat5m, point.longitude - lng5m),
+        LatLng(point.latitude + lat5m, point.longitude + lng5m),
+        LatLng(point.latitude - lat5m, point.longitude + lng5m)
       ];
     ***REMOVED***
-    if (osm_id == null) {
+    if (osmId == null) {
       //in this case we create the osm id by the center
-      osm_id = point.hashCode;
+      osmId = point.hashCode;
     ***REMOVED***
-    return getBuildingFromJson(osm_id, point, shape);
+    return getBuildingFromJson(osmId, point, shape);
   ***REMOVED***
 
-  VisitedHouse? getBuildingFromJson(int osm_id, LatLng point, List<LatLng> shape)
-  {
-    if(localBuildingMap.containsKey(osm_id))
-    {
-      return localBuildingMap[osm_id];
-    ***REMOVED***
-    else{
-      return VisitedHouse(osm_id, point.latitude, point.longitude, shape,[]);
+  VisitedHouse? getBuildingFromJson(
+      int osmId, LatLng point, List<LatLng> shape) {
+    if (localBuildingMap.containsKey(osmId)) {
+      return localBuildingMap[osmId];
+    ***REMOVED*** else {
+      return VisitedHouse(osmId, point.latitude, point.longitude, shape, []);
     ***REMOVED***
   ***REMOVED***
 
   VisitedHouseView getBuildingsInArea(BoundingBox bbox) {
     //TODO: it only checks for local buildings atm
     //TODO: take a bit more clever data format
-    List<SelectableVisitedHouse> buildings_in_roi = [];
-    for (VisitedHouse building in localBuildingMap.values) {
-      if (building.bbox.intersect(bbox)) {
-        buildings_in_roi.add(SelectableVisitedHouse.fromVisitedHouse(building));
-      ***REMOVED***
-    ***REMOVED***
-    VisitedHouseView vhv = VisitedHouseView(bbox, buildings_in_roi);
-    return vhv;
+    List<SelectableVisitedHouse> buildingsInRoi = localBuildingMap.values
+        .where((building) => building.bbox.intersect(bbox))
+        .map((building) => SelectableVisitedHouse.fromVisitedHouse(building))
+        .toList();
+
+    return VisitedHouseView(bbox, buildingsInRoi);
   ***REMOVED***
 
-  VisitedHouse? getBuildingForPointLocal(LatLng point) {
-    for (VisitedHouse building in localBuildingMap.values) {
-      if (building.bbox.containsPoint(point)) {
-        if (building.inside(point)) {
-          return building;
-        ***REMOVED***
-      ***REMOVED***
-    ***REMOVED***
-    return null;
-  ***REMOVED***
+  VisitedHouse? getBuildingForPointLocal(LatLng point) =>
+      // ignore: unnecessary_cast // nötig für Null-Ergebnis
+      localBuildingMap.values.map((house) => house as VisitedHouse?).firstWhere(
+          (building) =>
+              building!.bbox.containsPoint(point) && building.inside(point),
+          orElse: () => null);
 
   VisitedHouse editVisitedHouse(VisitedHouse house) {
-    var add_events = house.visitation_events;
-    var delete_events = Set();
+    var addEvents = house.visitationEvents;
+    var deleteEvents = Set();
 
-    VisitedHouse? building = localBuildingMap[house.osm_id];
+    VisitedHouse? building = localBuildingMap[house.osmId];
 
     if (building != null) {
-      var current_ids = building.visitation_events.map((e) => e.id).toSet();
-      var new_ids = house.visitation_events.map((e) => e.id).toSet();
-      delete_events = current_ids.difference(new_ids);
-      add_events = add_events
-          .where((element) => !current_ids.contains(element.id))
+      var currentIds = building.visitationEvents.map((e) => e.id).toSet();
+      var newIds = house.visitationEvents.map((e) => e.id).toSet();
+      deleteEvents = currentIds.difference(newIds);
+      addEvents = addEvents
+          .where((element) => !currentIds.contains(element.id))
           .toList();
     ***REMOVED***
-    for (var delete_event in delete_events) {
+    for (var delete_event in deleteEvents) {
       deleteVisitedHouse(delete_event);
     ***REMOVED***
 
-    for (var add_event in add_events) {
-        VisitedHouse house_with_event_only = VisitedHouse(house.osm_id, house.latitude, house.longitude,
-                                                           house.shape, [add_event]);
-      var h = createVisitedHouse(house_with_event_only);
-      h.then((value) => add_event.id = value?.visitation_events.last.id);
+    for (var add_event in addEvents) {
+      VisitedHouse houseWithWventOnly = VisitedHouse(house.osmId,
+          house.latitude, house.longitude, house.shape, [add_event]);
+      var h = createVisitedHouse(houseWithWventOnly);
+      h.then((value) => add_event.id = value?.visitationEvents.last.id);
     ***REMOVED***
-    if (house.visitation_events.isNotEmpty) {
-      house.visitation_events
+    if (house.visitationEvents.isNotEmpty) {
+      house.visitationEvents
           .sort((a, b) => a.datum.difference(b.datum).inSeconds > 0
               ? 1
               : a.datum.difference(b.datum).inSeconds < 0
                   ? -1
                   : 0);
-      localBuildingMap[house.osm_id] = house;
+      localBuildingMap[house.osmId] = house;
     ***REMOVED*** else {
-      localBuildingMap.remove(house.osm_id);
+      localBuildingMap.remove(house.osmId);
     ***REMOVED***
 
     return house;
@@ -189,17 +176,17 @@ class VisitedHousesService extends AbstractVisitedHousesService {
         .toList();
 
     for (VisitedHouse house in houses) {
-      VisitedHouse? local_house = localBuildingMap[house.osm_id];
-      if (local_house != null) {
-        var idx = local_house.visitation_events.indexWhere(
-            (element) => element.id == house.visitation_events.first.id);
+      VisitedHouse? localHouse = localBuildingMap[house.osmId];
+      if (localHouse != null) {
+        var idx = localHouse.visitationEvents.indexWhere(
+            (element) => element.id == house.visitationEvents.first.id);
         if (idx == -1) {
-          local_house.visitation_events.add(house.visitation_events.first);
+          localHouse.visitationEvents.add(house.visitationEvents.first);
         ***REMOVED*** else {
-          local_house.visitation_events[idx] = house.visitation_events.first;
+          localHouse.visitationEvents[idx] = house.visitationEvents.first;
         ***REMOVED***
       ***REMOVED*** else {
-        localBuildingMap[house.osm_id] = house;
+        localBuildingMap[house.osmId] = house;
       ***REMOVED***
     ***REMOVED***
 
@@ -258,36 +245,39 @@ var s1 = [
 
 class DemoVisitedHousesService extends AbstractVisitedHousesService {
   List<VisitedHouse> visitedHouses = [
-    VisitedHouse(
-        1,
-        52.52014,
-        13.36911,
-        s1.map((e) => LatLng(e['lat'] ?? 0.0, e['lon'] ?? 0)).toList(),
-        [VisitedHouseEvent(1, 'Willy-Brandt-Straße 1, Tiergarten, Mitte, Berlin, 10557', "Westfluegel", 12, DateTime(2021, 7, 16))]),
-    VisitedHouse(
-        2,
-        52.4964133,
-        13.3617511,
-        [],
-        [VisitedHouseEvent(2,'Potsdamer Straße 143, 10783 Berlin', '', 12, DateTime(2021, 7, 17))]),
-    VisitedHouse(
-        3,
-        52.5065,
-        13.35125,
-        [],
-        [VisitedHouseEvent(3,'Klingelhöferstraße 8,Botschaftsviertel, Tiergarten, Mitte, Berlin, 10785', 'Haupteingang', 11, DateTime(2021, 7, 19))])
+    VisitedHouse(1, 52.52014, 13.36911,
+        s1.map((e) => LatLng(e['lat'] ?? 0.0, e['lon'] ?? 0)).toList(), [
+      VisitedHouseEvent(
+          1,
+          'Willy-Brandt-Straße 1, Tiergarten, Mitte, Berlin, 10557',
+          "Westfluegel",
+          12,
+          DateTime(2021, 7, 16))
+    ]),
+    VisitedHouse(2, 52.4964133, 13.3617511, [], [
+      VisitedHouseEvent(2, 'Potsdamer Straße 143, 10783 Berlin', '', 12,
+          DateTime(2021, 7, 17))
+    ]),
+    VisitedHouse(3, 52.5065, 13.35125, [], [
+      VisitedHouseEvent(
+          3,
+          'Klingelhöferstraße 8,Botschaftsviertel, Tiergarten, Mitte, Berlin, 10785',
+          'Haupteingang',
+          11,
+          DateTime(2021, 7, 19))
+    ])
   ];
   var maxId = 10;
 
   DemoVisitedHousesService(
       AbstractUserService userService, GeoService geoService)
       : super(userService, geoService, DemoBackend()) {
-    localBuildingMap = {for (VisitedHouse v in visitedHouses) v.osm_id: v***REMOVED***
+    localBuildingMap = {for (VisitedHouse v in visitedHouses) v.osmId: v***REMOVED***
   ***REMOVED***
 
   @override
   Future<VisitedHouse> createVisitedHouse(VisitedHouse house) {
-    house.visitation_events.last.id = maxId;
+    house.visitationEvents.last.id = maxId;
     maxId += 1;
     return Future.value(house);
   ***REMOVED***

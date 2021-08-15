@@ -13,7 +13,7 @@ import '../shared/mocks.costumized.dart';
 
 main() {
   final mockgGeoService = MockGeoService();
-  Arguments? result = null;
+  Arguments? result;
 
   setUpUI((tester) async {
     reset(mockgGeoService);

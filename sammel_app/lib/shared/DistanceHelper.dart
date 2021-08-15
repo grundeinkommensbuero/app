@@ -8,15 +8,14 @@ class DistanceHelper
   
   static double getLongDiffFromM(LatLng position, double m)
   {
-    var m_per_long = pi/180*earthRadius*cos(position.latitude*pi/180).abs();
-    return m/m_per_long;
+    var meterPerLong = pi/180*earthRadius*cos(position.latitude*pi/180).abs();
+    return m/meterPerLong;
   ***REMOVED***
 
   static double getLatDiffFromM(LatLng position, double m)
   {
-    var m_per_lat = pi/180*earthRadius;
-    return m/m_per_lat;
-    ;
+    var meterPerLat = pi/180*earthRadius;
+    return m/meterPerLat;
   ***REMOVED***
 
 ***REMOVED***

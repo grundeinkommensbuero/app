@@ -72,7 +72,7 @@ class ActionMapState extends State<ActionMap> {
   List<Placard> placards = [];
   late AbstractPlacardsService placardService;
   var initialized = false;
-  List<Polygon> house_polygons = [];
+  List<Polygon> housePolygons = [];
 
   @override
   Widget build(BuildContext context) {
@@ -85,17 +85,20 @@ class ActionMapState extends State<ActionMap> {
     List<MapPlugin> plugins = [];
     plugins.add(AttributionPlugin());
     plugins.add(LocationPlugin());
-    this.house_polygons = generateVisitedHousePolygons();
+    this.housePolygons = generateVisitedHousePolygons();
     var layers = [
       TileLayerOptions(
           urlTemplate: "https://{s***REMOVED***.tile.openstreetmap.org/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
           subdomains: ['a', 'b', 'c']),
-      PolygonLayerOptions(polygons: this.house_polygons, polygonCulling: true),
+      PolygonLayerOptions(polygons: this.housePolygons, polygonCulling: true),
       MarkerLayerOptions(markers: markers),
     ];
     layers.add(AttributionOptions());
 
-    final userLocationLayer = [LocationOptions((_1, _2, _3) => SizedBox())];
+    final userLocationLayer = [
+      // ignore: non_constant_identifier_names
+      LocationOptions((_1, _2, _3)  => SizedBox())
+    ];
 
     var flutterMap = FlutterMap(
       key: Key('action map map'),
@@ -152,31 +155,30 @@ class ActionMapState extends State<ActionMap> {
   ***REMOVED***
 
   mapTap(LatLng point) async {
-    VisitedHouse? vh = await
-        Provider.of<AbstractVisitedHousesService>(context, listen: false)
+    VisitedHouse? vh =
+        await Provider.of<AbstractVisitedHousesService>(context, listen: false)
             .getVisitedHouseOfPoint(point, false);
 
     if (vh != null) {
-      var show_distance_in_m = 100.0;
-      var lng_diff = DistanceHelper.getLongDiffFromM(point, show_distance_in_m);
-      var lat_diff = DistanceHelper.getLatDiffFromM(point, show_distance_in_m);
+      var showDistanceInMeter = 100.0;
+      var lngDiff = DistanceHelper.getLongDiffFromM(point, showDistanceInMeter);
+      var latDiff = DistanceHelper.getLatDiffFromM(point, showDistanceInMeter);
       BoundingBox bbox = BoundingBox(
-          point.latitude - lat_diff,
-          point.longitude - lng_diff,
-          point.latitude + lat_diff,
-          point.longitude + lng_diff);
-      var building_view =
+          point.latitude - latDiff,
+          point.longitude - lngDiff,
+          point.latitude + latDiff,
+          point.longitude + lngDiff);
+      var buildingView =
           Provider.of<AbstractVisitedHousesService>(context, listen: false)
               .getBuildingsInArea(bbox);
-      print("### selecting building");
-      building_view.selected_building = SelectableVisitedHouse.clone(
+      buildingView.selectedBuilding = SelectableVisitedHouse.clone(
           SelectableVisitedHouse.fromVisitedHouse(vh, selected: true));
       await showEditVisitedHouseDialog(
           context: context,
-          building_view: building_view,
-          current_zoom_factor: widget.mapController.zoom);
+          buildingView: buildingView,
+          currentZoomFactor: widget.mapController.zoom);
       setState(() {
-        this.house_polygons = generateVisitedHousePolygons();
+        this.housePolygons = generateVisitedHousePolygons();
       ***REMOVED***);
     ***REMOVED***
   ***REMOVED***
@@ -226,21 +228,21 @@ class ActionMapState extends State<ActionMap> {
 
   void createNewVisitedHouse(LatLng point) async {
     //TODO: now it takes always the same distance around tap point
-    var show_distance_in_m = 100.0;
-    var lng_diff = DistanceHelper.getLongDiffFromM(point, show_distance_in_m);
-    var lat_diff = DistanceHelper.getLatDiffFromM(point, show_distance_in_m);
+    var showDistanceInM = 100.0;
+    var lngDiff = DistanceHelper.getLongDiffFromM(point, showDistanceInM);
+    var latDiff = DistanceHelper.getLatDiffFromM(point, showDistanceInM);
     BoundingBox bbox = BoundingBox(
-        point.latitude - lat_diff,
-        point.longitude - lng_diff,
-        point.latitude + lat_diff,
-        point.longitude + lng_diff);
-    var building_view =
+        point.latitude - latDiff,
+        point.longitude - lngDiff,
+        point.latitude + latDiff,
+        point.longitude + lngDiff);
+    var buildingView =
         Provider.of<AbstractVisitedHousesService>(context, listen: false)
             .getBuildingsInArea(bbox);
     var newHouseFromServer = await showAddBuildingDialog(
         context: context,
-        building_view: building_view,
-        current_zoom_factor: widget.mapController.zoom);
+        buildingView: buildingView,
+        currentZoomFactor: widget.mapController.zoom);
     if (newHouseFromServer == null) return;
 
     var arguments =
@@ -250,7 +252,7 @@ class ActionMapState extends State<ActionMap> {
           .createArguments(arguments);
 
     setState(() {
-      this.house_polygons = generateVisitedHousePolygons();
+      this.housePolygons = generateVisitedHousePolygons();
     ***REMOVED***);
   ***REMOVED***
 
@@ -261,7 +263,7 @@ class ActionMapState extends State<ActionMap> {
     Provider.of<AbstractVisitedHousesService>(context, listen: false)
         .loadVisitedHouses()
         .then((_) => setState(
-            () => this.house_polygons = this.generateVisitedHousePolygons()));
+            () => this.housePolygons = this.generateVisitedHousePolygons()));
   ***REMOVED***
 
   List<ActionMarker> generateActionMarkers() {
@@ -285,8 +287,6 @@ class ActionMapState extends State<ActionMap> {
   List<PlacardMarker> generatePlacardMarkers() {
     if (!initialized || widget.mapController.zoom < 15) return [];
     return placards
-        .where(
-            (placard) => placard.latitude != null && placard.longitude != null)
         .map((placard) => PlacardMarker(placard,
             mine: placard.benutzer == widget.myUserId,
             onTap: openPlacardDialog))

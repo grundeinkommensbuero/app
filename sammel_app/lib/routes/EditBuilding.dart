@@ -16,82 +16,56 @@ import 'package:sammel_app/shared/ServerException.dart';
 
 import '../Provisioning.dart';
 
-addNewVisitedHouseEvent(
-    BuildContext context, Future<VisitedHouse?> future_vh) async {
-  VisitedHouse? vh = await future_vh;
-  if (vh != null) {
+VisitedHouse? addNewVisitedHouseEvent(
+    BuildContext context, VisitedHouse? visitedHouse) {
+  if (visitedHouse != null) {
     //the last event is new. register at server
     var abstractVisitedHousesService =
         Provider.of<AbstractVisitedHousesService>(context, listen: false);
-    VisitedHouse future_new_house =
-        abstractVisitedHousesService.editVisitedHouse(vh);
-    return future_new_house;
-  ***REMOVED***
-  return null;
-  /*
-     VisitedHouse? new_house = await future_new_house;
-
-     if(new_house != null)
-       {
-         VisitedHouse? building =  abstractVisitedHousesService.localBuildingMap[new_house.osm_id]
-         if(abstractVisitedHousesService.localBuildingMap.containsKey(new_house.osm_id))
-           {
-             ?.visitation_events.add(new_house.visitation_events.last);
-
-             for(VisitedHouseEvent event in new_house.visitation_events)
-               {
-                 if
-               ***REMOVED***
-           ***REMOVED***
-         else
-           {
-             abstractVisitedHousesService.localBuildingMap[new_house.osm_id] = new_house;
-           ***REMOVED***
-       ***REMOVED***
-   ***REMOVED****/
+    return abstractVisitedHousesService.editVisitedHouse(visitedHouse);
+  ***REMOVED*** else
+    return null;
 ***REMOVED***
 
-showEditVisitedHouseDialog(
+Future<VisitedHouse?> showEditVisitedHouseDialog(
     {required BuildContext context,
-    required VisitedHouseView building_view,
-    required double current_zoom_factor***REMOVED***) {
-  Future<VisitedHouse?> future_vh = showDialog(
+    required VisitedHouseView buildingView,
+    required double currentZoomFactor***REMOVED***) async {
+  VisitedHouse? visitedHouse = await showDialog(
     context: context,
-    builder: (context) =>
-        EditBuildingDialog(building_view, current_zoom_factor),
+    builder: (context) => EditBuildingDialog(buildingView, currentZoomFactor),
   );
-  return addNewVisitedHouseEvent(context, future_vh);
+  return addNewVisitedHouseEvent(context, visitedHouse);
 ***REMOVED***
 
 class EditBuildingDialog extends StatefulWidget {
   late final LatLng? center;
-  late final VisitedHouseView building_view;
-  late final double current_zoom_factor;
+  late final VisitedHouseView buildingView;
+  late final double currentZoomFactor;
 
-  EditBuildingDialog(this.building_view, this.current_zoom_factor)
+  EditBuildingDialog(this.buildingView, this.currentZoomFactor)
       : super(key: Key('add building dialog'));
 
   @override
   State<StatefulWidget> createState() {
-    return EditBuildingDialogState(building_view);
+    return EditBuildingDialogState(buildingView);
   ***REMOVED***
 ***REMOVED***
 
 class EditBuildingDialogState extends State<EditBuildingDialog> {
   LocationMarker? marker;
   @required
-  late VisitedHouseView building_view;
+  late VisitedHouseView buildingView;
   late LatLng center;
 
   var showLoadingIndicator = false;
 
-  EditBuildingDialogState(VisitedHouseView building_view) {
-    this.building_view = building_view;
+  EditBuildingDialogState(VisitedHouseView buildingView) {
+    this.buildingView = buildingView;
     this.center = LatLng(
-        0.5 * (building_view.bbox.maxLatitude + building_view.bbox.minLatitude),
+        0.5 * (buildingView.bbox.maxLatitude + buildingView.bbox.minLatitude),
         0.5 *
-            (building_view.bbox.maxLongitude +
-                building_view.bbox.minLongitude));
+            (buildingView.bbox.maxLongitude + buildingView.bbox.minLongitude));
   ***REMOVED***
 
   @override
@@ -100,7 +74,7 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
       title: Text('Besuchtes Haus').tr(),
       content: SingleChildScrollView(
           child: Column(
-              mainAxisSize: MainAxisSize.min, children: build_widgets())),
+              mainAxisSize: MainAxisSize.min, children: createWidgets())),
       actions: [
         TextButton(
           child: Text('Abbrechen').tr(),
@@ -116,14 +90,14 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
                     .latestUser ==
                 null) throw ServerException('Couldnt fetch user from server');
             //   building_view.selected_building?.visitation_events.add(VisitedHouseEvent(-1, Provider.of<AbstractUserService>(context, listen: false).latestUser!.id!, DateTime.now()));
-            Navigator.pop(context, building_view.selected_building);
+            Navigator.pop(context, buildingView.selectedBuilding);
           ***REMOVED***,
         ),
       ],
     );
   ***REMOVED***
 
-  List<Widget> build_widgets() {
+  List<Widget> createWidgets() {
     var widgets = [
       Text(
         'Wähle das Haus auf der Karte aus.'.tr(),
@@ -153,9 +127,9 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
         height: 5.0,
       )
     ];
-    if (building_view.selected_building != null &&
-        building_view.selected_building!.visitation_events.length > 0) {
-      widgets.addAll(building_view.selected_building!.visitation_events
+    if (buildingView.selectedBuilding != null &&
+        buildingView.selectedBuilding!.visitationEvents.length > 0) {
+      widgets.addAll(buildingView.selectedBuilding!.visitationEvents
           .map((event) => buildVisitationEventItem(event)));
     ***REMOVED***
     return widgets;
@@ -166,14 +140,12 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
         key: Key('venue map'),
         options: MapOptions(
             center: center,
-            zoom: widget.current_zoom_factor < 17
-                ? 17
-                : widget.current_zoom_factor,
+            zoom: widget.currentZoomFactor < 17 ? 17 : widget.currentZoomFactor,
             interactiveFlags: noRotation,
-            swPanBoundary: LatLng(building_view.bbox.minLatitude,
-                building_view.bbox.minLongitude),
-            nePanBoundary: LatLng(building_view.bbox.maxLatitude,
-                building_view.bbox.maxLongitude),
+            swPanBoundary: LatLng(buildingView.bbox.minLatitude,
+                buildingView.bbox.minLongitude),
+            nePanBoundary: LatLng(buildingView.bbox.maxLatitude,
+                buildingView.bbox.maxLongitude),
             maxZoom: geo.zoomMax,
             minZoom: geo.zoomMin,
             onTap: houseSelected,
@@ -183,7 +155,7 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
               urlTemplate: "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
               subdomains: ['a', 'b', 'c']),
           PolygonLayerOptions(
-              polygons: building_view.buildDrawablePolygonsFromView(),
+              polygons: buildingView.buildDrawablePolygonsFromView(),
               polygonCulling: false),
           MarkerLayerOptions(markers: marker == null ? [] : [marker!]),
           AttributionOptions(),
@@ -192,14 +164,13 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
   ***REMOVED***
 
   houseSelected(LatLng point) async {
-    SelectableVisitedHouse? building = building_view.getBuildingByPoint(point);
+    SelectableVisitedHouse? building = buildingView.getBuildingByPoint(point);
     //not in current view
     setState(() {
       if (building != null &&
-          building_view.selected_building?.osm_id != building.osm_id) {
-        building_view.selected_building =
-            SelectableVisitedHouse.clone(building);
-        building_view.selected_building?.selected = true;
+          buildingView.selectedBuilding?.osmId != building.osmId) {
+        buildingView.selectedBuilding = SelectableVisitedHouse.clone(building);
+        buildingView.selectedBuilding?.selected = true;
       ***REMOVED***
       //venueController.text = geodata.description;
       // marker = LocationMarker(point);
@@ -238,7 +209,7 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
             onPressed: () {
               // Remove the item from the data source.
               setState(() {
-                building_view.selected_building!.visitation_events.remove(item);
+                buildingView.selectedBuilding!.visitationEvents.remove(item);
               ***REMOVED***);
             ***REMOVED***)
       ]);
