@@ -159,7 +159,7 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
       Align(
           alignment: Alignment.centerLeft,
           child: Text(
-            'Addresse',
+            'Adresse',
           ).tr()),
       TextFormField(
         key: Key('visited house adress input'),
