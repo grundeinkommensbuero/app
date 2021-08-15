@@ -1,11 +1,7 @@
 import 'dart:io';
-import 'dart:math';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 import 'package:http_server/http_server.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:sammel_app/model/Building.dart';
 import 'package:sammel_app/shared/DistanceHelper.dart';
 import 'package:poly/poly.dart' as poly;
 
@@ -16,7 +12,7 @@ class GeoService {
   late HttpClient httpClient;
 
   String nominatim_host = 'nominatim.openstreetmap.org';
-  String overpass_host = 'lz4.overpass-api.de';
+  String overpass_host = 'overpass.kumi.systems';
 
   int port = 443;
 
