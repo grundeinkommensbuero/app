@@ -111,8 +111,8 @@ class BuildingColorSelector {
   static var outdated_color = Color.fromARGB(100, 255, 0, 0);
   static var first_time_color = Color.fromARGB(100, 0, 0, 0);
   static var outdated_time_span = Duration(days: 7);
-  static var first_time_visit_color = Color.fromARGB(180, 0, 100, 0);
-  static var second_time_visit_color = Color.fromARGB(180, 0, 200, 0);
+  static var first_time_visit_color = Color.fromARGB(180, 0, 50, 0);
+  static var second_time_visit_color = Color.fromARGB(180, 0, 150, 0);
   static var third_time_visit_color = Color.fromARGB(180, 0, 255, 0);
 
   static Color getDrawColorForSelectable(SelectableVisitedHouse building) {
