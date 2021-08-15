@@ -63,7 +63,6 @@ class GeoService {
     Uri url = Uri.https(overpass_host, 'api/interpreter/', {
       'data': Uri.decodeComponent('[timeout:5][out:json];(way[building]($upper_right_lat,$upper_right_lng,$lower_left_lat,$lower_left_lng);); out body geom;')
     ***REMOVED***);
-    Future<GeoData> gd_future = getDescriptionToPoint(point);
     var response = await httpClient
         .getUrl(url)
         .then((request) => request.close())
