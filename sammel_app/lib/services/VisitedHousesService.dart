@@ -31,27 +31,6 @@ abstract class AbstractVisitedHousesService extends BackendService {
     this.geoService = geoService;
   ***REMOVED***
 
-  /*
-  deleteVisitedHouse(int id) {
-    for(VisitedHouse vh in localBuildingMap.values)
-    {
-      for(VisitedHouseEvent vhe in vh.visitation_events)
-      {
-        if(id == vhe.id)
-        {
-          if(vh.visitation_events.length == 1)
-          {
-            var res = localBuildingMap.remove(vh.osm_id);
-            print(res);
-          ***REMOVED***
-          else{
-            vh.visitation_events.remove(vhe);
-          ***REMOVED***
-          return;
-        ***REMOVED***
-      ***REMOVED***
-    ***REMOVED***
-  ***REMOVED****/
 
   @override
   Future<VisitedHouse?> getVisitedHouseOfPoint(LatLng point, bool check_on_server) async {
@@ -65,10 +44,10 @@ abstract class AbstractVisitedHousesService extends BackendService {
       return null;
     ***REMOVED***
     Future<List> s_future = geoService.getPolygonAndDescriptionOfPoint(point);
+
     List s = await s_future;
-    GeoData gd = s[1];
     List<LatLng>? shape = s[0];
-    var osm_id = s[2];
+    var osm_id = s[1];
     if(shape == null)
     {
       //no shape found take small bbox around point. problem is that we want a box that is drawn as square
@@ -82,18 +61,17 @@ abstract class AbstractVisitedHousesService extends BackendService {
       //in this case we create the osm id by the center
       osm_id = point.hashCode;
     ***REMOVED***
-    return getBuildingFromJson(osm_id, point, gd, shape);
+    return getBuildingFromJson(osm_id, point, shape);
   ***REMOVED***
 
-  VisitedHouse? getBuildingFromJson(int osm_id, LatLng point, GeoData geo_data, List<LatLng> shape)
+  VisitedHouse? getBuildingFromJson(int osm_id, LatLng point, List<LatLng> shape)
   {
     if(localBuildingMap.containsKey(osm_id))
     {
       return localBuildingMap[osm_id];
     ***REMOVED***
     else{
-      //TODO: Change to myself here
-      return VisitedHouse(osm_id, point.latitude, point.longitude, '${geo_data.street***REMOVED*** ${geo_data.number***REMOVED***' , shape,[]);
+      return VisitedHouse(osm_id, point.latitude, point.longitude, shape,[]);
     ***REMOVED***
   ***REMOVED***
 
@@ -144,7 +122,7 @@ abstract class AbstractVisitedHousesService extends BackendService {
 
       for (var add_event in add_events) {
         VisitedHouse house_with_event_only = VisitedHouse(house.osm_id, house.latitude, house.longitude,
-                                                          house.adresse, house.shape, [add_event]);
+                                                           house.shape, [add_event]);
         var h = createVisitedHouse(house_with_event_only);
         h.then((value) => add_event.id = value?.visitation_events.last.id);
       ***REMOVED***
@@ -244,28 +222,20 @@ class DemoVisitedHousesService extends AbstractVisitedHousesService {
         1,
         52.52014,
         13.36911,
-        'Willy-Brandt-Straße 1, Tiergarten, Mitte, Berlin, 10557',
         s1.map((e) => LatLng(e['lat'] ?? 0.0 , e['lon'] ?? 0)).toList(),
-        [VisitedHouseEvent(1, "Westfluegel", 12, DateTime(2021, 7, 16))]),
-    /*
+        [VisitedHouseEvent(1, 'Willy-Brandt-Straße 1, Tiergarten, Mitte, Berlin, 10557', "Westfluegel", 12, DateTime(2021, 7, 16))]),
     VisitedHouse(
         2,
         52.4964133,
         13.3617511,
-        'Potsdamer Straße 143, 10783 Berlin',
-        null,
-        DateTime(2021, 7, 17),
-        12,
-        ''),
+        [],
+        [VisitedHouseEvent(2,'Potsdamer Straße 143, 10783 Berlin', '', 12, DateTime(2021, 7, 17))]),
     VisitedHouse(
         3,
         52.5065,
         13.35125,
-        'Klingelhöferstraße 8,Botschaftsviertel, Tiergarten, Mitte, Berlin, 10785',
-        'Haupteingang',
-        DateTime(2021, 7, 19),
-        11,
-        '')*/
+        [],
+        [VisitedHouseEvent(3,'Klingelhöferstraße 8,Botschaftsviertel, Tiergarten, Mitte, Berlin, 10785', 'Haupteingang', 11, DateTime(2021, 7, 19))])
   ];
   var maxId = 10;
   DemoVisitedHousesService(AbstractUserService userService, GeoService geoService, Backend backend)

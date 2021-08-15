@@ -108,9 +108,8 @@ class GeoService {
         osm_id = building_data_l[0];
       ***REMOVED***
 
-    GeoData gd = await gd_future;
     //TODO solve empty elements list
-    return [building_data, gd, osm_id];
+    return [building_data, osm_id];
   ***REMOVED***
 
   List filterApartment(position, elements) {

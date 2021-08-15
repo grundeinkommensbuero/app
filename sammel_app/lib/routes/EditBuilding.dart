@@ -127,7 +127,7 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
   List<Widget> build_widgets() {
     var widgets = [
       Text(
-        'Wähle das Haus auf der Karte aus.',
+        'Wähle das Haus auf der Karte aus.'.tr(),
         textScaleFactor: 0.9,
       ).tr(),
       SizedBox(
@@ -147,7 +147,7 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
         height: 10.0,
       ),
       Align(alignment: Alignment.centerLeft, child: Text(
-        'Visitation Events',
+        'Visits',
         textScaleFactor: 1.2,
       ).tr()),
       SizedBox(
@@ -222,7 +222,7 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
         Expanded(
             child: ListTile(
           title: Text(
-              "${DateFormat("yyyy-MM-dd").format(item.datum)***REMOVED***, ${item.hausteil***REMOVED***"),
+              "${DateFormat("EEEE, MM-dd hh:mm").format(item.datum)***REMOVED***, ${item.adresse***REMOVED***, ${item.hausteil***REMOVED***"),
         )),
 
              IconButton(

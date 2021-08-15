@@ -119,7 +119,7 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
           key: Key('venue dialog finish button'),
           child: Text("Fertig").tr(),
           onPressed: () {
-            building_view.selected_building?.adresse =
+            building_view.selected_building?.visitation_events.last.adresse =
                 visitedHouseController.text;
             building_view.selected_building?.visitation_events.last.hausteil =
                 visitedHousePartController.text;
@@ -222,6 +222,9 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
 
   houseSelected(LatLng point) async {
 
+    Future<GeoData> gd_future = Provider.of<GeoService>(context,
+        listen: false).getDescriptionToPoint(point);
+
     setState(() {
       showLoadingIndicator = true;
     ***REMOVED***);
@@ -229,14 +232,16 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
     SelectableVisitedHouse? building = building_view.getBuildingByPoint(point);
     //not in current view
     if (building == null) {
-      var building_from_server =
-          await Provider.of<AbstractVisitedHousesService>(context,
+      Future<VisitedHouse?> building_future =
+          Provider.of<AbstractVisitedHousesService>(context,
                   listen: false)
               .getVisitedHouseOfPoint(point, true)
               .catchError((e, s) {
         ErrorService.handleError(e, s);
         return null;
       ***REMOVED***);
+
+      var building_from_server = await building_future;
       if (building_from_server != null) {
         building =
             SelectableVisitedHouse.fromVisitedHouse(building_from_server);
@@ -244,7 +249,9 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
     ***REMOVED***
     if(!mounted)
       return;
-    
+
+    GeoData geo_data = await gd_future;
+
     setState(() {
       if (building != null &&
           building_view.selected_building?.osm_id != building.osm_id) {
@@ -256,9 +263,8 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
             .id;
         if (usr_id != null)
           building_view.selected_building?.visitation_events
-              .add(VisitedHouseEvent(null, '', usr_id, DateTime.now()));
-        visitedHouseController.text =
-            '${building_view.selected_building?.adresse***REMOVED***';
+              .add(VisitedHouseEvent(null, '', '', usr_id, DateTime.now()));
+        visitedHouseController.text = '${geo_data.street***REMOVED*** ${geo_data.number***REMOVED***';
         showLoadingIndicator = false;
       ***REMOVED***
       //venueController.text = geodata.description;

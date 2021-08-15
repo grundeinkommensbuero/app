@@ -3,6 +3,7 @@ import 'dart:core';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:sammel_app/services/VisitedHouseView.dart';
@@ -14,20 +15,20 @@ class VisitedHouseEvent {
   int? id;
   DateTime datum;
   String hausteil = "";
+  String adresse = '';
 
-  VisitedHouseEvent(this.id, this.hausteil, this.benutzer, this.datum);
+  VisitedHouseEvent(this.id, this.adresse, this.hausteil, this.benutzer, this.datum);
 ***REMOVED***
 
 class VisitedHouse {
   int osm_id = -1;
   double latitude = -1.0;
   double longitude = -1.0;
-  String adresse = '';
   List<LatLng> shape = [];
   late BoundingBox bbox;
   List<VisitedHouseEvent> visitation_events = [];
 
-  VisitedHouse(this.osm_id, this.latitude, this.longitude, this.adresse,
+  VisitedHouse(this.osm_id,this.latitude, this.longitude,
       this.shape, this.visitation_events) {
     calculateBBox();
   ***REMOVED***
@@ -50,9 +51,8 @@ class VisitedHouse {
       : osm_id = json['osmId'],
         latitude = json['latitude'],
         longitude = json['longitude'],
-        adresse = json['adresse'],
         visitation_events = [
-          VisitedHouseEvent(json['id'], json['hausteil'], json['benutzer'],
+          VisitedHouseEvent(json['id'],  json['adresse'], json['hausteil'], json['benutzer'],
               ChronoHelfer.deserializeJsonDateTime(json['datum']))
         ],
         shape = List<LatLng>.from(jsonDecode(json['shape']).map((e) => LatLng(e[0], e[1])))
@@ -65,7 +65,7 @@ class VisitedHouse {
         'id': visitation_events.last.id,
         'latitude': latitude,
         'longitude': longitude,
-        'adresse': adresse,
+        'adresse': visitation_events.last.adresse,
         'hausteil': visitation_events.last.hausteil,
         'datum': DateFormat('yyyy-MM-dd').format(visitation_events.last.datum),
         'benutzer': visitation_events.last.benutzer,
@@ -87,19 +87,19 @@ class SelectableVisitedHouse extends VisitedHouse {
   var selected;
 
   SelectableVisitedHouse(
-      osm_id, adresse, latitude, longitude, shape, visitation_events, selected)
-      : super(osm_id, latitude, longitude, adresse, shape, visitation_events) {
+      osm_id, latitude, longitude, shape, visitation_events, selected)
+      : super(osm_id, latitude, longitude, shape, visitation_events) {
     this.selected = selected;
   ***REMOVED***
 
   SelectableVisitedHouse.fromVisitedHouse(VisitedHouse vh, {selected: false***REMOVED***)
-      : super(vh.osm_id, vh.latitude, vh.longitude, vh.adresse, vh.shape,
+      : super(vh.osm_id, vh.latitude, vh.longitude, vh.shape,
             vh.visitation_events) {
     this.selected = selected;
   ***REMOVED***
 
   SelectableVisitedHouse.clone(SelectableVisitedHouse vh)
-      : super(vh.osm_id, vh.latitude, vh.longitude, vh.adresse, vh.shape,
+      : super(vh.osm_id, vh.latitude, vh.longitude, vh.shape,
             List.from(vh.visitation_events)) {
     selected = vh.selected;
   ***REMOVED***
@@ -111,6 +111,9 @@ class BuildingColorSelector {
   static var outdated_color = Color.fromARGB(100, 255, 0, 0);
   static var first_time_color = Color.fromARGB(100, 0, 0, 0);
   static var outdated_time_span = Duration(days: 7);
+  static var first_time_visit_color = Color.fromARGB(180, 0, 100, 0);
+  static var second_time_visit_color = Color.fromARGB(180, 0, 200, 0);
+  static var third_time_visit_color = Color.fromARGB(180, 0, 255, 0);
 
   static Color getDrawColorForSelectable(SelectableVisitedHouse building) {
     if (building.selected) {
@@ -118,12 +121,12 @@ class BuildingColorSelector {
     ***REMOVED***
     if (building.visitation_events != null &&
         building.visitation_events.length > 0) {
-      if (DateTime.now().difference(building.visitation_events.last.datum) <
-          outdated_time_span) {
-        return recently_visited_color;
-      ***REMOVED*** else {
-        return outdated_color;
-      ***REMOVED***
+      if(building.visitation_events.length == 1)
+        return first_time_visit_color;
+      else if(building.visitation_events.length == 2)
+        return second_time_visit_color;
+      else
+        return third_time_visit_color;
     ***REMOVED*** else {
       return first_time_color;
     ***REMOVED***

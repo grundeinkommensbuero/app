@@ -28,8 +28,8 @@ class BoundingBox
 
   bool intersect(BoundingBox bbox)
   {
-    return containsPoint(LatLng(bbox.minLatitude, bbox.minLongitude)) || containsPoint(LatLng(bbox.maxLatitude, bbox.maxLongitude))
-        || bbox.containsPoint(LatLng(minLatitude, minLongitude)) || bbox.containsPoint(LatLng(maxLatitude, maxLongitude));
+    return minLatitude < bbox.maxLatitude && bbox.minLatitude < maxLatitude &&
+           minLongitude < bbox.maxLongitude && bbox.minLongitude < maxLongitude;
   ***REMOVED***
 ***REMOVED***
 
@@ -86,15 +86,7 @@ class VisitedHouseView
             CampaignTheme.secondary.green, CampaignTheme.secondary.blue),
         points: building.shape))
         .toList();
-    /*
-    if(selected_building != null && selected_building?.shape != null) {
-        p.add(Polygon(
-            color: BuildingColorSelector.getDrawColorForSelectable(selected_building!),
-            borderStrokeWidth: 2.0,
-            borderColor: Color.fromARGB(250, CampaignTheme.secondary.red,
-                CampaignTheme.secondary.green, CampaignTheme.secondary.blue),
-            points: selected_building!.shape));
-      ***REMOVED****/
+
     return p;
   ***REMOVED***
 ***REMOVED***

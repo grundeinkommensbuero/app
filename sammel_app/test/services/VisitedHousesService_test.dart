@@ -64,7 +64,7 @@ void main() {
               MockHttpClientResponseBody(), 200, kanzlerinamt().toJson())));
 
       var house = kanzlerinamt();
-      house.osm_id = null;
+      //house.id = null;
       await service.createVisitedHouse(house);
 
       verify(backend.post(
@@ -87,10 +87,10 @@ void main() {
               MockHttpClientResponseBody(), 200, kanzlerinamt().toJson())));
 
       var house = kanzlerinamt();
-      house.id = null;
+      //house.id = null;
       var response = await service.createVisitedHouse(house);
 
-      expect(response!.id, 1);
+      expect(response!.osm_id, 1);
     ***REMOVED***);
 
     test('createVisitedHouse returns null on Error', () async {
@@ -136,8 +136,8 @@ void main() {
               [VisitedHouseEvent(0, 'Haupteingang', 11, DateTime(2021, 7, 18))]));
 
       expect(visitedHousesService.visitedHouses.length, 4);
-      expect(visitedHousesService.visitedHouses[3].id, 4);
-      expect(newHouse.id, 4);
+      expect(visitedHousesService.visitedHouses[3].osm_id, 4);
+      expect(newHouse.osm_id, 4);
     ***REMOVED***);
 
     test('createVisitedHouse adds house with original id', () {
@@ -152,7 +152,7 @@ void main() {
           [VisitedHouseEvent(10, 'Haupteingang', 11, DateTime(2021, 7, 18))]));
 
       expect(visitedHousesService.visitedHouses.length, 4);
-      expect(visitedHousesService.visitedHouses[3].id, 10);
+      expect(visitedHousesService.visitedHouses[3].osm_id, 10);
     ***REMOVED***);
 
     test('deleteVisitedHouse removes corrrect house', () {
@@ -161,7 +161,7 @@ void main() {
       visitedHousesService.deleteVisitedHouse(3);
 
       expect(visitedHousesService.visitedHouses.length, 2);
-      expect(visitedHousesService.visitedHouses.map((h) => h.id),
+      expect(visitedHousesService.visitedHouses.map((h) => h.osm_id),
           containsAll([1, 2]));
     ***REMOVED***);
 
@@ -176,17 +176,25 @@ void main() {
     test('loadVisitedHouses serves all houses', () async {
       var houses = await visitedHousesService.loadVisitedHouses();
 
-      expect(houses.map((h) => h.id), containsAll([1, 2, 3]));
+      expect(houses.map((h) => h.osm_id), containsAll([1, 2, 3]));
     ***REMOVED***);
 
     test('editVisitedHouses', () async {
-      VisitedHouse house = VisitedHouse(4, 53, 11, 'tttt', [], [VisitedHouseEvent(-1, 'hausteil', 3, DateTime(2100))]);
+      VisitedHouse house = VisitedHouse(4, 53, 11, 'tttt', [], [VisitedHouseEvent(null, 'hausteil', 3, DateTime(2100))]);
       visitedHousesService.editVisitedHouse(house);
 
       expect(visitedHousesService.localBuildingMap.length, 4);
       expect(visitedHousesService.localBuildingMap[4]!.osm_id , 4);
       expect(visitedHousesService.localBuildingMap[4]!.visitation_events.length, 1);
-      expect(visitedHousesService.localBuildingMap[4]!.visitation_events[0].id, 4);
+      expect(visitedHousesService.localBuildingMap[4]!.visitation_events[0].id, 10);
+
+      house = VisitedHouse(4, 53, 11, 'tttt', [], [VisitedHouseEvent(null, 'hausteil', 3, DateTime(2100, 3))]);
+      visitedHousesService.editVisitedHouse(house);
+
+      expect(visitedHousesService.localBuildingMap.length, 4);
+      expect(visitedHousesService.localBuildingMap[4]!.osm_id , 4);
+      expect(visitedHousesService.localBuildingMap[4]!.visitation_events.length, 2);
+      expect(visitedHousesService.localBuildingMap[4]!.visitation_events[0].id, 11);
     ***REMOVED***);
 
   ***REMOVED***);

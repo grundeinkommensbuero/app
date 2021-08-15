@@ -153,10 +153,10 @@ class ActionMapState extends State<ActionMap> {
   ***REMOVED***
 
   mapTap(LatLng point) async {
-    Future<VisitedHouse?> vh_future =
+    VisitedHouse? vh = await
         Provider.of<AbstractVisitedHousesService>(context, listen: false)
             .getVisitedHouseOfPoint(point, false);
-    VisitedHouse? vh = await vh_future;
+
     if (vh != null) {
       var show_distance_in_m = 100.0;
       var lng_diff = DistanceHelper.getLongDiffFromM(point, show_distance_in_m);
