@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
+import 'package:quiver/strings.dart';
 import 'package:sammel_app/model/Building.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/services/VisitedHouseView.dart';
@@ -14,7 +15,8 @@ import 'package:sammel_app/shared/ServerException.dart';
 
 import '../Provisioning.dart';
 
-addNewVisitedHouseEvent(BuildContext context, Future<VisitedHouse?> future_vh) async {
+addNewVisitedHouseEvent(
+    BuildContext context, Future<VisitedHouse?> future_vh) async {
   VisitedHouse? vh = await future_vh;
   if (vh != null) {
     //the last event is new. register at server
@@ -49,10 +51,13 @@ addNewVisitedHouseEvent(BuildContext context, Future<VisitedHouse?> future_vh) a
 ***REMOVED***
 
 showEditVisitedHouseDialog(
-    {required BuildContext context, required VisitedHouseView building_view, required double current_zoom_factor***REMOVED***) {
+    {required BuildContext context,
+    required VisitedHouseView building_view,
+    required double current_zoom_factor***REMOVED***) {
   Future<VisitedHouse?> future_vh = showDialog(
     context: context,
-    builder: (context) => EditBuildingDialog(building_view, current_zoom_factor),
+    builder: (context) =>
+        EditBuildingDialog(building_view, current_zoom_factor),
   );
   return addNewVisitedHouseEvent(context, future_vh);
 ***REMOVED***
@@ -94,7 +99,7 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
       title: Text('Besuchtes Haus').tr(),
       content: SingleChildScrollView(
           child: Column(
-                  mainAxisSize: MainAxisSize.min, children: build_widgets())),
+              mainAxisSize: MainAxisSize.min, children: build_widgets())),
       actions: [
         TextButton(
           child: Text("Abbrechen").tr(),
@@ -129,20 +134,20 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
       Container(
           decoration: BoxDecoration(
               border: Border.all(color: CampaignTheme.secondary, width: 1.0)),
-          child: SizedBox(
-              height: 300.0,
-              width: 300.0,
-              child: buildFlutterMap())),
+          child:
+              SizedBox(height: 300.0, width: 300.0, child: buildFlutterMap())),
       SizedBox(
         height: 5.0,
       ),
       SizedBox(
         height: 10.0,
       ),
-      Align(alignment: Alignment.centerLeft, child: Text(
-        'Visitation Events',
-        textScaleFactor: 1.2,
-      ).tr()),
+      Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Besuche',
+            textScaleFactor: 1.2,
+          ).tr()),
       SizedBox(
         height: 5.0,
       )
@@ -150,46 +155,42 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
     if (building_view.selected_building != null &&
         building_view.selected_building!.visitation_events.length > 0) {
       widgets.addAll(building_view.selected_building!.visitation_events
-          .map((e) => buildVisitationEventItem(e)));
-      //widgets.add(Flexible(child: ListView.builder(shrinkWrap: true,
-      //    itemCount: building_view.selected_building!.visitation_events.length,
-      //    itemBuilder: buildVisitationEventItem)));
+          .map((event) => buildVisitationEventItem(event)));
     ***REMOVED***
     return widgets;
   ***REMOVED***
 
   Widget buildFlutterMap() {
     var map = FlutterMap(
-                key: Key('venue map'),
-                options: MapOptions(
-                    center: center,
-                    zoom: widget.current_zoom_factor < 17 ? 17 : widget.current_zoom_factor,
-                    interactiveFlags: noRotation,
-                    swPanBoundary: LatLng(building_view.bbox.minLatitude,
-                        building_view.bbox.minLongitude),
-                    nePanBoundary: LatLng(building_view.bbox.maxLatitude,
-                        building_view.bbox.maxLongitude),
-                    maxZoom: geo.zoomMax,
-                    minZoom: geo.zoomMin,
-                    onTap: houseSelected,
-                    plugins: [AttributionPlugin()]),
-                layers: [
-                  TileLayerOptions(
-                      urlTemplate:
-                          "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
-                      subdomains: ['a', 'b', 'c']),
-                  PolygonLayerOptions(
-                      polygons: building_view.buildDrawablePolygonsFromView(),
-                      polygonCulling: false),
-                  MarkerLayerOptions(
-                      markers: marker == null ? [] : [marker!]),
-                  AttributionOptions(),
-                ]);
+        key: Key('venue map'),
+        options: MapOptions(
+            center: center,
+            zoom: widget.current_zoom_factor < 17
+                ? 17
+                : widget.current_zoom_factor,
+            interactiveFlags: noRotation,
+            swPanBoundary: LatLng(building_view.bbox.minLatitude,
+                building_view.bbox.minLongitude),
+            nePanBoundary: LatLng(building_view.bbox.maxLatitude,
+                building_view.bbox.maxLongitude),
+            maxZoom: geo.zoomMax,
+            minZoom: geo.zoomMin,
+            onTap: houseSelected,
+            plugins: [AttributionPlugin()]),
+        layers: [
+          TileLayerOptions(
+              urlTemplate: "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
+              subdomains: ['a', 'b', 'c']),
+          PolygonLayerOptions(
+              polygons: building_view.buildDrawablePolygonsFromView(),
+              polygonCulling: false),
+          MarkerLayerOptions(markers: marker == null ? [] : [marker!]),
+          AttributionOptions(),
+        ]);
     return map;
   ***REMOVED***
 
   houseSelected(LatLng point) async {
-
     SelectableVisitedHouse? building = building_view.getBuildingByPoint(point);
     //not in current view
     setState(() {
@@ -205,35 +206,35 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
   ***REMOVED***
 
   Widget buildVisitationEventItem(VisitedHouseEvent item) {
-    // VisitedHouseEvent item = building_view.selected_building!
-    //   .visitation_events[index];
+    final tile = ListTile(
+      title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text('Adress goes here',
+            style: TextStyle(color: CampaignTheme.secondary)),
+        Text('${DateFormat("EEEE, MM.dd hh:mm").format(item.datum)***REMOVED***',
+            textScaleFactor: 0.8),
+        isEmpty(item.hausteil)
+            ? SizedBox()
+            : Text('${item.hausteil***REMOVED***', textScaleFactor: 0.8),
+      ]),
+    );
+
     if (item.benutzer ==
         Provider.of<AbstractUserService>(context, listen: false)
             .latestUser!
             .id) {
-      return Row( children: [
-        Expanded(
-            child: ListTile(
-          title: Text(
-              "${DateFormat("yyyy-MM-dd").format(item.datum)***REMOVED***, ${item.hausteil***REMOVED***"),
-        )),
-
-             IconButton(
-                icon: Icon(Icons.clear),
-                onPressed: () {
-                  // Remove the item from the data source.
-                  setState(() {
-                    building_view.selected_building!.visitation_events
-                        .remove(item);
-                  ***REMOVED***);
-                ***REMOVED***)
+      return Row(children: [
+        Expanded(child: tile),
+        IconButton(
+            icon: Icon(Icons.delete_forever),
+            onPressed: () {
+              // Remove the item from the data source.
+              setState(() {
+                building_view.selected_building!.visitation_events.remove(item);
+              ***REMOVED***);
+            ***REMOVED***)
       ]);
-    ***REMOVED*** else {
-      return ListTile(
-        title: Text(
-            "${DateFormat("yyyy-MM-dd").format(item.datum)***REMOVED***, ${item.hausteil***REMOVED***"),
-      );
-    ***REMOVED***
+    ***REMOVED*** else
+      return tile;
   ***REMOVED***
 ***REMOVED***
 

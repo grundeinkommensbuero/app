@@ -22,14 +22,14 @@ import 'package:sammel_app/shared/ServerException.dart';
 
 import '../Provisioning.dart';
 
-addNewVisitedHouseEvent(BuildContext context, Future<VisitedHouse?> future_vh) async {
+addNewVisitedHouseEvent(BuildContext context,
+    Future<VisitedHouse?> future_vh) async {
   VisitedHouse? vh = await future_vh;
   if (vh != null) {
     //the last event is new. register at server
     var abstractVisitedHousesService =
-        Provider.of<AbstractVisitedHousesService>(context, listen: false);
-    var future_new_house =
-        abstractVisitedHousesService.editVisitedHouse(vh);
+    Provider.of<AbstractVisitedHousesService>(context, listen: false);
+    var future_new_house = abstractVisitedHousesService.editVisitedHouse(vh);
     return future_new_house;
   ***REMOVED***
   return null;
@@ -56,8 +56,9 @@ addNewVisitedHouseEvent(BuildContext context, Future<VisitedHouse?> future_vh) a
    ***REMOVED****/
 ***REMOVED***
 
-showAddBuildingDialog(
-    {required BuildContext context, required VisitedHouseView building_view, required double current_zoom_factor***REMOVED***) {
+showAddBuildingDialog({required BuildContext context,
+  required VisitedHouseView building_view,
+  required double current_zoom_factor***REMOVED***) {
   Future<VisitedHouse?> future_vh = showDialog(
     context: context,
     builder: (context) => AddBuildingDialog(building_view, current_zoom_factor),
@@ -102,12 +103,12 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
 
   @override
   Widget build(BuildContext context) {
-    if(building_view.selected_building == null) houseSelected(this.center);
+    if (building_view.selected_building == null) houseSelected(this.center);
     return AlertDialog(
       title: Text('Besuchtes Haus').tr(),
       content: SingleChildScrollView(
           child: Column(
-                  mainAxisSize: MainAxisSize.min, children: build_widgets())),
+              mainAxisSize: MainAxisSize.min, children: build_widgets())),
       actions: [
         TextButton(
           child: Text("Abbrechen").tr(),
@@ -123,8 +124,9 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
                 visitedHouseController.text;
             building_view.selected_building?.visitation_events.last.hausteil =
                 visitedHousePartController.text;
-            if (Provider.of<AbstractUserService>(context, listen: false)
-                    .latestUser ==
+            if (Provider
+                .of<AbstractUserService>(context, listen: false)
+                .latestUser ==
                 null) throw ServerException('Couldnt fetch user from server');
             //   building_view.selected_building?.visitation_events.add(VisitedHouseEvent(-1, Provider.of<AbstractUserService>(context, listen: false).latestUser!.id!, DateTime.now()));
             Navigator.pop(context, building_view.selected_building);
@@ -146,39 +148,45 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
       Container(
           decoration: BoxDecoration(
               border: Border.all(color: CampaignTheme.secondary, width: 1.0)),
-          child: SizedBox(
-              height: 300.0,
-              width: 300.0,
-              child: buildFlutterMap())),
+          child:
+          SizedBox(height: 300.0, width: 300.0, child: buildFlutterMap())),
       SizedBox(
         height: 5.0,
       ),
       SizedBox(
         height: 10.0,
       ),
-      Align(alignment: Alignment.centerLeft, child: Text(
-        'Addresse',
-        textScaleFactor: 0.8,
-      ).tr()),
-      SizedBox(
-        height: 5.0,
-      ),
+      Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Addresse',
+          ).tr()),
       TextFormField(
         key: Key('visited house adress input'),
         //  keyboardType: TextInputType.multiline,
         //onChanged: (input) => location.description = input,
         controller: visitedHouseController,
+        decoration: InputDecoration(border: OutlineInputBorder()),
       ),
-    Align(alignment: Alignment.centerLeft, child: Text(
-    'Hausteil'.tr(),
-        textScaleFactor: 0.8,
-      ).tr()),
+      SizedBox(
+        height: 20.0,
+      ),
+      Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'Hausteil'.tr(),
+          ).tr()),
+      Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.'
+                .tr(),
+            textScaleFactor: 0.8,
+          ).tr()),
       TextFormField(
-        key: Key('visited house part input'),
-        decoration: InputDecoration(hintText: 'Vorderhaus, Seitenflügel, Hausnummer, Etage'.tr()),
-        // keyboardType: TextInputType.multiline,
-        //onChanged: (input) => location.description = input,
-        controller: visitedHousePartController,
+          key: Key('visited house part input'),
+      controller: visitedHousePartController,
+      decoration: InputDecoration(border: OutlineInputBorder()),
       )
     ];
     return widgets;
@@ -186,42 +194,51 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
 
   Widget buildFlutterMap() {
     var map = FlutterMap(
-                key: Key('venue map'),
-                options: MapOptions(
-                    center: center,
-                    zoom: widget.current_zoom_factor < 17 ? 17 : widget.current_zoom_factor,
-                    interactiveFlags: noRotation,
-                    swPanBoundary: LatLng(building_view.bbox.minLatitude,
-                        building_view.bbox.minLongitude),
-                    nePanBoundary: LatLng(building_view.bbox.maxLatitude,
-                        building_view.bbox.maxLongitude),
-                    maxZoom: geo.zoomMax,
-                    minZoom: geo.zoomMin,
-                    onTap: houseSelected,
-                    plugins: [AttributionPlugin()]),
-                layers: [
-                  TileLayerOptions(
-                      urlTemplate:
-                          "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
-                      subdomains: ['a', 'b', 'c']),
-                  PolygonLayerOptions(
-                      polygons: building_view.buildDrawablePolygonsFromView(),
-                      polygonCulling: false),
-                  MarkerLayerOptions(
-                      markers: marker == null ? [] : [marker!]),
-                  AttributionOptions(),
-                ]);
-    if(showLoadingIndicator)
-      {
-        return Stack(children: [map, Opacity(opacity: 0.7, child: Container(width: 300, height: 300,color: CampaignTheme.disabled)), Center(child: SizedBox(width: 100, height: 100, child: LoadingIndicator(
-            indicatorType: Indicator.ballRotateChase,
-            color: CampaignTheme.primary)))]);
-      ***REMOVED***
+        key: Key('venue map'),
+        options: MapOptions(
+            center: center,
+            zoom: widget.current_zoom_factor < 17
+                ? 17
+                : widget.current_zoom_factor,
+            interactiveFlags: noRotation,
+            swPanBoundary: LatLng(building_view.bbox.minLatitude,
+                building_view.bbox.minLongitude),
+            nePanBoundary: LatLng(building_view.bbox.maxLatitude,
+                building_view.bbox.maxLongitude),
+            maxZoom: geo.zoomMax,
+            minZoom: geo.zoomMin,
+            onTap: houseSelected,
+            plugins: [AttributionPlugin()]),
+        layers: [
+          TileLayerOptions(
+              urlTemplate: "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
+              subdomains: ['a', 'b', 'c']),
+          PolygonLayerOptions(
+              polygons: building_view.buildDrawablePolygonsFromView(),
+              polygonCulling: false),
+          MarkerLayerOptions(markers: marker == null ? [] : [marker!]),
+          AttributionOptions(),
+        ]);
+    if (showLoadingIndicator) {
+      return Stack(children: [
+        map,
+        Opacity(
+            opacity: 0.7,
+            child: Container(
+                width: 300, height: 300, color: CampaignTheme.disabled)),
+        Center(
+            child: SizedBox(
+                width: 100,
+                height: 100,
+                child: LoadingIndicator(
+                    indicatorType: Indicator.ballRotateChase,
+                    color: CampaignTheme.primary)))
+      ]);
+    ***REMOVED***
     return map;
   ***REMOVED***
 
   houseSelected(LatLng point) async {
-
     setState(() {
       showLoadingIndicator = true;
     ***REMOVED***);
@@ -230,10 +247,10 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
     //not in current view
     if (building == null) {
       var building_from_server =
-          await Provider.of<AbstractVisitedHousesService>(context,
-                  listen: false)
-              .getVisitedHouseOfPoint(point, true)
-              .catchError((e, s) {
+      await Provider.of<AbstractVisitedHousesService>(context,
+          listen: false)
+          .getVisitedHouseOfPoint(point, true)
+          .catchError((e, s) {
         ErrorService.handleError(e, s);
         return null;
       ***REMOVED***);
@@ -242,23 +259,23 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
             SelectableVisitedHouse.fromVisitedHouse(building_from_server);
       ***REMOVED***
     ***REMOVED***
-    if(!mounted)
-      return;
-    
+    if (!mounted) return;
+
     setState(() {
       if (building != null &&
           building_view.selected_building?.osm_id != building.osm_id) {
         building_view.selected_building =
             SelectableVisitedHouse.clone(building);
         building_view.selected_building?.selected = true;
-        var usr_id = Provider.of<AbstractUserService>(context, listen: false)
+        var usr_id = Provider
+            .of<AbstractUserService>(context, listen: false)
             .latestUser!
             .id;
         if (usr_id != null)
           building_view.selected_building?.visitation_events
               .add(VisitedHouseEvent(null, '', usr_id, DateTime.now()));
         visitedHouseController.text =
-            '${building_view.selected_building?.adresse***REMOVED***';
+        '${building_view.selected_building?.adresse***REMOVED***';
         showLoadingIndicator = false;
       ***REMOVED***
       //venueController.text = geodata.description;
@@ -270,14 +287,15 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
 class LocationMarker extends Marker {
   LocationMarker(LatLng point)
       : super(
-            point: point,
-            builder: (context) => DecoratedBox(
-                key: Key('location marker'),
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: CampaignTheme.primary,
-                    boxShadow: [
-                      BoxShadow(blurRadius: 4.0, offset: Offset(-2.0, 2.0))
-                    ]),
-                child: Icon(Icons.supervised_user_circle, size: 30.0)));
+      point: point,
+      builder: (context) =>
+          DecoratedBox(
+              key: Key('location marker'),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: CampaignTheme.primary,
+                  boxShadow: [
+                    BoxShadow(blurRadius: 4.0, offset: Offset(-2.0, 2.0))
+                  ]),
+              child: Icon(Icons.supervised_user_circle, size: 30.0)));
 ***REMOVED***
