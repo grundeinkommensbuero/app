@@ -81,7 +81,9 @@ class MyApp extends StatelessWidget {
   static var argumentsService = demoMode
       ? DemoArgumentsService(userService)
       : ArgumentsService(userService, backend);
-  static var visitedHouseService = demoMode ? DemoVisitedHousesService(userService, geoService,  backend) : VisitedHousesService(geoService, userService, backend);
+  static var visitedHouseService = demoMode
+      ? DemoVisitedHousesService(userService, geoService)
+      : VisitedHousesService(geoService, userService, backend);
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +102,8 @@ class MyApp extends StatelessWidget {
           Provider<GeoService>.value(value: geoService),
           Provider<LocalNotificationService>.value(
               value: localNotificationService),
-          Provider<AbstractVisitedHousesService>.value(value: visitedHouseService),
+          Provider<AbstractVisitedHousesService>.value(
+              value: visitedHouseService),
           Provider(create: (_) => placardService),
           Provider<AbstractPlacardsService>(create: (_) => placardService),
           Provider<AbstractArgumentsService>(create: (_) => argumentsService)
