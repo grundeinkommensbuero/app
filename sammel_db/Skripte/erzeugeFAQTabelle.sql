@@ -1,7 +1,7 @@
 create table FAQ
 (
     id            int   unique  not null,
-    title         char(120)          not null,
+    title         char(120)     not null,
     teaser        text          not null,
     rest          text          null,
     order_nr      double        not null,
@@ -11,13 +11,13 @@ create table FAQ
 
 create table FAQ_Tags
 (
-    faq           int                   not null,
-    tag           char(40)              not null
+    faq           int           not null,
+    tag           char(40)      not null
 );
 
 create table FAQ_Timestamp
 (
-    timestamp     datetime              not null,
+    timestamp     datetime      not null,
     constraint FAQ_pk
         primary key (timestamp)
 );
