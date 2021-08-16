@@ -6,9 +6,8 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/FAQItem.dart';
 import 'package:sammel_app/services/FAQService.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FAQ extends StatefulWidget {
   FAQ() : super(key: Key('faq page'));
@@ -77,7 +76,7 @@ class FAQState extends State<FAQ> {
                   height: 50,
                   child: LoadingIndicator(
                       indicatorType: Indicator.ballRotateChase,
-                      color: DweTheme.purple)))
+                      color: CampaignTheme.secondary)))
 )          : Expanded(
               child: ListView.builder(
                   controller: controller,
@@ -141,14 +140,14 @@ class FAQTile extends StatelessWidget {
               selectable: true,
               styleSheet: MarkdownStyleSheet(
                   a: TextStyle(
-                      color: DweTheme.purple,
+                      color: CampaignTheme.secondary,
                       decoration: TextDecoration.underline),
                   blockquoteDecoration:
-                      BoxDecoration(color: DweTheme.yellowBright))),
+                      BoxDecoration(color: CampaignTheme.primaryBright))),
           (item.rest != null && !extended
               ? Text(
                   'Weiterlesen',
-                  style: TextStyle(color: DweTheme.purple),
+                  style: TextStyle(color: CampaignTheme.secondary),
                 ).tr()
               : Container())
         ]),
