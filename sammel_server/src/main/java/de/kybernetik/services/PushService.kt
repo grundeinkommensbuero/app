@@ -52,14 +52,13 @@ open class PushService {
         when (modus) {
             "LOCAL" -> PREFIX = "local."
             "TEST" -> PREFIX = "test."
-            "PROD" -> PREFIX = ""
+            "PROD" -> PREFIX = "local."
             else -> LOG.error("Server-Modus unbekannt")
         ***REMOVED***
-        // TODO in späterer Version aktivieren, zusammen mit neuem Key
-//        when (modus) {
-//            "LOCAL" -> ENCRYPTION = "AES_PROD"
-//            else -> ENCRYPTION = "AES"
-//        ***REMOVED***
+        when (modus) {
+            "PROD" -> ENCRYPTION = "AES_PROD"
+            else -> ENCRYPTION = "AES"
+        ***REMOVED***
 
         val key = getProperty("key")
         KEY = SecretKeySpec(Base64.getDecoder().decode(key), "AES")
@@ -118,7 +117,7 @@ open class PushService {
 
     open fun pusheNeueAktionenNotification(aktionen: List<TerminDto>, topic: String) {
         LOG.debug("Neue Aktionen als Push-Messages zu versenden: ${aktionen.map { it.id ***REMOVED******REMOVED***")
-        if (aktionen.isNullOrEmpty()) return
+        if (aktionen.isEmpty()) return
 
         if (aktionen.map { it.ort ***REMOVED***.distinct().size > 1)
             LOG.warn("Orte aus unterschiedlichen Aktionen in derselben Push-Nachricht")
