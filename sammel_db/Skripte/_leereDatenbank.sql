@@ -10,3 +10,5 @@ drop table Token;
 drop table points; # nicht in DWE-DB!
 drop table Subscriptions;
 drop table Evaluationen;
+drop table BesuchteHaeuser;
+drop table Vorbehalte;

@@ -136,8 +136,11 @@ class StorageService {
   Future<void> saveCostumPushToken(String token) =>
       prefs.then((prefs) => prefs.setString(_PUSHTOKEN, token));
 
-  Future<void> markPullMode() =>
+  Future<void> setPullMode() =>
       prefs.then((prefs) => prefs.setBool(_PULL_MODE, true));
+
+  Future<void> unsetPullMode() =>
+      prefs.then((prefs) => prefs.setBool(_PULL_MODE, false));
 
   Future<bool> isPullMode() =>
       prefs.then((prefs) => prefs.getBool(_PULL_MODE) ?? false);

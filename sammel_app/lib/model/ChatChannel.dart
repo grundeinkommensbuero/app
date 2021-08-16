@@ -15,7 +15,7 @@ class ChatChannel {
   pushMessages(List<Message?> messages) {
     messages
         .where((message) => message != null && message is ChatMessage)
-        .forEach((message) => pushChatMessage(message!));
+        .forEach((message) => _pushChatMessage(message!));
     messages.where((message) => message is ParticipationMessage).forEach(
         (message) => pushParticipationMessage(message as ParticipationMessage));
 
@@ -23,7 +23,7 @@ class ChatChannel {
     ccl?.channelChanged(this);
   ***REMOVED***
 
-  pushChatMessage(Message message) {
+  _pushChatMessage(Message message) {
     Message? ownMessage =
         channelMessages.firstWhereOrNull((e) => message.isMessageEqual(e));
     if (ownMessage == null)

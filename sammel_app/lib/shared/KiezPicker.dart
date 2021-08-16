@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:poly/poly.dart' as poly;
 import 'package:provider/provider.dart';
 import 'package:sammel_app/Provisioning.dart';
@@ -10,7 +10,7 @@ import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/shared/NoRotation.dart';
 
-import 'DweTheme.dart';
+import 'CampaignTheme.dart';
 
 class KiezPicker {
   Set<Kiez> selectedKieze;
@@ -141,8 +141,8 @@ Set<Polygon> generateKiezeOutlines(Set<Kiez> kieze) {
       .map((kiez) => Polygon(
           color: Colors.transparent,
           borderStrokeWidth: 2.0,
-          borderColor: Color.fromARGB(250, DweTheme.purple.red,
-              DweTheme.purple.green, DweTheme.purple.blue),
+          borderColor: Color.fromARGB(250, CampaignTheme.secondary.red,
+              CampaignTheme.secondary.green, CampaignTheme.secondary.blue),
           points: kiez.polygon))
       .toSet();
 ***REMOVED***
@@ -152,8 +152,8 @@ Set<Polygon> generateOrtsteileOutlines(Set<Ortsteil> bezirke) {
       .map((bezirk) => Polygon(
           color: Colors.transparent,
           borderStrokeWidth: 2.0,
-          borderColor: Color.fromARGB(250, DweTheme.purple.red,
-              DweTheme.purple.green, DweTheme.purple.blue),
+          borderColor: Color.fromARGB(250, CampaignTheme.secondary.red,
+              CampaignTheme.secondary.green, CampaignTheme.secondary.blue),
           points: bezirk.polygon))
       .toSet();
 ***REMOVED***
@@ -163,8 +163,8 @@ Set<Polygon> generateRegionenOutlines(Set<Region> ortsteile) {
       .map((ortsteil) => Polygon(
           color: Colors.transparent,
           borderStrokeWidth: 2.0,
-          borderColor: Color.fromARGB(250, DweTheme.purple.red,
-              DweTheme.purple.green, DweTheme.purple.blue),
+          borderColor: Color.fromARGB(250, CampaignTheme.secondary.red,
+              CampaignTheme.secondary.green, CampaignTheme.secondary.blue),
           points: ortsteil.polygon))
       .toSet();
 ***REMOVED***
@@ -173,7 +173,7 @@ Map<Kiez, Polygon> generateKiezeAreas(Set<Kiez> kieze) {
   return kieze.toList().asMap().map((_, kiez) => MapEntry(
       kiez,
       Polygon(
-          color: Color.fromARGB(150, DweTheme.yellow.red, DweTheme.yellow.green,
-              DweTheme.yellow.blue),
+          color: Color.fromARGB(150, CampaignTheme.primary.red, CampaignTheme.primary.green,
+              CampaignTheme.primary.blue),
           points: kiez.polygon)));
 ***REMOVED***

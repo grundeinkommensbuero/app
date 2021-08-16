@@ -12,6 +12,9 @@ void main() {
 
   setUp(() {
     reset(storageService);
+    when(storageService.loadActionToken(any)).thenAnswer((_) => Future.value());
+    when(storageService.saveChatChannel(any))
+        .thenAnswer((_) => Future.value(true));
     service = ChatMessageService(storageService, manager, null);
   ***REMOVED***);
 

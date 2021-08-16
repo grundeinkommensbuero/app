@@ -5,7 +5,7 @@ import 'package:calendarro/default_weekday_labels_row.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 
 Future<List<DateTime>?> showMultipleDatePicker(
     List<DateTime> initDates, BuildContext context,
@@ -110,9 +110,9 @@ Future<List<DateTime>?> showMultipleDatePicker(
 
 class DweDayTileBuilder extends DayTileBuilder {
   @override
-  Widget build(BuildContext context, DateTime date, DateTimeCallback onTap) {
+  Widget build(BuildContext context, DateTime date, DateTimeCallback? onTap) {
     return DweCalendarroDayItem(
-        date: date, calendarroState: Calendarro.of(context), onTap: onTap);
+        date: date, calendarroState: Calendarro.of(context)!, onTap: onTap);
   ***REMOVED***
 ***REMOVED***
 
@@ -131,25 +131,25 @@ class DweCalendarroDayItem extends CalendarroDayItem {
     bool daySelected = calendarroState.isDateSelected(date);
     bool dayAfterSelected =
         calendarroState.isDateSelected(date.add(Duration(days: 1)));
-    var textColor = isWeekend ? DweTheme.purple : Colors.black;
-    if (daySelected) textColor = DweTheme.yellow;
+    var textColor = isWeekend ? CampaignTheme.secondary : Colors.black;
+    if (daySelected) textColor = CampaignTheme.primary;
     var fontWeight = isWeekend ? FontWeight.bold : FontWeight.normal;
     bool isToday = cal.DateUtils.isToday(date);
-    calendarroState = Calendarro.of(context);
+    calendarroState = Calendarro.of(context)!;
 
     BoxDecoration? boxDecoration;
     if (daySelected) {
       var leftborder = dayBeforeSelected ? Radius.zero : Radius.circular(20.0);
       var rightborder = dayAfterSelected ? Radius.zero : Radius.circular(20.0);
       boxDecoration = BoxDecoration(
-          color: DweTheme.purple,
+          color: CampaignTheme.secondary,
           shape: BoxShape.rectangle,
           borderRadius:
               BorderRadius.horizontal(left: leftborder, right: rightborder));
     ***REMOVED*** else if (isToday) {
       boxDecoration = BoxDecoration(
           border: Border.all(
-            color: DweTheme.purple,
+            color: CampaignTheme.secondary,
             width: 1.0,
           ),
           shape: BoxShape.rectangle,

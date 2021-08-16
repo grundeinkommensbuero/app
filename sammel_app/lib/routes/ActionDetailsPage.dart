@@ -1,8 +1,10 @@
+import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/model/Termin.dart';
@@ -13,14 +15,15 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 import 'package:sammel_app/shared/ExpandableConstrainedBox.dart';
+import 'package:share/share.dart';
 
 import 'ChatWindow.dart';
 
 enum TerminDetailsCommand { EDIT, DELETE, EVALUATE, CLOSE, FOCUS ***REMOVED***
 
-Future<TerminDetailsCommand> showActionDetailsPage(
+Future<TerminDetailsCommand?> showActionDetailsPage(
     BuildContext context,
     Termin action,
     bool isMyAction,
@@ -90,10 +93,10 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
       initialized = true;
     ***REMOVED***
 
-    final color = DweTheme.actionColor(
+    final color = CampaignTheme.actionColor(
         widget.action.ende, isMyAction, this.iAmParticipant);
 
-    PopupMenuButton menu =
+    PopupMenuButton? menu =
         menuButton(widget.action, isMyAction, iAmParticipant);
 
     Locale? locale;
@@ -121,7 +124,13 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                               color: Color.fromARGB(255, 129, 28, 98)))
                       .tr()),
             ]),
-            actions: [menu]),
+            actions: menu == null
+                ? [
+                    SizedBox(
+                      width: 30.0,
+                    )
+                  ]
+                : [menu]),
         body: SingleChildScrollView(
             padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
             child: Column(key: Key('action details page'), children: [
@@ -147,7 +156,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                       isPastAction(widget.action)
                           ? Text('diese Aktion ist beendet',
                                   style: TextStyle(
-                                      color: DweTheme.purple,
+                                      color: CampaignTheme.secondary,
                                       fontWeight: FontWeight.bold))
                               .tr()
                           : SizedBox()
@@ -250,14 +259,15 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                 height: 150.0,
                 width: 250.0,
                 decoration: BoxDecoration(
-                    border: Border.all(color: DweTheme.purple, width: 1.0)),
+                    border:
+                        Border.all(color: CampaignTheme.secondary, width: 1.0)),
                 child: FlutterMap(
                   key: Key('action details map'),
                   options: MapOptions(
                       center: LatLng(
                           widget.action.latitude, widget.action.longitude),
                       zoom: 15,
-                      interactive: false,
+                      interactiveFlags: InteractiveFlag.none,
                       onTap: (_) {
                         return Navigator.pop(
                             context, TerminDetailsCommand.FOCUS);
@@ -273,15 +283,14 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
               ),
             ])),
         persistentFooterButtons: determineActionButton()
-          ..add(SizedBox(
-              child: ElevatedButton(
+          ..add(ElevatedButton(
             key: Key('action details close button'),
             child: Text('Schließen').tr(),
             onPressed: () => Navigator.pop(context, TerminDetailsCommand.CLOSE),
-          ))));
+          )));
   ***REMOVED***
 
-  PopupMenuButton menuButton(
+  PopupMenuButton? menuButton(
       Termin action, bool isMyAction, bool iAmParticipant) {
     final List<PopupMenuItem> items = [];
 
@@ -291,7 +300,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           child: Row(children: [
             Icon(Icons.assignment_turned_in_outlined),
             SizedBox(width: 8),
-            Text('Mitmachen').tr()
+            Text('Mitmachen', textScaleFactor: 0.8).tr()
           ]),
           value: 'Mitmachen'));
 
@@ -301,9 +310,33 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           child: Row(children: [
             Icon(Icons.assignment_return_outlined),
             SizedBox(width: 8),
-            Text('Verlassen').tr()
+            Text('Verlassen', textScaleFactor: 0.8).tr()
           ]),
           value: 'Verlassen'));
+
+    if (iAmParticipant)
+      items.add(PopupMenuItem(
+          key: Key('action details calendar menu item'),
+          child: Row(
+            children: [
+              Icon(Icons.calendar_today_outlined),
+              SizedBox(width: 8),
+              Text('In den Kalender', textScaleFactor: 0.8).tr()
+            ],
+          ),
+          value: 'In den Kalender'));
+
+    if (iAmParticipant)
+      items.add(PopupMenuItem(
+          key: Key('action details share menu item'),
+          child: Row(
+            children: [
+              Icon(Icons.share),
+              SizedBox(width: 8),
+              Text('Teilen', textScaleFactor: 0.8).tr()
+            ],
+          ),
+          value: 'Teilen'));
 
     if (iAmParticipant)
       items.add(PopupMenuItem(
@@ -311,7 +344,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           child: Row(children: [
             Icon(Icons.message_outlined),
             SizedBox(width: 8),
-            Text('Zum Chat').tr()
+            Text('Zum Chat', textScaleFactor: 0.8).tr()
           ]),
           value: 'Zum Chat'));
 
@@ -323,7 +356,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           child: Row(children: [
             Icon(Icons.rss_feed_outlined),
             SizedBox(width: 8),
-            Text('Feedback').tr()
+            Text('Feedback', textScaleFactor: 0.8).tr()
           ]),
           value: 'Feedback'));
 
@@ -333,7 +366,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           child: Row(children: [
             Icon(Icons.edit),
             SizedBox(width: 8),
-            Text('Bearbeiten').tr()
+            Text('Bearbeiten', textScaleFactor: 0.8).tr()
           ]),
           value: 'Bearbeiten'));
       items.add(PopupMenuItem(
@@ -341,19 +374,25 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           child: Row(children: [
             Icon(Icons.delete, color: Colors.red),
             SizedBox(width: 8),
-            Text('Löschen', style: TextStyle(color: Colors.red)).tr()
+            Text('Löschen',
+                    textScaleFactor: 0.8, style: TextStyle(color: Colors.red))
+                .tr()
           ]),
           value: 'Löschen'));
     ***REMOVED***
 
+    if (items.isEmpty) return null;
+
     return PopupMenuButton(
         key: Key('action details menu button'),
-        color: DweTheme.yellowLight,
+        color: CampaignTheme.primaryLight,
         itemBuilder: (BuildContext context) => items,
         onSelected: (command) {
           if (command == 'Mitmachen') joinAction();
           if (command == 'Verlassen') leaveAction();
-          if (command == 'Zum Chat') openChatWindow()();
+          if (command == 'In den Kalender') calendarAction();
+          if (command == 'Teilen') shareAction();
+          if (command == 'Zum Chat') openChatWindow();
           if (command == 'Feedback') evaluateAction();
           if (command == 'Bearbeiten') editAction();
           if (command == 'Löschen') deleteAction();
@@ -386,9 +425,9 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
         ElevatedButton(
             style: ButtonStyle(
                 foregroundColor:
-                    MaterialStateProperty.all<Color>(DweTheme.yellow)),
+                    MaterialStateProperty.all<Color>(CampaignTheme.primary)),
             key: Key('open chat window'),
-            child: Row(children: [
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
               Icon(Icons.message, size: 20),
               SizedBox(width: 10),
               Text('Zum Chat').tr()
@@ -424,6 +463,33 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           widget.action.participants?.firstWhere((u) => u.id == me?.id));
       iAmParticipant = false;
     ***REMOVED***);
+  ***REMOVED***
+
+  void calendarAction() {
+    final Event event = Event(
+        title: '{typ***REMOVED*** in {ortsteil***REMOVED***'.tr(namedArgs: {
+          'typ': widget.action.typ.tr(),
+          'ortsteil': widget.action.ort.ortsteil
+        ***REMOVED***),
+        description:
+            '${widget.action.details!.beschreibung***REMOVED***\n${CampaignTheme.actionUrl(widget.action.id)***REMOVED***',
+        location: widget.action.details!.treffpunkt,
+        startDate: widget.action.beginn,
+        endDate: widget.action.ende);
+    Add2Calendar.addEvent2Cal(event);
+  ***REMOVED***
+
+  void shareAction() {
+    Share.share('{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***'
+        .tr(namedArgs: {
+      'typ': widget.action.typ.tr(),
+      'ortsteil': widget.action.ort.ortsteil,
+      'treffpunkt': widget.action.details!.treffpunkt,
+      'zeitpunkt': ''
+          '${DateFormat.MMMd(Localizations.localeOf(context).languageCode).format(widget.action.beginn)***REMOVED***,'
+          '${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(widget.action.beginn)***REMOVED***',
+      'url': CampaignTheme.actionUrl(widget.action.id),
+    ***REMOVED***));
   ***REMOVED***
 
   void evaluateAction() =>

@@ -28,8 +28,8 @@ class TermineFilter {
             // Dirty Hack für Bug https://github.com/dart-lang/intl/issues/244
             DateFormat("yyyy HH:mm:ss").parse('2019 ' + json['bis'])),
         orte = (json['orte'] as List<dynamic>).map((e) => e as String).toList(),
-        nurEigene = json['nurEigene'] as bool,
-        immerEigene = json['immerEigene'] as bool;
+        nurEigene = json['nurEigene'] ?? false,
+        immerEigene = json['immerEigene'] ?? true;
 
   Map<String, dynamic> toJson() => {
         'typen': typen,

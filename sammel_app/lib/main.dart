@@ -4,10 +4,12 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/Provisioning.dart';
 import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
+import 'package:sammel_app/services/ArgumentsService.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/FAQService.dart';
 import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
+import 'package:sammel_app/services/PlacardsService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/PushReceiveService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
@@ -15,8 +17,9 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
+import 'package:sammel_app/services/VisitedHousesService.dart';
 import 'package:sammel_app/shared/ConstJsonAssetLoader.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 
 import 'services/BackendService.dart';
 import 'services/LocalNotificationService.dart';
@@ -59,7 +62,7 @@ class MyApp extends StatelessWidget {
   static var localNotificationService =
       LocalNotificationService(pushNotificationManager);
   static var termineService = demoMode
-      ? DemoTermineService(stammdatenService, userService)
+      ? DemoTermineService(stammdatenService, userService, actionPageKey)
       : TermineService(
           stammdatenService,
           userService,
@@ -76,6 +79,15 @@ class MyApp extends StatelessWidget {
   static AbstractFAQService faqService = demoMode
       ? DemoFAQService() as AbstractFAQService
       : FAQService(storageService, userService, backend);
+  static var placardService = demoMode
+      ? DemoPlacardsService(userService)
+      : PlacardsService(userService, backend);
+  static var argumentsService = demoMode
+      ? DemoArgumentsService(userService)
+      : ArgumentsService(userService, backend);
+  static var visitedHouseService = demoMode
+      ? DemoVisitedHousesService(userService, geoService)
+      : VisitedHousesService(geoService, userService, backend);
 
   @override
   Widget build(BuildContext context) {
@@ -95,14 +107,19 @@ class MyApp extends StatelessWidget {
           Provider<LocalNotificationService>.value(
               value: localNotificationService),
           Provider<AbstractFAQService>.value(value: faqService),
+          Provider<AbstractVisitedHousesService>.value(
+              value: visitedHouseService),
+          Provider(create: (_) => placardService),
+          Provider<AbstractPlacardsService>(create: (_) => placardService),
+          Provider<AbstractArgumentsService>(create: (_) => argumentsService)
         ],
         child: MaterialApp(
           title: 'DW & Co. Enteignen',
-          theme: DweTheme.themeData,
+          theme: CampaignTheme.themeData,
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
           locale: context.locale,
-          home: Navigation(actionPageKey, clearButton),
+          home: Navigation(actionPageKey, GlobalKey(), clearButton),
           navigatorKey: navigatorKey,
         ));
   ***REMOVED***

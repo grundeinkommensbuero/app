@@ -123,7 +123,7 @@ void main() {
           false);
     ***REMOVED***);
 
-    test('seralizes properly', () {
+    test('seralizes properly with default values', () {
       var termineFilter = TermineFilter.fromJSON(jsonDecode('{'
           '"typen":[],'
           '"tage":[],'
@@ -132,7 +132,7 @@ void main() {
           '"orte":[]'
           '***REMOVED***'));
       expect(jsonEncode(termineFilter),
-          '{"typen":[],"tage":[],"von":null,"bis":null,"orte":[],"nurEigene":null,"immerEigene":null***REMOVED***');
+          '{"typen":[],"tage":[],"von":null,"bis":null,"orte":[],"nurEigene":false,"immerEigene":true***REMOVED***');
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***

@@ -2,27 +2,43 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:mockito/mockito.dart';
+import 'package:provider/provider.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/routes/ActionMap.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/services/PlacardsService.dart';
+import 'package:sammel_app/services/VisitedHouseView.dart';
+import 'package:sammel_app/services/VisitedHousesService.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 
-import '../TestdataStorage.dart';
-import '../model/Termin_test.dart';
 import '../shared/TestdatenVorrat.dart';
+import '../model/Termin_test.dart';
 import '../shared/mocks.costumized.dart';
 import '../shared/mocks.mocks.dart';
 import '../shared/mocks.trainer.dart';
+
+late MockVisitedHousesService _visitedHousesService =
+    MockVisitedHousesService();
+late MockPlacardsService _placardsService = MockPlacardsService();
 
 void main() {
   trainTranslation(MockTranslations());
 
   setUpAll(() {
     HttpOverrides.global = MapHttpOverrides();
+    reset(_visitedHousesService);
+    reset(_placardsService);
+    when(_placardsService.loadPlacards()).thenAnswer((_) => Future.value([]));
+    when(_visitedHousesService.loadVisitedHouses())
+        .thenAnswer((_) => Future.value([]));
+    when(_visitedHousesService.getBuildingsInArea(any))
+        .thenReturn(VisitedHouseView(BoundingBox(0, 0, 0, 0), []));
   ***REMOVED***);
 
   testWidgets('uses default values', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(home: Scaffold(body: ActionMap())));
+    await tester
+        .pumpWidget(MaterialApp(home: Scaffold(body: _mock(ActionMap()))));
 
     ActionMap actionMap = tester.widget(find.byType(ActionMap));
     expect(actionMap.termine, []);
@@ -55,7 +71,7 @@ void main() {
     ***REMOVED***);
 
     testWidgets('show all actions', (WidgetTester tester) async {
-      await tester.pumpWidget(actionMap);
+      await tester.pumpWidget(_mock(actionMap));
 
       expect(find.byKey(Key('action marker')), findsNWidgets(3));
     ***REMOVED***);
@@ -65,7 +81,7 @@ void main() {
       var isMyAction = (Termin action) => action.id == 2;
 
       var morgen = DateTime.now()..add(Duration(days: 1));
-      await tester.pumpWidget(MaterialApp(
+      await tester.pumpWidget(_mock(MaterialApp(
           home: Scaffold(
               body: ActionMap(
                   termine: [
@@ -84,7 +100,7 @@ void main() {
                   listLocations: [],
                   isMyAction: isMyAction,
                   iAmParticipant: (_) => false,
-                  openActionDetails: (_) {***REMOVED***))));
+                  openActionDetails: (_) {***REMOVED***)))));
 
       List<TextButton> actionMarker = tester
           .widgetList(find.byKey(Key('action marker')))
@@ -98,26 +114,26 @@ void main() {
               .style!
               .backgroundColor!
               .resolve({MaterialState.hovered***REMOVED***),
-          DweTheme.yellowLight);
+          CampaignTheme.primaryLight);
       expect(
           actionMarker[1]
               .style!
               .backgroundColor!
               .resolve({MaterialState.hovered***REMOVED***),
-          DweTheme.blueLight);
+          CampaignTheme.altSecondaryLight);
       expect(
           actionMarker[2]
               .style!
               .backgroundColor!
               .resolve({MaterialState.hovered***REMOVED***),
-          DweTheme.yellowLight);
+          CampaignTheme.primaryLight);
     ***REMOVED***);
 
     testWidgets('are higlighted for past actions', (WidgetTester tester) async {
       var isMyAction = (Termin action) => action.id == 2;
       var iAmParticipant = (Termin action) => action.participants!.isNotEmpty;
 
-      await tester.pumpWidget(MaterialApp(
+      await tester.pumpWidget(_mock(MaterialApp(
           home: Scaffold(
               body: ActionMap(
                   termine: [
@@ -138,7 +154,7 @@ void main() {
                   listLocations: [],
                   isMyAction: isMyAction,
                   iAmParticipant: iAmParticipant,
-                  openActionDetails: (_) {***REMOVED***))));
+                  openActionDetails: (_) {***REMOVED***)))));
 
       List<TextButton> actionMarker = tester
           .widgetList(find.byKey(Key('action marker')))
@@ -152,26 +168,26 @@ void main() {
               .style!
               .backgroundColor!
               .resolve({MaterialState.hovered***REMOVED***),
-          DweTheme.greenLight);
+          CampaignTheme.altPrimaryLight);
       expect(
           actionMarker[2]
               .style!
               .backgroundColor!
               .resolve({MaterialState.hovered***REMOVED***),
-          DweTheme.yellowBright);
+          CampaignTheme.primaryBright);
       expect(
           actionMarker[1]
               .style!
               .backgroundColor!
               .resolve({MaterialState.hovered***REMOVED***),
-          DweTheme.blueBright);
+          CampaignTheme.altSecondaryBright);
     ***REMOVED***);
 
     testWidgets('are higlighted for joined actions',
         (WidgetTester tester) async {
       var iAmParticipant = (Termin action) => action.participants!.isNotEmpty;
 
-      await tester.pumpWidget(MaterialApp(
+      await tester.pumpWidget(_mock(MaterialApp(
           home: Scaffold(
               body: ActionMap(
                   termine: [
@@ -191,7 +207,7 @@ void main() {
                   listLocations: [],
                   isMyAction: (_) => false,
                   iAmParticipant: iAmParticipant,
-                  openActionDetails: (_) {***REMOVED***))));
+                  openActionDetails: (_) {***REMOVED***)))));
 
       List<TextButton> actionMarker = tester
           .widgetList(find.byKey(Key('action marker')))
@@ -205,25 +221,25 @@ void main() {
               .style!
               .backgroundColor!
               .resolve({MaterialState.hovered***REMOVED***),
-          DweTheme.yellowBright);
+          CampaignTheme.primaryBright);
       expect(
           actionMarker[1]
               .style!
               .backgroundColor!
               .resolve({MaterialState.hovered***REMOVED***),
-          DweTheme.greenLight);
+          CampaignTheme.altPrimaryLight);
       expect(
           actionMarker[2]
               .style!
               .backgroundColor!
               .resolve({MaterialState.hovered***REMOVED***),
-          DweTheme.yellowBright);
+          CampaignTheme.primaryBright);
     ***REMOVED***);
 
     testWidgets('react to tap', (WidgetTester tester) async {
       bool iHaveBeenCalled = false;
 
-      await tester.pumpWidget(MaterialApp(
+      await tester.pumpWidget(_mock(MaterialApp(
           home: Scaffold(
               body: ActionMap(
                   termine: [
@@ -242,7 +258,7 @@ void main() {
                   listLocations: [],
                   isMyAction: (_) => false,
                   iAmParticipant: (_) => false,
-                  openActionDetails: (_) => iHaveBeenCalled = true))));
+                  openActionDetails: (_) => iHaveBeenCalled = true)))));
 
       expect(iHaveBeenCalled, false);
 
@@ -254,7 +270,7 @@ void main() {
   ***REMOVED***);
 
   testWidgets('shows all list locations', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(_mock(MaterialApp(
         home: Scaffold(
             body: ActionMap(
                 key: Key('action map'),
@@ -266,7 +282,7 @@ void main() {
                   curry36()..id = '3'
                 ],
                 isMyAction: (_) => false,
-                openActionDetails: (_) {***REMOVED***))));
+                openActionDetails: (_) {***REMOVED***)))));
 
     ActionMap map = tester.widget<ActionMap>(find.byKey(Key('action map')));
     map.mapController.move(LatLng(curry36().latitude, curry36().longitude), 14);
@@ -275,9 +291,30 @@ void main() {
     expect(find.byKey(Key('list location marker')), findsNWidgets(3));
   ***REMOVED***);
 
+  testWidgets('shows all placards', (WidgetTester tester) async {
+    reset(_placardsService);
+    when(_placardsService.loadPlacards())
+        .thenAnswer((_) => Future.value([placard1(), placard2(), placard3()]));
+
+    await tester.pumpWidget(_mock(MaterialApp(
+        home: Scaffold(
+            body: ActionMap(
+                key: Key('action map'),
+                termine: [],
+                isMyAction: (_) => false,
+                openActionDetails: (_) {***REMOVED***)))));
+
+    ActionMap map = tester.widget<ActionMap>(find.byKey(Key('action map')));
+    map.mapController
+        .move(LatLng(placard1().latitude, placard1().longitude), 15);
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(Key('placard marker')), findsNWidgets(3));
+  ***REMOVED***);
+
   testWidgets('hides list locations when far away',
       (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(_mock(MaterialApp(
         home: Scaffold(
             body: ActionMap(
                 key: Key('action map'),
@@ -288,20 +325,20 @@ void main() {
                   curry36()..id = '3'
                 ],
                 isMyAction: (_) => false,
-                openActionDetails: (_) {***REMOVED***))));
+                openActionDetails: (_) {***REMOVED***)))));
 
     expect(find.byKey(Key('list location marker')), findsNothing);
   ***REMOVED***);
 
   testWidgets('opens list location info on tap', (WidgetTester tester) async {
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(_mock(MaterialApp(
         home: Scaffold(
             body: ActionMap(
                 key: Key('action map'),
                 termine: [],
                 listLocations: [curry36()],
                 isMyAction: (_) => false,
-                openActionDetails: (_) {***REMOVED***))));
+                openActionDetails: (_) {***REMOVED***)))));
 
     ActionMap map = tester.widget<ActionMap>(find.byKey(Key('action map')));
     map.mapController.move(LatLng(curry36().latitude, curry36().longitude), 14);
@@ -315,16 +352,57 @@ void main() {
     expect(find.text(curry36().name!), findsOneWidget);
   ***REMOVED***);
 
+  testWidgets('shows mapAction dialog on LongPress',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(_mock(MaterialApp(
+        home: Scaffold(
+            body: ActionMap(
+                key: Key('action map'),
+                termine: [],
+                listLocations: [],
+                switchToActionCreator: (_) {***REMOVED***,
+                openActionDetails: (_) {***REMOVED***)))));
+
+    await tester.longPress(find.byKey(Key('action map')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(Key('map action dialog')), findsOneWidget);
+  ***REMOVED***);
+
+  testWidgets('calls switchToActionCreator for new action',
+      (WidgetTester tester) async {
+    LatLng? mapActionParameter;
+    Function(LatLng) mapAction =
+        (LatLng parameter) => mapActionParameter = parameter;
+    await tester.pumpWidget(_mock(MaterialApp(
+        home: Scaffold(
+            body: ActionMap(
+                key: Key('action map'),
+                termine: [],
+                listLocations: [],
+                switchToActionCreator: mapAction,
+                openActionDetails: (_) {***REMOVED***)))));
+
+    await tester.longPress(find.byKey(Key('action map')));
+    await tester.pump();
+
+    await tester.tap(find.byKey(Key('map action dialog action button')));
+    await tester.pumpAndSettle();
+
+    expect(mapActionParameter?.latitude.floor(), 52);
+    expect(mapActionParameter?.longitude.floor(), 13);
+  ***REMOVED***);
+
 //  Funktioniert nicht wegen null-Exception im dispose vom User-Location-Plugin
 //  testWidgets('enables user location plugin when permission granted',
 //      (WidgetTester tester) async {
-//    await tester.pumpWidget(MaterialApp(
+//    await tester.pumpWidget(_mock(MaterialApp(
 //        home: Scaffold(
 //            body: ActionMap(
 //                termine: [],
 //                listLocations: [],
 //                isMyAction: (_) => false,
-//                openActionDetails: () {***REMOVED***))));
+//                openActionDetails: () {***REMOVED***)))));
 //
 //    var state = tester.state<ActionMapState>(find.byType(ActionMap));
 //
@@ -359,3 +437,9 @@ void main() {
 //        isTrue);
 //  ***REMOVED***);
 ***REMOVED***
+
+_mock(Widget actionMap) => MultiProvider(providers: [
+      Provider<AbstractVisitedHousesService>.value(
+          value: _visitedHousesService),
+      Provider<AbstractPlacardsService>.value(value: _placardsService),
+    ], child: actionMap);

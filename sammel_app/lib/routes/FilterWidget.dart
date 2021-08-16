@@ -10,8 +10,9 @@ import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 import 'package:sammel_app/shared/KiezPicker.dart';
+import 'package:sammel_app/shared/action_types.dart';
 import 'package:sammel_app/shared/showMultipleDatePicker.dart';
 import 'package:sammel_app/shared/showTimeRangePicker.dart';
 
@@ -82,7 +83,7 @@ class FilterWidgetState extends State<FilterWidget>
               child: ElevatedButton(
                 key: Key('filter button'),
                 style: ButtonStyle(
-                    overlayColor: MaterialStateProperty.all(DweTheme.purple),
+                    overlayColor: MaterialStateProperty.all(CampaignTheme.secondary),
                     shape: MaterialStateProperty.all<OutlinedBorder>(
                         RoundedRectangleBorder(
                             borderRadius: BorderRadius.vertical(
@@ -90,7 +91,7 @@ class FilterWidgetState extends State<FilterWidget>
                                 bottom: Radius.elliptical(15.0, 20.0)))),
                     tapTargetSize: _zeroPadding,
                     foregroundColor:
-                        MaterialStateProperty.all(DweTheme.yellow)),
+                        MaterialStateProperty.all(CampaignTheme.primary)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -101,13 +102,13 @@ class FilterWidgetState extends State<FilterWidget>
                             height: 30,
                             child: LoadingIndicator(
                                 indicatorType: Indicator.ballRotateChase,
-                                color: DweTheme.yellow))
+                                color: CampaignTheme.primary))
                         : Text(buttonText,
                             key: Key('filter button text'),
                             textScaleFactor: 1.2),
                     Icon(expanded ? Icons.done : Icons.filter_alt_sharp,
                         color:
-                            filter.isEmpty ? DweTheme.yellow : DweTheme.green),
+                            filter.isEmpty ? CampaignTheme.primary : CampaignTheme.altPrimary),
                   ],
                 ),
                 onPressed: () {
@@ -127,8 +128,8 @@ class FilterWidgetState extends State<FilterWidget>
       !expanded
           ? TextButton(
               style: ButtonStyle(
-                  overlayColor: MaterialStateProperty.all(DweTheme.purple),
-                  foregroundColor: MaterialStateProperty.all(DweTheme.yellow)),
+                  overlayColor: MaterialStateProperty.all(CampaignTheme.secondary),
+                  foregroundColor: MaterialStateProperty.all(CampaignTheme.primary)),
               onPressed: onApply,
               child: Text(loading ? '' : 'Aktualisieren', textScaleFactor: 1.2)
                   .tr())
@@ -199,13 +200,6 @@ class FilterWidgetState extends State<FilterWidget>
   ***REMOVED***
 
   typeSelection() async {
-    List<String> moeglicheTypen = [
-      'Sammeln',
-      'Infoveranstaltung',
-      'Workshop',
-      'Plakatieren',
-      'Kundgebung'
-    ];
     List<String> ausgewTypen = []..addAll(filter.typen);
     bool nurEigene = filter.nurEigene == true;
     bool immerEigene = filter.immerEigene == true;
@@ -214,7 +208,7 @@ class FilterWidgetState extends State<FilterWidget>
         context: context,
         builder: (context) =>
             StatefulBuilder(builder: (context, setDialogState) {
-              return SimpleDialog(
+              return AlertDialog(
                   key: Key('type selection dialog'),
                   contentPadding: EdgeInsets.fromLTRB(5.0, 5.0, 5.0, 0.0),
                   titlePadding: EdgeInsets.zero,
@@ -222,49 +216,52 @@ class FilterWidgetState extends State<FilterWidget>
                       leading: null,
                       automaticallyImplyLeading: false,
                       title: const Text('Wähle Aktions-Art').tr()),
-                  children: [
-                    SwitchListTile(
-                        activeColor: DweTheme.purple,
-                        inactiveThumbColor: DweTheme.yellow,
-                        value: nurEigene,
-                        title: Text('Nur eigene Aktionen anzeigen').tr(),
-                        onChanged: (neuerWert) {
-                          setDialogState(() {
-                            nurEigene = neuerWert;
-                          ***REMOVED***);
-                        ***REMOVED***),
-                    SwitchListTile(
-                        activeColor: DweTheme.purple,
-                        inactiveThumbColor: DweTheme.yellow,
-                        value: immerEigene,
-                        title: Text('Eigene Aktionen immer anzeigen').tr(),
-                        onChanged: (neuerWert) {
-                          setDialogState(() {
-                            immerEigene = neuerWert;
-                          ***REMOVED***);
-                        ***REMOVED***),
-                  ]
-                    ..add(Divider(
-                        indent: 16, endIndent: 16, thickness: 1, height: 8))
-                    ..addAll(
-                        List.of(moeglicheTypen.map((typ) => CheckboxListTile(
+                  content: Container(padding: EdgeInsets.all(0), width: double.maxFinite, child: Column(mainAxisSize: MainAxisSize.min,
+                      children: [SwitchListTile(
+                      activeColor: CampaignTheme.secondary,
+                      inactiveThumbColor: CampaignTheme.primary,
+                      value: nurEigene,
+                      title: Text('Nur eigene Aktionen anzeigen').tr(),
+                      onChanged: (neuerWert) {
+                        setDialogState(() {
+                          nurEigene = neuerWert;
+                        ***REMOVED***);
+                      ***REMOVED***),
+                      SwitchListTile(
+                          activeColor: CampaignTheme.secondary,
+                          inactiveThumbColor: CampaignTheme.primary,
+                          value: immerEigene,
+                          title: Text('Eigene Aktionen immer anzeigen').tr(),
+                          onChanged: (neuerWert) {
+                            setDialogState(() {
+                              immerEigene = neuerWert;
+                            ***REMOVED***);
+                          ***REMOVED***),
+                      Divider(
+                          indent: 16, endIndent: 16, thickness: 1, height: 8),
+                  Flexible(child: ListView.builder( itemCount: moeglicheTypen.length, shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) =>
+                        CheckboxListTile(
                               checkColor: Colors.black,
-                              activeColor: DweTheme.yellowLight,
-                              value: ausgewTypen.contains(typ),
-                              title: Text(typ).tr(),
+                              activeColor: CampaignTheme.primaryLight,
+                              value: ausgewTypen.contains(moeglicheTypen[index]),
+                              title: Text(moeglicheTypen[index]).tr(),
                               onChanged: (bool? neuerWert) {
                                 setDialogState(() {
                                   if (neuerWert == true) {
-                                    ausgewTypen.add(typ);
+                                    ausgewTypen.add(moeglicheTypen[index]);
                                   ***REMOVED*** else {
-                                    ausgewTypen.remove(typ);
+                                    ausgewTypen.remove(moeglicheTypen[index]);
                                   ***REMOVED***
                                 ***REMOVED***);
                               ***REMOVED***,
-                            ))))
-                    ..add(ElevatedButton(
-                        child: Text('Fertig').tr(),
-                        onPressed: () => Navigator.pop(context))));
+                            ))),
+                        Divider(
+                            indent: 16, endIndent: 16, thickness: 1, height: 8),
+                      SizedBox(width: double.maxFinite, child: ElevatedButton(
+                          child: Text('Fertig').tr(),
+                          onPressed: () => Navigator.pop(context))
+                      )])));
             ***REMOVED***));
 
     setState(() {
@@ -335,14 +332,14 @@ class FilterElement extends StatelessWidget {
         width: double.infinity,
         child: TextButton(
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(DweTheme.purpleLight),
-              foregroundColor: MaterialStateProperty.all(DweTheme.yellow),
+              backgroundColor: MaterialStateProperty.all(CampaignTheme.secondaryLight),
+              foregroundColor: MaterialStateProperty.all(CampaignTheme.primary),
               tapTargetSize: _zeroPadding,
               padding: MaterialStateProperty.all(EdgeInsetsDirectional.zero),
             ),
             onPressed: selectionFunction,
             child: Container(
-              color: DweTheme.purpleLight,
+              color: CampaignTheme.secondaryLight,
               child: IntrinsicHeight(
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -364,9 +361,9 @@ class FilterElement extends StatelessWidget {
                     TextButton(
                       style: ButtonStyle(
                           backgroundColor:
-                              MaterialStateProperty.all(DweTheme.purpleLight),
+                              MaterialStateProperty.all(CampaignTheme.secondaryLight),
                           foregroundColor:
-                              MaterialStateProperty.all(DweTheme.yellow),
+                              MaterialStateProperty.all(CampaignTheme.primary),
                           tapTargetSize: _zeroPadding,
                           padding: MaterialStateProperty.all(
                               EdgeInsetsDirectional.zero)),

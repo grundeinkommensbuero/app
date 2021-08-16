@@ -40,6 +40,7 @@ void main() {
               MockHttpClientResponseBody(),
               200,
               User(11, '', Colors.red).toJson())));
+      when(storageService.saveUser(any)).thenAnswer((_) => Future.value(true));
     ***REMOVED***);
 
     group('user streams', () {

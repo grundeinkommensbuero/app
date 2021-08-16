@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:sammel_app/model/Building.dart';
 import 'package:sammel_app/model/Kiez.dart';
+import 'package:sammel_app/model/ListLocation.dart';
+import 'package:sammel_app/model/Placard.dart';
 import 'package:sammel_app/model/User.dart';
 
 User karl() => User(11, 'Karl Marx', Colors.red);
@@ -2203,3 +2206,46 @@ Ortsteil koepenick() => Ortsteil('Köpenick', [
       LatLng(13.5726143, 52.4130672),
       LatLng(13.5712698, 52.4140597)
     ]);
+
+Placard placard1() =>
+    Placard(1, 52.4722460, 13.3277830, '12161, Friedrich-Wilhelm-Platz 57', 11);
+
+Placard placard2() =>
+    Placard(2, 52.47102, 13.3282, "12161, Bundesallee 76", 12);
+
+Placard placard3() =>
+    Placard(3, 52.4709, 13.32744, "12161, Goßlerstraße 29", 11);
+
+VisitedHouse kanzlerinamt() => VisitedHouse(1, 52.52014, 13.36911, [], [
+      VisitedHouseEvent(
+          1,
+          'Willy-Brandt-Straße 1, Tiergarten, Mitte, Berlin, 10557',
+          'Westflügel',
+          11,
+          DateTime(2021, 7, 18))
+    ]);
+
+VisitedHouse hausundgrund() => VisitedHouse(2, 52.4964133, 13.3617511, [], [
+      VisitedHouseEvent(2, 'Potsdamer Straße 143, 10783 Berlin', '', 12,
+          DateTime(2021, 7, 17))
+    ]);
+
+VisitedHouse konradadenauerhaus() => VisitedHouse(3, 52.5065, 13.35125, [], [
+      VisitedHouseEvent(
+          3,
+          'Klingelhöferstraße 8,Botschaftsviertel, Tiergarten, Mitte, Berlin, 10785',
+          'Haupteingang',
+          11,
+          DateTime(2021, 7, 19))
+    ]);
+
+ListLocation curry36() =>
+    ListLocation('1', 'Curry 36', 'Mehringdamm', '36', 52.4935584, 13.3877282);
+
+ListLocation cafeKotti() => ListLocation(
+    "2", 'Café Kotti', 'Adalbertstraße', '96', 52.5001477, 13.4181523);
+
+ListLocation zukunft() =>
+    ListLocation('3', "Zukunft", 'Laskerstraße', '5', 52.5016524, 13.4655402);
+
+List<ListLocation> sampleListLocations() => [curry36(), cafeKotti(), zukunft()];

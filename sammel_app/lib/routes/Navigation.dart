@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/ChatChannel.dart';
 import 'package:sammel_app/model/Termin.dart';
@@ -10,7 +11,7 @@ import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StorageService.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 
 import 'ChatPage.dart';
 import 'FAQ.dart';
@@ -18,9 +19,10 @@ import 'TermineSeite.dart';
 
 class Navigation extends StatefulWidget {
   final clearButton;
-  final GlobalKey actionPage;
+  final GlobalKey<TermineSeiteState> actionPage;
+  final GlobalKey<ActionEditorState> actionEditorPage;
 
-  Navigation(this.actionPage, [this.clearButton = false])
+  Navigation(this.actionPage, this.actionEditorPage, [this.clearButton = false])
       : super(key: Key('navigation'));
 
   @override
@@ -63,8 +65,10 @@ class NavigationState extends State<Navigation>
   @override
   Widget build(BuildContext context) {
     var pages = [
-      TermineSeite(key: widget.actionPage),
-      ActionEditor(onFinish: newActionCreated, key: Key('action creator')),
+      TermineSeite(
+          key: widget.actionPage,
+          switchToActionCreator: this.navigateToActionCreator),
+      ActionEditor(key: widget.actionEditorPage, onFinish: newActionCreated),
       faq = FAQ(),
       chatPage = ChatPage(active: navigation == chatPageIndex),
       ProfilePage()
@@ -100,7 +104,7 @@ class NavigationState extends State<Navigation>
             ],
           )),
           body: Container(
-            color: DweTheme.yellowLight,
+            color: CampaignTheme.primaryLight,
             child: FadeTransition(
               opacity: _fade!,
               child: SlideTransition(
@@ -131,7 +135,7 @@ class NavigationState extends State<Navigation>
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     stops: [0.5, 1.0],
-                    colors: <Color>[DweTheme.yellow, Colors.yellowAccent],
+                    colors: <Color>[CampaignTheme.primary, Colors.yellowAccent],
                   ),
                 ),
                 child: ListView(
@@ -181,13 +185,13 @@ class NavigationState extends State<Navigation>
         key: key,
         padding: EdgeInsets.symmetric(vertical: selected ? 15.0 : 10.0),
         decoration: BoxDecoration(
-            color: selected ? DweTheme.purple : Colors.transparent),
+            color: selected ? CampaignTheme.secondary : Colors.transparent),
         child: ListTile(
             title: Text(
               title,
               style: selected
-                  ? DweTheme.menuCaptionSelected
-                  : DweTheme.menuCaption,
+                  ? CampaignTheme.menuCaptionSelected
+                  : CampaignTheme.menuCaption,
             ),
             subtitle: Text(
               subtitle,
@@ -244,6 +248,13 @@ class NavigationState extends State<Navigation>
   void navigateToActionPage() {
     switchPage(0);
     history.removeLast();
+  ***REMOVED***
+
+  void navigateToActionCreator(LatLng position) {
+    switchPage(1);
+    (widget.actionEditorPage.currentState as ActionEditorState)
+        .setPosition(position);
+    history.add(navigation);
   ***REMOVED***
 
   maybeDispose(ChatChannel value) {

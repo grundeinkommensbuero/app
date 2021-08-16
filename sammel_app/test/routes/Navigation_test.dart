@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_test_ui/flutter_test_ui.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
@@ -13,15 +14,22 @@ import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/FAQService.dart';
+import 'package:sammel_app/routes/TermineSeite.dart';
+import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
+import 'package:sammel_app/services/PlacardsService.dart';
 import 'package:sammel_app/services/PushNotificationManager.dart';
 import 'package:sammel_app/services/PushSendService.dart';
 import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
+import 'package:sammel_app/services/ChatMessageService.dart';
+import 'package:sammel_app/services/VisitedHouseView.dart';
+import 'package:sammel_app/services/VisitedHousesService.dart';
 
 import '../model/Termin_test.dart';
+import '../shared/TestdatenVorrat.dart';
 import '../shared/mocks.costumized.dart';
 import '../shared/mocks.mocks.dart';
 import '../shared/mocks.trainer.dart';
@@ -34,8 +42,11 @@ final _storageService = MockStorageService();
 final _pushService = MockPushSendService();
 final _userService = MockUserService();
 final _chatService = MockChatMessageService();
+final _placardService = MockPlacardsService();
 final _pushManager = MockPushNotificationManager();
 final _faqService = MockFAQService();
+final _geoService = MockGeoService();
+final _visitedHousesService = MockVisitedHousesService();
 
 void main() {
   trainTranslation(MockTranslations());
@@ -49,10 +60,13 @@ void main() {
 
   group('Navigation', () {
     late Navigation navigation;
-    var actionPage = GlobalKey(debugLabel: 'action page');
+    var actionPageKey = GlobalKey<TermineSeiteState>(debugLabel: 'action page');
+    var actionCreatorKey =
+        GlobalKey<ActionEditorState>(debugLabel: 'action creator');
 
     setUpUI((WidgetTester tester) async {
-      navigation = Navigation(actionPage);
+      navigation = Navigation(actionPageKey, actionCreatorKey);
+      reset(_visitedHousesService);
       when(_storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => []);
       when(_storageService.loadMyKiez()).thenAnswer((_) async => []);
@@ -65,6 +79,12 @@ void main() {
       when(_termineService.loadActions(any)).thenAnswer((_) async => []);
       when(_pushManager.pushToken).thenAnswer((_) async => 'Token');
       trainFAQService(_faqService);
+      when(_placardService.loadPlacards())
+          .thenAnswer((_) async => Future.value([]));
+      when(_visitedHousesService.loadVisitedHouses())
+          .thenAnswer((_) => Future.value([]));
+      when(_visitedHousesService.getBuildingsInArea(any))
+          .thenReturn(VisitedHouseView(BoundingBox(0, 0, 0, 0), []));
 
       await tester.pumpWidget(MultiProvider(providers: [
         Provider<StammdatenService>.value(value: _stammdatenService),
@@ -77,6 +97,10 @@ void main() {
         Provider<ChatMessageService>.value(value: _chatService),
         Provider<AbstractPushNotificationManager>.value(value: _pushManager),
         Provider<AbstractFAQService>.value(value: _faqService),
+        Provider<AbstractPlacardsService>.value(value: _placardService),
+        Provider<GeoService>.value(value: _geoService),
+        Provider<AbstractVisitedHousesService>.value(
+            value: _visitedHousesService),
       ], child: MaterialApp(home: navigation)));
     ***REMOVED***);
 
@@ -97,12 +121,12 @@ void main() {
     testUI('starts with ActionPage ', (WidgetTester tester) async {
       NavigationState state = tester.state(find.byWidget(navigation));
       expect(state.navigation, 0);
-      expect(find.byKey(actionPage), findsOneWidget);
+      expect(find.byKey(actionPageKey), findsOneWidget);
     ***REMOVED***);
 
     testUI('creates ActionPage and ActionCreator', (WidgetTester tester) async {
-      expect(find.byKey(actionPage), findsOneWidget);
-      expect(find.byKey(Key('action creator')), findsOneWidget);
+      expect(find.byKey(actionPageKey), findsOneWidget);
+      expect(find.byKey(actionCreatorKey), findsOneWidget);
     ***REMOVED***);
 
     testUI('switches to Action Creator with tap on Create Action Button',
@@ -116,7 +140,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(state.navigation, 1);
-      expect(find.byKey(Key('action creator')), findsOneWidget);
+      expect(find.byKey(actionCreatorKey), findsOneWidget);
       expect(find.text('Zum Sammeln einladen'), findsOneWidget);
     ***REMOVED***);
 
@@ -146,7 +170,7 @@ void main() {
       await openActionPage(tester);
 
       expect(state.navigation, 0);
-      expect(find.byKey(actionPage), findsOneWidget);
+      expect(find.byKey(actionPageKey), findsOneWidget);
     ***REMOVED***);
 
     testUI('stores navigation history', (WidgetTester tester) async {
@@ -188,8 +212,7 @@ void main() {
           .thenAnswer((_) async => TerminTestDaten.einTermin());
       await openActionCreator(tester);
 
-      ActionEditorState editor =
-          tester.state(find.byKey(Key('action creator')));
+      ActionEditorState editor = tester.state(find.byKey(actionCreatorKey));
       editor.action = testActionData();
 
       await tester.tap(find.byKey(Key('action editor finish button')));
@@ -197,6 +220,26 @@ void main() {
 
       NavigationState navigation = tester.state(find.byKey(Key('navigation')));
       expect(navigation.navigation, 0);
+    ***REMOVED***);
+
+    testUI('navigateToActionCreator changes page to ActionCreator',
+        (tester) async {
+      when(_geoService.getDescriptionToPoint(any)).thenAnswer(
+          (_) => Future.value(GeoData('Nightmare', 'Elm Street', '12')));
+      when(_stammdatenService.getKiezAtLocation(any))
+          .thenAnswer((_) => Future.value(plaenterwald()));
+
+      await openActionCreator(tester);
+
+      NavigationState state = tester.state(find.byType(Navigation));
+      (state).navigateToActionCreator(LatLng(52.5749413, 13.3762427));
+      await tester.pumpAndSettle();
+
+      expect(state.navigation, 1);
+      expect(state.history, containsAll([0]));
+      expect(state.history, containsAll([0]));
+      expect(find.byKey(actionCreatorKey), findsOneWidget);
+      expect(find.text('Zum Sammeln einladen'), findsOneWidget);
     ***REMOVED***);
   ***REMOVED***);
 

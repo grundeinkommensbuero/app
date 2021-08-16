@@ -7,6 +7,8 @@ import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/MessageException.dart';
 import 'package:sammel_app/shared/ServerException.dart';
 
+import 'GeoService.dart';
+
 class ErrorService {
   static BuildContext? _context;
   static List<List<String>> errorQueue = [];
@@ -55,6 +57,12 @@ class ErrorService {
           [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
       return;
     ***REMOVED***
+    if (error is OsmResponseException) {
+      pushError(
+          'Bei der Kommunikation mit einem Openstreetmap-Server ist ein Fehler aufgetreten',
+          [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
+      return;
+    ***REMOVED***
     if (error is ServerException) {
       pushError(
           'Bei der Kommunikation mit dem Server ist ein technischer Fehler aufgetreten',
@@ -90,7 +98,7 @@ class ErrorService {
         context: _context!,
         builder: (_) => AlertDialog(
               key: key,
-              title: Text(title),
+              title: Text(title).tr(),
               content: Column(mainAxisSize: MainAxisSize.min, children: [
                 Container(
                     height: 150,

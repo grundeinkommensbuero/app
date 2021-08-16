@@ -3,17 +3,21 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
-import 'package:latlong/latlong.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:quiver/strings.dart';
 import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/model/TerminDetails.dart';
 import 'package:sammel_app/model/User.dart';
+import 'package:sammel_app/services/ErrorService.dart';
+import 'package:sammel_app/services/GeoService.dart';
+import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
+import 'package:sammel_app/shared/action_types.dart';
 import 'package:sammel_app/shared/showMultipleDatePicker.dart';
 import 'package:sammel_app/shared/showTimeRangePicker.dart';
 import 'package:sammel_app/shared/showUsernameDialog.dart';
@@ -65,8 +69,7 @@ class ActionEditor extends StatefulWidget {
   final Termin? initAction;
   late Function onFinish;
 
-  ActionEditor(
-      {this.initAction, required this.onFinish, Key? key***REMOVED***)
+  ActionEditor({this.initAction, required this.onFinish, Key? key***REMOVED***)
       : super(key: key);
 
   @override
@@ -112,7 +115,7 @@ class ActionEditorState extends State<ActionEditor>
     return Scaffold(
         extendBody: true,
         body: Container(
-          decoration: BoxDecoration(color: DweTheme.yellowLight),
+          decoration: BoxDecoration(color: CampaignTheme.primaryLight),
           child: ListView(
               padding: EdgeInsets.only(
                   left: 20.0, right: 20.0, top: 15.0, bottom: 50.0),
@@ -207,7 +210,7 @@ class ActionEditorState extends State<ActionEditor>
           padding: EdgeInsets.symmetric(vertical: 5.0),
           decoration: BoxDecoration(
               boxShadow: [BoxShadow(blurRadius: 5.0, color: Colors.black38)],
-              color: DweTheme.yellow),
+              color: CampaignTheme.primary),
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
             ElevatedButton(
@@ -217,7 +220,7 @@ class ActionEditorState extends State<ActionEditor>
                   resetAction();
                   Navigator.maybePop(context);
                 ***REMOVED***),
-                ElevatedButton(
+            ElevatedButton(
                 key: Key('action editor finish button'),
                 child: Text('Fertig').tr(),
                 onPressed: () => finishPressed())
@@ -238,14 +241,18 @@ class ActionEditorState extends State<ActionEditor>
         ).tr()
       ]);
 
-  void locationSelection() async {
+  void locationSelection({LatLng? initPosition***REMOVED***) async {
     Location? ergebnis = await showLocationDialog(
         context: context,
         initDescription: action.treffpunkt,
-        initCoordinates: action.coordinates,
+        initCoordinates: action.coordinates ?? initPosition,
         initKiez: action.ort,
         center: determineMapCenter(action));
 
+    setNewLocation(ergebnis);
+  ***REMOVED***
+
+  void setNewLocation(Location? ergebnis) {
     setState(() {
       action.treffpunkt = ergebnis?.description;
       action.coordinates = ergebnis?.coordinates;
@@ -327,13 +334,6 @@ class ActionEditorState extends State<ActionEditor>
   ***REMOVED***
 
   typeSelection() async {
-    List<String> moeglicheTypen = [
-      'Sammeln',
-      'Infoveranstaltung',
-      'Workshop',
-      'Plakatieren',
-      'Kundgebung'
-    ];
     String? ausgewTyp = action.typ;
     await showDialog<String>(
         context: context,
@@ -409,7 +409,8 @@ class ActionEditorState extends State<ActionEditor>
     Text text;
     if (this.action.validated['tage'] == ValidationState.error ||
         this.action.validated['tage'] == ValidationState.not_validated) {
-      text = Text("Wähle einen Tag", style: TextStyle(color: DweTheme.purple))
+      text = Text("Wähle einen Tag",
+              style: TextStyle(color: CampaignTheme.secondary))
           .tr();
     ***REMOVED*** else {
       text = Text('am '.tr() +
@@ -429,7 +430,7 @@ class ActionEditorState extends State<ActionEditor>
         this.action.validated['venue'] == ValidationState.not_validated) {
       text = Text(
         'Gib einen Treffpunkt an',
-        style: TextStyle(color: DweTheme.purple),
+        style: TextStyle(color: CampaignTheme.secondary),
       ).tr();
     ***REMOVED*** else {
       text =
@@ -450,7 +451,7 @@ class ActionEditorState extends State<ActionEditor>
       val = ValidationState.ok;
     ***REMOVED*** else {
       text = Text('Ein paar Worte über dich',
-              style: TextStyle(color: DweTheme.purple))
+              style: TextStyle(color: CampaignTheme.secondary))
           .tr();
       val = ValidationState.error;
     ***REMOVED***
@@ -464,7 +465,7 @@ class ActionEditorState extends State<ActionEditor>
           .tr(namedArgs: {'beschreibung': termin.beschreibung!***REMOVED***);
     ***REMOVED*** else {
       text = Text('Beschreibe die Aktion kurz',
-              style: TextStyle(color: DweTheme.purple))
+              style: TextStyle(color: CampaignTheme.secondary))
           .tr();
     ***REMOVED***
     return buildTextRow(text, this.action.validated['beschreibung']!);
@@ -476,7 +477,7 @@ class ActionEditorState extends State<ActionEditor>
       text = Text(this.action.typ).tr();
     ***REMOVED*** else {
       text = Text('Wähle die Art der Aktion',
-              style: TextStyle(color: DweTheme.purple))
+              style: TextStyle(color: CampaignTheme.secondary))
           .tr();
     ***REMOVED***
     return buildTextRow(text, this.action.validated['typ']!);
@@ -492,9 +493,9 @@ class ActionEditorState extends State<ActionEditor>
     Text text;
     if (beschriftung.isEmpty) {
       val = ValidationState.error;
-      text =
-          Text('Wähle eine Uhrzeit', style: TextStyle(color: DweTheme.purple))
-              .tr();
+      text = Text('Wähle eine Uhrzeit',
+              style: TextStyle(color: CampaignTheme.secondary))
+          .tr();
     ***REMOVED*** else {
       val = ValidationState.ok;
       text = Text(beschriftung);
@@ -614,7 +615,8 @@ class ActionEditorState extends State<ActionEditor>
         ***REMOVED***
         User me = await Provider.of<AbstractUserService>(context, listen: false)
             .user
-            .first;
+            .first
+            .timeout(Duration(seconds: 5), onTimeout: () => throw Exception());
         termine.add(Termin(
             widget.initAction?.id,
             begin,
@@ -668,6 +670,23 @@ class ActionEditorState extends State<ActionEditor>
     final contact = action.kontakt;
     setState(() => action = ActionData()..kontakt = contact);
     validateContact();
+  ***REMOVED***
+
+  setPosition(LatLng position) async =>
+      setNewLocation(await getDescriptionAndKiezToPoint(position));
+
+  Future<Location> getDescriptionAndKiezToPoint(LatLng point) async {
+    var geodata = await Provider.of<GeoService>(context, listen: false)
+        .getDescriptionToPoint(point)
+        .catchError((e, s) {
+      ErrorService.handleError(e, s);
+      return GeoData('', '', '');
+    ***REMOVED***);
+
+    Kiez? kiez = await Provider.of<StammdatenService>(context, listen: false)
+        .getKiezAtLocation(point);
+
+    return Location(geodata.description, point, kiez);
   ***REMOVED***
 
   Row buildTextRow(Text text, ValidationState valState) {

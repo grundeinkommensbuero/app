@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 
-import '../TestdataStorage.dart';
+import '../shared/TestdatenVorrat.dart';
 
 main() {
   test('deserializes', () {

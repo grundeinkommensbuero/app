@@ -5,12 +5,9 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/shared/FileReader.dart';
 import 'package:test/test.dart';
 
-final kieze =
-    File('./assets/geodata/bezirksregion_generalized.geojson');
-final regionen =
-    File('./assets/geodata/prognoseraum_generalized.geojson');
-final ortsteile =
-    File('./assets/geodata/ortsteil_generalized.geojson');
+final kiezeFile = File('./assets/geodata/bezirksregion_generalized.geojson');
+final regionenFile = File('./assets/geodata/prognoseraum_generalized.geojson');
+final ortsteileFile = File('./assets/geodata/ortsteil_generalized.geojson');
 
 FileReader fileReaderMock = TestFileReader();
 
@@ -41,9 +38,13 @@ void main() {
 ***REMOVED***
 
 class TestFileReader extends Mock implements FileReader {
+  late Future<String> kieze;
+  late Future<String> regionen;
+  late Future<String> ortsteile;
+
   TestFileReader() {
-    when(this.kieze).thenAnswer((_) => kieze.readAsString());
-    when(this.regionen).thenAnswer((_) => regionen.readAsString());
-    when(this.ortsteile).thenAnswer((_) => ortsteile.readAsString());
+    kieze = Future.value(kiezeFile.readAsString());
+    regionen = Future.value(regionenFile.readAsString());
+    ortsteile = Future.value(ortsteileFile.readAsString());
   ***REMOVED***
 ***REMOVED***

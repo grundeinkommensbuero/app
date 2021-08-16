@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/model/Termin.dart';
-import 'package:sammel_app/shared/DweTheme.dart';
+import 'package:sammel_app/shared/CampaignTheme.dart';
 
 class TerminCard extends StatelessWidget {
   final Termin termin;
@@ -23,7 +23,7 @@ class TerminCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(10.0),
       decoration: BoxDecoration(
-          color: DweTheme.actionColor(termin.ende, myAction, participant),
+          color: CampaignTheme.actionColor(termin.ende, myAction, participant),
           boxShadow: [
             BoxShadow(
                 color: Colors.grey,

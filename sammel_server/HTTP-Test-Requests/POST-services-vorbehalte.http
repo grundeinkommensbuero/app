@@ -1,0 +1,13 @@
+POST http://127.0.0.1:18080/service/vorbehalte
+Accept: application/json
+Content-Type: application/json
+Authorization: Basic MTE6YWM0MzA5NjAtMDVlYi0xMWViLThhMjYtZmRjNzY4M2E4NGJj
+
+{
+  "vorbehalte": "Genossenschaften",
+  "benutzer": 11,
+  "ort": "Plänterwald",
+  "datum": "2021-08-08"
+***REMOVED***
+
+###

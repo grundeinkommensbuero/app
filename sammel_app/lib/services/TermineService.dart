@@ -22,9 +22,10 @@ import 'UserService.dart';
 
 abstract class AbstractTermineService extends BackendService {
   StammdatenService stammdatenService;
+  GlobalKey<TermineSeiteState> actionPageKey;
 
-  AbstractTermineService(
-      this.stammdatenService, AbstractUserService userService, Backend backend)
+  AbstractTermineService(this.stammdatenService,
+      AbstractUserService userService, this.actionPageKey, Backend backend)
       : super(userService, backend);
 
   Future<List<Termin>> loadActions(TermineFilter filter);
@@ -42,11 +43,21 @@ abstract class AbstractTermineService extends BackendService {
   leaveAction(int id);
 
   Future<void> saveEvaluation(Evaluation evaluation);
+
+  Future<void> loadAndShowAction(int id) async {
+    try {
+      var action = await getActionWithDetails(id);
+      actionPageKey.currentState!.openTerminDetails(action);
+    ***REMOVED*** on Error catch (e) {
+      ErrorService.handleError(e, StackTrace.current,
+          context:
+              'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.');
+    ***REMOVED***
+  ***REMOVED***
 ***REMOVED***
 
 class TermineService extends AbstractTermineService
     implements PushNotificationListener {
-  GlobalKey<TermineSeiteState> actionPageKey;
   LocalNotificationService localNotificationService;
 
   TermineService(
@@ -55,8 +66,8 @@ class TermineService extends AbstractTermineService
       Backend backend,
       PushNotificationManager manager,
       this.localNotificationService,
-      this.actionPageKey)
-      : super(stammdatenService, userService, backend) {
+      GlobalKey<TermineSeiteState> actionPageKey)
+      : super(stammdatenService, userService, actionPageKey, backend) {
     manager.registerMessageCallback(PushDataTypes.newKiezActions, this);
     manager.registerMessageCallback(PushDataTypes.actionChanged, this);
     manager.registerMessageCallback(PushDataTypes.actionDeleted, this);
@@ -93,8 +104,8 @@ class TermineService extends AbstractTermineService
   ***REMOVED***
 
   deleteAction(Termin action, String token) async {
-    await delete(
-        'service/termine/termin', jsonEncode(ActionWithToken(action, token)));
+    await delete('service/termine/termin',
+        data: jsonEncode(ActionWithToken(action, token)));
   ***REMOVED***
 
   joinAction(int id) async {
@@ -141,15 +152,26 @@ class TermineService extends AbstractTermineService
   ***REMOVED***
 
   @override
+  loadAndShowAction(int id) async {
+    try {
+      var action = await getActionWithDetails(id);
+      actionPageKey.currentState!.openTerminDetails(action);
+    ***REMOVED*** on Exception catch (e) {
+      ErrorService.handleError(e, StackTrace.current,
+          context: 'Die Aktion konnte nicht angezeigt werden');
+    ***REMOVED***
+  ***REMOVED***
+
+  @override
   void receiveMessage(Map<String, dynamic> data) async {
     final kieze = await stammdatenService.kieze;
     final message = ActionListPushData.fromJson(data, kieze);
 
-    if(message.type == PushDataTypes.newKiezActions)
+    if (message.type == PushDataTypes.newKiezActions)
       localNotificationService.sendNewActionsNotification(message);
-    if(message.type == PushDataTypes.actionDeleted)
+    if (message.type == PushDataTypes.actionDeleted)
       localNotificationService.sendActionDeletedNotification(message);
-    if(message.type == PushDataTypes.actionChanged)
+    if (message.type == PushDataTypes.actionChanged)
       localNotificationService.sendActionChangedNotification(message);
   ***REMOVED***
 
@@ -169,9 +191,9 @@ class DemoTermineService extends AbstractTermineService {
   static var heute = DateTime.now();
   late Future<List<Termin>> termine;
 
-  DemoTermineService(
-      StammdatenService stammdatenService, AbstractUserService userService)
-      : super(stammdatenService, userService, DemoBackend()) {
+  DemoTermineService(StammdatenService stammdatenService,
+      AbstractUserService userService, actionPageKey)
+      : super(stammdatenService, userService, actionPageKey, DemoBackend()) {
     termine = stammdatenService.kieze.then((kieze) => [
           Termin(
               1,
@@ -240,22 +262,18 @@ class DemoTermineService extends AbstractTermineService {
       DateTime datum =
           DateTime(termin.beginn.year, termin.beginn.month, termin.beginn.day);
       return (filter.von == null ? true : termin.ende.isAfter(von)) &&
-          (filter.bis == null ? true : termin.beginn.isBefore(bis)) &&
-          (filter.tage.isEmpty
-              ? true
-              : filter.tage.contains(datum)) &&
-          (filter.tage.isEmpty
-              ? true
-              : filter.tage.contains(datum)) &&
-          (filter.orte.isEmpty
-              ? true
-              : filter.orte.contains(termin.ort.name)) &&
-          (filter.typen.isEmpty
-              ? true
-              : filter.typen.contains(termin.typ)) &&
-          (filter.nurEigene == false
-              ? true
-              : termin.participants!.map((u) => u.id).contains(13)) ||
+              (filter.bis == null ? true : termin.beginn.isBefore(bis)) &&
+              (filter.tage.isEmpty ? true : filter.tage.contains(datum)) &&
+              (filter.tage.isEmpty ? true : filter.tage.contains(datum)) &&
+              (filter.orte.isEmpty
+                  ? true
+                  : filter.orte.contains(termin.ort.name)) &&
+              (filter.typen.isEmpty
+                  ? true
+                  : filter.typen.contains(termin.typ)) &&
+              (filter.nurEigene == false
+                  ? true
+                  : termin.participants!.map((u) => u.id).contains(13)) ||
           (filter.immerEigene == true
               ? termin.participants!.map((u) => u.id).contains(13)
               : false);

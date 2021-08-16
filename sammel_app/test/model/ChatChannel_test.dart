@@ -59,4 +59,33 @@ void main() {
       expect(channel.channelMessages[1] is ParticipationMessage, true);
     ***REMOVED***);
   ***REMOVED***);
+
+  group('push messages', () {
+    ChatChannel channel = ChatChannel('my channel');
+
+    Message laterMessage = ChatMessage(
+      text: 'later message',
+      timestamp: DateTime.now()
+    );
+    Message earlierMessage = ChatMessage(
+        text: 'first message',
+        timestamp: DateTime.now().subtract(Duration(hours: 5))
+    );
+
+    test('pushes new message', () {
+      channel.pushMessages([laterMessage]);
+      expect(channel.channelMessages, [laterMessage]);
+      expect(laterMessage.obtainedFromServer, false);
+    ***REMOVED***);
+
+    test('pushes second message and sorts it properly', () {
+      channel.pushMessages([earlierMessage]);
+      expect(channel.channelMessages, [earlierMessage, laterMessage]);
+    ***REMOVED***);
+
+    test('does not push message again', () {
+      channel.pushMessages([laterMessage]);
+      expect(channel.channelMessages, [earlierMessage, laterMessage]);
+    ***REMOVED***);
+  ***REMOVED***);
 ***REMOVED***

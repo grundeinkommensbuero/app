@@ -162,7 +162,7 @@ const Map<String, dynamic> en = {
   "Allgemeine Infos": "General info",
   "Nachricht von {name***REMOVED***": "Message from {name***REMOVED***",
   "Problem beim Einrichten von Push-Nachrichten":
-      "Error when opening a push message",
+      "Error on establishing push messages",
   "Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. Das kann der Fall sein, wenn etwa ein Google-freies Betriebssystem genutzt wird. Darum kann die App nur Benachrichtigungen empfangen während sie geöffnet ist.":
       "A connection to the Google Push service could not be established. That can happen if, for example, a Google-free operating system is being used, in which case the app can only receive notifications while it’s open.",
   "Beim Abrufen von Nachrichten ist ein Fehler aufgetreten. Das regelmäßige Abrufen von Nachrichten wird deshalb deaktiviert":
@@ -323,6 +323,39 @@ const Map<String, dynamic> en = {
   "Eigene Aktionen": "Own actions",
   "lade...": "loading...",
   "Na gut": "Allright",
+  "In den Kalender": "Add to Calendar",
+  '{typ***REMOVED*** in {ortsteil***REMOVED***': '{typ***REMOVED*** at {ortsteil***REMOVED***',
+  "Teilen": "Share",
+  '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***':
+      '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** at {zeitpunkt***REMOVED***\n{url***REMOVED***',
+  'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
+      'The action could not been found. Maybe it has been deleted.',
+  'Ein Fehler ist aufgetreten': 'An error occured',
+  'Haustürgespräche': 'Door-to-door conversations',
+  'Straßengespräche & Flyern': 'Street conversations and flyering',
+  'Kiezfest': 'Kiez-party',
+  'Eintragen': 'Enter',
+  'Was möchtest du an dieser Stelle eintragen?':
+      'What would you like to enter at this location?',
+  'Zu einer Aktion aufrufen': 'Call for an action',
+  'Ein Plakat eintragen': 'Enter a poster',
+  'Ein besuchtes Haus markieren': 'Mark a visited building',
+  'Plakat löschen': 'Delete poster',
+  'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?':
+      'You entered this poster. Would you like to delete it again?',
+  'Plakate aufhängen': 'Put up posters',
+  'Besuchtes Haus': 'Visited House',
+  'Wähle das Haus auf der Karte aus.': 'Select the house at the map',
+  'Adresse': 'Address',
+  'Hausteil': 'Part of the house',
+  'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.':
+      'for example Front Building, Side Wing, Staircase B, floor 1-3, etc.',
+  'Nein danke': 'No thanks',
+  'Absenden': 'Submit',
+  'Vorbehalte': 'Arguments',
+  'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.':
+      'Help the campaign by describing the arguments and hesitations of the undecided. Also: What arguments would convince them? If an argumen was important in more then one talk, write the number behind in brackets.',
+  'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.': 'For privacy reasons these data are not connected to an address.',
   "Weiterlesen": "Read More",
 ***REMOVED***
 
@@ -629,6 +662,39 @@ const Map<String, dynamic> ru = {
   //     "If you want to change Notifications to silent or disable certain notification categories, just press the three dots on a received notification. You will then be guided to the notification preferences for this app.",
   // "Kundgebung": "Manifestation",
   "Na gut": "Закрыть",
+  "In den Kalender": "Добавить в календарь",
+  '{typ***REMOVED*** in {ortsteil***REMOVED***': '{typ***REMOVED*** в {ortsteil***REMOVED***',
+  "Teilen": "Поделиться",
+  '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***':
+      '{typ***REMOVED*** в {ortsteil***REMOVED***, {treffpunkt***REMOVED*** {zeitpunkt***REMOVED***\n{url***REMOVED***',
+  'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
+      'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.',
+  'Ein Fehler ist aufgetreten': 'Произошла ошибка',
+  'Haustürgespräche': 'Haustürgespräche',
+  'Straßengespräche & Flyern': 'Straßengespräche & Flyern',
+  'Kiezfest': 'Kiezfest',
+  'Eintragen': 'Eintragen',
+  'Was möchtest du an dieser Stelle eintragen?':
+      'Was möchtest du an dieser Stelle eintragen?',
+  'Zu einer Aktion aufrufen': 'Zu einer Aktion aufrufen',
+  'Ein Plakat eintragen': 'Ein Plakat eintragen',
+  'Ein besuchtes Haus markieren': 'Ein besuchtes Haus markieren',
+  'Plakat löschen': 'Plakat löschen',
+  'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?':
+      'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?',
+  'Plakate aufhängen': 'Plakate aufhängen',
+  'Besuchtes Haus': 'Besuchtes Haus',
+  'Wähle das Haus auf der Karte aus.': 'Wähle das Haus auf der Karte aus.',
+  'Adresse': 'Adresse',
+  'Hausteil': 'Hausteil',
+  'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.':
+  'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.',
+  'Nein danke': 'Nein danke',
+  'Absenden': 'Absenden',
+  'Vorbehalte': 'Vorbehalte',
+  'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.':
+  'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.',
+  'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.': 'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.',
   "Weiterlesen": "Weiterlesen",
 ***REMOVED***
 
@@ -944,6 +1010,39 @@ const Map<String, dynamic> fr = {
   // "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
   //     "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.",
   "Na gut": "Fermer",
+  "In den Kalender": "Dans le calendrier",
+  '{typ***REMOVED*** in {ortsteil***REMOVED***': '{typ***REMOVED*** à {ortsteil***REMOVED***',
+  "Teilen": "Partagez",
+  '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***':
+      '{typ***REMOVED*** à {ortsteil***REMOVED***, {treffpunkt***REMOVED*** à {zeitpunkt***REMOVED***\n{url***REMOVED***',
+  'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
+      'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.',
+  'Ein Fehler ist aufgetreten': 'Une erreur s\'est produite',
+  'Haustürgespräche': 'Haustürgespräche',
+  'Straßengespräche & Flyern': 'Straßengespräche & Flyern',
+  'Kiezfest': 'Kiezfest',
+  'Eintragen': 'Eintragen',
+  'Was möchtest du an dieser Stelle eintragen?':
+      'Was möchtest du an dieser Stelle eintragen?',
+  'Zu einer Aktion aufrufen': 'Zu einer Aktion aufrufen',
+  'Ein Plakat eintragen': 'Ein Plakat eintragen',
+  'Ein besuchtes Haus markieren': 'Ein besuchtes Haus markieren',
+  'Plakat löschen': 'Plakat löschen',
+  'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?':
+      'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?',
+  'Plakate aufhängen': 'Plakate aufhängen',
+  'Besuchtes Haus': 'Besuchtes Haus',
+  'Wähle das Haus auf der Karte aus.': 'Wähle das Haus auf der Karte aus.',
+  'Adresse': 'Adresse',
+  'Hausteil': 'Hausteil',
+  'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.':
+  'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.',
+  'Nein danke': 'Nein danke',
+  'Absenden': 'Absenden',
+  'Vorbehalte': 'Vorbehalte',
+  'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.':
+  'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.',
+  'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.': 'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.',
   "Weiterlesen": "Continuer à lire",
 ***REMOVED***
 
@@ -1262,5 +1361,38 @@ const Map<String, dynamic> de = {
   "Eigene Aktionen": "Eigene Aktionen",
   "lade...": "lade...",
   "Na gut": "Na gut",
+  "In den Kalender": "In den Kalender",
+  "Teilen": "Teilen",
+  '{typ***REMOVED*** in {ortsteil***REMOVED***': '{typ***REMOVED*** in {ortsteil***REMOVED***',
+  '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***':
+      '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***',
+  'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
+      'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.',
+  'Ein Fehler ist aufgetreten': 'Ein Fehler ist aufgetreten',
+  'Haustürgespräche': 'Haustürgespräche',
+  'Straßengespräche & Flyern': 'Straßengespräche & Flyern',
+  'Kiezfest': 'Kiezfest',
+  'Eintragen': 'Eintragen',
+  'Was möchtest du an dieser Stelle eintragen?':
+      'Was möchtest du an dieser Stelle eintragen?',
+  'Zu einer Aktion aufrufen': 'Zu einer Aktion aufrufen',
+  'Ein Plakat eintragen': 'Ein Plakat eintragen',
+  'Ein besuchtes Haus markieren': 'Ein besuchtes Haus markieren',
+  'Plakat löschen': 'Plakat löschen',
+  'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?':
+      'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?',
+  'Plakate aufhängen': 'Plakate aufhängen',
+  'Besuchtes Haus': 'Besuchtes Haus',
+  'Wähle das Haus auf der Karte aus.': 'Wähle das Haus auf der Karte aus.',
+  'Adresse': 'Adresse',
+  'Hausteil': 'Hausteil',
+  'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.':
+  'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.',
+  'Nein danke': 'Nein danke',
+  'Absenden': 'Absenden',
+  'Vorbehalte': 'Vorbehalte',
+  'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.':
+  'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.',
+  'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.': 'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.',
   "Weiterlesen": "Weiterlesen",
 ***REMOVED***

@@ -39,13 +39,16 @@
     <system-properties>
         <property name="de.kybernetik.max-actions" value="100"/>
         <property name="de.kybernetik.action-age" value="7"/> <!-- in Tagen -->
+        <property name="de.kybernetik.shared.path" value="/opt/shared"/>
+        <property name="de.kybernetik.plakate.secret" value="true"/>
+        <property name="de.kybernetik.listlocations.secret" value="false"/>
     </system-properties>
     <management>
         <security-realms>
             <security-realm name="ManagementRealm">
                 <server-identities>
                     <ssl>
-                        <keystore path="${store_name***REMOVED***" relative-to="jboss.server.config.dir"
+                        <keystore path="${de.kybernetik.shared.path***REMOVED***/secrets/${store_name***REMOVED***"
                                   keystore-password="${store_password***REMOVED***" alias="server"
                                   key-password="${store_password***REMOVED***"/>
                     </ssl>
@@ -111,7 +114,7 @@
                 <formatter>
                     <named-formatter name="PATTERN"/>
                 </formatter>
-                <file path="/opt/shared/logs/server.log"/>
+                <file path="${de.kybernetik.shared.path***REMOVED***/logs/server.log"/>
                 <suffix value=".yyyy-MM-dd"/>
                 <append value="true"/>
             </periodic-rotating-file-handler>
@@ -446,7 +449,7 @@
                     <key-store name="dweKeyStore">
                         <credential-reference clear-text="${store_password***REMOVED***"/>
                         <implementation type="PKCS12"/>
-                        <file path="${store_name***REMOVED***" relative-to="jboss.server.config.dir"/>
+                        <file path="${de.kybernetik.shared.path***REMOVED***/secrets/${store_name***REMOVED***"/>
                     </key-store>
                 </key-stores>
                 <key-managers>
@@ -536,11 +539,12 @@
                 <smtp-server outbound-socket-binding-ref="mail-smtp"/>
             </mail-session>
         </subsystem>
-        <subsystem xmlns="urn:wildfly:microprofile-config-smallrye:1.0"/>
-        <subsystem xmlns="urn:wildfly:microprofile-health-smallrye:2.0" security-enabled="false"/>
-        <subsystem xmlns="urn:wildfly:microprofile-metrics-smallrye:2.0" security-enabled="false" exposed-subsystems="*"
-                   prefix="${wildfly.metrics.prefix:wildfly***REMOVED***"/>
-        <subsystem xmlns="urn:wildfly:microprofile-opentracing-smallrye:1.0"/>
+<!-- Kryptische Fehler beim Starten. Smallrye entbehrlich (?) -->
+<!--        <subsystem xmlns="urn:wildfly:microprofile-config-smallrye:1.0"/>-->
+<!--        <subsystem xmlns="urn:wildfly:microprofile-health-smallrye:2.0" security-enabled="false"/>-->
+<!--        <subsystem xmlns="urn:wildfly:microprofile-metrics-smallrye:2.0" security-enabled="false" exposed-subsystems="*"-->
+<!--                   prefix="${wildfly.metrics.prefix:wildfly***REMOVED***"/>-->
+<!--        <subsystem xmlns="urn:wildfly:microprofile-opentracing-smallrye:1.0"/>-->
         <subsystem xmlns="urn:jboss:domain:naming:2.0">
             <remote-naming/>
         </subsystem>

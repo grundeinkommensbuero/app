@@ -10,8 +10,8 @@ class Termin {
   DateTime ende;
   Kiez ort;
   String typ;
-  double? latitude;
-  double? longitude;
+  double latitude;
+  double longitude;
   List<User>? participants;
   TerminDetails? details;
 
@@ -70,6 +70,14 @@ class Termin {
         return centered
             ? 'assets/images/Kundgebung_centered.png'
             : 'assets/images/Kundgebung.png';
+      case 'Haustürgespräche':
+        return 'assets/images/Haustuergespraeche.png';
+      case 'Straßengespräche & Flyern':
+        return 'assets/images/StrassengespraecheUndFlyern.png';
+      case 'Kiezfest':
+        return 'assets/images/Kiezfest.png';
+      case 'Plakate aufhängen':
+        return 'assets/images/PlakateAufhaengen.png';
     ***REMOVED***
     return 'assets/images/logo_transparent.png'; // Platzhalter
   ***REMOVED***
