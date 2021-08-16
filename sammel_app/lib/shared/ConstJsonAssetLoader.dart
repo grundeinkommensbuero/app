@@ -356,6 +356,7 @@ const Map<String, dynamic> en = {
   'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.':
       'Help the campaign by describing the arguments and hesitations of the undecided. Also: What arguments would convince them? If an argumen was important in more then one talk, write the number behind in brackets.',
   'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.': 'For privacy reasons these data are not connected to an address.',
+  "Weiterlesen": "Read More",
 ***REMOVED***
 
 const Map<String, dynamic> ru = {
@@ -694,6 +695,7 @@ const Map<String, dynamic> ru = {
   'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.':
   'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.',
   'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.': 'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.',
+  "Weiterlesen": "Weiterlesen",
 ***REMOVED***
 
 const Map<String, dynamic> fr = {
@@ -1041,6 +1043,7 @@ const Map<String, dynamic> fr = {
   'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.':
   'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.',
   'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.': 'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.',
+  "Weiterlesen": "Continuer à lire",
 ***REMOVED***
 
 const Map<String, dynamic> de = {
@@ -1391,4 +1394,5 @@ const Map<String, dynamic> de = {
   'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.':
   'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.',
   'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.': 'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.',
+  "Weiterlesen": "Weiterlesen",
 ***REMOVED***

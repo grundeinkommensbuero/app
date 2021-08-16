@@ -37,6 +37,7 @@ late MockPushSendService _pushService = MockPushSendService();
 late MockUserService _userService = MockUserService();
 late MockChatMessageService _chatService = MockChatMessageService();
 late MockPushNotificationManager _pushManager = MockPushNotificationManager();
+late MockFAQService _faqService = MockFAQService();
 late MockPlacardsService _placardService = MockPlacardsService();
 late MockGeoService _geoService = MockGeoService();
 late MockVisitedHousesService _visitedHouseService = MockVisitedHousesService();
@@ -55,6 +56,7 @@ void main() {
     reset(_pushManager);
     reset(_chatService);
     reset(_stammdatenService);
+    reset(_faqService);
     reset(_visitedHouseService);
     when(_storageService.loadFilter()).thenAnswer((_) async => null);
     when(_storageService.loadAllStoredActionIds()).thenAnswer((_) async => []);
@@ -76,6 +78,7 @@ void main() {
         .thenAnswer((_) async => Future.value([]));
     when(_visitedHouseService.loadVisitedHouses())
         .thenAnswer((_) => Future.value([]));
+    trainFAQService(_faqService);
   ***REMOVED***);
 
   group('shows all data', () {

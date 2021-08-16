@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:sammel_app/model/ChatChannel.dart';
+import 'package:sammel_app/model/FAQItem.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/model/User.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -25,6 +26,8 @@ class StorageService {
   static const String _MYKIEZ = 'mykiez';
   static const String _NOTIF_INTERVAL = 'notifInterval';
   static const String _CONTACT = 'contact';
+  static const String _FAQ = 'faq';
+  static const String _FAQ_Timestamp = 'faqTimestamp';
 
   StorageService() {
     _prefs = SharedPreferences.getInstance();
@@ -161,6 +164,25 @@ class StorageService {
 
   Future<String?> loadContact() =>
       prefs.then((prefs) => prefs.getString(_CONTACT));
+
+  Future<bool> saveFAQ(List<FAQItem> faq) => prefs.then((prefs) =>
+      prefs.setStringList(_FAQ, faq.map((item) => jsonEncode(item)).toList()));
+
+  Future<List<FAQItem>?> loadFAQ() => prefs.then((prefs) async {
+        var storedFAQ = prefs.getStringList(_FAQ);
+        return storedFAQ
+            ?.map((faq) => FAQItem.fromJson(jsonDecode(faq)))
+            .toList();
+      ***REMOVED***);
+
+  Future<bool> saveFAQTimestamp(DateTime timestamp) => prefs
+      .then((prefs) => prefs.setString(_FAQ_Timestamp, timestamp.toString()));
+
+  Future<DateTime?> loadFAQTimestamp() => prefs.then((prefs) async {
+        var timestamp = prefs.getString(_FAQ_Timestamp);
+        if (timestamp == null) return null;
+        return DateTime.parse(timestamp);
+      ***REMOVED***);
 
   // for Debugging only
   loadCostumPushToken() => prefs.then((prefs) => prefs.getString(_PUSHTOKEN));

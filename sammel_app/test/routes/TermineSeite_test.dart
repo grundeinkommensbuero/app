@@ -19,6 +19,7 @@ import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/AuthFehler.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/ErrorService.dart';
+import 'package:sammel_app/services/FAQService.dart';
 import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/PlacardsService.dart';
@@ -47,6 +48,7 @@ final _pushService = MockPushSendService();
 final _userService = MockUserService();
 final _chatMessageService = MockChatMessageService();
 final _pushManager = MockPushNotificationManager();
+final _faqService = MockFAQService();
 final _placardsService = MockPlacardsService();
 final _geoService = MockGeoService();
 final _visitedHousesService = MockVisitedHousesService();
@@ -87,6 +89,8 @@ void main() {
     when(_termineService.deleteAction(any, any))
         .thenAnswer((_) => Future.value(null));
     when(_pushManager.pushToken).thenAnswer((_) => Future.value('Token'));
+    trainFAQService(_faqService);
+
     when(_visitedHousesService.loadVisitedHouses())
         .thenAnswer((_) => Future.value([]));
     when(_visitedHousesService.getBuildingsInArea(any))
@@ -1632,6 +1636,7 @@ _pumpNavigation(WidgetTester tester) async {
         Provider<AbstractPushSendService>.value(value: _pushService),
         Provider<ChatMessageService>.value(value: _chatMessageService),
         Provider<AbstractPushNotificationManager>.value(value: _pushManager),
+        Provider<AbstractFAQService>.value(value: _faqService),
         Provider<AbstractPlacardsService>.value(value: _placardsService),
         Provider<AbstractPlacardsService>.value(value: _placardsService),
         Provider<AbstractVisitedHousesService>.value(

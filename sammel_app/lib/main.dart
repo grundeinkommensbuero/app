@@ -6,6 +6,7 @@ import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/ArgumentsService.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
+import 'package:sammel_app/services/FAQService.dart';
 import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/PlacardsService.dart';
@@ -75,6 +76,9 @@ class MyApp extends StatelessWidget {
   static var chatMessageService =
       ChatMessageService(storageService, pushNotificationManager, navigatorKey);
   static var geoService = GeoService();
+  static AbstractFAQService faqService = demoMode
+      ? DemoFAQService() as AbstractFAQService
+      : FAQService(storageService, userService, backend);
   static var placardService = demoMode
       ? DemoPlacardsService(userService)
       : PlacardsService(userService, backend);
@@ -102,6 +106,7 @@ class MyApp extends StatelessWidget {
           Provider<GeoService>.value(value: geoService),
           Provider<LocalNotificationService>.value(
               value: localNotificationService),
+          Provider<AbstractFAQService>.value(value: faqService),
           Provider<AbstractVisitedHousesService>.value(
               value: visitedHouseService),
           Provider(create: (_) => placardService),

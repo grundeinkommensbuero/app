@@ -12,6 +12,8 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/Navigation.dart';
+import 'package:sammel_app/services/ChatMessageService.dart';
+import 'package:sammel_app/services/FAQService.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
@@ -29,8 +31,8 @@ import 'package:sammel_app/services/VisitedHousesService.dart';
 import '../model/Termin_test.dart';
 import '../shared/TestdatenVorrat.dart';
 import '../shared/mocks.costumized.dart';
-import '../shared/mocks.trainer.dart';
 import '../shared/mocks.mocks.dart';
+import '../shared/mocks.trainer.dart';
 import 'ActionEditor_test.dart';
 
 final _stammdatenService = MockStammdatenService();
@@ -42,6 +44,7 @@ final _userService = MockUserService();
 final _chatService = MockChatMessageService();
 final _placardService = MockPlacardsService();
 final _pushManager = MockPushNotificationManager();
+final _faqService = MockFAQService();
 final _geoService = MockGeoService();
 final _visitedHousesService = MockVisitedHousesService();
 
@@ -75,6 +78,7 @@ void main() {
           .thenAnswer((_) async => TermineFilter.leererFilter());
       when(_termineService.loadActions(any)).thenAnswer((_) async => []);
       when(_pushManager.pushToken).thenAnswer((_) async => 'Token');
+      trainFAQService(_faqService);
       when(_placardService.loadPlacards())
           .thenAnswer((_) async => Future.value([]));
       when(_visitedHousesService.loadVisitedHouses())
@@ -92,6 +96,7 @@ void main() {
         Provider<AbstractUserService>.value(value: _userService),
         Provider<ChatMessageService>.value(value: _chatService),
         Provider<AbstractPushNotificationManager>.value(value: _pushManager),
+        Provider<AbstractFAQService>.value(value: _faqService),
         Provider<AbstractPlacardsService>.value(value: _placardService),
         Provider<GeoService>.value(value: _geoService),
         Provider<AbstractVisitedHousesService>.value(
