@@ -52,7 +52,7 @@ open class PushService {
         when (modus) {
             "LOCAL" -> PREFIX = "local."
             "TEST" -> PREFIX = "test."
-            "PROD" -> PREFIX = "local."
+            "PROD" -> PREFIX = ""
             else -> LOG.error("Server-Modus unbekannt")
         ***REMOVED***
         when (modus) {
