@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response
 open class HealthRestResource {
 
     @EJB
-    lateinit var faqDao: FAQDao
+    private lateinit var faqDao: FAQDao
 
     @GET
     @PermitAll
