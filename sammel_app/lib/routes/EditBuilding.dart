@@ -141,7 +141,7 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
         options: MapOptions(
             center: center,
             zoom: widget.currentZoomFactor < 17 ? 17 : widget.currentZoomFactor,
-            interactiveFlags: noRotation,
+            interactiveFlags: noRotationNoMove,
             swPanBoundary: LatLng(buildingView.bbox.minLatitude,
                 buildingView.bbox.minLongitude),
             nePanBoundary: LatLng(buildingView.bbox.maxLatitude,

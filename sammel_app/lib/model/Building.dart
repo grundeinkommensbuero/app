@@ -35,8 +35,8 @@ class VisitedHouse {
   ***REMOVED***
 
   VisitedHouse.clone(VisitedHouse house)
-      : osm_id = house.osm_id, latitude = house.latitude, longitude = house.longitude,
-        shape = house.shape, visitation_events = List.from(house.visitation_events);
+      : osmId = house.osmId, latitude = house.latitude, longitude = house.longitude,
+        shape = house.shape, visitationEvents = List.from(house.visitationEvents);
 
   void calculateBBox() {
     double minLat = 1000;

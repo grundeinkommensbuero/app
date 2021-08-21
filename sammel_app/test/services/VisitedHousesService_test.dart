@@ -50,10 +50,10 @@ void main() {
       expect(response[0].osmId, 1);
       expect(response[1].osmId, 2);
       expect(response[2].osmId, 3);
-      expect(response[0].visitation_events[0].adresse,
+      expect(response[0].visitationEvents[0].adresse,
           'Willy-Brandt-Straße 1, Tiergarten, Mitte, Berlin, 10557');
-      expect(response[1].visitation_events[0].adresse, 'Potsdamer Straße 143, 10783 Berlin');
-      expect(response[2].visitation_events[0].adresse,
+      expect(response[1].visitationEvents[0].adresse, 'Potsdamer Straße 143, 10783 Berlin');
+      expect(response[2].visitationEvents[0].adresse,
           'Klingelhöferstraße 8,Botschaftsviertel, Tiergarten, Mitte, Berlin, 10785');
     ***REMOVED***);
 
