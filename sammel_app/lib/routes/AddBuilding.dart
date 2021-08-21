@@ -240,7 +240,18 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
         if (userId != null)
           buildingView.selectedBuilding?.visitationEvents
               .add(VisitedHouseEvent(null, '', '', userId, DateTime.now()));
-        visitedHouseController.text = '${geoData.street***REMOVED*** ${geoData.number***REMOVED***';
+        if(geoData.street != null)
+          {
+            if(geoData.number != null)
+              {
+                visitedHouseController.text = '${geoData.street***REMOVED*** ${geoData.number***REMOVED***';
+              ***REMOVED***
+            else
+              {
+                visitedHouseController.text = '${geoData.street***REMOVED***';
+              ***REMOVED***
+          ***REMOVED***
+
         showLoadingIndicator = false;
       ***REMOVED***
     ***REMOVED***);
