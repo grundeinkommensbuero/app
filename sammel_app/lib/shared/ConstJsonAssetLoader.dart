@@ -1017,7 +1017,8 @@ const Map<String, dynamic> fr = {
       '{typ***REMOVED*** à {ortsteil***REMOVED***, {treffpunkt***REMOVED*** à {zeitpunkt***REMOVED***\n{url***REMOVED***',
   'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
       'Pas de donner sur l\'action rechercher. Eventuellement l\'action a été effacer.', 
-  'Ein Fehler ist aufgetreten': 'Une erreur s\'est produite','Straßengespräche & Flyern':
+  'Ein Fehler ist aufgetreten': 'Une erreur s\'est produite',
+  'Straßengespräche & Flyern': 'Parler dans la rue & distribuer des prospectus',
   'Haustürgespräche': 'rend visite aux loueurs',
   'Parler dans la rue & distribuer des prospectus',
   'Kiezfest': 'fête du quartier',
