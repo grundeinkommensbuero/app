@@ -34,6 +34,10 @@ class VisitedHouse {
     calculateBBox();
   ***REMOVED***
 
+  VisitedHouse.clone(VisitedHouse house)
+      : osm_id = house.osm_id, latitude = house.latitude, longitude = house.longitude,
+        shape = house.shape, visitation_events = List.from(house.visitation_events);
+
   void calculateBBox() {
     double minLat = 1000;
     double maxLat = -1000;
@@ -82,6 +86,7 @@ class VisitedHouse {
             .toList())
         .contains(point.latitude, point.longitude);
   ***REMOVED***
+
 ***REMOVED***
 
 class SelectableVisitedHouse extends VisitedHouse {
