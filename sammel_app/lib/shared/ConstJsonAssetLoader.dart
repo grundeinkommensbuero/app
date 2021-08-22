@@ -1020,7 +1020,6 @@ const Map<String, dynamic> fr = {
   'Ein Fehler ist aufgetreten': 'Une erreur s\'est produite',
   'Straßengespräche & Flyern': 'Parler dans la rue & distribuer des prospectus',
   'Haustürgespräche': 'rend visite aux loueurs',
-  'Parler dans la rue & distribuer des prospectus',
   'Kiezfest': 'fête du quartier',
   'Eintragen': 'entrer',
   'Was möchtest du an dieser Stelle eintragen?':
