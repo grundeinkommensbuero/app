@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:http_server/http_server.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:sammel_app/model/Building.dart';
+import 'package:sammel_app/model/VisitedHouse.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/DistanceHelper.dart';
@@ -14,7 +14,7 @@ import 'VisitedHouseView.dart';
 abstract class AbstractVisitedHousesService extends BackendService {
   late GeoService geoService;
 
-  Map<int, VisitedHouse> localBuildingMap = {***REMOVED***
+  Map<int, VisitedHouse> localHousesMap = {***REMOVED***
 
   Future<List<VisitedHouse>> loadVisitedHouses();
 
@@ -26,10 +26,9 @@ abstract class AbstractVisitedHousesService extends BackendService {
     this.geoService = geoService;
   ***REMOVED***
 
-  @override
   Future<VisitedHouse?> getVisitedHouseOfPoint(
       LatLng point, bool checkOnServer) async {
-    VisitedHouse? visitedHousOnPoint = getBuildingForPointLocal(point);
+    VisitedHouse? visitedHousOnPoint = getVisitedHouseForPointLocal(point);
     if (visitedHousOnPoint != null) return visitedHousOnPoint;
 
     if (!checkOnServer) return null;
@@ -53,45 +52,44 @@ abstract class AbstractVisitedHousesService extends BackendService {
       //in this case we create the osm id by the center
       osmId = point.hashCode;
     ***REMOVED***
-    return getBuildingFromJson(osmId, point, shape);
+    return getVistitedHouseFromJson(osmId, point, shape);
   ***REMOVED***
 
-  VisitedHouse? getBuildingFromJson(
+  VisitedHouse? getVistitedHouseFromJson(
       int osmId, LatLng point, List<LatLng> shape) {
-    if (localBuildingMap.containsKey(osmId)) {
-      return localBuildingMap[osmId];
+    if (localHousesMap.containsKey(osmId)) {
+      return localHousesMap[osmId];
     ***REMOVED*** else {
       return VisitedHouse(osmId, point.latitude, point.longitude, shape, []);
     ***REMOVED***
   ***REMOVED***
 
-  VisitedHouseView getBuildingsInArea(BoundingBox bbox) {
+  VisitedHouseView getVisitedHousesInArea(BoundingBox bbox) {
     //TODO: it only checks for local buildings atm
     //TODO: take a bit more clever data format
-    List<SelectableVisitedHouse> buildingsInRoi = localBuildingMap.values
-        .where((building) => building.bbox.intersect(bbox))
-        .map((building) => SelectableVisitedHouse.fromVisitedHouse(building))
+    List<SelectableVisitedHouse> housesInRoi = localHousesMap.values
+        .where((house) => house.bbox.intersect(bbox))
+        .map((house) => SelectableVisitedHouse.fromVisitedHouse(house))
         .toList();
 
-    return VisitedHouseView(bbox, buildingsInRoi);
+    return VisitedHouseView(bbox, housesInRoi);
   ***REMOVED***
 
-  VisitedHouse? getBuildingForPointLocal(LatLng point) =>
-      // ignore: unnecessary_cast // nötig für Null-Ergebnis
-      localBuildingMap.values.map((house) => house as VisitedHouse?).firstWhere(
-          (building) =>
-              building!.bbox.containsPoint(point) && building.inside(point),
+  VisitedHouse? getVisitedHouseForPointLocal(LatLng point) =>
+      // ignore: unnecessary_cast
+      localHousesMap.values.map((house) => house as VisitedHouse?).firstWhere(
+          (house) => house!.bbox.containsPoint(point) && house.inside(point),
           orElse: () => null);
 
   VisitedHouse editVisitedHouse(VisitedHouse house) {
-    var addEvents = house.visitationEvents;
+    var addEvents = house.visitations;
     var deleteEvents = Set();
 
-    VisitedHouse? building = localBuildingMap[house.osmId];
+    VisitedHouse? localHouse = localHousesMap[house.osmId];
 
-    if (building != null) {
-      var currentIds = building.visitationEvents.map((e) => e.id).toSet();
-      var newIds = house.visitationEvents.map((e) => e.id).toSet();
+    if (localHouse != null) {
+      var currentIds = localHouse.visitations.map((e) => e.id).toSet();
+      var newIds = house.visitations.map((e) => e.id).toSet();
       deleteEvents = currentIds.difference(newIds);
       addEvents = addEvents
           .where((element) => !currentIds.contains(element.id))
@@ -105,25 +103,24 @@ abstract class AbstractVisitedHousesService extends BackendService {
       VisitedHouse houseWithWventOnly = VisitedHouse(house.osmId,
           house.latitude, house.longitude, house.shape, [addEvent]);
       var h = createVisitedHouse(houseWithWventOnly);
-      h.then((value) => addEvent.id = value?.visitationEvents.last.id);
+      h.then((value) => addEvent.id = value?.visitations.last.id);
     ***REMOVED***
-    if (house.visitationEvents.isNotEmpty) {
-      house.visitationEvents
-          .sort((a, b) => a.datum.difference(b.datum).inSeconds > 0
-              ? 1
-              : a.datum.difference(b.datum).inSeconds < 0
-                  ? -1
-                  : 0);
-      localBuildingMap[house.osmId] = house;
+    if (house.visitations.isNotEmpty) {
+      house.visitations.sort((a, b) => a.datum.difference(b.datum).inSeconds > 0
+          ? 1
+          : a.datum.difference(b.datum).inSeconds < 0
+              ? -1
+              : 0);
+      localHousesMap[house.osmId] = house;
     ***REMOVED*** else {
-      localBuildingMap.remove(house.osmId);
+      localHousesMap.remove(house.osmId);
     ***REMOVED***
 
     return house;
   ***REMOVED***
 
   getAllHouses() {
-    return localBuildingMap.values.toList();
+    return localHousesMap.values.toList();
   ***REMOVED***
 
   deleteVisitedHouse(int id) async {***REMOVED***
@@ -174,17 +171,17 @@ class VisitedHousesService extends AbstractVisitedHousesService {
         .toList();
 
     for (VisitedHouse house in houses) {
-      VisitedHouse? localHouse = localBuildingMap[house.osmId];
+      VisitedHouse? localHouse = localHousesMap[house.osmId];
       if (localHouse != null) {
-        var idx = localHouse.visitationEvents.indexWhere(
-            (element) => element.id == house.visitationEvents.first.id);
+        var idx = localHouse.visitations
+            .indexWhere((element) => element.id == house.visitations.first.id);
         if (idx == -1) {
-          localHouse.visitationEvents.add(house.visitationEvents.first);
+          localHouse.visitations.add(house.visitations.first);
         ***REMOVED*** else {
-          localHouse.visitationEvents[idx] = house.visitationEvents.first;
+          localHouse.visitations[idx] = house.visitations.first;
         ***REMOVED***
       ***REMOVED*** else {
-        localBuildingMap[house.osmId] = house;
+        localHousesMap[house.osmId] = house;
       ***REMOVED***
     ***REMOVED***
 
@@ -245,19 +242,15 @@ class DemoVisitedHousesService extends AbstractVisitedHousesService {
   List<VisitedHouse> visitedHouses = [
     VisitedHouse(1, 52.52014, 13.36911,
         s1.map((e) => LatLng(e['lat'] ?? 0.0, e['lon'] ?? 0)).toList(), [
-      VisitedHouseEvent(
-          1,
-          'Willy-Brandt-Straße 1, Tiergarten, Mitte, Berlin, 10557',
-          "Westfluegel",
-          12,
-          DateTime(2021, 7, 16))
+      Visitation(1, 'Willy-Brandt-Straße 1, Tiergarten, Mitte, Berlin, 10557',
+          "Westfluegel", 12, DateTime(2021, 7, 16))
     ]),
     VisitedHouse(2, 52.4964133, 13.3617511, [], [
-      VisitedHouseEvent(2, 'Potsdamer Straße 143, 10783 Berlin', '', 12,
+      Visitation(2, 'Potsdamer Straße 143, 10783 Berlin', '', 12,
           DateTime(2021, 7, 17))
     ]),
     VisitedHouse(3, 52.5065, 13.35125, [], [
-      VisitedHouseEvent(
+      Visitation(
           3,
           'Klingelhöferstraße 8,Botschaftsviertel, Tiergarten, Mitte, Berlin, 10785',
           'Haupteingang',
@@ -270,12 +263,12 @@ class DemoVisitedHousesService extends AbstractVisitedHousesService {
   DemoVisitedHousesService(
       AbstractUserService userService, GeoService geoService)
       : super(userService, geoService, DemoBackend()) {
-    localBuildingMap = {for (VisitedHouse v in visitedHouses) v.osmId: v***REMOVED***
+    localHousesMap = {for (VisitedHouse v in visitedHouses) v.osmId: v***REMOVED***
   ***REMOVED***
 
   @override
   Future<VisitedHouse> createVisitedHouse(VisitedHouse house) {
-    house.visitationEvents.last.id = maxId;
+    house.visitations.last.id = maxId;
     maxId += 1;
     //visitedHouses.add(VisitedHouse.clone(house));
     return Future.value(house);

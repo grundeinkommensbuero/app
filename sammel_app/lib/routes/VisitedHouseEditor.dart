@@ -4,7 +4,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:sammel_app/model/Building.dart';
+import 'package:sammel_app/model/VisitedHouse.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/services/VisitedHouseView.dart';
 import 'package:sammel_app/services/ErrorService.dart';
@@ -17,7 +17,7 @@ import 'package:sammel_app/shared/ServerException.dart';
 
 import '../Provisioning.dart';
 
-addNewVisitedHouseEvent(
+addNewVisitation(
     BuildContext context, VisitedHouse? visitedHouse) async {
   if (visitedHouse != null) {
     //the last event is new. register at server
@@ -29,54 +29,54 @@ addNewVisitedHouseEvent(
     return null;
 ***REMOVED***
 
-showAddBuildingDialog(
+showAddVisitationDialog(
     {required BuildContext context,
-    required VisitedHouseView buildingView,
+    required VisitedHouseView visitedHouseView,
     required double currentZoomFactor***REMOVED***) async {
   VisitedHouse? visitedHouse = await showDialog(
     context: context,
-    builder: (context) => AddBuildingDialog(buildingView, currentZoomFactor),
+    builder: (context) => VisitedHouseCreatorDialog(visitedHouseView, currentZoomFactor),
   );
-  return addNewVisitedHouseEvent(context, visitedHouse);
+  return addNewVisitation(context, visitedHouse);
 ***REMOVED***
 
-class AddBuildingDialog extends StatefulWidget {
+class VisitedHouseCreatorDialog extends StatefulWidget {
   late final LatLng? center;
-  final VisitedHouseView buildingView;
+  final VisitedHouseView visitedHouseView;
   final double currentZoomFactor;
 
-  AddBuildingDialog(this.buildingView, this.currentZoomFactor)
-      : super(key: Key('add building dialog'));
+  VisitedHouseCreatorDialog(this.visitedHouseView, this.currentZoomFactor)
+      : super(key: Key('add visited house dialog'));
 
   @override
   State<StatefulWidget> createState() {
-    return AddBuildingDialogState(buildingView);
+    return VisitedHouseCreatorState(visitedHouseView);
   ***REMOVED***
 ***REMOVED***
 
-class AddBuildingDialogState extends State<AddBuildingDialog> {
+class VisitedHouseCreatorState extends State<VisitedHouseCreatorDialog> {
   LocationMarker? marker;
   late TextEditingController visitedHouseController;
   late TextEditingController visitedHousePartController;
   @required
-  late VisitedHouseView buildingView;
+  late VisitedHouseView visitedHouseView;
   late LatLng center;
 
   var showLoadingIndicator = false;
 
-  AddBuildingDialogState(VisitedHouseView buildingView) {
-    this.buildingView = buildingView;
+  VisitedHouseCreatorState(VisitedHouseView visitedHouseView) {
+    this.visitedHouseView = visitedHouseView;
     this.center = LatLng(
-        0.5 * (buildingView.bbox.maxLatitude + buildingView.bbox.minLatitude),
+        0.5 * (visitedHouseView.bbox.maxLatitude + visitedHouseView.bbox.minLatitude),
         0.5 *
-            (buildingView.bbox.maxLongitude + buildingView.bbox.minLongitude));
+            (visitedHouseView.bbox.maxLongitude + visitedHouseView.bbox.minLongitude));
     visitedHouseController = TextEditingController(text: '');
     visitedHousePartController = TextEditingController(text: '');
   ***REMOVED***
 
   @override
   Widget build(BuildContext context) {
-    if (buildingView.selectedBuilding == null) houseSelected(this.center);
+    if (visitedHouseView.selectedHouse == null) houseSelected(this.center);
     return AlertDialog(
       title: Text('Besuchtes Haus').tr(),
       content: SingleChildScrollView(
@@ -93,15 +93,14 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
           key: Key('venue dialog finish button'),
           child: Text("Fertig").tr(),
           onPressed: () {
-            buildingView.selectedBuilding?.visitationEvents.last.adresse =
+            visitedHouseView.selectedHouse?.visitations.last.adresse =
                 visitedHouseController.text;
-            buildingView.selectedBuilding?.visitationEvents.last.hausteil =
+            visitedHouseView.selectedHouse?.visitations.last.hausteil =
                 visitedHousePartController.text;
             if (Provider.of<AbstractUserService>(context, listen: false)
                     .latestUser ==
                 null) throw ServerException('Couldnt fetch user from server');
-            //   building_view.selected_building?.visitation_events.add(VisitedHouseEvent(-1, Provider.of<AbstractUserService>(context, listen: false).latestUser!.id!, DateTime.now()));
-            Navigator.pop(context, buildingView.selectedBuilding);
+            Navigator.pop(context, visitedHouseView.selectedHouse);
           ***REMOVED***,
         ),
       ],
@@ -171,9 +170,9 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
             zoom: widget.currentZoomFactor < 17 ? 17 : widget.currentZoomFactor,
             interactiveFlags: noRotationNoMove,
             swPanBoundary: LatLng(
-                buildingView.bbox.minLatitude, buildingView.bbox.minLongitude),
+                visitedHouseView.bbox.minLatitude, visitedHouseView.bbox.minLongitude),
             nePanBoundary: LatLng(
-                buildingView.bbox.maxLatitude, buildingView.bbox.maxLongitude),
+                visitedHouseView.bbox.maxLatitude, visitedHouseView.bbox.maxLongitude),
             maxZoom: geo.zoomMax,
             minZoom: geo.zoomMin,
             onTap: houseSelected,
@@ -183,7 +182,7 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
               urlTemplate: "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
               subdomains: ['a', 'b', 'c']),
           PolygonLayerOptions(
-              polygons: buildingView.buildDrawablePolygonsFromView(),
+              polygons: visitedHouseView.buildDrawablePolygonsFromView(),
               polygonCulling: false),
           MarkerLayerOptions(markers: marker == null ? [] : [marker!]),
           AttributionOptions(),
@@ -210,10 +209,10 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
   houseSelected(LatLng point) async {
     setState(() => showLoadingIndicator = true);
 
-    SelectableVisitedHouse? building = buildingView.getBuildingByPoint(point);
+    SelectableVisitedHouse? house = visitedHouseView.getHouseByPoint(point);
     //not in current view
-    if (building == null) {
-      var buildingFromServer = await Provider.of<AbstractVisitedHousesService>(
+    if (house == null) {
+      var houseFromServer = await Provider.of<AbstractVisitedHousesService>(
               context,
               listen: false)
           .getVisitedHouseOfPoint(point, true)
@@ -221,8 +220,8 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
         ErrorService.handleError(e, s);
         return null;
       ***REMOVED***);
-      if (buildingFromServer != null)
-        building = SelectableVisitedHouse.fromVisitedHouse(buildingFromServer);
+      if (houseFromServer != null)
+        house = SelectableVisitedHouse.fromVisitedHouse(houseFromServer);
     ***REMOVED***
     if (!mounted) return;
 
@@ -230,16 +229,16 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
         .getDescriptionToPoint(point);
 
     setState(() {
-      if (building != null &&
-          buildingView.selectedBuilding?.osmId != building.osmId) {
-        buildingView.selectedBuilding = SelectableVisitedHouse.clone(building);
-        buildingView.selectedBuilding?.selected = true;
+      if (house != null &&
+          visitedHouseView.selectedHouse?.osmId != house.osmId) {
+        visitedHouseView.selectedHouse = SelectableVisitedHouse.clone(house);
+        visitedHouseView.selectedHouse?.selected = true;
         var userId = Provider.of<AbstractUserService>(context, listen: false)
             .latestUser!
             .id;
         if (userId != null)
-          buildingView.selectedBuilding?.visitationEvents
-              .add(VisitedHouseEvent(null, '', '', userId, DateTime.now()));
+          visitedHouseView.selectedHouse?.visitations
+              .add(Visitation(null, '', '', userId, DateTime.now()));
         if(geoData.street != null)
           {
             if(geoData.number != null)
@@ -251,7 +250,6 @@ class AddBuildingDialogState extends State<AddBuildingDialog> {
                 visitedHouseController.text = '${geoData.street***REMOVED***';
               ***REMOVED***
           ***REMOVED***
-
         showLoadingIndicator = false;
       ***REMOVED***
     ***REMOVED***);

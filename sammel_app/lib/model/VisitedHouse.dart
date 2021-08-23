@@ -11,14 +11,14 @@ import 'package:sammel_app/shared/CampaignTheme.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 import 'package:poly/poly.dart' as poly;
 
-class VisitedHouseEvent {
+class Visitation {
   int benutzer;
   int? id;
   DateTime datum;
   String hausteil = "";
   String adresse = '';
 
-  VisitedHouseEvent(this.id, this.adresse, this.hausteil, this.benutzer, this.datum);
+  Visitation(this.id, this.adresse, this.hausteil, this.benutzer, this.datum);
 ***REMOVED***
 
 class VisitedHouse {
@@ -27,10 +27,10 @@ class VisitedHouse {
   double longitude = -1.0;
   List<LatLng> shape = [];
   late BoundingBox bbox;
-  List<VisitedHouseEvent> visitationEvents = [];
+  List<Visitation> visitations = [];
 
-  VisitedHouse(this.osmId,this.latitude, this.longitude,
-      this.shape, this.visitationEvents) {
+  VisitedHouse(
+      this.osmId, this.latitude, this.longitude, this.shape, this.visitations) {
     calculateBBox();
   ***REMOVED***
 
@@ -56,24 +56,28 @@ class VisitedHouse {
       : osmId = json['osmId'],
         latitude = json['latitude'],
         longitude = json['longitude'],
-        visitationEvents = [
-          VisitedHouseEvent(json['id'],  json['adresse'], json['hausteil'], json['benutzer'],
+        visitations = [
+          Visitation(
+              json['id'],
+              json['adresse'],
+              json['hausteil'],
+              json['benutzer'],
               ChronoHelfer.deserializeJsonDateTime(json['datum']))
         ],
-        shape = List<LatLng>.from(jsonDecode(json['shape']).map((e) => LatLng(e[0], e[1])))
-  {
+        shape = List<LatLng>.from(
+            jsonDecode(json['shape']).map((e) => LatLng(e[0], e[1]))) {
     calculateBBox();
   ***REMOVED***
 
   Map<dynamic, dynamic> toJson() => {
         'osmId': osmId,
-        'id': visitationEvents.last.id,
+        'id': visitations.last.id,
         'latitude': latitude,
         'longitude': longitude,
-        'adresse': visitationEvents.last.adresse,
-        'hausteil': visitationEvents.last.hausteil,
-        'datum': DateFormat('yyyy-MM-dd').format(visitationEvents.last.datum),
-        'benutzer': visitationEvents.last.benutzer,
+        'adresse': visitations.last.adresse,
+        'hausteil': visitations.last.hausteil,
+        'datum': DateFormat('yyyy-MM-dd').format(visitations.last.datum),
+        'benutzer': visitations.last.benutzer,
         'shape':
             '${shape.map((e) => '[${e.latitude***REMOVED***,${e.longitude***REMOVED***]').toList()***REMOVED***'
       ***REMOVED***
@@ -99,33 +103,32 @@ class SelectableVisitedHouse extends VisitedHouse {
   ***REMOVED***
 
   SelectableVisitedHouse.fromVisitedHouse(VisitedHouse vh, {selected: false***REMOVED***)
-      : super(vh.osmId, vh.latitude, vh.longitude, vh.shape,
-            vh.visitationEvents) {
+      : super(vh.osmId, vh.latitude, vh.longitude, vh.shape, vh.visitations) {
     this.selected = selected;
   ***REMOVED***
 
   SelectableVisitedHouse.clone(SelectableVisitedHouse vh)
       : super(vh.osmId, vh.latitude, vh.longitude, vh.shape,
-            List.from(vh.visitationEvents)) {
+            List.from(vh.visitations)) {
     selected = vh.selected;
   ***REMOVED***
 ***REMOVED***
 
-class BuildingColorSelector {
+class VisitedHouseColorSelector {
   static var selectionColor = CampaignTheme.altPrimary;
   static var firstTimeColor = CampaignTheme.disabled;
   static var oneVisitColor = CampaignTheme.primaryBright;
   static var twoVisitsColor = CampaignTheme.primaryLight;
   static var manyVisitsColor = CampaignTheme.primary;
 
-  static Color getDrawColorForSelectable(SelectableVisitedHouse building) {
-    if (building.selected) {
+  static Color getDrawColorForSelectable(SelectableVisitedHouse house) {
+    if (house.selected) {
       return selectionColor;
     ***REMOVED***
-    if (building.visitationEvents.length > 0) {
-      if(building.visitationEvents.length == 1)
+    if (house.visitations.length > 0) {
+      if (house.visitations.length == 1)
         return oneVisitColor;
-      else if(building.visitationEvents.length == 2)
+      else if (house.visitations.length == 2)
         return twoVisitsColor;
       else
         return manyVisitsColor;

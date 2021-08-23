@@ -6,7 +6,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:sammel_app/Provisioning.dart';
-import 'package:sammel_app/model/Building.dart';
+import 'package:sammel_app/model/VisitedHouse.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Placard.dart';
 import 'package:sammel_app/model/Termin.dart';
@@ -24,10 +24,10 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_map_location/flutter_map_location.dart';
 
 import '../shared/DistanceHelper.dart';
-import 'AddBuilding.dart';
+import 'VisitedHouseEditor.dart';
 import 'MapActionDialog.dart';
 import 'PlacardDeleteDialog.dart';
-import 'EditBuilding.dart';
+import 'EditVisitedHouse.dart';
 
 class ActionMap extends StatefulWidget {
   final List<Termin> termine;
@@ -148,7 +148,7 @@ class ActionMapState extends State<ActionMap> {
           widget.mapController.bounds!.east);
       VisitedHouseView houseView =
           Provider.of<AbstractVisitedHousesService>(context, listen: false)
-              .getBuildingsInArea(bbox);
+              .getVisitedHousesInArea(bbox);
       return houseView.buildDrawablePolygonsFromView();
     ***REMOVED***
     return [];
@@ -168,14 +168,14 @@ class ActionMapState extends State<ActionMap> {
           point.longitude - lngDiff,
           point.latitude + latDiff,
           point.longitude + lngDiff);
-      var buildingView =
+      var visitedHouseView =
           Provider.of<AbstractVisitedHousesService>(context, listen: false)
-              .getBuildingsInArea(bbox);
-      buildingView.selectedBuilding = SelectableVisitedHouse.clone(
+              .getVisitedHousesInArea(bbox);
+      visitedHouseView.selectedHouse = SelectableVisitedHouse.clone(
           SelectableVisitedHouse.fromVisitedHouse(vh, selected: true));
       await showEditVisitedHouseDialog(
           context: context,
-          buildingView: buildingView,
+          visitedHouseView: visitedHouseView,
           currentZoomFactor: widget.mapController.zoom);
       setState(() {
         this.housePolygons = generateVisitedHousePolygons();
@@ -238,12 +238,12 @@ class ActionMapState extends State<ActionMap> {
         point.longitude - lngDiff,
         point.latitude + latDiff,
         point.longitude + lngDiff);
-    var buildingView =
+    var visitedHouseView =
         Provider.of<AbstractVisitedHousesService>(context, listen: false)
-            .getBuildingsInArea(bbox);
-    var newHouseFromServer = await showAddBuildingDialog(
+            .getVisitedHousesInArea(bbox);
+    var newHouseFromServer = await showAddVisitationDialog(
         context: context,
-        buildingView: buildingView,
+        visitedHouseView: visitedHouseView,
         currentZoomFactor: widget.mapController.zoom);
     if (newHouseFromServer == null) return;
 

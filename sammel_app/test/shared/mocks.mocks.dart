@@ -27,7 +27,6 @@ import 'package:http_server/src/http_body.dart' as _i8;
 import 'package:latlong2/latlong.dart' as _i38;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:sammel_app/model/ActionListPushData.dart' as _i36;
-import 'package:sammel_app/model/Building.dart' as _i21;
 import 'package:sammel_app/model/ChatChannel.dart' as _i13;
 import 'package:sammel_app/model/Evaluation.dart' as _i27;
 import 'package:sammel_app/model/FAQItem.dart' as _i40;
@@ -39,6 +38,7 @@ import 'package:sammel_app/model/PushMessage.dart' as _i31;
 import 'package:sammel_app/model/Termin.dart' as _i7;
 import 'package:sammel_app/model/TermineFilter.dart' as _i24;
 import 'package:sammel_app/model/User.dart' as _i12;
+import 'package:sammel_app/model/VisitedHouse.dart' as _i21;
 import 'package:sammel_app/routes/TermineSeite.dart' as _i26;
 import 'package:sammel_app/services/BackendService.dart' as _i5;
 import 'package:sammel_app/services/ChatMessageService.dart' as _i32;
@@ -1301,12 +1301,12 @@ class MockVisitedHousesService extends _i1.Mock
       super.noSuchMethod(Invocation.setter(#geoService, _geoService),
           returnValueForMissingStub: null);
   @override
-  Map<int, _i21.VisitedHouse> get localBuildingMap => (super.noSuchMethod(
-      Invocation.getter(#localBuildingMap),
+  Map<int, _i21.VisitedHouse> get localHousesMap => (super.noSuchMethod(
+      Invocation.getter(#localHousesMap),
       returnValue: <int, _i21.VisitedHouse>{***REMOVED***) as Map<int, _i21.VisitedHouse>);
   @override
-  set localBuildingMap(Map<int, _i21.VisitedHouse>? _localBuildingMap) => super
-      .noSuchMethod(Invocation.setter(#localBuildingMap, _localBuildingMap),
+  set localHousesMap(Map<int, _i21.VisitedHouse>? _localHousesMap) =>
+      super.noSuchMethod(Invocation.setter(#localHousesMap, _localHousesMap),
           returnValueForMissingStub: null);
   @override
   _i5.Backend get backend => (super.noSuchMethod(Invocation.getter(#backend),
@@ -1344,18 +1344,19 @@ class MockVisitedHousesService extends _i1.Mock
               Future<_i21.VisitedHouse?>.value(_FakeVisitedHouse())) as _i11
           .Future<_i21.VisitedHouse?>);
   @override
-  _i21.VisitedHouse? getBuildingFromJson(
+  _i21.VisitedHouse? getVistitedHouseFromJson(
           int? osmId, _i38.LatLng? point, List<_i38.LatLng>? shape) =>
-      (super.noSuchMethod(
-              Invocation.method(#getBuildingFromJson, [osmId, point, shape]))
+      (super.noSuchMethod(Invocation.method(
+              #getVistitedHouseFromJson, [osmId, point, shape]))
           as _i21.VisitedHouse?);
   @override
-  _i22.VisitedHouseView getBuildingsInArea(_i22.BoundingBox? bbox) =>
-      (super.noSuchMethod(Invocation.method(#getBuildingsInArea, [bbox]),
+  _i22.VisitedHouseView getVisitedHousesInArea(_i22.BoundingBox? bbox) =>
+      (super.noSuchMethod(Invocation.method(#getVisitedHousesInArea, [bbox]),
           returnValue: _FakeVisitedHouseView()) as _i22.VisitedHouseView);
   @override
-  _i21.VisitedHouse? getBuildingForPointLocal(_i38.LatLng? point) =>
-      (super.noSuchMethod(Invocation.method(#getBuildingForPointLocal, [point]))
+  _i21.VisitedHouse? getVisitedHouseForPointLocal(_i38.LatLng? point) =>
+      (super.noSuchMethod(
+              Invocation.method(#getVisitedHouseForPointLocal, [point]))
           as _i21.VisitedHouse?);
   @override
   _i21.VisitedHouse editVisitedHouse(_i21.VisitedHouse? house) =>

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:sammel_app/model/Building.dart';
+import 'package:sammel_app/model/VisitedHouse.dart';
 import 'package:sammel_app/services/VisitedHousesService.dart';
 import '../shared/TestdatenVorrat.dart';
 import '../shared/mocks.costumized.dart';
@@ -63,7 +63,7 @@ void main() {
               MockHttpClientResponseBody(), 200, kanzlerinamt().toJson())));
 
       var house = kanzlerinamt();
-      house.visitationEvents[0].id = null;
+      house.visitations[0].id = null;
       await service.createVisitedHouse(house);
 
       verify(_backend.post(
@@ -129,7 +129,7 @@ void main() {
 
       var newHouse = await visitedHousesService
           .createVisitedHouse(VisitedHouse(0, 52.47541, 13.30508, [], [
-        VisitedHouseEvent(
+        Visitation(
             0,
             'Mecklenburgische Straße 57, Wilmersdorf, Charlottenburg-Wilmersdorf, Berlin, 14197',
             'Haupteingang',
@@ -147,7 +147,7 @@ void main() {
 
       visitedHousesService
           .createVisitedHouse(VisitedHouse(10, 52.47541, 13.30508, [], [
-        VisitedHouseEvent(
+        Visitation(
             10,
             'Mecklenburgische Straße 57, Wilmersdorf, Charlottenburg-Wilmersdorf, Berlin, 14197',
             'Haupteingang',
@@ -185,26 +185,22 @@ void main() {
 
     test('editVisitedHouses', () async {
       VisitedHouse house = VisitedHouse(4, 53, 11, [],
-          [VisitedHouseEvent(null, 'tttt', 'hausteil', 3, DateTime(2100))]);
+          [Visitation(null, 'tttt', 'hausteil', 3, DateTime(2100))]);
       visitedHousesService.editVisitedHouse(house);
 
-      expect(visitedHousesService.localBuildingMap.length, 4);
-      expect(visitedHousesService.localBuildingMap[4]!.osmId, 4);
-      expect(
-          visitedHousesService.localBuildingMap[4]!.visitationEvents.length, 1);
-      expect(
-          visitedHousesService.localBuildingMap[4]!.visitationEvents[0].id, 10);
+      expect(visitedHousesService.localHousesMap.length, 4);
+      expect(visitedHousesService.localHousesMap[4]!.osmId, 4);
+      expect(visitedHousesService.localHousesMap[4]!.visitations.length, 1);
+      expect(visitedHousesService.localHousesMap[4]!.visitations[0].id, 10);
 
       house = VisitedHouse(4, 53, 11, [],
-          [VisitedHouseEvent(null, 'tttt', 'hausteil', 3, DateTime(2100, 3))]);
+          [Visitation(null, 'tttt', 'hausteil', 3, DateTime(2100, 3))]);
       visitedHousesService.editVisitedHouse(house);
 
-      expect(visitedHousesService.localBuildingMap.length, 4);
-      expect(visitedHousesService.localBuildingMap[4]!.osmId, 4);
-      expect(
-          visitedHousesService.localBuildingMap[4]!.visitationEvents.length, 2);
-      expect(
-          visitedHousesService.localBuildingMap[4]!.visitationEvents[0].id, 11);
+      expect(visitedHousesService.localHousesMap.length, 4);
+      expect(visitedHousesService.localHousesMap[4]!.osmId, 4);
+      expect(visitedHousesService.localHousesMap[4]!.visitations.length, 2);
+      expect(visitedHousesService.localHousesMap[4]!.visitations[0].id, 11);
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***
