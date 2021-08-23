@@ -34,6 +34,13 @@ class VisitedHouse {
     calculateBBox();
   ***REMOVED***
 
+  VisitedHouse.clone(VisitedHouse house)
+      : osmId = house.osmId,
+        latitude = house.latitude,
+        longitude = house.longitude,
+        shape = house.shape,
+        visitations = List.from(house.visitations);
+
   void calculateBBox() {
     double minLat = 1000;
     double maxLat = -1000;

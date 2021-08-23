@@ -140,7 +140,7 @@ class EditVisitedHouseDialogState extends State<EditVisitedHouseDialog> {
         options: MapOptions(
             center: center,
             zoom: widget.currentZoomFactor < 17 ? 17 : widget.currentZoomFactor,
-            interactiveFlags: noRotation,
+            interactiveFlags: noRotationNoMove,
             swPanBoundary: LatLng(visitedHouseView.bbox.minLatitude,
                 visitedHouseView.bbox.minLongitude),
             nePanBoundary: LatLng(visitedHouseView.bbox.maxLatitude,

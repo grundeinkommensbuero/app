@@ -62,7 +62,7 @@ class GeoService {
       'data': Uri.decodeComponent(
           '[timeout:5][out:json];(way[building]($upperRightLat,$upperRightLng,$lowerLeftLat,$lowerLeftLng);); out body geom;')
     ***REMOVED***);
-    var response = await httpClient
+    var response_convex_building_shape = httpClient
         .getUrl(url)
         .then((request) => request.close())
         .then(HttpBodyHandler.processResponse)
@@ -70,23 +70,30 @@ class GeoService {
       return body;
     ***REMOVED***);
 
+    url = Uri.https(overpassHost, 'api/interpreter/', {
+      'data': Uri.decodeComponent(
+          '[timeout:5][out:json];(relation[building]($upperRightLat,$upperRightLng,$lowerLeftLat,$lowerLeftLng);); out body geom;')
+    ***REMOVED***);
+
+    var response_concave_building_shape = await httpClient
+        .getUrl(url)
+        .then((request) => request.close())
+        .then(HttpBodyHandler.processResponse)
+        .then((HttpClientResponseBody body) {
+      return body;
+    ***REMOVED***);
+
+    var response = await response_convex_building_shape;
+
     if (response.response.statusCode < 200 ||
         response.response.statusCode >= 300)
       throw OsmResponseException(response.body.toString());
 
     var buildingDataL = filterApartment(point, response.body['elements']);
+
     if (buildingDataL.isEmpty) {
-      Uri url = Uri.https(overpassHost, 'api/interpreter/', {
-        'data': Uri.decodeComponent(
-            '[timeout:5][out:json];(relation[building]($upperRightLat,$upperRightLng,$lowerLeftLat,$lowerLeftLng);); out body geom;')
-      ***REMOVED***);
-      var response = await httpClient
-          .getUrl(url)
-          .then((request) => request.close())
-          .then(HttpBodyHandler.processResponse)
-          .then((HttpClientResponseBody body) {
-        return body;
-      ***REMOVED***);
+
+      var response = await response_concave_building_shape;
 
       if (response.response.statusCode < 200 ||
           response.response.statusCode >= 300)

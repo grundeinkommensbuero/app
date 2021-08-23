@@ -168,7 +168,7 @@ class VisitedHouseCreatorState extends State<VisitedHouseCreatorDialog> {
         options: MapOptions(
             center: center,
             zoom: widget.currentZoomFactor < 17 ? 17 : widget.currentZoomFactor,
-            interactiveFlags: noRotation,
+            interactiveFlags: noRotationNoMove,
             swPanBoundary: LatLng(
                 visitedHouseView.bbox.minLatitude, visitedHouseView.bbox.minLongitude),
             nePanBoundary: LatLng(
@@ -239,7 +239,17 @@ class VisitedHouseCreatorState extends State<VisitedHouseCreatorDialog> {
         if (userId != null)
           visitedHouseView.selectedHouse?.visitations
               .add(Visitation(null, '', '', userId, DateTime.now()));
-        visitedHouseController.text = '${geoData.street***REMOVED*** ${geoData.number***REMOVED***';
+        if(geoData.street != null)
+          {
+            if(geoData.number != null)
+              {
+                visitedHouseController.text = '${geoData.street***REMOVED*** ${geoData.number***REMOVED***';
+              ***REMOVED***
+            else
+              {
+                visitedHouseController.text = '${geoData.street***REMOVED***';
+              ***REMOVED***
+          ***REMOVED***
         showLoadingIndicator = false;
       ***REMOVED***
     ***REMOVED***);

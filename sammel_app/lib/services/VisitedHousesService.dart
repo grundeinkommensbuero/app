@@ -270,6 +270,7 @@ class DemoVisitedHousesService extends AbstractVisitedHousesService {
   Future<VisitedHouse> createVisitedHouse(VisitedHouse house) {
     house.visitations.last.id = maxId;
     maxId += 1;
+    //visitedHouses.add(VisitedHouse.clone(house));
     return Future.value(house);
   ***REMOVED***
 
