@@ -32,7 +32,7 @@ void main() {
     when(_placardsService.loadPlacards()).thenAnswer((_) => Future.value([]));
     when(_visitedHousesService.loadVisitedHouses())
         .thenAnswer((_) => Future.value([]));
-    when(_visitedHousesService.getBuildingsInArea(any))
+    when(_visitedHousesService.getVisitedHousesInArea(any))
         .thenReturn(VisitedHouseView(BoundingBox(0, 0, 0, 0), []));
   ***REMOVED***);
 

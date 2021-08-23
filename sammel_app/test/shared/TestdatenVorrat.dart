@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:sammel_app/model/Building.dart';
+import 'package:sammel_app/model/VisitedHouse.dart';
 import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Placard.dart';
@@ -2217,7 +2217,7 @@ Placard placard3() =>
     Placard(3, 52.4709, 13.32744, "12161, Goßlerstraße 29", 11);
 
 VisitedHouse kanzlerinamt() => VisitedHouse(1, 52.52014, 13.36911, [], [
-      VisitedHouseEvent(
+      Visitation(
           1,
           'Willy-Brandt-Straße 1, Tiergarten, Mitte, Berlin, 10557',
           'Westflügel',
@@ -2226,12 +2226,12 @@ VisitedHouse kanzlerinamt() => VisitedHouse(1, 52.52014, 13.36911, [], [
     ]);
 
 VisitedHouse hausundgrund() => VisitedHouse(2, 52.4964133, 13.3617511, [], [
-      VisitedHouseEvent(2, 'Potsdamer Straße 143, 10783 Berlin', '', 12,
+      Visitation(2, 'Potsdamer Straße 143, 10783 Berlin', '', 12,
           DateTime(2021, 7, 17))
     ]);
 
 VisitedHouse konradadenauerhaus() => VisitedHouse(3, 52.5065, 13.35125, [], [
-      VisitedHouseEvent(
+      Visitation(
           3,
           'Klingelhöferstraße 8,Botschaftsviertel, Tiergarten, Mitte, Berlin, 10785',
           'Haupteingang',

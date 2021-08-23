@@ -339,7 +339,7 @@ const Map<String, dynamic> en = {
       'What would you like to enter at this location?',
   'Zu einer Aktion aufrufen': 'Call for an action',
   'Ein Plakat eintragen': 'Enter a poster',
-  'Ein besuchtes Haus markieren': 'Mark a visited building',
+  'Ein besuchtes Haus markieren': 'Mark a visited house',
   'Plakat löschen': 'Delete poster',
   'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?':
       'You entered this poster. Would you like to delete it again?',
@@ -349,7 +349,7 @@ const Map<String, dynamic> en = {
   'Adresse': 'Address',
   'Hausteil': 'Part of the house',
   'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.':
-      'for example Front Building, Side Wing, Staircase B, floor 1-3, etc.',
+      'e.g. Front Building, Side Wing, Staircase B, floor 1-3, etc.',
   'Nein danke': 'No thanks',
   'Absenden': 'Submit',
   'Vorbehalte': 'Arguments',

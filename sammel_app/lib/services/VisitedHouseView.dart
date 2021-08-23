@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter_map/flutter_map.dart';
-import 'package:sammel_app/model/Building.dart';
+import 'package:sammel_app/model/VisitedHouse.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
 
@@ -27,49 +27,49 @@ class BoundingBox {
 ***REMOVED***
 
 class VisitedHouseView {
-  List<SelectableVisitedHouse> buildings;
+  List<SelectableVisitedHouse> houses;
   BoundingBox bbox;
-  SelectableVisitedHouse? selectedBuilding;
+  SelectableVisitedHouse? selectedHouse;
 
-  VisitedHouseView(this.bbox, this.buildings);
+  VisitedHouseView(this.bbox, this.houses);
 
-  SelectableVisitedHouse? getBuildingByPoint(LatLng point) {
+  SelectableVisitedHouse? getHouseByPoint(LatLng point) {
     if (!bbox.containsPoint(point)) {
       return null;
     ***REMOVED***
-    for (SelectableVisitedHouse building in buildings) {
-      if (building.inside(point)) return building;
+    for (SelectableVisitedHouse house in houses) {
+      if (house.inside(point)) return house;
     ***REMOVED***
     return null;
   ***REMOVED***
 
-  selectBuilding(LatLng point) {
-    SelectableVisitedHouse? newSelectedBuilding = getBuildingByPoint(point);
-    newSelectedBuilding?.selected = true;
-    selectedBuilding?.selected = false;
-    if (newSelectedBuilding != null) {
-      selectedBuilding = newSelectedBuilding;
+  selectHouse(LatLng point) {
+    SelectableVisitedHouse? newSelectedHouse = getHouseByPoint(point);
+    newSelectedHouse?.selected = true;
+    selectedHouse?.selected = false;
+    if (newSelectedHouse != null) {
+      selectedHouse = newSelectedHouse;
     ***REMOVED***
-    return newSelectedBuilding;
+    return newSelectedHouse;
   ***REMOVED***
 
   List<Polygon> buildDrawablePolygonsFromView() {
     List<SelectableVisitedHouse> houseslist = [];
-    if (selectedBuilding != null)
-      houseslist = buildings
-          .where((element) => element.osmId != selectedBuilding!.osmId)
+    if (selectedHouse != null)
+      houseslist = houses
+          .where((element) => element.osmId != selectedHouse!.osmId)
           .toList()
-            ..add(selectedBuilding!);
+            ..add(selectedHouse!);
     else
-      houseslist = buildings;
+      houseslist = houses;
 
     List<Polygon> polygons = houseslist
-        .map((building) => Polygon(
-            color: BuildingColorSelector.getDrawColorForSelectable(building),
+        .map((house) => Polygon(
+            color: VisitedHouseColorSelector.getDrawColorForSelectable(house),
             borderStrokeWidth: 2.0,
             borderColor: Color.fromARGB(250, CampaignTheme.secondary.red,
                 CampaignTheme.secondary.green, CampaignTheme.secondary.blue),
-            points: building.shape))
+            points: house.shape))
         .toList();
 
     return polygons;

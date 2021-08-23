@@ -93,7 +93,7 @@ void main() {
 
     when(_visitedHousesService.loadVisitedHouses())
         .thenAnswer((_) => Future.value([]));
-    when(_visitedHousesService.getBuildingsInArea(any))
+    when(_visitedHousesService.getVisitedHousesInArea(any))
         .thenReturn(VisitedHouseView(BoundingBox(0, 0, 0, 0), []));
     ErrorService.displayedTypes = [];
 
@@ -1483,6 +1483,7 @@ void main() {
       await tester.pumpAndSettle();
 
       verify(_termineService.loadAndShowAction(4)).called(1);
+      controller.close();
     ***REMOVED***);
   ***REMOVED***);
 

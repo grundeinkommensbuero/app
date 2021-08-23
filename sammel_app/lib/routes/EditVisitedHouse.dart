@@ -4,7 +4,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:quiver/strings.dart';
-import 'package:sammel_app/model/Building.dart';
+import 'package:sammel_app/model/VisitedHouse.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/services/VisitedHouseView.dart';
 import 'package:sammel_app/services/VisitedHousesService.dart';
@@ -29,43 +29,43 @@ VisitedHouse? addNewVisitedHouseEvent(
 
 Future<VisitedHouse?> showEditVisitedHouseDialog(
     {required BuildContext context,
-    required VisitedHouseView buildingView,
+    required VisitedHouseView visitedHouseView,
     required double currentZoomFactor***REMOVED***) async {
   VisitedHouse? visitedHouse = await showDialog(
     context: context,
-    builder: (context) => EditBuildingDialog(buildingView, currentZoomFactor),
+    builder: (context) => EditVisitedHouseDialog(visitedHouseView, currentZoomFactor),
   );
   return addNewVisitedHouseEvent(context, visitedHouse);
 ***REMOVED***
 
-class EditBuildingDialog extends StatefulWidget {
+class EditVisitedHouseDialog extends StatefulWidget {
   late final LatLng? center;
-  late final VisitedHouseView buildingView;
+  late final VisitedHouseView visitedHouseView;
   late final double currentZoomFactor;
 
-  EditBuildingDialog(this.buildingView, this.currentZoomFactor)
-      : super(key: Key('add building dialog'));
+  EditVisitedHouseDialog(this.visitedHouseView, this.currentZoomFactor)
+      : super(key: Key('add visited house dialog'));
 
   @override
   State<StatefulWidget> createState() {
-    return EditBuildingDialogState(buildingView);
+    return EditVisitedHouseDialogState(visitedHouseView);
   ***REMOVED***
 ***REMOVED***
 
-class EditBuildingDialogState extends State<EditBuildingDialog> {
+class EditVisitedHouseDialogState extends State<EditVisitedHouseDialog> {
   LocationMarker? marker;
   @required
-  late VisitedHouseView buildingView;
+  late VisitedHouseView visitedHouseView;
   late LatLng center;
 
   var showLoadingIndicator = false;
 
-  EditBuildingDialogState(VisitedHouseView buildingView) {
-    this.buildingView = buildingView;
+  EditVisitedHouseDialogState(VisitedHouseView visitedHouseView) {
+    this.visitedHouseView = visitedHouseView;
     this.center = LatLng(
-        0.5 * (buildingView.bbox.maxLatitude + buildingView.bbox.minLatitude),
+        0.5 * (visitedHouseView.bbox.maxLatitude + visitedHouseView.bbox.minLatitude),
         0.5 *
-            (buildingView.bbox.maxLongitude + buildingView.bbox.minLongitude));
+            (visitedHouseView.bbox.maxLongitude + visitedHouseView.bbox.minLongitude));
   ***REMOVED***
 
   @override
@@ -89,8 +89,7 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
             if (Provider.of<AbstractUserService>(context, listen: false)
                     .latestUser ==
                 null) throw ServerException('Couldnt fetch user from server');
-            //   building_view.selected_building?.visitation_events.add(VisitedHouseEvent(-1, Provider.of<AbstractUserService>(context, listen: false).latestUser!.id!, DateTime.now()));
-            Navigator.pop(context, buildingView.selectedBuilding);
+            Navigator.pop(context, visitedHouseView.selectedHouse);
           ***REMOVED***,
         ),
       ],
@@ -127,9 +126,9 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
         height: 5.0,
       )
     ];
-    if (buildingView.selectedBuilding != null &&
-        buildingView.selectedBuilding!.visitationEvents.length > 0) {
-      widgets.addAll(buildingView.selectedBuilding!.visitationEvents
+    if (visitedHouseView.selectedHouse != null &&
+        visitedHouseView.selectedHouse!.visitations.length > 0) {
+      widgets.addAll(visitedHouseView.selectedHouse!.visitations
           .map((event) => buildVisitationEventItem(event)));
     ***REMOVED***
     return widgets;
@@ -142,10 +141,10 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
             center: center,
             zoom: widget.currentZoomFactor < 17 ? 17 : widget.currentZoomFactor,
             interactiveFlags: noRotation,
-            swPanBoundary: LatLng(buildingView.bbox.minLatitude,
-                buildingView.bbox.minLongitude),
-            nePanBoundary: LatLng(buildingView.bbox.maxLatitude,
-                buildingView.bbox.maxLongitude),
+            swPanBoundary: LatLng(visitedHouseView.bbox.minLatitude,
+                visitedHouseView.bbox.minLongitude),
+            nePanBoundary: LatLng(visitedHouseView.bbox.maxLatitude,
+                visitedHouseView.bbox.maxLongitude),
             maxZoom: geo.zoomMax,
             minZoom: geo.zoomMin,
             onTap: houseSelected,
@@ -155,7 +154,7 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
               urlTemplate: "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
               subdomains: ['a', 'b', 'c']),
           PolygonLayerOptions(
-              polygons: buildingView.buildDrawablePolygonsFromView(),
+              polygons: visitedHouseView.buildDrawablePolygonsFromView(),
               polygonCulling: false),
           MarkerLayerOptions(markers: marker == null ? [] : [marker!]),
           AttributionOptions(),
@@ -164,20 +163,20 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
   ***REMOVED***
 
   houseSelected(LatLng point) async {
-    SelectableVisitedHouse? building = buildingView.getBuildingByPoint(point);
+    SelectableVisitedHouse? house = visitedHouseView.getHouseByPoint(point);
     //not in current view
     setState(() {
-      if (building != null &&
-          buildingView.selectedBuilding?.osmId != building.osmId) {
-        buildingView.selectedBuilding = SelectableVisitedHouse.clone(building);
-        buildingView.selectedBuilding?.selected = true;
+      if (house != null &&
+          visitedHouseView.selectedHouse?.osmId != house.osmId) {
+        visitedHouseView.selectedHouse = SelectableVisitedHouse.clone(house);
+        visitedHouseView.selectedHouse?.selected = true;
       ***REMOVED***
       //venueController.text = geodata.description;
       // marker = LocationMarker(point);
     ***REMOVED***);
   ***REMOVED***
 
-  Widget buildVisitationEventItem(VisitedHouseEvent item) {
+  Widget buildVisitationEventItem(Visitation item) {
     Locale? locale;
     try {
       locale = context.locale;
@@ -209,7 +208,7 @@ class EditBuildingDialogState extends State<EditBuildingDialog> {
             onPressed: () {
               // Remove the item from the data source.
               setState(() {
-                buildingView.selectedBuilding!.visitationEvents.remove(item);
+                visitedHouseView.selectedHouse!.visitations.remove(item);
               ***REMOVED***);
             ***REMOVED***)
       ]);

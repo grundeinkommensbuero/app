@@ -24,7 +24,6 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
-import 'package:sammel_app/services/ChatMessageService.dart';
 import 'package:sammel_app/services/VisitedHouseView.dart';
 import 'package:sammel_app/services/VisitedHousesService.dart';
 
@@ -83,7 +82,7 @@ void main() {
           .thenAnswer((_) async => Future.value([]));
       when(_visitedHousesService.loadVisitedHouses())
           .thenAnswer((_) => Future.value([]));
-      when(_visitedHousesService.getBuildingsInArea(any))
+      when(_visitedHousesService.getVisitedHousesInArea(any))
           .thenReturn(VisitedHouseView(BoundingBox(0, 0, 0, 0), []));
 
       await tester.pumpWidget(MultiProvider(providers: [
