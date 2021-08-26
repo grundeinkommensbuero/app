@@ -355,7 +355,8 @@ const Map<String, dynamic> en = {
   'Vorbehalte': 'Arguments',
   'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.':
       'Help the campaign by describing the arguments and hesitations of the undecided. Also: What arguments would convince them? If an argumen was important in more then one talk, write the number behind in brackets.',
-  'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.': 'For privacy reasons these data are not connected to an address.',
+  'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.':
+      'For privacy reasons these data are not connected to an address.',
   "Weiterlesen": "Read More",
 ***REMOVED***
 
@@ -670,32 +671,32 @@ const Map<String, dynamic> ru = {
   'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
       'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.',
   'Ein Fehler ist aufgetreten': 'Произошла ошибка',
-  'Haustürgespräche': 'Haustürgespräche',
-  'Straßengespräche & Flyern': 'Straßengespräche & Flyern',
-  'Kiezfest': 'Kiezfest',
-  'Eintragen': 'Eintragen',
-  'Was möchtest du an dieser Stelle eintragen?':
-      'Was möchtest du an dieser Stelle eintragen?',
-  'Zu einer Aktion aufrufen': 'Zu einer Aktion aufrufen',
-  'Ein Plakat eintragen': 'Ein Plakat eintragen',
-  'Ein besuchtes Haus markieren': 'Ein besuchtes Haus markieren',
-  'Plakat löschen': 'Plakat löschen',
+  'Haustürgespräche': 'обход по квартирам',
+  'Straßengespräche & Flyern': 'уличные разговоры & распространять листовки',
+  'Kiezfest': 'праздник в жилом районе',
+  'Eintragen': 'ввести',
+  'Was möchtest du an dieser Stelle eintragen?': 'Что ты хочешь здесь ввести?',
+  'Zu einer Aktion aufrufen': 'Призвать к действию',
+  'Ein Plakat eintragen': 'Ввести плакат',
+  'Ein besuchtes Haus markieren': 'Отметь дом, который ты посетил*а',
+  'Plakat löschen': 'удалить  плакат',
   'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?':
-      'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?',
-  'Plakate aufhängen': 'Plakate aufhängen',
-  'Besuchtes Haus': 'Besuchtes Haus',
-  'Wähle das Haus auf der Karte aus.': 'Wähle das Haus auf der Karte aus.',
-  'Adresse': 'Adresse',
-  'Hausteil': 'Hausteil',
+      'Ты ввел*а этот плакат. Ты хочешь его удалить?',
+  'Plakate aufhängen': 'Вешать плакаты',
+  'Besuchtes Haus': 'Посещенный дом',
+  'Wähle das Haus auf der Karte aus.': 'Выбери дом на карте.',
+  'Adresse': 'Адрес',
+  'Hausteil': 'Часть дома',
   'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.':
-  'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.',
-  'Nein danke': 'Nein danke',
-  'Absenden': 'Absenden',
-  'Vorbehalte': 'Vorbehalte',
+      'Например, передний корпус, боковое крыло, лестница В, этажи 1-3 и т. д.',
+  'Nein danke': 'нет cпасибо',
+  'Absenden': 'отправить',
+  'Vorbehalte': 'Неуверенность',
   'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.':
-  'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.',
-  'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.': 'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.',
-  "Weiterlesen": "Weiterlesen",
+      'Помоги кампании: запиши, в чем заключались проблемы с людьми которые были неуверенны. И: Чем ты их убедил*а? Если аргумент был важен в нескольких беседах, запиши в скобках после аргумента количество бесед.',
+  'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.':
+      'В целях защиты данных эти данные не связаны с адресом.',
+  "Weiterlesen": "продолжить чтение",
 ***REMOVED***
 
 const Map<String, dynamic> fr = {
@@ -1016,7 +1017,7 @@ const Map<String, dynamic> fr = {
   '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***':
       '{typ***REMOVED*** à {ortsteil***REMOVED***, {treffpunkt***REMOVED*** à {zeitpunkt***REMOVED***\n{url***REMOVED***',
   'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
-      'Pas de donner sur l\'action rechercher. Eventuellement l\'action a été effacer.', 
+      'Pas de donner sur l\'action rechercher. Eventuellement l\'action a été effacer.',
   'Ein Fehler ist aufgetreten': 'Une erreur s\'est produite',
   'Straßengespräche & Flyern': 'Parler dans la rue & distribuer des prospectus',
   'Haustürgespräche': 'rend visite aux loueurs',
@@ -1036,13 +1037,14 @@ const Map<String, dynamic> fr = {
   'Adresse': 'adresse',
   'Hausteil': 'partie de la maison',
   'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.':
-  'Par example partie avant, aile latérale, entrer B, étage 1-3, etc.',
+      'Par example partie avant, aile latérale, entrer B, étage 1-3, etc.',
   'Nein danke': 'Non merci',
   'Absenden': 'envoyer',
   'Vorbehalte': 'réserve',
   'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.':
       'Tu peut aider d’avancer à campagne en prenant des notes exacte sur les raisons pour lesquelles quelques un (et une) hésitent encore. Comment les convaincre et avec quels arguments? Prend aussi des notes sur le nombre de fois qu’un argument fut pertinent.',
-  'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.': 'Pour des raisons de protection des données, ces données ne sont pas liées à une adresse.',
+  'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.':
+      'Pour des raisons de protection des données, ces données ne sont pas liées à une adresse.',
   "Weiterlesen": "Continuer à lire",
 ***REMOVED***
 
@@ -1387,12 +1389,13 @@ const Map<String, dynamic> de = {
   'Adresse': 'Adresse',
   'Hausteil': 'Hausteil',
   'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.':
-  'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.',
+      'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.',
   'Nein danke': 'Nein danke',
   'Absenden': 'Absenden',
   'Vorbehalte': 'Vorbehalte',
   'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.':
-  'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.',
-  'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.': 'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.',
+      'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.',
+  'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.':
+      'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.',
   "Weiterlesen": "Weiterlesen",
 ***REMOVED***
