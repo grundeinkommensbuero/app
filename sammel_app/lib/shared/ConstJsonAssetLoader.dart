@@ -358,6 +358,8 @@ const Map<String, dynamic> en = {
   'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.':
       'For privacy reasons these data are not connected to an address.',
   "Weiterlesen": "Read More",
+  'Ja-Stimmen sammeln': 'Collect Yes-Votes',
+  'Zeitungen verteilen': 'Deliver Newspapers',
 ***REMOVED***
 
 const Map<String, dynamic> ru = {
@@ -657,11 +659,15 @@ const Map<String, dynamic> ru = {
   "Zur Aktion": "к акции",
   "Berichten": "отзыв",
   "Über Aktion berichten": "отзыв",
+  // TODO
+  // "Kundgebung": "Manifestation",
+  // "Nur eigene Aktionen anzeigen": "Nur eigene Aktionen anzeigen",
+  // "Eigene Aktionen immer anzeigen": "Eigene Aktionen immer anzeigen",
+  // "Eigene Aktionen": "Eigene Aktionen",
   // "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
   //     "If you want to change Notifications to silent or disable certain notification categories, just long press a received notification. You will then be guided to the notification preferences for this app.",
   // "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
   //     "If you want to change Notifications to silent or disable certain notification categories, just press the three dots on a received notification. You will then be guided to the notification preferences for this app.",
-  // "Kundgebung": "Manifestation",
   "Na gut": "Закрыть",
   "In den Kalender": "Добавить в календарь",
   '{typ***REMOVED*** in {ortsteil***REMOVED***': '{typ***REMOVED*** в {ortsteil***REMOVED***',
@@ -697,6 +703,8 @@ const Map<String, dynamic> ru = {
   'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.':
       'В целях защиты данных эти данные не связаны с адресом.',
   "Weiterlesen": "продолжить чтение",
+  'Ja-Stimmen sammeln': 'Сбор голосов за',
+  'Zeitungen verteilen': 'доставлять газеты',
 ***REMOVED***
 
 const Map<String, dynamic> fr = {
@@ -1008,8 +1016,12 @@ const Map<String, dynamic> fr = {
   "Berichten": "Commentaire",
   "Über Aktion berichten": "Commentaire",
   "Kundgebung": "Manifestation",
+  // TODO
   // "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
   //     "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.",
+  // "Nur eigene Aktionen anzeigen": "Nur eigene Aktionen anzeigen",
+  // "Eigene Aktionen immer anzeigen": "Eigene Aktionen immer anzeigen",
+  // "Eigene Aktionen": "Eigene Aktionen",
   "Na gut": "Fermer",
   "In den Kalender": "Dans le calendrier",
   '{typ***REMOVED*** in {ortsteil***REMOVED***': '{typ***REMOVED*** à {ortsteil***REMOVED***',
@@ -1046,6 +1058,8 @@ const Map<String, dynamic> fr = {
   'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.':
       'Pour des raisons de protection des données, ces données ne sont pas liées à une adresse.',
   "Weiterlesen": "Continuer à lire",
+  'Ja-Stimmen sammeln': 'Recueillir les votes oui',
+  'Zeitungen verteilen': 'Livrer des journaux',
 ***REMOVED***
 
 const Map<String, dynamic> de = {
@@ -1398,4 +1412,6 @@ const Map<String, dynamic> de = {
   'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.':
       'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.',
   "Weiterlesen": "Weiterlesen",
+  'Ja-Stimmen sammeln': 'Ja-Stimmen sammeln',
+  'Zeitungen verteilen': 'Zeitungen verteilen',
 ***REMOVED***
