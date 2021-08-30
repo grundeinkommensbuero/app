@@ -60,11 +60,11 @@ class Termin {
             ? 'assets/images/Sammeln.png'
             : 'assets/images/Sammeln.png';
       case 'Infoveranstaltung':
-        return 'assets/images/Workshop.png';
+        return 'assets/images/Infoveranstaltung.png';
       case 'Workshop':
         return centered
-            ? 'assets/images/Workshop.png'
-            : 'assets/images/Workshop.png';
+            ? 'assets/images/Infoveranstaltung.png'
+            : 'assets/images/Infoveranstaltung.png';
       case 'Plakatieren':
         return 'assets/images/Plakatieren.png';
       case 'Kundgebung':
