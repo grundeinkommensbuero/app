@@ -93,8 +93,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
       initialized = true;
     }
 
-    final color = CampaignTheme.actionColor(
-        widget.action.ende, isMyAction, this.iAmParticipant);
+    final color = CampaignTheme.primary;
 
     PopupMenuButton? menu =
         menuButton(widget.action, isMyAction, iAmParticipant);
@@ -121,7 +120,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 22.0,
-                              color: Color.fromARGB(255, 129, 28, 98)))
+                              color: CampaignTheme.secondary))
                       .tr()),
             ]),
             actions: menu == null

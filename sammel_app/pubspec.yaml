@@ -64,13 +64,13 @@ dependencies:
 dependency_overrides:
   calendarro: #https://github.com/adamstyrc/calendarro/pull/46 DateUtils and ancestorStateOfType fixes
     git: https://github.com/kitwtnb/calendarro.git
-# sieht leider verwaist aus
-# zwei Forks:
-# * https://github.com/kitwtnb/calendarro.git (Null-Safety)
-# * https://github.com/ProbablyRational/calendarro.git (Bugfixes)
-# 2 Alternativen (Notwendige Funktionen: Multi-Selection, Internationalisierung):
-# https://pub.dev/packages/flutter_calendar_carousel (null-safe)
-# https://pub.dev/packages/table_calendar (null-safety auf dem weg)
+  # sieht leider verwaist aus
+  # zwei Forks:
+  # * https://github.com/kitwtnb/calendarro.git (Null-Safety)
+  # * https://github.com/ProbablyRational/calendarro.git (Bugfixes)
+  # 2 Alternativen (Notwendige Funktionen: Multi-Selection, Internationalisierung):
+  # https://pub.dev/packages/flutter_calendar_carousel (null-safe)
+  # https://pub.dev/packages/table_calendar (null-safety auf dem weg)
   poly:
     git: https://github.com/Keatr0n/poly.git
 
@@ -88,7 +88,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -96,38 +95,39 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-   - assets/images/dwe.png
-   - assets/images/logo.png
-   - assets/images/logo_ios.png
-   - assets/images/logo_transparent.png
-   - assets/images/Sammeln.png
-   - assets/images/Sammeln_centered.png
-   - assets/images/Workshop.png
-   - assets/images/Workshop_centered.png
-   - assets/images/Infoveranstaltung.png
-   - assets/images/Plakatieren.png
-   - assets/images/Kundgebung.png
-   - assets/images/Kundgebung_centered.png
-   - assets/images/housy_happy.png
-   - assets/images/housy_info.png
-   - assets/images/housy_problem.png
-   - assets/images/aktionen-seite.png
-   - assets/images/aktionen-details-seite.png
-   - assets/images/chat-seite.png
-   - assets/images/HausBesucht.png
-   - assets/images/Haustuergespraeche.png
-   - assets/images/Kiezfest.png
-   - assets/images/PlakateAufhaengen.png
-   - assets/images/StrassengespraecheUndFlyern.png
-   - assets/images/Plakat.png
-   - assets/images/Flyern.png
-   - assets/images/dw_video_enteignen_bezahlen.png
-   - assets/images/eintragen.png
-   - assets/security/sammel-server_local.pem
-   - assets/security/root-cert.pem
-   - assets/geodata/bezirksregion_generalized.geojson
-   - assets/geodata/ortsteil_generalized.geojson
-   - assets/geodata/prognoseraum_generalized.geojson
+    - assets/images/xbge.png
+    - assets/images/xbge_logo_small.png
+    - assets/images/logo.png
+    - assets/images/keyvisual.png
+    - assets/images/logo_ios.png
+    - assets/images/logo_transparent.png
+    - assets/images/Sammeln.png
+    - assets/images/Sammeln_centered.png
+    - assets/images/Infoveranstaltung.png
+    - assets/images/Workshop_centered.png
+    - assets/images/Plakatieren.png
+    - assets/images/Kundgebung.png
+    - assets/images/Kundgebung_centered.png
+    - assets/images/housy_happy.png
+    - assets/images/housy_info.png
+    - assets/images/housy_problem.png
+    - assets/images/aktionen-seite.png
+    - assets/images/aktionen-details-seite.png
+    - assets/images/chat-seite.png
+    - assets/images/HausBesucht.png
+    - assets/images/Haustuergespraeche.png
+    - assets/images/Kiezfest.png
+    - assets/images/PlakateAufhaengen.png
+    - assets/images/StrassengespraecheUndFlyern.png
+    - assets/images/Plakat.png
+    - assets/images/Flyern.png
+    - assets/images/dw_video_enteignen_bezahlen.png
+    - assets/images/eintragen.png
+    - assets/security/sammel-server_local.pem
+    - assets/security/root-cert.pem
+    - assets/geodata/bezirksregion_generalized.geojson
+    - assets/geodata/ortsteil_generalized.geojson
+    - assets/geodata/prognoseraum_generalized.geojson
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -141,12 +141,12 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Raleway
+    - family: Ideal
       fonts:
-        - asset: fonts/Raleway-Medium.ttf
-        - asset: fonts/Raleway-Italic.ttf
+        - asset: fonts/ideal-regular.ttf
+        - asset: fonts/ideal-regular.ttf
           style: italic
-        - asset: fonts/Raleway-Bold.ttf
+        - asset: fonts/ideal-bold.ttf
           weight: 700
   #   - family: Trajan Pro
   #     fonts:

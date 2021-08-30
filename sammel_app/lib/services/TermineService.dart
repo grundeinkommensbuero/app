@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -19,6 +20,9 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'ErrorService.dart';
 import 'LocalNotificationService.dart';
 import 'UserService.dart';
+
+import 'dart:developer' as developer;
+import 'package:flutter/foundation.dart';
 
 abstract class AbstractTermineService extends BackendService {
   StammdatenService stammdatenService;
@@ -76,6 +80,7 @@ class TermineService extends AbstractTermineService
   Future<List<Termin>> loadActions(TermineFilter filter) async {
     HttpClientResponseBody response =
         await post('service/termine', jsonEncode(filter));
+
     var kieze = await stammdatenService.kieze;
     final termine = (response.body as List)
         .map((jsonTermin) => Termin.fromJson(jsonTermin, kieze))

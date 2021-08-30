@@ -1,4 +1,4 @@
-const Mode mode = Mode.DEMO;
+const Mode mode = Mode.PROD;
 
 // Debug
 const bool pullMode = false;
@@ -17,7 +17,7 @@ int get port => portMap[mode]!;
 String get topicPrefix => topicPrefixMap[mode]!;
 
 const String appAuth = 'MTpiOTdjNzU5Ny1mNjY5LTRmZWItOWJhMi0zMjE0YzE4MjIzMzk=';
-const String prodKey = 'Produktiv-Verschüsselungs-Key goes here';
+const String prodKey = '/1YorpECNpqJlt+bIGHhCQxIhkDWhDZ9LwhChPHmOlY=';
 
 const geo = GeoProperties(
     boundLatMin: 52.324702,
@@ -34,7 +34,7 @@ const hostMap = {
   Mode.DEMO: 'none',
   Mode.LOCAL: '10.0.2.2',
   Mode.TEST: 'dwe.idash.org',
-  Mode.PROD: 'dwenteignen.party',
+  Mode.PROD: 'app-server.xbge.de',
 };
 
 const portMap = {
