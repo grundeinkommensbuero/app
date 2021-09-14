@@ -1,4 +1,4 @@
-FROM jboss/wildfly
+FROM jboss/wildfly:24.0.0.Final
 
 # Datenbank-Connector als Modul kopieren
 COPY Wildfly/mariaDB /opt/jboss/wildfly/modules/org/mariadb/main
