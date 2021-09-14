@@ -30,4 +30,5 @@ printf "\n%s\n"  "Database responded, starting server..."
   -Dstore_password=$SERVER_PASSWORD \
   -Dmode=$MODE \
   -Dkey=$KEY \
+  -Dresteasy.preferJacksonOverJsonB=false \
   --debug
