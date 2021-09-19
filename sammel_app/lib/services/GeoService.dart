@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:http_server/http_server.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:sammel_app/Provisioning.dart';
 import 'package:sammel_app/shared/DistanceHelper.dart';
 import 'package:poly/poly.dart' as poly;
 
@@ -11,7 +12,7 @@ class GeoService {
   late HttpClient httpClient;
 
   String nominatimHost = 'nominatim.openstreetmap.org';
-  String overpassHost = 'overpass.kumi.systems';
+  String overpassHost = overpassApi;
 
   int port = 443;
 
@@ -58,7 +59,7 @@ class GeoService {
     var lowerLeftLat = point.latitude + twoMeterLat;
     var lowerLeftLng = point.longitude + twoMeterLng;
 
-    Uri url = Uri.https(overpassHost, 'api/interpreter/', {
+    Uri url = Uri.http(overpassHost, 'api/interpreter', {
       'data': Uri.decodeComponent(
           '[timeout:5][out:json];(way[building]($upperRightLat,$upperRightLng,$lowerLeftLat,$lowerLeftLng);); out body geom;')
     ***REMOVED***);
@@ -70,7 +71,7 @@ class GeoService {
       return body;
     ***REMOVED***);
 
-    url = Uri.https(overpassHost, 'api/interpreter/', {
+    url = Uri.http(overpassHost, 'api/interpreter/', {
       'data': Uri.decodeComponent(
           '[timeout:5][out:json];(relation[building]($upperRightLat,$upperRightLng,$lowerLeftLat,$lowerLeftLng);); out body geom;')
     ***REMOVED***);
