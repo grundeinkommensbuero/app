@@ -71,7 +71,7 @@ class GeoService {
       return body;
     ***REMOVED***);
 
-    url = Uri.http(overpassHost, 'api/interpreter/', {
+    url = Uri.http(overpassHost, 'api/interpreter', {
       'data': Uri.decodeComponent(
           '[timeout:5][out:json];(relation[building]($upperRightLat,$upperRightLng,$lowerLeftLat,$lowerLeftLng);); out body geom;')
     ***REMOVED***);
