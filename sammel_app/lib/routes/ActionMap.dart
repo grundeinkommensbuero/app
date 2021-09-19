@@ -220,7 +220,6 @@ class ActionMapState extends State<ActionMap> {
     MapActionType? chosenAction = await showMapActionDialog(context);
 
     if (chosenAction == MapActionType.NewAction) {
-      print('### switchToActionCreator ausgelöst');
       widget.switchToActionCreator(point);
     ***REMOVED***
     if (chosenAction == MapActionType.NewPlacard) createNewPlacard(point);
@@ -229,7 +228,6 @@ class ActionMapState extends State<ActionMap> {
   ***REMOVED***
 
   void createNewVisitedHouse(LatLng point) async {
-    //TODO: now it takes always the same distance around tap point
     var showDistanceInM = 100.0;
     var lngDiff = DistanceHelper.getLongDiffFromM(point, showDistanceInM);
     var latDiff = DistanceHelper.getLatDiffFromM(point, showDistanceInM);

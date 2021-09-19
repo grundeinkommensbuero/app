@@ -1327,8 +1327,9 @@ class MockVisitedHousesService extends _i1.Mock
                   Future<_i21.VisitedHouse?>.value(_FakeVisitedHouse()))
           as _i11.Future<_i21.VisitedHouse?>);
   @override
-  dynamic deleteVisitedHouse(int? id) =>
-      super.noSuchMethod(Invocation.method(#deleteVisitedHouse, [id]));
+  _i11.Future<dynamic> deleteVisitedHouse(int? id) =>
+      (super.noSuchMethod(Invocation.method(#deleteVisitedHouse, [id]),
+          returnValue: Future<dynamic>.value(null)) as _i11.Future<dynamic>);
   @override
   _i11.Future<List<_i21.VisitedHouse>> loadVisitedHouses() =>
       (super.noSuchMethod(Invocation.method(#loadVisitedHouses, []),
@@ -1362,6 +1363,10 @@ class MockVisitedHousesService extends _i1.Mock
   _i21.VisitedHouse editVisitedHouse(_i21.VisitedHouse? house) =>
       (super.noSuchMethod(Invocation.method(#editVisitedHouse, [house]),
           returnValue: _FakeVisitedHouse()) as _i21.VisitedHouse);
+  @override
+  List<_i21.VisitedHouse> getAllHouses() =>
+      (super.noSuchMethod(Invocation.method(#getAllHouses, []),
+          returnValue: <_i21.VisitedHouse>[]) as List<_i21.VisitedHouse>);
   @override
   _i11.Future<_i8.HttpClientResponseBody> get(String? url, {bool? appAuth***REMOVED***) =>
       (super.noSuchMethod(Invocation.method(#get, [url], {#appAuth: appAuth***REMOVED***),

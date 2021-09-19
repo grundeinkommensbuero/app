@@ -52,7 +52,8 @@ void main() {
       expect(response[2].osmId, 3);
       expect(response[0].visitations[0].adresse,
           'Willy-Brandt-Straße 1, Tiergarten, Mitte, Berlin, 10557');
-      expect(response[1].visitations[0].adresse, 'Potsdamer Straße 143, 10783 Berlin');
+      expect(response[1].visitations[0].adresse,
+          'Potsdamer Straße 143, 10783 Berlin');
       expect(response[2].visitations[0].adresse,
           'Klingelhöferstraße 8,Botschaftsviertel, Tiergarten, Mitte, Berlin, 10785');
     ***REMOVED***);
@@ -125,7 +126,7 @@ void main() {
 
     test('createVisitedHouse stores house with new id and returns it',
         () async {
-      expect(visitedHousesService.visitedHouses.length, 3);
+      expect(visitedHousesService.visitedHousesOnStart.length, 3);
 
       var newHouse = await visitedHousesService
           .createVisitedHouse(VisitedHouse(0, 52.47541, 13.30508, [], [
@@ -137,44 +138,9 @@ void main() {
             DateTime(2021, 7, 18))
       ]));
 
-      expect(visitedHousesService.visitedHouses.length, 4);
-      expect(visitedHousesService.visitedHouses[3].osmId, 4);
+      expect(visitedHousesService.visitedHousesOnStart.length, 4);
+      expect(visitedHousesService.visitedHousesOnStart[3].osmId, 4);
       expect(newHouse.osmId, 4);
-    ***REMOVED***);
-
-    test('createVisitedHouse adds house with original id', () {
-      expect(visitedHousesService.visitedHouses.length, 3);
-
-      visitedHousesService
-          .createVisitedHouse(VisitedHouse(10, 52.47541, 13.30508, [], [
-        Visitation(
-            10,
-            'Mecklenburgische Straße 57, Wilmersdorf, Charlottenburg-Wilmersdorf, Berlin, 14197',
-            'Haupteingang',
-            11,
-            DateTime(2021, 7, 18))
-      ]));
-
-      expect(visitedHousesService.visitedHouses.length, 4);
-      expect(visitedHousesService.visitedHouses[3].osmId, 10);
-    ***REMOVED***);
-
-    test('deleteVisitedHouse removes corrrect house', () {
-      expect(visitedHousesService.visitedHouses.length, 3);
-
-      visitedHousesService.deleteVisitedHouse(3);
-
-      expect(visitedHousesService.visitedHouses.length, 2);
-      expect(visitedHousesService.visitedHouses.map((h) => h.osmId),
-          containsAll([1, 2]));
-    ***REMOVED***);
-
-    test('deleteVisitedHouse ignores unkown house', () {
-      expect(visitedHousesService.visitedHouses.length, 3);
-
-      visitedHousesService.deleteVisitedHouse(4);
-
-      expect(visitedHousesService.visitedHouses.length, 3);
     ***REMOVED***);
 
     test('loadVisitedHouses serves all houses', () async {
@@ -183,7 +149,7 @@ void main() {
       expect(houses.map((h) => h.osmId), containsAll([1, 2, 3]));
     ***REMOVED***);
 
-    test('editVisitedHouses', () async {
+    test('editVisitedHouses generates id for visitation', () async {
       VisitedHouse house = VisitedHouse(4, 53, 11, [],
           [Visitation(null, 'tttt', 'hausteil', 3, DateTime(2100))]);
       visitedHousesService.editVisitedHouse(house);
@@ -191,16 +157,7 @@ void main() {
       expect(visitedHousesService.localHousesMap.length, 4);
       expect(visitedHousesService.localHousesMap[4]!.osmId, 4);
       expect(visitedHousesService.localHousesMap[4]!.visitations.length, 1);
-      expect(visitedHousesService.localHousesMap[4]!.visitations[0].id, 10);
-
-      house = VisitedHouse(4, 53, 11, [],
-          [Visitation(null, 'tttt', 'hausteil', 3, DateTime(2100, 3))]);
-      visitedHousesService.editVisitedHouse(house);
-
-      expect(visitedHousesService.localHousesMap.length, 4);
-      expect(visitedHousesService.localHousesMap[4]!.osmId, 4);
-      expect(visitedHousesService.localHousesMap[4]!.visitations.length, 2);
-      expect(visitedHousesService.localHousesMap[4]!.visitations[0].id, 11);
+      expect(visitedHousesService.localHousesMap[4]!.visitations[0].id, 4);
     ***REMOVED***);
   ***REMOVED***);
 ***REMOVED***

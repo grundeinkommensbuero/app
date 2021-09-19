@@ -20,21 +20,21 @@ abstract class AbstractVisitedHousesService extends BackendService {
 
   Future<VisitedHouse?> createVisitedHouse(VisitedHouse house);
 
-  AbstractVisitedHousesService(
-      AbstractUserService userService, GeoService geoService, Backend backend)
+  AbstractVisitedHousesService(AbstractUserService userService,
+      GeoService geoService, Backend backend)
       : super(userService, backend) {
     this.geoService = geoService;
   ***REMOVED***
 
-  Future<VisitedHouse?> getVisitedHouseOfPoint(
-      LatLng point, bool checkOnServer) async {
+  Future<VisitedHouse?> getVisitedHouseOfPoint(LatLng point,
+      bool checkOnServer) async {
     VisitedHouse? visitedHousOnPoint = getVisitedHouseForPointLocal(point);
     if (visitedHousOnPoint != null) return visitedHousOnPoint;
 
     if (!checkOnServer) return null;
 
     List polygonAndDesc =
-        await geoService.getPolygonAndDescriptionOfPoint(point);
+    await geoService.getPolygonAndDescriptionOfPoint(point);
     List<LatLng>? shape = polygonAndDesc[0];
     var osmId = polygonAndDesc[1];
     if (shape == null) {
@@ -55,8 +55,8 @@ abstract class AbstractVisitedHousesService extends BackendService {
     return getVistitedHouseFromJson(osmId, point, shape);
   ***REMOVED***
 
-  VisitedHouse? getVistitedHouseFromJson(
-      int osmId, LatLng point, List<LatLng> shape) {
+  VisitedHouse? getVistitedHouseFromJson(int osmId, LatLng point,
+      List<LatLng> shape) {
     if (localHousesMap.containsKey(osmId)) {
       return localHousesMap[osmId];
     ***REMOVED*** else {
@@ -65,8 +65,6 @@ abstract class AbstractVisitedHousesService extends BackendService {
   ***REMOVED***
 
   VisitedHouseView getVisitedHousesInArea(BoundingBox bbox) {
-    //TODO: it only checks for local buildings atm
-    //TODO: take a bit more clever data format
     List<SelectableVisitedHouse> housesInRoi = localHousesMap.values
         .where((house) => house.bbox.intersect(bbox))
         .map((house) => SelectableVisitedHouse.fromVisitedHouse(house))
@@ -77,67 +75,81 @@ abstract class AbstractVisitedHousesService extends BackendService {
 
   VisitedHouse? getVisitedHouseForPointLocal(LatLng point) =>
       // ignore: unnecessary_cast
-      localHousesMap.values.map((house) => house as VisitedHouse?).firstWhere(
+  localHousesMap.values.map((house) => house as VisitedHouse?).firstWhere(
           (house) => house!.bbox.containsPoint(point) && house.inside(point),
-          orElse: () => null);
+      orElse: () => null);
 
   VisitedHouse editVisitedHouse(VisitedHouse house) {
-    var addEvents = house.visitations;
-    var deleteEvents = Set();
+    List<Visitation> newVisitationList = house.visitations;
+    Set<int> deleteVisitations = Set();
 
+    print('localHousesMap: ${localHousesMap.values.map((value) => '${value
+        .osmId***REMOVED*** ${value.visitations.map((e) => e.id)***REMOVED***')***REMOVED***');
     VisitedHouse? localHouse = localHousesMap[house.osmId];
 
     if (localHouse != null) {
-      var currentIds = localHouse.visitations.map((e) => e.id).toSet();
-      var newIds = house.visitations.map((e) => e.id).toSet();
-      deleteEvents = currentIds.difference(newIds);
-      addEvents = addEvents
-          .where((element) => !currentIds.contains(element.id))
+      var currentEventIds = localHouse.visitations.map((e) => e.id!).toSet();
+      print('currentIds: ${currentEventIds***REMOVED***');
+      var newVisitationIds = newVisitationList.map((e) => e.id).toSet();
+      print('newIds: ${newVisitationIds***REMOVED***');
+      deleteVisitations = currentEventIds.difference(newVisitationIds);
+      newVisitationList = newVisitationList
+          .where((element) => !currentEventIds.contains(element.id))
           .toList();
     ***REMOVED***
-    for (var deleteEvent in deleteEvents) {
-      deleteVisitedHouse(deleteEvent);
+    print('deleteVisitations: ${deleteVisitations***REMOVED***');
+    for (var deleteVisitation in deleteVisitations) {
+      print('Lösche Event ${deleteVisitation***REMOVED***');
+      deleteVisitedHouse(deleteVisitation);
     ***REMOVED***
 
-    for (var addEvent in addEvents) {
-      VisitedHouse houseWithWventOnly = VisitedHouse(house.osmId,
+    for (var addEvent in newVisitationList) {
+      VisitedHouse houseWithEventOnly = VisitedHouse(house.osmId,
           house.latitude, house.longitude, house.shape, [addEvent]);
-      var h = createVisitedHouse(houseWithWventOnly);
+      var h = createVisitedHouse(houseWithEventOnly);
       h.then((value) => addEvent.id = value?.visitations.last.id);
     ***REMOVED***
+    print('Events von Haus ${house.osmId***REMOVED***: ${house.visitations.map((e) => e
+        .id)***REMOVED***');
     if (house.visitations.isNotEmpty) {
-      house.visitations.sort((a, b) => a.datum.difference(b.datum).inSeconds > 0
+      house.visitations.sort((a, b) =>
+      a.datum
+          .difference(b.datum)
+          .inSeconds > 0
           ? 1
-          : a.datum.difference(b.datum).inSeconds < 0
-              ? -1
-              : 0);
+          : a.datum
+          .difference(b.datum)
+          .inSeconds < 0
+          ? -1
+          : 0);
       localHousesMap[house.osmId] = house;
     ***REMOVED*** else {
+      print('Lösche Haus ${house.osmId***REMOVED***');
       localHousesMap.remove(house.osmId);
     ***REMOVED***
 
     return house;
   ***REMOVED***
 
-  getAllHouses() {
+  List<VisitedHouse> getAllHouses() {
     return localHousesMap.values.toList();
   ***REMOVED***
 
-  deleteVisitedHouse(int id) async {***REMOVED***
+  Future deleteVisitedHouse(int id);
 ***REMOVED***
 
 class VisitedHousesService extends AbstractVisitedHousesService {
   late GeoService geoService;
 
-  VisitedHousesService(
-      GeoService geoService, AbstractUserService userService, Backend backend)
+  VisitedHousesService(GeoService geoService, AbstractUserService userService,
+      Backend backend)
       : super(userService, geoService, backend);
 
   @override
   Future<VisitedHouse?> createVisitedHouse(VisitedHouse house) async {
     try {
       var response =
-          await post('service/besuchteHaeuser/neu', jsonEncode(house));
+      await post('service/besuchteHaeuser/neu', jsonEncode(house));
       return VisitedHouse.fromJson(response.body);
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
@@ -148,7 +160,7 @@ class VisitedHousesService extends AbstractVisitedHousesService {
   @override
   deleteVisitedHouse(int id) async {
     try {
-      return await delete('service/besuchteHaeuser/$id');
+      await delete('service/besuchteHaeuser/$id');
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
           context: 'Löschen von Besuchtem Haus ist fehlgeschlagen.');
@@ -239,12 +251,13 @@ var s1 = [
 ];
 
 class DemoVisitedHousesService extends AbstractVisitedHousesService {
-  List<VisitedHouse> visitedHouses = [
+  List<VisitedHouse> visitedHousesOnStart = [
     VisitedHouse(1, 52.52014, 13.36911,
         s1.map((e) => LatLng(e['lat'] ?? 0.0, e['lon'] ?? 0)).toList(), [
-      Visitation(1, 'Willy-Brandt-Straße 1, Tiergarten, Mitte, Berlin, 10557',
-          "Westfluegel", 12, DateTime(2021, 7, 16))
-    ]),
+          Visitation(
+              1, 'Willy-Brandt-Straße 1, Tiergarten, Mitte, Berlin, 10557',
+              "Westfluegel", 12, DateTime(2021, 7, 16))
+        ]),
     VisitedHouse(2, 52.4964133, 13.3617511, [], [
       Visitation(2, 'Potsdamer Straße 143, 10783 Berlin', '', 12,
           DateTime(2021, 7, 17))
@@ -260,20 +273,30 @@ class DemoVisitedHousesService extends AbstractVisitedHousesService {
   ];
   var maxId = 3;
 
-  DemoVisitedHousesService(
-      AbstractUserService userService, GeoService geoService)
+  DemoVisitedHousesService(AbstractUserService userService,
+      GeoService geoService)
       : super(userService, geoService, DemoBackend()) {
-    localHousesMap = {for (VisitedHouse v in visitedHouses) v.osmId: v***REMOVED***
+    localHousesMap = {for (var house in visitedHousesOnStart) house.osmId: house***REMOVED***
   ***REMOVED***
 
   @override
   Future<VisitedHouse> createVisitedHouse(VisitedHouse house) {
-    house.visitations.last.id = maxId;
-    maxId += 1;
-    //visitedHouses.add(VisitedHouse.clone(house));
-    return Future.value(house);
+    print('### Häuser vorher: ${visitedHousesOnStart.map((e) =>
+        e.visitations.map((e) => e.id))***REMOVED***');
+    house.visitations.last.id = maxId += 1;
+    house.osmId = maxId;
+    var newHouse = VisitedHouse.clone(house);
+    visitedHousesOnStart.add(newHouse);
+    print('### Häuser nachher: ${visitedHousesOnStart.map((e) =>
+        e.visitations.map((e) => e.id))***REMOVED***');
+    return Future.value(newHouse);
   ***REMOVED***
 
   @override
-  Future<List<VisitedHouse>> loadVisitedHouses() => Future.value(visitedHouses);
+  Future<List<VisitedHouse>> loadVisitedHouses() => Future.value(visitedHousesOnStart);
+
+  @override
+  deleteVisitedHouse(int id) async {
+    // Löschen im Server unnötig***REMOVED***
+  ***REMOVED***
 ***REMOVED***
