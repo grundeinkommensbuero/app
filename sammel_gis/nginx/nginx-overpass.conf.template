@@ -43,11 +43,6 @@ http {
         ssl_certificate /etc/ssl/certificate.crt;
         ssl_certificate_key /etc/ssl/certificate.key;
 
-        ssl_protocols TLSv1.2 TLSv1.3;
-
-        ssl_ciphers ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-SHA;
-        ssl_prefer_server_ciphers on;
-
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload";
         # END COSTUM
 
