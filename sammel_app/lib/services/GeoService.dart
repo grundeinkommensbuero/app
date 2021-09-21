@@ -17,7 +17,11 @@ class GeoService {
   int port = 443;
 
   GeoService({HttpClient? httpMock***REMOVED***) {
-    if (httpMock == null) httpClient = HttpClient();
+    if (httpMock == null)
+      httpClient = HttpClient()
+        ..badCertificateCallback = ((X509Certificate cert, String host,
+                int port) =>
+            host == 'localhost' || host == '10.0.2.2' || host == '127.0.0.1');
   ***REMOVED***
 
   Future<GeoData> getDescriptionToPoint(LatLng point) async {
@@ -59,7 +63,7 @@ class GeoService {
     var lowerLeftLat = point.latitude + twoMeterLat;
     var lowerLeftLng = point.longitude + twoMeterLng;
 
-    Uri url = Uri.http(overpassHost, 'api/interpreter', {
+    Uri url = Uri.https(overpassHost, 'api/interpreter', {
       'data': Uri.decodeComponent(
           '[timeout:5][out:json];(way[building]($upperRightLat,$upperRightLng,$lowerLeftLat,$lowerLeftLng);); out body geom;')
     ***REMOVED***);
@@ -71,7 +75,7 @@ class GeoService {
       return body;
     ***REMOVED***);
 
-    url = Uri.http(overpassHost, 'api/interpreter', {
+    url = Uri.https(overpassHost, 'api/interpreter', {
       'data': Uri.decodeComponent(
           '[timeout:5][out:json];(relation[building]($upperRightLat,$upperRightLng,$lowerLeftLat,$lowerLeftLng);); out body geom;')
     ***REMOVED***);
@@ -93,7 +97,6 @@ class GeoService {
     var buildingDataL = filterApartment(point, response.body['elements']);
 
     if (buildingDataL.isEmpty) {
-
       var response = await response_concave_building_shape;
 
       if (response.response.statusCode < 200 ||
