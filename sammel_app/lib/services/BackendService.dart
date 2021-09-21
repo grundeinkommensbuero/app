@@ -34,7 +34,7 @@ class BackendService {
     try {
       var response = await backend
           .get(url, await authHeaders(appAuth))
-          .timeout(Duration(seconds: 5), onTimeout: () => checkConnectivity());
+          .timeout(Duration(seconds: 10), onTimeout: () => checkConnectivity());
 
       if (response.response.statusCode >= 200 &&
           response.response.statusCode < 300) return response;
@@ -77,7 +77,7 @@ class BackendService {
     try {
       var response = await backend
           .delete(url, data, await authHeaders(appAuth))
-          .timeout(Duration(seconds: 2),
+          .timeout(Duration(seconds: 10),
               onTimeout: () async => await checkConnectivity());
 
       if (response.response.statusCode >= 200 &&
