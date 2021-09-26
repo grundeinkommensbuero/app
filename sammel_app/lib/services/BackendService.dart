@@ -13,6 +13,7 @@ import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/MessageException.dart';
 import 'package:sammel_app/shared/ServerException.dart';
 
+import 'AccessException.dart';
 import 'AuthFehler.dart';
 import 'RestFehler.dart';
 
@@ -64,6 +65,9 @@ class BackendService {
 
       if (response.response.statusCode == 403)
         throw AuthFehler.fromJson(response.body);
+
+      if (response.response.statusCode == 423)
+        throw AccessException.fromJson(response.body);
 
       // else
       throw RestFehler(response.body.toString());

@@ -17,6 +17,8 @@ abstract class AbstractPlacardsService extends BackendService {
   Future<Placard?> createPlacard(Placard placard);
 
   deletePlacard(int id);
+
+  takeDownPlacard(int id);
 ***REMOVED***
 
 class PlacardsService extends AbstractPlacardsService {
@@ -47,17 +49,28 @@ class PlacardsService extends AbstractPlacardsService {
   @override
   Future<List<Placard>> loadPlacards() async {
     HttpClientResponseBody response;
+    final placards;
     try {
       response = await get('service/plakate');
+      placards = (response.body as List)
+          .map((jsonListLocation) => Placard.fromJson(jsonListLocation))
+          .toList();
     ***REMOVED*** catch (e, s) {
       ErrorService.handleError(e, s,
           context: 'Plakate konnten nicht geladen werden.');
       return [];
     ***REMOVED***
-    final placards = (response.body as List)
-        .map((jsonListLocation) => Placard.fromJson(jsonListLocation))
-        .toList();
     return placards;
+  ***REMOVED***
+
+  @override
+  takeDownPlacard(int id) async {
+    try {
+      return await post('service/plakate/abgehangen/$id', jsonEncode({***REMOVED***));
+    ***REMOVED*** catch (e, s) {
+      ErrorService.handleError(e, s,
+          context: 'Abhängen von Plakat ist fehlgeschlagen.');
+    ***REMOVED***
   ***REMOVED***
 ***REMOVED***
 
@@ -65,9 +78,10 @@ class DemoPlacardsService extends AbstractPlacardsService {
   DemoPlacardsService(AbstractUserService userService)
       : super(userService, DemoBackend());
   List<Placard> placards = [
-    Placard(1, 52.4722460, 13.3277830, '12161, Friedrich-Wilhelm-Platz 57', 11),
-    Placard(2, 52.47102, 13.3282, "12161, Bundesallee 76", 12),
-    Placard(3, 52.4709, 13.32744, "12161, Goßlerstraße 29", 13)
+    Placard(1, 52.4722460, 13.3277830, '12161, Friedrich-Wilhelm-Platz 57', 11,
+        false),
+    Placard(2, 52.47102, 13.3282, "12161, Bundesallee 76", 12, false),
+    Placard(3, 52.4709, 13.32744, "12161, Goßlerstraße 29", 13, false)
   ];
 
   @override
@@ -92,4 +106,12 @@ class DemoPlacardsService extends AbstractPlacardsService {
 
   @override
   Future<List<Placard>> loadPlacards() => Future.value(placards);
+
+  @override
+  takeDownPlacard(int id) {
+    var placard = placards.where((placard) => placard.id == id).first;
+    placard.abgehangen = true;
+
+    return placard;
+  ***REMOVED***
 ***REMOVED***

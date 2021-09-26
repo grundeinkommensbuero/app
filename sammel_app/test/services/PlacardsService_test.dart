@@ -70,7 +70,8 @@ void main() {
               '"latitude":52.472246,'
               '"longitude":13.327783,'
               '"adresse":"12161, Friedrich-Wilhelm-Platz 57",'
-              '"benutzer":11'
+              '"benutzer":11,'
+              '"abgehangen":false'
               '***REMOVED***',
           any));
     ***REMOVED***);
@@ -117,7 +118,7 @@ void main() {
       expect(placardService.placards.length, 3);
 
       var newPlacard = await placardService.createPlacard(
-          Placard(0, 52.47065, 13.3285, '12161, Bundesallee 129', 11));
+          Placard(0, 52.47065, 13.3285, '12161, Bundesallee 129', 11, false));
 
       expect(placardService.placards.length, 4);
       expect(placardService.placards[3].id, 4);
@@ -128,7 +129,7 @@ void main() {
       expect(placardService.placards.length, 3);
 
       placardService.createPlacard(
-          Placard(10, 52.47065, 13.3285, '12161, Bundesallee 129', 11));
+          Placard(10, 52.47065, 13.3285, '12161, Bundesallee 129', 11, false));
 
       expect(placardService.placards.length, 4);
       expect(placardService.placards[3].id, 10);

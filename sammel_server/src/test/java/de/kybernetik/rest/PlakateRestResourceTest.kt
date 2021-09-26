@@ -82,7 +82,8 @@ class PlakateRestResourceTest {
                 52.47065,
                 13.3285,
                 "12161, Bundesallee 129",
-                11
+                11,
+                false
             )
         )
 
@@ -92,7 +93,8 @@ class PlakateRestResourceTest {
                 52.47065,
                 13.3285,
                 "12161, Bundesallee 129",
-                11
+                11,
+                false
             )
         )
 
@@ -111,7 +113,8 @@ class PlakateRestResourceTest {
                 52.47065,
                 13.3285,
                 "12161, Bundesallee 129",
-                11
+                11,
+                false
             )
         )
 
@@ -121,7 +124,8 @@ class PlakateRestResourceTest {
                 52.47065,
                 13.3285,
                 "12161, Bundesallee 129",
-                12
+                12,
+                false
             )
         )
 
@@ -140,7 +144,8 @@ class PlakateRestResourceTest {
                 52.47065,
                 13.3285,
                 "Plakat aus der Datenbank",
-                11
+                11,
+                false
             )
         )
 
@@ -150,7 +155,8 @@ class PlakateRestResourceTest {
                 52.47065,
                 13.3285,
                 "Plakat von der App",
-                12
+                12,
+                false
             )
         )
 

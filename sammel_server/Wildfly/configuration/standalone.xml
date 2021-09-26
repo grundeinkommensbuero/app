@@ -42,6 +42,7 @@
         <property name="de.kybernetik.shared.path" value="/opt/shared"/>
         <property name="de.kybernetik.plakate.secret" value="true"/>
         <property name="de.kybernetik.listlocations.secret" value="false"/>
+        <property name="de.kybernetik.plakate.abhaengen" value="true"/>
     </system-properties>
     <management>
         <security-realms>

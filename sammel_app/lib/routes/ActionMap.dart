@@ -26,7 +26,7 @@ import 'package:flutter_map_location/flutter_map_location.dart';
 import '../shared/DistanceHelper.dart';
 import 'VisitedHouseEditor.dart';
 import 'MapActionDialog.dart';
-import 'PlacardDeleteDialog.dart';
+import 'PlacardDialog.dart';
 import 'EditVisitedHouse.dart';
 
 class ActionMap extends StatefulWidget {
@@ -97,7 +97,7 @@ class ActionMapState extends State<ActionMap> {
 
     final userLocationLayer = [
       // ignore: non_constant_identifier_names
-      LocationOptions((_1, _2, _3)  => SizedBox())
+      LocationOptions((_1, _2, _3) => SizedBox())
     ];
 
     var flutterMap = FlutterMap(
@@ -135,6 +135,11 @@ class ActionMapState extends State<ActionMap> {
   void deletePlacard(Placard placard) {
     placardService.deletePlacard(placard.id!);
     setState(() => placards.remove(placard));
+  ***REMOVED***
+
+  void takeDownPlacard(Placard placard) {
+    placardService.takeDownPlacard(placard.id!);
+    setState(() => placards.remove(placard.abgehangen = true));
   ***REMOVED***
 
   List<Polygon> generateVisitedHousePolygons() {
@@ -183,12 +188,13 @@ class ActionMapState extends State<ActionMap> {
     ***REMOVED***
   ***REMOVED***
 
-  openPlacardDialog(Placard placard) async {
+  Future openPlacardDialog(Placard placard, bool mine) async {
     if (placard.id == null) return;
 
-    bool confirmed = await showPlacardDeleteDialog(context);
+    PlacardDialogAction action = await showPlacardDialog(context, mine);
 
-    if (confirmed) deletePlacard(placard);
+    if (action == PlacardDialogAction.DELETE) deletePlacard(placard);
+    if (action == PlacardDialogAction.TAKE_DOWN) takeDownPlacard(placard);
   ***REMOVED***
 
   createNewPlacard(LatLng point) async {
@@ -201,8 +207,13 @@ class ActionMapState extends State<ActionMap> {
     final geoData = await Provider.of<GeoService>(context, listen: false)
         .getDescriptionToPoint(point);
 
-    final placard = await placardService.createPlacard(Placard(null,
-        point.latitude, point.longitude, geoData.fullAdress, widget.myUserId!));
+    final placard = await placardService.createPlacard(Placard(
+        null,
+        point.latitude,
+        point.longitude,
+        geoData.fullAdress,
+        widget.myUserId!,
+        false));
     if (placard != null) {
       setState(() => placards.add(placard));
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -346,9 +357,9 @@ class ActionMarker extends Marker {
 
 class PlacardMarker extends Marker {
   bool mine = false;
-  Function(Placard) onTap;
+  Function(Placard, bool) onTap;
 
-  static emptyFunction(_) {***REMOVED***
+  static emptyFunction(_1, _2) {***REMOVED***
 
   PlacardMarker(Placard placard,
       {this.mine = false, this.onTap = emptyFunction***REMOVED***)
@@ -366,12 +377,15 @@ class PlacardMarker extends Marker {
               ], shape: BoxShape.circle),
               child: TextButton(
                   key: Key('placard marker'),
-                  onPressed: () => mine ? onTap(placard) : null,
+                  onPressed:
+                      placard.abgehangen ? null : () => onTap(placard, mine),
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                         EdgeInsets.all(0)),
                   ),
-                  child: Image.asset('assets/images/Plakat.png'))),
+                  child: placard.abgehangen
+                      ? Image.asset('assets/images/PlakatAbgehangen.png')
+                      : Image.asset('assets/images/Plakat.png'))),
         );
 ***REMOVED***
 

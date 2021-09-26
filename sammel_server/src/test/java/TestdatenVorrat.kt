@@ -114,11 +114,11 @@ class TestdatenVorrat {
 
         fun konradadenauerhaus() = BesuchtesHaus(3, 52.5065, 13.35125, "Klingelhöferstraße 8,Botschaftsviertel, Tiergarten, Mitte, Berlin, 10785", "Haupteingang", null, 25999445, LocalDate.of(2021,7,19), 11)
 
-        fun plakat1() = Plakat(1, 52.4722460, 13.3277830, "12161, Friedrich-Wilhelm-Platz 57", 11)
+        fun plakat1() = Plakat(1, 52.4722460, 13.3277830, "12161, Friedrich-Wilhelm-Platz 57", 11, false)
 
-        fun plakat2() = Plakat(2, 52.47102, 13.3282, "12161, Bundesallee 76", 12)
+        fun plakat2() = Plakat(2, 52.47102, 13.3282, "12161, Bundesallee 76", 12, false)
 
-        fun plakat3() = Plakat(3, 52.4709, 13.32744, "12161, Goßlerstraße 29", 11)
+        fun plakat3() = Plakat(3, 52.4709, 13.32744, "12161, Goßlerstraße 29", 11, false)
     ***REMOVED***
 
     @Suppress("unused")

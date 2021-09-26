@@ -360,6 +360,16 @@ const Map<String, dynamic> en = {
   "Weiterlesen": "Read More",
   'Ja-Stimmen sammeln': 'Collect Yes-Votes',
   'Zeitungen verteilen': 'Deliver Newspapers',
+  'Abhängen': 'Take down',
+  'Dieses Plakat hast du eingetragen. Du kannst es wieder löschen oder als abgehangen markieren.':
+      'You added this placard. You can delete it or mark it as taken down.',
+  'Abhängen von Plakat ist fehlgeschlagen.':
+      'Taking down of the placard failed.',
+  'Das Abhängen von Plakaten ist noch nicht aktiviert.':
+      'Taking down placards has not been activated yet.',
+  'Access failed': 'Zugriff fehlgeschlagen',
+  'Dieses Plakat wurde von jemand anderem eingetragen. Du kannst es als abgehangen markieren.':
+      'This placard has been added by somone else. You can mark it as taken down.',
 ***REMOVED***
 
 const Map<String, dynamic> ru = {
@@ -705,6 +715,16 @@ const Map<String, dynamic> ru = {
   "Weiterlesen": "продолжить чтение",
   'Ja-Stimmen sammeln': 'Сбор голосов за',
   'Zeitungen verteilen': 'доставлять газеты',
+  'Abhängen': 'Abhängen',
+  'Dieses Plakat hast du eingetragen. Du kannst es wieder löschen oder als abgehangen markieren.':
+      'Dieses Plakat hast du eingetragen. Du kannst es wieder löschen oder als abgehangen markieren.',
+  'Abhängen von Plakat ist fehlgeschlagen.':
+      'Abhängen von Plakat ist fehlgeschlagen.',
+  'Das Abhängen von Plakaten ist noch nicht aktiviert.':
+      'Das Abhängen von Plakaten ist noch nicht aktiviert.',
+  'Zugriff fehlgeschlagen': 'Zugriff fehlgeschlagen',
+  'Dieses Plakat wurde von jemand anderem eingetragen. Du kannst es als abgehangen markieren.':
+      'Dieses Plakat wurde von jemand anderem eingetragen. Du kannst es als abgehangen markieren.',
 ***REMOVED***
 
 const Map<String, dynamic> fr = {
@@ -1060,6 +1080,16 @@ const Map<String, dynamic> fr = {
   "Weiterlesen": "Continuer à lire",
   'Ja-Stimmen sammeln': 'Recueillir les votes oui',
   'Zeitungen verteilen': 'Livrer des journaux',
+  'Abhängen': 'Abhängen',
+  'Dieses Plakat hast du eingetragen. Du kannst es wieder löschen oder als abgehangen markieren.':
+      'Dieses Plakat hast du eingetragen. Du kannst es wieder löschen oder als abgehangen markieren.',
+  'Abhängen von Plakat ist fehlgeschlagen.':
+      'Abhängen von Plakat ist fehlgeschlagen.',
+  'Das Abhängen von Plakaten ist noch nicht aktiviert.':
+      'Das Abhängen von Plakaten ist noch nicht aktiviert.',
+  'Zugriff fehlgeschlagen': 'Zugriff fehlgeschlagen',
+  'Dieses Plakat wurde von jemand anderem eingetragen. Du kannst es als abgehangen markieren.':
+      'Dieses Plakat wurde von jemand anderem eingetragen. Du kannst es als abgehangen markieren.',
 ***REMOVED***
 
 const Map<String, dynamic> de = {
@@ -1133,7 +1163,8 @@ const Map<String, dynamic> de = {
   "Zum Sammeln einladen": "Zum Sammeln einladen",
   "Fragen und Antworten": "Fragen und Antworten",
   "Dein Profil": "Dein Profil",
-  "Eine Sammel-Aktion ins Leben rufen": "Eine Sammel-Aktion ins Leben rufen",
+  "Eine Sammel-Aktion ins Leben rufen":
+      "Andere zu einer gemeinsamen Aktion einladen",
   "Tipps und Argumente": "Tipps und Argumente",
   "Tipps, Tricks und Argumentationshilfen":
       "Tipps, Tricks und Argumentationshilfen",
@@ -1414,4 +1445,14 @@ const Map<String, dynamic> de = {
   "Weiterlesen": "Weiterlesen",
   'Ja-Stimmen sammeln': 'Ja-Stimmen sammeln',
   'Zeitungen verteilen': 'Zeitungen verteilen',
+  'Abhängen': 'Abhängen',
+  'Dieses Plakat hast du eingetragen. Du kannst es wieder löschen oder als abgehangen markieren.':
+      'Dieses Plakat hast du eingetragen. Du kannst es wieder löschen oder als abgehangen markieren.',
+  'Abhängen von Plakat ist fehlgeschlagen.':
+      'Abhängen von Plakat ist fehlgeschlagen.',
+  'Das Abhängen von Plakaten ist noch nicht aktiviert.':
+      'Das Abhängen von Plakaten ist noch nicht aktiviert.',
+  'Zugriff fehlgeschlagen': 'Zugriff fehlgeschlagen',
+  'Dieses Plakat wurde von jemand anderem eingetragen. Du kannst es als abgehangen markieren.':
+      'Dieses Plakat wurde von jemand anderem eingetragen. Du kannst es als abgehangen markieren.',
 ***REMOVED***

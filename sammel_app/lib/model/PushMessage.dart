@@ -1,5 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:sammel_app/shared/DeserialisiationError.dart';
+import 'package:sammel_app/shared/DeserialisationException.dart';
 import 'package:sammel_app/shared/ServerException.dart';
 
 import 'Message.dart';
@@ -59,7 +59,7 @@ class ChatPushData extends PushData {
 
   ChatPushData(String? channel) {
     if (channel == null)
-      throw DeserialisationError(
+      throw DeserialisationException(
           'Fehlender Kanal für Beteiligungs-Benachrichtigung');
     this.channel = channel;
   ***REMOVED***

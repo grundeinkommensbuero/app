@@ -1506,7 +1506,7 @@ void main() {
       await tester.tap(find.byKey(Key('placard marker')));
       await tester.pump();
 
-      expect(find.byKey(Key('delete placard dialog')), findsOneWidget);
+      expect(find.byKey(Key('placard dialog')), findsOneWidget);
     ***REMOVED***);
 
     testUI('closes placard dialog on abort and does not delete placard',
@@ -1514,7 +1514,7 @@ void main() {
       await tester.tap(find.byKey(Key('placard marker')));
       await tester.pump();
 
-      expect(find.byKey(Key('delete placard dialog')), findsOneWidget);
+      expect(find.byKey(Key('placard dialog')), findsOneWidget);
 
       await tester.tap(find.byKey(Key('delete placard dialog abort button')));
       await tester.pump();
@@ -1531,9 +1531,9 @@ void main() {
       await tester.tap(find.byKey(Key('placard marker')));
       await tester.pump();
 
-      expect(find.byKey(Key('delete placard dialog')), findsOneWidget);
+      expect(find.byKey(Key('placard dialog')), findsOneWidget);
 
-      await tester.tap(find.byKey(Key('delete placard dialog confirm button')));
+      await tester.tap(find.byKey(Key('delete placard button')));
       await tester.pump();
 
       verify(_placardsService.deletePlacard(1)).called(1);

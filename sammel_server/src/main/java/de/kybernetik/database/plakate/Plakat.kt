@@ -13,6 +13,7 @@ class Plakat: Serializable {
         longitude = 0.0
         adresse = ""
         user_id = 0
+        abgehangen = false
     ***REMOVED***
 
     constructor(
@@ -20,13 +21,15 @@ class Plakat: Serializable {
         latitude: Double,
         longitude: Double,
         adresse: String,
-        user_id: Long
+        user_id: Long,
+        abgehangen: Boolean
     ) {
         this.id = id
         this.latitude = latitude
         this.longitude = longitude
         this.adresse = adresse
         this.user_id = user_id
+        this.abgehangen = abgehangen
     ***REMOVED***
 
     @Id
@@ -44,4 +47,7 @@ class Plakat: Serializable {
 
     @Column
     var user_id: Long
+
+    @Column
+    var abgehangen: Boolean
 ***REMOVED***

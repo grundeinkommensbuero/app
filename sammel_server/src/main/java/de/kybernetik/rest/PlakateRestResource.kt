@@ -98,6 +98,28 @@ open class PlakateRestResource {
 
         return Response.ok().build()
     ***REMOVED***
+
+    @POST
+    @RolesAllowed("user")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("abgehangen/{plakatId***REMOVED***")
+    open fun haengePlakatAb(@PathParam("plakatId") plakatId: Long): Response {
+        if (System.getProperty("de.kybernetik.plakate.abhaengen")?.toBoolean() == false) {
+            LOG.info("Versuch von Benutzer*in ${context.userPrincipal.name***REMOVED*** Plakat ${plakatId***REMOVED*** abzuhängen abgelehnt")
+            return Response
+                .status(423) // Locked
+                .entity(RestFehlermeldung("Das Abhängen von Plakaten ist noch nicht aktiviert."))
+                .build()
+        ***REMOVED***
+
+        val plakat: Plakat?
+        plakat = dao.ladePlakat(plakatId)
+        if (plakat == null) return Response.status(322).entity(RestFehlermeldung("Unbekanntes Plakat")).build()
+        plakat.abgehangen = true
+        LOG.info("Plakat ${plakat.id***REMOVED*** durch Benutzer ${context.userPrincipal.name***REMOVED*** abgehängt")
+        return Response.ok().entity(PlakatDto.convertFromPlakat(plakat)).build()
+    ***REMOVED***
 ***REMOVED***
 
 data class PlakatDto(
@@ -105,7 +127,8 @@ data class PlakatDto(
     var latitude: Double? = null,
     var longitude: Double? = null,
     var adresse: String? = null,
-    var benutzer: Long? = null
+    var benutzer: Long? = null,
+    var abgehangen: Boolean? = null
 ) {
 
     fun convertToPlakat(): Plakat {
@@ -116,7 +139,7 @@ data class PlakatDto(
         if (this.benutzer == null)
             throw FehlenderWertException("benutzer")
 
-        return Plakat(id ?: 0, latitude!!, longitude!!, adresse ?: "", benutzer!!)
+        return Plakat(id ?: 0, latitude!!, longitude!!, adresse ?: "", benutzer!!, abgehangen ?: false)
     ***REMOVED***
 
     companion object {
@@ -126,7 +149,8 @@ data class PlakatDto(
                 plakat.latitude,
                 plakat.longitude,
                 plakat.adresse,
-                plakat.user_id
+                plakat.user_id,
+                plakat.abgehangen
             )
         ***REMOVED***
     ***REMOVED***

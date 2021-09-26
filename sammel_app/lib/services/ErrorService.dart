@@ -4,9 +4,11 @@ import 'package:sammel_app/services/AuthFehler.dart';
 import 'package:sammel_app/services/BackendService.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 import 'package:sammel_app/services/UserService.dart';
+import 'package:sammel_app/shared/DeserialisationException.dart';
 import 'package:sammel_app/shared/MessageException.dart';
 import 'package:sammel_app/shared/ServerException.dart';
 
+import 'AccessException.dart';
 import 'GeoService.dart';
 
 class ErrorService {
@@ -51,7 +53,18 @@ class ErrorService {
           [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
       return;
     ***REMOVED***
+    if (error is AccessException) {
+      pushError('Zugriff fehlgeschlagen',
+          [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
+      return;
+    ***REMOVED***
     if (error is RestFehler) {
+      pushError(
+          'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten',
+          [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
+      return;
+    ***REMOVED***
+    if (error is DeserialisationException) {
       pushError(
           'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten',
           [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
