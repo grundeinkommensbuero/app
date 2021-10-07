@@ -12,6 +12,8 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/model/TermineFilter.dart';
 import 'package:sammel_app/routes/ActionEditor.dart';
 import 'package:sammel_app/routes/Navigation.dart';
+import 'package:sammel_app/services/ChatMessageService.dart';
+import 'package:sammel_app/services/FAQService.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
 import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
@@ -22,13 +24,14 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
-import 'package:sammel_app/services/ChatMessageService.dart';
+import 'package:sammel_app/services/VisitedHouseView.dart';
+import 'package:sammel_app/services/VisitedHousesService.dart';
 
 import '../model/Termin_test.dart';
 import '../shared/TestdatenVorrat.dart';
 import '../shared/mocks.costumized.dart';
-import '../shared/mocks.trainer.dart';
 import '../shared/mocks.mocks.dart';
+import '../shared/mocks.trainer.dart';
 import 'ActionEditor_test.dart';
 
 final _stammdatenService = MockStammdatenService();
@@ -40,7 +43,9 @@ final _userService = MockUserService();
 final _chatService = MockChatMessageService();
 final _placardService = MockPlacardsService();
 final _pushManager = MockPushNotificationManager();
+final _faqService = MockFAQService();
 final _geoService = MockGeoService();
+final _visitedHousesService = MockVisitedHousesService();
 
 void main() {
   trainTranslation(MockTranslations());
@@ -60,6 +65,7 @@ void main() {
 
     setUpUI((WidgetTester tester) async {
       navigation = Navigation(actionPageKey, actionCreatorKey);
+      reset(_visitedHousesService);
       when(_storageService.loadAllStoredActionIds())
           .thenAnswer((_) async => []);
       when(_storageService.loadMyKiez()).thenAnswer((_) async => []);
@@ -71,8 +77,13 @@ void main() {
           .thenAnswer((_) async => TermineFilter.leererFilter());
       when(_termineService.loadActions(any)).thenAnswer((_) async => []);
       when(_pushManager.pushToken).thenAnswer((_) async => 'Token');
+      trainFAQService(_faqService);
       when(_placardService.loadPlacards())
           .thenAnswer((_) async => Future.value([]));
+      when(_visitedHousesService.loadVisitedHouses())
+          .thenAnswer((_) => Future.value([]));
+      when(_visitedHousesService.getVisitedHousesInArea(any))
+          .thenReturn(VisitedHouseView(BoundingBox(0, 0, 0, 0), []));
 
       await tester.pumpWidget(MultiProvider(providers: [
         Provider<StammdatenService>.value(value: _stammdatenService),
@@ -84,8 +95,11 @@ void main() {
         Provider<AbstractUserService>.value(value: _userService),
         Provider<ChatMessageService>.value(value: _chatService),
         Provider<AbstractPushNotificationManager>.value(value: _pushManager),
+        Provider<AbstractFAQService>.value(value: _faqService),
         Provider<AbstractPlacardsService>.value(value: _placardService),
         Provider<GeoService>.value(value: _geoService),
+        Provider<AbstractVisitedHousesService>.value(
+            value: _visitedHousesService),
       ], child: MaterialApp(home: navigation)));
     ***REMOVED***);
 
@@ -211,8 +225,8 @@ void main() {
         (tester) async {
       when(_geoService.getDescriptionToPoint(any)).thenAnswer(
           (_) => Future.value(GeoData('Nightmare', 'Elm Street', '12')));
-      when(_stammdatenService.getKiezAtLocation(any)).thenAnswer(
-          (_) => Future.value(plaenterwald()));
+      when(_stammdatenService.getKiezAtLocation(any))
+          .thenAnswer((_) => Future.value(plaenterwald()));
 
       await openActionCreator(tester);
 

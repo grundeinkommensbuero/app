@@ -1,8 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:loading_indicator/loading_indicator.dart';
+import 'package:provider/provider.dart';
 import 'package:sammel_app/model/FAQItem.dart';
 import 'package:sammel_app/services/FAQService.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class FAQ extends StatefulWidget {
   FAQ() : super(key: Key('faq page'));
@@ -13,9 +18,11 @@ class FAQ extends StatefulWidget {
 
 class FAQState extends State<FAQ> {
   final searchInputController = TextEditingController();
-  int? opened;
-  List<FAQItem> items = FAQService.loadItems('');
+  double? opened;
+  List<FAQItem>? items;
   ScrollController? controller;
+
+  late AbstractFAQService faqService;
 
   @override
   void initState() {
@@ -25,6 +32,11 @@ class FAQState extends State<FAQ> {
 
   @override
   Widget build(BuildContext context) {
+    if (items == null) {
+      this.faqService = Provider.of<AbstractFAQService>(context);
+      listenToFAQ();
+    ***REMOVED***
+
     return Scaffold(
         body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
       Container(
@@ -41,10 +53,10 @@ class FAQState extends State<FAQ> {
                 suffixIcon: IconButton(
                     key: Key('faq search clear button'),
                     icon: Icon(Icons.clear, color: CampaignTheme.secondary),
-                    onPressed: () => setState(() {
-                          searchInputController.clear();
-                          items = FAQService.loadItems('');
-                        ***REMOVED***)),
+                    onPressed: () {
+                      listenToFAQ(search: null);
+                      setState(() => searchInputController.clear());
+                    ***REMOVED***),
                 contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
                 border: OutlineInputBorder(
                     borderSide: BorderSide.none,
@@ -52,28 +64,40 @@ class FAQState extends State<FAQ> {
                 hintText: 'Durchsuchen'.tr()),
             onChanged: (text) {
               controller?.jumpTo(0);
-              setState(() => items = FAQService.loadItems(text));
+              listenToFAQ(search: text);
             ***REMOVED***,
           ),
         ),
       ),
-      Expanded(
-        child: ListView.builder(
-            controller: controller,
-            itemCount: items.length,
-            itemBuilder: (BuildContext context, int index) => InkWell(
-                onTap: () => setState(() {
-                      if (opened == items[index].id)
-                        opened = null;
-                      else
-                        opened = items[index].id;
-                      primaryFocus?.unfocus();
-                    ***REMOVED***),
-                child: FAQTile(items[index],
-                    extended: opened == items[index].id))),
-      )
+      items == null
+          ? Expanded(child: Center(
+              child: SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: LoadingIndicator(
+                      indicatorType: Indicator.ballRotateChase,
+                      color: CampaignTheme.secondary)))
+)          : Expanded(
+              child: ListView.builder(
+                  controller: controller,
+                  itemCount: items!.length,
+                  itemBuilder: (BuildContext context, int index) => InkWell(
+                      onTap: () => setState(() {
+                            if (opened == items![index].order)
+                              opened = null;
+                            else
+                              opened = items![index].order;
+                            primaryFocus?.unfocus();
+                          ***REMOVED***),
+                      child: FAQTile(items![index],
+                          extended: opened == items![index].order))),
+            )
     ]));
   ***REMOVED***
+
+  listenToFAQ({String? search***REMOVED***) => faqService
+      .getSortedFAQ(search)
+      .listen((faq) => setState(() => items = faq));
 ***REMOVED***
 
 // ignore: must_be_immutable
@@ -110,7 +134,22 @@ class FAQTile extends StatelessWidget {
           SizedBox(
             height: 10.0,
           ),
-          extended ? item.content : item.shortContent
+          MarkdownBody(
+              data: extended ? item.full : item.teaser,
+              onTapLink: (_a, link, _b) => launch(link ?? ''),
+              selectable: true,
+              styleSheet: MarkdownStyleSheet(
+                  a: TextStyle(
+                      color: CampaignTheme.secondary,
+                      decoration: TextDecoration.underline),
+                  blockquoteDecoration:
+                      BoxDecoration(color: CampaignTheme.primaryBright))),
+          (item.rest != null && !extended
+              ? Text(
+                  'Weiterlesen',
+                  style: TextStyle(color: CampaignTheme.secondary),
+                ).tr()
+              : Container())
         ]),
       ),
     );

@@ -4,7 +4,9 @@ import 'package:provider/provider.dart';
 import 'package:sammel_app/Provisioning.dart';
 import 'package:sammel_app/routes/Navigation.dart';
 import 'package:sammel_app/routes/TermineSeite.dart';
+import 'package:sammel_app/services/ArgumentsService.dart';
 import 'package:sammel_app/services/ChatMessageService.dart';
+import 'package:sammel_app/services/FAQService.dart';
 import 'package:sammel_app/services/GeoService.dart';
 import 'package:sammel_app/services/ListLocationService.dart';
 import 'package:sammel_app/services/PlacardsService.dart';
@@ -15,6 +17,7 @@ import 'package:sammel_app/services/StammdatenService.dart';
 import 'package:sammel_app/services/StorageService.dart';
 import 'package:sammel_app/services/TermineService.dart';
 import 'package:sammel_app/services/UserService.dart';
+import 'package:sammel_app/services/VisitedHousesService.dart';
 import 'package:sammel_app/shared/ConstJsonAssetLoader.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
 
@@ -73,9 +76,18 @@ class MyApp extends StatelessWidget {
   static var chatMessageService =
       ChatMessageService(storageService, pushNotificationManager, navigatorKey);
   static var geoService = GeoService();
+  static AbstractFAQService faqService = demoMode
+      ? DemoFAQService() as AbstractFAQService
+      : FAQService(storageService, userService, backend);
   static var placardService = demoMode
       ? DemoPlacardsService(userService)
       : PlacardsService(userService, backend);
+  static var argumentsService = demoMode
+      ? DemoArgumentsService(userService)
+      : ArgumentsService(userService, backend);
+  static var visitedHouseService = demoMode
+      ? DemoVisitedHousesService(userService, geoService)
+      : VisitedHousesService(geoService, userService, backend);
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +106,12 @@ class MyApp extends StatelessWidget {
           Provider<GeoService>.value(value: geoService),
           Provider<LocalNotificationService>.value(
               value: localNotificationService),
-          Provider(create: (_) => placardService)
+          Provider<AbstractFAQService>.value(value: faqService),
+          Provider<AbstractVisitedHousesService>.value(
+              value: visitedHouseService),
+          Provider(create: (_) => placardService),
+          Provider<AbstractPlacardsService>(create: (_) => placardService),
+          Provider<AbstractArgumentsService>(create: (_) => argumentsService)
         ],
         child: MaterialApp(
           title: 'DW & Co. Enteignen',

@@ -23,7 +23,7 @@ import 'ChatWindow.dart';
 
 enum TerminDetailsCommand { EDIT, DELETE, EVALUATE, CLOSE, FOCUS ***REMOVED***
 
-Future<TerminDetailsCommand> showActionDetailsPage(
+Future<TerminDetailsCommand?> showActionDetailsPage(
     BuildContext context,
     Termin action,
     bool isMyAction,

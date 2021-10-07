@@ -4,9 +4,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/rendering.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
 
-enum MapActionType { NewAction, NewPlacard, NewVisitedHouse ***REMOVED***
+enum MapActionType { NewAction, NewPlacard, NewVisitedHouse, Cancel ***REMOVED***
 
-Future<MapActionType?> showMapActionDialog(BuildContext context) async =>
+Future<MapActionType> showMapActionDialog(BuildContext context) async =>
     await showDialog(
         context: context,
         builder: (_) => AlertDialog(
@@ -20,7 +20,7 @@ Future<MapActionType?> showMapActionDialog(BuildContext context) async =>
                       child: Container(
                           alignment: Alignment.center,
                           child: Row(children: [
-                            Image.asset('assets/images/Flyern.png', width: 25),
+                            Image.asset('assets/images/Sammeln.png', width: 20),
                             SizedBox(width: 5),
                             Expanded(
                                 child: Text('Zu einer Aktion aufrufen').tr())
@@ -45,8 +45,7 @@ Future<MapActionType?> showMapActionDialog(BuildContext context) async =>
                       key: Key('map action dialog placard button'),
                       child: Container(
                           child: Row(children: [
-                            Image.asset('assets/images/PlakateAufhaengen.png',
-                                width: 25),
+                            Icon(Icons.assistant_sharp),
                             SizedBox(width: 5),
                             Expanded(child: Text('Ein Plakat eintragen').tr())
                           ]),
@@ -67,11 +66,10 @@ Future<MapActionType?> showMapActionDialog(BuildContext context) async =>
                           Navigator.pop(context, MapActionType.NewPlacard)),
                   SizedBox(height: 5),
                   TextButton(
-                      key: Key('map action dialog visited house button'),
+                      key: Key('map action dialog house button'),
                       child: Container(
                           child: Row(children: [
-                            Image.asset('assets/images/HausBesucht.png',
-                                width: 25),
+                            Icon(Icons.house),
                             SizedBox(width: 5),
                             Expanded(
                                 child:
@@ -97,6 +95,7 @@ Future<MapActionType?> showMapActionDialog(BuildContext context) async =>
                   TextButton(
                     key: Key('map action dialog abort button'),
                     child: Text('Abbrechen').tr(),
-                    onPressed: () => Navigator.pop(context, null),
+                    onPressed: () =>
+                        Navigator.pop(context, MapActionType.Cancel),
                   )
                 ]));

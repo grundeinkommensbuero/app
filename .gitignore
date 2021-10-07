@@ -8,3 +8,4 @@
 /server-work-dir/secrets/*
 /server-work-dir/logs/*
 .vscode
+/sammel_gis/db/*

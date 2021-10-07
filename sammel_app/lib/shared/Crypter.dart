@@ -19,8 +19,7 @@ Future<Map<String, dynamic>> decrypt(dynamic data) async {
   ***REMOVED***
   if (data['encrypted'] == 'AES') {
     if (data['payload'] == null) return {***REMOVED***
-    SecretBox secretBox = SecretBox(
-        base64.decode(data['payload']),
+    SecretBox secretBox = SecretBox(base64.decode(data['payload']),
         nonce: base64.decode(data['nonce']), mac: Mac.empty);
     final decrypted = await algorithm.decrypt(secretBox, secretKey: key);
     final decoded = jsonDecode(utf8.decode(decrypted));
@@ -29,8 +28,7 @@ Future<Map<String, dynamic>> decrypt(dynamic data) async {
   ***REMOVED***
   if (data['encrypted'] == 'AES_PROD') {
     if (data['payload'] == null) return {***REMOVED***
-    SecretBox secretBox = SecretBox(
-        base64.decode(data['payload']),
+    SecretBox secretBox = SecretBox(base64.decode(data['payload']),
         nonce: base64.decode(data['nonce']), mac: Mac.empty);
     final decrypted = await algorithm.decrypt(secretBox, secretKey: pKey);
     final decoded = jsonDecode(utf8.decode(decrypted));

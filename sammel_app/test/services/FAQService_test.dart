@@ -1,64 +1,48 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http_server/http_server.dart';
+import 'package:jiffy/jiffy.dart';
+import 'package:mockito/mockito.dart';
 import 'package:sammel_app/model/FAQItem.dart';
+import 'package:sammel_app/model/Health.dart';
 import 'package:sammel_app/services/FAQService.dart';
 
+import '../shared/mocks.costumized.dart';
+import '../shared/mocks.mocks.dart';
+import '../shared/mocks.trainer.dart';
+
+final _storageService = MockStorageService();
+final _userService = MockUserService();
+final _backend = MockBackend();
+
 main() {
-  group('loaditems', () {
-    FAQService.items = testItems;
+  setUp(() {
+    reset(_storageService);
+    reset(_userService);
+    reset(_backend);
+    trainUserService(_userService);
+    trainBackend(_backend);
+    when(_storageService.loadFAQ()).thenAnswer((_) => Future.value(testItems));
+    when(_backend.get('service/faq', any)).thenAnswer((_) =>
+        Future<HttpClientResponseBody>.value(
+            trainHttpResponse(MockHttpClientResponseBody(), 200, [
+          {
+            "id": 4,
+            "title": "Myrmica Ruginodis",
+            "teaser": "Klein aber gemein",
+            "order": 4.0,
+            "tags": ["gelb", "braun", "giftig"]
+          ***REMOVED***
+        ])));
+  ***REMOVED***);
 
-    test('orders by number of hits in tags', () {
-      List<FAQItem> orderedItems = FAQService.loadItems('Ameise rot Holz');
-
-      expect(
-          orderedItems.map((item) => item.title),
-          containsAllInOrder([
-            'Camponotus Ligniperdus',
-            'Messor Barbarus',
-            'Lasius Niger',
-          ]));
+  group('mixin', () {
+    test('returns null with missing faqs', () async {
+      expect(TestFAQSorter().sortItems(null, null), isNull);
     ***REMOVED***);
 
-    test('orders by number of hits in title', () {
-      List<FAQItem> orderedItems = FAQService.loadItems('Lasius Niger Messor');
-
-      expect(
-          orderedItems.map((item) => item.title),
-          containsAllInOrder([
-            'Lasius Niger',
-            'Messor Barbarus',
-            'Camponotus Ligniperdus',
-          ]));
-    ***REMOVED***);
-
-    test('hits in tags outweight hits in title', () {
-      List<FAQItem> orderedItems = FAQService.loadItems('Holz Lasius Niger');
-
-      expect(
-          orderedItems.map((item) => item.title),
-          containsAllInOrder([
-            'Camponotus Ligniperdus',
-            'Lasius Niger',
-            'Messor Barbarus',
-          ]));
-    ***REMOVED***);
-
-    test('orders by number of hits in content text', () {
-      List<FAQItem> orderedItems = FAQService.loadItems(
-          'Netter Fleißig friedlich dickste Herrscher Mitteleuropa');
-
-      expect(
-          orderedItems.map((item) => item.title),
-          containsAllInOrder([
-            'Messor Barbarus',
-            'Camponotus Ligniperdus',
-            'Lasius Niger',
-          ]));
-    ***REMOVED***);
-
-    test('hits in title outweight hits in text', () {
+    test('orders by number of hits in tags', () async {
       List<FAQItem> orderedItems =
-          FAQService.loadItems('Netter Fleißig friedlich Ligniperdus');
+          TestFAQSorter().sortItems('Ameise rot Holz', testItems)!;
 
       expect(
           orderedItems.map((item) => item.title),
@@ -69,22 +53,62 @@ main() {
           ]));
     ***REMOVED***);
 
-    test('is not case sensitive', () {
+    test('orders by number of hits in title', () async {
       List<FAQItem> orderedItems =
-          FAQService.loadItems('RäUbEr CaMpoNoTuS lIgNiPeRdUs');
+          TestFAQSorter().sortItems('Lasius Niger Messor', testItems)!;
 
       expect(
           orderedItems.map((item) => item.title),
           containsAllInOrder([
             'Lasius Niger',
-            'Camponotus Ligniperdus',
             'Messor Barbarus',
+            'Camponotus Ligniperdus',
           ]));
     ***REMOVED***);
 
-    test('finds sub-words', () {
+    test('hits in tags outweight hits in title', () async {
       List<FAQItem> orderedItems =
-          FAQService.loadItems('europa unscheinbar welt');
+          TestFAQSorter().sortItems('Holz Lasius Niger', testItems)!;
+
+      expect(
+          orderedItems.map((item) => item.title),
+          containsAllInOrder([
+            'Camponotus Ligniperdus',
+            'Lasius Niger',
+            'Messor Barbarus',
+          ]));
+    ***REMOVED***);
+
+    test('orders by number of hits in content text', () async {
+      List<FAQItem> orderedItems = TestFAQSorter().sortItems(
+          'Netter Fleißig friedlich dickste Herrscher Mitteleuropa',
+          testItems)!;
+
+      expect(
+          orderedItems.map((item) => item.title),
+          containsAllInOrder([
+            'Messor Barbarus',
+            'Camponotus Ligniperdus',
+            'Lasius Niger',
+          ]));
+    ***REMOVED***);
+
+    test('hits in title outweight hits in text', () async {
+      List<FAQItem> orderedItems = TestFAQSorter()
+          .sortItems('Netter Fleißig friedlich Ligniperdus', testItems)!;
+
+      expect(
+          orderedItems.map((item) => item.title),
+          containsAllInOrder([
+            'Camponotus Ligniperdus',
+            'Messor Barbarus',
+            'Lasius Niger',
+          ]));
+    ***REMOVED***);
+
+    test('is not case sensitive', () async {
+      List<FAQItem> orderedItems = TestFAQSorter()
+          .sortItems('RäUbEr CaMpoNoTuS lIgNiPeRdUs', testItems)!;
 
       expect(
           orderedItems.map((item) => item.title),
@@ -95,11 +119,25 @@ main() {
           ]));
     ***REMOVED***);
 
-    test('does not change original items order', () {
-      FAQService.loadItems('Lasius Messor Barbarus');
+    test('finds sub-words', () async {
+      List<FAQItem> orderedItems =
+          TestFAQSorter().sortItems('europa unscheinbar welt', testItems)!;
 
       expect(
-          FAQService.items.map((item) => item.title),
+          orderedItems.map((item) => item.title),
+          containsAllInOrder([
+            'Lasius Niger',
+            'Camponotus Ligniperdus',
+            'Messor Barbarus',
+          ]));
+    ***REMOVED***);
+
+    test('does not change original items order', () async {
+      var items = testItems;
+      TestFAQSorter().sortItems('Lasius Messor Barbarus', items);
+
+      expect(
+          items.map((item) => item.title),
           containsAllInOrder([
             'Camponotus Ligniperdus',
             'Lasius Niger',
@@ -107,8 +145,9 @@ main() {
           ]));
     ***REMOVED***);
 
-    test('can handle multiple spaces and all kind of blanks', () {
-      var orderedItems = FAQService.loadItems('Lasius     Messor\n\tBarbarus');
+    test('can handle multiple spaces and all kind of blanks', () async {
+      List<FAQItem> orderedItems = TestFAQSorter()
+          .sortItems('Lasius     Messor\n\tBarbarus', testItems)!;
 
       expect(
           orderedItems.map((item) => item.title),
@@ -119,28 +158,137 @@ main() {
           ]));
     ***REMOVED***);
   ***REMOVED***);
+
+  group('DemoFAQService', () {
+    test('delivers demo faq items', () async {
+      var faq = await DemoFAQService().getSortedFAQ(null).first;
+
+      expect(faq, isNotNull);
+      expect(faq!.length, 4);
+      expect(faq[0].title, 'Wann geht\'s los?');
+      expect(faq[1].title, 'Was sind die Stufen des Volksbegehrens?');
+      expect(faq[2].title, 'Sammeltipps');
+      expect(faq[3].title, 'Feedback und Fehlermeldungen');
+    ***REMOVED***);
+
+    test('uses sorter', () async {
+      final faqUnsorted = await DemoFAQService().getSortedFAQ(null).first;
+      final faqSorted = await DemoFAQService().getSortedFAQ('Erfolg').first;
+
+      expect(faqSorted!.map((e) => e.id).toList(),
+          containsAll(faqUnsorted!.map((e) => e.id)));
+      expect(faqSorted.map((e) => e.id).toList(),
+          isNot(containsAllInOrder(faqUnsorted.map((e) => e.id))));
+    ***REMOVED***);
+  ***REMOVED***);
+
+  group('FAQService', () {
+    test('loads and returns old faq from storage on start', () async {
+      var faqService = FAQService(_storageService, _userService, _backend);
+      var faq = await faqService.getSortedFAQ(null).first;
+
+      expect(faq, isNotNull);
+      expect(faq!.length, 3);
+      expect(faq[0].id, 1);
+      expect(faq[1].id, 2);
+      expect(faq[2].id, 3);
+
+      verify(_storageService.loadFAQ()).called(1);
+    ***REMOVED***);
+
+    test(
+        'retrieves and returns new faq from server on start when local timestamp is null',
+        () async {
+      var faqService = FAQService(_storageService, _userService, _backend);
+
+      List<FAQItem>? faq;
+      faqService.getSortedFAQ(null).listen((newFaq) => faq = newFaq);
+      await Future.delayed(Duration(milliseconds: 100));
+
+      verify(_backend.get('service/faq', any)).called(1);
+      expect(faq, isNotNull);
+      expect(faq!.length, 1);
+      expect(faq![0].id, 4);
+    ***REMOVED***);
+
+    test('stores new faq from server in storage when local timestamp is null',
+        () async {
+      var faqService = FAQService(_storageService, _userService, _backend);
+
+      faqService.getSortedFAQ(null);
+      await Future.delayed(Duration(milliseconds: 100));
+
+      var faq = verify(_storageService.saveFAQ(captureAny)).captured;
+      expect(faq.length, 1);
+      expect((faq[0] as List<FAQItem>).length, 1);
+      expect((faq[0] as List<FAQItem>)[0].id, 4);
+      expect((faq[0] as List<FAQItem>)[0].title, 'Myrmica Ruginodis');
+    ***REMOVED***);
+
+    test(
+        'does not retrieve new faq from server in storage when local timestamp is not null, but servers is',
+        () async {
+      when(_storageService.loadFAQTimestamp())
+          .thenAnswer((_) => Future.value(_today()));
+      var faqService = FAQService(_storageService, _userService, _backend);
+
+      faqService.getSortedFAQ(null);
+      await Future.delayed(Duration(milliseconds: 100));
+
+      verifyNever(_backend.get('service/faq', any));
+      verifyNever(_storageService.saveFAQ(captureAny));
+    ***REMOVED***);
+
+    test(
+        'does not retrieve new faq from server in storage when local timestamp is newer then servers',
+        () async {
+      when(_storageService.loadFAQTimestamp())
+          .thenAnswer((_) => Future.value(_today()));
+      when(_backend.getServerHealth()).thenAnswer(
+          (_) => Future.value(ServerHealth()..faqTimestamp = _yesterday()));
+      var faqService = FAQService(_storageService, _userService, _backend);
+
+      faqService.getSortedFAQ(null);
+      await Future.delayed(Duration(milliseconds: 100));
+
+      verifyNever(_backend.get('service/faq', any));
+      verifyNever(_storageService.saveFAQ(captureAny));
+    ***REMOVED***);
+
+    test(
+        'does not retrieve new faq from server in storage when local timestamp is newer then servers',
+        () async {
+      when(_storageService.loadFAQTimestamp())
+          .thenAnswer((_) => Future.value(_yesterday()));
+      when(_backend.getServerHealth()).thenAnswer(
+          (_) => Future.value(ServerHealth()..faqTimestamp = _today()));
+      var faqService = FAQService(_storageService, _userService, _backend);
+
+      faqService.getSortedFAQ(null);
+      await Future.delayed(Duration(milliseconds: 100));
+
+      verify(_backend.get('service/faq', any)).called(1);
+      verify(_storageService.saveFAQ(captureAny)).called(1);
+    ***REMOVED***);
+  ***REMOVED***);
 ***REMOVED***
 
+DateTime _today() => DateTime.now();
+
+DateTime _yesterday() => Jiffy(DateTime.now()).subtract(days: 1).dateTime;
+
 var testItems = [
-  FAQItem(
-      1,
-      'Camponotus Ligniperdus',
-      Text('Anzeige-Text'),
-      Text('Kurztext'),
-      'Die dickste Ameise in Mitteleuropa',
-      ['Holz', 'Ameise', 'rot', 'schwarz']),
-  FAQItem(
-      2,
-      'Lasius Niger',
-      Text('Anzeige-Text'),
-      Text('Kurztext'),
-      'Die unscheinbaren Herrscher der Krabbelwelt',
-      ['Räuber', 'Erdnester', 'schwarz']),
+  FAQItem(1, 'Camponotus Ligniperdus', 'Die dickste Ameise', ' in Mitteleuropa',
+      1.0, ['Holz', 'Ameise', 'rot', 'schwarz']),
+  FAQItem(2, 'Lasius Niger', 'Die unscheinbaren Herrscher', ' der Krabbelwelt',
+      2.0, ['Räuber', 'Erdnester', 'schwarz']),
   FAQItem(
       3,
       'Messor Barbarus',
-      Text('Anzeige-Text'),
-      Text('Kurztext'),
-      'Netter als ihr Name vermuten lässt. Fleißig und friedlich.',
+      'Netter als ihr Name vermuten lässt.',
+      ' Fleißig und friedlich.',
+      3.0,
       ['Sammler', 'Erdnester', 'rot', 'schwarz']),
 ];
+
+class TestFAQSorter with FAQSorter {***REMOVED***

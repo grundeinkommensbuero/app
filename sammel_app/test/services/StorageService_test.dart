@@ -8,6 +8,7 @@ import 'package:sammel_app/services/StorageService.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../shared/TestdatenVorrat.dart';
+import 'FAQService_test.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -268,6 +269,59 @@ void main() async {
       var secret = await service.loadContact();
 
       expect(secret, 'Ick bin ein Berliner');
+    ***REMOVED***);
+  ***REMOVED***);
+
+  group('faq', () {
+    test('loadFAQ returns stored list of FAQItems', () async {
+      _prefs.setStringList(
+          'faq', testItems.map((item) => jsonEncode(item.toJson())).toList());
+
+      var result = await service.loadFAQ();
+
+      expect(result, isNotNull);
+      expect(result!.length, 3);
+      expect(result[0].id, 1);
+      expect(result[1].id, 2);
+      expect(result[2].id, 3);
+    ***REMOVED***);
+
+    test('loadFAQ returns null if no faq is stored', () async {
+      var result = await service.loadFAQ();
+
+      expect(result, isNull);
+    ***REMOVED***);
+
+    test('saveFAQ saves faq to storage', () async {
+      expect(_prefs.getStringList('faq'), isNull);
+
+      await service.saveFAQ(testItems);
+
+      expect(_prefs.getStringList('faq'), isNotNull);
+    ***REMOVED***);
+  ***REMOVED***);
+
+  group('faq timestamp', () {
+    test('loadFAQTimestamp returns stored timestamp', () async {
+      _prefs.setString('faqTimestamp', '2021-04-12 17:00:00');
+
+      var result = await service.loadFAQTimestamp();
+
+      expect(result, isNotNull);
+      expect(result, isNotNull);
+    ***REMOVED***);
+
+    test('loadFAQTimestamp returns null if no faq is stored', () async {
+      var result = await service.loadFAQ();
+
+      expect(result, isNull);
+    ***REMOVED***);
+
+    test('saveFAQTimestamp stores timestamp', () async {
+      DateTime timestamp = DateTime.parse('2021-04-12 17:05:00');
+      await service.saveFAQTimestamp(timestamp);
+
+      expect(_prefs.getString('faqTimestamp'), '2021-04-12 17:05:00.000');
     ***REMOVED***);
   ***REMOVED***);
 

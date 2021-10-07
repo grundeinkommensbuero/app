@@ -11,6 +11,7 @@
     <modules>
         <module>sammel_db</module>
         <module>sammel_server</module>
+        <module>sammel_gis</module>
     </modules>
 
     <properties>

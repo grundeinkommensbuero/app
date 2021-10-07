@@ -1,0 +1,8 @@
+POST http://127.0.0.1:18080/service/plakate/abgehangen/1
+Accept: application/json
+Content-Type: application/json
+Authorization: Basic MTE6YWM0MzA5NjAtMDVlYi0xMWViLThhMjYtZmRjNzY4M2E4NGJj
+
+{***REMOVED***
+
+###

@@ -162,7 +162,7 @@ const Map<String, dynamic> en = {
   "Allgemeine Infos": "General info",
   "Nachricht von {name***REMOVED***": "Message from {name***REMOVED***",
   "Problem beim Einrichten von Push-Nachrichten":
-      "Error when opening a push message",
+      "Error on establishing push messages",
   "Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. Das kann der Fall sein, wenn etwa ein Google-freies Betriebssystem genutzt wird. Darum kann die App nur Benachrichtigungen empfangen während sie geöffnet ist.":
       "A connection to the Google Push service could not be established. That can happen if, for example, a Google-free operating system is being used, in which case the app can only receive notifications while it’s open.",
   "Beim Abrufen von Nachrichten ist ein Fehler aufgetreten. Das regelmäßige Abrufen von Nachrichten wird deshalb deaktiviert":
@@ -331,18 +331,45 @@ const Map<String, dynamic> en = {
   'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
       'The action could not been found. Maybe it has been deleted.',
   'Ein Fehler ist aufgetreten': 'An error occured',
-  'Haustürgespräche': 'Haustürgespräche',
-  'Straßengespräche & Flyern': 'Straßengespräche & Flyern',
-  'Kiezfest': 'Kiezfest',
-  'Eintragen': 'Eintragen',
+  'Haustürgespräche': 'Door-to-door conversations',
+  'Straßengespräche & Flyern': 'Street conversations and flyering',
+  'Kiezfest': 'Kiez-party',
+  'Eintragen': 'Enter',
   'Was möchtest du an dieser Stelle eintragen?':
-      'Was möchtest du an dieser Stelle eintragen?',
-  'Zu einer Aktion aufrufen': 'Zu einer Aktion aufrufen',
-  'Ein Plakat eintragen': 'Ein Plakat eintragen',
-  'Ein besuchtes Haus markieren': 'Ein besuchtes Haus markieren',
-  'Plakat löschen': 'Plakat löschen',
+      'What would you like to enter at this location?',
+  'Zu einer Aktion aufrufen': 'Call for an action',
+  'Ein Plakat eintragen': 'Enter a poster',
+  'Ein besuchtes Haus markieren': 'Mark a visited house',
+  'Plakat löschen': 'Delete poster',
   'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?':
-      'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?',
+      'You entered this poster. Would you like to delete it again?',
+  'Plakate aufhängen': 'Put up posters',
+  'Besuchtes Haus': 'Visited House',
+  'Wähle das Haus auf der Karte aus.': 'Select the house at the map',
+  'Adresse': 'Address',
+  'Hausteil': 'Part of the house',
+  'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.':
+      'e.g. Front Building, Side Wing, Staircase B, floor 1-3, etc.',
+  'Nein danke': 'No thanks',
+  'Absenden': 'Submit',
+  'Vorbehalte': 'Arguments',
+  'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.':
+      'Help the campaign by describing the arguments and hesitations of the undecided. Also: What arguments would convince them? If an argumen was important in more then one talk, write the number behind in brackets.',
+  'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.':
+      'For privacy reasons these data are not connected to an address.',
+  "Weiterlesen": "Read More",
+  'Ja-Stimmen sammeln': 'Collect Yes-Votes',
+  'Zeitungen verteilen': 'Deliver Newspapers',
+  'Abhängen': 'Take down',
+  'Dieses Plakat hast du eingetragen. Du kannst es wieder löschen oder als abgehangen markieren.':
+      'You added this placard. You can delete it or mark it as taken down.',
+  'Abhängen von Plakat ist fehlgeschlagen.':
+      'Taking down of the placard failed.',
+  'Das Abhängen von Plakaten ist noch nicht aktiviert.':
+      'Taking down placards has not been activated yet.',
+  'Access failed': 'Zugriff fehlgeschlagen',
+  'Dieses Plakat wurde von jemand anderem eingetragen. Du kannst es als abgehangen markieren.':
+      'This placard has been added by somone else. You can mark it as taken down.',
 ***REMOVED***
 
 const Map<String, dynamic> ru = {
@@ -642,11 +669,15 @@ const Map<String, dynamic> ru = {
   "Zur Aktion": "к акции",
   "Berichten": "отзыв",
   "Über Aktion berichten": "отзыв",
+  // TODO
+  // "Kundgebung": "Manifestation",
+  // "Nur eigene Aktionen anzeigen": "Nur eigene Aktionen anzeigen",
+  // "Eigene Aktionen immer anzeigen": "Eigene Aktionen immer anzeigen",
+  // "Eigene Aktionen": "Eigene Aktionen",
   // "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
   //     "If you want to change Notifications to silent or disable certain notification categories, just long press a received notification. You will then be guided to the notification preferences for this app.",
   // "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
   //     "If you want to change Notifications to silent or disable certain notification categories, just press the three dots on a received notification. You will then be guided to the notification preferences for this app.",
-  // "Kundgebung": "Manifestation",
   "Na gut": "Закрыть",
   "In den Kalender": "Добавить в календарь",
   '{typ***REMOVED*** in {ortsteil***REMOVED***': '{typ***REMOVED*** в {ortsteil***REMOVED***',
@@ -656,6 +687,44 @@ const Map<String, dynamic> ru = {
   'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
       'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.',
   'Ein Fehler ist aufgetreten': 'Произошла ошибка',
+  'Haustürgespräche': 'обход по квартирам',
+  'Straßengespräche & Flyern': 'уличные разговоры & распространять листовки',
+  'Kiezfest': 'праздник в жилом районе',
+  'Eintragen': 'ввести',
+  'Was möchtest du an dieser Stelle eintragen?': 'Что ты хочешь здесь ввести?',
+  'Zu einer Aktion aufrufen': 'Призвать к действию',
+  'Ein Plakat eintragen': 'Ввести плакат',
+  'Ein besuchtes Haus markieren': 'Отметь дом, который ты посетил*а',
+  'Plakat löschen': 'удалить  плакат',
+  'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?':
+      'Ты ввел*а этот плакат. Ты хочешь его удалить?',
+  'Plakate aufhängen': 'Вешать плакаты',
+  'Besuchtes Haus': 'Посещенный дом',
+  'Wähle das Haus auf der Karte aus.': 'Выбери дом на карте.',
+  'Adresse': 'Адрес',
+  'Hausteil': 'Часть дома',
+  'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.':
+      'Например, передний корпус, боковое крыло, лестница В, этажи 1-3 и т. д.',
+  'Nein danke': 'нет cпасибо',
+  'Absenden': 'отправить',
+  'Vorbehalte': 'Неуверенность',
+  'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.':
+      'Помоги кампании: запиши, в чем заключались проблемы с людьми которые были неуверенны. И: Чем ты их убедил*а? Если аргумент был важен в нескольких беседах, запиши в скобках после аргумента количество бесед.',
+  'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.':
+      'В целях защиты данных эти данные не связаны с адресом.',
+  "Weiterlesen": "продолжить чтение",
+  'Ja-Stimmen sammeln': 'Сбор голосов за',
+  'Zeitungen verteilen': 'доставлять газеты',
+  'Abhängen': 'Abhängen',
+  'Dieses Plakat hast du eingetragen. Du kannst es wieder löschen oder als abgehangen markieren.':
+      'Dieses Plakat hast du eingetragen. Du kannst es wieder löschen oder als abgehangen markieren.',
+  'Abhängen von Plakat ist fehlgeschlagen.':
+      'Abhängen von Plakat ist fehlgeschlagen.',
+  'Das Abhängen von Plakaten ist noch nicht aktiviert.':
+      'Das Abhängen von Plakaten ist noch nicht aktiviert.',
+  'Zugriff fehlgeschlagen': 'Zugriff fehlgeschlagen',
+  'Dieses Plakat wurde von jemand anderem eingetragen. Du kannst es als abgehangen markieren.':
+      'Dieses Plakat wurde von jemand anderem eingetragen. Du kannst es als abgehangen markieren.',
 ***REMOVED***
 
 const Map<String, dynamic> fr = {
@@ -967,8 +1036,12 @@ const Map<String, dynamic> fr = {
   "Berichten": "Commentaire",
   "Über Aktion berichten": "Commentaire",
   "Kundgebung": "Manifestation",
+  // TODO
   // "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
   //     "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe auf die drei Punkte in einer Benachrichtigung die du bekommen hast und du gelangst du den Benachrichtigungseinstellungen für diese App.",
+  // "Nur eigene Aktionen anzeigen": "Nur eigene Aktionen anzeigen",
+  // "Eigene Aktionen immer anzeigen": "Eigene Aktionen immer anzeigen",
+  // "Eigene Aktionen": "Eigene Aktionen",
   "Na gut": "Fermer",
   "In den Kalender": "Dans le calendrier",
   '{typ***REMOVED*** in {ortsteil***REMOVED***': '{typ***REMOVED*** à {ortsteil***REMOVED***',
@@ -976,20 +1049,47 @@ const Map<String, dynamic> fr = {
   '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***':
       '{typ***REMOVED*** à {ortsteil***REMOVED***, {treffpunkt***REMOVED*** à {zeitpunkt***REMOVED***\n{url***REMOVED***',
   'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
-      'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.',
+      'Pas de donner sur l\'action rechercher. Eventuellement l\'action a été effacer.',
   'Ein Fehler ist aufgetreten': 'Une erreur s\'est produite',
-  'Haustürgespräche': 'Haustürgespräche',
-  'Straßengespräche & Flyern': 'Straßengespräche & Flyern',
-  'Kiezfest': 'Kiezfest',
-  'Eintragen': 'Eintragen',
+  'Straßengespräche & Flyern': 'Parler dans la rue & distribuer des prospectus',
+  'Haustürgespräche': 'rend visite aux loueurs',
+  'Kiezfest': 'fête du quartier',
+  'Eintragen': 'entrer',
   'Was möchtest du an dieser Stelle eintragen?':
-      'Was möchtest du an dieser Stelle eintragen?',
-  'Zu einer Aktion aufrufen': 'Zu einer Aktion aufrufen',
-  'Ein Plakat eintragen': 'Ein Plakat eintragen',
-  'Ein besuchtes Haus markieren': 'Ein besuchtes Haus markieren',
-  'Plakat löschen': 'Plakat löschen',
+      'Tu contre inscrire quoi sur cette place-là?',
+  'Zu einer Aktion aufrufen': 'Appeler à une action',
+  'Ein Plakat eintragen': 'Enter une affiche',
+  'Ein besuchtes Haus markieren': 'marquer une visite à domicile',
+  'Plakat löschen': 'effacer  l’affiche',
   'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?':
-      'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?',
+      'Tu as enter cette affiche. Conte tu effacer cette affiche de nouveau?',
+  'Plakate aufhängen': 'afficher des affiches',
+  'Besuchtes Haus': 'Visite a domicile',
+  'Wähle das Haus auf der Karte aus.': 'sélecte la maison sur la carte.',
+  'Adresse': 'adresse',
+  'Hausteil': 'partie de la maison',
+  'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.':
+      'Par example partie avant, aile latérale, entrer B, étage 1-3, etc.',
+  'Nein danke': 'Non merci',
+  'Absenden': 'envoyer',
+  'Vorbehalte': 'réserve',
+  'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.':
+      'Tu peut aider d’avancer à campagne en prenant des notes exacte sur les raisons pour lesquelles quelques un (et une) hésitent encore. Comment les convaincre et avec quels arguments? Prend aussi des notes sur le nombre de fois qu’un argument fut pertinent.',
+  'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.':
+      'Pour des raisons de protection des données, ces données ne sont pas liées à une adresse.',
+  "Weiterlesen": "Continuer à lire",
+  'Ja-Stimmen sammeln': 'Recueillir les votes oui',
+  'Zeitungen verteilen': 'Livrer des journaux',
+  'Abhängen': 'Abhängen',
+  'Dieses Plakat hast du eingetragen. Du kannst es wieder löschen oder als abgehangen markieren.':
+      'Dieses Plakat hast du eingetragen. Du kannst es wieder löschen oder als abgehangen markieren.',
+  'Abhängen von Plakat ist fehlgeschlagen.':
+      'Abhängen von Plakat ist fehlgeschlagen.',
+  'Das Abhängen von Plakaten ist noch nicht aktiviert.':
+      'Das Abhängen von Plakaten ist noch nicht aktiviert.',
+  'Zugriff fehlgeschlagen': 'Zugriff fehlgeschlagen',
+  'Dieses Plakat wurde von jemand anderem eingetragen. Du kannst es als abgehangen markieren.':
+      'Dieses Plakat wurde von jemand anderem eingetragen. Du kannst es als abgehangen markieren.',
 ***REMOVED***
 
 const Map<String, dynamic> de = {
@@ -1063,7 +1163,8 @@ const Map<String, dynamic> de = {
   "Zum Sammeln einladen": "Zum Sammeln einladen",
   "Fragen und Antworten": "Fragen und Antworten",
   "Dein Profil": "Dein Profil",
-  "Eine Sammel-Aktion ins Leben rufen": "Eine Sammel-Aktion ins Leben rufen",
+  "Eine Sammel-Aktion ins Leben rufen":
+      "Andere zu einer gemeinsamen Aktion einladen",
   "Tipps und Argumente": "Tipps und Argumente",
   "Tipps, Tricks und Argumentationshilfen":
       "Tipps, Tricks und Argumentationshilfen",
@@ -1327,4 +1428,31 @@ const Map<String, dynamic> de = {
   'Plakat löschen': 'Plakat löschen',
   'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?':
       'Dieses Plakat hast du eingetragen. Möchtest du es wieder löschen?',
+  'Plakate aufhängen': 'Plakate aufhängen',
+  'Besuchtes Haus': 'Besuchtes Haus',
+  'Wähle das Haus auf der Karte aus.': 'Wähle das Haus auf der Karte aus.',
+  'Adresse': 'Adresse',
+  'Hausteil': 'Hausteil',
+  'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.':
+      'zum Beispiel Vorderhaus, Seitenflügel, Aufgang B, Etage 1-3, etc.',
+  'Nein danke': 'Nein danke',
+  'Absenden': 'Absenden',
+  'Vorbehalte': 'Vorbehalte',
+  'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.':
+      'Hilf der Kampagne, indem du im Wortlaut aufschreibst, was die Bedenken der Unentschlossenen waren. Und: Mit was hast du sie überzeugen können? Wenn ein Argument in mehreren Gesprächen wichtig war, schreibe die Häufigkeit in Klammern dahinter.',
+  'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.':
+      'Aus Datenschutzgründen werden diese Daten nicht mit einer Adresse verknüpft.',
+  "Weiterlesen": "Weiterlesen",
+  'Ja-Stimmen sammeln': 'Ja-Stimmen sammeln',
+  'Zeitungen verteilen': 'Zeitungen verteilen',
+  'Abhängen': 'Abhängen',
+  'Dieses Plakat hast du eingetragen. Du kannst es wieder löschen oder als abgehangen markieren.':
+      'Dieses Plakat hast du eingetragen. Du kannst es wieder löschen oder als abgehangen markieren.',
+  'Abhängen von Plakat ist fehlgeschlagen.':
+      'Abhängen von Plakat ist fehlgeschlagen.',
+  'Das Abhängen von Plakaten ist noch nicht aktiviert.':
+      'Das Abhängen von Plakaten ist noch nicht aktiviert.',
+  'Zugriff fehlgeschlagen': 'Zugriff fehlgeschlagen',
+  'Dieses Plakat wurde von jemand anderem eingetragen. Du kannst es als abgehangen markieren.':
+      'Dieses Plakat wurde von jemand anderem eingetragen. Du kannst es als abgehangen markieren.',
 ***REMOVED***

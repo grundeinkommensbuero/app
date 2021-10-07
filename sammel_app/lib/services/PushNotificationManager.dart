@@ -47,10 +47,8 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     var listener = createPushListener(firebaseService, backend);
     updateService = PushUpdateService(userService, backend);
 
-    listener.then((listener) {
-      pushToken = listener.token;
-      updateMessages();
-    ***REMOVED***);
+    pushToken = listener.then((l) => l.token);
+    listener.then((listener) => updateMessages());
   ***REMOVED***
 
   Future<PushReceiveService> createPushListener(
@@ -80,7 +78,14 @@ class PushNotificationManager implements AbstractPushNotificationManager {
   Map<String, PushNotificationListener> callbackMap = Map();
 
   onReceived(RemoteMessage message) async {
-    final data = await decrypt(message.data);
+    final data;
+    try {
+      data = await decrypt(message.data);
+    ***REMOVED*** catch (e) {
+      ErrorService.pushError("Unlesbare Push-Nachricht",
+          'Bei der Entschlüsselung einer Push-Nachrich ist ein Fehler aufgetreten');
+      return;
+    ***REMOVED***
 
     try {
       if (data.containsKey('type'))

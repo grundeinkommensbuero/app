@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:sammel_app/model/VisitedHouse.dart';
 import 'package:sammel_app/model/Kiez.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Placard.dart';
 import 'package:sammel_app/model/User.dart';
-import 'package:sammel_app/services/VisitedHousesService.dart';
 
 User karl() => User(11, 'Karl Marx', Colors.red);
 
@@ -2208,36 +2208,36 @@ Ortsteil koepenick() => Ortsteil('Köpenick', [
     ]);
 
 Placard placard1() =>
-    Placard(1, 52.4722460, 13.3277830, '12161, Friedrich-Wilhelm-Platz 57', 11);
+    Placard(1, 52.4722460, 13.3277830, '12161, Friedrich-Wilhelm-Platz 57', 11, false);
 
 Placard placard2() =>
-    Placard(2, 52.47102, 13.3282, "12161, Bundesallee 76", 12);
+    Placard(2, 52.47102, 13.3282, "12161, Bundesallee 76", 12, false);
 
 Placard placard3() =>
-    Placard(3, 52.4709, 13.32744, "12161, Goßlerstraße 29", 11);
+    Placard(3, 52.4709, 13.32744, "12161, Goßlerstraße 29", 11, false);
 
-VisitedHouseDummy kanzlerinamt() => VisitedHouseDummy(
-    1,
-    52.52014,
-    13.36911,
-    'Willy-Brandt-Straße 1, Tiergarten, Mitte, Berlin, 10557',
-    'Westflügel',
-    DateTime(2021, 7, 18),
-    11,
-    '');
+VisitedHouse kanzlerinamt() => VisitedHouse(1, 52.52014, 13.36911, [], [
+      Visitation(
+          1,
+          'Willy-Brandt-Straße 1, Tiergarten, Mitte, Berlin, 10557',
+          'Westflügel',
+          11,
+          DateTime(2021, 7, 18))
+    ]);
 
-VisitedHouseDummy hausundgrund() => VisitedHouseDummy(2, 52.4964133, 13.3617511,
-    'Potsdamer Straße 143, 10783 Berlin', null, DateTime(2021, 7, 17), 12, '');
+VisitedHouse hausundgrund() => VisitedHouse(2, 52.4964133, 13.3617511, [], [
+      Visitation(2, 'Potsdamer Straße 143, 10783 Berlin', '', 12,
+          DateTime(2021, 7, 17))
+    ]);
 
-VisitedHouseDummy konradadenauerhaus() => VisitedHouseDummy(
-    3,
-    52.5065,
-    13.35125,
-    'Klingelhöferstraße 8,Botschaftsviertel, Tiergarten, Mitte, Berlin, 10785',
-    'Haupteingang',
-    DateTime(2021, 7, 19),
-    11,
-    '');
+VisitedHouse konradadenauerhaus() => VisitedHouse(3, 52.5065, 13.35125, [], [
+      Visitation(
+          3,
+          'Klingelhöferstraße 8,Botschaftsviertel, Tiergarten, Mitte, Berlin, 10785',
+          'Haupteingang',
+          11,
+          DateTime(2021, 7, 19))
+    ]);
 
 ListLocation curry36() =>
     ListLocation('1', 'Curry 36', 'Mehringdamm', '36', 52.4935584, 13.3877282);

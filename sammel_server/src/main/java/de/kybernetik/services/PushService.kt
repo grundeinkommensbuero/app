@@ -55,11 +55,10 @@ open class PushService {
             "PROD" -> PREFIX = ""
             else -> LOG.error("Server-Modus unbekannt")
         ***REMOVED***
-        // TODO in späterer Version aktivieren, zusammen mit neuem Key
-//        when (modus) {
-//            "LOCAL" -> ENCRYPTION = "AES_PROD"
-//            else -> ENCRYPTION = "AES"
-//        ***REMOVED***
+        when (modus) {
+            "PROD" -> ENCRYPTION = "AES_PROD"
+            else -> ENCRYPTION = "AES"
+        ***REMOVED***
 
         val key = getProperty("key")
         KEY = SecretKeySpec(Base64.getDecoder().decode(key), "AES")
@@ -83,12 +82,13 @@ open class PushService {
         val topicInModus = "$PREFIX$topic"
         LOG.info("Pushe Nachricht zu Topic $PREFIX$topic")
         val verschluesselt = verschluessele(nachricht.data)
-        firebase.sendePushNachrichtAnTopic(nachricht.notification, verschluesselt, topicInModus)
 
         val subscribers = subscriptionDao.getSubscribersForTopic(topic)
         val subscribedBenutzer = benutzerDao.getBenutzer(subscribers)
         if (subscribedBenutzer.isNotEmpty())
             pushDao.speicherePushMessageFuerEmpfaenger(nachricht.notification, verschluesselt, subscribedBenutzer)
+
+        firebase.sendePushNachrichtAnTopic(nachricht.notification, verschluesselt, topicInModus)
     ***REMOVED***
 
     open fun verschluessele(data: Map<String, Any?>?): Map<String, String>? {
@@ -118,7 +118,7 @@ open class PushService {
 
     open fun pusheNeueAktionenNotification(aktionen: List<TerminDto>, topic: String) {
         LOG.debug("Neue Aktionen als Push-Messages zu versenden: ${aktionen.map { it.id ***REMOVED******REMOVED***")
-        if (aktionen.isNullOrEmpty()) return
+        if (aktionen.isEmpty()) return
 
         if (aktionen.map { it.ort ***REMOVED***.distinct().size > 1)
             LOG.warn("Orte aus unterschiedlichen Aktionen in derselben Push-Nachricht")

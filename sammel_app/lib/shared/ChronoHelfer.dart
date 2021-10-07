@@ -43,6 +43,12 @@ class ChronoHelfer {
     return DateFormat('EEEE, d. MMMM yyyy', locale?.languageCode).format(date);
   ***REMOVED***
 
+  static String formatDateOfDateTimeMitWochentagOhneJahr(DateTime? date,
+      [Locale? locale]) {
+    if (date == null) return '';
+    return DateFormat('EEEE, d. MMMM', locale?.languageCode).format(date);
+  ***REMOVED***
+
   static String formatDateOfDateTime(DateTime? date) {
     if (date == null) return '';
     return DateFormat('d. MMMM yyyy').format(date);

@@ -12,6 +12,8 @@ import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/UserService.dart';
 import 'package:sammel_app/shared/MessageException.dart';
 import 'package:sammel_app/shared/ServerException.dart';
+
+import 'AccessException.dart';
 import 'AuthFehler.dart';
 import 'RestFehler.dart';
 
@@ -33,7 +35,7 @@ class BackendService {
     try {
       var response = await backend
           .get(url, await authHeaders(appAuth))
-          .timeout(Duration(seconds: 5), onTimeout: () => checkConnectivity());
+          .timeout(Duration(seconds: 10), onTimeout: () => checkConnectivity());
 
       if (response.response.statusCode >= 200 &&
           response.response.statusCode < 300) return response;
@@ -64,6 +66,9 @@ class BackendService {
       if (response.response.statusCode == 403)
         throw AuthFehler.fromJson(response.body);
 
+      if (response.response.statusCode == 423)
+        throw AccessException.fromJson(response.body);
+
       // else
       throw RestFehler(response.body.toString());
     ***REMOVED*** on SocketException catch (e) {
@@ -76,7 +81,7 @@ class BackendService {
     try {
       var response = await backend
           .delete(url, data, await authHeaders(appAuth))
-          .timeout(Duration(seconds: 2),
+          .timeout(Duration(seconds: 10),
               onTimeout: () async => await checkConnectivity());
 
       if (response.response.statusCode >= 200 &&

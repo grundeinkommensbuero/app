@@ -40,7 +40,7 @@ class StammdatenService {
 
   Future<Kiez?> getKiezAtLocation(LatLng point) async {
     return (await kieze)
-        .map((kiez) => kiez as Kiez?) // nötig wegen orElse => null
+        .map((kiez) => kiez as Kiez?) // ignore: unnecessary_cast, // nötig wegen orElse => null
         .firstWhere(
             (kiez) => poly.Polygon(kiez!.polygon
             .map((latlng) =>

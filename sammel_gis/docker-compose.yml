@@ -1,0 +1,18 @@
+version: '3.4'
+services:
+  gis:
+    build: .
+    container_name: overpass
+    restart: always
+    environment:
+      OVERPASS_MODE: 'init'
+      OVERPASS_PLANET_URL: 'http://download.geofabrik.de/europe/germany/berlin-latest.osm.bz2'
+    ports:
+      - '10443:443'
+      - '1080:80'
+    expose:
+      - '10443'
+      - '1080'
+    volumes:
+      - ./db:/db
+      - ./ssl:/etc/ssl

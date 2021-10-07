@@ -4,27 +4,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
 import 'package:sammel_app/Provisioning.dart';
+import 'package:sammel_app/model/VisitedHouse.dart';
 import 'package:sammel_app/model/ListLocation.dart';
 import 'package:sammel_app/model/Placard.dart';
 import 'package:sammel_app/model/Termin.dart';
+import 'package:sammel_app/routes/ArgumentsDialog.dart';
+import 'package:sammel_app/services/ArgumentsService.dart';
+import 'package:sammel_app/services/ErrorService.dart';
+import 'package:sammel_app/services/GeoService.dart';
+import 'package:sammel_app/services/PlacardsService.dart';
+import 'package:sammel_app/services/VisitedHouseView.dart';
+import 'package:sammel_app/services/VisitedHousesService.dart';
 import 'package:sammel_app/shared/AttributionPlugin.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
 import 'package:sammel_app/shared/NoRotation.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_map_location/flutter_map_location.dart';
 
+import '../shared/DistanceHelper.dart';
+import 'VisitedHouseEditor.dart';
+import 'MapActionDialog.dart';
+import 'PlacardDialog.dart';
+import 'EditVisitedHouse.dart';
+
 class ActionMap extends StatefulWidget {
   final List<Termin> termine;
   final List<ListLocation> listLocations;
-  final List<Placard> placards;
   final int? myUserId;
   final Function(Termin) isMyAction;
   final Function(Termin) isPastAction;
   final Function(Termin) iAmParticipant;
   final Function(Termin) openActionDetails;
-  final Function(Placard) openPlacardDialog;
-  final Function(LatLng point) mapAction;
+  final Function(LatLng point) switchToActionCreator;
   late final MapController mapController;
 
   // no better way yet: https://github.com/dart-lang/sdk/issues/4596
@@ -36,14 +49,12 @@ class ActionMap extends StatefulWidget {
     Key? key,
     this.termine = const [],
     this.listLocations = const [],
-    this.placards = const [],
     this.myUserId,
     this.isMyAction = falseFunction,
     this.isPastAction = emptyFunction,
     this.openActionDetails = emptyFunction,
-    this.openPlacardDialog = emptyFunction,
     this.iAmParticipant = emptyFunction,
-    this.mapAction = emptyFunction,
+    this.switchToActionCreator = emptyFunction,
     mapController,
   ***REMOVED***) : super(key: key) {
     this.mapController = mapController ?? MapController();
@@ -58,40 +69,55 @@ class ActionMapState extends State<ActionMap> {
 
   var locationPermissionGranted = false;
   List<Marker> markers = [];
+  List<Placard> placards = [];
+  late AbstractPlacardsService placardService;
   var initialized = false;
+  List<Polygon> housePolygons = [];
 
   @override
   Widget build(BuildContext context) {
+    if (!initialized) {
+      placardService = Provider.of<AbstractPlacardsService>(context);
+      loadPlaccards();
+    ***REMOVED***
+
     var markers = generateMarkers();
     List<MapPlugin> plugins = [];
     plugins.add(AttributionPlugin());
     plugins.add(LocationPlugin());
-
+    this.housePolygons = generateVisitedHousePolygons();
     var layers = [
       TileLayerOptions(
           urlTemplate: "https://{s***REMOVED***.tile.openstreetmap.org/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
           subdomains: ['a', 'b', 'c']),
+      PolygonLayerOptions(polygons: this.housePolygons, polygonCulling: true),
       MarkerLayerOptions(markers: markers),
     ];
     layers.add(AttributionOptions());
 
-    final userLocationLayer = [LocationOptions((_1, _2, _3) => SizedBox())];
+    final userLocationLayer = [
+      // ignore: non_constant_identifier_names
+      LocationOptions((_1, _2, _3) => SizedBox())
+    ];
 
     var flutterMap = FlutterMap(
       key: Key('action map map'),
       options: MapOptions(
-          onLongPress: (LatLng point) => widget.mapAction(point),
-          plugins: plugins,
-          center: LatLng(geo.initCenterLat, geo.initCenterLong),
-          swPanBoundary: LatLng(geo.boundLatMin, geo.boundLongMin),
-          nePanBoundary: LatLng(geo.boundLatMax, geo.boundLongMax),
-          zoom: geo.initZoom,
-          interactiveFlags: noRotation,
-          maxZoom: geo.zoomMax,
-          minZoom: geo.zoomMin,
-          onPositionChanged: (position, _) => widget.mapController.onReady.then(
-              (_) => setState(
-                  () => this.markers = generateListLocationMarkers()))),
+        onTap: (LatLng point) => mapTap(point),
+        onLongPress: (LatLng point) => mapAction(point),
+        plugins: plugins,
+        center: LatLng(geo.initCenterLat, geo.initCenterLong),
+        swPanBoundary: LatLng(geo.boundLatMin, geo.boundLongMin),
+        nePanBoundary: LatLng(geo.boundLatMax, geo.boundLongMax),
+        zoom: geo.initZoom,
+        interactiveFlags: noRotation,
+        maxZoom: geo.zoomMax,
+        minZoom: geo.zoomMin,
+        onPositionChanged: (position, _) =>
+            widget.mapController.onReady.then((_) => setState(() {
+                  this.markers = generateListLocationMarkers();
+                ***REMOVED***)),
+      ),
       layers: layers,
       nonRotatedLayers: userLocationLayer,
       mapController: widget.mapController,
@@ -100,9 +126,159 @@ class ActionMapState extends State<ActionMap> {
     return flutterMap;
   ***REMOVED***
 
+  loadPlaccards() {
+    placardService
+        .loadPlacards()
+        .then((placards) => setState(() => this.placards = placards));
+  ***REMOVED***
+
+  void deletePlacard(Placard placard) {
+    placardService.deletePlacard(placard.id!);
+    setState(() => placards.remove(placard));
+  ***REMOVED***
+
+  void takeDownPlacard(Placard placard) {
+    placardService.takeDownPlacard(placard.id!);
+    setState(() => placards.remove(placard.abgehangen = true));
+  ***REMOVED***
+
+  List<Polygon> generateVisitedHousePolygons() {
+    if (initialized && widget.mapController.zoom > 14) {
+      //return widget.visitedHouses;
+
+      BoundingBox bbox = BoundingBox(
+          widget.mapController.bounds!.south,
+          widget.mapController.bounds!.west,
+          widget.mapController.bounds!.north,
+          widget.mapController.bounds!.east);
+      VisitedHouseView houseView =
+          Provider.of<AbstractVisitedHousesService>(context, listen: false)
+              .getVisitedHousesInArea(bbox);
+      return houseView.buildDrawablePolygonsFromView();
+    ***REMOVED***
+    return [];
+  ***REMOVED***
+
+  mapTap(LatLng point) async {
+    VisitedHouse? vh =
+        await Provider.of<AbstractVisitedHousesService>(context, listen: false)
+            .getVisitedHouseOfPoint(point, false);
+
+    if (vh != null) {
+      var showDistanceInMeter = 100.0;
+      var lngDiff = DistanceHelper.getLongDiffFromM(point, showDistanceInMeter);
+      var latDiff = DistanceHelper.getLatDiffFromM(point, showDistanceInMeter);
+      BoundingBox bbox = BoundingBox(
+          point.latitude - latDiff,
+          point.longitude - lngDiff,
+          point.latitude + latDiff,
+          point.longitude + lngDiff);
+      var visitedHouseView =
+          Provider.of<AbstractVisitedHousesService>(context, listen: false)
+              .getVisitedHousesInArea(bbox);
+      visitedHouseView.selectedHouse = SelectableVisitedHouse.clone(
+          SelectableVisitedHouse.fromVisitedHouse(vh, selected: true));
+      await showEditVisitedHouseDialog(
+          context: context,
+          visitedHouseView: visitedHouseView,
+          currentZoomFactor: widget.mapController.zoom);
+      setState(() {
+        this.housePolygons = generateVisitedHousePolygons();
+      ***REMOVED***);
+    ***REMOVED***
+  ***REMOVED***
+
+  Future openPlacardDialog(Placard placard, bool mine) async {
+    if (placard.id == null) return;
+
+    PlacardDialogAction action = await showPlacardDialog(context, mine);
+
+    if (action == PlacardDialogAction.DELETE) deletePlacard(placard);
+    if (action == PlacardDialogAction.TAKE_DOWN) takeDownPlacard(placard);
+  ***REMOVED***
+
+  createNewPlacard(LatLng point) async {
+    if (widget.myUserId == null) {
+      ErrorService.pushError('Plakat kann nicht erstellt werden',
+          'Die App hat noch kein Benutzer*inprofil für dich erzeugt. Versuche es bitte später nochmal');
+      return;
+    ***REMOVED***
+
+    final geoData = await Provider.of<GeoService>(context, listen: false)
+        .getDescriptionToPoint(point);
+
+    final placard = await placardService.createPlacard(Placard(
+        null,
+        point.latitude,
+        point.longitude,
+        geoData.fullAdress,
+        widget.myUserId!,
+        false));
+    if (placard != null) {
+      setState(() => placards.add(placard));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(
+              'Neues Plakat an der Adresse "${placard.adresse***REMOVED***" eingetragen'
+                  .tr(),
+              style: TextStyle(color: Colors.black87)),
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 5),
+          backgroundColor: Color.fromARGB(220, 255, 255, 250)));
+    ***REMOVED***
+  ***REMOVED***
+
+  mapAction(LatLng point) async {
+    MapActionType? chosenAction = await showMapActionDialog(context);
+
+    if (chosenAction == MapActionType.NewAction) {
+      widget.switchToActionCreator(point);
+    ***REMOVED***
+    if (chosenAction == MapActionType.NewPlacard) createNewPlacard(point);
+    if (chosenAction == MapActionType.NewVisitedHouse)
+      createNewVisitedHouse(point);
+  ***REMOVED***
+
+  void createNewVisitedHouse(LatLng point) async {
+    var showDistanceInM = 100.0;
+    var lngDiff = DistanceHelper.getLongDiffFromM(point, showDistanceInM);
+    var latDiff = DistanceHelper.getLatDiffFromM(point, showDistanceInM);
+    BoundingBox bbox = BoundingBox(
+        point.latitude - latDiff,
+        point.longitude - lngDiff,
+        point.latitude + latDiff,
+        point.longitude + lngDiff);
+    var visitedHouseView =
+        Provider.of<AbstractVisitedHousesService>(context, listen: false)
+            .getVisitedHousesInArea(bbox);
+    var newHouseFromServer = await showAddVisitationDialog(
+        context: context,
+        visitedHouseView: visitedHouseView,
+        currentZoomFactor: widget.mapController.zoom);
+    if (newHouseFromServer == null) return;
+
+    var arguments =
+        await showArgumentsDialog(context: context, coordinates: point);
+    if (arguments != null)
+      Provider.of<AbstractArgumentsService>(context, listen: false)
+          .createArguments(arguments);
+
+    setState(() {
+      this.housePolygons = generateVisitedHousePolygons();
+    ***REMOVED***);
+  ***REMOVED***
+
+  update() async {
+    placardService.loadPlacards().then((placards) => setState(() {
+          this.placards = placards;
+        ***REMOVED***));
+    Provider.of<AbstractVisitedHousesService>(context, listen: false)
+        .loadVisitedHouses()
+        .then((_) => setState(
+            () => this.housePolygons = this.generateVisitedHousePolygons()));
+  ***REMOVED***
+
   List<ActionMarker> generateActionMarkers() {
     return widget.termine
-        .where((action) => action.latitude != null && action.longitude != null)
         .map((action) => ActionMarker(action,
             ownAction: widget.isMyAction(action),
             participant: widget.iAmParticipant(action),
@@ -121,12 +297,10 @@ class ActionMapState extends State<ActionMap> {
 
   List<PlacardMarker> generatePlacardMarkers() {
     if (!initialized || widget.mapController.zoom < 15) return [];
-    return widget.placards
-        .where(
-            (placard) => placard.latitude != null && placard.longitude != null)
+    return placards
         .map((placard) => PlacardMarker(placard,
             mine: placard.benutzer == widget.myUserId,
-            onTap: widget.openPlacardDialog))
+            onTap: openPlacardDialog))
         .toList()
         .reversed
         .toList();
@@ -183,9 +357,9 @@ class ActionMarker extends Marker {
 
 class PlacardMarker extends Marker {
   bool mine = false;
-  Function(Placard) onTap;
+  Function(Placard, bool) onTap;
 
-  static emptyFunction(_) {***REMOVED***
+  static emptyFunction(_1, _2) {***REMOVED***
 
   PlacardMarker(Placard placard,
       {this.mine = false, this.onTap = emptyFunction***REMOVED***)
@@ -203,12 +377,15 @@ class PlacardMarker extends Marker {
               ], shape: BoxShape.circle),
               child: TextButton(
                   key: Key('placard marker'),
-                  onPressed: () => mine ? onTap(placard) : null,
+                  onPressed:
+                      placard.abgehangen ? null : () => onTap(placard, mine),
                   style: ButtonStyle(
                     padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
                         EdgeInsets.all(0)),
                   ),
-                  child: Image.asset('assets/images/Plakat.png'))),
+                  child: placard.abgehangen
+                      ? Image.asset('assets/images/PlakatAbgehangen.png')
+                      : Image.asset('assets/images/Plakat.png'))),
         );
 ***REMOVED***
 
