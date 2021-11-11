@@ -162,5 +162,5 @@ flutter:
 flutter_icons:
   android: true
   ios: true
-  image_path_android: "assets/images/logo.png"
-  image_path_ios: "assets/images/logo_ios.png"
+  image_path_android: "assets/images/xbge_logo_small.png"
+  image_path_ios: "assets/images/xbge_logo_small.png"

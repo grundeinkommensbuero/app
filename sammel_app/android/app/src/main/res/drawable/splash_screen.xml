@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Modify this file to customize your launch splash screen -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/dwe_yellow"/>
+    <item android:drawable="@drawable/xbge_violet"/>
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/dwe" />
+            android:src="@drawable/xbge" />
     </item>
 </layer-list>

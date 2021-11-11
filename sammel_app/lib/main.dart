@@ -114,7 +114,7 @@ class MyApp extends StatelessWidget {
           Provider<AbstractArgumentsService>(create: (_) => argumentsService)
         ],
         child: MaterialApp(
-          title: 'DW & Co. Enteignen',
+          title: 'Expedition Grundeinkommen',
           theme: CampaignTheme.themeData,
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,

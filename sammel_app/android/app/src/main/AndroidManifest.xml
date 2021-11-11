@@ -9,8 +9,9 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <application
             android:name=".Application"
-            android:label="DW+Co. Enteignen"
-            android:icon="@mipmap/ic_launcher">
+            android:label="Expedition Grundeinkommen"
+            android:icon="@mipmap/ic_launcher"
+            >
         <activity
                 android:name=".MainActivity"
                 android:launchMode="singleTop"
@@ -66,6 +67,6 @@
                 android:resource="@drawable/push_logo" />
         <meta-data
                 android:name="com.google.firebase.messaging.default_notification_color"
-                android:resource="@drawable/dwe_purple" />
+                android:resource="@drawable/xbge_violet" />
     </application>
 </manifest>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <drawable name="dwe_yellow">#ffffD800</drawable>
-    <drawable name="dwe_purple">#ff811C62</drawable>
+    <drawable name="xbge_violet">#7d69f6</drawable>
+    <drawable name="xbge_aqua">#46b4b4</drawable>
 </resources>
