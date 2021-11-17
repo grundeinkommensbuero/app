@@ -124,8 +124,10 @@ open class PushService {
             LOG.warn("Orte aus unterschiedlichen Aktionen in derselben Push-Nachricht")
 
         val title = if (aktionen.size == 1) "Neue Aktion in deinem Kiez" else "Neue Aktionen in deinem Kiez"
-        val body = if (aktionen.size == 1)
+        val body = if (aktionen.size == 1 && aktionen[0].typ != "Listen ausgelegt")
             "${aktionen[0].typ***REMOVED*** am ${aktionen[0].beginn!!.format(DateTimeFormatter.ofPattern("dd.MM. 'um' HH:mm 'Uhr'"))***REMOVED***, ${aktionen[0].ort***REMOVED***"
+        else if (aktionen.size == 1)
+            "Listen ausgelegt in ${aktionen[0].ort***REMOVED***"
         else
             "${aktionen.size***REMOVED*** neue Aktionen in ${aktionen[0].ort***REMOVED***"
 

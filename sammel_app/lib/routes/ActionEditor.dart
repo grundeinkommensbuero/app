@@ -142,27 +142,6 @@ class ActionEditorState extends State<ActionEditor>
                       ]))
                 ]),
                 Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Icon(Icons.access_time, size: 40.0),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  Expanded(
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                        Text(
-                          'Wann?',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ).tr(),
-                        InputButton(
-                            onTap: daysSelection, child: daysButtonCaption()),
-                        InputButton(
-                            onTap: timeSelection,
-                            child: timeButtonCaption(this.action),
-                            key: Key('open time span dialog')),
-                      ]))
-                ]),
-                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Icon(Icons.info_outline, size: 40.0),
                   SizedBox(
                     width: 10.0,
@@ -185,6 +164,29 @@ class ActionEditorState extends State<ActionEditor>
                             child: descriptionButtonCaption(this.action)),
                       ]))
                 ]),
+                if (this.action.typ != 'Listen ausgelegt') ...[
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                    Icon(Icons.access_time, size: 40.0),
+                    SizedBox(
+                      width: 10.0,
+                    ),
+                    Expanded(
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                          Text(
+                            'Wann?',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ).tr(),
+                          InputButton(
+                              onTap: daysSelection, child: daysButtonCaption()),
+                          InputButton(
+                              onTap: timeSelection,
+                              child: timeButtonCaption(this.action),
+                              key: Key('open time span dialog')),
+                        ]))
+                  ])
+                ],
                 Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Icon(Icons.face, size: 40.0),
                   SizedBox(
@@ -397,7 +399,9 @@ class ActionEditorState extends State<ActionEditor>
     var ergebnis = await showTextInputDialog(
         this.action.beschreibung,
         'Beschreibung',
-        'Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammler*innen mitbringen? Kann man auch später dazustoßen?',
+        this.action.typ == 'Sammeln'
+            ? 'Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammler*innen mitbringen? Kann man auch später dazustoßen?'
+            : 'Gib eine kurze Beschreibung des Events oder des Ortes an.',
         Key('description input dialog'));
     setState(() {
       this.action.beschreibung = ergebnis;
@@ -506,10 +510,18 @@ class ActionEditorState extends State<ActionEditor>
   ***REMOVED***
 
   void validateAllInput() {
-    validateAgainstNull(action.von, 'von');
-    validateAgainstNull(action.bis, 'bis');
+    // Skip validation for datetime, if type is "Listen ausgelegt"
+    if (action.typ == 'Listen ausgelegt') {
+      this.action.validated['von'] = ValidationState.ok;
+      this.action.validated['bis'] = ValidationState.ok;
+      this.action.validated['tage'] = ValidationState.ok;
+    ***REMOVED*** else {
+      validateAgainstNull(action.von, 'von');
+      validateAgainstNull(action.bis, 'bis');
+      validateDays();
+    ***REMOVED***
+
     validateAgainstNull(action.ort, 'ort');
-    validateDays();
     validateTyp();
     validateVenue();
     validateDescription();
@@ -604,30 +616,47 @@ class ActionEditorState extends State<ActionEditor>
     validateAllInput();
     if (action.validated['all'] == ValidationState.ok) {
       List<Termin> termine = [];
-      for (final tag in this.action.tage) {
-        DateTime begin = new DateTime(tag.year, tag.month, tag.day,
-            this.action.von!.hour, this.action.von!.minute);
-        DateTime end = new DateTime(tag.year, tag.month, tag.day,
-            this.action.bis!.hour, this.action.bis!.minute);
-        if (ChronoHelfer.isTimeOfDayBefore(
-            this.action.bis!, this.action.von!)) {
-          end = end.add(Duration(days: 1));
-        ***REMOVED***
-        User me = await Provider.of<AbstractUserService>(context, listen: false)
-            .user
-            .first
-            .timeout(Duration(seconds: 5), onTimeout: () => throw Exception());
+      User me = await Provider.of<AbstractUserService>(context, listen: false)
+          .user
+          .first
+          .timeout(Duration(seconds: 5), onTimeout: () => throw Exception());
+
+      if (this.action.typ == 'Listen ausgelegt') {
+        DateTime now = new DateTime.now();
         termine.add(Termin(
             widget.initAction?.id,
-            begin,
-            end,
+            now,
+            new DateTime(now.year + 1, now.month, now.day),
             this.action.ort!,
             this.action.typ,
             action.coordinates!.latitude,
             action.coordinates!.longitude,
-            [me],
+            [],
             TerminDetails(
                 action.treffpunkt!, action.beschreibung!, action.kontakt!)));
+      ***REMOVED*** else {
+        for (final tag in this.action.tage) {
+          DateTime begin = new DateTime(tag.year, tag.month, tag.day,
+              this.action.von!.hour, this.action.von!.minute);
+          DateTime end = new DateTime(tag.year, tag.month, tag.day,
+              this.action.bis!.hour, this.action.bis!.minute);
+          if (ChronoHelfer.isTimeOfDayBefore(
+              this.action.bis!, this.action.von!)) {
+            end = end.add(Duration(days: 1));
+          ***REMOVED***
+
+          termine.add(Termin(
+              widget.initAction?.id,
+              begin,
+              end,
+              this.action.ort!,
+              this.action.typ,
+              action.coordinates!.latitude,
+              action.coordinates!.longitude,
+              [me],
+              TerminDetails(
+                  action.treffpunkt!, action.beschreibung!, action.kontakt!)));
+        ***REMOVED***
       ***REMOVED***
       return termine;
     ***REMOVED*** else {

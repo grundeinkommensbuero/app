@@ -118,7 +118,8 @@ class ActionListState extends State<ActionList> {
     // Jetzt-Zeile an die zuletzt vergangene Aktion anhängen
     if ((widget.termine[index].beginn.isBefore(now)) &&
         (index == widget.termine.length - 1 ||
-            widget.termine[index + 1].beginn.isAfter(now)))
+            widget.termine[index + 1].beginn.isAfter(now)) &&
+        widget.termine[index].typ != 'Listen ausgelegt')
       tile = Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
         tile,
         Text(

@@ -28,6 +28,7 @@ import javax.ws.rs.core.Context
 import javax.ws.rs.core.MediaType.APPLICATION_JSON
 import javax.ws.rs.core.Response
 import javax.ws.rs.core.SecurityContext
+import javax.annotation.security.PermitAll
 
 @Stateless
 @Path("termine")
@@ -53,18 +54,27 @@ open class TermineRestResource {
     @Context
     private lateinit var context: SecurityContext
 
+
+    @OPTIONS
+    @PermitAll
+    open fun optionsGetTermine(): Response {
+        return allowCors();
+    ***REMOVED***
+
     @POST
-    @RolesAllowed("user")
+    @PermitAll
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun getTermine(filter: TermineFilter?): Response {
         LOG.info("filter: ${filter***REMOVED***");
         LOG.info("Lade Aktionen mit Filter ${filter?.typen***REMOVED***, ${filter?.tage***REMOVED***, ${filter?.von***REMOVED***, ${filter?.bis***REMOVED***, ${filter?.orte***REMOVED***, ${filter?.nurEigene***REMOVED***, ${filter?.immerEigene***REMOVED***")
-        val termine = dao.getTermine(filter ?: TermineFilter(), context.userPrincipal.name.toLong())
+        var benutzerId = if(context.userPrincipal != null) context.userPrincipal.name.toLong() else null
+        val termine = dao.getTermine(filter ?: TermineFilter(), benutzerId)
         LOG.info("termine: ${termine***REMOVED***")
         return Response
             .ok()
-            .entity(termine.map { termin -> convertFromTerminWithoutDetails(termin) ***REMOVED***)
+            .entity(termine.map { termin -> convertFromTerminWithDetails(termin) ***REMOVED***)
+            .header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Methods", "POST, OPTIONS").header("Access-Control-Allow-Headers", "accept, authorization, content-type, x-requested-with")
             .build()
     ***REMOVED***
 
@@ -72,7 +82,7 @@ open class TermineRestResource {
     @Path("termin")
     @RolesAllowed("user")
     @Produces(APPLICATION_JSON)
-    open fun getTermin(@QueryParam("id") id: Long?): Response {
+    open fun getTermin(@QueryParam("id") id: Long? ): Response {
         LOG.info("Lade Aktion $id")
         if (id == null)
             return Response
@@ -92,13 +102,21 @@ open class TermineRestResource {
             .build()
     ***REMOVED***
 
+
+    @OPTIONS
+    @Path("neu")
+    @PermitAll
+    open fun optionsLegeNeuenTerminAn(): Response {
+        return allowCors();
+    ***REMOVED***
+
     @POST
     @Path("neu")
-    @RolesAllowed("named")
+    @PermitAll
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun legeNeuenTerminAn(actionAndToken: ActionWithTokenDto): Response {
-        LOG.info("Lege neue Aktion an in ${actionAndToken.action?.ort***REMOVED*** durch ${context.userPrincipal.name***REMOVED***")
+        LOG.info("Lege neue Aktion an in ${actionAndToken.action?.ort***REMOVED***.")
         if (actionAndToken.action == null)
             return Response
                 .status(422)
@@ -115,7 +133,7 @@ open class TermineRestResource {
         )
         neueAktionenNotification.merkeNeueAktion(terminDto)
 
-        return Response.ok().entity(terminDto).build()
+        return Response.ok().entity(terminDto).header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Methods", "POST, OPTIONS").header("Access-Control-Allow-Headers", "accept, authorization, content-type, x-requested-with").build()
     ***REMOVED***
 
     @POST
@@ -548,5 +566,16 @@ open class TermineRestResource {
             LOG.debug("Informiere Teilnehmer ${restTeilnehmer.map { it.id ***REMOVED******REMOVED*** von Aktion ${aktion.id***REMOVED*** über Löschung")
         pushService.sendePushNachrichtAnEmpfaenger(pushMessage, restTeilnehmer)
     ***REMOVED***
+
+    open fun allowCors(): Response {
+        return Response
+                .ok()
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Methods", "POST, OPTIONS")
+                .header("Allow", "POST, OPTIONS")
+                .header("Access-Control-Allow-Headers", "accept, authorization, content-type, x-requested-with")
+                .build()
+    ***REMOVED***
+
 ***REMOVED***
 

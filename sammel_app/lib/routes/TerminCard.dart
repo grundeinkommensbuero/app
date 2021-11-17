@@ -52,7 +52,8 @@ class TerminCard extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
-                          color: CampaignTheme.actionColorHeading(myAction, participant)),
+                          color: CampaignTheme.actionColorHeading(
+                              myAction, participant)),
                     ).tr()),
                     SizedBox(width: 45.0)
                   ]),
@@ -60,19 +61,23 @@ class TerminCard extends StatelessWidget {
                     erzeugeOrtText(termin.ort),
                     textAlign: TextAlign.start,
                     style: TextStyle(
-                      color: CampaignTheme.actionColorText(myAction, participant),
+                      color:
+                          CampaignTheme.actionColorText(myAction, participant),
                       fontSize: 15.0,
                     ),
                   ),
-                  Text(
-                    erzeugeDatumText(termin.beginn, termin.ende,
-                        Localizations.localeOf(context)),
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      color: CampaignTheme.actionColorText(myAction, participant),
-                      fontSize: 15.0,
-                    ),
-                  ),
+                  if (termin.typ != 'Listen ausgelegt') ...[
+                    Text(
+                      erzeugeDatumText(termin.beginn, termin.ende,
+                          Localizations.localeOf(context)),
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        color: CampaignTheme.actionColorText(
+                            myAction, participant),
+                        fontSize: 15.0,
+                      ),
+                    )
+                  ],
                 ])),
           ]),
     );

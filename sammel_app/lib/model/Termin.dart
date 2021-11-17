@@ -59,6 +59,8 @@ class Termin {
         return centered
             ? 'assets/images/Sammeln.png'
             : 'assets/images/Sammeln.png';
+      case 'Listen ausgelegt':
+        return 'assets/images/Pin.png';
       case 'Infoveranstaltung':
         return 'assets/images/Infoveranstaltung.png';
       case 'Workshop':

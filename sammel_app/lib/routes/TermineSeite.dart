@@ -148,9 +148,9 @@ class TermineSeiteState extends State<TermineSeite>
         unselectedItemColor: CampaignTheme.primaryLight,
         items: [
           BottomNavigationBarItem(
-              icon: Icon(Icons.view_list,
-                  key: Key('list view navigation button')),
-              label: 'Liste'.tr(),
+            icon:
+                Icon(Icons.view_list, key: Key('list view navigation button')),
+            label: 'Liste'.tr(),
           ),
           BottomNavigationBarItem(
               icon: Icon(Icons.map, key: Key('map view navigation button')),
@@ -207,279 +207,276 @@ class TermineSeiteState extends State<TermineSeite>
     globalActionMapKey.currentState?.update();
     await termineService!
         .loadActions(filter)
-        .then((termine) =>
-        setState(() => this.termine = termine..sort(Termin.compareByStart)))
-        .catchError((e, s) =>
-        ErrorService.handleError(e, s,
+        .then((termine) => setState(() => this.termine = termine))
+        .catchError((e, s) => ErrorService.handleError(e, s,
             context: 'Aktionen konnten nicht geladen werden.'));
   ***REMOVED***
 
-    void showRestError(RestFehler e) {
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text('Aktion konnte nicht angelegt werden').tr(),
-            content: SelectableText(e.message),
-            actions: <Widget>[
-              ElevatedButton(
-                child: Text('Okay...').tr(),
-                onPressed: () => Navigator.pop(context),
-              )
-            ],
-          ));
-    ***REMOVED***
+  void showRestError(RestFehler e) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text('Aktion konnte nicht angelegt werden').tr(),
+              content: SelectableText(e.message),
+              actions: <Widget>[
+                ElevatedButton(
+                  child: Text('Okay...').tr(),
+                  onPressed: () => Navigator.pop(context),
+                )
+              ],
+            ));
+  ***REMOVED***
 
-    openTerminDetails(Termin termin) async {
-      if (termin.id == null) return;
-      try {
-        var terminMitDetails =
-        await termineService!.getActionWithDetails(termin.id!);
-        TerminDetailsCommand? command = await showActionDetailsPage(
-            context,
-            terminMitDetails,
-            isMyAction(termin),
-            participant(termin),
-            joinAction,
-            leaveAction);
-
-        if (command == TerminDetailsCommand.DELETE)
-          deleteAction(terminMitDetails);
-
-        if (command == TerminDetailsCommand.EDIT)
-          editAction(context, terminMitDetails);
-
-        if (command == TerminDetailsCommand.EVALUATE)
-          evaluateAction(context, terminMitDetails);
-
-        if (command == TerminDetailsCommand.FOCUS)
-          showActionOnMap(terminMitDetails);
-      ***REMOVED*** catch (e, s) {
-        ErrorService.handleError(e, s,
-            context: 'Aktion konnte nicht geladen werden.');
-      ***REMOVED***
-    ***REMOVED***
-
-    bool isMyAction(Termin action) => myActions.contains(action.id);
-
-    bool iAmParticipant(Termin action) =>
-        action.participants?.map((e) => e.id).contains(me?.id) ?? false;
-
-    editAction(BuildContext context, Termin termin) async {
-      await showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) {
-            return SimpleDialog(
-                titlePadding: EdgeInsets.zero,
-                title: AppBar(
-                  leading: null,
-                  automaticallyImplyLeading: false,
-                  title: Text('Deine Aktion bearbeiten',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22.0,
-                          color: CampaignTheme.secondary))
-                      .tr(),
-                ),
-                children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.8,
-                    height: MediaQuery.of(context).size.height * 0.8,
-                    child: ActionEditor(
-                        initAction: termin,
-                        onFinish: afterActionEdit,
-                        key: Key('action editor')),
-                  )
-                ]);
-          ***REMOVED***);
-    ***REMOVED***
-
-    afterActionEdit(List<Termin> editedAction) async {
-      await saveAction(editedAction[0]);
-      openTerminDetails(editedAction[0]); // recursive and I know it
-    ***REMOVED***
-
-    Future<void> saveAction(Termin editedAction) async {
-      try {
-        String? token = await storageService!.loadActionToken(editedAction.id!);
-        if (token == null) throw Exception('Fehlende Authorisierung zu Aktion');
-        await termineService!.saveAction(editedAction, token);
-        setState(() => updateAction(editedAction, false));
-      ***REMOVED*** catch (e, s) {
-        ErrorService.handleError(e, s,
-            context: 'Aktion konnte nicht gespeichert werden.');
-      ***REMOVED***
-    ***REMOVED***
-
-    Future evaluateAction(BuildContext context, Termin termin) async {
-      await showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) {
-            return SimpleDialog(
-                titlePadding: EdgeInsets.zero,
-                title: AppBar(
-                  leading: null,
-                  automaticallyImplyLeading: false,
-                  title: Text('Über Aktion berichten',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22.0,
-                          color: CampaignTheme.secondary))
-                      .tr(),
-                ),
-                children: <Widget>[
-                  Container(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      height: MediaQuery.of(context).size.height * 0.8,
-                      child: EvaluationForm(termin,
-                          onFinish: afterActionEvaluation,
-                          key: Key('evaluation editor')))
-                ]);
-          ***REMOVED***);
-    ***REMOVED***
-
-    afterActionEvaluation(Evaluation evaluation) async {
-      Navigator.pop(context, false);
-
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Vielen Dank, dass Du Eure Erfahrungen geteilt hast.'.tr(),
-            style: TextStyle(color: Colors.black87)),
-        behavior: SnackBarBehavior.floating,
-        duration: Duration(seconds: 4),
-        backgroundColor: Color.fromARGB(220, 255, 255, 250),
-      ));
-      await saveEvaluation(evaluation);
-    ***REMOVED***
-
-    Future<void> saveEvaluation(Evaluation evaluation) async {
-      try {
-        await termineService?.saveEvaluation(evaluation);
-        await storageService?.markActionIdAsEvaluated(evaluation.terminId!);
-      ***REMOVED*** catch (e, s) {
-        ErrorService.handleError(e, s,
-            context: 'Evaluation konnte nicht gespeichert werden.');
-      ***REMOVED***
-      return;
-    ***REMOVED***
-
-    Future<void> deleteAction(Termin action) async {
-      if (action.id == null) return;
-      String? token = await storageService!.loadActionToken(action.id!);
-      try {
-        if (token == null) throw Exception('Fehlende Authorisierung zu Aktion');
-        await termineService?.deleteAction(action, token);
-        storageService!.deleteActionToken(action.id!);
-        setState(() => updateAction(action, true));
-      ***REMOVED*** catch (e, s) {
-        ErrorService.handleError(e, s,
-            context: 'Aktion konnte nicht gelöscht werden.');
-      ***REMOVED***
-    ***REMOVED***
-
-    updateAction(Termin updatedAction, bool remove) {
-      var index =
-      termine.indexWhere((Termin action) => action.id == updatedAction.id);
-
-      if (index == -1) return;
-
-      if (remove) {
-        termine.removeAt(index);
-        myActions.remove(updatedAction.id);
-      ***REMOVED*** else {
-        termine[index] = updatedAction;
-        termine.sort(Termin.compareByStart);
-      ***REMOVED***
-    ***REMOVED***
-
-    createAndAddAction(Termin action) async {
-      try {
-        Termin actionWithId = await createNewAction(action);
-        myActions.add(actionWithId.id!);
-        setState(() {
-          termine
-            ..add(actionWithId)
-            ..sort(Termin.compareByStart);
-        ***REMOVED***);
-      ***REMOVED*** catch (e, s) {
-        ErrorService.handleError(e, s,
-            context: 'Aktion konnte nicht erzeugt werden.');
-      ***REMOVED***
-    ***REMOVED***
-
-    Future<Termin> createNewAction(Termin action) async {
-      String uuid = Uuid().v1();
-      Termin actionWithId = await termineService!.createAction(action, uuid);
-      storageService?.saveActionToken(actionWithId.id!, uuid);
-      return actionWithId;
-    ***REMOVED***
-
-    void showActionOnMap(Termin action) {
-      setState(() => navigation = 1);
-      mapController.move(LatLng(action.latitude, action.longitude), 15.0);
-    ***REMOVED***
-
-    Future<void> joinAction(Termin action) async {
-      if (action.id == null || me == null) return;
-      await termineService?.joinAction(action.id!);
-      setState(() => termine
-          .where((t) => t.id == action.id)
-          .forEach((Termin t) => t.participants?.add(me!)));
-    ***REMOVED***
-
-    Future<void> leaveAction(Termin action) async {
-      if (action.id == null || me == null) return;
-      await termineService?.leaveAction(action.id!);
-      setState(() {
-        var actionFromList = termine.firstWhere((t) => t.id == action.id);
-        actionFromList.participants?.removeWhere((user) => user.id == me!.id);
-      ***REMOVED***);
-    ***REMOVED***
-
-    bool participant(Termin termin) =>
-        termin.participants?.map((e) => e.id).contains(me?.id) ?? false;
-
-    void zeigeAktionen(String title, List<Termin> actions) {
-      Navigator.push(
+  openTerminDetails(Termin termin) async {
+    if (termin.id == null) return;
+    try {
+      var terminMitDetails =
+          await termineService!.getActionWithDetails(termin.id!);
+      TerminDetailsCommand? command = await showActionDetailsPage(
           context,
-          MaterialPageRoute(
-              builder: (context) => Scaffold(
-                  appBar: AppBar(title: Text(title)),
-                  body: ActionList(actions, isMyAction, isPastAction,
-                      iAmParticipant, openTerminDetails))));
-    ***REMOVED***
+          terminMitDetails,
+          isMyAction(termin),
+          participant(termin),
+          joinAction,
+          leaveAction);
 
-    checkDeepLinks() async {
-      registerUriListener(uriLinkStream);
-      showAction(await getInitialUri());
-    ***REMOVED***
+      if (command == TerminDetailsCommand.DELETE)
+        deleteAction(terminMitDetails);
 
-    registerUriListener(Stream<Uri?> linkStream) {
-      uniLinkListener = linkStream.listen((final Uri? uri) => showAction(uri));
-    ***REMOVED***
+      if (command == TerminDetailsCommand.EDIT)
+        editAction(context, terminMitDetails);
 
-    showAction(Uri? uri) {
-      if (uri?.queryParameters['aktion'] == null) return;
-      final int? id = int.tryParse(uri!.queryParameters['aktion']!);
-      if (id == null) {
-        ErrorService.pushError("Ungültige Aktions-ID",
-            "Die Nummer der Aktion in dem Link ist ungültig. Möglicherweise wurde die Aktion bereits gelöscht.");
-        return;
-      ***REMOVED***
-      termineService!.loadAndShowAction(id);
-    ***REMOVED***
+      if (command == TerminDetailsCommand.EVALUATE)
+        evaluateAction(context, terminMitDetails);
 
-    @override
-    void dispose() {
-      try {
-        uniLinkListener.cancel();
-      ***REMOVED*** catch (_) {***REMOVED***
-      super.dispose();
+      if (command == TerminDetailsCommand.FOCUS)
+        showActionOnMap(terminMitDetails);
+    ***REMOVED*** catch (e, s) {
+      ErrorService.handleError(e, s,
+          context: 'Aktion konnte nicht geladen werden.');
     ***REMOVED***
   ***REMOVED***
 
+  bool isMyAction(Termin action) => myActions.contains(action.id);
+
+  bool iAmParticipant(Termin action) =>
+      action.participants?.map((e) => e.id).contains(me?.id) ?? false;
+
+  editAction(BuildContext context, Termin termin) async {
+    await showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return SimpleDialog(
+              titlePadding: EdgeInsets.zero,
+              title: AppBar(
+                leading: null,
+                automaticallyImplyLeading: false,
+                title: Text('Deine Aktion bearbeiten',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22.0,
+                            color: CampaignTheme.secondary))
+                    .tr(),
+              ),
+              children: <Widget>[
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.height * 0.8,
+                  child: ActionEditor(
+                      initAction: termin,
+                      onFinish: afterActionEdit,
+                      key: Key('action editor')),
+                )
+              ]);
+        ***REMOVED***);
+  ***REMOVED***
+
+  afterActionEdit(List<Termin> editedAction) async {
+    await saveAction(editedAction[0]);
+    openTerminDetails(editedAction[0]); // recursive and I know it
+  ***REMOVED***
+
+  Future<void> saveAction(Termin editedAction) async {
+    try {
+      String? token = await storageService!.loadActionToken(editedAction.id!);
+      if (token == null) throw Exception('Fehlende Authorisierung zu Aktion');
+      await termineService!.saveAction(editedAction, token);
+      setState(() => updateAction(editedAction, false));
+    ***REMOVED*** catch (e, s) {
+      ErrorService.handleError(e, s,
+          context: 'Aktion konnte nicht gespeichert werden.');
+    ***REMOVED***
+  ***REMOVED***
+
+  Future evaluateAction(BuildContext context, Termin termin) async {
+    await showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return SimpleDialog(
+              titlePadding: EdgeInsets.zero,
+              title: AppBar(
+                leading: null,
+                automaticallyImplyLeading: false,
+                title: Text('Über Aktion berichten',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22.0,
+                            color: CampaignTheme.secondary))
+                    .tr(),
+              ),
+              children: <Widget>[
+                Container(
+                    width: MediaQuery.of(context).size.width * 0.8,
+                    height: MediaQuery.of(context).size.height * 0.8,
+                    child: EvaluationForm(termin,
+                        onFinish: afterActionEvaluation,
+                        key: Key('evaluation editor')))
+              ]);
+        ***REMOVED***);
+  ***REMOVED***
+
+  afterActionEvaluation(Evaluation evaluation) async {
+    Navigator.pop(context, false);
+
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('Vielen Dank, dass Du Eure Erfahrungen geteilt hast.'.tr(),
+          style: TextStyle(color: Colors.black87)),
+      behavior: SnackBarBehavior.floating,
+      duration: Duration(seconds: 4),
+      backgroundColor: Color.fromARGB(220, 255, 255, 250),
+    ));
+    await saveEvaluation(evaluation);
+  ***REMOVED***
+
+  Future<void> saveEvaluation(Evaluation evaluation) async {
+    try {
+      await termineService?.saveEvaluation(evaluation);
+      await storageService?.markActionIdAsEvaluated(evaluation.terminId!);
+    ***REMOVED*** catch (e, s) {
+      ErrorService.handleError(e, s,
+          context: 'Evaluation konnte nicht gespeichert werden.');
+    ***REMOVED***
+    return;
+  ***REMOVED***
+
+  Future<void> deleteAction(Termin action) async {
+    if (action.id == null) return;
+    String? token = await storageService!.loadActionToken(action.id!);
+    try {
+      if (token == null) throw Exception('Fehlende Authorisierung zu Aktion');
+      await termineService?.deleteAction(action, token);
+      storageService!.deleteActionToken(action.id!);
+      setState(() => updateAction(action, true));
+    ***REMOVED*** catch (e, s) {
+      ErrorService.handleError(e, s,
+          context: 'Aktion konnte nicht gelöscht werden.');
+    ***REMOVED***
+  ***REMOVED***
+
+  updateAction(Termin updatedAction, bool remove) {
+    var index =
+        termine.indexWhere((Termin action) => action.id == updatedAction.id);
+
+    if (index == -1) return;
+
+    if (remove) {
+      termine.removeAt(index);
+      myActions.remove(updatedAction.id);
+    ***REMOVED*** else {
+      termine[index] = updatedAction;
+      termine.sort(Termin.compareByStart);
+    ***REMOVED***
+  ***REMOVED***
+
+  createAndAddAction(Termin action) async {
+    try {
+      Termin actionWithId = await createNewAction(action);
+      myActions.add(actionWithId.id!);
+      setState(() {
+        termine
+          ..add(actionWithId)
+          ..sort(Termin.compareByStart);
+      ***REMOVED***);
+    ***REMOVED*** catch (e, s) {
+      ErrorService.handleError(e, s,
+          context: 'Aktion konnte nicht erzeugt werden.');
+    ***REMOVED***
+  ***REMOVED***
+
+  Future<Termin> createNewAction(Termin action) async {
+    String uuid = Uuid().v1();
+    Termin actionWithId = await termineService!.createAction(action, uuid);
+    storageService?.saveActionToken(actionWithId.id!, uuid);
+    return actionWithId;
+  ***REMOVED***
+
+  void showActionOnMap(Termin action) {
+    setState(() => navigation = 1);
+    mapController.move(LatLng(action.latitude, action.longitude), 15.0);
+  ***REMOVED***
+
+  Future<void> joinAction(Termin action) async {
+    if (action.id == null || me == null) return;
+    await termineService?.joinAction(action.id!);
+    setState(() => termine
+        .where((t) => t.id == action.id)
+        .forEach((Termin t) => t.participants?.add(me!)));
+  ***REMOVED***
+
+  Future<void> leaveAction(Termin action) async {
+    if (action.id == null || me == null) return;
+    await termineService?.leaveAction(action.id!);
+    setState(() {
+      var actionFromList = termine.firstWhere((t) => t.id == action.id);
+      actionFromList.participants?.removeWhere((user) => user.id == me!.id);
+    ***REMOVED***);
+  ***REMOVED***
+
+  bool participant(Termin termin) =>
+      termin.participants?.map((e) => e.id).contains(me?.id) ?? false;
+
+  void zeigeAktionen(String title, List<Termin> actions) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => Scaffold(
+                appBar: AppBar(title: Text(title)),
+                body: ActionList(actions, isMyAction, isPastAction,
+                    iAmParticipant, openTerminDetails))));
+  ***REMOVED***
+
+  checkDeepLinks() async {
+    registerUriListener(uriLinkStream);
+    showAction(await getInitialUri());
+  ***REMOVED***
+
+  registerUriListener(Stream<Uri?> linkStream) {
+    uniLinkListener = linkStream.listen((final Uri? uri) => showAction(uri));
+  ***REMOVED***
+
+  showAction(Uri? uri) {
+    if (uri?.queryParameters['aktion'] == null) return;
+    final int? id = int.tryParse(uri!.queryParameters['aktion']!);
+    if (id == null) {
+      ErrorService.pushError("Ungültige Aktions-ID",
+          "Die Nummer der Aktion in dem Link ist ungültig. Möglicherweise wurde die Aktion bereits gelöscht.");
+      return;
+    ***REMOVED***
+    termineService!.loadAndShowAction(id);
+  ***REMOVED***
+
+  @override
+  void dispose() {
+    try {
+      uniLinkListener.cancel();
+    ***REMOVED*** catch (_) {***REMOVED***
+    super.dispose();
+  ***REMOVED***
+***REMOVED***
 
 class ButtonRow extends StatelessWidget {
   final List<Widget> widgets;

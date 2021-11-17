@@ -20,6 +20,7 @@ const Map<String, dynamic> en = {
   "Karte": "Map",
   "Sammeln": "Collection",
   "Infoveranstaltung": "Information event",
+  "Listen ausgelegt": "Left lists",
   "Workshop": "Workshop",
   "Unbekannter Nachrichtentyp abgespeichert": "Unknown message type saved",
   "{kiez***REMOVED*** in {bezirk***REMOVED***\n Treffpunkt: {treffpunkt***REMOVED***":
@@ -221,6 +222,8 @@ const Map<String, dynamic> en = {
   "Beschreibung": "Description",
   "Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammlerinnen und Sammler mitbringen? Kann man auch später dazustoßen, usw":
       "Briefly describe the event. Where do you want to collect signatures? What should the other collectors bring along? Can they join you later? etc.",
+  "Gib eine kurze Beschreibung des Events oder des Ortes an.":
+      "Provide a brief description of the event or location.",
   "Wähle einen Tag": "Choose a day",
   "am ": "on ",
   "Gib einen Treffpunkt an": "Specify a meeting point",
@@ -377,6 +380,7 @@ const Map<String, dynamic> ru = {
   "Karte": "Карта",
   "Sammeln": "Собрать подписи",
   "Infoveranstaltung": "Информационное мероприятие",
+  "Listen ausgelegt": "Составленные списки",
   "Workshop": "Семинар",
   "Unbekannter Nachrichtentyp abgespeichert":
       "Сохранено сообщение неизвестного типа",
@@ -580,6 +584,8 @@ const Map<String, dynamic> ru = {
   "Beschreibung": "Описание",
   "Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammlerinnen und Sammler mitbringen? Kann man auch später dazustoßen, usw":
       "Приведи краткое описание акции. Куда ты хочешь отправиться за подписями, что должны принести с собой другие сборщики? Можно ли присоединиться позднее и т.п.",
+  "Gib eine kurze Beschreibung des Events oder des Ortes an.":
+      "Дайте краткое описание события или места.",
   "Wähle einen Tag": "Выбери день",
   "am ": " ",
   "Gib einen Treffpunkt an": "Укажи место встречи",
@@ -732,6 +738,7 @@ const Map<String, dynamic> fr = {
   "Karte": "Carte",
   "Sammeln": "Collecter",
   "Infoveranstaltung": "Réunion d’information",
+  "Listen ausgelegt": "Listes conçues",
   "Workshop": "Workshop",
   "Unbekannter Nachrichtentyp abgespeichert":
       "Message de type inconnu sauvegardé",
@@ -939,6 +946,8 @@ const Map<String, dynamic> fr = {
   "Beschreibung": "Déscription",
   "Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammlerinnen und Sammler mitbringen? Kann man auch später dazustoßen, usw":
       "Décris brièvement l’action. Où veux-tu collecter, que doivent apporter les autres collect.eur.rice.s? Peut-on également joindre l’action plus tard? etc…",
+  "Gib eine kurze Beschreibung des Events oder des Ortes an.":
+      "Donne une brève description de l'événement ou du lieu.",
   "Wähle einen Tag": "Choisis un jour",
   "am ": "le ",
   "Gib einen Treffpunkt an": "Indiques un point de rencontre",
@@ -1097,6 +1106,7 @@ const Map<String, dynamic> de = {
   "Karte": "Karte",
   "Sammeln": "Sammeln",
   "Infoveranstaltung": "Infoveranstaltung",
+  "Listen ausgelegt": "Listen ausgelegt",
   "Workshop": "Workshop",
   "Unbekannter Nachrichtentyp abgespeichert":
       "Unbekannter Nachrichtentyp abgespeichert",
@@ -1306,6 +1316,8 @@ const Map<String, dynamic> de = {
   "Beschreibung": "Beschreibung",
   "Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammlerinnen und Sammler mitbringen? Kann man auch später dazustoßen, usw":
       "Gib eine kurze Beschreibung der Aktion an. Wo willst du sammeln gehen, was sollen die anderen Sammlerinnen und Sammler mitbringen? Kann man auch später dazustoßen, usw",
+  "Gib eine kurze Beschreibung des Events oder des Ortes an.":
+      "Gib eine kurze Beschreibung des Events oder des Ortes an.",
   "Wähle einen Tag": "Wähle einen Tag",
   "am ": "am ",
   "Gib einen Treffpunkt an": "Gib einen Treffpunkt an",

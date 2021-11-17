@@ -1,5 +1,4 @@
 List<String> moeglicheTypen = [
   'Sammeln',
-  'Infoveranstaltung',
-  'Plakatieren',
+  'Listen ausgelegt',
 ];

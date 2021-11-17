@@ -54,7 +54,7 @@ open class TermineDao {
 
         if (filter.immerEigene == null || filter.immerEigene == true && benutzerId != null) sql += " or $immerEigeneKlausel"
 
-        sql += " order by termine.beginn"
+        sql += " order by case termine.typ when 'Listen ausgelegt' then 2 else 1 end, termine.beginn"
         val query = entityManager.createQuery(sql, Termin::class.java)
         query.maxResults = getProperty("de.kybernetik.max-actions").toInt()
 

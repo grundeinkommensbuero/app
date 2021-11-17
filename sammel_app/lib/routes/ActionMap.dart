@@ -403,11 +403,7 @@ class ListLocationMarker extends Marker {
                     EdgeInsets.all(0)),
               ),
               onPressed: () => showListLocationDialog(context, listLocation),
-              child: Icon(
-                Icons.edit_location,
-                color: CampaignTheme.secondary,
-                size: 30.0,
-              )),
+              child: Image.asset('assets/images/Pin.png')),
         );
 
   static showListLocationDialog(

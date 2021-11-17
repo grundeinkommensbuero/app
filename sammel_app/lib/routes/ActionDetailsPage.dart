@@ -134,33 +134,35 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
             padding: EdgeInsets.symmetric(vertical: 15, horizontal: 10),
             child: Column(key: Key('action details page'), children: [
               // Time
-              Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Icon(Icons.access_time, size: 40.0),
-                SizedBox(
-                  width: 10.0,
-                ),
-                Expanded(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                      Text(
-                        'Wann?',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ).tr(),
-                      SelectableText(
-                          ChronoHelfer.formatDateOfDateTimeMitWochentag(
-                              widget.action.beginn, locale)),
-                      SelectableText(ChronoHelfer.formatFromToTimeOfDateTimes(
-                          widget.action.beginn, widget.action.ende)),
-                      isPastAction(widget.action)
-                          ? Text('diese Aktion ist beendet',
-                                  style: TextStyle(
-                                      color: CampaignTheme.secondary,
-                                      fontWeight: FontWeight.bold))
-                              .tr()
-                          : SizedBox()
-                    ]))
-              ]),
+              if (widget.action.typ != 'Listen ausgelegt') ...[
+                Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Icon(Icons.access_time, size: 40.0),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Expanded(
+                      child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                        Text(
+                          'Wann?',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ).tr(),
+                        SelectableText(
+                            ChronoHelfer.formatDateOfDateTimeMitWochentag(
+                                widget.action.beginn, locale)),
+                        SelectableText(ChronoHelfer.formatFromToTimeOfDateTimes(
+                            widget.action.beginn, widget.action.ende)),
+                        isPastAction(widget.action)
+                            ? Text('diese Aktion ist beendet',
+                                    style: TextStyle(
+                                        color: CampaignTheme.secondary,
+                                        fontWeight: FontWeight.bold))
+                                .tr()
+                            : SizedBox()
+                      ]))
+                ])
+              ],
               SizedBox(
                 height: 10.0,
               ),
