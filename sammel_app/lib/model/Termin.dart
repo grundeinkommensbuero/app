@@ -1,5 +1,6 @@
 import 'package:sammel_app/model/User.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
+import 'package:poly/poly.dart' as poly;
 
 import 'Kiez.dart';
 import 'TerminDetails.dart';
@@ -22,7 +23,14 @@ class Termin {
       : id = json['id'],
         beginn = ChronoHelfer.deserializeJsonDateTime(json['beginn']),
         ende = ChronoHelfer.deserializeJsonDateTime(json['ende']),
-        ort = kieze.firstWhere((kiez) => json['ort'] == kiez.name),
+        // If there is no kiez found (e.g. because Termin was created on website),
+        // we need to find the kiez using the coordinates
+        ort = kieze.firstWhere((kiez) => json['ort'] == kiez.name,
+            orElse: () => kieze.firstWhere((kiez) => poly.Polygon(kiez.polygon
+                    .map((latlng) =>
+                        poly.Point<num>(latlng.latitude, latlng.longitude))
+                    .toList())
+                .contains(json['latitude'], json['longitude']))),
         typ = json['typ'] ?? 'Termin',
         latitude = json['latitude'] ?? null,
         longitude = json['longitude'] ?? null,
