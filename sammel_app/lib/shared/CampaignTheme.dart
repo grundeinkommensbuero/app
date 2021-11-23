@@ -29,29 +29,24 @@ class CampaignTheme {
     dialogBackgroundColor: primaryLight,
     elevatedButtonTheme: ElevatedButtonThemeData(
         style: ButtonStyle(
-      backgroundColor:
-          MaterialStateProperty.all<Color>(secondary),
+      backgroundColor: MaterialStateProperty.all<Color>(secondary),
     )),
     textButtonTheme: TextButtonThemeData(
         style: ButtonStyle(
       foregroundColor: MaterialStateProperty.resolveWith((state) =>
-          state.contains(MaterialState.disabled)
-              ? disabled
-              : secondary),
+          state.contains(MaterialState.disabled) ? disabled : secondary),
     )),
     iconTheme: IconThemeData(color: secondary),
     fontFamily: 'Ideal',
   );
 
-  static var menuCaption =
-      TextStyle(fontSize: 20.0, color: secondary);
-  static var menuCaptionSelected =
-      TextStyle(fontSize: 20.0, color: primary);
+  static var menuCaption = TextStyle(fontSize: 20.0, color: secondary);
+  static var menuCaptionSelected = TextStyle(fontSize: 20.0, color: primary);
 
   static Color actionColor(DateTime ende, bool owner, bool participant) {
     final past = ende.isBefore(DateTime.now());
 
-    if(past) return primaryLight;
+    if (past) return primaryLight;
 
     // if (owner && past) return CampaignTheme.altSecondaryBright;
     // Proposition Tatiana: white on green
@@ -64,14 +59,14 @@ class CampaignTheme {
     return primary;
   ***REMOVED***
 
-  static Color actionColorText(bool owner, bool participant){
-    if(owner || participant) return primary;
+  static Color actionColorText(bool owner, bool participant) {
+    if (owner || participant) return primary;
 
     return Colors.black54;
   ***REMOVED***
 
-  static Color actionColorHeading(bool owner, bool participant){
-    if(owner || participant) return CampaignTheme.primary;
+  static Color actionColorHeading(bool owner, bool participant) {
+    if (owner || participant) return CampaignTheme.primary;
 
     return secondary;
   ***REMOVED***
@@ -91,5 +86,5 @@ class CampaignTheme {
           alignment: Alignment.topCenter));
 
   static String actionUrl(int? id) =>
-      'www.dwenteignen.de/die-sammel-app?aktion=$id';
+      'www.expedition-grundeinkommen.de/die-sammel-app?aktion=$id';
 ***REMOVED***
