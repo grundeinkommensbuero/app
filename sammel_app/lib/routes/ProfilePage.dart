@@ -342,39 +342,51 @@ showAboutDialog(BuildContext context) async {
   showDialog(
       context: context,
       builder: (context) => AboutDialog(
-            applicationName: 'Expedition Grundeinkommen',
+            applicationName: 'Expedition Grund-\neinkommen',
             applicationVersion:
                 '${packageInfo.version***REMOVED*** (${packageInfo.buildNumber***REMOVED***)',
             children: [
               SizedBox(
-                  height: 230,
-                  child: Image.asset('assets/images/xbge.png')),
+                  height: 80, child: Image.asset('assets/images/xbge.png')),
               SizedBox(height: 15.0),
-              // TODO: update text
-              Text('Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.')
+              Text('Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz. Die Expedition Grundeinkommen hat die App für ihre Zwecke angepasst.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, kannst du gerne eine Mail an die Expedition oder an DWE schreiben.')
                   .tr(),
               SizedBox(height: 15.0),
               Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
                 RichText(
                     text: TextSpan(
-                        text: 'Gitlab-Repository',
+                        text: 'Gitlab-Repository\n',
                         style: TextStyle(
-                            fontSize: 15.0,
+                            fontSize: 12.0,
                             color: Colors.indigo,
                             decoration: TextDecoration.underline),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () => launch(
                               'https://gitlab.com/kybernetik/sammel-app'))),
+              ]),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
                 RichText(
                     text: TextSpan(
-                        text: 'app@dwenteignen.de',
+                        text: 'app@dwenteignen.de\n',
                         style: TextStyle(
-                            fontSize: 15.0,
+                            fontSize: 12.0,
                             color: Colors.indigo,
                             decoration: TextDecoration.underline),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () => launch('mailto:app@dwenteignen.de')))
-              ])
+              ]),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+                RichText(
+                    text: TextSpan(
+                        text: 'technik@expedition-grundeinkommen.de\n',
+                        style: TextStyle(
+                            fontSize: 12.0,
+                            color: Colors.indigo,
+                            decoration: TextDecoration.underline),
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () => launch(
+                              'mailto:technik@expedition-grundeinkommen.de')))
+              ]),
             ],
           ));
 ***REMOVED***

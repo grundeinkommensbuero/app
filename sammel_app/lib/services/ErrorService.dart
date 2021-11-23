@@ -17,7 +17,7 @@ class ErrorService {
   static List<String> displayedTypes = [];
 
   static const EMAIL =
-      '\n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an app@dwenteignen.de';
+      '\n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an support@expedition-grundeinkommen.de';
 
   static void setContext(context) {
     ErrorService._context = context;

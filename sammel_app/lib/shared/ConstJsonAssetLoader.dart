@@ -105,8 +105,8 @@ const Map<String, dynamic> en = {
       "How often do you want to be notified about new collection events in your area?",
   "Wie häufig möchtest du Infos über anstehende Aktionen bekommen?":
       "How often do you want to be told about upcoming events?",
-  "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.":
-      "This app was developed by a small team of enthusiastic IT activists for Deutsche Wohnen & Co Enteignen and is under free license.\\n\\nIf you are interested in using the app for your own campaign, just write us an email or visit our website. You can also let us know about problems or errors with the app.",
+  "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz. Die Expedition Grundeinkommen hat die App für ihre Zwecke angepasst.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, kannst du gerne eine Mail an die Expedition oder an DWE schreiben.":
+      "This app was developed by a small team of enthusiastic IT activists for Deutsche Wohnen & Co Enteignen and is under free license.\\n\\nExpedition Grundeinkommen has adapted the app for its own purposes. If you are interested in using this app for your petition, you are welcome to send an email to Expedition or to DWE.",
   "Heute, ": "Today, ",
   "Morgen, ": "Tomorrow, ",
   "{prefix***REMOVED***{date***REMOVED*** um {zeit***REMOVED*** Uhr, ": "{prefix***REMOVED***{date***REMOVED*** at {zeit***REMOVED*** o’clock, ",
@@ -664,8 +664,8 @@ const Map<String, dynamic> ru = {
       "Приведи краткое описание акции. Куда ты хочешь отправиться за подписями, что должны принести с собой другие сборщики? Можно ли присоединиться позднее?",
   "Benachrichtigungs-Einstellungen": "Настройки уведомлений",
   "Benachrichtigungen einstellen": "Настроить уведомления",
-  "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.":
-      "Если ты хочешь выключить звук уведомлений или полностью отключить уведомления определенных видов, то просто долго нажимай на полученное уведомление, и ты перейдешь в настройки уведомлений в данном приложении.",
+  "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz. Die Expedition Grundeinkommen hat die App für ihre Zwecke angepasst.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, kannst du gerne eine Mail an die Expedition oder an DWE schreiben.":
+      "Это приложение было разработано небольшой командой энтузиастов-активистов в области информационных технологий для компании Deutsche Wohnen & Co. Expropriate campaign и доступна под свободной лицензией. Экспедиция Grundeinkommen адаптировала это приложение для своих целей. Если вы заинтересованы в использовании этого приложения для своей петиции, вы можете отправить письмо в Экспедицию или в DWE.",
   "Plakatieren": "расклеивать плакаты",
   "Löschen": "удалить",
   "Bearbeiten": "править",
@@ -826,8 +826,8 @@ const Map<String, dynamic> fr = {
       "Avec quelle régularité souhaites-tu être tenu informé des nouvelles actions de collectes dans ton quartier?",
   "Wie häufig möchtest du Infos über anstehende Aktionen bekommen?":
       "Avec quelle régularité souhaites-tu recevoir des Infos sur les futures actions?",
-  "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.":
-      "Cette appli a été développée par un petit groupe d'informaticien.ne.s activistes pour la campagne Deutsche Wohnen & Co. Enteignen - et se trouve sous licence libre.\\n\\n  Si tu es intéressé.e à utiliser cette appli pour un vote populaire, contactes nous simplement par email ou visite notre site web. Ainsi tu peux nous indiquer des erreurs ou dysfonctionnements encontrés avec l'appli.",
+  "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz. Die Expedition Grundeinkommen hat die App für ihre Zwecke angepasst.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, kannst du gerne eine Mail an die Expedition oder an DWE schreiben.":
+      "Cette application a été développée par une petite équipe d'activistes informatiques enthousiastes* pour la campagne Deutsche Wohnen & Co. La campagne d'expropriation est sous licence libre. L'Expédition Revenu de Base a adapté l'application à ses propres fins.\n\NSi tu es intéressé(e) par l'utilisation de cette application pour ta pétition populaire, tu peux volontiers écrire un mail à l'Expédition ou à DWE.",
   "Heute, ": "Aujourd'hui, ",
   "Morgen, ": "Demain, ",
   "{prefix***REMOVED***{date***REMOVED*** um {zeit***REMOVED*** Uhr, ": "{prefix***REMOVED***{date***REMOVED*** à {zeit***REMOVED*** heure.s, ",
@@ -1174,7 +1174,7 @@ const Map<String, dynamic> de = {
   "Fragen und Antworten": "Fragen und Antworten",
   "Dein Profil": "Dein Profil",
   "Eine Sammel-Aktion ins Leben rufen":
-      "Andere zu einer gemeinsamen Aktion einladen",
+      "Oder Ort markieren, an dem Listen ausgelegt sind",
   "Tipps und Argumente": "Tipps und Argumente",
   "Tipps, Tricks und Argumentationshilfen":
       "Tipps, Tricks und Argumentationshilfen",
@@ -1195,8 +1195,8 @@ const Map<String, dynamic> de = {
       "Wie oft und aktuell willst du über neue Sammel-Aktionen in deinem Kiez informiert werden?",
   "Wie häufig möchtest du Infos über anstehende Aktionen bekommen?":
       "Wie häufig möchtest du Infos über anstehende Aktionen bekommen?",
-  "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.":
-      "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, dann schreib uns doch einfach eine Mail oder besuche uns auf unserer Webseite. So kannst du uns auch Fehler und Probleme mit der App melden.",
+  "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz. Die Expedition Grundeinkommen hat die App für ihre Zwecke angepasst.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, kannst du gerne eine Mail an die Expedition oder an DWE schreiben.":
+      "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz. Die Expedition Grundeinkommen hat die App für ihre Zwecke angepasst.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, kannst du gerne eine Mail an die Expedition oder an DWE schreiben.",
   "Heute, ": "Heute, ",
   "Morgen, ": "Morgen, ",
   "{prefix***REMOVED***{date***REMOVED*** um {zeit***REMOVED*** Uhr, ": "{prefix***REMOVED***{date***REMOVED*** um {zeit***REMOVED*** Uhr, ",
