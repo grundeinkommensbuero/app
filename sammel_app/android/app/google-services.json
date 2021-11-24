@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:34078750980:android:464bd1e31cab7145d1b851",
+        "mobilesdk_app_id": "1:34078750980:android:2e53da301bd70504d1b851",
         "android_client_info": {
-          "package_name": "de.kybernetik.sammel_app"
+          "package_name": "de.expeditiongrundeinkommen.app"
         ***REMOVED***
       ***REMOVED***,
       "oauth_client": [
@@ -29,6 +29,13 @@
             {
               "client_id": "34078750980-cl765vaiud8l97laee6l4gapmu5e3voa.apps.googleusercontent.com",
               "client_type": 3
+            ***REMOVED***,
+            {
+              "client_id": "34078750980-3897fobie83afqudvbs6tgffpb6etrmm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.flutter.flutter.app"
+              ***REMOVED***
             ***REMOVED***
           ]
         ***REMOVED***

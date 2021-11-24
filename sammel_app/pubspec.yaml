@@ -82,6 +82,7 @@ dev_dependencies:
   mockito: ^5.0.1
   flutter_test_ui: ^2.0.0 # auf dem weg: https://github.com/spkersten/flutter_test_ui/tree/null-safety
   build_runner: ^1.10.0
+  change_app_package_name: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
