@@ -88,7 +88,7 @@
         <key>CFBundleTypeRole</key>
         <string>Editor</string>
         <key>CFBundleURLName</key>
-        <string>dwenteignen.de/die-sammel-app</string>
+        <string>expedition-grundeinkommen.de/die-sammel-app</string>
         <key>CFBundleURLSchemes</key>
         <array>
         <string>http</string>
