@@ -427,20 +427,5 @@ class ListLocationMarker extends Marker {
                       'Wichtig ist, dass du die ausgefüllten Listen regelmäßig abholst.\n'
                       'Frage doch mal die Betreiber*innen deines Lieblings-Spätis!\n',
                     ).tr(),
-                    RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(children: [
-                          TextSpan(
-                              text: tr('Du kannst den Ort eintragen auf:\n'),
-                              style: TextStyle(color: Colors.black)),
-                          TextSpan(
-                              text: 'www.dwenteignen.de/sammelpunkte/',
-                              style: TextStyle(
-                                  color: Colors.indigo,
-                                  decoration: TextDecoration.underline),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () =>
-                                    launch('www.dwenteignen.de/sammelpunkte/'))
-                        ]))
                   ]));
 ***REMOVED***
