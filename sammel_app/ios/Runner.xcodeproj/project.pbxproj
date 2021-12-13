@@ -9,11 +9,11 @@
 /* Begin PBXBuildFile section */
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; ***REMOVED***
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; ***REMOVED***
+		4149427E2757E258007E0C8F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4149427D2757E258007E0C8F /* GoogleService-Info.plist */; ***REMOVED***
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; ***REMOVED***
 		9740EEB41CF90195004384FC /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 9740EEB21CF90195004384FC /* Debug.xcconfig */; ***REMOVED***
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; ***REMOVED***
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; ***REMOVED***
-		BFF7B50F25B78D750063D710 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BFF7B50E25B78D750063D710 /* GoogleService-Info.plist */; ***REMOVED***
 		DDE6A3DF2E69184492603C15 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0115C35341C892074AD8C1F /* Pods_Runner.framework */; ***REMOVED***
 /* End PBXBuildFile section */
 
@@ -35,6 +35,7 @@
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; ***REMOVED***
 		23E7303E7EEE98E165C3C303 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; ***REMOVED***
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; ***REMOVED***
+		4149427D2757E258007E0C8F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; ***REMOVED***
 		42C7305552D14BAE83C44AA5 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; ***REMOVED***
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; ***REMOVED***
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; ***REMOVED***
@@ -47,7 +48,6 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; ***REMOVED***
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; ***REMOVED***
 		BFF7B50D25B78D360063D710 /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; ***REMOVED***
-		BFF7B50E25B78D750063D710 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; ***REMOVED***
 		F0115C35341C892074AD8C1F /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; ***REMOVED***
 /* End PBXFileReference section */
 
@@ -114,7 +114,7 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
-				BFF7B50E25B78D750063D710 /* GoogleService-Info.plist */,
+				4149427D2757E258007E0C8F /* GoogleService-Info.plist */,
 				BFF7B50D25B78D360063D710 /* Runner.entitlements */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
@@ -172,8 +172,9 @@
 				TargetAttributes = {
 					97C146ED1CF9000F007C117D = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 3TT9J3V8NS;
+						DevelopmentTeam = H88DW8XLBV;
 						LastSwiftMigration = 0910;
+						ProvisioningStyle = Automatic;
 					***REMOVED***
 				***REMOVED***
 			***REMOVED***
@@ -202,9 +203,9 @@
 			files = (
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				9740EEB41CF90195004384FC /* Debug.xcconfig in Resources */,
+				4149427E2757E258007E0C8F /* GoogleService-Info.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
-				BFF7B50F25B78D750063D710 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		***REMOVED***
@@ -254,12 +255,10 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT***REMOVED***/Target Support Files/Pods-Runner/Pods-Runner-resources.sh",
-				"${PODS_ROOT***REMOVED***/FirebaseFirestore/FirebaseFirestore/Resources/gRPCCertificates-Cpp.bundle",
 				"${PODS_ROOT***REMOVED***/GoogleSignIn/Resources/GoogleSignIn.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR***REMOVED***/${UNLOCALIZED_RESOURCES_FOLDER_PATH***REMOVED***/gRPCCertificates-Cpp.bundle",
 				"${TARGET_BUILD_DIR***REMOVED***/${UNLOCALIZED_RESOURCES_FOLDER_PATH***REMOVED***/GoogleSignIn.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -275,48 +274,66 @@
 			inputPaths = (
 				"${PODS_ROOT***REMOVED***/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/AppAuth/AppAuth.framework",
-				"${BUILT_PRODUCTS_DIR***REMOVED***/FMDB/FMDB.framework",
-				"${PODS_ROOT***REMOVED***/../Flutter/Flutter.framework",
+				"${BUILT_PRODUCTS_DIR***REMOVED***/BoringSSL-GRPC/openssl_grpc.framework",
+				"${BUILT_PRODUCTS_DIR***REMOVED***/FirebaseAuth/FirebaseAuth.framework",
+				"${BUILT_PRODUCTS_DIR***REMOVED***/FirebaseCore/FirebaseCore.framework",
+				"${BUILT_PRODUCTS_DIR***REMOVED***/FirebaseCoreDiagnostics/FirebaseCoreDiagnostics.framework",
+				"${BUILT_PRODUCTS_DIR***REMOVED***/FirebaseFirestore/FirebaseFirestore.framework",
+				"${BUILT_PRODUCTS_DIR***REMOVED***/FirebaseInstallations/FirebaseInstallations.framework",
+				"${BUILT_PRODUCTS_DIR***REMOVED***/FirebaseMessaging/FirebaseMessaging.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/GTMAppAuth/GTMAppAuth.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR***REMOVED***/GoogleDataTransport/GoogleDataTransport.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/PromisesObjC/FBLPromises.framework",
-				"${BUILT_PRODUCTS_DIR***REMOVED***/Protobuf/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/Reachability/Reachability.framework",
+				"${BUILT_PRODUCTS_DIR***REMOVED***/abseil/absl.framework",
+				"${BUILT_PRODUCTS_DIR***REMOVED***/add_2_calendar/add_2_calendar.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/connectivity/connectivity.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/flutter_compass/flutter_compass.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/flutter_local_notifications/flutter_local_notifications.framework",
-				"${BUILT_PRODUCTS_DIR***REMOVED***/location/location.framework",
+				"${BUILT_PRODUCTS_DIR***REMOVED***/gRPC-C++/grpcpp.framework",
+				"${BUILT_PRODUCTS_DIR***REMOVED***/gRPC-Core/grpc.framework",
+				"${BUILT_PRODUCTS_DIR***REMOVED***/geolocator/geolocator.framework",
+				"${BUILT_PRODUCTS_DIR***REMOVED***/leveldb-library/leveldb.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/nanopb/nanopb.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/package_info/package_info.framework",
-				"${BUILT_PRODUCTS_DIR***REMOVED***/path_provider/path_provider.framework",
+				"${BUILT_PRODUCTS_DIR***REMOVED***/share/share.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/shared_preferences/shared_preferences.framework",
-				"${BUILT_PRODUCTS_DIR***REMOVED***/sqflite/sqflite.framework",
+				"${BUILT_PRODUCTS_DIR***REMOVED***/uni_links/uni_links.framework",
 				"${BUILT_PRODUCTS_DIR***REMOVED***/url_launcher/url_launcher.framework",
-				"${BUILT_PRODUCTS_DIR***REMOVED***/user_location/user_location.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/AppAuth.framework",
-				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/FMDB.framework",
-				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/Flutter.framework",
+				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/openssl_grpc.framework",
+				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/FirebaseAuth.framework",
+				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/FirebaseCore.framework",
+				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/FirebaseCoreDiagnostics.framework",
+				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/FirebaseFirestore.framework",
+				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/FirebaseInstallations.framework",
+				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/FirebaseMessaging.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/GTMAppAuth.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/GoogleDataTransport.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/FBLPromises.framework",
-				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/Protobuf.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/Reachability.framework",
+				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/absl.framework",
+				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/add_2_calendar.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/connectivity.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/flutter_compass.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/flutter_local_notifications.framework",
-				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/location.framework",
+				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/grpcpp.framework",
+				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/grpc.framework",
+				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/geolocator.framework",
+				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/leveldb.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/nanopb.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/package_info.framework",
-				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/path_provider.framework",
+				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/share.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/shared_preferences.framework",
-				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/sqflite.framework",
+				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/uni_links.framework",
 				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/url_launcher.framework",
-				"${TARGET_BUILD_DIR***REMOVED***/${FRAMEWORKS_FOLDER_PATH***REMOVED***/user_location.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -414,19 +431,22 @@
 		***REMOVED***
 		249021D4217E4FDB00AE95B9 /* Profile */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9740EEB31CF90195004384FC /* Generated.xcconfig */;
+			baseConfigurationReference = 874AA32BC54174C1EA23AD6B /* Pods-Runner.profile.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 28;
-				DEVELOPMENT_TEAM = 3TT9J3V8NS;
+				DEVELOPMENT_TEAM = H88DW8XLBV;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -435,6 +455,7 @@
 				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = de.expeditiongrundeinkommen.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -553,23 +574,27 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 28;
-				DEVELOPMENT_TEAM = 3TT9J3V8NS;
+				DEVELOPMENT_TEAM = H88DW8XLBV;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
 				MARKETING_VERSION = 1.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = de.kybernetik.sammelApp2;
+				PRODUCT_BUNDLE_IDENTIFIER = de.expeditiongrundeinkommen.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
@@ -584,23 +609,27 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 28;
-				DEVELOPMENT_TEAM = 3TT9J3V8NS;
+				DEVELOPMENT_TEAM = H88DW8XLBV;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Flutter",
 				);
 				MARKETING_VERSION = 1.1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = de.kybernetik.sammelApp2;
+				PRODUCT_BUNDLE_IDENTIFIER = de.expeditiongrundeinkommen.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Runner/Runner-Bridging-Header.h";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
