@@ -95,14 +95,17 @@ class NavigationState extends State<Navigation>
           drawerScrimColor: Colors.black26,
           drawer: buildDrawer(),
           appBar: AppBar(
+              iconTheme: IconThemeData(color: CampaignTheme.secondary),
               title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Flexible(
-                  child: Text(titles[navigation], overflow: TextOverflow.fade)),
-              Image.asset('assets/images/xbge_logo_small.png', width: 50.0)
-            ],
-          )),
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Flexible(
+                      child: Text(titles[navigation],
+                          overflow: TextOverflow.fade,
+                          style: TextStyle(color: CampaignTheme.secondary))),
+                  Image.asset('assets/images/xbge_logo_small.png', width: 50.0)
+                ],
+              )),
           body: Container(
             color: CampaignTheme.primaryLight,
             child: FadeTransition(
@@ -130,9 +133,7 @@ class NavigationState extends State<Navigation>
         width: 200.0,
         child: Drawer(
             child: Container(
-                decoration: BoxDecoration(
-                  color: CampaignTheme.primary
-                ),
+                decoration: BoxDecoration(color: CampaignTheme.primary),
                 child: ListView(
                   padding:
                       EdgeInsets.symmetric(vertical: 40.0, horizontal: 0.0),
@@ -190,7 +191,8 @@ class NavigationState extends State<Navigation>
             ),
             subtitle: Text(
               subtitle,
-              style: TextStyle(color: selected ? CampaignTheme.primary : Colors.black54),
+              style: TextStyle(
+                  color: selected ? CampaignTheme.primary : Colors.black54),
             ),
             onTap: () {
               if (navigation != index) {
