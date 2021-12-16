@@ -95,7 +95,7 @@ class NavigationState extends State<Navigation>
           drawerScrimColor: Colors.black26,
           drawer: buildDrawer(),
           appBar: AppBar(
-              iconTheme: IconThemeData(color: CampaignTheme.secondary),
+              iconTheme: IconThemeData(color: Colors.black),
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
