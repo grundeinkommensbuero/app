@@ -27,8 +27,8 @@ open class HealthRestResource {
             .entity(
                 Health(
                     status = "lebendig",
-                    version = "1.4.4",
-                    minClient = "1.1.0+28",
+                    version = "0.1.0",
+                    minClient = "0.1.0+1",
                     modus = getProperty("mode"),
                     faqTimestamp = faqDao.getFAQTimestamp()
                 )
