@@ -34,7 +34,7 @@ if (keystorePropertiesFile.exists()) {
 ***REMOVED***
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     // Löst einen Fehler im Build auf dem Gitlab-CI, bei dem der daemon vorzeitig runtergefahren wird
     // scheint aber nicht zu helfen
     // buildToolsVersion '26.0.3'
@@ -50,7 +50,7 @@ android {
     defaultConfig {
         applicationId "de.expeditiongrundeinkommen.app"
         minSdkVersion 16
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
@@ -68,8 +68,8 @@ android {
 
     buildTypes {
         release {
-            signingConfig signingConfigs.debug
-//            signingConfig signingConfigs.release
+            // signingConfig signingConfigs.debug
+           signingConfig signingConfigs.release
         ***REMOVED***
     ***REMOVED***
 ***REMOVED***
