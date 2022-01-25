@@ -14,7 +14,7 @@ class FAQ extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => FAQState();
-***REMOVED***
+}
 
 class FAQState extends State<FAQ> {
   final searchInputController = TextEditingController();
@@ -28,14 +28,14 @@ class FAQState extends State<FAQ> {
   void initState() {
     controller = ScrollController();
     super.initState();
-  ***REMOVED***
+  }
 
   @override
   Widget build(BuildContext context) {
     if (items == null) {
       this.faqService = Provider.of<AbstractFAQService>(context);
       listenToFAQ();
-    ***REMOVED***
+    }
 
     return Scaffold(
         body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
@@ -56,7 +56,7 @@ class FAQState extends State<FAQ> {
                     onPressed: () {
                       listenToFAQ(search: null);
                       setState(() => searchInputController.clear());
-                    ***REMOVED***),
+                    }),
                 contentPadding: EdgeInsets.symmetric(horizontal: 10.0),
                 border: OutlineInputBorder(
                     borderSide: BorderSide.none,
@@ -65,7 +65,7 @@ class FAQState extends State<FAQ> {
             onChanged: (text) {
               controller?.jumpTo(0);
               listenToFAQ(search: text);
-            ***REMOVED***,
+            },
           ),
         ),
       ),
@@ -88,24 +88,24 @@ class FAQState extends State<FAQ> {
                             else
                               opened = items![index].order;
                             primaryFocus?.unfocus();
-                          ***REMOVED***),
+                          }),
                       child: FAQTile(items![index],
                           extended: opened == items![index].order))),
             )
     ]));
-  ***REMOVED***
+  }
 
-  listenToFAQ({String? search***REMOVED***) => faqService
+  listenToFAQ({String? search}) => faqService
       .getSortedFAQ(search)
       .listen((faq) => setState(() => items = faq));
-***REMOVED***
+}
 
 // ignore: must_be_immutable
 class FAQTile extends StatelessWidget {
   final FAQItem item;
   final bool extended;
 
-  FAQTile(this.item, {this.extended = false***REMOVED***) : super(key: Key('item tile'));
+  FAQTile(this.item, {this.extended = false}) : super(key: Key('item tile'));
 
   @override
   Widget build(BuildContext context) {
@@ -153,5 +153,5 @@ class FAQTile extends StatelessWidget {
         ]),
       ),
     );
-  ***REMOVED***
-***REMOVED***
+  }
+}

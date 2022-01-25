@@ -20,7 +20,7 @@ class StammdatenService {
     return (jsonDecode(json)['features'] as List)
         .map((json) => Kiez.fromJson(json))
         .toSet();
-  ***REMOVED***
+  }
 
   static Future<Set<Region>> loadRegionen() async {
     final json = await fileReader.regionen;
@@ -28,7 +28,7 @@ class StammdatenService {
     return (jsonDecode(json)['features'] as List)
         .map((json) => Region.fromJson(json))
         .toSet();
-  ***REMOVED***
+  }
 
   static Future<Set<Ortsteil>> loadOrtsteile() async {
     final json = await fileReader.ortsteile;
@@ -36,7 +36,7 @@ class StammdatenService {
     return (jsonDecode(json)['features'] as List)
         .map((json) => Ortsteil.fromJson(json))
         .toSet();
-  ***REMOVED***
+  }
 
   Future<Kiez?> getKiezAtLocation(LatLng point) async {
     return (await kieze)
@@ -48,5 +48,5 @@ class StammdatenService {
             .toList())
             .contains(point.latitude, point.longitude),
         orElse: () => null);
-  ***REMOVED***
-***REMOVED***
+  }
+}

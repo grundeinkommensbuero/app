@@ -31,16 +31,16 @@ open class PlakateRestResource {
         if (System.getProperty("de.kybernetik.plakate.secret")?.toBoolean() == true) {
             LOG.debug("Lade keine Plakate, weil Plakate geheim gehalten werden")
             return Response.status(200).entity(emptyList<Plakat>()).build()
-        ***REMOVED***
+        }
 
         LOG.debug("Lade alle Plakate")
         val plakate = dao.ladeAllePlakate()
-        LOG.debug("${plakate***REMOVED*** Plakate gefunden")
+        LOG.debug("${plakate} Plakate gefunden")
         return Response
             .ok()
-            .entity(plakate.map { plakat -> PlakatDto.convertFromPlakat(plakat) ***REMOVED***)
+            .entity(plakate.map { plakat -> PlakatDto.convertFromPlakat(plakat) })
             .build()
-    ***REMOVED***
+    }
 
     @POST
     @RolesAllowed("user")
@@ -49,78 +49,78 @@ open class PlakateRestResource {
     @Path("neu")
     open fun erstellePlakat(plakatDto: PlakatDto): Response {
         if (plakatDto.benutzer.toString() != context.userPrincipal.name) {
-            LOG.warn("Benutzer*in ${plakatDto.benutzer***REMOVED*** des Plakat stimmt nicht überein mit Benutzer*in ${context.userPrincipal.name***REMOVED*** der Request")
+            LOG.warn("Benutzer*in ${plakatDto.benutzer} des Plakat stimmt nicht überein mit Benutzer*in ${context.userPrincipal.name} der Request")
             plakatDto.benutzer = context.userPrincipal.name.toLong()
-        ***REMOVED***
+        }
 
         val plakat: Plakat
         try {
             plakat = dao.erstellePlakat(plakatDto.convertToPlakat())
-        ***REMOVED*** catch (e: FehlenderWertException) {
+        } catch (e: FehlenderWertException) {
             LOG.error(e.message)
             return Response.status(322).entity(RestFehlermeldung(e.message)).build()
-        ***REMOVED***
-        LOG.info("Neues Plakat ${plakat.id***REMOVED*** durch Benutzer ${context.userPrincipal.name***REMOVED*** erstellt")
+        }
+        LOG.info("Neues Plakat ${plakat.id} durch Benutzer ${context.userPrincipal.name} erstellt")
         return Response.ok().entity(PlakatDto.convertFromPlakat(plakat)).build()
-    ***REMOVED***
+    }
 
     @DELETE
     @RolesAllowed("user")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("{id***REMOVED***")
+    @Path("{id}")
     open fun loeschePlakat(@PathParam("id") id: Long?): Response {
         if (id == null) {
-            LOG.warn("Fehlende id in Lösch-Request für Plakat durch Benutzer*in ${context.userPrincipal.name***REMOVED***")
+            LOG.warn("Fehlende id in Lösch-Request für Plakat durch Benutzer*in ${context.userPrincipal.name}")
             return Response.status(422)
                 .entity(RestFehlermeldung("Kein Plakat an den Server gesendet"))
                 .build()
-        ***REMOVED***
+        }
 
         val plakat = dao.ladePlakat(id)
 
         if (plakat == null) {
-            LOG.warn("Benutzer*in ${context.userPrincipal.name***REMOVED*** versucht unbekanntes Plakat ${id***REMOVED*** zu löschen")
+            LOG.warn("Benutzer*in ${context.userPrincipal.name} versucht unbekanntes Plakat ${id} zu löschen")
             return Response.status(422)
                 .entity(RestFehlermeldung("Keine gültiges Plakat an den Server gesendet"))
                 .build()
-        ***REMOVED***
+        }
 
         if (plakat.user_id.toString() != context.userPrincipal.name) {
-            LOG.warn("Benutzer*in ${context.userPrincipal.name***REMOVED*** versucht fremdes Plakat ${id***REMOVED*** zu löschen. Löschversuch verhindert.")
+            LOG.warn("Benutzer*in ${context.userPrincipal.name} versucht fremdes Plakat ${id} zu löschen. Löschversuch verhindert.")
             return Response.status(403)
                 .entity(RestFehlermeldung("Plakat wurde von einer anderen Benutzer*in eingetragen"))
                 .build()
-        ***REMOVED***
+        }
 
-        LOG.info("Lösche Plakat ${plakat.id***REMOVED*** durch Benutzer*in ${context.userPrincipal.name***REMOVED***")
+        LOG.info("Lösche Plakat ${plakat.id} durch Benutzer*in ${context.userPrincipal.name}")
         dao.loeschePlakat(plakat)
 
         return Response.ok().build()
-    ***REMOVED***
+    }
 
     @POST
     @RolesAllowed("user")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("abgehangen/{plakatId***REMOVED***")
+    @Path("abgehangen/{plakatId}")
     open fun haengePlakatAb(@PathParam("plakatId") plakatId: Long): Response {
         if (System.getProperty("de.kybernetik.plakate.abhaengen")?.toBoolean() == false) {
-            LOG.info("Versuch von Benutzer*in ${context.userPrincipal.name***REMOVED*** Plakat ${plakatId***REMOVED*** abzuhängen abgelehnt")
+            LOG.info("Versuch von Benutzer*in ${context.userPrincipal.name} Plakat ${plakatId} abzuhängen abgelehnt")
             return Response
                 .status(423) // Locked
                 .entity(RestFehlermeldung("Das Abhängen von Plakaten ist noch nicht aktiviert."))
                 .build()
-        ***REMOVED***
+        }
 
         val plakat: Plakat?
         plakat = dao.ladePlakat(plakatId)
         if (plakat == null) return Response.status(322).entity(RestFehlermeldung("Unbekanntes Plakat")).build()
         plakat.abgehangen = true
-        LOG.info("Plakat ${plakat.id***REMOVED*** durch Benutzer ${context.userPrincipal.name***REMOVED*** abgehängt")
+        LOG.info("Plakat ${plakat.id} durch Benutzer ${context.userPrincipal.name} abgehängt")
         return Response.ok().entity(PlakatDto.convertFromPlakat(plakat)).build()
-    ***REMOVED***
-***REMOVED***
+    }
+}
 
 data class PlakatDto(
     var id: Long? = null,
@@ -140,7 +140,7 @@ data class PlakatDto(
             throw FehlenderWertException("benutzer")
 
         return Plakat(id ?: 0, latitude!!, longitude!!, adresse ?: "", benutzer!!, abgehangen ?: false)
-    ***REMOVED***
+    }
 
     companion object {
         fun convertFromPlakat(plakat: Plakat): PlakatDto {
@@ -152,6 +152,6 @@ data class PlakatDto(
                 plakat.user_id,
                 plakat.abgehangen
             )
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+        }
+    }
+}

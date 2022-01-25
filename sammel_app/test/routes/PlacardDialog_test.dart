@@ -16,15 +16,15 @@ main() {
               child: const Text('Starter'),
               onPressed: () async =>
                   returnValue = await showPlacardDialog(context, true)));
-    ***REMOVED***)));
+    })));
 
     await tester.tap(find.byKey(Key('starter')));
     await tester.pump();
-  ***REMOVED***);
+  });
 
   testUI('showPlacardDialog shows dialog', (tester) async {
     expect(find.byKey(Key('placard dialog')), findsOneWidget);
-  ***REMOVED***);
+  });
 
   testUI('showPlacardDialog shows dialog and closes on Cancel', (tester) async {
     await tester.tap(find.byKey(Key('delete placard dialog abort button')));
@@ -32,7 +32,7 @@ main() {
 
     expect(returnValue, PlacardDialogAction.CANCEL);
     expect(find.byKey(Key('placard dialog')), findsNothing);
-  ***REMOVED***);
+  });
 
   testUI('showPlacardDialog shows dialog and returns DELETE on delete button',
       (tester) async {
@@ -41,7 +41,7 @@ main() {
 
     expect(returnValue, PlacardDialogAction.DELETE);
     expect(find.byKey(Key('placard dialog')), findsNothing);
-  ***REMOVED***);
+  });
 
   testUI('showPlacardDialog shows dialog and returns TAKE_DOWN on delete button',
       (tester) async {
@@ -50,5 +50,5 @@ main() {
 
     expect(returnValue, PlacardDialogAction.TAKE_DOWN);
     expect(find.byKey(Key('placard dialog')), findsNothing);
-  ***REMOVED***);
-***REMOVED***
+  });
+}

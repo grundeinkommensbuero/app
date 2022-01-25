@@ -10,7 +10,7 @@ main() {
     expect(json['vorbehalte'], 'Neubau (2), Kosten');
     expect(json['datum'], '2021-08-08');
     expect(json['ort'], '10243');
-  ***REMOVED***);
+  });
 
   test('serializes without Kiez', () {
     var json =
@@ -19,5 +19,5 @@ main() {
     expect(json['vorbehalte'], 'Neubau (2), Kosten');
     expect(json['datum'], '2021-08-08');
     expect(json['ort'], null);
-  ***REMOVED***);
-***REMOVED***
+  });
+}

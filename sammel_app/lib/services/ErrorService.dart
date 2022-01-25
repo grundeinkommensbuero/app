@@ -25,9 +25,9 @@ class ErrorService {
     errorQueue.clear();
     queueCopy.forEach((error) =>
         showErrorDialog(error[0], error[1], key: Key('error dialog')));
-  ***REMOVED***
+  }
 
-  static handleError(error, StackTrace stacktrace, {String? context***REMOVED***) async {
+  static handleError(error, StackTrace stacktrace, {String? context}) async {
     print('Fehler aufgetreten: $error\n$stacktrace');
 
     if (context != null) context = context.tr();
@@ -35,76 +35,76 @@ class ErrorService {
     var errorMessage = '';
     try {
       errorMessage = tr(error.message);
-    ***REMOVED*** catch (_) {***REMOVED***
+    } catch (_) {}
     if (error is NoUserAuthException) {
       pushError('Dein Account konnte nicht authentifziert werden.',
           [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
       return;
-    ***REMOVED***
+    }
 
     if (error is InvalidUserException) {
       pushError('Dein Account konnte nicht authentifziert werden.',
           [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
       return;
-    ***REMOVED***
+    }
 
     if (error is AuthFehler) {
       pushError('Fehler bei Nutzer-Authentifizierung',
           [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
       return;
-    ***REMOVED***
+    }
     if (error is AccessException) {
       pushError('Zugriff fehlgeschlagen',
           [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
       return;
-    ***REMOVED***
+    }
     if (error is RestFehler) {
       pushError(
           'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten',
           [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
       return;
-    ***REMOVED***
+    }
     if (error is DeserialisationException) {
       pushError(
           'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten',
           [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
       return;
-    ***REMOVED***
+    }
     if (error is OsmResponseException) {
       pushError(
           'Bei der Kommunikation mit einem Openstreetmap-Server ist ein Fehler aufgetreten',
           [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
       return;
-    ***REMOVED***
+    }
     if (error is ServerException) {
       pushError(
           'Bei der Kommunikation mit dem Server ist ein technischer Fehler aufgetreten',
           [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
       return;
-    ***REMOVED***
+    }
     if (error is ConnectivityException) {
       pushError('Ein Verbindungs-Problem ist aufgetreten',
           [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
       return;
-    ***REMOVED***
+    }
     if (error is WarningException) {
       pushError('Warnung',
           [context, errorMessage, EMAIL].where((e) => e != null).join(' '));
       return;
-    ***REMOVED***
+    }
     pushError('Ein Fehler ist aufgetreten',
         [context, EMAIL].where((e) => e != null).join(' '));
-  ***REMOVED***
+  }
 
   static void pushError(String titel, String message) {
     if (_context == null)
       errorQueue.add([titel, message]);
     else
       showErrorDialog(titel, message, key: Key('error dialog'));
-  ***REMOVED***
+  }
 
   static Future showErrorDialog(String title, String message,
-      {key: Key***REMOVED***) async {
+      {key: Key}) async {
     if (displayedTypes.contains(title)) return;
     displayedTypes.add(title);
     showDialog(
@@ -130,5 +130,5 @@ class ErrorService {
                 )
               ],
             )).whenComplete(() => displayedTypes.remove(title));
-  ***REMOVED***
-***REMOVED***
+  }
+}

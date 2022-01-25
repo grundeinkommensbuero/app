@@ -14,7 +14,7 @@ class Plakat: Serializable {
         adresse = ""
         user_id = 0
         abgehangen = false
-    ***REMOVED***
+    }
 
     constructor(
         id: Long,
@@ -30,7 +30,7 @@ class Plakat: Serializable {
         this.adresse = adresse
         this.user_id = user_id
         this.abgehangen = abgehangen
-    ***REMOVED***
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,4 +50,4 @@ class Plakat: Serializable {
 
     @Column
     var abgehangen: Boolean
-***REMOVED***
+}

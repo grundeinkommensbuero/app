@@ -6,7 +6,7 @@ const authMap = {
   Mode.LOCAL: 'Basic MzpmZjdhOGI2Yi1lMTVhLTRmZWUtOWY3OS1kY2EwNmZkNmM4ODM=',
   Mode.TEST: 'Basic MzpmZjdhOGI2Yi1lMTVhLTRmZWUtOWY3OS1kY2EwNmZkNmM4ODM=',
   Mode.PROD: 'KEY NICHT EINCHECKEN!',
-***REMOVED***
+};
 
 Future<void> main() async {
   var mode = Mode.LOCAL;
@@ -29,9 +29,9 @@ Abholen könnt ihr die Flyer und viele andere Materialien im DWE-Büro in der Gr
       "color": colorMap[author],
       "sender_name": nameMap[author],
       "user_id": -1
-    ***REMOVED***,
-    "notification": silent ? null : {"title": titel, "body": inhalt***REMOVED***
-  ***REMOVED***
+    },
+    "notification": silent ? null : {"title": titel, "body": inhalt}
+  };
 
   final response = await post(
       Uri(
@@ -43,40 +43,40 @@ Abholen könnt ihr die Flyer und viele andere Materialien im DWE-Büro in der Gr
         "Authorization": authMap[mode]!,
         "Content-Type": "application/json",
         "Accept": "application/json"
-      ***REMOVED***,
+      },
       body: jsonEncode(body));
 
   print(
-      'Ergebnis: ${response.statusCode***REMOVED*** - ${response.body***REMOVED*** - ${response.reasonPhrase***REMOVED***');
-***REMOVED***
+      'Ergebnis: ${response.statusCode} - ${response.body} - ${response.reasonPhrase}');
+}
 
-enum Mode { LOCAL, TEST, PROD ***REMOVED***
-enum Author { APP, DWE ***REMOVED***
+enum Mode { LOCAL, TEST, PROD }
+enum Author { APP, DWE }
 
-***REMOVED***
+const hostMap = {
   Mode.LOCAL: 'localhost',
-***REMOVED***
+  Mode.TEST: 'dwe.idash.org',
   Mode.PROD: 'dwenteignen.party',
-***REMOVED***
+};
 
 const protocolMap = {
   Mode.LOCAL: 'http',
   Mode.TEST: 'https',
   Mode.PROD: 'https',
-***REMOVED***
+};
 
-***REMOVED***
+const portMap = {
   Mode.LOCAL: 18080,
-***REMOVED***
-***REMOVED***
-***REMOVED***
+  Mode.TEST: 443,
+  Mode.PROD: 443,
+};
 
 const colorMap = {
   Author.APP: 4292668415,
   Author.DWE: 4294960680,
-***REMOVED***
+};
 
 const nameMap = {
   Author.APP: 'App-Info',
   Author.DWE: 'Deutsche Wohnen & Co. Enteignen',
-***REMOVED***
+};

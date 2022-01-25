@@ -33,11 +33,11 @@ main() {
                         context: context,
                         coordinates: LatLng(52.49653, 13.43762))),
               );
-            ***REMOVED***),
+            }),
           ),
         )));
     await tester.tap(find.byKey(Key('starter')));
-  ***REMOVED***);
+  });
 
   testUI('opens arguments dialog with all elements', (tester) async {
     await tester.pumpAndSettle();
@@ -47,7 +47,7 @@ main() {
     expect(find.byKey(Key('arguments dialog cancel button')), findsOneWidget);
     expect(find.byKey(Key('arguments dialog submit button')), findsOneWidget);
     expect(find.text('Vorbehalte'), findsOneWidget);
-  ***REMOVED***);
+  });
 
   testUI('determines and shows Kiez and current Date', (tester) async {
     await tester.pumpAndSettle();
@@ -57,7 +57,7 @@ main() {
         .called(1);
 
     expect(find.text('10243, $today'), findsOneWidget);
-  ***REMOVED***);
+  });
 
   testUI('shows "Berlin" on start', (tester) async {
     when(mockgGeoService.getDescriptionToPoint(any))
@@ -66,7 +66,7 @@ main() {
 
     var today = ChronoHelfer.formatDateOfDateTime(DateTime.now());
     expect(find.text('Berlin, $today'), findsOneWidget);
-  ***REMOVED***);
+  });
 
   testUI('returns Arguments on submit button', (tester) async {
     await tester.pumpAndSettle();
@@ -81,7 +81,7 @@ main() {
     expect(result?.date.month, DateTime.now().month);
     expect(result?.date.day, DateTime.now().day);
     expect(result?.plz, '10243');
-  ***REMOVED***);
+  });
 
   testUI('returns no Arguments on cancel button', (tester) async {
     await tester.pumpAndSettle();
@@ -92,5 +92,5 @@ main() {
     await tester.pump();
 
     expect(result, isNull);
-  ***REMOVED***);
-***REMOVED***
+  });
+}

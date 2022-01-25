@@ -34,7 +34,7 @@ void main() {
         .thenAnswer((_) => Future.value([]));
     when(_visitedHousesService.getVisitedHousesInArea(any))
         .thenReturn(VisitedHouseView(BoundingBox(0, 0, 0, 0), []));
-  ***REMOVED***);
+  });
 
   testWidgets('uses default values', (WidgetTester tester) async {
     await tester
@@ -43,7 +43,7 @@ void main() {
     ActionMap actionMap = tester.widget(find.byType(ActionMap));
     expect(actionMap.termine, []);
     expect(actionMap.listLocations, []);
-  ***REMOVED***);
+  });
 
   group('action marker', () {
     late Widget actionMap;
@@ -67,14 +67,14 @@ void main() {
                   listLocations: [],
                   isMyAction: (_) => false,
                   iAmParticipant: (_) => false,
-                  openActionDetails: (_) {***REMOVED***)));
-    ***REMOVED***);
+                  openActionDetails: (_) {})));
+    });
 
     testWidgets('show all actions', (WidgetTester tester) async {
       await tester.pumpWidget(_mock(actionMap));
 
       expect(find.byKey(Key('action marker')), findsNWidgets(3));
-    ***REMOVED***);
+    });
 
     testWidgets('are hightlighted for own actions',
         (WidgetTester tester) async {
@@ -100,7 +100,7 @@ void main() {
                   listLocations: [],
                   isMyAction: isMyAction,
                   iAmParticipant: (_) => false,
-                  openActionDetails: (_) {***REMOVED***)))));
+                  openActionDetails: (_) {})))));
 
       List<TextButton> actionMarker = tester
           .widgetList(find.byKey(Key('action marker')))
@@ -113,21 +113,21 @@ void main() {
           actionMarker[0]
               .style!
               .backgroundColor!
-              .resolve({MaterialState.hovered***REMOVED***),
+              .resolve({MaterialState.hovered}),
           CampaignTheme.primaryLight);
       expect(
           actionMarker[1]
               .style!
               .backgroundColor!
-              .resolve({MaterialState.hovered***REMOVED***),
+              .resolve({MaterialState.hovered}),
           CampaignTheme.altSecondaryLight);
       expect(
           actionMarker[2]
               .style!
               .backgroundColor!
-              .resolve({MaterialState.hovered***REMOVED***),
+              .resolve({MaterialState.hovered}),
           CampaignTheme.primaryLight);
-    ***REMOVED***);
+    });
 
     testWidgets('are higlighted for past actions', (WidgetTester tester) async {
       var isMyAction = (Termin action) => action.id == 2;
@@ -154,7 +154,7 @@ void main() {
                   listLocations: [],
                   isMyAction: isMyAction,
                   iAmParticipant: iAmParticipant,
-                  openActionDetails: (_) {***REMOVED***)))));
+                  openActionDetails: (_) {})))));
 
       List<TextButton> actionMarker = tester
           .widgetList(find.byKey(Key('action marker')))
@@ -167,21 +167,21 @@ void main() {
           actionMarker[0]
               .style!
               .backgroundColor!
-              .resolve({MaterialState.hovered***REMOVED***),
+              .resolve({MaterialState.hovered}),
           CampaignTheme.altPrimaryLight);
       expect(
           actionMarker[2]
               .style!
               .backgroundColor!
-              .resolve({MaterialState.hovered***REMOVED***),
+              .resolve({MaterialState.hovered}),
           CampaignTheme.primaryBright);
       expect(
           actionMarker[1]
               .style!
               .backgroundColor!
-              .resolve({MaterialState.hovered***REMOVED***),
+              .resolve({MaterialState.hovered}),
           CampaignTheme.altSecondaryBright);
-    ***REMOVED***);
+    });
 
     testWidgets('are higlighted for joined actions',
         (WidgetTester tester) async {
@@ -207,7 +207,7 @@ void main() {
                   listLocations: [],
                   isMyAction: (_) => false,
                   iAmParticipant: iAmParticipant,
-                  openActionDetails: (_) {***REMOVED***)))));
+                  openActionDetails: (_) {})))));
 
       List<TextButton> actionMarker = tester
           .widgetList(find.byKey(Key('action marker')))
@@ -220,21 +220,21 @@ void main() {
           actionMarker[0]
               .style!
               .backgroundColor!
-              .resolve({MaterialState.hovered***REMOVED***),
+              .resolve({MaterialState.hovered}),
           CampaignTheme.primaryBright);
       expect(
           actionMarker[1]
               .style!
               .backgroundColor!
-              .resolve({MaterialState.hovered***REMOVED***),
+              .resolve({MaterialState.hovered}),
           CampaignTheme.altPrimaryLight);
       expect(
           actionMarker[2]
               .style!
               .backgroundColor!
-              .resolve({MaterialState.hovered***REMOVED***),
+              .resolve({MaterialState.hovered}),
           CampaignTheme.primaryBright);
-    ***REMOVED***);
+    });
 
     testWidgets('react to tap', (WidgetTester tester) async {
       bool iHaveBeenCalled = false;
@@ -266,8 +266,8 @@ void main() {
       await tester.pump();
 
       expect(iHaveBeenCalled, true);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   testWidgets('shows all list locations', (WidgetTester tester) async {
     await tester.pumpWidget(_mock(MaterialApp(
@@ -282,14 +282,14 @@ void main() {
                   curry36()..id = '3'
                 ],
                 isMyAction: (_) => false,
-                openActionDetails: (_) {***REMOVED***)))));
+                openActionDetails: (_) {})))));
 
     ActionMap map = tester.widget<ActionMap>(find.byKey(Key('action map')));
     map.mapController.move(LatLng(curry36().latitude, curry36().longitude), 14);
     await tester.pumpAndSettle();
 
     expect(find.byKey(Key('list location marker')), findsNWidgets(3));
-  ***REMOVED***);
+  });
 
   testWidgets('shows all placards', (WidgetTester tester) async {
     reset(_placardsService);
@@ -302,7 +302,7 @@ void main() {
                 key: Key('action map'),
                 termine: [],
                 isMyAction: (_) => false,
-                openActionDetails: (_) {***REMOVED***)))));
+                openActionDetails: (_) {})))));
 
     ActionMap map = tester.widget<ActionMap>(find.byKey(Key('action map')));
     map.mapController
@@ -310,7 +310,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byKey(Key('placard marker')), findsNWidgets(3));
-  ***REMOVED***);
+  });
 
   testWidgets('hides list locations when far away',
       (WidgetTester tester) async {
@@ -325,10 +325,10 @@ void main() {
                   curry36()..id = '3'
                 ],
                 isMyAction: (_) => false,
-                openActionDetails: (_) {***REMOVED***)))));
+                openActionDetails: (_) {})))));
 
     expect(find.byKey(Key('list location marker')), findsNothing);
-  ***REMOVED***);
+  });
 
   testWidgets('opens list location info on tap', (WidgetTester tester) async {
     await tester.pumpWidget(_mock(MaterialApp(
@@ -338,7 +338,7 @@ void main() {
                 termine: [],
                 listLocations: [curry36()],
                 isMyAction: (_) => false,
-                openActionDetails: (_) {***REMOVED***)))));
+                openActionDetails: (_) {})))));
 
     ActionMap map = tester.widget<ActionMap>(find.byKey(Key('action map')));
     map.mapController.move(LatLng(curry36().latitude, curry36().longitude), 14);
@@ -350,7 +350,7 @@ void main() {
 
     expect(find.byKey(Key('list location info dialog')), findsOneWidget);
     expect(find.text(curry36().name!), findsOneWidget);
-  ***REMOVED***);
+  });
 
   testWidgets('shows mapAction dialog on LongPress',
       (WidgetTester tester) async {
@@ -360,14 +360,14 @@ void main() {
                 key: Key('action map'),
                 termine: [],
                 listLocations: [],
-                switchToActionCreator: (_) {***REMOVED***,
-                openActionDetails: (_) {***REMOVED***)))));
+                switchToActionCreator: (_) {},
+                openActionDetails: (_) {})))));
 
     await tester.longPress(find.byKey(Key('action map')));
     await tester.pumpAndSettle();
 
     expect(find.byKey(Key('map action dialog')), findsOneWidget);
-  ***REMOVED***);
+  });
 
   testWidgets('calls switchToActionCreator for new action',
       (WidgetTester tester) async {
@@ -381,7 +381,7 @@ void main() {
                 termine: [],
                 listLocations: [],
                 switchToActionCreator: mapAction,
-                openActionDetails: (_) {***REMOVED***)))));
+                openActionDetails: (_) {})))));
 
     await tester.longPress(find.byKey(Key('action map')));
     await tester.pump();
@@ -391,7 +391,7 @@ void main() {
 
     expect(mapActionParameter?.latitude.floor(), 52);
     expect(mapActionParameter?.longitude.floor(), 13);
-  ***REMOVED***);
+  });
 
 //  Funktioniert nicht wegen null-Exception im dispose vom User-Location-Plugin
 //  testWidgets('enables user location plugin when permission granted',
@@ -402,7 +402,7 @@ void main() {
 //                termine: [],
 //                listLocations: [],
 //                isMyAction: (_) => false,
-//                openActionDetails: () {***REMOVED***)))));
+//                openActionDetails: () {})))));
 //
 //    var state = tester.state<ActionMapState>(find.byType(ActionMap));
 //
@@ -435,8 +435,8 @@ void main() {
 //            .map((layer) => layer.runtimeType)
 //            .contains(UserLocationPlugin),
 //        isTrue);
-//  ***REMOVED***);
-***REMOVED***
+//  });
+}
 
 _mock(Widget actionMap) => MultiProvider(providers: [
       Provider<AbstractVisitedHousesService>.value(

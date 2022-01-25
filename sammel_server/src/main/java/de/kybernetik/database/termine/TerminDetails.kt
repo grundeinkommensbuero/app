@@ -32,5 +32,5 @@ class TerminDetails {
         this.treffpunkt = treffpunkt
         this.beschreibung = beschreibung
         this.kontakt = kontakt
-    ***REMOVED***
-***REMOVED***
+    }
+}

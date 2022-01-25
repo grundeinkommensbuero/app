@@ -20,7 +20,7 @@ main() {
     setUp(() {
       reset(backendMock);
       service = PushSendService(userService, backendMock);
-    ***REMOVED***);
+    });
 
     test('pushToDevices erwartet Empfänger', () {
       expect(
@@ -32,7 +32,7 @@ main() {
           () => service.pushToDevices(
               [], PushData(), PushNotification('Titel', "Inhalt")),
           throwsA((e) => e is MissingTargetError));
-    ***REMOVED***);
+    });
 
     test('pushToDevices sendet Push-Nachricht an Server', () async {
       when(backendMock.post(any, any, any)).thenAnswer((_) async =>
@@ -43,11 +43,11 @@ main() {
 
       verify(backendMock.post(
           'service/push/devices',
-          '{"recipients":["Empfänger"],"data":{"type":"general"***REMOVED***,"notification":{"title":"Titel","body":"Inhalt"***REMOVED******REMOVED***',
+          '{"recipients":["Empfänger"],"data":{"type":"general"},"notification":{"title":"Titel","body":"Inhalt"}}',
           any,
           any));
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('DemoPushService', () {
     late DemoPushSendService service;
@@ -55,7 +55,7 @@ main() {
     setUp(() {
       reset(backendMock);
       service = DemoPushSendService(userService);
-    ***REMOVED***);
+    });
 
     test('pushToDevices erwartet Empfänger', () {
       expect(
@@ -67,7 +67,7 @@ main() {
           () => service.pushToDevices(
               [], PushData(), PushNotification('Titel', "Inhalt")),
           throwsA((e) => e is MissingTargetError));
-    ***REMOVED***);
+    });
 
     test('pushToDevices legt Nachricht in Stream', () async {
       List<PushData> gesendeteNachrichten = [];
@@ -83,7 +83,7 @@ main() {
       expect(gesendeteNachrichten.length, 2);
       expect(true, gesendeteNachrichten.contains(pushData1));
       expect(true, gesendeteNachrichten.contains(pushData2));
-    ***REMOVED***);
+    });
 
     test('pushToAction legt Nachricht in Stream', () async {
       List<PushData> gesendeteNachrichten = [];
@@ -99,6 +99,6 @@ main() {
       expect(gesendeteNachrichten.length, 2);
       expect(true, gesendeteNachrichten.contains(pushData1));
       expect(true, gesendeteNachrichten.contains(pushData2));
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+    });
+  });
+}

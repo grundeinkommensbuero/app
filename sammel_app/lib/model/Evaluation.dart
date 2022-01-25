@@ -22,5 +22,5 @@ class Evaluation {
         'kommentar': kommentar,
         'situation': situation,
         'ausgefallen': ausgefallen
-      ***REMOVED***
-***REMOVED***
+      };
+}

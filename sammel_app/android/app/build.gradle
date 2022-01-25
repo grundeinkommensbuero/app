@@ -3,23 +3,23 @@ def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
     localPropertiesFile.withReader('UTF-8') { reader ->
         localProperties.load(reader)
-    ***REMOVED***
-***REMOVED***
+    }
+}
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
 if (flutterRoot == null) {
     throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
-***REMOVED***
+}
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
     flutterVersionCode = '1'
-***REMOVED***
+}
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
     flutterVersionName = '1.0'
-***REMOVED***
+}
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
@@ -31,7 +31,7 @@ def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-***REMOVED***
+}
 
 android {
     compileSdkVersion 30
@@ -41,11 +41,11 @@ android {
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
-    ***REMOVED***
+    }
 
     lintOptions {
         disable 'InvalidPackage'
-    ***REMOVED***
+    }
 
     defaultConfig {
         applicationId "de.expeditiongrundeinkommen.app"
@@ -55,7 +55,7 @@ android {
         versionName flutterVersionName
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    ***REMOVED***
+    }
 
     signingConfigs {
         release {
@@ -63,20 +63,20 @@ android {
             keyPassword keystoreProperties.getProperty('keyPassword')
             storeFile file(keystoreProperties.getProperty('storeFile'))
             storePassword keystoreProperties.getProperty('storePassword')
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
     buildTypes {
         release {
             // signingConfig signingConfigs.debug
            signingConfig signingConfigs.release
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+        }
+    }
+}
 
 flutter {
     source '../..'
-***REMOVED***
+}
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -85,6 +85,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.google.firebase:firebase-messaging:21.0.1'
     implementation 'com.android.support:multidex:1.0.3'
-***REMOVED***
+}
 
 

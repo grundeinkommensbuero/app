@@ -52,7 +52,7 @@ class PushNotificationResourceTest {
     @Before
     fun setUp() {
         whenever(context.userPrincipal).thenReturn(BasicUserPrincipal("11"))
-    ***REMOVED***
+    }
 
     @InjectMocks
     lateinit var resource: PushNotificationResource
@@ -71,7 +71,7 @@ class PushNotificationResourceTest {
         verify(pushService, times(1))
                 .sendePushNachrichtAnTopic(messageArgument.capture(), topicArgument.capture())
         assertEquals(messageArgument.firstValue, nachricht)
-    ***REMOVED***
+    }
 
     @Test
     fun `pushToParticipants liefert 403, wenn User nicht Teilnehmer ist`() {
@@ -105,7 +105,7 @@ class PushNotificationResourceTest {
         assertEquals(response!!.status, 403)
         assertEquals("Du bist nicht Teilnehmer*in dieser Aktion", (response.entity as RestFehlermeldung).meldung)
         verify(pushService, never()).sendePushNachrichtAnEmpfaenger(anyOrNull(), anyList())
-    ***REMOVED***
+    }
 
     @Test
     fun `pushToParticipants sendet Nachricht an PushService`() {
@@ -123,10 +123,10 @@ class PushNotificationResourceTest {
         val nachrichtCaptor = argumentCaptor<PushMessageDto>()
         val teilnehmerCaptor = argumentCaptor<List<Benutzer>>()
         verify(pushService, atLeastOnce()).sendePushNachrichtAnEmpfaenger(nachrichtCaptor.capture(), teilnehmerCaptor.capture())
-        assertTrue { nachrichtCaptor.firstValue.data!!.isEmpty() ***REMOVED***
+        assertTrue { nachrichtCaptor.firstValue.data!!.isEmpty() }
         assertEquals(nachrichtCaptor.firstValue.notification, notification)
         assertEquals(teilnehmerCaptor.firstValue, teilnehmer)
-    ***REMOVED***
+    }
 
     @Test
     fun `pullNotifications liest Benutzer-ID aus Credentials`() {
@@ -140,7 +140,7 @@ class PushNotificationResourceTest {
         resource.pullNotifications()
 
         verify(pushMessageDao, times(1)).ladeAllePushMessagesFuerBenutzer(11)
-    ***REMOVED***
+    }
 
     @Test
     fun `pullNotifications liefert pushMessages aus`() {
@@ -168,9 +168,9 @@ class PushNotificationResourceTest {
         assertEquals(response!!.status, 200)
         @Suppress("UNCHECKED_CAST")
         assertTrue((response.entity as List<PushMessageDto>)
-                .map { it.notification!!.title ***REMOVED***
+                .map { it.notification!!.title }
                 .containsAll(listOf("1", "2", "3")))
-    ***REMOVED***
+    }
 
     @Test
     fun `pullNotifications loescht Nachrichten in DB`() {
@@ -196,7 +196,7 @@ class PushNotificationResourceTest {
         resource.pullNotifications()
 
         verify(pushMessageDao, times(1)).loeschePushMessages(pushMessages)
-    ***REMOVED***
+    }
 
     @Test
     fun `pullNotifications liefert keine Empfaenger aus`() {
@@ -211,5 +211,5 @@ class PushNotificationResourceTest {
 
         @Suppress("UNCHECKED_CAST")
         (assertNull((response!!.entity as List<PushMessageDto>)[0].recipients))
-    ***REMOVED***
-***REMOVED***
+    }
+}

@@ -19,27 +19,27 @@ open class BesuchtesHausDao {
         LOG.debug("Speichere neues HausBesucht in Datenbank")
         entityManager.persist(besuchtesHaus)
         entityManager.flush()
-        LOG.debug("ID von neu erstelltem HausBesucht: ${besuchtesHaus.id***REMOVED***")
+        LOG.debug("ID von neu erstelltem HausBesucht: ${besuchtesHaus.id}")
         return besuchtesHaus
-    ***REMOVED***
+    }
 
     open fun ladeBesuchtesHaus(id: Long): BesuchtesHaus? {
         LOG.trace("Lade einzelnes Besuchtes Haus $id")
         try {
             return entityManager.find(BesuchtesHaus::class.java, id)
-        ***REMOVED*** catch (e: IllegalArgumentException) {
+        } catch (e: IllegalArgumentException) {
             LOG.error(e.message, e)
             return null
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
     open fun loescheBesuchtesHaus(besuchtesHaus: BesuchtesHaus) {
-        LOG.debug("Lösche Besuchtes Haus ${besuchtesHaus.id***REMOVED***, in ${besuchtesHaus.adresse***REMOVED***")
+        LOG.debug("Lösche Besuchtes Haus ${besuchtesHaus.id}, in ${besuchtesHaus.adresse}")
         entityManager.remove(besuchtesHaus)
-    ***REMOVED***
+    }
 
     open fun ladeAlleBesuchtenHaeuser(): List<BesuchtesHaus> {
         LOG.trace("Lade alle Besuchten Häuser")
         return entityManager.createQuery("from BesuchtesHaus", BesuchtesHaus::class.java).resultList
-    ***REMOVED***
-***REMOVED***
+    }
+}

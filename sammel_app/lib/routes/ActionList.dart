@@ -19,12 +19,12 @@ class ActionList extends StatefulWidget {
 
   ActionList(this.termine, this.isMyAction, this.isPastAction,
       this.iAmParticipant, this.openActionDetails,
-      {Key? key***REMOVED***)
+      {Key? key})
       : super(key: key);
 
   @override
   ActionListState createState() => ActionListState();
-***REMOVED***
+}
 
 class ActionListState extends State<ActionList> {
   ItemScrollController _scrollController = ItemScrollController();
@@ -51,9 +51,9 @@ class ActionListState extends State<ActionList> {
               alignment: 0,
               curve: Curves.easeOutCubic,
               duration: Duration(milliseconds: indexOfNow * 75)));
-    ***REMOVED***
+    }
     return scrollableList;
-  ***REMOVED***
+  }
 
   void maybeShowEvaluationSnackBar(BuildContext context) async {
     evaluations ??=
@@ -75,9 +75,9 @@ class ActionListState extends State<ActionList> {
                     label: 'Zur Aktion'.tr(),
                     onPressed: () => widget.openActionDetails(termin)))));
         break;
-      ***REMOVED***
-    ***REMOVED***
-  ***REMOVED***
+      }
+    }
+  }
 
   int getIndexOfNow() {
     var now = DateTime.now();
@@ -89,10 +89,10 @@ class ActionListState extends State<ActionList> {
           return (widget.termine.length > 5 ? widget.termine.length - 5 : 0);
         else
           return index;
-      ***REMOVED***
-    ***REMOVED***
+      }
+    }
     return 0;
-  ***REMOVED***
+  }
 
   Widget cardListBuilder(context, index) {
     Widget tile = ListTile(
@@ -114,7 +114,7 @@ class ActionListState extends State<ActionList> {
         ),
         tile
       ]);
-    ***REMOVED***
+    }
     // Jetzt-Zeile an die zuletzt vergangene Aktion anhängen
     if ((widget.termine[index].beginn.isBefore(now)) &&
         (index == widget.termine.length - 1 ||
@@ -129,11 +129,11 @@ class ActionListState extends State<ActionList> {
         ).tr(),
       ]);
     return tile;
-  ***REMOVED***
+  }
 
   @override
   void dispose() {
     snackbarTimer?.cancel();
     super.dispose();
-  ***REMOVED***
-***REMOVED***
+  }
+}

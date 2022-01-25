@@ -8,7 +8,7 @@ pid        /var/run/nginx.pid;
 
 events {
     worker_connections  1024;
-***REMOVED***
+}
 
 
 http {
@@ -51,7 +51,7 @@ http {
 		location / {
 			root   /usr/share/nginx/html;
 			index  index.html index.htm;
-		***REMOVED***
+		}
 
 		#error_page  404              /404.html;
 
@@ -60,21 +60,21 @@ http {
 		error_page   500 502 503 504  /50x.html;
 		location = /50x.html {
 			root   /usr/share/nginx/html;
-		***REMOVED***
+		}
 
 		location /cgi-bin/ {
             include        fastcgi_params;
             fastcgi_param  SCRIPT_FILENAME  /app/$fastcgi_script_name;
             fastcgi_param  PATH_INFO        $fastcgi_path_info;
             fastcgi_pass   unix:/nginx/fcgiwrap.socket;
-            fastcgi_read_timeout ${OVERPASS_MAX_TIMEOUT***REMOVED***
-            fastcgi_send_timeout ${OVERPASS_MAX_TIMEOUT***REMOVED***
-		***REMOVED***
+            fastcgi_read_timeout ${OVERPASS_MAX_TIMEOUT};
+            fastcgi_send_timeout ${OVERPASS_MAX_TIMEOUT};
+		}
 
 		location /api/ {
             rewrite ^/api/(.+)$ /cgi-bin/$1 last;
-		***REMOVED***
-	***REMOVED***
+		}
+	}
 
 
-***REMOVED***
+}

@@ -18,7 +18,7 @@ Future<Location?> showLocationDialog(
         String? initDescription,
         LatLng? initCoordinates,
         Kiez? initKiez,
-        LatLng? center***REMOVED***) =>
+        LatLng? center}) =>
     showDialog(
       context: context,
       builder: (context) =>
@@ -41,8 +41,8 @@ class LocationDialog extends StatefulWidget {
         initCoordinates != null ? LocationMarker(initCoordinates!) : null;
     var location = Location(initDescription ?? '', initCoordinates, initKiez);
     return LocationDialogState(location, initMarker, center);
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 class LocationDialogState extends State<LocationDialog> {
   LocationMarker? marker;
@@ -54,7 +54,7 @@ class LocationDialogState extends State<LocationDialog> {
     marker = initMarker;
     location = initVenue;
     venueController = TextEditingController(text: location.description);
-  ***REMOVED***
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +93,7 @@ class LocationDialogState extends State<LocationDialog> {
                     layers: [
                       TileLayerOptions(
                           urlTemplate:
-                              "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
+                              "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
                           subdomains: ['a', 'b', 'c']),
                       MarkerLayerOptions(
                           markers: marker == null ? [] : [marker!]),
@@ -104,7 +104,7 @@ class LocationDialogState extends State<LocationDialog> {
         ),
         Text(
             location.kiez != null
-                ? '${location.kiez!.name***REMOVED*** in ${location.kiez!.region***REMOVED***'
+                ? '${location.kiez!.name} in ${location.kiez!.region}'
                 : '',
             style: TextStyle(fontSize: 13, color: CampaignTheme.secondary),
             softWrap: false,
@@ -139,18 +139,18 @@ class LocationDialogState extends State<LocationDialog> {
                 context,
                 Location(widget.initDescription, widget.initCoordinates,
                     widget.initKiez));
-          ***REMOVED***,
+          },
         ),
         TextButton(
           key: Key('venue dialog finish button'),
           child: Text("Fertig").tr(),
           onPressed: () {
             Navigator.pop(context, location);
-          ***REMOVED***,
+          },
         ),
       ],
     );
-  ***REMOVED***
+  }
 
   locationSelected(LatLng point) async {
     Location newLocation = await getDescriptionAndKiezToPoint(point);
@@ -163,8 +163,8 @@ class LocationDialogState extends State<LocationDialog> {
       venueController.text = newLocation.description!;
       location.description = newLocation.description;
       marker = LocationMarker(point);
-    ***REMOVED***);
-  ***REMOVED***
+    });
+  }
 
   Future<Location> getDescriptionAndKiezToPoint(LatLng point) async {
     var geodata = await Provider.of<GeoService>(context, listen: false)
@@ -172,14 +172,14 @@ class LocationDialogState extends State<LocationDialog> {
         .catchError((e, s) {
       ErrorService.handleError(e, s);
       return GeoData('', '', '');
-    ***REMOVED***);
+    });
 
     Kiez? kiez = await Provider.of<StammdatenService>(context, listen: false)
         .getKiezAtLocation(point);
 
     return Location(geodata.description, point, kiez);
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 class LocationMarker extends Marker {
   LocationMarker(LatLng point)
@@ -194,7 +194,7 @@ class LocationMarker extends Marker {
                       BoxShadow(blurRadius: 4.0, offset: Offset(-2.0, 2.0))
                     ]),
                 child: Icon(Icons.supervised_user_circle, size: 30.0)));
-***REMOVED***
+}
 
 class Location {
   String? description;
@@ -202,4 +202,4 @@ class Location {
   Kiez? kiez;
 
   Location(this.description, this.coordinates, this.kiez);
-***REMOVED***
+}

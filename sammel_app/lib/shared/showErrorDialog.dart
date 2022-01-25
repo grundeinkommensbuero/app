@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sammel_app/services/RestFehler.dart';
 
 Future showErrorDialog(BuildContext context, String title, RestFehler error,
-    {key: Key***REMOVED***) {
+    {key: Key}) {
   return showDialog(
       context: context,
       builder: (_) => AlertDialog(
@@ -18,4 +18,4 @@ Future showErrorDialog(BuildContext context, String title, RestFehler error,
               )
             ],
           ));
-***REMOVED***
+}

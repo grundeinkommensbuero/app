@@ -32,7 +32,7 @@ main() {
 
     manager = PushNotificationManager(
         storageService, userService, firebaseMock, backend);
-  ***REMOVED***);
+  });
 
   group('createPushListener', () {
     test('erzeugt Firebase-Service, wenn Token nicht null ist', () async {
@@ -42,7 +42,7 @@ main() {
       await manager.createPushListener(firebaseMock, backend);
 
       expect(true, manager.listener is FirebaseReceiveService);
-    ***REMOVED***);
+    });
 
     test('markiert als kein Pull-Modus, wenn Token nicht null ist', () async {
       reset(storageService);
@@ -51,7 +51,7 @@ main() {
       await manager.createPushListener(firebaseMock, backend);
 
       verify(storageService.unsetPullMode()).called(1);
-    ***REMOVED***);
+    });
 
     test('erzeugt PullService, wenn Token null ist', () async {
       reset(storageService);
@@ -61,7 +61,7 @@ main() {
       await manager.createPushListener(firebaseMock, backend);
 
       expect(true, manager.listener is PullService);
-    ***REMOVED***);
+    });
 
     test('speichert als Pull-Modus, wenn Token null ist', () async {
       reset(storageService);
@@ -72,7 +72,7 @@ main() {
 
       verifyNever(storageService.unsetPullMode());
       verify(storageService.setPullMode()).called(1);
-    ***REMOVED***);
+    });
 
     test('setzt Pull-Modus, wenn noch nicht im Pull-Modus', () async {
       reset(storageService);
@@ -82,8 +82,8 @@ main() {
       await manager.createPushListener(firebaseMock, backend);
 
       verify(storageService.setPullMode()).called(1);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('DemoPushNotificationManager', () {
     DemoPushSendService pushSendService = MockDemoPushSendService();
@@ -95,7 +95,7 @@ main() {
       reset(pushSendService);
       controller = StreamController<PushData>.broadcast(sync: true);
       when(pushSendService.stream).thenAnswer((_) => controller.stream);
-    ***REMOVED***);
+    });
 
     test('serves push messages to correct listener', () async {
       var listener1 = TestListener();
@@ -115,17 +115,17 @@ main() {
       expect(listener1.nachrichten[1]['type'], 'type1');
       expect(listener2.nachrichten.length, 1);
       expect(listener2.nachrichten[0]['type'], 'type2');
-    ***REMOVED***);
+    });
 
     test('works without listeners', () async {
       controller.add(TestPushData('type1'));
-    ***REMOVED***);
+    });
 
     tearDown(() {
       controller.close();
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+    });
+  });
+}
 
 class TestListener implements PushNotificationListener {
   List<Map<String, dynamic>> nachrichten = [];
@@ -133,17 +133,17 @@ class TestListener implements PushNotificationListener {
   @override
   void receiveMessage(Map<String, dynamic> data) {
     nachrichten.add(data);
-  ***REMOVED***
+  }
 
   @override
-  void handleNotificationTap(Map<dynamic, dynamic> data) {***REMOVED***
+  void handleNotificationTap(Map<dynamic, dynamic> data) {}
 
   @override
-  void updateMessages(List<Map<String, dynamic>> data) {***REMOVED***
-***REMOVED***
+  void updateMessages(List<Map<String, dynamic>> data) {}
+}
 
 class TestPushData extends PushData {
   String type;
 
   TestPushData(this.type);
-***REMOVED***
+}

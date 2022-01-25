@@ -38,5 +38,5 @@ class Vorbehalte {
         this.benutzer = benutzer
         this.datum = datum
         this.ort = ort
-    ***REMOVED***
-***REMOVED***
+    }
+}

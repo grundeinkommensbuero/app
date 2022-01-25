@@ -12,7 +12,7 @@ void main() {
   setUp(() {
     reset(_userService);
     trainUserService(_userService);
-  ***REMOVED***);
+  });
 
   group('VisitedHousesService', () {
     late MockBackend _backend;
@@ -22,7 +22,7 @@ void main() {
       _backend = MockBackend();
       trainBackend(_backend);
       service = VisitedHousesService(MockGeoService(), _userService, _backend);
-    ***REMOVED***);
+    });
 
     test('loadVisitedHouses calls right path', () async {
       when(_backend.get('service/besuchteHaeuser', any)).thenAnswer((_) =>
@@ -32,7 +32,7 @@ void main() {
       await service.loadVisitedHouses();
 
       verify(_backend.get('service/besuchteHaeuser', any));
-    ***REMOVED***);
+    });
 
     test('loadVisitedHouses deserializes Response', () async {
       when(_backend.get('service/besuchteHaeuser', any)).thenAnswer((_) {
@@ -43,7 +43,7 @@ void main() {
         ];
         return Future.value(
             trainHttpResponse(MockHttpClientResponseBody(), 200, houses));
-      ***REMOVED***);
+      });
 
       var response = await service.loadVisitedHouses();
 
@@ -56,7 +56,7 @@ void main() {
           'Potsdamer Straße 143, 10783 Berlin');
       expect(response[2].visitations[0].adresse,
           'Klingelhöferstraße 8,Botschaftsviertel, Tiergarten, Mitte, Berlin, 10785');
-    ***REMOVED***);
+    });
 
     test('createVisitedHouse sends serialized house to right path', () async {
       when(_backend.post('service/besuchteHaeuser/neu', any, any)).thenAnswer(
@@ -79,9 +79,9 @@ void main() {
               '"datum":"2021-07-18",'
               '"benutzer":11'
               ',"shape":"[]"'
-              '***REMOVED***',
+              '}',
           any));
-    ***REMOVED***);
+    });
 
     test('createVisitedHouse returns house from database with Id', () async {
       when(_backend.post('service/besuchteHaeuser/neu', any, any)).thenAnswer(
@@ -93,7 +93,7 @@ void main() {
       var response = await service.createVisitedHouse(house);
 
       expect(response!.osmId, 1);
-    ***REMOVED***);
+    });
 
     test('createVisitedHouse returns null on Error', () async {
       when(_backend.post('service/besuchteHaeuser/neu', any, any))
@@ -102,7 +102,7 @@ void main() {
       var response = await service.createVisitedHouse(kanzlerinamt());
 
       expect(response, isNull);
-    ***REMOVED***);
+    });
 
     test('deleteVisitedHouse calls right path with id', () async {
       when(_backend.delete('service/besuchteHaeuser/1', any, any)).thenAnswer(
@@ -112,8 +112,8 @@ void main() {
       await service.deleteVisitedHouse(1);
 
       verify(_backend.delete('service/besuchteHaeuser/1', any, any));
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('DemoVisitedHousesService', () {
     DemoVisitedHousesService visitedHousesService =
@@ -122,7 +122,7 @@ void main() {
     setUp(() {
       visitedHousesService =
           DemoVisitedHousesService(_userService, MockGeoService());
-    ***REMOVED***);
+    });
 
     test('createVisitedHouse stores house with new id and returns it',
         () async {
@@ -141,13 +141,13 @@ void main() {
       expect(visitedHousesService.visitedHousesOnStart.length, 4);
       expect(visitedHousesService.visitedHousesOnStart[3].osmId, 4);
       expect(newHouse.osmId, 4);
-    ***REMOVED***);
+    });
 
     test('loadVisitedHouses serves all houses', () async {
       var houses = await visitedHousesService.loadVisitedHouses();
 
       expect(houses.map((h) => h.osmId), containsAll([1, 2, 3]));
-    ***REMOVED***);
+    });
 
     test('editVisitedHouses generates id for visitation', () async {
       VisitedHouse house = VisitedHouse(4, 53, 11, [],
@@ -158,6 +158,6 @@ void main() {
       expect(visitedHousesService.localHousesMap[4]!.osmId, 4);
       expect(visitedHousesService.localHousesMap[4]!.visitations.length, 1);
       expect(visitedHousesService.localHousesMap[4]!.visitations[0].id, 4);
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+    });
+  });
+}

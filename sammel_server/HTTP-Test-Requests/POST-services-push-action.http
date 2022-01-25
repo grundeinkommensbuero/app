@@ -6,9 +6,9 @@ Authorization: Basic MTE6YWM0MzA5NjAtMDVlYi0xMWViLThhMjYtZmRjNzY4M2E4NGJj
 {
     "data":{
         "type":"Typ"
-    ***REMOVED***,
+    },
     "notification":{
         "title":"Titel",
         "body":"Meldung"
-    ***REMOVED***
-***REMOVED***
+    }
+}

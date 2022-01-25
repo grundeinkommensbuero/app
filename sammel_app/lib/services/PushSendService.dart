@@ -15,7 +15,7 @@ abstract class AbstractPushSendService extends BackendService {
       List<String> recipients, PushData data, PushNotification notification);
 
   pushToAction(int actionId, PushData data, PushNotification notification);
-***REMOVED***
+}
 
 class PushSendService extends AbstractPushSendService {
   PushSendService(AbstractUserService userService, Backend backend)
@@ -26,35 +26,35 @@ class PushSendService extends AbstractPushSendService {
     if (recipients == null || recipients.isEmpty) {
       throw MissingTargetError(
           'Für Push-Nachrichten an Geräte muss mindestens ein Empfänger angegeben werden.');
-    ***REMOVED***
+    }
 
     try {
       post(
           'service/push/devices',
           jsonEncode(PushMessage(data, notification, recipients: recipients)
               .toJson()));
-    ***REMOVED*** catch (e, s) {
+    } catch (e, s) {
       ErrorService.handleError(e, s,
           context: 'Push-Nachricht an Geräte konnte nicht versandt werden');
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   pushToAction(
       int? actionId, PushData data, PushNotification notification) async {
     if (actionId == null) {
       throw MissingTargetError(
           'Für Push-Nachrichten an Aktionen muss die Aktions-ID angegeben werden.');
-    ***REMOVED***
+    }
 
     try {
       await post('service/push/action/$actionId',
           jsonEncode(PushMessage(data, notification).toJson()));
-    ***REMOVED*** catch (e, s) {
+    } catch (e, s) {
       ErrorService.handleError(e, s,
           context: 'Push-Nachricht an Aktion konnte nicht versandt werden.');
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***
+    }
+  }
+}
 
 class DemoPushSendService extends AbstractPushSendService {
   DemoPushSendService(AbstractUserService userService)
@@ -70,17 +70,17 @@ class DemoPushSendService extends AbstractPushSendService {
     if (recipients == null || recipients.isEmpty) {
       throw MissingTargetError(
           "Für Push-Nachrichten an Geräte muss mindestens ein Empfänger angegeben werden.");
-    ***REMOVED***
+    }
     controller.add(data);
-  ***REMOVED***
+  }
 
   pushToAction(int actionId, PushData data, PushNotification notification) {
     controller.add(data);
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 class MissingTargetError {
   String message;
 
   MissingTargetError(this.message);
-***REMOVED***
+}

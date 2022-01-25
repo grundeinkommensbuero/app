@@ -31,7 +31,7 @@ class ListLocationRestResourceTest {
     @Before
     fun setUp() {
         System.setProperty("de.kybernetik.listlocations.secret", "false")
-    ***REMOVED***
+    }
 
     @Test
     fun `converts ListLocation to ListLocationDto`() {
@@ -45,7 +45,7 @@ class ListLocationRestResourceTest {
         assertEquals(listLocationDto.number, curry36().nr)
         assertEquals(listLocationDto.latitude, curry36().laengengrad)
         assertEquals(listLocationDto.longitude, curry36().breitengrad)
-    ***REMOVED***
+    }
 
     @Test
     fun `converts ListLocation to ListLocationDto with missing data`() {
@@ -59,7 +59,7 @@ class ListLocationRestResourceTest {
         assertEquals(listLocationDto.number, "")
         assertEquals(listLocationDto.latitude, null)
         assertEquals(listLocationDto.longitude, null)
-    ***REMOVED***
+    }
 
     @Test
     @Suppress("UNCHECKED_CAST")
@@ -70,7 +70,7 @@ class ListLocationRestResourceTest {
         val list: List<ListLocationDto> = result.entity as List<ListLocationDto>
 
         assertTrue(list.isEmpty())
-    ***REMOVED***
+    }
 
     @Test
     @Suppress("UNCHECKED_CAST") // Datentyp für Entity
@@ -102,7 +102,7 @@ class ListLocationRestResourceTest {
         assertEquals(list[2].number, zukunft().nr)
         assertEquals(list[2].latitude, zukunft().laengengrad)
         assertEquals(list[2].longitude, zukunft().breitengrad)
-    ***REMOVED***
+    }
 
     @Test
     @Suppress("UNCHECKED_CAST") // Datentyp für Entity
@@ -130,7 +130,7 @@ class ListLocationRestResourceTest {
         assertEquals(list[1].number, zukunft().nr)
         assertEquals(list[1].latitude, zukunft().laengengrad)
         assertEquals(list[1].longitude, zukunft().breitengrad)
-    ***REMOVED***
+    }
 
     @Test
     @Suppress("UNCHECKED_CAST")
@@ -141,7 +141,7 @@ class ListLocationRestResourceTest {
         val list: List<ListLocationDto> = result.entity as List<ListLocationDto>
 
         assertEquals(list.size, 0)
-    ***REMOVED***
+    }
 
     @Test
     @Suppress("UNCHECKED_CAST")
@@ -152,5 +152,5 @@ class ListLocationRestResourceTest {
         val list: List<ListLocationDto> = result.entity as List<ListLocationDto>
 
         assertEquals(list.size, 0)
-    ***REMOVED***
-***REMOVED***
+    }
+}

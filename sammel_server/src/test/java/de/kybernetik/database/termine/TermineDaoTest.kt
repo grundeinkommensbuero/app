@@ -50,7 +50,7 @@ class TermineDaoTest {
     fun setUp() {
         System.setProperty("de.kybernetik.max-actions","100")
         System.setProperty("de.kybernetik.action-age","7")
-    ***REMOVED***
+    }
 
     @Test
     fun getTermineLiefertAlleTermineAusDbMitLeeremFilter() {
@@ -93,7 +93,7 @@ class TermineDaoTest {
         assertEquals(termine[1].teilnehmer[1].name, karl().name)
         assertEquals(termine[1].latitude, 52.48612)
         assertEquals(termine[1].longitude, 13.47192)
-    ***REMOVED***
+    }
 
     @Ignore("Funktion bis zum Release auskommentiert")
     @Test
@@ -113,7 +113,7 @@ class TermineDaoTest {
         assertEquals(datumCaptor.value.year, vor7tagen.year)
         assertEquals(datumCaptor.value.month, vor7tagen.month)
         assertEquals(datumCaptor.value.dayOfMonth, vor7tagen.dayOfMonth)
-    ***REMOVED***
+    }
 
     @Test
     fun erzeugeGetTermineQueryErgaenztTypenKlauselWennNichtNull() {
@@ -125,12 +125,12 @@ class TermineDaoTest {
 
         val queryCaptor = ArgumentCaptor.forClass(String::class.java)
         verify(entityManager, atLeastOnce()).createQuery(queryCaptor.capture(), any<Class<Termin>>())
-        assertTrue { queryCaptor.firstValue.contains("where termine.typ in (:typen)") ***REMOVED***
+        assertTrue { queryCaptor.firstValue.contains("where termine.typ in (:typen)") }
         val typenCaptor = ArgumentCaptor.forClass(List::class.java)
         verify(typedQuery, atLeastOnce()).setParameter(matches("typen"), typenCaptor.capture())
         assertTrue(typenCaptor.value.contains("Sammeln"))
         assertTrue(typenCaptor.value.contains("Infoveranstaltung"))
-    ***REMOVED***
+    }
 
     @Test
     fun erzeugeGetTermineQueryErgaenztTypenKlauselNICHTWennNull() {
@@ -142,7 +142,7 @@ class TermineDaoTest {
         verify(entityManager, atLeastOnce()).createQuery(queryCaptor.capture(), any<Class<Termin>>())
         assertFalse(queryCaptor.value.contains("where termine.typ in :typen"))
         verify(typedQuery, never()).setParameter(matches("typen"), any())
-    ***REMOVED***
+    }
 
     @Test
     fun erzeugeGetTermineQueryErgaenztTageKlauselWennNichtNull() {
@@ -160,7 +160,7 @@ class TermineDaoTest {
         verify(typedQuery, atLeastOnce()).setParameter(matches("tage"), tageCaptor.capture())
         assertTrue(tageCaptor.value.contains(heute.toDate()))
         assertTrue(tageCaptor.value.contains(heute.plusDays(1).toDate()))
-    ***REMOVED***
+    }
 
     @Test
     fun erzeugeGetTermineQueryErgaenztTageKlauselNICHTWennNull() {
@@ -172,7 +172,7 @@ class TermineDaoTest {
         verify(entityManager, atLeastOnce()).createQuery(queryCaptor.capture(), any<Class<Termin>>())
         assertFalse(queryCaptor.value.contains("where DATE(termine.beginn) in (:tage)"))
         verify(typedQuery, never()).setParameter(matches("tage"), any())
-    ***REMOVED***
+    }
 
     @Test
     fun erzeugeGetTermineQueryErgaenztVonKlauselWennNichtNull() {
@@ -187,7 +187,7 @@ class TermineDaoTest {
         verify(entityManager, atLeastOnce()).createQuery(queryCaptor.capture(), any<Class<Termin>>())
         assertTrue(queryCaptor.value.contains("TIME(termine.beginn) >= TIME(:von)"))
         verify(typedQuery, atLeastOnce()).setParameter("von", jetzt.atDate(LocalDate.now()))
-    ***REMOVED***
+    }
 
     @Test
     fun erzeugeGetTermineQueryErgaenztVonKlauselNICHTWennNull() {
@@ -199,7 +199,7 @@ class TermineDaoTest {
         verify(entityManager, atLeastOnce()).createQuery(queryCaptor.capture(), any<Class<Termin>>())
         assertFalse(queryCaptor.value.contains("where TIME(termine.beginn) >= TIME(:von)"))
         verify(typedQuery, never()).setParameter(matches("von"), any())
-    ***REMOVED***
+    }
 
     @Test
     fun erzeugeGetTermineQueryErgaenztBisKlauselWennNichtNull() {
@@ -214,7 +214,7 @@ class TermineDaoTest {
         verify(entityManager, atLeastOnce()).createQuery(queryCaptor.capture(), any<Class<Termin>>())
         assertTrue(queryCaptor.value.contains("TIME(termine.beginn) <= TIME(:bis)"))
         verify(typedQuery, atLeastOnce()).setParameter("bis", jetzt.atDate(LocalDate.now()))
-    ***REMOVED***
+    }
 
     @Test
     fun erzeugeGetTermineQueryErgaenztBisKlauselNICHTWennNull() {
@@ -226,7 +226,7 @@ class TermineDaoTest {
         verify(entityManager, atLeastOnce()).createQuery(queryCaptor.capture(), any<Class<Termin>>())
         assertFalse(queryCaptor.value.contains("where TIME(termine.beginn) <= TIME(:bis)"))
         verify(typedQuery, never()).setParameter(matches("von"), any())
-    ***REMOVED***
+    }
 
     @Test
     fun erzeugeGetTermineQueryErgaenztOrteKlauselWennNichtNull() {
@@ -242,7 +242,7 @@ class TermineDaoTest {
         val tageCaptor = ArgumentCaptor.forClass(List::class.java)
         verify(typedQuery, atLeastOnce()).setParameter(matches("orte"), tageCaptor.capture())
         assertEquals((tageCaptor.value[0] as String), "Frankfurter Allee Nord")
-    ***REMOVED***
+    }
 
     @Test
     fun erzeugeGetTermineQueryErgaenztOrteKlauselNICHTWennNull() {
@@ -254,7 +254,7 @@ class TermineDaoTest {
         verify(entityManager, atLeastOnce()).createQuery(queryCaptor.capture(), any<Class<Termin>>())
         assertFalse(queryCaptor.value.contains("where termine.ort in (:orte)"))
         verify(typedQuery, never()).setParameter(matches("orte"), any())
-    ***REMOVED***
+    }
 
     @Test
     fun erzeugeGetTermineQueryErgaenztAlleKlauselnWennNichtNull() {
@@ -282,7 +282,7 @@ class TermineDaoTest {
         verify(typedQuery, atLeastOnce()).setParameter(matches("von"), any())
         verify(typedQuery, atLeastOnce()).setParameter(matches("bis"), any())
         verify(typedQuery, atLeastOnce()).setParameter(matches("orte"), any())
-    ***REMOVED***
+    }
 
     @Test
     fun getTerminLiefertTerminMitDetailsAusDb() {
@@ -304,7 +304,7 @@ class TermineDaoTest {
 
         assertEquals(termin, terminInDb)
         assertEquals(termin!!.details, terminInDb.details)
-    ***REMOVED***
+    }
 
     @Test
     fun aktualisiereTerminSchreibtTerminInDb() {
@@ -324,7 +324,7 @@ class TermineDaoTest {
 
         verify(entityManager, atLeastOnce()).merge(termin)
         verify(entityManager, atLeastOnce()).flush()
-    ***REMOVED***
+    }
 
     @Test(expected = DatenkonsistenzException::class)
     fun `aktualisiereTerminSchreibt ueberprueft ob Termin-ID und TerminDetails-ID uebereinstimmen`() {
@@ -343,7 +343,7 @@ class TermineDaoTest {
         dao.aktualisiereTermin(termin)
 
         verify(entityManager, never()).merge(termin)
-    ***REMOVED***
+    }
 
     @Test
     fun erstelleNeuenTerminSchreibtTerminInDb() {
@@ -363,7 +363,7 @@ class TermineDaoTest {
 
         verify(entityManager, atLeastOnce()).persist(termin)
         verify(entityManager, atLeastOnce()).flush()
-    ***REMOVED***
+    }
 
     @Test
     fun loescheAktionRemovesActionInDb() {
@@ -397,7 +397,7 @@ class TermineDaoTest {
         verify(entityManager, atLeastOnce()).find(Termin::class.java, 1L)
         verify(entityManager, atLeastOnce()).remove(terminFromDb)
         verify(entityManager, atLeastOnce()).flush()
-    ***REMOVED***
+    }
 
     @Test(expected = DatabaseException::class)
     fun loescheAktionThrowsNotFoundExceptionIfActionDoesNotExist() {
@@ -416,7 +416,7 @@ class TermineDaoTest {
         whenever(entityManager.find(Termin::class.java, 1L)).thenThrow(IllegalArgumentException())
 
         dao.loescheAktion(termin)
-    ***REMOVED***
+    }
 
     @Test(expected = DatabaseException::class)
     fun loescheAktionThrowsNotFoundExceptionIfDeletionFails() {
@@ -446,7 +446,7 @@ class TermineDaoTest {
         whenever(entityManager.remove(actionFromDb)).thenThrow(IllegalArgumentException())
 
         dao.loescheAktion(termin)
-    ***REMOVED***
+    }
 
     @Test
     fun loadTokenLoadsTokenForActionIdFromDb() {
@@ -456,5 +456,5 @@ class TermineDaoTest {
 
         assertEquals(token!!.actionId, 12L)
         assertEquals(token.token, "token")
-    ***REMOVED***
-***REMOVED***
+    }
+}

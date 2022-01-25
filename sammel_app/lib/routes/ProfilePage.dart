@@ -20,7 +20,7 @@ import 'package:url_launcher/url_launcher.dart';
 class ProfilePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => ProfilePageState();
-***REMOVED***
+}
 
 class ProfilePageState extends State<ProfilePage> {
   var init = false;
@@ -40,7 +40,7 @@ class ProfilePageState extends State<ProfilePage> {
     'en': 'englisch',
     'ru': 'русский',
     'fr': 'français',
-  ***REMOVED***
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class ProfilePageState extends State<ProfilePage> {
           .loadMyKiez()
           .then((List<String>? kieze) => setState(() => myKieze = kieze ?? []));
       init = true;
-    ***REMOVED***
+    }
     var kiezeCaption = myKieze.join(', ');
 
     return Scaffold(
@@ -160,7 +160,7 @@ class ProfilePageState extends State<ProfilePage> {
                     onPressed: (context) => showPrivacyDialog(context),
                     editable: false),
                 SizedBox(height: 20.0),
-                SelectableText('User-ID: ${user?.id***REMOVED***',
+                SelectableText('User-ID: ${user?.id}',
                     textAlign: TextAlign.center),
                 SizedBox(height: 20.0),
               ],
@@ -169,7 +169,7 @@ class ProfilePageState extends State<ProfilePage> {
             child: Icon(Icons.info_outline_rounded,
                 size: 40.0, color: CampaignTheme.primary),
             onPressed: () => showAboutDialog(context)));
-  ***REMOVED***
+  }
 
   showKiezPicker() async {
     var selection = (await KiezPicker(
@@ -185,8 +185,8 @@ class ProfilePageState extends State<ProfilePage> {
       renewTopicSubscriptions(selection, interval);
       storageService?.saveMyKiez(selection);
       setState(() => myKieze = selection);
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   showLanguageDialog(BuildContext context) async {
     String? selection = await showDialog(
@@ -205,7 +205,7 @@ class ProfilePageState extends State<ProfilePage> {
 
     if (selection != null)
       EasyLocalization.of(context)!.setLocale(Locale(selection));
-  ***REMOVED***
+  }
 
   showNotificationDialog(BuildContext context) async {
     String? selection = await showDialog(
@@ -228,8 +228,8 @@ class ProfilePageState extends State<ProfilePage> {
       renewTopicSubscriptions(myKieze, selection);
       storageService?.saveNotificationInterval(selection);
       setState(() => interval = selection);
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   void renewTopicSubscriptions(List<String> newKieze, String newInterval) {
     if (interval != "nie")
@@ -238,8 +238,8 @@ class ProfilePageState extends State<ProfilePage> {
     if (newInterval != "nie")
       pushNotificationManager?.subscribeToKiezActionTopics(
           newKieze, newInterval);
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 showNotificationInfoDialog(BuildContext context) {
   showDialog(
@@ -260,7 +260,7 @@ showNotificationInfoDialog(BuildContext context) {
                     child: Text('Okay', textAlign: TextAlign.end).tr(),
                     onPressed: () => Navigator.pop(context))
               ]));
-***REMOVED***
+}
 
 showPrivacyDialog(BuildContext context) {
   showDialog(
@@ -281,7 +281,7 @@ showPrivacyDialog(BuildContext context) {
                     child: Text('Okay', textAlign: TextAlign.end).tr(),
                     onPressed: () => Navigator.pop(context))
               ]));
-***REMOVED***
+}
 
 class ProfileItem extends StatelessWidget {
   final Widget child;
@@ -293,7 +293,7 @@ class ProfileItem extends StatelessWidget {
       {required this.child,
       this.title = '',
       required this.onPressed,
-      this.editable = true***REMOVED***);
+      this.editable = true});
 
   @override
   Widget build(BuildContext context) {
@@ -334,8 +334,8 @@ class ProfileItem extends StatelessWidget {
                       ])),
                   editable ? Icon(Icons.edit) : SizedBox(),
                 ])));
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 showAboutDialog(BuildContext context) async {
   final packageInfo = await PackageInfo.fromPlatform();
@@ -344,7 +344,7 @@ showAboutDialog(BuildContext context) async {
       builder: (context) => AboutDialog(
             applicationName: 'Expedition Grund-\neinkommen',
             applicationVersion:
-                '${packageInfo.version***REMOVED*** (${packageInfo.buildNumber***REMOVED***)',
+                '${packageInfo.version} (${packageInfo.buildNumber})',
             children: [
               SizedBox(
                   height: 80, child: Image.asset('assets/images/xbge.png')),
@@ -389,4 +389,4 @@ showAboutDialog(BuildContext context) async {
               ]),
             ],
           ));
-***REMOVED***
+}

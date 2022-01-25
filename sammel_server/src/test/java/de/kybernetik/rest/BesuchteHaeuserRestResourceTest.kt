@@ -36,7 +36,7 @@ class BesuchteHaeuserRestResourceTest {
     @Before
     fun setUp() {
         whenever(context.userPrincipal).thenReturn(BasicUserPrincipal("11"))
-    ***REMOVED***
+    }
 
     @InjectMocks
     private lateinit var besuchteHaeuserRestResource: BesuchteHaeuserRestResource
@@ -62,7 +62,7 @@ class BesuchteHaeuserRestResourceTest {
         assertEquals("Potsdamer Straße 143, 10783 Berlin", entity[1].adresse)
         assertEquals(3L, entity[2].id)
         assertEquals("Klingelhöferstraße 8,Botschaftsviertel, Tiergarten, Mitte, Berlin, 10785", entity[2].adresse)
-    ***REMOVED***
+    }
 
         @Test
     fun erstelleBesuchtesHausRuftDaoAufUndKonvertiertDto() {
@@ -102,7 +102,7 @@ class BesuchteHaeuserRestResourceTest {
             "Mecklenburgische Straße 57, Wilmersdorf, Charlottenburg-Wilmersdorf, Berlin, 14197",
             argCaptor.firstValue.adresse
         )
-    ***REMOVED***
+    }
 
     @Test
     fun erstelleBesuchtesHausKorrigiertBenutzer() {
@@ -139,7 +139,7 @@ class BesuchteHaeuserRestResourceTest {
         assertEquals(11, argCaptor.firstValue.user_id)
 
         assertEquals(200, response.status)
-    ***REMOVED***
+    }
 
     @Test
     fun loescheBesuchtesHausErwartetIdAlsPathParameter() {
@@ -148,7 +148,7 @@ class BesuchteHaeuserRestResourceTest {
         assertEquals(422, response.status)
         assertEquals("Kein Besuchtes Haus an den Server gesendet", (response.entity as RestFehlermeldung).meldung)
         verify(dao, never()).loescheBesuchtesHaus(any())
-    ***REMOVED***
+    }
 
     @Test
     fun loescheBesuchtesHausErwartetExistierendeIdAlsPathParameter() {
@@ -159,7 +159,7 @@ class BesuchteHaeuserRestResourceTest {
         assertEquals(422, response.status)
         assertEquals("Keine gültiges Besuchtes Haus an den Server gesendet", (response.entity as RestFehlermeldung).meldung)
         verify(dao, never()).loescheBesuchtesHaus(any())
-    ***REMOVED***
+    }
 
     @Test
     fun loescheBesuchtesHausWeistFalschenBenutzerZurueck() {
@@ -170,7 +170,7 @@ class BesuchteHaeuserRestResourceTest {
         assertEquals(403, response.status)
         assertEquals("Haus wurde von einer anderen Benutzer*in eingetragen", (response.entity as RestFehlermeldung).meldung)
         verify(dao, never()).loescheBesuchtesHaus(any())
-    ***REMOVED***
+    }
 
     @Test
     fun loescheBesuchtesHausAkzeptiertRichtigenBenutzerUndLoeschtHaus() {
@@ -181,5 +181,5 @@ class BesuchteHaeuserRestResourceTest {
 
         assertEquals(200, response.status)
         verify(dao, times(1)).loescheBesuchtesHaus(kanzlerinamt)
-    ***REMOVED***
-***REMOVED***
+    }
+}

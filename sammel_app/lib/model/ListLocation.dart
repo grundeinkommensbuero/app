@@ -16,4 +16,4 @@ class ListLocation {
         number = jsonListLocation['number'],
         latitude = jsonListLocation['latitude'],
         longitude = jsonListLocation['longitude'];
-***REMOVED***
+}

@@ -24,16 +24,16 @@ class ChatWindow extends StatefulWidget {
   final Termin termin;
   final bool writable;
 
-  ChatWindow(this.channel, this.termin, this.writable, {Key? key***REMOVED***)
+  ChatWindow(this.channel, this.termin, this.writable, {Key? key})
       : super(key: key);
 
   @override
   ChatWindowState createState() => ChatWindowState(channel, termin);
-***REMOVED***
+}
 
 abstract class ChannelChangeListener {
   void channelChanged(ChatChannel channel);
-***REMOVED***
+}
 
 class ChatWindowState extends State<ChatWindow> {
   FocusNode? focusNode;
@@ -49,7 +49,7 @@ class ChatWindowState extends State<ChatWindow> {
 
   ChatWindowState(this.channel, this.termin) {
     this.widgetList = ChatListWidget(this.channel);
-  ***REMOVED***
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,12 +59,12 @@ class ChatWindowState extends State<ChatWindow> {
           .listen((user) => setState(() => this.user = user));
       pushService = Provider.of<AbstractPushSendService>(context);
       initialized = true;
-    ***REMOVED***
+    }
 
     var inputWidget;
     if (widget.writable) {
       inputWidget = ChatInputWidget(onSendMessage);
-    ***REMOVED***
+    }
     var headerWidget = buildHeader(widget.termin);
     Scaffold page = Scaffold(
         appBar: headerWidget,
@@ -73,7 +73,7 @@ class ChatWindowState extends State<ChatWindow> {
           widget.writable ? inputWidget : null
         ]));
     return page;
-  ***REMOVED***
+  }
 
   buildHeader(Termin termin) {
     return AppBar(
@@ -94,7 +94,7 @@ class ChatWindowState extends State<ChatWindow> {
               softWrap: false,
               overflow: TextOverflow.fade),
           Text(
-              'am ${ChronoHelfer.formatDateOfDateTime(termin.beginn)***REMOVED***, um ${ChronoHelfer.dateTimeToStringHHmm(termin.beginn)***REMOVED*** Uhr',
+              'am ${ChronoHelfer.formatDateOfDateTime(termin.beginn)}, um ${ChronoHelfer.dateTimeToStringHHmm(termin.beginn)} Uhr',
               style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.normal),
               overflow: TextOverflow.fade)
         ]),
@@ -105,11 +105,11 @@ class ChatWindowState extends State<ChatWindow> {
                   tooltip: 'Show Chat Member',
                   onPressed: () {
                     openMemberPage(context, termin.participants!);
-                  ***REMOVED***,
+                  },
                 )
               : Container(),
         ]);
-  ***REMOVED***
+  }
 
   void openMemberPage(BuildContext context, List<User> participants) {
     Navigator.push(context, MaterialPageRoute(
@@ -120,14 +120,14 @@ class ChatWindowState extends State<ChatWindow> {
           ),
           body: createMemberListWidget(participants),
         );
-      ***REMOVED***,
+      },
     ));
-  ***REMOVED***
+  }
 
   Widget createMemberListWidget(List<User> participants) {
     if (participants.length == 0) {
       return Text('Keine Teilnehmer*innen').tr();
-    ***REMOVED*** else {
+    } else {
       List<Widget> users = participants
           .where((user) => user.name != null && user.name!.isEmpty)
           .where((user) => user.color != null)
@@ -140,21 +140,21 @@ class ChatWindowState extends State<ChatWindow> {
           0,
           Padding(
               padding: EdgeInsets.only(left: 15, top: 5, bottom: 5),
-              child: Text('{count***REMOVED*** Teilnehmer*innen im Chat',
+              child: Text('{count} Teilnehmer*innen im Chat',
                       style: TextStyle(
                           fontSize: 15, fontWeight: FontWeight.normal))
                   .tr(namedArgs: {
                 'count': (users.length + aCount).toString()
-              ***REMOVED***)));
+              })));
       if (aCount > 0) {
         users.add(createUserWidget(
-            '+ {count***REMOVED*** weitere Teilnehmer*innen'
-                .tr(namedArgs: {'count': aCount.toString()***REMOVED***),
+            '+ {count} weitere Teilnehmer*innen'
+                .tr(namedArgs: {'count': aCount.toString()}),
             Colors.black));
-      ***REMOVED***
+      }
       return SingleChildScrollView(child: Column(children: users));
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   Padding createUserWidget(String name, Color color) => Padding(
       padding: EdgeInsets.only(left: 15, top: 5, bottom: 5),
@@ -180,7 +180,7 @@ class ChatWindowState extends State<ChatWindow> {
     if (isBlank(name)) {
       name = await showUsernameDialog(context: context);
       if (name == null) return;
-    ***REMOVED***
+    }
 
     ChatMessage message = ChatMessage(
         text: controller.text,
@@ -195,44 +195,44 @@ class ChatWindowState extends State<ChatWindow> {
         mpd,
         PushNotification(
             'Neue Chat-Nachricht',
-            "Zu ${termin.typ***REMOVED*** "
-                'am ${ChronoHelfer.formatDateOfDateTime(termin.beginn)***REMOVED***, '
-                'um ${ChronoHelfer.dateTimeToStringHHmm(termin.beginn)***REMOVED*** '
-                ', ${termin.ort.ortsteil***REMOVED***'));
+            "Zu ${termin.typ} "
+                'am ${ChronoHelfer.formatDateOfDateTime(termin.beginn)}, '
+                'um ${ChronoHelfer.dateTimeToStringHHmm(termin.beginn)} '
+                ', ${termin.ort.ortsteil}'));
     channel.pushMessages([message]);
     Provider.of<StorageService>(context, listen: false)
         .saveChatChannel(channel);
     controller.clear();
-  ***REMOVED***
+  }
 
   @override
   void initState() {
     super.initState();
     focusNode = FocusNode();
     focusNode!.addListener(onFocusChange);
-  ***REMOVED***
+  }
 
   @override
   void dispose() {
     this.channel.disposeListener();
     focusNode?.dispose();
     super.dispose();
-  ***REMOVED***
+  }
 
   void onFocusChange() {
     if (focusNode?.hasFocus ?? false) {
       textFieldHasFocus = true;
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   void backArrowPressed(BuildContext context) {
     if (textFieldHasFocus) {
       textFieldHasFocus = false;
       FocusScope.of(context).requestFocus(FocusNode());
-    ***REMOVED*** else {
+    } else {
       this.channel.disposeListener();
       focusNode?.dispose();
       Navigator.pop(context);
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***
+    }
+  }
+}

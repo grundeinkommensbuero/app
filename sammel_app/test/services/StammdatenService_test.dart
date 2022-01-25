@@ -16,7 +16,7 @@ void main() {
   setUp(() {
     StammdatenService.fileReader = TestFileReader();
     stammdatenService = StammdatenService();
-  ***REMOVED***);
+  });
 
   test('reads Kiez main features from files', () async {
     var kieze = await stammdatenService.kieze;
@@ -34,8 +34,8 @@ void main() {
     expect(kieze.toList()[2].ortsteil, 'Wilmersdorf');
     expect(kieze.toList()[2].region, 'CW 6');
     expect(kieze.toList()[2].name, 'Forst Grunewald');
-  ***REMOVED***);
-***REMOVED***
+  });
+}
 
 class TestFileReader extends Mock implements FileReader {
   late Future<String> kieze;
@@ -46,5 +46,5 @@ class TestFileReader extends Mock implements FileReader {
     kieze = Future.value(kiezeFile.readAsString());
     regionen = Future.value(regionenFile.readAsString());
     ortsteile = Future.value(ortsteileFile.readAsString());
-  ***REMOVED***
-***REMOVED***
+  }
+}

@@ -4,7 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/rendering.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
 
-enum MapActionType { NewAction, NewPlacard, NewVisitedHouse, Cancel ***REMOVED***
+enum MapActionType { NewAction, NewPlacard, NewVisitedHouse, Cancel }
 
 Future<MapActionType> showMapActionDialog(BuildContext context) async =>
     await showDialog(

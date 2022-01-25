@@ -14,16 +14,16 @@ class Subscription {
     constructor(benutzer: Long, topic: String) {
         this.benutzer = benutzer
         this.topic = topic
-    ***REMOVED***
+    }
 
     @Id
     var benutzer: Long = 0
 
     @Id
     lateinit var topic: String
-***REMOVED***
+}
 
 @Suppress("unused") // für JPA
 class SubscriptionKey(private var benutzer: Long = 0, private var topic: String) : Serializable {
     constructor() : this(0,"")
-***REMOVED***
+}

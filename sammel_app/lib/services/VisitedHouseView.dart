@@ -16,15 +16,15 @@ class BoundingBox {
         point.latitude <= maxLatitude &&
         minLongitude <= point.longitude &&
         point.longitude <= maxLongitude;
-  ***REMOVED***
+  }
 
   bool intersect(BoundingBox bbox) {
     return minLatitude < bbox.maxLatitude &&
         bbox.minLatitude < maxLatitude &&
         minLongitude < bbox.maxLongitude &&
         bbox.minLongitude < maxLongitude;
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 class VisitedHouseView {
   List<SelectableVisitedHouse> houses;
@@ -36,12 +36,12 @@ class VisitedHouseView {
   SelectableVisitedHouse? getHouseByPoint(LatLng point) {
     if (!bbox.containsPoint(point)) {
       return null;
-    ***REMOVED***
+    }
     for (SelectableVisitedHouse house in houses) {
       if (house.inside(point)) return house;
-    ***REMOVED***
+    }
     return null;
-  ***REMOVED***
+  }
 
   selectHouse(LatLng point) {
     SelectableVisitedHouse? newSelectedHouse = getHouseByPoint(point);
@@ -49,9 +49,9 @@ class VisitedHouseView {
     selectedHouse?.selected = false;
     if (newSelectedHouse != null) {
       selectedHouse = newSelectedHouse;
-    ***REMOVED***
+    }
     return newSelectedHouse;
-  ***REMOVED***
+  }
 
   List<Polygon> buildDrawablePolygonsFromView() {
     List<SelectableVisitedHouse> houseslist = [];
@@ -73,5 +73,5 @@ class VisitedHouseView {
         .toList();
 
     return polygons;
-  ***REMOVED***
-***REMOVED***
+  }
+}

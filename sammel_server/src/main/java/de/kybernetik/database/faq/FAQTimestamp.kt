@@ -12,4 +12,4 @@ class FAQTimestamp @Suppress("unused") constructor() {
     @Id
     @Column
     lateinit var timestamp: LocalDateTime
-***REMOVED***
+}

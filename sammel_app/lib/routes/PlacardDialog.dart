@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
 
-enum PlacardDialogAction { DELETE, TAKE_DOWN, CANCEL ***REMOVED***
+enum PlacardDialogAction { DELETE, TAKE_DOWN, CANCEL }
 
 Future<PlacardDialogAction> showPlacardDialog(
         BuildContext context, bool mine) async =>

@@ -13,8 +13,8 @@ data class PushMessageDto(
     companion object {
         fun convertFromPushMessage(pushMessage: PushMessage): PushMessageDto =
             PushMessageDto(pushMessage.getBenachrichtigung(), pushMessage.getDaten(), null, null)
-    ***REMOVED***
-***REMOVED***
+    }
+}
 
 data class PushNotificationDto(
     var title: String? = null,

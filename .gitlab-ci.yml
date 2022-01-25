@@ -3,7 +3,7 @@
 
 # Caching Maven und Flutter Repositories
 cache:
-  key: ${CI_COMMIT_REF_SLUG***REMOVED***
+  key: ${CI_COMMIT_REF_SLUG}
   paths:
     - .m2/repository
     - /home/cirrus/.pub-cache

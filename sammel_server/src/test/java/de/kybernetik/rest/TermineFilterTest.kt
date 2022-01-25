@@ -21,5 +21,5 @@ class TermineFilterTest {
         assertEquals(filter.von?.hour,12)
         assertEquals(filter.bis?.hour, 18)
         assertEquals(filter.orte!![0], "Frankfurter Allee Nord")
-    ***REMOVED***
-***REMOVED***
+    }
+}

@@ -6,7 +6,7 @@ import 'package:sammel_app/services/ErrorService.dart';
 import 'package:sammel_app/services/UserService.dart';
 
 Future<String?> showUsernameDialog(
-        {required BuildContext context, bool hideHint = false***REMOVED***) =>
+        {required BuildContext context, bool hideHint = false}) =>
     showDialog(
       context: context,
       builder: (context) => UsernameDialog(hideHint),
@@ -19,7 +19,7 @@ class UsernameDialog extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => UsernameDialogState();
-***REMOVED***
+}
 
 class UsernameDialogState extends State<UsernameDialog> {
   String? username;
@@ -58,18 +58,18 @@ class UsernameDialogState extends State<UsernameDialog> {
         ),
       ],
     );
-  ***REMOVED***
+  }
 
   changeUserNameAndClose() async {
     try {
       await Provider.of<AbstractUserService>(context, listen: false)
           .updateUsername(username!);
       Navigator.pop(context, username);
-    ***REMOVED*** catch (e) {
+    } catch (e) {
       ErrorService.handleError(e, StackTrace.current);
       Navigator.pop(context, null);
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   isValid() => isNotBlank(username);
-***REMOVED***
+}

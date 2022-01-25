@@ -15,6 +15,6 @@ void main() {
         '"stunden":3.5,'
         '"kommentar":"nice",'
         '"situation":"normal",'
-        '"ausgefallen":false***REMOVED***');
-  ***REMOVED***);
-***REMOVED***
+        '"ausgefallen":false}');
+  });
+}

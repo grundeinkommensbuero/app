@@ -60,5 +60,5 @@ class Evaluation {
         this.kommentar = kommentar
         this.situation = situation
         this.ausgefallen = ausgefallen
-    ***REMOVED***
-***REMOVED***
+    }
+}

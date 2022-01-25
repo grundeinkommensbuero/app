@@ -31,12 +31,12 @@ open class BesuchteHaeuserRestResource {
     open fun getBesuchteHaeuser(): Response {
         LOG.debug("Lade alle Besuchten Häuser")
         val besuchteHaeuser = dao.ladeAlleBesuchtenHaeuser()
-        LOG.debug("${besuchteHaeuser***REMOVED*** Besuchte Häuser gefunden")
+        LOG.debug("${besuchteHaeuser} Besuchte Häuser gefunden")
         return Response
             .ok()
-            .entity(besuchteHaeuser.map { besuchtesHaus -> BesuchtesHausDto.convertFromBesuchtesHaus(besuchtesHaus) ***REMOVED***)
+            .entity(besuchteHaeuser.map { besuchtesHaus -> BesuchtesHausDto.convertFromBesuchtesHaus(besuchtesHaus) })
             .build()
-    ***REMOVED***
+    }
 
     @POST
     @RolesAllowed("user")
@@ -45,56 +45,56 @@ open class BesuchteHaeuserRestResource {
     @Path("neu")
     open fun erstelleBesuchtesHaus(besuchtesHausDto: BesuchtesHausDto): Response {
         if (besuchtesHausDto.benutzer.toString() != context.userPrincipal.name) {
-            LOG.warn("Benutzer*in ${besuchtesHausDto.benutzer***REMOVED*** des Besuchten Hauses stimmt nicht überein mit Benutzer*in ${context.userPrincipal.name***REMOVED*** der Request")
+            LOG.warn("Benutzer*in ${besuchtesHausDto.benutzer} des Besuchten Hauses stimmt nicht überein mit Benutzer*in ${context.userPrincipal.name} der Request")
             besuchtesHausDto.benutzer = context.userPrincipal.name.toLong()
-        ***REMOVED***
+        }
 
         val besuchtesHaus: BesuchtesHaus
         try {
             besuchtesHaus = dao.erstelleBesuchtesHaus(besuchtesHausDto.convertToBesuchtesHaus())
-        ***REMOVED*** catch (e: FehlenderWertException) {
+        } catch (e: FehlenderWertException) {
             LOG.error(e.message)
             return Response.status(322).entity(RestFehlermeldung(e.message)).build()
-        ***REMOVED***
-        LOG.info("Neues Besuchtes Haus ${besuchtesHaus.id***REMOVED*** durch Benutzer ${context.userPrincipal.name***REMOVED*** erstellt")
+        }
+        LOG.info("Neues Besuchtes Haus ${besuchtesHaus.id} durch Benutzer ${context.userPrincipal.name} erstellt")
         return Response.ok().entity(BesuchtesHausDto.convertFromBesuchtesHaus(besuchtesHaus)).build()
-    ***REMOVED***
+    }
 
     @DELETE
     @RolesAllowed("user")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("{id***REMOVED***")
+    @Path("{id}")
     open fun loescheBesuchtesHaus(@PathParam("id") id: Long?): Response {
         if (id == null) {
-            LOG.warn("Fehlende id in Lösch-Request für Besuchtes Haus durch Benutzer*in ${context.userPrincipal.name***REMOVED***")
+            LOG.warn("Fehlende id in Lösch-Request für Besuchtes Haus durch Benutzer*in ${context.userPrincipal.name}")
             return Response.status(422)
                 .entity(RestFehlermeldung("Kein Besuchtes Haus an den Server gesendet"))
                 .build()
-        ***REMOVED***
+        }
 
         val besuchtesHaus = dao.ladeBesuchtesHaus(id)
 
         if (besuchtesHaus == null) {
-            LOG.warn("Benutzer*in ${context.userPrincipal.name***REMOVED*** versucht unbekanntes Besuchtes Haus ${id***REMOVED*** zu löschen")
+            LOG.warn("Benutzer*in ${context.userPrincipal.name} versucht unbekanntes Besuchtes Haus ${id} zu löschen")
             return Response.status(422)
                 .entity(RestFehlermeldung("Keine gültiges Besuchtes Haus an den Server gesendet"))
                 .build()
-        ***REMOVED***
+        }
 
         if (besuchtesHaus.user_id.toString() != context.userPrincipal.name) {
-            LOG.warn("Benutzer*in ${context.userPrincipal.name***REMOVED*** versucht fremdes Besuchtes Haus ${id***REMOVED*** zu löschen. Löschversuch verhindert.")
+            LOG.warn("Benutzer*in ${context.userPrincipal.name} versucht fremdes Besuchtes Haus ${id} zu löschen. Löschversuch verhindert.")
             return Response.status(403)
                 .entity(RestFehlermeldung("Haus wurde von einer anderen Benutzer*in eingetragen"))
                 .build()
-        ***REMOVED***
+        }
 
-        LOG.info("Lösche Besuchtes Haus ${besuchtesHaus.id***REMOVED*** durch Benutzer*in ${context.userPrincipal.name***REMOVED***")
+        LOG.info("Lösche Besuchtes Haus ${besuchtesHaus.id} durch Benutzer*in ${context.userPrincipal.name}")
         dao.loescheBesuchtesHaus(besuchtesHaus)
 
         return Response.ok().build()
-    ***REMOVED***
-***REMOVED***
+    }
+}
 
 data class BesuchtesHausDto(
     var id: Long? = null,
@@ -120,7 +120,7 @@ data class BesuchtesHausDto(
             id ?: 0, latitude!!, longitude!!, adresse ?: "", hausteil, shape, osmId, datum ?: LocalDate.now(),
             benutzer!!
         )
-    ***REMOVED***
+    }
 
     companion object {
         fun convertFromBesuchtesHaus(besuchtesHaus: BesuchtesHaus): BesuchtesHausDto {
@@ -135,6 +135,6 @@ data class BesuchtesHausDto(
                 besuchtesHaus.datum,
                 besuchtesHaus.user_id
             )
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+        }
+    }
+}

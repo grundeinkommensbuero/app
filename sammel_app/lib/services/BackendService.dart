@@ -21,17 +21,17 @@ class BackendService {
   final Backend backend;
   late AbstractUserService userService;
 
-  static Map<String, String> appHeaders = {'Authorization': 'Basic $appAuth'***REMOVED***
+  static Map<String, String> appHeaders = {'Authorization': 'Basic $appAuth'};
 
   BackendService(AbstractUserService? userService, this.backend) {
     // UserService ist sein eigener UserService
     if (!(this is AbstractUserService)) {
       if (userService == null) throw ArgumentError.notNull('userService');
       this.userService = userService;
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
-  Future<HttpClientResponseBody> get(String url, {bool? appAuth***REMOVED***) async {
+  Future<HttpClientResponseBody> get(String url, {bool? appAuth}) async {
     try {
       var response = await backend
           .get(url, await authHeaders(appAuth))
@@ -45,13 +45,13 @@ class BackendService {
 
       // else
       throw RestFehler(response.body.toString());
-    ***REMOVED*** on SocketException catch (e) {
+    } on SocketException catch (e) {
       return await checkConnectivity(originalError: e);
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   Future<HttpClientResponseBody> post(String url, String data,
-      {Map<String, String>? parameters, bool? appAuth***REMOVED***) async {
+      {Map<String, String>? parameters, bool? appAuth}) async {
     try {
       Future<HttpClientResponseBody> post =
           backend.post(url, data, await authHeaders(appAuth), parameters);
@@ -71,13 +71,13 @@ class BackendService {
 
       // else
       throw RestFehler(response.body.toString());
-    ***REMOVED*** on SocketException catch (e) {
+    } on SocketException catch (e) {
       return await checkConnectivity(originalError: e);
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   Future<HttpClientResponseBody> delete(String url,
-      {String? data, bool? appAuth***REMOVED***) async {
+      {String? data, bool? appAuth}) async {
     try {
       var response = await backend
           .delete(url, data, await authHeaders(appAuth))
@@ -92,10 +92,10 @@ class BackendService {
 
       // else
       throw RestFehler(response.body.toString());
-    ***REMOVED*** on SocketException catch (e) {
+    } on SocketException catch (e) {
       return await checkConnectivity(originalError: e);
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   Future<Map<String, String>> authHeaders(bool? appAuth) {
     if (appAuth != null && appAuth)
@@ -103,15 +103,15 @@ class BackendService {
     else
       return userService.userHeaders.timeout(Duration(seconds: 20),
           onTimeout: () => throw NoUserAuthException);
-  ***REMOVED***
+  }
 
   // http client throws SocketException on connection errors
-  Future<HttpClientResponseBody> checkConnectivity({originalError***REMOVED***) async {
+  Future<HttpClientResponseBody> checkConnectivity({originalError}) async {
     if ((await Connectivity().checkConnectivity()) == ConnectivityResult.none) {
       // no internet connection
       throw ConnectivityException(
           'Es scheint keine Internet-Verbindung zu bestehen.');
-    ***REMOVED***
+    }
 
     var healthCall = backend.getServerHealth();
     var googleCall = backend.callGoogle();
@@ -123,40 +123,40 @@ class BackendService {
                 // both server and google don't respond
                 throw ConnectivityException(
                     "Die Internet-Verbindung scheint sehr langsam zu sein.");
-              ***REMOVED***).then((_) {
+              }).then((_) {
                 // server doesn't respond but google does
                 throw ConnectivityException(
                     'Der Server antwortet leider nicht. Möglicherweise ist er überlastet, versuch es doch später nochmal');
-              ***REMOVED***));
+              }));
       // Server responds and is healthy
       if (serverHealth.alive)
         throw ConnectivityException(
             'Ein Verbindungsproblem ist aufgetreten: '.tr() +
-                '${originalError?.message***REMOVED***');
+                '${originalError?.message}');
       else
         // Server responds but has issues
         throw throw ConnectivityException(
             'Der Server hat leider gerade technische Probleme: '.tr() +
                 serverHealth.status);
-    ***REMOVED*** on SocketException catch (e) {
+    } on SocketException catch (e) {
       try {
         await googleCall;
         // server refuses but google answers
         throw ConnectivityException(
-            'Der Server reagiert nicht, obwohl eine Internet-Verbindung besteht. Vielleicht gibt es ein technisches Problem, bitte versuch es später nochmal. ${e.message***REMOVED***');
-      ***REMOVED*** on SocketException catch (e) {
+            'Der Server reagiert nicht, obwohl eine Internet-Verbindung besteht. Vielleicht gibt es ein technisches Problem, bitte versuch es später nochmal. ${e.message}');
+      } on SocketException catch (e) {
         // both server and google refuse
         throw ConnectivityException(
             'Das Internet scheint nicht erreichbar zu sein: '.tr() + e.message);
-      ***REMOVED***
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***
+      }
+    }
+  }
+}
 
 class NoUserAuthException implements Exception {
   var message =
       'Es ist ein Fehler aufgetreten beim Verifizieren deines Benutzer*in-Accounts. Probiere es eventuell zu einem späteren Zeitpunkt noch einmal oder versuche die App nochmal neu zu installieren, wenn du keine eigenen Aktionen betreust.';
-***REMOVED***
+}
 
 class Backend {
   final Future<void> zertifikatGeladen = ladeZertifikat().timeout(
@@ -170,7 +170,7 @@ class Backend {
   static final Map<String, String> headers = {
     HttpHeaders.contentTypeHeader: "application/json; charset=utf-8",
     HttpHeaders.acceptHeader: "*/*",
-  ***REMOVED***
+  };
 
   Backend() {
     Future.wait([getServerHealth(), PackageInfo.fromPlatform()]).then((values) {
@@ -178,21 +178,21 @@ class Backend {
       final version = values[1] as PackageInfo;
       if (!health.alive)
         ErrorService.handleError(
-            WarningException("Der Server meldet Probleme: ${health.status***REMOVED***"),
+            WarningException("Der Server meldet Probleme: ${health.status}"),
             StackTrace.current);
       if (int.parse(version.buildNumber) <
           int.parse(
               health.minClient.substring(health.minClient.indexOf('+') + 1)))
         ErrorService.handleError(
             WarningException(
-                'Deine App-Version ist veraltet. Dies ist die Version {version***REMOVED***, du musst aber mindestens Version {minClient***REMOVED*** benutzen, damit die App richtig funktioniert.'
+                'Deine App-Version ist veraltet. Dies ist die Version {version}, du musst aber mindestens Version {minClient} benutzen, damit die App richtig funktioniert.'
                     .tr(namedArgs: {
-              'version': '${version.version***REMOVED***+${version.buildNumber***REMOVED***',
+              'version': '${version.version}+${version.buildNumber}',
               'minClient': health.minClient
-            ***REMOVED***)),
+            })),
             StackTrace.current);
-    ***REMOVED***);
-  ***REMOVED***
+    });
+  }
 
   // Assets müssen außerhalb von Widgets mit dieser asynchronen Funktion ermittelt werden
   // Darum kann das Zertifikat nicht bei der Initialisierung geladen werden
@@ -204,8 +204,8 @@ class Backend {
     if (localMode) {
       ByteData data = await rootBundle.load(localCertificate);
       clientContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   static String rootCertificate = 'assets/security/root-cert.pem';
   static String localCertificate = 'assets/security/sammel-server_local.pem';
@@ -222,18 +222,18 @@ class Backend {
               .forEach((key, value) => request.headers.add(key, value));
           headers.forEach((key, value) => request.headers.add(key, value));
           return request.close();
-        ***REMOVED***)
+        })
         .then(HttpBodyHandler.processResponse)
         .then((HttpClientResponseBody body) {
           if (body.type != "json") {
             throw WrongResponseFormatException(
-                'Get-Request bekommt "${body.type***REMOVED***",'
-                ' statt "json" - Response zurück: ${body.body***REMOVED***');
-          ***REMOVED*** else {
+                'Get-Request bekommt "${body.type}",'
+                ' statt "json" - Response zurück: ${body.body}');
+          } else {
             return body;
-          ***REMOVED***
-        ***REMOVED***);
-  ***REMOVED***
+          }
+        });
+  }
 
   Future<HttpClientResponseBody> post(
       String url, String data, Map<String, String> headers,
@@ -247,20 +247,20 @@ class Backend {
           headers.forEach((key, value) => request.headers.add(key, value));
           request.write(data);
           return request.close();
-        ***REMOVED***)
+        })
         .then(HttpBodyHandler.processResponse)
         .then((HttpClientResponseBody body) {
           if (body.type != "json" &&
               ((body is List && (body.body as List).isNotEmpty) ||
                   ((body is String && (body as String).isEmpty)))) {
-            var message = 'Post-Request bekommt "${body.type***REMOVED***",'
-                ' statt "json" - Response zurück: ${body.body***REMOVED***';
+            var message = 'Post-Request bekommt "${body.type}",'
+                ' statt "json" - Response zurück: ${body.body}';
             throw WrongResponseFormatException(message);
-          ***REMOVED*** else {
+          } else {
             return body;
-          ***REMOVED***
-        ***REMOVED***);
-  ***REMOVED***
+          }
+        });
+  }
 
   Future<HttpClientResponseBody> delete(
       String url, String? data, Map<String, String> headers) async {
@@ -273,44 +273,44 @@ class Backend {
           headers.forEach((key, value) => request.headers.add(key, value));
           request.write(data);
           return request.close();
-        ***REMOVED***)
+        })
         .then(HttpBodyHandler.processResponse)
         .then((HttpClientResponseBody body) {
           if (body.type != "json" &&
               ((body is List && (body.body as List).isNotEmpty) ||
                   ((body is String && (body as String).isEmpty)))) {
-            var message = 'Delete-Request bekommt "${body.type***REMOVED***",'
-                ' statt "json" - Response zurück: ${body.body***REMOVED***';
+            var message = 'Delete-Request bekommt "${body.type}",'
+                ' statt "json" - Response zurück: ${body.body}';
             throw WrongResponseFormatException(message);
-          ***REMOVED*** else {
+          } else {
             return body;
-          ***REMOVED***
-        ***REMOVED***);
-  ***REMOVED***
+          }
+        });
+  }
 
   // from https://stackoverflow.com/questions/27808848/retrieving-the-response-body-from-an-httpclientresponse
   static String body(List<dynamic> response) {
     return response.map((dyn) => dyn as String).join();
-  ***REMOVED***
+  }
 
   Future<void> callGoogle() =>
       client.get("google.de", 80, '').then((r) => r.close());
 
-  Future<ServerHealth> getServerHealth() => get('service/health', {***REMOVED***)
+  Future<ServerHealth> getServerHealth() => get('service/health', {})
       .then((HttpClientResponseBody body) => ServerHealth.fromJson(body.body));
-***REMOVED***
+}
 
 class WrongResponseFormatException implements ServerException {
   final String message;
 
   WrongResponseFormatException([this.message = 'Falsches Format']);
-***REMOVED***
+}
 
 class ConnectivityException implements Exception {
   var message;
 
   ConnectivityException(this.message);
-***REMOVED***
+}
 
 class DemoBackend implements Backend {
   @override
@@ -336,6 +336,6 @@ class DemoBackend implements Backend {
 
   @override
   Future<void> get zertifikatGeladen => throw UnimplementedError();
-***REMOVED***
+}
 
-class DemoBackendShouldNeverBeUsedError {***REMOVED***
+class DemoBackendShouldNeverBeUsedError {}

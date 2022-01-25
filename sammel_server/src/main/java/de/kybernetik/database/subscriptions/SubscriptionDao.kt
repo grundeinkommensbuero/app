@@ -20,22 +20,22 @@ open class SubscriptionDao {
             .createQuery("from Subscriptions where topic = :topic", Subscription::class.java)
             .setParameter("topic", topic)
             .resultList
-            ?.map { it.benutzer ***REMOVED*** ?: emptyList()
+            ?.map { it.benutzer } ?: emptyList()
 
-        LOG.debug("Subscriber gefunden: $subscriber***REMOVED***")
+        LOG.debug("Subscriber gefunden: $subscriber}")
         return subscriber
-    ***REMOVED***
+    }
 
     open fun subscribe(benutzerId: Long, topics: List<String>) {
         LOG.debug("Subscribe Benutzer $benutzerId an Topics $topics")
         for (topic in topics) entityManager.merge(Subscription(benutzerId, topic))
-    ***REMOVED***
+    }
 
     open fun unsubscribe(benutzerId: Long, topics: List<String>) {
         LOG.debug("Unsubscribe Benutzer $benutzerId von Topics $topics")
         for (topic in topics) {
             val subscription = entityManager.find(Subscription::class.java, SubscriptionKey(benutzerId, topic))
             if (subscription != null) entityManager.remove(subscription)
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+        }
+    }
+}

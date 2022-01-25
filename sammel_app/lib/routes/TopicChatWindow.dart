@@ -13,12 +13,12 @@ class TopicChatWindow extends StatefulWidget {
   final ChatChannel channel;
   final bool buildHeader;
 
-  TopicChatWindow(this.channel, this.buildHeader, {Key? key***REMOVED***)
+  TopicChatWindow(this.channel, this.buildHeader, {Key? key})
       : super(key: key);
 
   @override
   TopicChatWindowState createState() => TopicChatWindowState(channel);
-***REMOVED***
+}
 
 class TopicChatWindowState extends State<TopicChatWindow>
     implements ChannelChangeListener {
@@ -30,7 +30,7 @@ class TopicChatWindowState extends State<TopicChatWindow>
   TopicChatWindowState(ChatChannel channel) {
     channel.registerChannelChangeListener(this);
     messages = channel.channelMessages.map((e) => e as ChatMessage).toList();
-  ***REMOVED***
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class TopicChatWindowState extends State<TopicChatWindow>
                   reverse: true,
                 ),
                 padding: EdgeInsets.only(bottom: 40))));
-  ***REMOVED***
+  }
 
   Widget buildMessageWidget(ChatMessage message) {
     return Align(
@@ -78,7 +78,7 @@ class TopicChatWindowState extends State<TopicChatWindow>
                             textScaleFactor: 0.8,
                           ),
                         ])))));
-  ***REMOVED***
+  }
 
   @override
   void channelChanged(ChatChannel channel) =>
@@ -88,5 +88,5 @@ class TopicChatWindowState extends State<TopicChatWindow>
   void dispose() {
     widget.channel.disposeListener();
     super.dispose();
-  ***REMOVED***
-***REMOVED***
+  }
+}

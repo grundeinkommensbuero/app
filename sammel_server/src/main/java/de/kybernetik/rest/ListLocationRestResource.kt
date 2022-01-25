@@ -27,16 +27,16 @@ open class ListLocationRestResource {
         if (System.getProperty("de.kybernetik.listlocations.secret")?.toBoolean() == true) {
             LOG.debug("Lade keine Solidarischen Orte, weil diese geheim gehalten werden")
             return Response.status(200).entity(emptyList<ListLocation>()).build()
-        ***REMOVED***
+        }
 
         val listLocations: List<ListLocation>? = dao.getActiveListLocations()
         val listLocationDtos =
                 listLocations
-                        ?.filter { it.breitengrad != null && it.laengengrad != null ***REMOVED***
+                        ?.filter { it.breitengrad != null && it.laengengrad != null }
                         ?.map(ListLocationDto.Companion::convertFromListLocation)
                         ?: emptyList()
         return Response.ok().entity(listLocationDtos).build()
-    ***REMOVED***
+    }
 
     data class ListLocationDto(
             var id: String? = null,
@@ -55,7 +55,7 @@ open class ListLocationRestResource {
                         listLocation.nr,
                         listLocation.laengengrad,
                         listLocation.breitengrad))
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+            }
+        }
+    }
+}

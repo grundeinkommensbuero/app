@@ -16,7 +16,7 @@ abstract class Message {
   Map<String, dynamic> toJson();
 
   bool isMessageEqual(Message msg);
-***REMOVED***
+}
 
 class ChatMessage implements Message {
   @override
@@ -36,7 +36,7 @@ class ChatMessage implements Message {
       this.timestamp,
       this.messageColor,
       this.obtainedFromServer = false,
-      this.userId***REMOVED***);
+      this.userId});
 
   @override
   ChatMessage.fromJson(Map<dynamic, dynamic> jsonMessageData) {
@@ -48,7 +48,7 @@ class ChatMessage implements Message {
     userId = jsonMessageData['user_id'] == null
         ? null
         : int.tryParse(jsonMessageData['user_id'].toString());
-  ***REMOVED***
+  }
 
   @override
   Map<String, dynamic> toJson() => {
@@ -59,7 +59,7 @@ class ChatMessage implements Message {
         'timestamp': timestamp.toString(),
         'color': messageColor?.value,
         'from_server': obtainedFromServer,
-      ***REMOVED***
+      };
 
   @override
   bool isMessageEqual(Message msg) {
@@ -69,8 +69,8 @@ class ChatMessage implements Message {
         msg.senderName == msg.senderName &&
         equalTimestamps(timestamp, msg.timestamp) &&
         messageColor?.value == msg.messageColor?.value;
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 class ParticipationMessage implements Message {
   @override
@@ -89,7 +89,7 @@ class ParticipationMessage implements Message {
     final bool joins = json['joins']!;
     return ParticipationMessage(DateTime.parse(json['timestamp']),
         json['username'], joins, json['obtained_from_server'] ?? false);
-  ***REMOVED***
+  }
 
   @override
   Map<String, dynamic> toJson() => {
@@ -98,7 +98,7 @@ class ParticipationMessage implements Message {
         'timestamp': timestamp != null ? timestamp.toString() : null,
         'username': username,
         'joins': joins
-      ***REMOVED***
+      };
 
   @override
   bool isMessageEqual(Message msg) {
@@ -107,5 +107,5 @@ class ParticipationMessage implements Message {
         equalTimestamps(timestamp, msg.timestamp) &&
         username == msg.username &&
         joins == msg.joins;
-  ***REMOVED***
-***REMOVED***
+  }
+}

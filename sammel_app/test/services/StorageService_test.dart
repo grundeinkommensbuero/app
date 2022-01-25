@@ -12,7 +12,7 @@ import 'FAQService_test.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences.setMockInitialValues({***REMOVED***); //set values here
+  SharedPreferences.setMockInitialValues({}); //set values here
   SharedPreferences _prefs = await SharedPreferences.getInstance();
 
   var service = StorageService();
@@ -26,7 +26,7 @@ void main() async {
       expect(result, true);
       expect(_prefs.containsKey('action:1'), true);
       expect(_prefs.getString("action:1"), "123789456");
-    ***REMOVED***);
+    });
 
     test('are read correctly', () async {
       await _prefs.setString('action:1', '123789456');
@@ -34,7 +34,7 @@ void main() async {
       var token = await service.loadActionToken(1);
 
       expect(token, '123789456');
-    ***REMOVED***);
+    });
 
     test('are deleted correctly', () async {
       await _prefs.setString('action:1', '123789456');
@@ -43,7 +43,7 @@ void main() async {
 
       expect(result, true);
       expect(_prefs.getString("action:1"), null);
-    ***REMOVED***);
+    });
 
     test('are marked as stored with saving', () async {
       var result = await service.saveActionToken(1, '123789456');
@@ -51,7 +51,7 @@ void main() async {
       expect(result, true);
       expect(_prefs.containsKey('actionlist'), true);
       expect(_prefs.getStringList("actionlist"), containsAll(['1']));
-    ***REMOVED***);
+    });
 
     test('are demarked as stored with deletion', () async {
       await _prefs.setString('action:1', '123789456');
@@ -60,7 +60,7 @@ void main() async {
 
       expect(result, true);
       expect(_prefs.getStringList("actionlist"), isEmpty);
-    ***REMOVED***);
+    });
 
     test('loadAllStoredActionIds returns saved ids as integers', () async {
       await _prefs.setStringList('actionlist', ['1', '2', '3']);
@@ -68,7 +68,7 @@ void main() async {
       var list = await service.loadAllStoredActionIds();
 
       expect(list, containsAll([1, 2, 3]));
-    ***REMOVED***);
+    });
 
     test('loadAllStoredActionIds returns empty list if storage empty',
         () async {
@@ -77,8 +77,8 @@ void main() async {
       var list = await service.loadAllStoredActionIds();
 
       expect(list, []);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('Filter', () {
     test('is stored correctly', () async {
@@ -106,7 +106,7 @@ void main() async {
       expect(filterFromStorage.bis, TimeOfDay(hour: 15, minute: 0));
       expect(filterFromStorage.orte,
           containsAll(['Frankfurter Allee Nord', 'Tempelhofer Vorstadt']));
-    ***REMOVED***);
+    });
 
     test('is read correctly', () async {
       TermineFilter filter = TermineFilter(
@@ -130,7 +130,7 @@ void main() async {
       expect(readFilter.bis, TimeOfDay(hour: 15, minute: 0));
       expect(readFilter.orte,
           containsAll(['Frankfurter Allee Nord', 'Tempelhofer Vorstadt']));
-    ***REMOVED***);
+    });
 
     test('loads empty filter if none is stored', () async {
       TermineFilter(
@@ -151,8 +151,8 @@ void main() async {
       expect(readFilter.von, null);
       expect(readFilter.bis, null);
       expect(readFilter.orte.length, 0);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('secret', () {
     test('is stored correctly', () async {
@@ -160,7 +160,7 @@ void main() async {
 
       expect(_prefs.containsKey('secret'), true);
       expect(_prefs.getString("secret"), "123789456");
-    ***REMOVED***);
+    });
 
     test('is read correctly', () async {
       await _prefs.setString('secret', '123789456');
@@ -168,7 +168,7 @@ void main() async {
       var secret = await service.loadSecret();
 
       expect(secret, '123789456');
-    ***REMOVED***);
+    });
 
     test('waits until stored', () async {
       Future.delayed(Duration(seconds: 1))
@@ -177,8 +177,8 @@ void main() async {
       var secret = await service.loadSecret();
 
       expect(secret, '123789456');
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('costum push token', () {
     test('is stored correctly', () async {
@@ -186,7 +186,7 @@ void main() async {
 
       expect(_prefs.containsKey('pushToken'), true);
       expect(_prefs.getString("pushToken"), "123789456");
-    ***REMOVED***);
+    });
 
     test('is read correctly', () async {
       await _prefs.setString('pushToken', '123789456');
@@ -194,27 +194,27 @@ void main() async {
       var token = await service.loadCostumPushToken();
 
       expect(token, '123789456');
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('user', () {
     test('saveUser saves user to storage', () async {
       await service.saveUser(karl());
 
       expect(_prefs.getString('user'),
-          '{"id":11,"name":"Karl Marx","color":4294198070***REMOVED***');
-    ***REMOVED***);
+          '{"id":11,"name":"Karl Marx","color":4294198070}');
+    });
 
     test('loadUser loads user from storage', () async {
       _prefs.setString(
-          'user', '{"id":11,"name":"Karl Marx","color":4294198070***REMOVED***');
+          'user', '{"id":11,"name":"Karl Marx","color":4294198070}');
 
       var user = (await service.loadUser())!;
 
       expect(user.id, 11);
       expect(user.name, 'Karl Marx');
       expect(user.color?.value, 4294198070);
-    ***REMOVED***);
+    });
 
     test('loadUser returns null if no user stored', () async {
       _prefs.remove('user');
@@ -222,27 +222,27 @@ void main() async {
       var user = await service.loadUser();
 
       expect(user, null);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('pullMode', () {
     test('setPullMode sets pullMode to true', () async {
       await service.setPullMode();
 
       expect(_prefs.getBool('pullMode'), true);
-    ***REMOVED***);
+    });
 
     test('unsetPullMode sets pullMode to false', () async {
       await service.unsetPullMode();
 
       expect(_prefs.getBool('pullMode'), false);
-    ***REMOVED***);
+    });
 
     test('isPullMode returns false, if not set', () async {
       var result = await service.isPullMode();
 
       expect(result, false);
-    ***REMOVED***);
+    });
 
     test('isPullMode returns false, if not set', () async {
       _prefs.setBool('pullMode', true);
@@ -250,8 +250,8 @@ void main() async {
       var result = await service.isPullMode();
 
       expect(result, true);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('contact', () {
     test('is stored correctly', () async {
@@ -261,7 +261,7 @@ void main() async {
 
       expect(_prefs.containsKey('contact'), true);
       expect(_prefs.getString("contact"), "Ick bin ein Berliner");
-    ***REMOVED***);
+    });
 
     test('is read correctly', () async {
       await _prefs.setString('contact', 'Ick bin ein Berliner');
@@ -269,8 +269,8 @@ void main() async {
       var secret = await service.loadContact();
 
       expect(secret, 'Ick bin ein Berliner');
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('faq', () {
     test('loadFAQ returns stored list of FAQItems', () async {
@@ -284,13 +284,13 @@ void main() async {
       expect(result[0].id, 1);
       expect(result[1].id, 2);
       expect(result[2].id, 3);
-    ***REMOVED***);
+    });
 
     test('loadFAQ returns null if no faq is stored', () async {
       var result = await service.loadFAQ();
 
       expect(result, isNull);
-    ***REMOVED***);
+    });
 
     test('saveFAQ saves faq to storage', () async {
       expect(_prefs.getStringList('faq'), isNull);
@@ -298,8 +298,8 @@ void main() async {
       await service.saveFAQ(testItems);
 
       expect(_prefs.getStringList('faq'), isNotNull);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('faq timestamp', () {
     test('loadFAQTimestamp returns stored timestamp', () async {
@@ -309,24 +309,24 @@ void main() async {
 
       expect(result, isNotNull);
       expect(result, isNotNull);
-    ***REMOVED***);
+    });
 
     test('loadFAQTimestamp returns null if no faq is stored', () async {
       var result = await service.loadFAQ();
 
       expect(result, isNull);
-    ***REMOVED***);
+    });
 
     test('saveFAQTimestamp stores timestamp', () async {
       DateTime timestamp = DateTime.parse('2021-04-12 17:05:00');
       await service.saveFAQTimestamp(timestamp);
 
       expect(_prefs.getString('faqTimestamp'), '2021-04-12 17:05:00.000');
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   test('clearAllPreferences clears whole storage', () async {
-    _prefs.setString('user', '{"id":11,"name":"Karl Marx","color":4294198070***REMOVED***');
+    _prefs.setString('user', '{"id":11,"name":"Karl Marx","color":4294198070}');
     _prefs.setStringList('actionlist', ['1', '2', '3']);
     _prefs.setInt('anyInt', 1);
     _prefs.setBool('anyBool', true);
@@ -339,9 +339,9 @@ void main() async {
     expect(_prefs.getInt('anyInt'), null);
     expect(_prefs.getBool('anyBool'), null);
     expect(_prefs.getDouble('anyDouble'), null);
-  ***REMOVED***);
+  });
 
   tearDown(() async {
     await service.clearAllPreferences();
-  ***REMOVED***);
-***REMOVED***
+  });
+}

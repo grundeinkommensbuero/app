@@ -36,7 +36,7 @@ class PushMessageDaoTest {
     fun setUp() {
         whenever(entity.createQuery(anyString(), any<Class<PushMessage>>()))
                 .thenReturn(typedQuery)
-    ***REMOVED***
+    }
 
     @Test
     fun `ladeAllePushMessagesFuerBenutzer sucht nach Benutzer-ID`() {
@@ -51,7 +51,7 @@ class PushMessageDaoTest {
 
         verify(entity, times(1)).createQuery("select m from PushMessages m where m.empfaenger = 11", PushMessage::class.java)
         assertEquals(ergebnis, pushMessages)
-    ***REMOVED***
+    }
 
     @Test
     fun `speicherePushMessage legt PushMessage fuer jeden Empfaenger ab`() {
@@ -62,14 +62,14 @@ class PushMessageDaoTest {
 
         assertEquals(captor.firstValue.empfaenger.id, karl().id)
         assertEquals(captor.secondValue.empfaenger.id, rosa().id)
-    ***REMOVED***
+    }
 
     @Test
     fun `speicherePushMessage kommt mit leerer Empfaengerliste klar`() {
         dao.speicherePushMessageFuerEmpfaenger(PushNotificationDto(channel = "Allgemein", collapseId = null), mapOf("key" to "value"), emptyList())
 
         verify(entity, never()).persist(any())                                                   
-    ***REMOVED***
+    }
 
     @Test
     fun `loeschePushMessages loescht Nachrichten in DB`() {
@@ -91,10 +91,10 @@ class PushMessageDaoTest {
 
         verify(entity, times(3)).find(PushMessage::class.java, 0L)
         verify(entity, times(3)).remove(null)
-    ***REMOVED***
+    }
 
     @Test
     fun `loeschePushMessages kommt mit leerer Liste klar`() {
         dao.loeschePushMessages(emptyList())
-    ***REMOVED***
-***REMOVED***
+    }
+}

@@ -17,7 +17,7 @@ open class BenutzerDao {
     open fun getBenutzer(id: Long): Benutzer? {
         LOG.debug("Lade Benutzer für Nutzer-ID $id")
         return entityManager.find(Benutzer::class.java, id)
-    ***REMOVED***
+    }
 
     open fun getBenutzer(ids: List<Long>): List<Benutzer> {
         if (ids.isEmpty()) return emptyList()
@@ -30,39 +30,39 @@ open class BenutzerDao {
             .setParameter("ids", ids)
             .resultList
 
-    ***REMOVED***
+    }
 
     open fun getCredentials(id: Long): Credentials? {
         LOG.debug("Lade Credentials für Nutzer-ID $id")
         return entityManager.find(Credentials::class.java, id)
-    ***REMOVED***
+    }
 
     open fun legeNeuenBenutzerAn(benutzer: Benutzer): Benutzer {
         if (benutzer.id != 0L) {
             throw NeuerBenutzerHatBereitsIdException()
-        ***REMOVED***
+        }
         LOG.debug(
             "Neuen Benutzer anlegen " +
-                    if (benutzer.name.isNullOrBlank()) "ohne Namen" else "mit Name ${benutzer.name***REMOVED***"
+                    if (benutzer.name.isNullOrBlank()) "ohne Namen" else "mit Name ${benutzer.name}"
         )
         try {
             entityManager.persist(benutzer)
             return benutzer
-        ***REMOVED*** catch (e: Exception) {
+        } catch (e: Exception) {
             throw BenutzerAnlegenGescheitertException("Beim Anlegen eines neuen Benutzers ist ein unerwartetes technisches Problem aufgetreten")
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
     open fun aktualisiereBenutzername(id: Long, name: String): Benutzer {
         val benutzerAusDb = entityManager.find(Benutzer::class.java, id)
         benutzerAusDb.name = name
-        LOG.debug("Benutzername aktualisiert für ${benutzerAusDb.id***REMOVED*** mit ${benutzerAusDb.name***REMOVED***")
+        LOG.debug("Benutzername aktualisiert für ${benutzerAusDb.id} mit ${benutzerAusDb.name}")
         return benutzerAusDb
-    ***REMOVED***
+    }
 
     open fun legeNeueCredentialsAn(credentials: Credentials) {
         entityManager.persist(credentials)
-    ***REMOVED***
+    }
 
     open fun benutzernameExistiert(name: String): Boolean {
         LOG.debug("Ermittle ob Benutzer $name existiert")
@@ -71,24 +71,24 @@ open class BenutzerDao {
             .setParameter("name", name)
             .resultList
             .isNotEmpty()
-    ***REMOVED***
+    }
 
     open fun getFirebaseKeys(benutzerListe: List<Benutzer>): List<String> {
         if (benutzerListe.isEmpty())
             return emptyList()
-        LOG.debug("Sammle Firebase-Keys für Nutzer ${benutzerListe.map { it.id ***REMOVED******REMOVED***")
+        LOG.debug("Sammle Firebase-Keys für Nutzer ${benutzerListe.map { it.id }}")
         return entityManager
             .createQuery(
                 "select creds.firebaseKey from Credentials creds " +
                         "where creds.id in (:ids) " +
                         "and creds.isFirebase = true", String::class.java
             )
-            .setParameter("ids", benutzerListe.map { it.id ***REMOVED***)
+            .setParameter("ids", benutzerListe.map { it.id })
             .resultList
-    ***REMOVED***
+    }
 
     open fun getBenutzerOhneFirebase(benutzerListe: List<Benutzer>): List<Benutzer> =
-        getBenutzerOhneFirebaseViaId(benutzerListe.map { it.id ***REMOVED***)
+        getBenutzerOhneFirebaseViaId(benutzerListe.map { it.id })
 
     open fun getBenutzerOhneFirebaseViaId(benutzerListe: List<Long>): List<Benutzer> {
         if (benutzerListe.isEmpty())
@@ -104,7 +104,7 @@ open class BenutzerDao {
             .setParameter("ids", benutzerListe)
             .resultList
 
-    ***REMOVED***
+    }
 
 
     open fun gibNutzerNamedRolle(benutzer: Benutzer) {
@@ -113,9 +113,9 @@ open class BenutzerDao {
             .setParameter("id", benutzer.id)
             .setParameter("rolle", "named")
             .executeUpdate()
-        LOG.debug("Benutzer ${benutzer.id***REMOVED*** um Rolle 'named' erweitert")
-    ***REMOVED***
+        LOG.debug("Benutzer ${benutzer.id} um Rolle 'named' erweitert")
+    }
 
     class NeuerBenutzerHatBereitsIdException : Exception()
     class BenutzerAnlegenGescheitertException(message: String) : java.lang.Exception(message)
-***REMOVED***
+}

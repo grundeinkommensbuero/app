@@ -19,7 +19,7 @@ class EjbAccessExceptionMapperTest {
         assertTrue(response.entity is RestFehlermeldung)
         assertEquals((response.entity as RestFehlermeldung).meldung,
                 "Du hast nicht die notwendigen Rechte um diese Funktion auszuführen")
-    ***REMOVED***
+    }
 
     @Test
     fun `toResponse behandelt Server-Fehler`() {
@@ -30,5 +30,5 @@ class EjbAccessExceptionMapperTest {
         assertEquals(response.status, 500)
         assertTrue(response.entity is RestFehlermeldung)
         assertTrue((response.entity as RestFehlermeldung).meldung!!.contains("Nachricht"))
-    ***REMOVED***
-***REMOVED***
+    }
+}

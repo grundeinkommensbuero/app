@@ -22,7 +22,7 @@ void main() {
     widget = Provider<AbstractUserService>(
         create: (context) => _userService,
         child: MaterialApp(home: Scaffold(body: ChatListWidget(channel))));
-  ***REMOVED***);
+  });
 
   group('ParticipationMessages', () {
     testUI('shows join message', (tester) async {
@@ -39,7 +39,7 @@ void main() {
               widget.text.toPlainText() ==
                   'Karl Marx ist der Aktion beigetreten\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen'),
           findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('shows join message with unknown username', (tester) async {
       await tester.pumpWidget(widget, Duration(minutes: 5));
@@ -55,7 +55,7 @@ void main() {
               widget.text.toPlainText() ==
                   'Jemand ist der Aktion beigetreten\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen'),
           findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('shows leave message', (tester) async {
       await tester.pumpWidget(widget, Duration(minutes: 5));
@@ -71,7 +71,7 @@ void main() {
               widget.text.toPlainText() ==
                   'Karl Marx hat die Aktion verlassen'),
           findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('shows leave message with unknown username', (tester) async {
       await tester.pumpWidget(widget, Duration(minutes: 5));
@@ -86,6 +86,6 @@ void main() {
               widget is RichText &&
               widget.text.toPlainText() == 'Jemand hat die Aktion verlassen'),
           findsOneWidget);
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+    });
+  });
+}

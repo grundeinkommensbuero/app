@@ -57,7 +57,7 @@ class PushServiceTest {
         System.setProperty("key", "vue8NkTYyN1e2OoHGcapLZWiCTC+13Eqk9gXBSq4azc=")
         System.setProperty("mode", "LOCAL")
         service.werteUmgebungsvariabelnAus()
-    ***REMOVED***
+    }
 
     @Test
     fun `sendePushNachrichtAnEmpfaenger ignoriert leere Anfragen`() {
@@ -65,7 +65,7 @@ class PushServiceTest {
 
         verify(firebaseService, never()).sendePushNachrichtAnEmpfaenger(any(), any(), any())
         verify(pushDao, never()).speicherePushMessageFuerEmpfaenger(any(), any(), any())
-    ***REMOVED***
+    }
 
 
     @Test
@@ -80,7 +80,7 @@ class PushServiceTest {
 
         verify(firebaseService, times(1))
             .sendePushNachrichtAnEmpfaenger(notification, emptyMap(), firebaseKeys)
-    ***REMOVED***
+    }
 
     @Test
     fun `sendePushNachrichtAnEmpfaenger sendet nichts an Firebase ohne FirebaseKeys`() {
@@ -97,7 +97,7 @@ class PushServiceTest {
         )
 
         verify(firebaseService, never()).sendePushNachrichtAnEmpfaenger(any(), any(), any())
-    ***REMOVED***
+    }
 
     @Test
     fun `sendePushNachrichtAnEmpfaenger speichert PushMessage fuer alle Nicht-Firebase-User`() {
@@ -119,7 +119,7 @@ class PushServiceTest {
         assertEquals(notification, notificationCaptor.firstValue)
         assertTrue(dataCaptor.firstValue.isEmpty())
         assertEquals(teilnehmerInnen, teilnehmerCaptor.firstValue)
-    ***REMOVED***
+    }
 
     @Test
     fun `sendePushNachrichtAnEmpfaenger speichert keine PushMessage ohne Nicht-Firebase-User`() {
@@ -136,7 +136,7 @@ class PushServiceTest {
         )
 
         verify(pushDao, never()).speicherePushMessageFuerEmpfaenger(any(), any(), any())
-    ***REMOVED***
+    }
 
     @Test
     fun `sendePushNachrichtAnEmpfaenger speichert persistent Nachricht fuer alle User`() {
@@ -158,7 +158,7 @@ class PushServiceTest {
         @Suppress("UNCHECKED_CAST")
         verify(pushDao, times(1))
             .speicherePushMessageFuerEmpfaenger(nachricht.notification, emptyMap(), teilnehmer)
-    ***REMOVED***
+    }
 
     @Test
     fun `verschluesselt() reicht verschluesselte Daten heraus`() {
@@ -184,7 +184,7 @@ class PushServiceTest {
         val data = GsonBuilder().serializeNulls().create().fromJson(plaintext, Map::class.java)
         assertEquals(data["key1"], "value1")
         assertEquals(data["key2"], "value2")
-    ***REMOVED***
+    }
 
     @Test
     fun `verschluesselt() notiert Verschluesselungstyp und Nonce`() {
@@ -199,13 +199,13 @@ class PushServiceTest {
         val nachricht = service.verschluessele(dto.data)!!
         assertEquals(nachricht["encrypted"], "AES")
         assertNotNull(nachricht["nonce"])
-    ***REMOVED***
+    }
 
     @Ignore("Zum manuellen Testen Log-Level in Funktion auf info stellen")
     @Test
     fun verschluessele() {
         service.verschluessele(mapOf("content" to "Hello World"))
-    ***REMOVED***
+    }
 
     companion object {
         fun entschluessele(data: Map<String, String>): String {
@@ -218,6 +218,6 @@ class PushServiceTest {
             )
             val plainbytes = cipher.doFinal(Base64.getDecoder().decode(data["payload"]))
             return String(plainbytes, Charsets.UTF_8)
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+        }
+    }
+}

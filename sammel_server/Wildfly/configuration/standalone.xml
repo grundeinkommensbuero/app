@@ -49,9 +49,9 @@
             <security-realm name="ManagementRealm">
                 <server-identities>
                     <ssl>
-                        <keystore path="${de.kybernetik.shared.path***REMOVED***/secrets/${store_name***REMOVED***"
-                                  keystore-password="${store_password***REMOVED***" alias="server"
-                                  key-password="${store_password***REMOVED***"/>
+                        <keystore path="${de.kybernetik.shared.path}/secrets/${store_name}"
+                                  keystore-password="${store_password}" alias="server"
+                                  key-password="${store_password}"/>
                     </ssl>
                 </server-identities>
                 <authentication>
@@ -115,7 +115,7 @@
                 <formatter>
                     <named-formatter name="PATTERN"/>
                 </formatter>
-                <file path="${de.kybernetik.shared.path***REMOVED***/logs/server.log"/>
+                <file path="${de.kybernetik.shared.path}/logs/server.log"/>
                 <suffix value=".yyyy-MM-dd"/>
                 <append value="true"/>
             </periodic-rotating-file-handler>
@@ -163,10 +163,10 @@
                 </handlers>
             </root-logger>
             <formatter name="PATTERN">
-                <pattern-formatter pattern="%d{yyyy-MM-dd HH:mm:ss,SSS***REMOVED*** %-5p [%c] (%t) %s%e%n"/>
+                <pattern-formatter pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c] (%t) %s%e%n"/>
             </formatter>
             <formatter name="COLOR-PATTERN">
-                <pattern-formatter pattern="%K{level***REMOVED***%d{HH:mm:ss,SSS***REMOVED*** %-5p [%c] (%t) %s%e%n"/>
+                <pattern-formatter pattern="%K{level}%d{HH:mm:ss,SSS} %-5p [%c] (%t) %s%e%n"/>
             </formatter>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:batch-jberet:2.0">
@@ -186,7 +186,7 @@
             <datasources>
                 <datasource jndi-name="java:jboss/datasources/ExampleDS" pool-name="ExampleDS" enabled="true"
                             use-java-context="true"
-                            statistics-enabled="${wildfly.datasources.statistics-enabled:${wildfly.statistics-enabled:false***REMOVED******REMOVED***">
+                            statistics-enabled="${wildfly.datasources.statistics-enabled:${wildfly.statistics-enabled:false}}">
                     <connection-url>jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE</connection-url>
                     <driver>h2</driver>
                     <security>
@@ -195,8 +195,8 @@
                     </security>
                 </datasource>
                 <datasource jndi-name="java:jboss/datasources/mariaDBDS" pool-name="mariaDBDS"
-                            statistics-enabled="${wildfly.datasources.statistics-enabled:${wildfly.statistics-enabled:false***REMOVED******REMOVED***">
-                    <connection-url>jdbc:mariadb://${db_url***REMOVED***:${db_port***REMOVED***/${db_schema***REMOVED***</connection-url>
+                            statistics-enabled="${wildfly.datasources.statistics-enabled:${wildfly.statistics-enabled:false}}">
+                    <connection-url>jdbc:mariadb://${db_url}:${db_port}/${db_schema}</connection-url>
                     <driver>mariaDB</driver>
                     <transaction-isolation>TRANSACTION_READ_COMMITTED</transaction-isolation>
                     <pool>
@@ -204,8 +204,8 @@
                         <max-pool-size>200</max-pool-size>
                     </pool>
                     <security>
-                        <user-name>${db_user***REMOVED***</user-name>
-                        <password>${db_password***REMOVED***</password>
+                        <user-name>${db_user}</user-name>
+                        <password>${db_password}</password>
                     </security>
                     <validation>
                         <valid-connection-checker
@@ -229,7 +229,7 @@
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:deployment-scanner:2.0">
             <deployment-scanner path="deployments" relative-to="jboss.server.base.dir" scan-interval="5000"
-                                runtime-failure-causes-rollback="${jboss.deployment.scanner.rollback.on.failure:false***REMOVED***"/>
+                                runtime-failure-causes-rollback="${jboss.deployment.scanner.rollback.on.failure:false}"/>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:discovery:1.0"/>
         <subsystem xmlns="urn:jboss:domain:distributable-web:2.0" default-session-management="default"
@@ -312,7 +312,7 @@
                 </thread-pool>
             </thread-pools>
             <default-missing-method-permissions-deny-access value="true"/>
-            <statistics enabled="${wildfly.ejb3.statistics-enabled:${wildfly.statistics-enabled:false***REMOVED******REMOVED***"/>
+            <statistics enabled="${wildfly.ejb3.statistics-enabled:${wildfly.statistics-enabled:false}}"/>
             <log-system-exceptions value="false"/>
             <application-security-domains>
                 <application-security-domain name="ApplicationDomain" security-domain="ApplicationDomain"/>
@@ -448,14 +448,14 @@
             <tls>
                 <key-stores>
                     <key-store name="dweKeyStore">
-                        <credential-reference clear-text="${store_password***REMOVED***"/>
+                        <credential-reference clear-text="${store_password}"/>
                         <implementation type="PKCS12"/>
-                        <file path="${de.kybernetik.shared.path***REMOVED***/secrets/${store_name***REMOVED***"/>
+                        <file path="${de.kybernetik.shared.path}/secrets/${store_name}"/>
                     </key-store>
                 </key-stores>
                 <key-managers>
                     <key-manager name="dweKeyManager" key-store="dweKeyStore">
-                        <credential-reference clear-text="${store_password***REMOVED***"/>
+                        <credential-reference clear-text="${store_password}"/>
                     </key-manager>
                 </key-managers>
                 <server-ssl-contexts>
@@ -544,7 +544,7 @@
 <!--        <subsystem xmlns="urn:wildfly:microprofile-config-smallrye:1.0"/>-->
 <!--        <subsystem xmlns="urn:wildfly:microprofile-health-smallrye:2.0" security-enabled="false"/>-->
 <!--        <subsystem xmlns="urn:wildfly:microprofile-metrics-smallrye:2.0" security-enabled="false" exposed-subsystems="*"-->
-<!--                   prefix="${wildfly.metrics.prefix:wildfly***REMOVED***"/>-->
+<!--                   prefix="${wildfly.metrics.prefix:wildfly}"/>-->
 <!--        <subsystem xmlns="urn:wildfly:microprofile-opentracing-smallrye:1.0"/>-->
         <subsystem xmlns="urn:jboss:domain:naming:2.0">
             <remote-naming/>
@@ -603,20 +603,20 @@
             </deployment-permissions>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:transactions:5.0">
-            <core-environment node-identifier="${jboss.tx.node.id:1***REMOVED***">
+            <core-environment node-identifier="${jboss.tx.node.id:1}">
                 <process-id>
                     <uuid/>
                 </process-id>
             </core-environment>
             <recovery-environment socket-binding="txn-recovery-environment" status-socket-binding="txn-status-manager"/>
             <coordinator-environment
-                    statistics-enabled="${wildfly.transactions.statistics-enabled:${wildfly.statistics-enabled:false***REMOVED******REMOVED***"/>
+                    statistics-enabled="${wildfly.transactions.statistics-enabled:${wildfly.statistics-enabled:false}}"/>
             <object-store path="tx-object-store" relative-to="jboss.server.data.dir"/>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:undertow:10.0" default-server="default-server"
                    default-virtual-host="default-host" default-servlet-container="default"
                    default-security-domain="other"
-                   statistics-enabled="${wildfly.undertow.statistics-enabled:${wildfly.statistics-enabled:false***REMOVED******REMOVED***">
+                   statistics-enabled="${wildfly.undertow.statistics-enabled:${wildfly.statistics-enabled:false}}">
             <buffer-cache name="default"/>
             <server name="default-server">
                 <http-listener name="default" socket-binding="http" redirect-socket="https" enable-http2="true"/>
@@ -624,7 +624,7 @@
                 <host name="default-host" alias="localhost">
                     <location name="/" handler="welcome-content"/>
                     <access-log directory="/opt/shared/logs"
-                                pattern="%h %t &quot;%r&quot; %s &quot;%{i,User-Agent***REMOVED***&quot;" use-server-log="false"/>
+                                pattern="%h %t &quot;%r&quot; %s &quot;%{i,User-Agent}&quot;" use-server-log="false"/>
                     <http-invoker security-realm="ApplicationRealm"/>
                 </host>
             </server>
@@ -633,7 +633,7 @@
                 <websockets/>
             </servlet-container>
             <handlers>
-                <file name="welcome-content" path="${jboss.home.dir***REMOVED***/welcome-content"/>
+                <file name="welcome-content" path="${jboss.home.dir}/welcome-content"/>
             </handlers>
             <application-security-domains>
                 <application-security-domain name="ApplicationDomain"
@@ -641,8 +641,8 @@
             </application-security-domains>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:webservices:2.0"
-                   statistics-enabled="${wildfly.webservices.statistics-enabled:${wildfly.statistics-enabled:false***REMOVED******REMOVED***">
-            <wsdl-host>${jboss.bind.address:127.0.0.1***REMOVED***</wsdl-host>
+                   statistics-enabled="${wildfly.webservices.statistics-enabled:${wildfly.statistics-enabled:false}}">
+            <wsdl-host>${jboss.bind.address:127.0.0.1}</wsdl-host>
             <endpoint-config name="Standard-Endpoint-Config"/>
             <endpoint-config name="Recording-Endpoint-Config">
                 <pre-handler-chain name="recording-handlers"
@@ -656,19 +656,19 @@
     </profile>
     <interfaces>
         <interface name="management">
-            <inet-address value="${jboss.bind.address.management:127.0.0.1***REMOVED***"/>
+            <inet-address value="${jboss.bind.address.management:127.0.0.1}"/>
         </interface>
         <interface name="public">
-            <inet-address value="${jboss.bind.address:127.0.0.1***REMOVED***"/>
+            <inet-address value="${jboss.bind.address:127.0.0.1}"/>
         </interface>
     </interfaces>
     <socket-binding-group name="standard-sockets" default-interface="public"
-                          port-offset="${jboss.socket.binding.port-offset:0***REMOVED***">
-        <socket-binding name="ajp" port="${jboss.ajp.port:8009***REMOVED***"/>
-        <socket-binding name="http" port="${jboss.http.port:8080***REMOVED***"/>
-        <socket-binding name="https" port="${jboss.https.port:8443***REMOVED***"/>
-        <socket-binding name="management-http" interface="management" port="${jboss.management.http.port:9990***REMOVED***"/>
-        <socket-binding name="management-https" interface="management" port="${jboss.management.https.port:9993***REMOVED***"/>
+                          port-offset="${jboss.socket.binding.port-offset:0}">
+        <socket-binding name="ajp" port="${jboss.ajp.port:8009}"/>
+        <socket-binding name="http" port="${jboss.http.port:8080}"/>
+        <socket-binding name="https" port="${jboss.https.port:8443}"/>
+        <socket-binding name="management-http" interface="management" port="${jboss.management.http.port:9990}"/>
+        <socket-binding name="management-https" interface="management" port="${jboss.management.https.port:9993}"/>
         <socket-binding name="txn-recovery-environment" port="4712"/>
         <socket-binding name="txn-status-manager" port="4713"/>
         <outbound-socket-binding name="mail-smtp">

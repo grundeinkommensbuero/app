@@ -35,12 +35,12 @@ import 'FilterWidget.dart';
 class TermineSeite extends StatefulWidget {
   final Function(LatLng) switchToActionCreator;
 
-  TermineSeite({Key? key, required this.switchToActionCreator***REMOVED***)
+  TermineSeite({Key? key, required this.switchToActionCreator})
       : super(key: key ?? Key('action page'));
 
   @override
   TermineSeiteState createState() => TermineSeiteState();
-***REMOVED***
+}
 
 class TermineSeiteState extends State<TermineSeite>
     with SingleTickerProviderStateMixin {
@@ -87,7 +87,7 @@ class TermineSeiteState extends State<TermineSeite>
       parent: _animationController,
       curve: Curves.easeIn,
     ));
-  ***REMOVED***
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +158,7 @@ class TermineSeiteState extends State<TermineSeite>
         ],
       ),
     ));
-  ***REMOVED***
+  }
 
   swithPage(index) async {
     if (index == navigation) return;
@@ -167,9 +167,9 @@ class TermineSeiteState extends State<TermineSeite>
     setState(() {
       navigation = index;
       swipeLeft = !swipeLeft;
-    ***REMOVED***);
+    });
     await _animationController.reverse();
-  ***REMOVED***
+  }
 
   // funktioniert nicht im Konstruktor, weil da der BuildContext fehlt
   // und auch nicht im initState(), weil da InheritedWidgets nicht angefasst werden können
@@ -189,8 +189,8 @@ class TermineSeiteState extends State<TermineSeite>
         .then((listLocations) {
       setState(() {
         this.listLocations = listLocations;
-      ***REMOVED***);
-    ***REMOVED***);
+      });
+    });
 
     placardService = Provider.of<AbstractPlacardsService>(context);
 
@@ -201,7 +201,7 @@ class TermineSeiteState extends State<TermineSeite>
     checkDeepLinks();
 
     _initialized = true;
-  ***REMOVED***
+  }
 
   Future loadActions(TermineFilter filter) async {
     globalActionMapKey.currentState?.update();
@@ -210,7 +210,7 @@ class TermineSeiteState extends State<TermineSeite>
         .then((termine) => setState(() => this.termine = termine))
         .catchError((e, s) => ErrorService.handleError(e, s,
             context: 'Aktionen konnten nicht geladen werden.'));
-  ***REMOVED***
+  }
 
   void showRestError(RestFehler e) {
     showDialog(
@@ -225,7 +225,7 @@ class TermineSeiteState extends State<TermineSeite>
                 )
               ],
             ));
-  ***REMOVED***
+  }
 
   openTerminDetails(Termin termin) async {
     if (termin.id == null) return;
@@ -251,11 +251,11 @@ class TermineSeiteState extends State<TermineSeite>
 
       if (command == TerminDetailsCommand.FOCUS)
         showActionOnMap(terminMitDetails);
-    ***REMOVED*** catch (e, s) {
+    } catch (e, s) {
       ErrorService.handleError(e, s,
           context: 'Aktion konnte nicht geladen werden.');
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   bool isMyAction(Termin action) => myActions.contains(action.id);
 
@@ -290,13 +290,13 @@ class TermineSeiteState extends State<TermineSeite>
                       key: Key('action editor')),
                 )
               ]);
-        ***REMOVED***);
-  ***REMOVED***
+        });
+  }
 
   afterActionEdit(List<Termin> editedAction) async {
     await saveAction(editedAction[0]);
     openTerminDetails(editedAction[0]); // recursive and I know it
-  ***REMOVED***
+  }
 
   Future<void> saveAction(Termin editedAction) async {
     try {
@@ -304,11 +304,11 @@ class TermineSeiteState extends State<TermineSeite>
       if (token == null) throw Exception('Fehlende Authorisierung zu Aktion');
       await termineService!.saveAction(editedAction, token);
       setState(() => updateAction(editedAction, false));
-    ***REMOVED*** catch (e, s) {
+    } catch (e, s) {
       ErrorService.handleError(e, s,
           context: 'Aktion konnte nicht gespeichert werden.');
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   Future evaluateAction(BuildContext context, Termin termin) async {
     await showDialog(
@@ -336,8 +336,8 @@ class TermineSeiteState extends State<TermineSeite>
                         onFinish: afterActionEvaluation,
                         key: Key('evaluation editor')))
               ]);
-        ***REMOVED***);
-  ***REMOVED***
+        });
+  }
 
   afterActionEvaluation(Evaluation evaluation) async {
     Navigator.pop(context, false);
@@ -350,18 +350,18 @@ class TermineSeiteState extends State<TermineSeite>
       backgroundColor: Color.fromARGB(220, 255, 255, 250),
     ));
     await saveEvaluation(evaluation);
-  ***REMOVED***
+  }
 
   Future<void> saveEvaluation(Evaluation evaluation) async {
     try {
       await termineService?.saveEvaluation(evaluation);
       await storageService?.markActionIdAsEvaluated(evaluation.terminId!);
-    ***REMOVED*** catch (e, s) {
+    } catch (e, s) {
       ErrorService.handleError(e, s,
           context: 'Evaluation konnte nicht gespeichert werden.');
-    ***REMOVED***
+    }
     return;
-  ***REMOVED***
+  }
 
   Future<void> deleteAction(Termin action) async {
     if (action.id == null) return;
@@ -371,11 +371,11 @@ class TermineSeiteState extends State<TermineSeite>
       await termineService?.deleteAction(action, token);
       storageService!.deleteActionToken(action.id!);
       setState(() => updateAction(action, true));
-    ***REMOVED*** catch (e, s) {
+    } catch (e, s) {
       ErrorService.handleError(e, s,
           context: 'Aktion konnte nicht gelöscht werden.');
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   updateAction(Termin updatedAction, bool remove) {
     var index =
@@ -386,11 +386,11 @@ class TermineSeiteState extends State<TermineSeite>
     if (remove) {
       termine.removeAt(index);
       myActions.remove(updatedAction.id);
-    ***REMOVED*** else {
+    } else {
       termine[index] = updatedAction;
       termine.sort(Termin.compareByStart);
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   createAndAddAction(Termin action) async {
     try {
@@ -400,24 +400,24 @@ class TermineSeiteState extends State<TermineSeite>
         termine
           ..add(actionWithId)
           ..sort(Termin.compareByStart);
-      ***REMOVED***);
-    ***REMOVED*** catch (e, s) {
+      });
+    } catch (e, s) {
       ErrorService.handleError(e, s,
           context: 'Aktion konnte nicht erzeugt werden.');
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   Future<Termin> createNewAction(Termin action) async {
     String uuid = Uuid().v1();
     Termin actionWithId = await termineService!.createAction(action, uuid);
     storageService?.saveActionToken(actionWithId.id!, uuid);
     return actionWithId;
-  ***REMOVED***
+  }
 
   void showActionOnMap(Termin action) {
     setState(() => navigation = 1);
     mapController.move(LatLng(action.latitude, action.longitude), 15.0);
-  ***REMOVED***
+  }
 
   Future<void> joinAction(Termin action) async {
     if (action.id == null || me == null) return;
@@ -425,7 +425,7 @@ class TermineSeiteState extends State<TermineSeite>
     setState(() => termine
         .where((t) => t.id == action.id)
         .forEach((Termin t) => t.participants?.add(me!)));
-  ***REMOVED***
+  }
 
   Future<void> leaveAction(Termin action) async {
     if (action.id == null || me == null) return;
@@ -433,8 +433,8 @@ class TermineSeiteState extends State<TermineSeite>
     setState(() {
       var actionFromList = termine.firstWhere((t) => t.id == action.id);
       actionFromList.participants?.removeWhere((user) => user.id == me!.id);
-    ***REMOVED***);
-  ***REMOVED***
+    });
+  }
 
   bool participant(Termin termin) =>
       termin.participants?.map((e) => e.id).contains(me?.id) ?? false;
@@ -447,16 +447,16 @@ class TermineSeiteState extends State<TermineSeite>
                 appBar: AppBar(title: Text(title)),
                 body: ActionList(actions, isMyAction, isPastAction,
                     iAmParticipant, openTerminDetails))));
-  ***REMOVED***
+  }
 
   checkDeepLinks() async {
     registerUriListener(uriLinkStream);
     showAction(await getInitialUri());
-  ***REMOVED***
+  }
 
   registerUriListener(Stream<Uri?> linkStream) {
     uniLinkListener = linkStream.listen((final Uri? uri) => showAction(uri));
-  ***REMOVED***
+  }
 
   showAction(Uri? uri) {
     if (uri?.queryParameters['aktion'] == null) return;
@@ -465,18 +465,18 @@ class TermineSeiteState extends State<TermineSeite>
       ErrorService.pushError("Ungültige Aktions-ID",
           "Die Nummer der Aktion in dem Link ist ungültig. Möglicherweise wurde die Aktion bereits gelöscht.");
       return;
-    ***REMOVED***
+    }
     termineService!.loadAndShowAction(id);
-  ***REMOVED***
+  }
 
   @override
   void dispose() {
     try {
       uniLinkListener.cancel();
-    ***REMOVED*** catch (_) {***REMOVED***
+    } catch (_) {}
     super.dispose();
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 class ButtonRow extends StatelessWidget {
   final List<Widget> widgets;
@@ -490,8 +490,8 @@ class ButtonRow extends StatelessWidget {
             .expand((widget) => [SizedBox(width: 5.0), widget])
             .skip(1)
             .toList());
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 AlertDialog confirmDeleteDialog(BuildContext context) => AlertDialog(
         key: Key('deletion confirmation dialog'),

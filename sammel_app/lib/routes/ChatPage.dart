@@ -10,11 +10,11 @@ import 'package:sammel_app/shared/CampaignTheme.dart';
 class ChatPage extends StatefulWidget {
   final bool active;
 
-  ChatPage({this.active = false***REMOVED***);
+  ChatPage({this.active = false});
 
   @override
   State<StatefulWidget> createState() => ChatPageState();
-***REMOVED***
+}
 
 class ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
   AbstractPushNotificationManager? pushManager;
@@ -32,17 +32,17 @@ class ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
       Provider.of<ChatMessageService>(context)
           .getTopicChannel('global')
           .then((channel) => setState(() => topicChannel = channel));
-    ***REMOVED***
+    }
     if (!widget.active) {
       // navigiert weg
       chatWindow = null;
       topicChannel?.disposeListener();
-    ***REMOVED*** else if (topicChannel != null) {
+    } else if (topicChannel != null) {
       // ist bereit
       if (chatWindow == null)
         chatWindow = TopicChatWindow(topicChannel!, false);
       return chatWindow!;
-    ***REMOVED***
+    }
     // navigiert hin, ist aber noch nicht bereit
     return Center(
         child: Container(
@@ -50,25 +50,25 @@ class ChatPageState extends State<ChatPage> with WidgetsBindingObserver {
             height: 100,
             width: 100,
             child: Container(color: Colors.white)));
-  ***REMOVED***
+  }
 
   @override
   void initState() {
     // for didChangeAppLifecycleState
     WidgetsBinding.instance?.addObserver(this);
     super.initState();
-  ***REMOVED***
+  }
 
   @override
   void dispose() {
     // for didChangeAppLifecycleState
     WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
-  ***REMOVED***
+  }
 
 // Lade verpasste Push-Nachrichten vom Server nach
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) pushManager?.updateMessages();
-  ***REMOVED***
-***REMOVED***
+  }
+}

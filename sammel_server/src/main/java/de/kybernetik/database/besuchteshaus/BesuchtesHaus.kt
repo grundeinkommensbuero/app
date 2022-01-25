@@ -15,7 +15,7 @@ class BesuchtesHaus: Serializable {
         adresse = ""
         datum = LocalDate.MIN
         user_id = 0
-    ***REMOVED***
+    }
 
     constructor(
         id: Long,
@@ -37,7 +37,7 @@ class BesuchtesHaus: Serializable {
         this.osm_id = osmId
         this.datum = datum
         this.user_id = user_id
-    ***REMOVED***
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,4 +66,4 @@ class BesuchtesHaus: Serializable {
 
     @Column
     var user_id: Long
-***REMOVED***
+}

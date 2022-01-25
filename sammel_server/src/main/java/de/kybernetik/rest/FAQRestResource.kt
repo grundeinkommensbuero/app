@@ -26,9 +26,9 @@ open class FAQRestResource {
     @Produces(MediaType.APPLICATION_JSON)
     open fun getAllFAQs(): List<FAQDto> {
         LOG.info("Lade FAQs")
-        return dao.getAllFAQ().map { FAQDto.convertFromFAQ(it) ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+        return dao.getAllFAQ().map { FAQDto.convertFromFAQ(it) }
+    }
+}
 
 data class FAQDto(
     var id: Long,
@@ -40,5 +40,5 @@ data class FAQDto(
 ) {
     companion object {
         fun convertFromFAQ(faq: FAQ): FAQDto = FAQDto(faq.id, faq.title, faq.teaser, faq.rest, faq.order, faq.tags)
-    ***REMOVED***
-***REMOVED***
+    }
+}

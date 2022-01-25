@@ -16,7 +16,7 @@ class BenutzerDtoTest {
         assertEquals(benutzer.id, 11L)
         assertEquals(benutzer.name, "Karl Marx")
         assertEquals(benutzer.color, 4294198070)
-    ***REMOVED***
+    }
 
     @Test
     fun convertToBenutzerOhneId() {
@@ -27,7 +27,7 @@ class BenutzerDtoTest {
         assertEquals(benutzer.id, 0L)
         assertEquals(benutzer.name, "Karl Marx")
         assertEquals(benutzer.color, 4294198070)
-    ***REMOVED***
+    }
 
     @Test
     fun convertFromBenutzer() {
@@ -38,5 +38,5 @@ class BenutzerDtoTest {
         assertEquals(dto.id, 11L)
         assertEquals(dto.name, "Karl Marx")
         assertEquals(dto.color, 4294198070)
-    ***REMOVED***
-***REMOVED***
+    }
+}

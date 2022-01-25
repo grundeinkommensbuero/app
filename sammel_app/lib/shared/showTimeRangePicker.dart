@@ -11,11 +11,11 @@ Future<TimeRange> showTimeRangePicker(
       initialTo ?? TimeOfDay(hour: 12, minute: 00), 'Endzeit', 'Fertig',
       key: Key('to time picker'));
   return TimeRange(from, to);
-***REMOVED***
+}
 
 Future<TimeOfDay?> showSingleTimePicker(
     BuildContext context, TimeOfDay initialTime, String title, String next,
-    {Key? key***REMOVED***) async {
+    {Key? key}) async {
   return await showTimePicker(
       context: context,
       initialTime: initialTime,
@@ -43,12 +43,12 @@ Future<TimeOfDay?> showSingleTimePicker(
                             style: TextButton.styleFrom(
                                 primary: CampaignTheme.secondary))),
                     child: timePicker!)));
-      ***REMOVED***);
-***REMOVED***
+      });
+}
 
 class TimeRange {
   TimeOfDay? from;
   TimeOfDay? to;
 
   TimeRange(this.from, this.to);
-***REMOVED***
+}

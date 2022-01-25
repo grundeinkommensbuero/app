@@ -23,24 +23,24 @@ main() {
                     context, 'Titel', error,
                     key: Key('error dialog'))),
           );
-        ***REMOVED***),
+        }),
       ),
     ));
 
     await tester.tap(find.byKey(Key('starter')));
     await tester.pumpAndSettle();
-  ***REMOVED***);
+  });
 
   testUI('starts and shows data', (WidgetTester tester) async {
     expect(find.byKey(Key('error dialog')), findsOneWidget);
     expect(find.text('Titel'), findsOneWidget);
     expect(find.text('there is a reason for everything'), findsOneWidget);
-  ***REMOVED***);
+  });
 
   testUI('closes on close button', (WidgetTester tester) async {
     await tester.tap(find.byKey(Key('error dialog close button')));
     await tester.pumpAndSettle();
 
     expect(find.byKey(Key('error dialog')), findsNothing);
-  ***REMOVED***);
-***REMOVED***
+  });
+}

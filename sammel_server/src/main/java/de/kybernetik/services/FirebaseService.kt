@@ -56,11 +56,11 @@ open class FirebaseService {
                 .addAllTokens(empfaenger.distinct())
                 .build()
             pushResponse = firebase.sendMulticast(pushMessage)
-        ***REMOVED***
+        }
         LOG.debug(
-            "${pushResponse?.successCount***REMOVED*** Push-Nachrichten  wurden erfolgreich an Firebase versendet"
+            "${pushResponse?.successCount} Push-Nachrichten  wurden erfolgreich an Firebase versendet"
         )
-    ***REMOVED***
+    }
 
     open fun sendePushNachrichtAnTopic(notification: PushNotificationDto?, data: Map<String, String>?, topic: String) {
         if (topic.isEmpty())
@@ -94,9 +94,9 @@ open class FirebaseService {
                 .build()
             val pushResponse = firebase.send(pushMessage)
             LOG.debug("Erfolgreich Nachricht an Topic $topic gesendet: $pushResponse")
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
     class MissingMessageTarget(message: String) : Exception(message)
     class TooManyRecipientsError : Exception("Nicht mehr als 500 Empfänger für eine Nachricht möglich")
-***REMOVED***
+}

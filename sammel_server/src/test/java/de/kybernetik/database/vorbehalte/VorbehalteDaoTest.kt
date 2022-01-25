@@ -39,5 +39,5 @@ class VorbehalteDaoTest {
         assertEquals(2021, argument.datum?.year)
         assertEquals(8,argument.datum?.month?.value)
         assertEquals(8, argument.datum?.dayOfMonth)
-    ***REMOVED***
-***REMOVED***
+    }
+}

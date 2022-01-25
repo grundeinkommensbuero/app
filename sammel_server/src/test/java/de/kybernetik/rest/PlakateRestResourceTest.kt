@@ -37,7 +37,7 @@ class PlakateRestResourceTest {
     fun setUp() {
         whenever(context.userPrincipal).thenReturn(BasicUserPrincipal("11"))
         System.setProperty("de.kybernetik.plakate.secret", "false")
-    ***REMOVED***
+    }
 
     @InjectMocks
     private lateinit var plakateRestResource: PlakateRestResource
@@ -49,7 +49,7 @@ class PlakateRestResourceTest {
         val plakate = plakateRestResource.getPlakate()
 
         assertTrue((plakate.entity as List<Plakat>).isEmpty())
-    ***REMOVED***
+    }
 
     @Test
     fun getPlakateKonvertiertAllePlakateVonDao() {
@@ -72,7 +72,7 @@ class PlakateRestResourceTest {
         assertEquals("12161, Bundesallee 76", entity[1].adresse)
         assertEquals(3L, entity[2].id)
         assertEquals("12161, Goßlerstraße 29", entity[2].adresse)
-    ***REMOVED***
+    }
 
     @Test
     fun erstellePlakatRuftDaoAufUndKonvertiertDto() {
@@ -103,7 +103,7 @@ class PlakateRestResourceTest {
 
         assertEquals(0, argCaptor.firstValue.id)
         assertEquals("12161, Bundesallee 129", argCaptor.firstValue.adresse)
-    ***REMOVED***
+    }
 
     @Test
     fun erstellePlakatKorrigiertBenutzer() {
@@ -134,7 +134,7 @@ class PlakateRestResourceTest {
         assertEquals(11, argCaptor.firstValue.user_id)
 
         assertEquals(200, response.status)
-    ***REMOVED***
+    }
 
     @Test
     fun erstellePlakatLiefertPlakatDtoVonDBZurueck() {
@@ -161,7 +161,7 @@ class PlakateRestResourceTest {
         )
 
         assertEquals("Plakat aus der Datenbank", (response.entity as PlakatDto).adresse)
-    ***REMOVED***
+    }
 
     @Test
     fun loeschePlakatErwartetIdAlsPathParameter() {
@@ -170,7 +170,7 @@ class PlakateRestResourceTest {
         assertEquals(422, response.status)
         assertEquals("Kein Plakat an den Server gesendet", (response.entity as RestFehlermeldung).meldung)
         verify(dao, never()).loeschePlakat(any())
-    ***REMOVED***
+    }
 
     @Test
     fun loeschePlakateErwartetExistierendeIdAlsPathParameter() {
@@ -184,7 +184,7 @@ class PlakateRestResourceTest {
             (response.entity as RestFehlermeldung).meldung
         )
         verify(dao, never()).loeschePlakat(any())
-    ***REMOVED***
+    }
 
     @Test
     fun loeschePlakatWeistFalschenBenutzerZurueck() {
@@ -198,7 +198,7 @@ class PlakateRestResourceTest {
             (response.entity as RestFehlermeldung).meldung
         )
         verify(dao, never()).loeschePlakat(any())
-    ***REMOVED***
+    }
 
     @Test
     fun loeschePlakatAkzeptiertRichtigenBenutzerUndLoeschtHaus() {
@@ -209,5 +209,5 @@ class PlakateRestResourceTest {
 
         assertEquals(200, response.status)
         verify(dao, times(1)).loeschePlakat(plakat)
-    ***REMOVED***
-***REMOVED***
+    }
+}

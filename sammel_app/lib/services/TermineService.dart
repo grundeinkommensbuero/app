@@ -52,13 +52,13 @@ abstract class AbstractTermineService extends BackendService {
     try {
       var action = await getActionWithDetails(id);
       actionPageKey.currentState!.openTerminDetails(action);
-    ***REMOVED*** on Error catch (e) {
+    } on Error catch (e) {
       ErrorService.handleError(e, StackTrace.current,
           context:
               'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.');
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***
+    }
+  }
+}
 
 class TermineService extends AbstractTermineService
     implements PushNotificationListener {
@@ -75,7 +75,7 @@ class TermineService extends AbstractTermineService
     manager.registerMessageCallback(PushDataTypes.newKiezActions, this);
     manager.registerMessageCallback(PushDataTypes.actionChanged, this);
     manager.registerMessageCallback(PushDataTypes.actionDeleted, this);
-  ***REMOVED***
+  }
 
   Future<List<Termin>> loadActions(TermineFilter filter) async {
     HttpClientResponseBody response =
@@ -86,7 +86,7 @@ class TermineService extends AbstractTermineService
         .map((jsonTermin) => Termin.fromJson(jsonTermin, kieze))
         .toList();
     return termine;
-  ***REMOVED***
+  }
 
   Future<Termin> createAction(Termin termin, String token) async {
     ActionWithToken actionWithToken = ActionWithToken(termin, token);
@@ -94,42 +94,42 @@ class TermineService extends AbstractTermineService
         await post('service/termine/neu', jsonEncode(actionWithToken));
     var kieze = await stammdatenService.kieze;
     return Termin.fromJson(response.body, kieze);
-  ***REMOVED***
+  }
 
   @override
   Future<Termin> getActionWithDetails(int id) async {
     var response = await get('service/termine/termin?id=' + id.toString());
     var kieze = await stammdatenService.kieze;
     return Termin.fromJson(response.body, kieze);
-  ***REMOVED***
+  }
 
   saveAction(Termin action, String token) async {
     await post(
         'service/termine/termin', jsonEncode(ActionWithToken(action, token)));
-  ***REMOVED***
+  }
 
   deleteAction(Termin action, String token) async {
     await delete('service/termine/termin',
         data: jsonEncode(ActionWithToken(action, token)));
-  ***REMOVED***
+  }
 
   joinAction(int id) async {
     try {
       await post('service/termine/teilnahme', jsonEncode(null),
-          parameters: {'id': '$id'***REMOVED***);
-    ***REMOVED*** catch (e, s) {
+          parameters: {'id': '$id'});
+    } catch (e, s) {
       ErrorService.handleError(e, s, context: 'Teilnahme ist fehlgeschlagen.');
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   leaveAction(int id) async {
     try {
       await post('service/termine/absage', jsonEncode(null),
-          parameters: {'id': '$id'***REMOVED***);
-    ***REMOVED*** catch (e, s) {
+          parameters: {'id': '$id'});
+    } catch (e, s) {
       ErrorService.handleError(e, s, context: 'Absage ist fehlgeschlagen.');
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   @override
   void handleNotificationTap(Map<String, dynamic> data) async {
@@ -143,29 +143,29 @@ class TermineService extends AbstractTermineService
     else {
       actionPageKey.currentState!
           .zeigeAktionen('Neue Aktionen', actionData.actions);
-    ***REMOVED***
+    }
 
     if (actionData.type == PushDataTypes.actionChanged) {
       actionPageKey.currentState!.openTerminDetails(actionData.actions[0]);
-    ***REMOVED***
+    }
 
     if (actionData.type == PushDataTypes.actionDeleted) {
       actionData.actions[0].id = null;
       actionPageKey.currentState!
           .zeigeAktionen('Gelöschte Aktionen', actionData.actions);
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   @override
   loadAndShowAction(int id) async {
     try {
       var action = await getActionWithDetails(id);
       actionPageKey.currentState!.openTerminDetails(action);
-    ***REMOVED*** on Exception catch (e) {
+    } on Exception catch (e) {
       ErrorService.handleError(e, StackTrace.current,
           context: 'Die Aktion konnte nicht angezeigt werden');
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   @override
   void receiveMessage(Map<String, dynamic> data) async {
@@ -178,19 +178,19 @@ class TermineService extends AbstractTermineService
       localNotificationService.sendActionDeletedNotification(message);
     if (message.type == PushDataTypes.actionChanged)
       localNotificationService.sendActionChangedNotification(message);
-  ***REMOVED***
+  }
 
   @override
-  void updateMessages(List<Map<String, dynamic>> data) {***REMOVED***
+  void updateMessages(List<Map<String, dynamic>> data) {}
 
   saveEvaluation(Evaluation evaluation) async {
     try {
       await post('service/termine/evaluation', jsonEncode(evaluation));
-    ***REMOVED*** catch (e, s) {
+    } catch (e, s) {
       ErrorService.handleError(e, s, context: 'Evaluation ist fehlgeschlagen.');
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***
+    }
+  }
+}
 
 class DemoTermineService extends AbstractTermineService {
   static var heute = DateTime.now();
@@ -255,7 +255,7 @@ class DemoTermineService extends AbstractTermineService {
                   'Ihr seid alle herzlich eingeladen zur Strategiediskussion',
                   'Meldet euch doch bitte an unter info@dwenteignen.de damit wir das Buffet planen können')),
         ]);
-  ***REMOVED***
+  }
 
   @override
   Future<List<Termin>> loadActions(TermineFilter filter) async {
@@ -282,8 +282,8 @@ class DemoTermineService extends AbstractTermineService {
           (filter.immerEigene == true
               ? termin.participants!.map((u) => u.id).contains(13)
               : false);
-    ***REMOVED***).toList();
-  ***REMOVED***
+    }).toList();
+  }
 
   @override
   Future<Termin> createAction(Termin termin, String token) async {
@@ -291,41 +291,41 @@ class DemoTermineService extends AbstractTermineService {
     termin.id = highestId + 1;
     (await termine).add(termin);
     return termin;
-  ***REMOVED***
+  }
 
   @override
   Future<Termin> getActionWithDetails(int id) async {
     return (await termine).firstWhere((termin) => termin.id == id);
-  ***REMOVED***
+  }
 
   @override
   Future<void> saveAction(Termin newAction, String token) async {
     var termine = await this.termine;
     termine[termine.indexWhere((oldAction) => oldAction.id == newAction.id)] =
         newAction;
-  ***REMOVED***
+  }
 
   @override
   deleteAction(Termin action, String token) async {
     var termine = await this.termine;
     termine.removeAt(termine.indexWhere((a) => a.id == action.id));
-  ***REMOVED***
+  }
 
   joinAction(int id) async {
     var stored = (await termine).firstWhere((a) => a.id == id);
     if (!stored.participants!.map((e) => e.id).contains(1))
       stored.participants!.add(User(11, 'Ich', Colors.red));
-  ***REMOVED***
+  }
 
   leaveAction(int id) async {
     var stored = (await termine).firstWhere((a) => a.id == id);
     if (stored.participants!.map((e) => e.id).contains(1))
       stored.participants!.remove(User(11, 'Ich', Colors.red));
-  ***REMOVED***
+  }
 
   @override
   Future<void> saveEvaluation(Evaluation evaluation) async {
     // hier muss man nix machen, es wird sowieso lokal gespeichert, dass man eine Evaluation abgegeben hat
     return;
-  ***REMOVED***
-***REMOVED***
+  }
+}

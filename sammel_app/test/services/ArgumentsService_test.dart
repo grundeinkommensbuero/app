@@ -13,7 +13,7 @@ main() {
   setUp(() {
     reset(userService);
     trainUserService(userService);
-  ***REMOVED***);
+  });
 
   group('ArgumentsService', () {
     late MockBackend backend;
@@ -23,7 +23,7 @@ main() {
       backend = MockBackend();
       trainBackend(backend);
       service = ArgumentsService(userService, backend);
-    ***REMOVED***);
+    });
 
     test('calls backend service with right path and sends arguments', () async {
       when(backend.post('service/vorbehalte', any, any)).thenAnswer((_) =>
@@ -39,15 +39,15 @@ main() {
               '"vorbehalte":"Genossenschaften",'
               '"datum":"2021-08-08",'
               '"ort":"10243"'
-              '***REMOVED***',
+              '}',
           any));
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('DemoArgumentsService', () {
     test('does nothing', () {
       DemoArgumentsService(userService).createArguments(Arguments(
           'Genossenschaften', DateTime(2021, 8, 8), '10243'));
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+    });
+  });
+}

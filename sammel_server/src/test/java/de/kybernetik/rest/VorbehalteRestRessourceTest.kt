@@ -33,7 +33,7 @@ class VorbehalteRestRessourceTest {
     @Before
     fun setUp() {
         whenever(context.userPrincipal).thenReturn(BasicUserPrincipal("11"))
-    ***REMOVED***
+    }
 
     @Test
     fun `legeNeueVorbehalteAn konvertiert Dto und ruft Dao auf`() {
@@ -55,7 +55,7 @@ class VorbehalteRestRessourceTest {
         assertEquals(8, captor.firstValue.datum?.monthValue)
         assertEquals(8, captor.firstValue.datum?.dayOfMonth)
         assertEquals("10243", captor.firstValue.ort)
-    ***REMOVED***
+    }
 
     @Test
     fun `legeNeueVorbehalteAn reichert um Benutzer an`() {
@@ -72,7 +72,7 @@ class VorbehalteRestRessourceTest {
         verify(dao).erzeugeNeueVorbehalte(captor.capture())
         assertEquals(11, captor.firstValue.benutzer)
         assertEquals(200, response.status)
-    ***REMOVED***
+    }
 
     @Test
     fun `legeNeueVorbehalteAn speichert bei fehlenden Werten nicht und gibt Fehlercode zurueck`() {
@@ -87,5 +87,5 @@ class VorbehalteRestRessourceTest {
 
         verify(dao, never()).erzeugeNeueVorbehalte(anyOrNull())
         assertEquals("Fehlender Wert für Datum", (response.entity as RestFehlermeldung).meldung)
-    ***REMOVED***
-***REMOVED***
+    }
+}

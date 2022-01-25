@@ -16,7 +16,7 @@ void main() {
     ErrorService.errorQueue = [];
     ErrorService.setContext(null);
     ErrorService.displayedTypes = [];
-  ***REMOVED***);
+  });
 
   group('pushMessage', () {
     test('stores error message when waiting for build context', () {
@@ -25,7 +25,7 @@ void main() {
       ErrorService.pushError('Titel', 'Nachricht');
 
       expect(ErrorService.errorQueue.length, 3);
-    ***REMOVED***);
+    });
 
     testUI('shows error message immediately with build context',
         (WidgetTester tester) async {
@@ -41,7 +41,7 @@ void main() {
                       'Titel', 'Nachricht',
                       key: Key('error dialog'))),
             );
-          ***REMOVED***),
+          }),
         ),
       ));
 
@@ -50,8 +50,8 @@ void main() {
 
       expect(find.byKey(Key('error dialog')), findsOneWidget);
       expect(ErrorService.errorQueue, isEmpty);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('handleError', () {
     test('recognizes and handles AuthFehler', () {
@@ -62,7 +62,7 @@ void main() {
           'Fehler bei Nutzer-Authentifizierung');
       expect(ErrorService.errorQueue[0][1],
           'Nachricht \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an app@dwenteignen.de');
-    ***REMOVED***);
+    });
 
     test('recognizes and handles RestFehler', () {
       ErrorService.handleError(RestFehler('Nachricht'), StackTrace.empty);
@@ -72,7 +72,7 @@ void main() {
           'Bei der Kommunikation mit dem Server ist ein Fehler aufgetreten');
       expect(ErrorService.errorQueue[0][1],
           'Nachricht \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an app@dwenteignen.de');
-    ***REMOVED***);
+    });
 
     test('recognizes and handles WrongResponseFormatException', () {
       ErrorService.handleError(
@@ -83,7 +83,7 @@ void main() {
           'Bei der Kommunikation mit dem Server ist ein technischer Fehler aufgetreten');
       expect(ErrorService.errorQueue[0][1],
           'Nachricht \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an app@dwenteignen.de');
-    ***REMOVED***);
+    });
 
     test('adds optional message to Error text', () {
       ErrorService.handleError(RestFehler('Nachricht.'), StackTrace.empty,
@@ -94,8 +94,8 @@ void main() {
           ErrorService.errorQueue[0][1],
           'Zusätzliche Info. Nachricht. \n\n'
           'Wenn du Hilfe brauchst, schreib uns doch einfach per Mail an app@dwenteignen.de');
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('showErrorDialog', () {
     setUpUI((WidgetTester tester) async {
@@ -111,27 +111,27 @@ void main() {
                       'Titel', 'Nachricht',
                       key: Key('error dialog'))),
             );
-          ***REMOVED***),
+          }),
         ),
       ));
 
       await tester.tap(find.byKey(Key('starter')));
       await tester.pumpAndSettle();
-    ***REMOVED***);
+    });
 
     testUI('starts and shows data', (WidgetTester tester) async {
       expect(find.byKey(Key('error dialog')), findsOneWidget);
       expect(find.text('Titel'), findsOneWidget);
       expect(find.text('Nachricht'), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('closes on close button', (WidgetTester tester) async {
       await tester.tap(find.byKey(Key('error dialog close button')));
       await tester.pumpAndSettle();
 
       expect(find.byKey(Key('error dialog')), findsNothing);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('setContext', () {
     late BuildContext context;
@@ -140,9 +140,9 @@ void main() {
         child: Builder(builder: (BuildContext newContext) {
           context = newContext;
           return Placeholder();
-        ***REMOVED***),
+        }),
       )));
-    ***REMOVED***);
+    });
 
     testUI('shows dialog for every stored message',
         (WidgetTester tester) async {
@@ -156,7 +156,7 @@ void main() {
       expect(find.text('Titel1'), findsOneWidget);
       expect(find.text('Titel2'), findsOneWidget);
       expect(find.text('Titel3'), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('shows only one dialog for every stored message, when called twice',
         (WidgetTester tester) async {
@@ -171,13 +171,13 @@ void main() {
       expect(find.text('Titel1'), findsOneWidget);
       expect(find.text('Titel2'), findsOneWidget);
       expect(find.text('Titel3'), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('shows no dialog with empty queue', (WidgetTester tester) async {
       ErrorService.setContext(context);
       await tester.pumpAndSettle();
 
       expect(find.byKey(Key('error dialog')), findsNothing);
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+    });
+  });
+}

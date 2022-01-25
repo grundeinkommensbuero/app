@@ -15,7 +15,7 @@ void main() {
         var pushData = ParticipationPushData(message(), 1, 'my channel');
         var json = pushData.toJson();
         expect(json['channel'], 'my channel');
-      ***REMOVED***);
+      });
 
       test('throws error on missing channel', () {
         expect(
@@ -24,8 +24,8 @@ void main() {
                 e is DeserialisationException &&
                 e.message ==
                     'Fehlender Kanal für Beteiligungs-Benachrichtigung'));
-      ***REMOVED***);
-    ***REMOVED***);
+      });
+    });
     group('fromJson', () {
       test('deserializes correcty', () {
         var json = {
@@ -36,22 +36,22 @@ void main() {
           'username': 'Karl Marx',
           'action': 1,
           'joins': true
-        ***REMOVED***
+        };
 
         var pushData = ParticipationPushData.fromJson(json);
         expect(pushData.type, 'ParticipationMessage');
         expect(pushData.channel, 'my channel');
-      ***REMOVED***);
+      });
 
       test('throws UnreadablePushMessage on incosistent data', () {
         var json = {
           'type': 'ParticipationMessage',
           'channel': 'my channel',
-        ***REMOVED***
+        };
 
         expect(() => ParticipationPushData.fromJson(json),
             throwsA((e) => e is UnreadablePushMessage));
-      ***REMOVED***);
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+      });
+    });
+  });
+}

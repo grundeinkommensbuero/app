@@ -31,14 +31,14 @@ main() {
             "teaser": "Klein aber gemein",
             "order": 4.0,
             "tags": ["gelb", "braun", "giftig"]
-          ***REMOVED***
+          }
         ])));
-  ***REMOVED***);
+  });
 
   group('mixin', () {
     test('returns null with missing faqs', () async {
       expect(TestFAQSorter().sortItems(null, null), isNull);
-    ***REMOVED***);
+    });
 
     test('orders by number of hits in tags', () async {
       List<FAQItem> orderedItems =
@@ -51,7 +51,7 @@ main() {
             'Messor Barbarus',
             'Lasius Niger',
           ]));
-    ***REMOVED***);
+    });
 
     test('orders by number of hits in title', () async {
       List<FAQItem> orderedItems =
@@ -64,7 +64,7 @@ main() {
             'Messor Barbarus',
             'Camponotus Ligniperdus',
           ]));
-    ***REMOVED***);
+    });
 
     test('hits in tags outweight hits in title', () async {
       List<FAQItem> orderedItems =
@@ -77,7 +77,7 @@ main() {
             'Lasius Niger',
             'Messor Barbarus',
           ]));
-    ***REMOVED***);
+    });
 
     test('orders by number of hits in content text', () async {
       List<FAQItem> orderedItems = TestFAQSorter().sortItems(
@@ -91,7 +91,7 @@ main() {
             'Camponotus Ligniperdus',
             'Lasius Niger',
           ]));
-    ***REMOVED***);
+    });
 
     test('hits in title outweight hits in text', () async {
       List<FAQItem> orderedItems = TestFAQSorter()
@@ -104,7 +104,7 @@ main() {
             'Messor Barbarus',
             'Lasius Niger',
           ]));
-    ***REMOVED***);
+    });
 
     test('is not case sensitive', () async {
       List<FAQItem> orderedItems = TestFAQSorter()
@@ -117,7 +117,7 @@ main() {
             'Camponotus Ligniperdus',
             'Messor Barbarus',
           ]));
-    ***REMOVED***);
+    });
 
     test('finds sub-words', () async {
       List<FAQItem> orderedItems =
@@ -130,7 +130,7 @@ main() {
             'Camponotus Ligniperdus',
             'Messor Barbarus',
           ]));
-    ***REMOVED***);
+    });
 
     test('does not change original items order', () async {
       var items = testItems;
@@ -143,7 +143,7 @@ main() {
             'Lasius Niger',
             'Messor Barbarus',
           ]));
-    ***REMOVED***);
+    });
 
     test('can handle multiple spaces and all kind of blanks', () async {
       List<FAQItem> orderedItems = TestFAQSorter()
@@ -156,8 +156,8 @@ main() {
             'Lasius Niger',
             'Camponotus Ligniperdus',
           ]));
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('DemoFAQService', () {
     test('delivers demo faq items', () async {
@@ -169,7 +169,7 @@ main() {
       expect(faq[1].title, 'Was sind die Stufen des Volksbegehrens?');
       expect(faq[2].title, 'Sammeltipps');
       expect(faq[3].title, 'Feedback und Fehlermeldungen');
-    ***REMOVED***);
+    });
 
     test('uses sorter', () async {
       final faqUnsorted = await DemoFAQService().getSortedFAQ(null).first;
@@ -179,8 +179,8 @@ main() {
           containsAll(faqUnsorted!.map((e) => e.id)));
       expect(faqSorted.map((e) => e.id).toList(),
           isNot(containsAllInOrder(faqUnsorted.map((e) => e.id))));
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('FAQService', () {
     test('loads and returns old faq from storage on start', () async {
@@ -194,7 +194,7 @@ main() {
       expect(faq[2].id, 3);
 
       verify(_storageService.loadFAQ()).called(1);
-    ***REMOVED***);
+    });
 
     test(
         'retrieves and returns new faq from server on start when local timestamp is null',
@@ -209,7 +209,7 @@ main() {
       expect(faq, isNotNull);
       expect(faq!.length, 1);
       expect(faq![0].id, 4);
-    ***REMOVED***);
+    });
 
     test('stores new faq from server in storage when local timestamp is null',
         () async {
@@ -223,7 +223,7 @@ main() {
       expect((faq[0] as List<FAQItem>).length, 1);
       expect((faq[0] as List<FAQItem>)[0].id, 4);
       expect((faq[0] as List<FAQItem>)[0].title, 'Myrmica Ruginodis');
-    ***REMOVED***);
+    });
 
     test(
         'does not retrieve new faq from server in storage when local timestamp is not null, but servers is',
@@ -237,7 +237,7 @@ main() {
 
       verifyNever(_backend.get('service/faq', any));
       verifyNever(_storageService.saveFAQ(captureAny));
-    ***REMOVED***);
+    });
 
     test(
         'does not retrieve new faq from server in storage when local timestamp is newer then servers',
@@ -253,7 +253,7 @@ main() {
 
       verifyNever(_backend.get('service/faq', any));
       verifyNever(_storageService.saveFAQ(captureAny));
-    ***REMOVED***);
+    });
 
     test(
         'does not retrieve new faq from server in storage when local timestamp is newer then servers',
@@ -269,9 +269,9 @@ main() {
 
       verify(_backend.get('service/faq', any)).called(1);
       verify(_storageService.saveFAQ(captureAny)).called(1);
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+    });
+  });
+}
 
 DateTime _today() => DateTime.now();
 
@@ -291,4 +291,4 @@ var testItems = [
       ['Sammler', 'Erdnester', 'rot', 'schwarz']),
 ];
 
-class TestFAQSorter with FAQSorter {***REMOVED***
+class TestFAQSorter with FAQSorter {}

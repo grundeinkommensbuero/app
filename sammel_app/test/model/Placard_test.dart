@@ -18,8 +18,8 @@ void main() {
           '"adresse":"12161, Friedrich-Wilhelm-Platz 57",'
           '"benutzer":13,'
           '"abgehangen":false'
-          '***REMOVED***');
-    ***REMOVED***);
+          '}');
+    });
 
     test('filled Placard', () {
       expect(
@@ -33,9 +33,9 @@ void main() {
           '"adresse":"12161, Friedrich-Wilhelm-Platz 57",'
           '"benutzer":11,'
           '"abgehangen":false'
-          '***REMOVED***');
-    ***REMOVED***);
-  ***REMOVED***);
+          '}');
+    });
+  });
 
   group('deserialises', () {
     test('throws error on missing values', () {
@@ -47,12 +47,12 @@ void main() {
               '"adresse":null,'
               '"benutzer":null,'
               '"abgehangen":null'
-              '***REMOVED***')),
+              '}')),
           throwsA((e) =>
               e is DeserialisationException &&
               e.message ==
                   'Fehlende Werte: latitude, longitude, adresse, benutzer, abgehangen'));
-    ***REMOVED***);
+    });
 
     test('filled user', () {
       final user = Placard.fromJson(jsonDecode('{'
@@ -62,13 +62,13 @@ void main() {
           '"adresse":"12161, Friedrich-Wilhelm-Platz 57",'
           '"benutzer":11,'
           '"abgehangen":false'
-          '***REMOVED***'));
+          '}'));
 
       expect(user.id, 1);
       expect(user.latitude, 52.472246);
       expect(user.longitude, 13.327783);
       expect(user.adresse, '12161, Friedrich-Wilhelm-Platz 57');
       expect(user.benutzer, 11);
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+    });
+  });
+}

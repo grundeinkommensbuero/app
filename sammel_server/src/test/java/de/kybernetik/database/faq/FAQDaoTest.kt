@@ -48,7 +48,7 @@ class FAQDaoTest {
             .thenReturn(typedQuery)
         whenever(typedQuery.resultList)
             .thenReturn(response)
-    ***REMOVED***
+    }
 
     @Test
     fun `getAllFAQ fragt Datenbank und reicht Amtwort weiter`() {
@@ -60,7 +60,7 @@ class FAQDaoTest {
         assertEquals(faqs[2], response[2])
 
         verify(entityManager, times(1)).createQuery("from FAQ", FAQ::class.java)
-    ***REMOVED***
+    }
 
     @Test
     fun `getFAQTimestamp returns existing timestamp`() {
@@ -72,7 +72,7 @@ class FAQDaoTest {
             .thenReturn(faqTimestamp)
 
         assertEquals(dao.getFAQTimestamp(), faqTimestamp.timestamp)
-    ***REMOVED***
+    }
 
     @Test
     fun `getFAQTimestamp returns null on missing timestamp`() {
@@ -82,8 +82,8 @@ class FAQDaoTest {
             .thenThrow(NoResultException::class.java)
 
         assertEquals(dao.getFAQTimestamp(), null)
-    ***REMOVED***
-***REMOVED***
+    }
+}
 
 @Suppress("unused")
 open class FAQBuilder {
@@ -92,42 +92,42 @@ open class FAQBuilder {
     open fun withId(id: Long): FAQBuilder {
         faq.id = id
         return this
-    ***REMOVED***
+    }
 
     open fun withTitle(title: String): FAQBuilder {
         faq.title = title
         return this
-    ***REMOVED***
+    }
 
     open fun withTeaser(teaser: String): FAQBuilder {
         faq.teaser = teaser
         return this
-    ***REMOVED***
+    }
 
     fun withRest(rest: String): FAQBuilder {
         faq.rest = rest
         return this
-    ***REMOVED***
+    }
 
     open fun withOrder(order: Double): FAQBuilder {
         faq.order = order
         return this
-    ***REMOVED***
+    }
 
     open fun withTags(tags: List<String>): FAQBuilder {
         faq.tags = tags
         return this
-    ***REMOVED***
+    }
 
     open fun withGenericValues(offset: Long): FAQBuilder {
         faq.id = offset
-        faq.title = "Titel ${offset***REMOVED***"
-        faq.teaser = "Teaser ${offset***REMOVED***"
-        faq.rest = "Rest ${offset***REMOVED***"
+        faq.title = "Titel ${offset}"
+        faq.teaser = "Teaser ${offset}"
+        faq.rest = "Rest ${offset}"
         faq.order = offset.toDouble()
-        faq.tags = (1.rangeTo(offset)).map { "tag $it" ***REMOVED***
+        faq.tags = (1.rangeTo(offset)).map { "tag $it" }
         return this
-    ***REMOVED***
+    }
 
     open fun build(): FAQ = faq
-***REMOVED***
+}

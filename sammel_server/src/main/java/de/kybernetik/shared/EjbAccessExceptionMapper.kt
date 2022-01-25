@@ -17,15 +17,15 @@ class EjbAccessExceptionMapper : ExceptionMapper<EJBException?> {
     override
     fun toResponse(exception: EJBException?): Response {
         if (exception is EJBAccessException) {
-            LOG.warn("Unbefugter Zugriff: ${exception.localizedMessage***REMOVED***")
+            LOG.warn("Unbefugter Zugriff: ${exception.localizedMessage}")
             return Response.status(FORBIDDEN)
                 .entity(RestFehlermeldung("Du hast nicht die notwendigen Rechte um diese Funktion auszuführen"))
                 .build()
-        ***REMOVED*** else {
+        } else {
             LOG.error("EJB-Exception aufgetreten", exception)
             return Response.status(INTERNAL_SERVER_ERROR)
-                .entity(RestFehlermeldung("Ein unerwarteter Fehler ist aufgetreten: ${exception!!.localizedMessage***REMOVED***"))
+                .entity(RestFehlermeldung("Ein unerwarteter Fehler ist aufgetreten: ${exception!!.localizedMessage}"))
                 .build()
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+        }
+    }
+}

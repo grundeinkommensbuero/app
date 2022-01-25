@@ -25,7 +25,7 @@ void main() {
       'number': '96',
       'latitude': 52.5001477,
       'longitude': 13.4181523
-    ***REMOVED***
+    };
     var zukunftJson = {
       'id': '3',
       'name': 'Zukunft',
@@ -33,7 +33,7 @@ void main() {
       'number': '5',
       'latitude': 52.5016524,
       'longitude': 13.4655402
-    ***REMOVED***
+    };
     List<Map<String, dynamic>> listlocations = [cafeKottiJson, zukunftJson];
     when(backend.get('/service/listlocations/actives', any)).thenAnswer(
         (_) async => trainHttpResponse(
@@ -55,17 +55,17 @@ void main() {
     expect(ergebnis[1].number, '5');
     expect(ergebnis[1].latitude, 52.5016524);
     expect(ergebnis[1].longitude, 13.4655402);
-  ***REMOVED***);
+  });
 
   group('DemoListLocationService', () {
     var service;
     setUp(() {
       service = DemoListLocationService(userService);
-    ***REMOVED***);
+    });
 
     test('uses DemoBackend', () {
       expect(service.backend is DemoBackend, true);
-    ***REMOVED***);
+    });
 
     test('DemoListLocationService returns list locations', () async {
       List<ListLocation> result = await service.getActiveListLocations();
@@ -91,6 +91,6 @@ void main() {
       expect(result[2].number, zukunft().number);
       expect(result[2].latitude, zukunft().latitude);
       expect(result[2].longitude, zukunft().longitude);
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+    });
+  });
+}

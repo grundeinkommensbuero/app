@@ -6,14 +6,14 @@ class ConstJsonAssetLoader extends AssetLoader {
   @override
   Future<Map<String, dynamic>?> load(String _, Locale locale) async =>
       languages[locale.languageCode];
-***REMOVED***
+}
 
 const Map<String, Map<String, dynamic>> languages = {
   'en': en,
   'de': de,
   'ru': ru,
   'fr': fr,
-***REMOVED***
+};
 
 const Map<String, dynamic> en = {
   "Liste": "List",
@@ -23,12 +23,12 @@ const Map<String, dynamic> en = {
   "Listen ausgelegt": "Left lists",
   "Workshop": "Workshop",
   "Unbekannter Nachrichtentyp abgespeichert": "Unknown message type saved",
-  "{kiez***REMOVED*** in {bezirk***REMOVED***\n Treffpunkt: {treffpunkt***REMOVED***":
-      "{kiez***REMOVED*** in {bezirk***REMOVED***\n meeting point: {treffpunkt***REMOVED***",
-  "Unlesbare Push-Nachricht (Teilnahme) empfangen: {message***REMOVED***":
-      "Unreadable push notification (participation) received: {message***REMOVED***",
+  "{kiez} in {bezirk}\n Treffpunkt: {treffpunkt}":
+      "{kiez} in {bezirk}\n meeting point: {treffpunkt}",
+  "Unlesbare Push-Nachricht (Teilnahme) empfangen: {message}":
+      "Unreadable push notification (participation) received: {message}",
   "Ein paar Worte über dich": "A few words about yourself",
-  "Beschreibung: {beschreibung***REMOVED***": "Description: {beschreibung***REMOVED***",
+  "Beschreibung: {beschreibung}": "Description: {beschreibung}",
   "Beschreibe die Aktion kurz": "Briefly describe the event",
   "Wähle die Art der Aktion": "Choose the event type",
   "von ": "from ",
@@ -45,22 +45,22 @@ const Map<String, dynamic> en = {
   "\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen":
       "\nNew participants can’t read older messages",
   "gerade eben": "just now",
-  "{***REMOVED*** Minuten": {
-    "zero": "{***REMOVED*** Minutes",
-    "one": "{***REMOVED*** Minute",
-    "two": "{***REMOVED*** Minutes",
-    "other": "{***REMOVED*** Minutes"
-  ***REMOVED***,
-  "{***REMOVED*** Stunden": {
-    "zero": "{***REMOVED*** Hours",
-    "one": "{***REMOVED*** Hour",
-    "two": "{***REMOVED*** Hours",
-    "other": "{***REMOVED*** Hours"
-  ***REMOVED***,
+  "{} Minuten": {
+    "zero": "{} Minutes",
+    "one": "{} Minute",
+    "two": "{} Minutes",
+    "other": "{} Minutes"
+  },
+  "{} Stunden": {
+    "zero": "{} Hours",
+    "one": "{} Hour",
+    "two": "{} Hours",
+    "other": "{} Hours"
+  },
   "Teilnehmer*innen": "Participants",
   "Keine Teilnehmer*innen": "No participants",
-  "{count***REMOVED*** Teilnehmer*innen im Chat": "{count***REMOVED*** participants in chat",
-  "+ {count***REMOVED*** weitere Teilnehmer*innen": "+ {count***REMOVED*** other participants",
+  "{count} Teilnehmer*innen im Chat": "{count} participants in chat",
+  "+ {count} weitere Teilnehmer*innen": "+ {count} other participants",
   "Neue Chat-Nachricht": "New chat message",
   "Öffne die App um sie zu lesen": "Open the app to read",
   "Durchsuchen": "Browse",
@@ -109,7 +109,7 @@ const Map<String, dynamic> en = {
       "This app was developed by a small team of enthusiastic IT activists for Deutsche Wohnen & Co Enteignen and is under free license.\\n\\nExpedition Grundeinkommen has adapted the app for its own purposes. If you are interested in using this app for your petition, you are welcome to send an email to Expedition or to DWE.",
   "Heute, ": "Today, ",
   "Morgen, ": "Tomorrow, ",
-  "{prefix***REMOVED***{date***REMOVED*** um {zeit***REMOVED*** Uhr, ": "{prefix***REMOVED***{date***REMOVED*** at {zeit***REMOVED*** o’clock, ",
+  "{prefix}{date} um {zeit} Uhr, ": "{prefix}{date} at {zeit} o’clock, ",
   "Aktionen konnten nicht geladen werden.": "Event could not be loaded.",
   "Aktion konnte nicht angelegt werden": "Event could not be displayed",
   "Okay...": "Okay...",
@@ -145,8 +145,8 @@ const Map<String, dynamic> en = {
       "An error has occurred while verifying your user account. Please try again later or reinstall the app if you don’t have any events of your own saved.",
   "SSL-Zertifikat konnte nicht geladen werden":
       "SSL-certificate could not be loaded",
-  "Deine App-Version ist veraltet. Dies ist die Version {version***REMOVED***, du musst aber mindestens Version {minClient***REMOVED*** benutzen, damit die App richtig funktioniert.":
-      "Your version of the app is out-of-date. This is version {version***REMOVED***. You need to use at least {minClient***REMOVED*** or later for the app to work properly.",
+  "Deine App-Version ist veraltet. Dies ist die Version {version}, du musst aber mindestens Version {minClient} benutzen, damit die App richtig funktioniert.":
+      "Your version of the app is out-of-date. This is version {version}. You need to use at least {minClient} or later for the app to work properly.",
   "Falsches Format": "Wrong format",
   "Listen-Orte konnten nicht geladen werden.":
       "List of locations could not be loaded.",
@@ -161,17 +161,17 @@ const Map<String, dynamic> en = {
       "Notifications about new chat messages about events you’re taking part in",
   "Infos": "Info",
   "Allgemeine Infos": "General info",
-  "Nachricht von {name***REMOVED***": "Message from {name***REMOVED***",
+  "Nachricht von {name}": "Message from {name}",
   "Problem beim Einrichten von Push-Nachrichten":
       "Error on establishing push messages",
   "Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. Das kann der Fall sein, wenn etwa ein Google-freies Betriebssystem genutzt wird. Darum kann die App nur Benachrichtigungen empfangen während sie geöffnet ist.":
       "A connection to the Google Push service could not be established. That can happen if, for example, a Google-free operating system is being used, in which case the app can only receive notifications while it’s open.",
   "Beim Abrufen von Nachrichten ist ein Fehler aufgetreten. Das regelmäßige Abrufen von Nachrichten wird deshalb deaktiviert":
       "An error occurred when retrieving messages. Regular message retrieval has been disabled",
-  "Fehler beim Anmelden der Benachrichtigungen zu {topics***REMOVED***":
-      "Error logging in to notifications about {topics***REMOVED***",
-  "Fehler beim Abmelden der Benachrichtigungen zu {topics***REMOVED***":
-      "Error logging out from notifications about {topics***REMOVED***",
+  "Fehler beim Anmelden der Benachrichtigungen zu {topics}":
+      "Error logging in to notifications about {topics}",
+  "Fehler beim Abmelden der Benachrichtigungen zu {topics}":
+      "Error logging out from notifications about {topics}",
   "Für Push-Nachrichten an Geräte muss mindestens ein Empfänger angegeben werden.":
       "At least one recipient needs to be chosen for push messages to another device.",
   "Push-Nachricht an Geräte konnte nicht versandt werden":
@@ -209,7 +209,7 @@ const Map<String, dynamic> en = {
   "Keine Auswahl": "No selection",
   "Um diese Aktion auszuführen musst du dir einen Benutzer*in-Name geben":
       "To perform this action you need to give yourself a username",
-  "am {tage***REMOVED***,": "on {tage***REMOVED***,",
+  "am {tage},": "on {tage},",
   "Auswählen": "Select",
   "Auswahl übernehmen": "Apply selection",
   "Das Volksbegehren lebt von deiner Beteiligung! \n":
@@ -269,18 +269,18 @@ const Map<String, dynamic> en = {
   "Situation:": "Situation:",
   "Optional: Wie war die Situation?": "Optional: How was the situation?",
   "Erzähl uns, was ihr erreicht habt!\n": " Tell us what you accomplished!\n",
-  "{***REMOVED*** Unterschriften": {
-    "zero": "{***REMOVED*** signatures",
-    "one": "{***REMOVED*** signature",
-    "two": "{***REMOVED*** signatures",
-    "other": "{***REMOVED*** signatures"
-  ***REMOVED***,
-  "{***REMOVED*** Teilnehmer": {
-    "zero": "{***REMOVED*** participants",
-    "one": "{***REMOVED*** participants",
-    "two": "{***REMOVED*** participants",
-    "other": "{***REMOVED*** participants"
-  ***REMOVED***,
+  "{} Unterschriften": {
+    "zero": "{} signatures",
+    "one": "{} signature",
+    "two": "{} signatures",
+    "other": "{} signatures"
+  },
+  "{} Teilnehmer": {
+    "zero": "{} participants",
+    "one": "{} participants",
+    "two": "{} participants",
+    "other": "{} participants"
+  },
   "News": "News",
   "Neues vom Volksbegehren und der Kampagne":
       "News from the referendum and the campaign",
@@ -299,8 +299,8 @@ const Map<String, dynamic> en = {
   "Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an app@dwenteignen.de":
       "All the data you put into the app will be stored exclusively at system of the Deutsche Wohnen & Co. Enteignen campaign and will only be used for the purpose of this app and the campaign. Please take into account that many of the data that you input can be read by other users of this app. Chat messages can only be viewed by participants of the chat at message time. \nFor push notification functionality we depend on Google and Appla delivering infrastructure. Data that are transported this way are being encrypted. If you want us to remove all personal data you input please mail us at app@dwenteignen.de",
   "Zu viele Tage": "Too many dates",
-  "Bitte wähle {maxTage***REMOVED*** Tage oder weniger aus.":
-      "Please select {maxTage***REMOVED*** days or fewer.",
+  "Bitte wähle {maxTage} Tage oder weniger aus.":
+      "Please select {maxTage} days or fewer.",
   "Benachrichtigungs-Einstellungen": "Notification Configurations",
   "Benachrichtigungen einstellen": "Configure Notifications",
   "Wenn du Benachrichtigungen leise stellen oder bestimmte Benachrichtigungs-Arten ganz ausstellen willst, dann tippe einfach lange auf eine Benachrichtigung die du bekommen hast und du gelangst zu den Benachrichtigungseinstellungen für diese App.":
@@ -327,10 +327,10 @@ const Map<String, dynamic> en = {
   "lade...": "loading...",
   "Na gut": "Allright",
   "In den Kalender": "Add to Calendar",
-  '{typ***REMOVED*** in {ortsteil***REMOVED***': '{typ***REMOVED*** at {ortsteil***REMOVED***',
+  '{typ} in {ortsteil}': '{typ} at {ortsteil}',
   "Teilen": "Share",
-  '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***':
-      '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** at {zeitpunkt***REMOVED***\n{url***REMOVED***',
+  '{typ} in {ortsteil}, {treffpunkt} am {zeitpunkt}\n{url}':
+      '{typ} in {ortsteil}, {treffpunkt} at {zeitpunkt}\n{url}',
   'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
       'The action could not been found. Maybe it has been deleted.',
   'Ein Fehler ist aufgetreten': 'An error occured',
@@ -373,7 +373,7 @@ const Map<String, dynamic> en = {
   'Access failed': 'Zugriff fehlgeschlagen',
   'Dieses Plakat wurde von jemand anderem eingetragen. Du kannst es als abgehangen markieren.':
       'This placard has been added by somone else. You can mark it as taken down.',
-***REMOVED***
+};
 
 const Map<String, dynamic> ru = {
   "Liste": "Список",
@@ -384,12 +384,12 @@ const Map<String, dynamic> ru = {
   "Workshop": "Семинар",
   "Unbekannter Nachrichtentyp abgespeichert":
       "Сохранено сообщение неизвестного типа",
-  "{kiez***REMOVED*** in {bezirk***REMOVED***\n Treffpunkt: {treffpunkt***REMOVED***":
-      "{kiez***REMOVED*** в {bezirk***REMOVED***\n место встречи: {treffpunkt***REMOVED***",
-  "Unlesbare Push-Nachricht (Teilnahme) empfangen: {message***REMOVED***":
-      "Принято нечитаемое Push-сообщение (участие): {message***REMOVED***",
+  "{kiez} in {bezirk}\n Treffpunkt: {treffpunkt}":
+      "{kiez} в {bezirk}\n место встречи: {treffpunkt}",
+  "Unlesbare Push-Nachricht (Teilnahme) empfangen: {message}":
+      "Принято нечитаемое Push-сообщение (участие): {message}",
   "Ein paar Worte über dich": "Несколько слов о тебе",
-  "Beschreibung: {beschreibung***REMOVED***": "Описание: {beschreibung***REMOVED***",
+  "Beschreibung: {beschreibung}": "Описание: {beschreibung}",
   "Beschreibe die Aktion kurz": "Кратко опиши акцию",
   "Wähle die Art der Aktion": "Выбери вид акции",
   "von ": "с ",
@@ -408,22 +408,22 @@ const Map<String, dynamic> ru = {
   "\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen":
       "\nНовые участники не могут читать старые сообщения",
   "gerade eben": "только что",
-  "{***REMOVED*** Minuten": {
-    "zero": "{***REMOVED*** минут",
-    "one": "{***REMOVED*** минута",
-    "two": "{***REMOVED*** минуты",
-    "other": "{***REMOVED*** мин. "
-  ***REMOVED***,
-  "{***REMOVED*** Stunden": {
-    "zero": "{***REMOVED*** часов",
-    "one": "{***REMOVED*** час",
-    "two": "{***REMOVED*** часа",
-    "other": "{***REMOVED*** час."
-  ***REMOVED***,
+  "{} Minuten": {
+    "zero": "{} минут",
+    "one": "{} минута",
+    "two": "{} минуты",
+    "other": "{} мин. "
+  },
+  "{} Stunden": {
+    "zero": "{} часов",
+    "one": "{} час",
+    "two": "{} часа",
+    "other": "{} час."
+  },
   "Teilnehmer*innen": "Участники",
   "Keine Teilnehmer*innen": "Участников нет",
-  "{count***REMOVED*** Teilnehmer*innen im Chat": "{count***REMOVED*** участников в чате",
-  "+ {count***REMOVED*** weitere Teilnehmer*innen": "+ еще {count***REMOVED*** участников",
+  "{count} Teilnehmer*innen im Chat": "{count} участников в чате",
+  "+ {count} weitere Teilnehmer*innen": "+ еще {count} участников",
   "Neue Chat-Nachricht": "Новое сообщение в чате",
   "Öffne die App um sie zu lesen": "Открой приложение, чтобы прочитать",
   "Durchsuchen": "Просмотреть",
@@ -471,7 +471,7 @@ const Map<String, dynamic> ru = {
       "Данное приложение было разработано небольшой командой энтузиастов из ИТ-индустрии для кампании «Национализируем Deutsche Wohnen & Co («Дойче Вонен унд Ко»)» и распространяется по свободной лицензии.\\n\\nЕсли ты заинтересован в использовании данного приложения для целей твоей народной инициативы, то просто напиши нам на электронную почту или посети наш сайт. По этим же каналам ты можешь сообщать нам об ошибках в приложении и о связанных с ним проблемах.",
   "Heute, ": "Сегодня, ",
   "Morgen, ": "Завтра, ",
-  "{prefix***REMOVED***{date***REMOVED*** um {zeit***REMOVED*** Uhr, ": "{prefix***REMOVED***{date***REMOVED*** в {zeit***REMOVED***, ",
+  "{prefix}{date} um {zeit} Uhr, ": "{prefix}{date} в {zeit}, ",
   "Aktionen konnten nicht geladen werden.": "Не удалось загрузить акции.",
   "Aktion konnte nicht angelegt werden": "Не удалось создать акцию",
   "Okay...": "Хорошо...",
@@ -507,8 +507,8 @@ const Map<String, dynamic> ru = {
       "При проверке подлинности твоей учетной записи пользователя возникла проблема. Повтори попытку позднее или переустанови приложение, если ты не курируешь собственные акции.",
   "SSL-Zertifikat konnte nicht geladen werden":
       "Не удалось загрузить SSL-сертификат",
-  "Deine App-Version ist veraltet. Dies ist die Version {version***REMOVED***, du musst aber mindestens Version {minClient***REMOVED*** benutzen, damit die App richtig funktioniert.":
-      "Используемая тобой версия приложения устарела. Это версия {version***REMOVED***, но для правильной работы приложения необходимо использовать как минимум версию {minClient***REMOVED***.",
+  "Deine App-Version ist veraltet. Dies ist die Version {version}, du musst aber mindestens Version {minClient} benutzen, damit die App richtig funktioniert.":
+      "Используемая тобой версия приложения устарела. Это версия {version}, но для правильной работы приложения необходимо использовать как минимум версию {minClient}.",
   "Falsches Format": "Неверный формат",
   "Listen-Orte konnten nicht geladen werden.":
       "Не удалось загрузить внесенные в списки места.",
@@ -523,17 +523,17 @@ const Map<String, dynamic> ru = {
       "Уведомления о новых сообщениях в чатах акций, в которых ты участвуешь",
   "Infos": "Информация",
   "Allgemeine Infos": "Общие сведения",
-  "Nachricht von {name***REMOVED***": "Сообщение от {name***REMOVED***",
+  "Nachricht von {name}": "Сообщение от {name}",
   "Problem beim Einrichten von Push-Nachrichten":
       "Проблема с настройкой Push-сообщений",
   "Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. Das kann der Fall sein, wenn etwa ein Google-freies Betriebssystem genutzt wird. Darum kann die App nur Benachrichtigungen empfangen während sie geöffnet ist.":
       "Не удалось установить соединения со службой Push-уведомлений Google. Так бывает в случае использования операционной системы, не привязанной к Google. Поэтому приложение может принимать уведомления, только когда оно открыто.",
   "Beim Abrufen von Nachrichten ist ein Fehler aufgetreten. Das regelmäßige Abrufen von Nachrichten wird deshalb deaktiviert":
       "При извлечении сообщений произошла ошибка. В связи с этим регулярное извлечение сообщений отключено",
-  "Fehler beim Anmelden der Benachrichtigungen zu {topics***REMOVED***":
-      "Ошибка при подписке на уведомления по {topics***REMOVED***",
-  "Fehler beim Abmelden der Benachrichtigungen zu {topics***REMOVED***":
-      "Ошибка при отписке от уведомлений по {topics***REMOVED***",
+  "Fehler beim Anmelden der Benachrichtigungen zu {topics}":
+      "Ошибка при подписке на уведомления по {topics}",
+  "Fehler beim Abmelden der Benachrichtigungen zu {topics}":
+      "Ошибка при отписке от уведомлений по {topics}",
   "Für Push-Nachrichten an Geräte muss mindestens ein Empfänger angegeben werden.":
       "Для отправки Push-сообщений на устройства должен быть указан хотя бы один получатель.",
   "Push-Nachricht an Geräte konnte nicht versandt werden":
@@ -571,7 +571,7 @@ const Map<String, dynamic> ru = {
   "Keine Auswahl": "Выбор отсутствует",
   "Um diese Aktion auszuführen musst du dir einen Benutzer*in-Name geben":
       "Для выполнения данной акции ты должен завести себе имя пользователя",
-  "am {tage***REMOVED***,": " {tage***REMOVED***,",
+  "am {tage},": " {tage},",
   "Auswählen": "Выбрать",
   "Auswahl übernehmen": "Применить выбор",
   "Das Volksbegehren lebt von deiner Beteiligung! \n":
@@ -633,26 +633,26 @@ const Map<String, dynamic> ru = {
   "Situation: ": "Обстановка: ",
   "Optional: Wie war die Situation?": "Опционально: Какой была обстановка?",
   "Erzähl uns, was ihr erreicht habt!\n": "Расскажи нам о вашем результате!\n",
-  "{***REMOVED*** Unterschriften": {
-    "zero": "{***REMOVED*** подписей",
-    "one": "{***REMOVED*** подпись",
-    "two": "{***REMOVED*** подписи",
-    "others": "{***REMOVED*** другое",
-  ***REMOVED***,
-  "{***REMOVED*** Teilnehmer": {
-    "zero": "{***REMOVED*** участников",
-    "one": "{***REMOVED*** участник",
-    "two": "{***REMOVED*** участника",
-    "other": "{***REMOVED*** другое"
-  ***REMOVED***,
+  "{} Unterschriften": {
+    "zero": "{} подписей",
+    "one": "{} подпись",
+    "two": "{} подписи",
+    "others": "{} другое",
+  },
+  "{} Teilnehmer": {
+    "zero": "{} участников",
+    "one": "{} участник",
+    "two": "{} участника",
+    "other": "{} другое"
+  },
   "Datenschutz": "Защита данных",
   "Deine Daten": "Твои данные",
   "Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an e@mail.com.":
       "Все данные, которые ты вводишь в приложение, хранятся исключительно на системах кампании «Национализируем Deutsche Wohnen & Co («Дойче Вонен унд Ко»)» и используются только в целях, связанных с приложением и кампанией. Но обращаем твое внимание на то, что другие пользователи могут читать многие из тех данных, которые ты вводишь в приложение. Сообщения в чате могут быть прочитаны только всеми участниками чата в момент появления сообщения.\n\nДля того чтобы была доступна функция Push-сообщений, мы вынуждены использовать инфраструктуру доставки сообщений, предоставляемую компанией Google и, в соответствующих случаях, компанией Apple. Передаваемые при этом данные передаются в зашифрованном виде. Если ты хочешь, чтобы все введенные тобой персональные данные были удалены, сообщи нам об этом по адресу: e@mail.com.",
   "Okay": "Хорошо",
   "Zu viele Tage": "Слишком большое количество дней",
-  "Bitte wähle {maxTage***REMOVED*** Tage oder weniger aus.":
-      "Выбери не больше {maxTage***REMOVED*** дней или меньшее количество дней.",
+  "Bitte wähle {maxTage} Tage oder weniger aus.":
+      "Выбери не больше {maxTage} дней или меньшее количество дней.",
   "Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an app@dwenteignen.de.":
       "Все данные, которые ты вводишь в приложение, хранятся исключительно на системах кампании «Национализируем Deutsche Wohnen & Co («Дойче Вонен унд Ко»)» и используются только в целях, связанных с приложением и кампанией. Но обращаем твое внимание на то, что другие пользователи могут читать многие из тех данных, которые ты вводишь в приложение. Сообщения в чате могут быть прочитаны только всеми участниками чата в момент появления сообщения.\n\nДля того чтобы была доступна функция Push-сообщений, мы вынуждены использовать инфраструктуру доставки сообщений, предоставляемую компанией Google и, в соответствующих случаях, компанией Apple. Передаваемые при этом данные передаются в зашифрованном виде. Если ты хочешь, чтобы все введенные тобой персональные данные были удалены, сообщи нам об этом по адресу: app@dwenteignen.de.",
   "deutsch": "немецкий язык",
@@ -686,10 +686,10 @@ const Map<String, dynamic> ru = {
   //     "If you want to change Notifications to silent or disable certain notification categories, just press the three dots on a received notification. You will then be guided to the notification preferences for this app.",
   "Na gut": "Закрыть",
   "In den Kalender": "Добавить в календарь",
-  '{typ***REMOVED*** in {ortsteil***REMOVED***': '{typ***REMOVED*** в {ortsteil***REMOVED***',
+  '{typ} in {ortsteil}': '{typ} в {ortsteil}',
   "Teilen": "Поделиться",
-  '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***':
-      '{typ***REMOVED*** в {ortsteil***REMOVED***, {treffpunkt***REMOVED*** {zeitpunkt***REMOVED***\n{url***REMOVED***',
+  '{typ} in {ortsteil}, {treffpunkt} am {zeitpunkt}\n{url}':
+      '{typ} в {ortsteil}, {treffpunkt} {zeitpunkt}\n{url}',
   'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
       'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.',
   'Ein Fehler ist aufgetreten': 'Произошла ошибка',
@@ -731,7 +731,7 @@ const Map<String, dynamic> ru = {
   'Zugriff fehlgeschlagen': 'Zugriff fehlgeschlagen',
   'Dieses Plakat wurde von jemand anderem eingetragen. Du kannst es als abgehangen markieren.':
       'Dieses Plakat wurde von jemand anderem eingetragen. Du kannst es als abgehangen markieren.',
-***REMOVED***
+};
 
 const Map<String, dynamic> fr = {
   "Liste": "Liste",
@@ -742,12 +742,12 @@ const Map<String, dynamic> fr = {
   "Workshop": "Workshop",
   "Unbekannter Nachrichtentyp abgespeichert":
       "Message de type inconnu sauvegardé",
-  "{kiez***REMOVED*** in {bezirk***REMOVED***\n Treffpunkt: {treffpunkt***REMOVED***":
-      "{kiez***REMOVED*** dans {bezirk***REMOVED***\n Point de rencontre: {treffpunkt***REMOVED***",
-  "Unlesbare Push-Nachricht (Teilnahme) empfangen: {message***REMOVED***":
-      "Notification push illisible (Participation) reçue: {message***REMOVED***",
+  "{kiez} in {bezirk}\n Treffpunkt: {treffpunkt}":
+      "{kiez} dans {bezirk}\n Point de rencontre: {treffpunkt}",
+  "Unlesbare Push-Nachricht (Teilnahme) empfangen: {message}":
+      "Notification push illisible (Participation) reçue: {message}",
   "Ein paar Worte über dich": "Quelques mots sur toi",
-  "Beschreibung: {beschreibung***REMOVED***": "Déscription: {beschreibung***REMOVED***",
+  "Beschreibung: {beschreibung}": "Déscription: {beschreibung}",
   "Beschreibe die Aktion kurz": "Décris brièvement l'action",
   "Wähle die Art der Aktion": "Choisis la forme de l'action",
   "von ": "de ",
@@ -766,22 +766,22 @@ const Map<String, dynamic> fr = {
   "\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen":
       "\nLes nouve.eaux.elles participant.e.s ne peuvent pas lire d'anciens messages",
   "gerade eben": "à l'instant",
-  "{***REMOVED*** Minuten": {
-    "zero": "{***REMOVED*** Minutes",
-    "one": "{***REMOVED*** Minute",
-    "two": "{***REMOVED*** Minutes",
-    "other": "{***REMOVED*** Minutes"
-  ***REMOVED***,
-  "{***REMOVED*** Stunden": {
-    "zero": "{***REMOVED*** Heure",
-    "one": "{***REMOVED*** Heure",
-    "two": "{***REMOVED*** Heures",
-    "other": "{***REMOVED*** Heures"
-  ***REMOVED***,
+  "{} Minuten": {
+    "zero": "{} Minutes",
+    "one": "{} Minute",
+    "two": "{} Minutes",
+    "other": "{} Minutes"
+  },
+  "{} Stunden": {
+    "zero": "{} Heure",
+    "one": "{} Heure",
+    "two": "{} Heures",
+    "other": "{} Heures"
+  },
   "Teilnehmer*innen": "Participant.e.s",
   "Keine Teilnehmer*innen": "Aucun.e.s participant.e.s",
-  "{count***REMOVED*** Teilnehmer*innen im Chat": "{count***REMOVED*** Participant.e.s dans le chat",
-  "+ {count***REMOVED*** weitere Teilnehmer*innen": "+ {count***REMOVED*** autres participant.e.s",
+  "{count} Teilnehmer*innen im Chat": "{count} Participant.e.s dans le chat",
+  "+ {count} weitere Teilnehmer*innen": "+ {count} autres participant.e.s",
   "Neue Chat-Nachricht": "Nouveau message",
   "Öffne die App um sie zu lesen": "Ouvre l'appli pour la lire",
   "Durchsuchen": "Rechercher",
@@ -830,7 +830,7 @@ const Map<String, dynamic> fr = {
       "Cette application a été développée par une petite équipe d'activistes informatiques enthousiastes* pour la campagne Deutsche Wohnen & Co. La campagne d'expropriation est sous licence libre. L'Expédition Revenu de Base a adapté l'application à ses propres fins.\n\NSi tu es intéressé(e) par l'utilisation de cette application pour ta pétition populaire, tu peux volontiers écrire un mail à l'Expédition ou à DWE.",
   "Heute, ": "Aujourd'hui, ",
   "Morgen, ": "Demain, ",
-  "{prefix***REMOVED***{date***REMOVED*** um {zeit***REMOVED*** Uhr, ": "{prefix***REMOVED***{date***REMOVED*** à {zeit***REMOVED*** heure.s, ",
+  "{prefix}{date} um {zeit} Uhr, ": "{prefix}{date} à {zeit} heure.s, ",
   "Aktionen konnten nicht geladen werden.":
       "Les actions n'ont pas pu être chargées.",
   "Aktion konnte nicht angelegt werden": "L'action n'a pas pu être établie",
@@ -868,8 +868,8 @@ const Map<String, dynamic> fr = {
       "Une erreur est survenue lors de la vérification de ton compte. Réessayes plus tard ou essayes de réinstaller l'appli si tu n'est pas en charge d'actions.",
   "SSL-Zertifikat konnte nicht geladen werden":
       "Certificat-SSL n'a pas pu être chargé",
-  "Deine App-Version ist veraltet. Dies ist die Version {version***REMOVED***, du musst aber mindestens Version {minClient***REMOVED*** benutzen, damit die App richtig funktioniert.":
-      "Ta version de l'appli est dépassée. Celle-ci est la version {version***REMOVED***, mais c'est au moins la version {minClient***REMOVED*** que tu nécessites pour que l'appli fonctionne correctement.",
+  "Deine App-Version ist veraltet. Dies ist die Version {version}, du musst aber mindestens Version {minClient} benutzen, damit die App richtig funktioniert.":
+      "Ta version de l'appli est dépassée. Celle-ci est la version {version}, mais c'est au moins la version {minClient} que tu nécessites pour que l'appli fonctionne correctement.",
   "Falsches Format": "Format incorrect",
   "Listen-Orte konnten nicht geladen werden.":
       "La liste des lieux n'a pas pu être chargée.",
@@ -884,17 +884,17 @@ const Map<String, dynamic> fr = {
       "Communication des actions auxquelles tu participes par le biais de nouveaux messages dans le chat ",
   "Infos": "Infos",
   "Allgemeine Infos": "Infos générales",
-  "Nachricht von {name***REMOVED***": "Message de {name***REMOVED***",
+  "Nachricht von {name}": "Message de {name}",
   "Problem beim Einrichten von Push-Nachrichten":
       "Problème à installer les notifications-push",
   "Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. Das kann der Fall sein, wenn etwa ein Google-freies Betriebssystem genutzt wird. Darum kann die App nur Benachrichtigungen empfangen während sie geöffnet ist.":
       "La connection au service Google-Push n'a pas pu être établie. Cela peut être le cas lorsque le système d'exploitation n'est pas de Google. Pour cette raison l'appli ne peut undrecevoir les notifications que lorsque l'appli est ouverte",
   "Beim Abrufen von Nachrichten ist ein Fehler aufgetreten. Das regelmäßige Abrufen von Nachrichten wird deshalb deaktiviert":
       "Une erreur est survenue lors du chargement des messages. Le chargement fréquent des messages sera donc désactivé",
-  "Fehler beim Anmelden der Benachrichtigungen zu {topics***REMOVED***":
-      "Erreur lors du chargement des messages pour {topics***REMOVED***",
-  "Fehler beim Abmelden der Benachrichtigungen zu {topics***REMOVED***":
-      "Erreur lors de l'annulation des messages pour {topics***REMOVED***",
+  "Fehler beim Anmelden der Benachrichtigungen zu {topics}":
+      "Erreur lors du chargement des messages pour {topics}",
+  "Fehler beim Abmelden der Benachrichtigungen zu {topics}":
+      "Erreur lors de l'annulation des messages pour {topics}",
   "Für Push-Nachrichten an Geräte muss mindestens ein Empfänger angegeben werden.":
       "Pour les notifications push sur les dispositifs, un déstinataire doit être au moins indiqué.",
   "Push-Nachricht an Geräte konnte nicht versandt werden":
@@ -933,7 +933,7 @@ const Map<String, dynamic> fr = {
   "Keine Auswahl": "Aucune option",
   "Um diese Aktion auszuführen musst du dir einen Benutzer*in-Name geben":
       "Pour exécuter cette action définis d’abord un nom d’utilisat.eur.trice",
-  "am {tage***REMOVED***,": "le {tage***REMOVED***,",
+  "am {tage},": "le {tage},",
   "Auswählen": "Choisir",
   "Auswahl übernehmen": "Utiliser ce choix",
   "Das Volksbegehren lebt von deiner Beteiligung! \n":
@@ -999,26 +999,26 @@ const Map<String, dynamic> fr = {
   "Optional: Wie war die Situation?": "optionnel, comment était la situation?",
   "Erzähl uns, was ihr erreicht habt!\n":
       "Racontes nous ce que vous avez atteint!\n",
-  "{***REMOVED*** Unterschriften": {
-    "zero": "{***REMOVED*** Signature",
-    "one": "{***REMOVED*** Signature",
-    "two": "{***REMOVED*** Signatures",
-    "others": "{***REMOVED*** Signatures",
-  ***REMOVED***,
-  "{***REMOVED*** Teilnehmer": {
-    "zero": "{***REMOVED*** Particpant.e",
-    "one": "{***REMOVED***Participant.e",
-    "two": "{***REMOVED***Participant.e.s",
-    "other": "{***REMOVED***Participant.e.s"
-  ***REMOVED***,
+  "{} Unterschriften": {
+    "zero": "{} Signature",
+    "one": "{} Signature",
+    "two": "{} Signatures",
+    "others": "{} Signatures",
+  },
+  "{} Teilnehmer": {
+    "zero": "{} Particpant.e",
+    "one": "{}Participant.e",
+    "two": "{}Participant.e.s",
+    "other": "{}Participant.e.s"
+  },
   "Datenschutz": "Protection des données",
   "Deine Daten": "Tes données",
   "Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an e@mail.com.":
       "Toutes les données que tu inscris dans l’appli seront uniquement sauvegardées et utilisées sur les systèmes de la campagne -Deutsche Wohnen & Co. Enteignen-. Considères toutefois, que beaucoup de données que tu partages peuvent être lues par d’autres utilisat.eur.rice.s de l’appli. Les messages du chat sont seulement lisibles pour les participant.e.s du chat au moment de leur rédaction. \n\nConcernant la fonction des notifications push, nous sommes dépendants d’une structure de gestion Google ou Apple. Les données véhiculées par ce biais sont cryptées. Si tu souhaites que toutes les données que tu as partagées soient supprimées, écris nous un mail à e@mail.com",
   "Okay": "OK",
   "Zu viele Tage": "Trop de jours",
-  "Bitte wähle {maxTage***REMOVED*** Tage oder weniger aus.":
-      "Choisis s’il te plaît {maxTage***REMOVED*** journées ou moins.",
+  "Bitte wähle {maxTage} Tage oder weniger aus.":
+      "Choisis s’il te plaît {maxTage} journées ou moins.",
   "Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an app@dwenteignen.de.":
       "Toutes les données que tu inscris dans l’appli seront uniquement sauvegardées et utilisées sur les systèmes de la campagne -Deutsche Wohnen & Co. Enteignen-. Considères toutefois, que beaucoup de données que tu partages peuvent être lues par d’autres utilisat.eur.rice.s de l’appli. Les messages du chat sont seulement lisibles pour les participant.e.s du chat au moment de leur rédaction. \n\nConcernant la fonction des notifications push, nous sommes dépendants d’une structure de gestion Google ou Apple. Les données véhiculées par ce biais sont cryptées. Si tu souhaites que toutes les données que tu as partagées soient supprimées, écris nous un mail à  app@dwenteignen.de.",
   "deutsch": "allemand",
@@ -1053,10 +1053,10 @@ const Map<String, dynamic> fr = {
   // "Eigene Aktionen": "Eigene Aktionen",
   "Na gut": "Fermer",
   "In den Kalender": "Dans le calendrier",
-  '{typ***REMOVED*** in {ortsteil***REMOVED***': '{typ***REMOVED*** à {ortsteil***REMOVED***',
+  '{typ} in {ortsteil}': '{typ} à {ortsteil}',
   "Teilen": "Partagez",
-  '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***':
-      '{typ***REMOVED*** à {ortsteil***REMOVED***, {treffpunkt***REMOVED*** à {zeitpunkt***REMOVED***\n{url***REMOVED***',
+  '{typ} in {ortsteil}, {treffpunkt} am {zeitpunkt}\n{url}':
+      '{typ} à {ortsteil}, {treffpunkt} à {zeitpunkt}\n{url}',
   'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
       'Pas de donner sur l\'action rechercher. Eventuellement l\'action a été effacer.',
   'Ein Fehler ist aufgetreten': 'Une erreur s\'est produite',
@@ -1099,7 +1099,7 @@ const Map<String, dynamic> fr = {
   'Zugriff fehlgeschlagen': 'Zugriff fehlgeschlagen',
   'Dieses Plakat wurde von jemand anderem eingetragen. Du kannst es als abgehangen markieren.':
       'Dieses Plakat wurde von jemand anderem eingetragen. Du kannst es als abgehangen markieren.',
-***REMOVED***
+};
 
 const Map<String, dynamic> de = {
   "Liste": "Liste",
@@ -1110,12 +1110,12 @@ const Map<String, dynamic> de = {
   "Workshop": "Workshop",
   "Unbekannter Nachrichtentyp abgespeichert":
       "Unbekannter Nachrichtentyp abgespeichert",
-  "{kiez***REMOVED*** in {bezirk***REMOVED***\n Treffpunkt: {treffpunkt***REMOVED***":
-      "{kiez***REMOVED*** in {bezirk***REMOVED***\n Treffpunkt: {treffpunkt***REMOVED***",
-  "Unlesbare Push-Nachricht (Teilnahme) empfangen: {message***REMOVED***":
-      "Unlesbare Push-Nachricht (Teilnahme) empfangen: {message***REMOVED***",
+  "{kiez} in {bezirk}\n Treffpunkt: {treffpunkt}":
+      "{kiez} in {bezirk}\n Treffpunkt: {treffpunkt}",
+  "Unlesbare Push-Nachricht (Teilnahme) empfangen: {message}":
+      "Unlesbare Push-Nachricht (Teilnahme) empfangen: {message}",
   "Ein paar Worte über dich": "Ein paar Worte über dich",
-  "Beschreibung: {beschreibung***REMOVED***": "Beschreibung: {beschreibung***REMOVED***",
+  "Beschreibung: {beschreibung}": "Beschreibung: {beschreibung}",
   "Beschreibe die Aktion kurz": "Beschreibe die Aktion kurz",
   "Wähle die Art der Aktion": "Wähle die Art der Aktion",
   "von ": "von ",
@@ -1134,22 +1134,22 @@ const Map<String, dynamic> de = {
   "\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen":
       "\nNeue Teilnehmer*innen können ältere Nachrichten nicht lesen",
   "gerade eben": "gerade eben",
-  "{***REMOVED*** Minuten": {
-    "zero": "{***REMOVED*** Minuten",
-    "one": "{***REMOVED*** Minute",
-    "two": "{***REMOVED*** Minuten",
-    "other": "{***REMOVED*** Minuten"
-  ***REMOVED***,
-  "{***REMOVED*** Stunden": {
-    "zero": "{***REMOVED*** Stunden",
-    "one": "{***REMOVED*** Stunde",
-    "two": "{***REMOVED*** Stunden",
-    "other": "{***REMOVED*** Stunden"
-  ***REMOVED***,
+  "{} Minuten": {
+    "zero": "{} Minuten",
+    "one": "{} Minute",
+    "two": "{} Minuten",
+    "other": "{} Minuten"
+  },
+  "{} Stunden": {
+    "zero": "{} Stunden",
+    "one": "{} Stunde",
+    "two": "{} Stunden",
+    "other": "{} Stunden"
+  },
   "Teilnehmer*innen": "Teilnehmer*innen",
   "Keine Teilnehmer*innen": "Keine Teilnehmer*innen",
-  "{count***REMOVED*** Teilnehmer*innen im Chat": "{count***REMOVED*** Teilnehmer*innen im Chat",
-  "+ {count***REMOVED*** weitere Teilnehmer*innen": "+ {count***REMOVED*** weitere Teilnehmer*innen",
+  "{count} Teilnehmer*innen im Chat": "{count} Teilnehmer*innen im Chat",
+  "+ {count} weitere Teilnehmer*innen": "+ {count} weitere Teilnehmer*innen",
   "Neue Chat-Nachricht": "Neue Chat-Nachricht",
   "Öffne die App um sie zu lesen": "Öffne die App um sie zu lesen",
   "Durchsuchen": "Durchsuchen",
@@ -1199,7 +1199,7 @@ const Map<String, dynamic> de = {
       "Diese App wurde von einem kleinen Team enthusiastischer IT-Aktivist*innen für die Deutsche Wohnen & Co. Enteignen - Kampagne entwickelt und steht unter einer freien Lizenz. Die Expedition Grundeinkommen hat die App für ihre Zwecke angepasst.\n\nWenn du Interesse daran hast diese App für dein Volksbegehren einzusetzen, kannst du gerne eine Mail an die Expedition oder an DWE schreiben.",
   "Heute, ": "Heute, ",
   "Morgen, ": "Morgen, ",
-  "{prefix***REMOVED***{date***REMOVED*** um {zeit***REMOVED*** Uhr, ": "{prefix***REMOVED***{date***REMOVED*** um {zeit***REMOVED*** Uhr, ",
+  "{prefix}{date} um {zeit} Uhr, ": "{prefix}{date} um {zeit} Uhr, ",
   "Aktionen konnten nicht geladen werden.":
       "Aktionen konnten nicht geladen werden.",
   "Aktion konnte nicht angelegt werden": "Aktion konnte nicht angelegt werden",
@@ -1238,8 +1238,8 @@ const Map<String, dynamic> de = {
       "Es ist ein Fehler aufgetreten beim Verifizieren deines Benutzer*in-Accounts. Probiere es eventuell zu einem späteren Zeitpunkt noch einmal oder versuche die App nochmal neu zu installieren, wenn du keine eigenen Aktionen betreust.",
   "SSL-Zertifikat konnte nicht geladen werden":
       "SSL-Zertifikat konnte nicht geladen werden",
-  "Deine App-Version ist veraltet. Dies ist die Version {version***REMOVED***, du musst aber mindestens Version {minClient***REMOVED*** benutzen, damit die App richtig funktioniert.":
-      "Deine App-Version ist veraltet. Dies ist die Version {version***REMOVED***, du musst aber mindestens Version {minClient***REMOVED*** benutzen, damit die App richtig funktioniert.",
+  "Deine App-Version ist veraltet. Dies ist die Version {version}, du musst aber mindestens Version {minClient} benutzen, damit die App richtig funktioniert.":
+      "Deine App-Version ist veraltet. Dies ist die Version {version}, du musst aber mindestens Version {minClient} benutzen, damit die App richtig funktioniert.",
   "Falsches Format": "Falsches Format",
   "Listen-Orte konnten nicht geladen werden.":
       "Listen-Orte konnten nicht geladen werden.",
@@ -1254,17 +1254,17 @@ const Map<String, dynamic> de = {
       "Benachrichtigungen über neue Chat-Nachrichten zu Aktionen an denen du teilnimmst",
   "Infos": "Infos",
   "Allgemeine Infos": "Allgemeine Infos",
-  "Nachricht von {name***REMOVED***": "Nachricht von {name***REMOVED***",
+  "Nachricht von {name}": "Nachricht von {name}",
   "Problem beim Einrichten von Push-Nachrichten":
       "Problem beim Einrichten von Push-Nachrichten",
   "Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. Das kann der Fall sein, wenn etwa ein Google-freies Betriebssystem genutzt wird. Darum kann die App nur Benachrichtigungen empfangen während sie geöffnet ist.":
       "Es konnte keine Verbindung zum Google-Push-Service hergestellt werden. Das kann der Fall sein, wenn etwa ein Google-freies Betriebssystem genutzt wird. Darum kann die App nur Benachrichtigungen empfangen während sie geöffnet ist.",
   "Beim Abrufen von Nachrichten ist ein Fehler aufgetreten. Das regelmäßige Abrufen von Nachrichten wird deshalb deaktiviert":
       "Beim Abrufen von Nachrichten ist ein Fehler aufgetreten. Das regelmäßige Abrufen von Nachrichten wird deshalb deaktiviert",
-  "Fehler beim Anmelden der Benachrichtigungen zu {topics***REMOVED***":
-      "Fehler beim Anmelden der Benachrichtigungen zu {topics***REMOVED***",
-  "Fehler beim Abmelden der Benachrichtigungen zu {topics***REMOVED***":
-      "Fehler beim Abmelden der Benachrichtigungen zu {topics***REMOVED***",
+  "Fehler beim Anmelden der Benachrichtigungen zu {topics}":
+      "Fehler beim Anmelden der Benachrichtigungen zu {topics}",
+  "Fehler beim Abmelden der Benachrichtigungen zu {topics}":
+      "Fehler beim Abmelden der Benachrichtigungen zu {topics}",
   "Für Push-Nachrichten an Geräte muss mindestens ein Empfänger angegeben werden.":
       "Für Push-Nachrichten an Geräte muss mindestens ein Empfänger angegeben werden.",
   "Push-Nachricht an Geräte konnte nicht versandt werden":
@@ -1303,7 +1303,7 @@ const Map<String, dynamic> de = {
   "Keine Auswahl": "Keine Auswahl",
   "Um diese Aktion auszuführen musst du dir einen Benutzer*in-Name geben":
       "Um diese Aktion auszuführen musst du dir einen Benutzer*in-Name geben",
-  "am {tage***REMOVED***,": "am {tage***REMOVED***,",
+  "am {tage},": "am {tage},",
   "Auswählen": "Auswählen",
   "Auswahl übernehmen": "Auswahl übernehmen",
   "Das Volksbegehren lebt von deiner Beteiligung! \n":
@@ -1368,26 +1368,26 @@ const Map<String, dynamic> de = {
   "Optional: Wie war die Situation?": "Optional: Wie war die Situation?",
   "Erzähl uns, was ihr erreicht habt!\n":
       "Erzähl uns, was ihr erreicht habt!\n",
-  "{***REMOVED*** Unterschriften": {
-    "zero": "{***REMOVED*** Unterschriften",
-    "one": "{***REMOVED*** Unterschrift",
-    "two": "{***REMOVED*** Unterschriften",
-    "others": "{***REMOVED*** Unterschriften",
-  ***REMOVED***,
-  "{***REMOVED*** Teilnehmer": {
-    "zero": "{***REMOVED*** Teilnehmer*innen",
-    "one": "{***REMOVED*** Teilnehmer*in",
-    "two": "{***REMOVED*** Teilnehmer*innen",
-    "other": "{***REMOVED*** Teilnehmer*innen"
-  ***REMOVED***,
+  "{} Unterschriften": {
+    "zero": "{} Unterschriften",
+    "one": "{} Unterschrift",
+    "two": "{} Unterschriften",
+    "others": "{} Unterschriften",
+  },
+  "{} Teilnehmer": {
+    "zero": "{} Teilnehmer*innen",
+    "one": "{} Teilnehmer*in",
+    "two": "{} Teilnehmer*innen",
+    "other": "{} Teilnehmer*innen"
+  },
   "Datenschutz": "Datenschutz",
   "Deine Daten": "Deine Daten",
   "Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an app@dwenteignen.de.":
       "Alle Daten, die du in die App eingibst werden ausschließlich auf Systemem der Deutsche Wohnen & Co. Enteignen - Kampagne gespeichert und nur für die App und die Kampagne verwendet. Beachte jedoch, dass viele Daten, die du eingibst von anderen Nutzer*innen der App gelesen werden können. Chat-Nachrichten sind ausschließlich lesbar für alle Teilnehmer*innen des Chats zum Zeitpunkt der Nachricht.\n\nFür die Funktion der Push-Nachrichten sind wir auf den Einsatz einer Zustell-Infrastruktur von Google und ggf. Apple angewiesen. Daten die auf diesem Weg transportiert werden, werden verschlüsselt übertragen. Wenn du möchtest, dass alle persönlichen Daten, die du eingetragen hast gelöscht werden, schreibe uns bitte eine Mail an app@dwenteignen.de.",
   "Okay": "Okay",
   "Zu viele Tage": "Zu viele Tage",
-  "Bitte wähle {maxTage***REMOVED*** Tage oder weniger aus.":
-      "Bitte wähle {maxTage***REMOVED*** Tage oder weniger aus.",
+  "Bitte wähle {maxTage} Tage oder weniger aus.":
+      "Bitte wähle {maxTage} Tage oder weniger aus.",
   "deutsch": "deutsch",
   "englisch": "english",
   "": "",
@@ -1422,9 +1422,9 @@ const Map<String, dynamic> de = {
   "Na gut": "Na gut",
   "In den Kalender": "In den Kalender",
   "Teilen": "Teilen",
-  '{typ***REMOVED*** in {ortsteil***REMOVED***': '{typ***REMOVED*** in {ortsteil***REMOVED***',
-  '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***':
-      '{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***',
+  '{typ} in {ortsteil}': '{typ} in {ortsteil}',
+  '{typ} in {ortsteil}, {treffpunkt} am {zeitpunkt}\n{url}':
+      '{typ} in {ortsteil}, {treffpunkt} am {zeitpunkt}\n{url}',
   'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.':
       'Die Aktion konnte nicht gefunden werden. Eventuell wurde sie gelöscht.',
   'Ein Fehler ist aufgetreten': 'Ein Fehler ist aufgetreten',
@@ -1467,4 +1467,4 @@ const Map<String, dynamic> de = {
   'Zugriff fehlgeschlagen': 'Zugriff fehlgeschlagen',
   'Dieses Plakat wurde von jemand anderem eingetragen. Du kannst es als abgehangen markieren.':
       'Dieses Plakat wurde von jemand anderem eingetragen. Du kannst es als abgehangen markieren.',
-***REMOVED***
+};

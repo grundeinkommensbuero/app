@@ -37,36 +37,36 @@ open class PushNotificationResource {
     @Context
     private lateinit var context: SecurityContext
 
-    @Path("action/{actionId***REMOVED***")
+    @Path("action/{actionId}")
     @RolesAllowed("named")
     @POST
     open fun pushToParticipants(nachricht: PushMessageDto, @PathParam("actionId") actionId: Long): Response? {
         LOG.info("Pushe Nachricht für Aktion $actionId")
         val teilnehmer = termineDao.getTermin(actionId)?.teilnehmer
 
-        if ((teilnehmer == null || !(teilnehmer.map { it.id ***REMOVED***.contains(context.userPrincipal.name.toLong())))) {
-            LOG.debug("Benutzer ${context.userPrincipal.name***REMOVED*** darf keine Push-Message an Aktion $actionId mit Teilnehmern ${teilnehmer?.map { it.id ***REMOVED******REMOVED*** schicken")
+        if ((teilnehmer == null || !(teilnehmer.map { it.id }.contains(context.userPrincipal.name.toLong())))) {
+            LOG.debug("Benutzer ${context.userPrincipal.name} darf keine Push-Message an Aktion $actionId mit Teilnehmern ${teilnehmer?.map { it.id }} schicken")
             return Response
                 .status(FORBIDDEN)
                 .entity(RestFehlermeldung("Du bist nicht Teilnehmer*in dieser Aktion"))
                 .build()
-        ***REMOVED***
+        }
 
         nachricht.notification?.channel = "Aktionen-Chats"
-        nachricht.notification?.collapseId = "chat:action:${actionId***REMOVED***"
+        nachricht.notification?.collapseId = "chat:action:${actionId}"
         nachricht.persistent = true
 
         pushService.sendePushNachrichtAnEmpfaenger(nachricht, teilnehmer)
 
         return Response.accepted().build()
-    ***REMOVED***
+    }
 
-    @Path("topic/{topic***REMOVED***")
+    @Path("topic/{topic}")
     @RolesAllowed("moderator")
     @POST
     open fun pushToTopic(nachricht: PushMessageDto, @PathParam("topic") topic: String) {
         pushService.sendePushNachrichtAnTopic(nachricht, topic)
-    ***REMOVED***
+    }
 
     @Path("pull")
     @RolesAllowed("user")
@@ -77,33 +77,33 @@ open class PushNotificationResource {
 
         val pushMessages =
             pushMessageDao.ladeAllePushMessagesFuerBenutzer(userId)
-        LOG.debug("${pushMessages.size***REMOVED*** PushMessages für Benutzer $userId geladen: ${pushMessages.map { it.id ***REMOVED******REMOVED***")
+        LOG.debug("${pushMessages.size} PushMessages für Benutzer $userId geladen: ${pushMessages.map { it.id }}")
 
         pushMessageDao.loeschePushMessages(pushMessages)
 
         return Response
             .ok()
-            .entity(pushMessages.map { PushMessageDto.convertFromPushMessage(it) ***REMOVED***)
+            .entity(pushMessages.map { PushMessageDto.convertFromPushMessage(it) })
             .build()
-    ***REMOVED***
+    }
 
     @Path("pull/subscribe")
     @RolesAllowed("user")
     @POST
     open fun subscribeToTopics(topics: List<String>): Response? {
-        LOG.info("Benutzer ${context.userPrincipal.name***REMOVED*** abboniert Topics $topics")
+        LOG.info("Benutzer ${context.userPrincipal.name} abboniert Topics $topics")
         subscriptionDao.subscribe(context.userPrincipal.name.toLong(), topics)
 
         return Response.ok().build()
-    ***REMOVED***
+    }
 
     @Path("pull/unsubscribe")
     @RolesAllowed("user")
     @POST
     open fun unsubscribeToTopics(topics: List<String>): Response? {
-        LOG.info("Benutzer ${context.userPrincipal.name***REMOVED*** deabboniert Topics $topics")
+        LOG.info("Benutzer ${context.userPrincipal.name} deabboniert Topics $topics")
         subscriptionDao.unsubscribe(context.userPrincipal.name.toLong(), topics)
 
         return Response.ok().build()
-    ***REMOVED***
-***REMOVED***
+    }
+}

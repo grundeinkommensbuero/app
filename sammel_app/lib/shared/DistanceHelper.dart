@@ -10,12 +10,12 @@ class DistanceHelper
   {
     var meterPerLong = pi/180*earthRadius*cos(position.latitude*pi/180).abs();
     return m/meterPerLong;
-  ***REMOVED***
+  }
 
   static double getLatDiffFromM(LatLng position, double m)
   {
     var meterPerLat = pi/180*earthRadius;
     return m/meterPerLat;
-  ***REMOVED***
+  }
 
-***REMOVED***
+}

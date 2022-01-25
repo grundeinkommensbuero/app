@@ -38,5 +38,5 @@ class Credentials() {
         this.firebaseKey = pushKey
         this.isFirebase = isFirebase
         this.roles = roles
-    ***REMOVED***
-***REMOVED***
+    }
+}

@@ -25,20 +25,20 @@ addNewVisitation(
         Provider.of<AbstractVisitedHousesService>(context, listen: false)
             .editVisitedHouse(visitedHouse);
     return newHouse;
-  ***REMOVED*** else
+  } else
     return null;
-***REMOVED***
+}
 
 showAddVisitationDialog(
     {required BuildContext context,
     required VisitedHouseView visitedHouseView,
-    required double currentZoomFactor***REMOVED***) async {
+    required double currentZoomFactor}) async {
   VisitedHouse? visitedHouse = await showDialog(
     context: context,
     builder: (context) => VisitedHouseCreatorDialog(visitedHouseView, currentZoomFactor),
   );
   return addNewVisitation(context, visitedHouse);
-***REMOVED***
+}
 
 class VisitedHouseCreatorDialog extends StatefulWidget {
   late final LatLng? center;
@@ -51,8 +51,8 @@ class VisitedHouseCreatorDialog extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return VisitedHouseCreatorState(visitedHouseView);
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 class VisitedHouseCreatorState extends State<VisitedHouseCreatorDialog> {
   LocationMarker? marker;
@@ -72,7 +72,7 @@ class VisitedHouseCreatorState extends State<VisitedHouseCreatorDialog> {
             (visitedHouseView.bbox.maxLongitude + visitedHouseView.bbox.minLongitude));
     visitedHouseController = TextEditingController(text: '');
     visitedHousePartController = TextEditingController(text: '');
-  ***REMOVED***
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +87,7 @@ class VisitedHouseCreatorState extends State<VisitedHouseCreatorDialog> {
           child: Text("Abbrechen").tr(),
           onPressed: () {
             Navigator.pop(context, null);
-          ***REMOVED***,
+          },
         ),
         TextButton(
           key: Key('venue dialog finish button'),
@@ -101,11 +101,11 @@ class VisitedHouseCreatorState extends State<VisitedHouseCreatorDialog> {
                     .latestUser ==
                 null) throw ServerException('Couldnt fetch user from server');
             Navigator.pop(context, visitedHouseView.selectedHouse);
-          ***REMOVED***,
+          },
         ),
       ],
     );
-  ***REMOVED***
+  }
 
   List<Widget> createWidgets() {
     var widgets = [
@@ -160,7 +160,7 @@ class VisitedHouseCreatorState extends State<VisitedHouseCreatorDialog> {
       )
     ];
     return widgets;
-  ***REMOVED***
+  }
 
   Widget buildFlutterMap() {
     var map = FlutterMap(
@@ -179,7 +179,7 @@ class VisitedHouseCreatorState extends State<VisitedHouseCreatorDialog> {
             plugins: [AttributionPlugin()]),
         layers: [
           TileLayerOptions(
-              urlTemplate: "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
+              urlTemplate: "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
               subdomains: ['a', 'b', 'c']),
           PolygonLayerOptions(
               polygons: visitedHouseView.buildDrawablePolygonsFromView(),
@@ -202,9 +202,9 @@ class VisitedHouseCreatorState extends State<VisitedHouseCreatorDialog> {
                     indicatorType: Indicator.ballRotateChase,
                     color: CampaignTheme.primary)))
       ]);
-    ***REMOVED***
+    }
     return map;
-  ***REMOVED***
+  }
 
   houseSelected(LatLng point) async {
     setState(() => showLoadingIndicator = true);
@@ -219,10 +219,10 @@ class VisitedHouseCreatorState extends State<VisitedHouseCreatorDialog> {
           .catchError((e, s) {
         ErrorService.handleError(e, s);
         return null;
-      ***REMOVED***);
+      });
       if (houseFromServer != null)
         house = SelectableVisitedHouse.fromVisitedHouse(houseFromServer);
-    ***REMOVED***
+    }
     if (!mounted) return;
 
     GeoData geoData = await Provider.of<GeoService>(context, listen: false)
@@ -243,18 +243,18 @@ class VisitedHouseCreatorState extends State<VisitedHouseCreatorDialog> {
           {
             if(geoData.number != null)
               {
-                visitedHouseController.text = '${geoData.street***REMOVED*** ${geoData.number***REMOVED***';
-              ***REMOVED***
+                visitedHouseController.text = '${geoData.street} ${geoData.number}';
+              }
             else
               {
-                visitedHouseController.text = '${geoData.street***REMOVED***';
-              ***REMOVED***
-          ***REMOVED***
+                visitedHouseController.text = '${geoData.street}';
+              }
+          }
         showLoadingIndicator = false;
-      ***REMOVED***
-    ***REMOVED***);
-  ***REMOVED***
-***REMOVED***
+      }
+    });
+  }
+}
 
 class LocationMarker extends Marker {
   LocationMarker(LatLng point)
@@ -269,4 +269,4 @@ class LocationMarker extends Marker {
                       BoxShadow(blurRadius: 4.0, offset: Offset(-2.0, 2.0))
                     ]),
                 child: Icon(Icons.supervised_user_circle, size: 30.0)));
-***REMOVED***
+}

@@ -22,23 +22,23 @@ open class PushMessageDao {
             .createQuery("select m from PushMessages m where m.empfaenger = $id", PushMessage::class.java)
             .resultList
         return resultList
-    ***REMOVED***
+    }
 
     open fun speicherePushMessageFuerEmpfaenger(
         notification: PushNotificationDto?,
         data: Map<String, String>?,
         teilnehmer: List<Benutzer>
     ) {
-        LOG.debug("Speichere Nachricht für Empfänger ${teilnehmer.map { it.id ***REMOVED******REMOVED*** in Datenbank")
+        LOG.debug("Speichere Nachricht für Empfänger ${teilnehmer.map { it.id }} in Datenbank")
         for (teili in teilnehmer) entityManager.persist(PushMessage(teili, data, notification))
         entityManager.flush()
-    ***REMOVED***
+    }
 
     open fun loeschePushMessages(nachrichten: List<PushMessage>) {
         nachrichten.forEach {
             val nachricht = entityManager.find(PushMessage::class.java, it.id)
             entityManager.remove(nachricht)
-        ***REMOVED***
+        }
         entityManager.flush()
-    ***REMOVED***
-***REMOVED***
+    }
+}

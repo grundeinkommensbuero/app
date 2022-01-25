@@ -9,8 +9,8 @@ class AttributionOptions extends LayerOptions {
 
   AttributionOptions({
     this.color = Colors.blueGrey,
-  ***REMOVED***);
-***REMOVED***
+  });
+}
 
 class AttributionLayer extends StatelessWidget {
   final AttributionOptions options;
@@ -46,7 +46,7 @@ class AttributionLayer extends StatelessWidget {
                                       ..onTap = () {
                                         launch(
                                             'https://www.openstreetmap.org/copyright');
-                                      ***REMOVED***,
+                                      },
                                   ),
                                 ),
                                 RichText(
@@ -57,7 +57,7 @@ class AttributionLayer extends StatelessWidget {
                                       ..onTap = () {
                                         launch(
                                             'https://opendatacommons.org/licenses/odbl/');
-                                      ***REMOVED***,
+                                      },
                                   ),
                                 ),
                                 RichText(
@@ -68,7 +68,7 @@ class AttributionLayer extends StatelessWidget {
                                       ..onTap = () {
                                         launch(
                                             'https://www.fossgis.de/');
-                                      ***REMOVED***,
+                                      },
                                   ),
                                 ),
                                 RichText(
@@ -79,7 +79,7 @@ class AttributionLayer extends StatelessWidget {
                                       ..onTap = () {
                                         launch(
                                             'https://www.mapbox.com/map-feedback/');
-                                      ***REMOVED***,
+                                      },
                                   ),
                                 ),
                               ],
@@ -90,26 +90,26 @@ class AttributionLayer extends StatelessWidget {
                                 child: Text("OK"),
                                 onPressed: () {
                                   Navigator.of(context).pop();
-                                ***REMOVED***),
+                                }),
                           ],
                         ));
-              ***REMOVED***),
+              }),
           Text("OpenStreetMap"),
         ],
       ),
     );
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 class AttributionPlugin extends MapPlugin {
   @override
   Widget createLayer(
       LayerOptions options, MapState mapState, Stream<void> stream) {
     return AttributionLayer(options as AttributionOptions, mapState, stream);
-  ***REMOVED***
+  }
 
   @override
   bool supportsLayer(LayerOptions options) {
     return options is AttributionOptions;
-  ***REMOVED***
-***REMOVED***
+  }
+}

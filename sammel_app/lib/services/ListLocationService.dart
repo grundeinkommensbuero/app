@@ -10,7 +10,7 @@ abstract class AbstractListLocationService extends BackendService {
 
   AbstractListLocationService(AbstractUserService userService, Backend backend)
       : super(userService, backend);
-***REMOVED***
+}
 
 class ListLocationService extends AbstractListLocationService {
   List<ListLocation>? cache;
@@ -24,18 +24,18 @@ class ListLocationService extends AbstractListLocationService {
     HttpClientResponseBody response;
     try {
       response = await get('/service/listlocations/actives');
-    ***REMOVED*** catch (e, s) {
+    } catch (e, s) {
       ErrorService.handleError(e, s,
           context: 'Listen-Orte konnten nicht geladen werden.');
       return [];
-    ***REMOVED***
+    }
     final listLocations = (response.body as List)
         .map((jsonListLocation) => ListLocation.fromJson(jsonListLocation))
         .toList();
     cache = listLocations;
     return listLocations;
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 class DemoListLocationService extends AbstractListLocationService {
   DemoListLocationService(userService) : super(userService, DemoBackend());
@@ -49,5 +49,5 @@ class DemoListLocationService extends AbstractListLocationService {
   @override
   Future<List<ListLocation>> getActiveListLocations() async {
     return listLocations;
-  ***REMOVED***
-***REMOVED***
+  }
+}

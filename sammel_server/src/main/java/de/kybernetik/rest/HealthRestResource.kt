@@ -35,8 +35,8 @@ open class HealthRestResource {
             )
             .build()
 
-    ***REMOVED***
-***REMOVED***
+    }
+}
 
 data class Health(
     val status: String,

@@ -22,8 +22,8 @@ final storageServiceMock = MockStorageService();
 main() {
   late Widget widget;
 
-  Function(Termin) joinAction = (_) {***REMOVED***
-  Function(Termin) leaveAction = (_) {***REMOVED***
+  Function(Termin) joinAction = (_) {};
+  Function(Termin) leaveAction = (_) {};
 
   trainTranslation(MockTranslations());
 
@@ -38,13 +38,13 @@ main() {
     termin.ende = Jiffy(DateTime.now()).add(days: 1, hours: 1).dateTime;
 
     widget = createActionDetailsPage(termin, joinAction, leaveAction);
-  ***REMOVED***);
+  });
 
   testWidgets('opens', (WidgetTester tester) async {
     await tester.pumpWidget(widget);
 
     expect(find.byKey(Key('action details page')), findsOneWidget);
-  ***REMOVED***);
+  });
 
   testWidgets('shows action values', (WidgetTester tester) async {
     await tester.pumpWidget(widget);
@@ -55,14 +55,14 @@ main() {
         findsOneWidget);
     expect(find.text('Bringe Westen und Klämmbretter mit'), findsOneWidget);
     expect(find.text('Ruft an unter 012345678'), findsOneWidget);
-  ***REMOVED***);
+  });
 
   testWidgets('shows map with marker', (WidgetTester tester) async {
     await tester.pumpWidget(widget);
 
     expect(find.byKey(Key('action details map')), findsOneWidget);
     expect(find.byKey(Key('action details map marker')), findsOneWidget);
-  ***REMOVED***);
+  });
 
   testWidgets('shows no menu with past unparticiating actions',
       (WidgetTester tester) async {
@@ -74,7 +74,7 @@ main() {
     await tester.pumpWidget(widget);
 
     expect(find.byKey(Key('action details menu button')), findsNothing);
-  ***REMOVED***);
+  });
 
   testWidgets('shows calender menu button only if participating',
       (WidgetTester tester) async {
@@ -92,7 +92,7 @@ main() {
 
     expect(
         find.byKey(Key('action details calendar menu item')), findsOneWidget);
-  ***REMOVED***);
+  });
 
   testWidgets('shows share menu button only if participating',
       (WidgetTester tester) async {
@@ -109,8 +109,8 @@ main() {
     await tester.pumpAndSettle();
 
     expect(find.byKey(Key('action details share menu item')), findsOneWidget);
-  ***REMOVED***);
-***REMOVED***
+  });
+}
 
 MultiProvider createActionDetailsPage(
     Termin termin, Function(Termin) joinAction, Function(Termin) leaveAction) {
@@ -126,4 +126,4 @@ MultiProvider createActionDetailsPage(
           home: Dialog(
               child: ActionDetailsPage(
                   termin, false, false, joinAction, leaveAction))));
-***REMOVED***
+}

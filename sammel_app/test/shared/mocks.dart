@@ -37,4 +37,4 @@ import 'package:sammel_app/services/VisitedHousesService.dart';
   MockSpec<FirebaseReceiveService>(returnNullOnMissingStub: true)
 ])
 // run `flutter pub run build_runner build` to generate Mocks
-void main() {***REMOVED***
+void main() {}

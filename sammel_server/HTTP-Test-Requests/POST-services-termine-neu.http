@@ -17,20 +17,20 @@ Authorization: Basic MTE6YWM0MzA5NjAtMDVlYi0xMWViLThhMjYtZmRjNzY4M2E4NGJj
         "id": 11,
         "name": "Karl Marx",
         "color": 1
-      ***REMOVED***,
+      },
       {
         "id": 12,
         "name": "Rosa Luxemburg",
         "color": 2
-      ***REMOVED***
+      }
     ],
     "details": {
       "beschreibung": "eine andere beschreibung",
       "kontakt": "kalle@revo.de",
       "treffpunkt": "Weltzeituhr"
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***
+    }
+  }
+}
 
 ###
 

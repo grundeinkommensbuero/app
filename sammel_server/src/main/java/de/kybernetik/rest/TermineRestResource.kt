@@ -59,24 +59,24 @@ open class TermineRestResource {
     @PermitAll
     open fun optionsGetTermine(): Response {
         return allowCors();
-    ***REMOVED***
+    }
 
     @POST
     @PermitAll
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun getTermine(filter: TermineFilter?): Response {
-        LOG.info("filter: ${filter***REMOVED***");
-        LOG.info("Lade Aktionen mit Filter ${filter?.typen***REMOVED***, ${filter?.tage***REMOVED***, ${filter?.von***REMOVED***, ${filter?.bis***REMOVED***, ${filter?.orte***REMOVED***, ${filter?.nurEigene***REMOVED***, ${filter?.immerEigene***REMOVED***")
+        LOG.info("filter: ${filter}");
+        LOG.info("Lade Aktionen mit Filter ${filter?.typen}, ${filter?.tage}, ${filter?.von}, ${filter?.bis}, ${filter?.orte}, ${filter?.nurEigene}, ${filter?.immerEigene}")
         var benutzerId = if(context.userPrincipal != null) context.userPrincipal.name.toLong() else null
         val termine = dao.getTermine(filter ?: TermineFilter(), benutzerId)
-        LOG.info("termine: ${termine***REMOVED***")
+        LOG.info("termine: ${termine}")
         return Response
             .ok()
-            .entity(termine.map { termin -> convertFromTerminWithDetails(termin) ***REMOVED***)
+            .entity(termine.map { termin -> convertFromTerminWithDetails(termin) })
             .header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Methods", "POST, OPTIONS").header("Access-Control-Allow-Headers", "accept, authorization, content-type, x-requested-with")
             .build()
-    ***REMOVED***
+    }
 
     @GET
     @Path("termin")
@@ -100,7 +100,7 @@ open class TermineRestResource {
             .ok()
             .entity(convertFromTerminWithDetails(termin))
             .build()
-    ***REMOVED***
+    }
 
 
     @OPTIONS
@@ -108,7 +108,7 @@ open class TermineRestResource {
     @PermitAll
     open fun optionsLegeNeuenTerminAn(): Response {
         return allowCors();
-    ***REMOVED***
+    }
 
     @POST
     @Path("neu")
@@ -116,7 +116,7 @@ open class TermineRestResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun legeNeuenTerminAn(actionAndToken: ActionWithTokenDto): Response {
-        LOG.info("Lege neue Aktion an in ${actionAndToken.action?.ort***REMOVED***.")
+        LOG.info("Lege neue Aktion an in ${actionAndToken.action?.ort}.")
         if (actionAndToken.action == null)
             return Response
                 .status(422)
@@ -129,12 +129,12 @@ open class TermineRestResource {
         val terminDto = convertFromTerminWithoutDetails(updatedAction)
         pushService.pusheNeueAktionenNotification(
             listOf(terminDto),
-            "${updatedAction.ort***REMOVED***-sofort"
+            "${updatedAction.ort}-sofort"
         )
         neueAktionenNotification.merkeNeueAktion(terminDto)
 
         return Response.ok().entity(terminDto).header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Methods", "POST, OPTIONS").header("Access-Control-Allow-Headers", "accept, authorization, content-type, x-requested-with").build()
-    ***REMOVED***
+    }
 
     @POST
     @Path("termin")
@@ -142,7 +142,7 @@ open class TermineRestResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun aktualisiereTermin(actionAndToken: ActionWithTokenDto): Response {
-        LOG.info("Aktualisiere Aktion ${actionAndToken.action?.id***REMOVED*** durch ${context.userPrincipal.name***REMOVED***")
+        LOG.info("Aktualisiere Aktion ${actionAndToken.action?.id} durch ${context.userPrincipal.name}")
         if (actionAndToken.action?.id == null) return noValidActionResponse
 
         val tokenFromDb = dao.loadToken(actionAndToken.action!!.id!!)?.token
@@ -155,14 +155,14 @@ open class TermineRestResource {
             neuerTermin.teilnehmer = dao.getTermin(actionAndToken.action!!.id!!)!!.teilnehmer
             dao.aktualisiereTermin(neuerTermin)
             informiereUeberAenderung(actionAndToken.action!!, neuerTermin.teilnehmer)
-        ***REMOVED*** catch (e: EJBException) {
-            LOG.error("Fehler beim Mergen des Termins: Termin: ${actionAndToken.action***REMOVED***\n", e)
+        } catch (e: EJBException) {
+            LOG.error("Fehler beim Mergen des Termins: Termin: ${actionAndToken.action}\n", e)
             return Response.status(422).entity(e.message).build()
-        ***REMOVED***
+        }
         return Response
             .ok()
             .build()
-    ***REMOVED***
+    }
 
     @DELETE
     @Path("termin")
@@ -170,7 +170,7 @@ open class TermineRestResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun loescheAktion(actionAndToken: ActionWithTokenDto): Response {
-        LOG.info("Lösche Aktion ${actionAndToken.action?.id***REMOVED*** durch ${context.userPrincipal.name***REMOVED***")
+        LOG.info("Lösche Aktion ${actionAndToken.action?.id} durch ${context.userPrincipal.name}")
         if (actionAndToken.action?.id == null)
             return noValidActionResponse
 
@@ -187,11 +187,11 @@ open class TermineRestResource {
             if (tokenFromDb != null) dao.deleteToken(Token(actionAndToken.action!!.id!!, actionAndToken.token!!))
             termin.teilnehmer = teilnehmer
             informiereUeberLoeschung(actionAndToken.action!!, termin.teilnehmer)
-        ***REMOVED*** catch (e: DatabaseException) {
+        } catch (e: DatabaseException) {
             return Response.status(404).entity(e.message).build()
-        ***REMOVED***
+        }
         return Response.ok().build()
-    ***REMOVED***
+    }
 
     @POST
     @Path("teilnahme")
@@ -199,7 +199,7 @@ open class TermineRestResource {
     @Consumes(APPLICATION_JSON)
     @Produces(APPLICATION_JSON)
     open fun meldeTeilnahmeAn(@QueryParam("id") id: Long?): Response {
-        LOG.info("Teilnahme an Aktion $id durch ${context.userPrincipal.name***REMOVED***")
+        LOG.info("Teilnahme an Aktion $id durch ${context.userPrincipal.name}")
 
         val ungueltigeAktion = "Die angegebene Aktion ist ungültig"
         if (id == null) {
@@ -207,7 +207,7 @@ open class TermineRestResource {
             return Response.status(422)
                 .entity(RestFehlermeldung(ungueltigeAktion))
                 .build()
-        ***REMOVED***
+        }
 
         val aktion = dao.getTermin(id)
         if (aktion == null) {
@@ -215,14 +215,14 @@ open class TermineRestResource {
             return Response.status(422)
                 .entity(RestFehlermeldung(ungueltigeAktion))
                 .build()
-        ***REMOVED***
+        }
 
         val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
 
-        if (aktion.teilnehmer.map { it.id ***REMOVED***.contains(userAusDb!!.id)) {
+        if (aktion.teilnehmer.map { it.id }.contains(userAusDb!!.id)) {
             LOG.debug("Benutzer $id ist bereits Teilnehmer der Aktion")
             return Response.accepted().build()
-        ***REMOVED***
+        }
 
         informiereUeberTeilnahme(userAusDb, aktion)
         aktion.teilnehmer = aktion.teilnehmer.plus(userAusDb)
@@ -230,14 +230,14 @@ open class TermineRestResource {
 
 
         return Response.accepted().build()
-    ***REMOVED***
+    }
 
     @POST
     @Path("absage")
     @RolesAllowed("user")
     @Produces(APPLICATION_JSON)
     open fun sageTeilnahmeAb(@QueryParam("id") id: Long?): Response {
-        LOG.info("Absage an Aktion $id durch ${context.userPrincipal.name***REMOVED***")
+        LOG.info("Absage an Aktion $id durch ${context.userPrincipal.name}")
         if (id == null)
             return Response.status(422)
                 .entity(RestFehlermeldung("Die angegebene Aktion ist ungültig"))
@@ -250,7 +250,7 @@ open class TermineRestResource {
                 .build()
 
         val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
-        val userAusListe = aktionAusDb.teilnehmer.find { it.id == userAusDb!!.id ***REMOVED***
+        val userAusListe = aktionAusDb.teilnehmer.find { it.id == userAusDb!!.id }
 
         if (userAusListe == null)
             return Response.accepted().build()
@@ -260,7 +260,7 @@ open class TermineRestResource {
         informiereUeberAbsage(userAusDb!!, aktionAusDb)
 
         return Response.accepted().build()
-    ***REMOVED***
+    }
 
     @POST
     @Path("evaluation")
@@ -269,31 +269,31 @@ open class TermineRestResource {
     @Produces(APPLICATION_JSON)
     open fun aktualisiereEvaluation(evaluation: EvaluationDto): Response {
         if (evaluation.termin_id == null) return noValidActionResponse
-        LOG.info("Speichere Evaluation für ${evaluation.termin_id***REMOVED*** durch ${context.userPrincipal.name***REMOVED***")
+        LOG.info("Speichere Evaluation für ${evaluation.termin_id} durch ${context.userPrincipal.name}")
 
         val userAusDb = benutzerDao.getBenutzer(context.userPrincipal.name.toLong())
 
         val terminAusDb = dao.getTermin(evaluation.termin_id!!)
         if (terminAusDb == null) return noValidActionResponse
 
-        if (!terminAusDb.teilnehmer.map { it.id.toString() ***REMOVED***.contains(context.userPrincipal.name)) {
-            LOG.warn("Unbefugte Benutzer*in ${context.userPrincipal.name***REMOVED*** versucht Aktion${evaluation.termin_id***REMOVED*** zu evaluieren")
+        if (!terminAusDb.teilnehmer.map { it.id.toString() }.contains(context.userPrincipal.name)) {
+            LOG.warn("Unbefugte Benutzer*in ${context.userPrincipal.name} versucht Aktion${evaluation.termin_id} zu evaluieren")
             return Response
                 .status(FORBIDDEN)
                 .entity("Du bist nicht Teilnehmer*in dieser Aktion")
                 .build()
-        ***REMOVED***
+        }
 
         try {
             dao.speichereEvaluation(evaluation.convertToEvaluation(userAusDb!!.id))
-        ***REMOVED*** catch (e: EJBException) {
-            LOG.error("Fehler beim Mergen der Evaluation: Evaluation: ${evaluation***REMOVED***\n", e)
+        } catch (e: EJBException) {
+            LOG.error("Fehler beim Mergen der Evaluation: Evaluation: ${evaluation}\n", e)
             return Response.status(422).entity(e.message).build()
-        ***REMOVED***
+        }
         return Response
             .ok()
             .build()
-    ***REMOVED***
+    }
 
     @GET
     @Path("evaluation")
@@ -303,19 +303,19 @@ open class TermineRestResource {
         LOG.info("Alle Evaluationen abgefragt")
         val alleAktionen = dao.getTermine(TermineFilter(), null)
         val alleEvaluation = dao.ladeAlleEvaluationen()
-        LOG.info("${alleEvaluation.size***REMOVED*** Evaluationen zu ${alleAktionen.size***REMOVED*** Aktionen ausgeliefert")
+        LOG.info("${alleEvaluation.size} Evaluationen zu ${alleAktionen.size} Aktionen ausgeliefert")
         return Response
             .ok()
             .entity(
                 EvaluationenUndAktionenDto(
                     alleAktionen.stream()
-                        .map { convertFromTerminWithoutDetails(it) ***REMOVED***
-                        .peek { it.participants = null ***REMOVED***
+                        .map { convertFromTerminWithoutDetails(it) }
+                        .peek { it.participants = null }
                         .collect(toList()),
-                    alleEvaluation.map { vonEvaluation(it) ***REMOVED***)
+                    alleEvaluation.map { vonEvaluation(it) })
             )
             .build()
-    ***REMOVED***
+    }
 
     data class EvaluationenUndAktionenDto(
         var aktionen: List<TerminDto> = emptyList(),
@@ -346,7 +346,7 @@ open class TermineRestResource {
                 situation = situation,
                 ausgefallen = ausgefallen
             )
-        ***REMOVED***
+        }
 
         companion object {
             fun vonEvaluation(it: Evaluation) = EvaluationDto(
@@ -360,8 +360,8 @@ open class TermineRestResource {
                 situation = it.situation,
                 ausgefallen = it.ausgefallen
             )
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
     data class TerminDto(
         var id: Long? = null,
@@ -384,17 +384,17 @@ open class TermineRestResource {
                 typ = typ,
                 latitude = latitude,
                 longitude = longitude,
-                teilnehmer = if (participants == null) emptyList() else participants!!.map { it.convertToBenutzer() ***REMOVED***,
+                teilnehmer = if (participants == null) emptyList() else participants!!.map { it.convertToBenutzer() },
                 details = details?.convertToTerminDetails(id)
             )
-        ***REMOVED***
+        }
 
         companion object {
             fun convertFromTerminWithDetails(termin: Termin): TerminDto {
                 val terminDto = convertFromTerminWithoutDetails(termin)
                 terminDto.details = TerminDetailsDto.convertFromTerminDetails(termin.details)
                 return terminDto
-            ***REMOVED***
+            }
 
             fun convertFromTerminWithoutDetails(termin: Termin): TerminDto = TerminDto(
                 termin.id,
@@ -404,9 +404,9 @@ open class TermineRestResource {
                 termin.typ,
                 termin.latitude,
                 termin.longitude,
-                termin.teilnehmer.map { BenutzerDto.convertFromBenutzer(it) ***REMOVED***)
-        ***REMOVED***
-    ***REMOVED***
+                termin.teilnehmer.map { BenutzerDto.convertFromBenutzer(it) })
+        }
+    }
 
     data class ActionWithTokenDto(
         var action: TerminDto? = null,
@@ -426,7 +426,7 @@ open class TermineRestResource {
                 beschreibung = this.beschreibung,
                 kontakt = this.kontakt
             )
-        ***REMOVED***
+        }
 
         companion object {
             fun convertFromTerminDetails(details: TerminDetails?): TerminDetailsDto? {
@@ -436,25 +436,25 @@ open class TermineRestResource {
                     beschreibung = details.beschreibung,
                     kontakt = details.kontakt
                 )
-            ***REMOVED***
-        ***REMOVED***
-    ***REMOVED***
+            }
+        }
+    }
 
     open fun informiereUeberTeilnahme(benutzer: Benutzer, aktion: Termin) {
         if (aktion.teilnehmer.isEmpty()) {
-            LOG.debug("Aktion ${aktion.id***REMOVED*** hat keine Teilnehmer, deswgen kann niemand informiert werden")
+            LOG.debug("Aktion ${aktion.id} hat keine Teilnehmer, deswgen kann niemand informiert werden")
             return
-        ***REMOVED***
+        }
         val name = if (benutzer.name.isNullOrBlank()) "Jemand" else benutzer.name!!
         var pushMessage = PushMessageDto(
             PushNotificationDto(
                 "Verstärkung für deine Aktion",
-                "$name ist deiner Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))***REMOVED*** beigetreten",
+                "$name ist deiner Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))} beigetreten",
                 "Teilnahmen und Absagen"
             ),
             mapOf(
                 "type" to "ParticipationMessage",
-                "channel" to "action:${aktion.id***REMOVED***",
+                "channel" to "action:${aktion.id}",
                 "timestamp" to now().format(ISO_OFFSET_DATE_TIME),
                 "action" to aktion.id,
                 "username" to name,
@@ -465,15 +465,15 @@ open class TermineRestResource {
         )
         val ersteller = aktion.teilnehmer[0]
 
-        LOG.debug("Informiere Ersteller ${ersteller.id***REMOVED*** von Aktion ${aktion.id***REMOVED***")
+        LOG.debug("Informiere Ersteller ${ersteller.id} von Aktion ${aktion.id}")
         pushService.sendePushNachrichtAnEmpfaenger(pushMessage, listOf(ersteller))
 
         val teilnehmer = aktion.teilnehmer.minus(ersteller)
-        LOG.debug("Informiere restliche Teilnehmer ${teilnehmer.map { it.id ***REMOVED******REMOVED*** von Aktion ${aktion.id***REMOVED***")
+        LOG.debug("Informiere restliche Teilnehmer ${teilnehmer.map { it.id }} von Aktion ${aktion.id}")
         pushMessage = PushMessageDto(
             PushNotificationDto(
                 "Verstärkung für eure Aktion",
-                "$name ist der Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))***REMOVED*** beigetreten, an der du teilnimmst",
+                "$name ist der Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))} beigetreten, an der du teilnimmst",
                 "Teilnahmen und Absagen"
             ),
             pushMessage.data,
@@ -483,22 +483,22 @@ open class TermineRestResource {
         val restlicheTeilnehmer = aktion.teilnehmer.minus(ersteller)
 
         pushService.sendePushNachrichtAnEmpfaenger(pushMessage, restlicheTeilnehmer)
-    ***REMOVED***
+    }
 
     open fun informiereUeberAbsage(benutzer: Benutzer, aktion: Termin) {
         if (aktion.teilnehmer.isEmpty()) {
-            LOG.debug("Aktion ${aktion.id***REMOVED*** hat keine Teilnehmer, deswegen kann niemand informiert werden")
+            LOG.debug("Aktion ${aktion.id} hat keine Teilnehmer, deswegen kann niemand informiert werden")
             return
-        ***REMOVED***
+        }
         val name = if (benutzer.name.isNullOrBlank()) "Jemand" else benutzer.name!!
         var pushMessage = PushMessageDto(
             PushNotificationDto(
                 "Absage bei deiner Aktion",
-                "$name nimmt nicht mehr Teil an deiner Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))***REMOVED***",
+                "$name nimmt nicht mehr Teil an deiner Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))}",
                 "Teilnahmen und Absagen"
             ), mapOf(
                 "type" to "ParticipationMessage",
-                "channel" to "action:${aktion.id***REMOVED***",
+                "channel" to "action:${aktion.id}",
                 "timestamp" to now().format(ISO_OFFSET_DATE_TIME),
                 "action" to aktion.id,
                 "username" to name,
@@ -509,13 +509,13 @@ open class TermineRestResource {
         )
         val ersteller = aktion.teilnehmer[0]
 
-        LOG.debug("Informiere Ersteller ${ersteller.id***REMOVED*** von Aktion ${aktion.id***REMOVED***")
+        LOG.debug("Informiere Ersteller ${ersteller.id} von Aktion ${aktion.id}")
         pushService.sendePushNachrichtAnEmpfaenger(pushMessage, listOf(ersteller))
 
         pushMessage = PushMessageDto(
             PushNotificationDto(
                 "Absage bei eurer Aktion",
-                "$name hat die Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))***REMOVED*** verlassen, an der du teilnimmst",
+                "$name hat die Aktion vom ${aktion.beginn?.format(ofPattern("dd.MM."))} verlassen, an der du teilnimmst",
                 "Teilnahmen und Absagen"
             ), pushMessage.data,
             null,
@@ -523,17 +523,17 @@ open class TermineRestResource {
         )
         val teilnehmer = aktion.teilnehmer.minus(ersteller)
 
-        LOG.debug("Informiere restliche Teilnehmer ${teilnehmer.map { it.id ***REMOVED******REMOVED*** von Aktion ${aktion.id***REMOVED***")
+        LOG.debug("Informiere restliche Teilnehmer ${teilnehmer.map { it.id }} von Aktion ${aktion.id}")
         pushService.sendePushNachrichtAnEmpfaenger(pushMessage, teilnehmer)
-    ***REMOVED***
+    }
 
     open fun informiereUeberAenderung(aktion: TerminDto, teilnehmer: List<Benutzer>) {
         val pushMessage = PushMessageDto(
             PushNotificationDto(
                 "Eine Aktion an der du teilnimmst hat sich geändert",
-                "${aktion.typ***REMOVED*** am ${aktion.beginn!!.format(ofPattern("dd.MM."))***REMOVED*** in ${aktion.ort***REMOVED*** (${aktion.details?.treffpunkt***REMOVED***)",
+                "${aktion.typ} am ${aktion.beginn!!.format(ofPattern("dd.MM."))} in ${aktion.ort} (${aktion.details?.treffpunkt})",
                 "Änderungen an Aktionen",
-                "action:change:${aktion.id***REMOVED***"
+                "action:change:${aktion.id}"
             ),
             mapOf<String, Any>(
                 "type" to "ActionChanged",
@@ -543,17 +543,17 @@ open class TermineRestResource {
         )
         val restTeilnehmer = teilnehmer.subList(1, teilnehmer.size)
         if (teilnehmer.isNotEmpty())
-            LOG.debug("Informiere Teilnehmer ${teilnehmer.map { it.id ***REMOVED******REMOVED*** von Aktion ${aktion.id***REMOVED*** über Änderungen")
+            LOG.debug("Informiere Teilnehmer ${teilnehmer.map { it.id }} von Aktion ${aktion.id} über Änderungen")
         pushService.sendePushNachrichtAnEmpfaenger(pushMessage, restTeilnehmer)
-    ***REMOVED***
+    }
 
     open fun informiereUeberLoeschung(aktion: TerminDto, teilnehmer: List<Benutzer>) {
         val pushMessage = PushMessageDto(
             PushNotificationDto(
                 "Eine Aktion an der du teilnimmst wurde abgesagt",
-                "${aktion.typ***REMOVED*** am ${aktion.beginn!!.format(ofPattern("dd.MM."))***REMOVED*** in ${aktion.ort***REMOVED*** (${aktion.details?.treffpunkt***REMOVED***) wurde von der Ersteller*in gelöscht",
+                "${aktion.typ} am ${aktion.beginn!!.format(ofPattern("dd.MM."))} in ${aktion.ort} (${aktion.details?.treffpunkt}) wurde von der Ersteller*in gelöscht",
                 "Änderungen an Aktionen",
-                "action:change:${aktion.id***REMOVED***"
+                "action:change:${aktion.id}"
             ),
             mapOf<String, Any>(
                 "type" to "ActionDeleted",
@@ -563,9 +563,9 @@ open class TermineRestResource {
         )
         val restTeilnehmer = teilnehmer.subList(1, teilnehmer.size)
         if (restTeilnehmer.isNotEmpty())
-            LOG.debug("Informiere Teilnehmer ${restTeilnehmer.map { it.id ***REMOVED******REMOVED*** von Aktion ${aktion.id***REMOVED*** über Löschung")
+            LOG.debug("Informiere Teilnehmer ${restTeilnehmer.map { it.id }} von Aktion ${aktion.id} über Löschung")
         pushService.sendePushNachrichtAnEmpfaenger(pushMessage, restTeilnehmer)
-    ***REMOVED***
+    }
 
     open fun allowCors(): Response {
         return Response
@@ -575,7 +575,7 @@ open class TermineRestResource {
                 .header("Allow", "POST, OPTIONS")
                 .header("Access-Control-Allow-Headers", "accept, authorization, content-type, x-requested-with")
                 .build()
-    ***REMOVED***
+    }
 
-***REMOVED***
+}
 

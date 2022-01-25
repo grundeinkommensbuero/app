@@ -19,15 +19,15 @@ open class FAQDao {
 
     open fun getAllFAQ(): List<FAQ> {
         val faqs = entityManager.createQuery("from FAQ", FAQ::class.java).resultList
-        LOG.debug("${faqs.size***REMOVED*** FAQ-Einträge gefunden: ${faqs.map { it.title ***REMOVED******REMOVED***")
+        LOG.debug("${faqs.size} FAQ-Einträge gefunden: ${faqs.map { it.title }}")
         return faqs
-    ***REMOVED***
+    }
 
     open fun getFAQTimestamp(): LocalDateTime? {
         try {
             return entityManager.createQuery("from FAQTimestamp", FAQTimestamp::class.java).singleResult.timestamp
-        ***REMOVED*** catch (e: NoResultException) {
+        } catch (e: NoResultException) {
             return null
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+        }
+    }
+}

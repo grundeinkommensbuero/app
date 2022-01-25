@@ -41,14 +41,14 @@ void main() {
               200,
               User(11, '', Colors.red).toJson())));
       when(storageService.saveUser(any)).thenAnswer((_) => Future.value(true));
-    ***REMOVED***);
+    });
 
     group('user streams', () {
       test('stream is initialized', () {
         var service = UserService(storageService, firebase, backendMock);
 
         expect(service.streamController.stream, isNotNull);
-      ***REMOVED***);
+      });
 
       test('individual stream emits first user, even if subscribed later',
           () async {
@@ -57,14 +57,14 @@ void main() {
         var service = UserService(storageService, firebase, backendMock);
 
         // other listeners to broadcast
-        service.streamController.stream.listen((_) => {***REMOVED***);
-        service.streamController.stream.listen((_) => {***REMOVED***);
+        service.streamController.stream.listen((_) => {});
+        service.streamController.stream.listen((_) => {});
 
         await service.streamController.stream.first;
 
         var subscription = service.user;
         expect(await subscription.first, user);
-      ***REMOVED***);
+      });
 
       test('individual streams emit following users', () async {
         when(storageService.loadUser()).thenAnswer((_) async => karl());
@@ -80,7 +80,7 @@ void main() {
         service.streamController.close();
 
         expect((await users).map((user) => user.id), [11, 12, 13, 14]);
-      ***REMOVED***);
+      });
 
       test('stores latest user', () async {
         final user = karl();
@@ -90,7 +90,7 @@ void main() {
         await service.streamController.stream.first;
 
         expect(service.latestUser, user);
-      ***REMOVED***);
+      });
 
       test('updates latest user', () async {
         when(storageService.loadUser()).thenAnswer((_) async => karl());
@@ -115,7 +115,7 @@ void main() {
         await userPassed;
 
         expect(service.latestUser, nextUser);
-      ***REMOVED***);
+      });
 
       test('closes individual streams', () async {
         when(storageService.loadUser()).thenAnswer((_) async => karl());
@@ -128,8 +128,8 @@ void main() {
         service.streamController.close();
 
         await individualStream.length.timeout(Duration(seconds: 1));
-      ***REMOVED***);
-    ***REMOVED***);
+      });
+    });
 
     group('initially', () {
       test('assigns itself as userService and determines userHeader', () async {
@@ -141,13 +141,13 @@ void main() {
 
         expect(service.userService, service);
         expect(userHeaders['Authorization'], 'Basic MTE6c2VjcmV0');
-      ***REMOVED***);
+      });
 
       test('loads user from storage', () async {
         UserService(storageService, firebase, backendMock);
 
         verify(storageService.loadUser()).called(1);
-      ***REMOVED***);
+      });
 
       test('registers new user to server, if none stored', () async {
         when(storageService.loadUser()).thenAnswer((_) async => null);
@@ -166,7 +166,7 @@ void main() {
         expect(login['user']['color'], isNotNull);
         expect(login['secret'], isNotEmpty);
         expect(login['firebaseKey'], 'firebaseToken');
-      ***REMOVED***);
+      });
 
       test('saves new user to storage', () async {
         var user = User(11, '', Colors.red);
@@ -179,7 +179,7 @@ void main() {
         var argument =
             verify(storageService.saveUser(captureAny)).captured.single as User;
         expect(equals(argument, user), true);
-      ***REMOVED***);
+      });
 
       test('verifies stored user', () async {
         var user = User(11, 'Karl Marx', Colors.red);
@@ -195,7 +195,7 @@ void main() {
         expect(equals(User.fromJSON(jsonDecode(argument)['user']), user), true);
         expect(jsonDecode(argument)['secret'], 'secret');
         expect(jsonDecode(argument)['firebaseKey'], 'firebaseToken');
-      ***REMOVED***);
+      });
 
       test('serves created user', () async {
         when(storageService.loadUser()).thenAnswer((_) async => null);
@@ -204,14 +204,14 @@ void main() {
 
         var user = await userService.user.first;
         expect(equals(user, User(11, '', Colors.red)), isTrue);
-      ***REMOVED***);
+      });
 
       test('serves verified user', () async {
         var userService = UserService(storageService, firebase, backendMock);
 
         var user = await userService.user.first;
         expect(equals(user, User(11, 'Karl Marx', Colors.red)), isTrue);
-      ***REMOVED***);
+      });
 
       test('registers new user if authentication to server fails', () async {
         when(backendMock.post('service/benutzer/authentifiziere', any, any))
@@ -232,7 +232,7 @@ void main() {
         expect(login['user']['color'], isNotNull);
         expect(login['secret'], isNotEmpty);
         expect(login['firebaseKey'], 'firebaseToken');
-      ***REMOVED***);
+      });
 
       // FIXME Funktioniert leider nicht, keine Ahnung was das Problem ist
       /*test('throws exception with non-authentication fail', () async {
@@ -243,10 +243,10 @@ void main() {
 
       expect(() {
         return userService.user;
-      ***REMOVED***, throwsException);
-    ***REMOVED***);*/
-    ***REMOVED***);
-  ***REMOVED***);
+      }, throwsException);
+    });*/
+    });
+  });
 
   group('DemoUserService', () {
     var service = DemoUserService();
@@ -262,9 +262,9 @@ void main() {
       expect(users.map((user) => user.name),
           containsAll(['Ich', 'neuer Name', 'neuerer Name']));
       expect(service.latestUser!.name, 'neuerer Name');
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+    });
+  });
+}
 
 bool equals(User user1, User user2) =>
     user1.id == user2.id &&

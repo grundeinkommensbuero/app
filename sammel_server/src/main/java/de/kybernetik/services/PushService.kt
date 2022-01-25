@@ -54,15 +54,15 @@ open class PushService {
             "TEST" -> PREFIX = "test."
             "PROD" -> PREFIX = ""
             else -> LOG.error("Server-Modus unbekannt")
-        ***REMOVED***
+        }
         when (modus) {
             "PROD" -> ENCRYPTION = "AES_PROD"
             else -> ENCRYPTION = "AES"
-        ***REMOVED***
+        }
 
         val key = getProperty("key")
         KEY = SecretKeySpec(Base64.getDecoder().decode(key), "AES")
-    ***REMOVED***
+    }
 
     open fun sendePushNachrichtAnEmpfaenger(nachricht: PushMessageDto, empfaenger: List<Benutzer>) {
         val firebaseKeys = benutzerDao.getFirebaseKeys(empfaenger)
@@ -71,12 +71,12 @@ open class PushService {
         val verschluesselt = verschluessele(nachricht.data)
         if (firebaseKeys.isNotEmpty()) {
             firebase.sendePushNachrichtAnEmpfaenger(nachricht.notification, verschluesselt, firebaseKeys)
-        ***REMOVED***
+        }
         if (nachricht.persistent == true) {
             pushDao.speicherePushMessageFuerEmpfaenger(nachricht.notification, verschluesselt, empfaenger)
-        ***REMOVED*** else if (benutzerOhneFirebase.isNotEmpty())
+        } else if (benutzerOhneFirebase.isNotEmpty())
             pushDao.speicherePushMessageFuerEmpfaenger(nachricht.notification, verschluesselt, benutzerOhneFirebase)
-    ***REMOVED***
+    }
 
     open fun sendePushNachrichtAnTopic(nachricht: PushMessageDto, topic: String) {
         val topicInModus = "$PREFIX$topic"
@@ -89,7 +89,7 @@ open class PushService {
             pushDao.speicherePushMessageFuerEmpfaenger(nachricht.notification, verschluesselt, subscribedBenutzer)
 
         firebase.sendePushNachrichtAnTopic(nachricht.notification, verschluesselt, topicInModus)
-    ***REMOVED***
+    }
 
     open fun verschluessele(data: Map<String, Any?>?): Map<String, String>? {
         try {
@@ -107,29 +107,29 @@ open class PushService {
                 val verschluesselt = cipher.doFinal(bytes)
 
                 ciphertext = Base64.getEncoder().encodeToString(verschluesselt)
-            ***REMOVED***
+            }
             LOG.debug("Verschlüssele $data zu $ciphertext mit Nonce $nonce")
             return mapOf("encrypted" to ENCRYPTION, "payload" to ciphertext, "nonce" to nonce)
-        ***REMOVED*** catch (e: JsonSyntaxException) {
+        } catch (e: JsonSyntaxException) {
             LOG.error("Serialisieren von Push-Nachricht gescheitert", e)
             return null
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
     open fun pusheNeueAktionenNotification(aktionen: List<TerminDto>, topic: String) {
-        LOG.debug("Neue Aktionen als Push-Messages zu versenden: ${aktionen.map { it.id ***REMOVED******REMOVED***")
+        LOG.debug("Neue Aktionen als Push-Messages zu versenden: ${aktionen.map { it.id }}")
         if (aktionen.isEmpty()) return
 
-        if (aktionen.map { it.ort ***REMOVED***.distinct().size > 1)
+        if (aktionen.map { it.ort }.distinct().size > 1)
             LOG.warn("Orte aus unterschiedlichen Aktionen in derselben Push-Nachricht")
 
         val title = if (aktionen.size == 1) "Neue Aktion in deinem Kiez" else "Neue Aktionen in deinem Kiez"
         val body = if (aktionen.size == 1 && aktionen[0].typ != "Listen ausgelegt")
-            "${aktionen[0].typ***REMOVED*** am ${aktionen[0].beginn!!.format(DateTimeFormatter.ofPattern("dd.MM. 'um' HH:mm 'Uhr'"))***REMOVED***, ${aktionen[0].ort***REMOVED***"
+            "${aktionen[0].typ} am ${aktionen[0].beginn!!.format(DateTimeFormatter.ofPattern("dd.MM. 'um' HH:mm 'Uhr'"))}, ${aktionen[0].ort}"
         else if (aktionen.size == 1)
-            "Listen ausgelegt in ${aktionen[0].ort***REMOVED***"
+            "Listen ausgelegt in ${aktionen[0].ort}"
         else
-            "${aktionen.size***REMOVED*** neue Aktionen in ${aktionen[0].ort***REMOVED***"
+            "${aktionen.size} neue Aktionen in ${aktionen[0].ort}"
 
         val pushMessage = PushMessageDto(
             PushNotificationDto(title, body, "Aktionen im Kiez"),
@@ -142,6 +142,6 @@ open class PushService {
         )
         val topicEnc = URLEncoder.encode(topic, Charsets.UTF_8.name()).replace("+", "%20")
         sendePushNachrichtAnTopic(pushMessage, topicEnc)
-    ***REMOVED***
+    }
 
-***REMOVED***
+}

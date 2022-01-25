@@ -35,7 +35,7 @@ class FirebaseServiceTest {
     @Before
     fun setUp() {
         tokenField.isAccessible = true
-    ***REMOVED***
+    }
 
     @Test(expected = MissingMessageTarget::class)
     fun `sendePushNachrichtAnEmpfaenger erwartet nichtleere Liste von Empfaenger`() =
@@ -59,13 +59,13 @@ class FirebaseServiceTest {
         whenever(firebase.sendMulticast(any())).thenReturn(reponseMock)
         whenever(reponseMock.successCount).thenReturn(50)
 
-        service.sendePushNachrichtAnEmpfaenger(PushNotificationDto(channel = "Allgemein", collapseId = null), emptyMap(), (1..50).map { Int.toString() ***REMOVED***)
+        service.sendePushNachrichtAnEmpfaenger(PushNotificationDto(channel = "Allgemein", collapseId = null), emptyMap(), (1..50).map { Int.toString() })
 
         val captor = argumentCaptor<MulticastMessage>()
         verify(firebase, times(1)).sendMulticast(captor.capture())
         @Suppress("UNCHECKED_CAST") val tokens = tokenField.get(captor.firstValue) as List<String>
-        assertTrue(tokens.containsAll((1..50).map { Int.toString() ***REMOVED***))
-    ***REMOVED***
+        assertTrue(tokens.containsAll((1..50).map { Int.toString() }))
+    }
 
     @Test
     fun `sendePushNachrichtAnEmpfaenger schickt keine Nachricht zweimal an denselben Empfaeger`() {
@@ -79,7 +79,7 @@ class FirebaseServiceTest {
         verify(firebase, times(1)).sendMulticast(captor.capture())
         @Suppress("UNCHECKED_CAST") val tokens = tokenField.get(captor.firstValue) as List<String>
         assertTrue(tokens.containsAll(listOf("1", "2", "3")))
-    ***REMOVED***
+    }
 
     @Test
     fun `sendePushNachrichtAnEmpfaenger akzeptiert leere Daten`() {
@@ -87,10 +87,10 @@ class FirebaseServiceTest {
         whenever(firebase.sendMulticast(any())).thenReturn(reponseMock)
         whenever(reponseMock.successCount).thenReturn(50)
 
-        service.sendePushNachrichtAnEmpfaenger(PushNotificationDto(channel = "Allgemein", collapseId = null), null, (1..50).map { Int.toString() ***REMOVED***)
+        service.sendePushNachrichtAnEmpfaenger(PushNotificationDto(channel = "Allgemein", collapseId = null), null, (1..50).map { Int.toString() })
 
         verify(firebase, times(1)).sendMulticast(any())
-    ***REMOVED***
+    }
 
     @Test(expected = MissingMessageTarget::class)
     fun `sendePushNachrichtAnTopic erwartet  nichtleeres Topic`() =
@@ -101,7 +101,7 @@ class FirebaseServiceTest {
         service.sendePushNachrichtAnTopic(PushNotificationDto(channel = "Allgemein", collapseId = null), emptyMap(), "topic")
 
         verify(firebase, times(1)).send(any())
-    ***REMOVED***
+    }
 
     @Test
     fun `Firebase stubbed FirebaseMessaging wenn keine Konfigurationsdatei existiert`() {
@@ -111,5 +111,5 @@ class FirebaseServiceTest {
         assertEquals(firebase4real.send(message), "")
 
         assertNull(firebase4real.sendMulticast(null))
-    ***REMOVED***
-***REMOVED***
+    }
+}

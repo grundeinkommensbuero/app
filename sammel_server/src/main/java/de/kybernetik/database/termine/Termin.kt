@@ -63,5 +63,5 @@ class Termin {
         this.longitude = longitude
         this.details = details
         this.teilnehmer = teilnehmer
-    ***REMOVED***
-***REMOVED***
+    }
+}

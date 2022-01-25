@@ -38,7 +38,7 @@ void main() async {
       assetLoader: ConstJsonAssetLoader(),
       fallbackLocale: Locale('en'),
       child: MyApp()));
-***REMOVED***
+}
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 final GlobalKey<TermineSeiteState> actionPageKey =
@@ -122,5 +122,5 @@ class MyApp extends StatelessWidget {
           home: Navigation(actionPageKey, GlobalKey(), clearButton),
           navigatorKey: navigatorKey,
         ));
-  ***REMOVED***
-***REMOVED***
+  }
+}

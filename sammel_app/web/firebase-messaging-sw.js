@@ -8,11 +8,11 @@ firebase.initializeApp({
   storageBucket: "expedition-grundeinkommen-app.appspot.com",
   messagingSenderId: "34078750980",
   appId: "1:34078750980:web:ab1f51298d65f0a2d1b851",
-***REMOVED***);
+});
 // Necessary to receive background messages:
 const messaging = firebase.messaging();
 
 // Optional:
 messaging.onBackgroundMessage((m) => {
   console.log("onBackgroundMessage", m);
-***REMOVED***);
+});

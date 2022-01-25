@@ -28,15 +28,15 @@ class MapHttpClientResponse extends Mock implements HttpClientResponse {
 
   @override
   StreamSubscription<List<int>> listen(void Function(List<int> event)? onData,
-      {Function? onError, void Function()? onDone, bool? cancelOnError***REMOVED***) {
+      {Function? onError, void Function()? onDone, bool? cancelOnError}) {
     return _stream.listen(onData,
         onError: onError, onDone: onDone, cancelOnError: cancelOnError);
-  ***REMOVED***
+  }
 
   static Stream<List<int>> readFile() => File('test/res/map.png').openRead();
-***REMOVED***
+}
 
-class MockHttpClientRequest extends Mock implements HttpClientRequest {***REMOVED***
+class MockHttpClientRequest extends Mock implements HttpClientRequest {}
 
 class MapClient extends Mock implements HttpClient {
   @override
@@ -44,28 +44,28 @@ class MapClient extends Mock implements HttpClient {
     final request = MockHttpClientRequest();
     when(request.close()).thenAnswer((_) async {
       return MapHttpClientResponse();
-    ***REMOVED***);
+    });
     return Future.value(request);
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 class MapHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? securityContext) => MapClient();
-***REMOVED***
+}
 
-class _FakeSocket extends _i2.Fake implements _i24.Socket {***REMOVED***
+class _FakeSocket extends _i2.Fake implements _i24.Socket {}
 
 class _FakeFirebaseApp extends _i2.Fake implements _i19.FirebaseApp {
   @override
   // ignore: hash_and_equals
   bool operator ==(dynamic other) => super == other;
-***REMOVED***
+}
 
-class _FakeHttpHeaders extends _i2.Fake implements _i24.HttpHeaders {***REMOVED***
+class _FakeHttpHeaders extends _i2.Fake implements _i24.HttpHeaders {}
 
 class _FakeHttpClientResponse extends _i2.Fake
-    implements _i24.HttpClientResponse {***REMOVED***
+    implements _i24.HttpClientResponse {}
 
 /// A class which mocks [HttpClientResponse].
 ///
@@ -74,7 +74,7 @@ class MockHttpClientResponse extends _i2.Mock
     implements _i24.HttpClientResponse {
   MockHttpClientResponse() {
     _i2.throwOnMissingStub(this);
-  ***REMOVED***
+  }
 
   @override
   int get statusCode =>
@@ -134,7 +134,7 @@ class MockHttpClientResponse extends _i2.Mock
   _i15.Future<_i24.Socket> detachSocket() => (super.noSuchMethod(
       Invocation.method(#detachSocket, []),
       returnValue: Future.value(_FakeSocket())) as _i15.Future<_i24.Socket>);
-***REMOVED***
+}
 
 /// A class which mocks [HttpClientResponseBody].
 ///
@@ -143,7 +143,7 @@ class MockHttpClientResponseBody extends _i2.Mock
     implements _i8.HttpClientResponseBody {
   MockHttpClientResponseBody() {
     _i2.throwOnMissingStub(this);
-  ***REMOVED***
+  }
 
   @override
   _i24.HttpClientResponse get response =>
@@ -153,7 +153,7 @@ class MockHttpClientResponseBody extends _i2.Mock
   @override
   String get type =>
       (super.noSuchMethod(Invocation.getter(#type), returnValue: '') as String);
-***REMOVED***
+}
 
 /// A class which mocks [FirebaseMessaging].
 ///
@@ -161,7 +161,7 @@ class MockHttpClientResponseBody extends _i2.Mock
 class MockFirebaseMessaging extends _i2.Mock implements _i35.FirebaseMessaging {
   MockFirebaseMessaging() {
     _i2.throwOnMissingStub(this);
-  ***REMOVED***
+  }
 
   @override
   _i19.FirebaseApp get app => (super.noSuchMethod(Invocation.getter(#app),
@@ -185,7 +185,7 @@ class MockFirebaseMessaging extends _i2.Mock implements _i35.FirebaseMessaging {
   @override
   Map<dynamic, dynamic> get pluginConstants =>
       (super.noSuchMethod(Invocation.getter(#pluginConstants),
-          returnValue: <dynamic, dynamic>{***REMOVED***) as Map<dynamic, dynamic>);
+          returnValue: <dynamic, dynamic>{}) as Map<dynamic, dynamic>);
 
   @override
   _i15.Future<_i20.RemoteMessage?> getInitialMessage() =>
@@ -194,8 +194,8 @@ class MockFirebaseMessaging extends _i2.Mock implements _i35.FirebaseMessaging {
           as _i15.Future<_i20.RemoteMessage?>);
 
   @override
-  _i15.Future<void> deleteToken({String? senderId***REMOVED***) => (super.noSuchMethod(
-      Invocation.method(#deleteToken, [], {#senderId: senderId***REMOVED***),
+  _i15.Future<void> deleteToken({String? senderId}) => (super.noSuchMethod(
+      Invocation.method(#deleteToken, [], {#senderId: senderId}),
       returnValue: Future.value(null),
       returnValueForMissingStub: Future.value()) as _i15.Future<void>);
 
@@ -205,8 +205,8 @@ class MockFirebaseMessaging extends _i2.Mock implements _i35.FirebaseMessaging {
           returnValue: Future.value('')) as _i15.Future<String?>);
 
   @override
-  _i15.Future<String?> getToken({String? vapidKey***REMOVED***) => (super.noSuchMethod(
-      Invocation.method(#getToken, [], {#vapidKey: vapidKey***REMOVED***),
+  _i15.Future<String?> getToken({String? vapidKey}) => (super.noSuchMethod(
+      Invocation.method(#getToken, [], {#vapidKey: vapidKey}),
       returnValue: Future.value('')) as _i15.Future<String?>);
 
   @override
@@ -223,7 +223,7 @@ class MockFirebaseMessaging extends _i2.Mock implements _i35.FirebaseMessaging {
           bool? carPlay = false,
           bool? criticalAlert = false,
           bool? provisional = false,
-          bool? sound = true***REMOVED***) =>
+          bool? sound = true}) =>
       (super.noSuchMethod(
               Invocation.method(#requestPermission, [], {
                 #alert: alert,
@@ -233,7 +233,7 @@ class MockFirebaseMessaging extends _i2.Mock implements _i35.FirebaseMessaging {
                 #criticalAlert: criticalAlert,
                 #provisional: provisional,
                 #sound: sound
-              ***REMOVED***),
+              }),
               returnValue: Future.value(_FakeNotificationSettings()))
           as _i15.Future<_i21.NotificationSettings>);
 
@@ -244,7 +244,7 @@ class MockFirebaseMessaging extends _i2.Mock implements _i35.FirebaseMessaging {
           String? collapseKey,
           String? messageId,
           String? messageType,
-          int? ttl***REMOVED***) =>
+          int? ttl}) =>
       (super.noSuchMethod(
           Invocation.method(#sendMessage, [], {
             #to: to,
@@ -253,7 +253,7 @@ class MockFirebaseMessaging extends _i2.Mock implements _i35.FirebaseMessaging {
             #messageId: messageId,
             #messageType: messageType,
             #ttl: ttl
-          ***REMOVED***),
+          }),
           returnValue: Future.value(null),
           returnValueForMissingStub: Future.value()) as _i15.Future<void>);
 
@@ -265,10 +265,10 @@ class MockFirebaseMessaging extends _i2.Mock implements _i35.FirebaseMessaging {
 
   @override
   _i15.Future<void> setForegroundNotificationPresentationOptions(
-          {bool? alert = false, bool? badge = false, bool? sound = false***REMOVED***) =>
+          {bool? alert = false, bool? badge = false, bool? sound = false}) =>
       (super.noSuchMethod(
           Invocation.method(#setForegroundNotificationPresentationOptions, [],
-              {#alert: alert, #badge: badge, #sound: sound***REMOVED***),
+              {#alert: alert, #badge: badge, #sound: sound}),
           returnValue: Future.value(null),
           returnValueForMissingStub: Future.value()) as _i15.Future<void>);
 
@@ -283,12 +283,12 @@ class MockFirebaseMessaging extends _i2.Mock implements _i35.FirebaseMessaging {
       (super.noSuchMethod(Invocation.method(#unsubscribeFromTopic, [topic]),
           returnValue: Future.value(null),
           returnValueForMissingStub: Future.value()) as _i15.Future<void>);
-***REMOVED***
+}
 
-class _FakeRemoteMessage extends _i2.Fake implements _i20.RemoteMessage {***REMOVED***
+class _FakeRemoteMessage extends _i2.Fake implements _i20.RemoteMessage {}
 
 class _FakeNotificationSettings extends _i2.Fake
-    implements _i21.NotificationSettings {***REMOVED***
+    implements _i21.NotificationSettings {}
 
 /// A class which mocks [GeoService].
 ///
@@ -296,7 +296,7 @@ class _FakeNotificationSettings extends _i2.Fake
 class MockGeoService extends _i2.Mock implements _i18.GeoService {
   MockGeoService() {
     _i2.throwOnMissingStub(this);
-  ***REMOVED***
+  }
 
   @override
   _i24.HttpClient get httpClient =>
@@ -329,8 +329,8 @@ class MockGeoService extends _i2.Mock implements _i18.GeoService {
       (super.noSuchMethod(Invocation.method(#getDescriptionToPoint, [point]),
               returnValue: Future.value(_FakeGeoData()))
           as _i15.Future<_i18.GeoData>);
-***REMOVED***
+}
 
-class _FakeHttpClient extends _i2.Fake implements _i24.HttpClient {***REMOVED***
+class _FakeHttpClient extends _i2.Fake implements _i24.HttpClient {}
 
-class _FakeGeoData extends _i2.Fake implements _i18.GeoData {***REMOVED***
+class _FakeGeoData extends _i2.Fake implements _i18.GeoData {}

@@ -13,7 +13,7 @@ void main() {
         '"user":null,'
         '"secret":null,'
         '"firebaseKey":null'
-        '***REMOVED***');
+        '}');
 
     expect(
         jsonEncode(Login(null, '', '').toJson()),
@@ -21,8 +21,8 @@ void main() {
         '"user":null,'
         '"secret":"",'
         '"firebaseKey":""'
-        '***REMOVED***');
-  ***REMOVED***);
+        '}');
+  });
 
   test('serialises filled Login', () {
     expect(
@@ -30,9 +30,9 @@ void main() {
             Login(User(11, 'Karl Marx', Colors.red), 'secret', 'firebaseKey')
                 .toJson()),
         '{'
-        '"user":{"id":11,"name":"Karl Marx","color":4294198070***REMOVED***,'
+        '"user":{"id":11,"name":"Karl Marx","color":4294198070},'
         '"secret":"secret",'
         '"firebaseKey":"firebaseKey"'
-        '***REMOVED***');
-  ***REMOVED***);
-***REMOVED***
+        '}');
+  });
+}

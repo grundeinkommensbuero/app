@@ -19,7 +19,7 @@ class Visitation {
   String adresse = '';
 
   Visitation(this.id, this.adresse, this.hausteil, this.benutzer, this.datum);
-***REMOVED***
+}
 
 class VisitedHouse {
   int osmId = -1;
@@ -32,7 +32,7 @@ class VisitedHouse {
   VisitedHouse(
       this.osmId, this.latitude, this.longitude, this.shape, this.visitations) {
     calculateBBox();
-  ***REMOVED***
+  }
 
   VisitedHouse.clone(VisitedHouse house)
       : osmId = house.osmId,
@@ -51,9 +51,9 @@ class VisitedHouse {
       maxLat = max(maxLat, p.latitude);
       minLng = min(minLng, p.longitude);
       maxLng = max(maxLng, p.longitude);
-    ***REMOVED***
+    }
     bbox = BoundingBox(minLat, minLng, maxLat, maxLng);
-  ***REMOVED***
+  }
 
   VisitedHouse.fromJson(Map<dynamic, dynamic> json)
       : osmId = json['osmId'],
@@ -70,7 +70,7 @@ class VisitedHouse {
         shape = List<LatLng>.from(
             jsonDecode(json['shape']).map((e) => LatLng(e[0], e[1]))) {
     calculateBBox();
-  ***REMOVED***
+  }
 
   Map<dynamic, dynamic> toJson() => {
         'osmId': osmId,
@@ -82,8 +82,8 @@ class VisitedHouse {
         'datum': DateFormat('yyyy-MM-dd').format(visitations.last.datum),
         'benutzer': visitations.last.benutzer,
         'shape':
-            '${shape.map((e) => '[${e.latitude***REMOVED***,${e.longitude***REMOVED***]').toList()***REMOVED***'
-      ***REMOVED***
+            '${shape.map((e) => '[${e.latitude},${e.longitude}]').toList()}'
+      };
 
   bool inside(LatLng point) {
     return poly.Polygon(shape
@@ -92,8 +92,8 @@ class VisitedHouse {
             .cast<poly.Point<num>>()
             .toList())
         .contains(point.latitude, point.longitude);
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 class SelectableVisitedHouse extends VisitedHouse {
   var selected;
@@ -102,19 +102,19 @@ class SelectableVisitedHouse extends VisitedHouse {
       osmId, latitude, longitude, shape, visitationEvents, selected)
       : super(osmId, latitude, longitude, shape, visitationEvents) {
     this.selected = selected;
-  ***REMOVED***
+  }
 
-  SelectableVisitedHouse.fromVisitedHouse(VisitedHouse vh, {selected: false***REMOVED***)
+  SelectableVisitedHouse.fromVisitedHouse(VisitedHouse vh, {selected: false})
       : super(vh.osmId, vh.latitude, vh.longitude, vh.shape, vh.visitations) {
     this.selected = selected;
-  ***REMOVED***
+  }
 
   SelectableVisitedHouse.clone(SelectableVisitedHouse vh)
       : super(vh.osmId, vh.latitude, vh.longitude, vh.shape,
             List.from(vh.visitations)) {
     selected = vh.selected;
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 class VisitedHouseColorSelector {
   static var selectionColor = CampaignTheme.altPrimary;
@@ -126,7 +126,7 @@ class VisitedHouseColorSelector {
   static Color getDrawColorForSelectable(SelectableVisitedHouse house) {
     if (house.selected) {
       return selectionColor;
-    ***REMOVED***
+    }
     if (house.visitations.length > 0) {
       if (house.visitations.length == 1)
         return oneVisitColor;
@@ -134,8 +134,8 @@ class VisitedHouseColorSelector {
         return twoVisitsColor;
       else
         return manyVisitsColor;
-    ***REMOVED*** else {
+    } else {
       return firstTimeColor;
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***
+    }
+  }
+}

@@ -11,5 +11,5 @@ class Login {
         'user': user,
         'secret': secret,
         'firebaseKey': firebaseKey,
-      ***REMOVED***
-***REMOVED***
+      };
+}

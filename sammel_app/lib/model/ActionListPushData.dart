@@ -14,11 +14,11 @@ class ActionListPushData implements PushData {
     actions = (json['actions'] as List)
         .map((json) => Termin.fromJson(json, kieze))
         .toList();
-  ***REMOVED***
+  }
 
   @override
   toJson() => {
     'type': type,
     'actions': actions.map((action) => action.toJson()).toList()
-  ***REMOVED***
-***REMOVED***
+  };
+}

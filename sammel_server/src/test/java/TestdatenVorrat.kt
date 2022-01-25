@@ -13,23 +13,23 @@ class TestdatenVorrat {
     companion object {
         fun sammeltermin(): String {
             return "Sammeln"
-        ***REMOVED***
+        }
 
         fun infoveranstaltung(): String {
             return "Infoveranstaltung"
-        ***REMOVED***
+        }
 
         fun karl(): Benutzer {
             return Benutzer(11, "Karl Marx", 4294198070)
-        ***REMOVED***
+        }
 
         fun rosa(): Benutzer {
             return Benutzer(12, "Rosa Luxemburg", 0)
-        ***REMOVED***
+        }
 
         fun bini(): Benutzer {
             return Benutzer(13, "Bini Adamczak", 3L)
-        ***REMOVED***
+        }
 
         fun terminOhneTeilnehmerOhneDetails(): Termin {
             return Termin(
@@ -43,7 +43,7 @@ class TestdatenVorrat {
                 13.47192,
                 null
             )
-        ***REMOVED***
+        }
 
         fun terminMitTeilnehmerOhneDetails(): Termin {
             return Termin(
@@ -57,7 +57,7 @@ class TestdatenVorrat {
                 13.47192,
                 null
             )
-        ***REMOVED***
+        }
 
         fun terminMitTeilnehmerMitDetails(): Termin {
             return Termin(
@@ -71,7 +71,7 @@ class TestdatenVorrat {
                 13.47192,
                 terminDetails()
             )
-        ***REMOVED***
+        }
 
         fun terminOhneTeilnehmerMitDetails(): Termin {
             return Termin(
@@ -85,20 +85,20 @@ class TestdatenVorrat {
                 13.47192,
                 terminDetails()
             )
-        ***REMOVED***
+        }
 
 
         fun terminDto(): TermineRestResource.TerminDto {
             return TermineRestResource.TerminDto.convertFromTerminWithoutDetails(terminOhneTeilnehmerOhneDetails())
-        ***REMOVED***
+        }
 
         fun terminDtoMitDetails(): TermineRestResource.TerminDto {
             return TermineRestResource.TerminDto.convertFromTerminWithoutDetails(terminOhneTeilnehmerMitDetails())
-        ***REMOVED***
+        }
 
         internal fun terminDetails(): TerminDetails {
             return TerminDetails(1, "Weltzeituhr", "Kommt zahlreich", "kalle@revo.de")
-        ***REMOVED***
+        }
 
         fun curry36(): ListLocation = ListLocation("1", "Curry 36", "Mehringdamm", "36", 52.4935584, 13.3877282)
 
@@ -119,7 +119,7 @@ class TestdatenVorrat {
         fun plakat2() = Plakat(2, 52.47102, 13.3282, "12161, Bundesallee 76", 12, false)
 
         fun plakat3() = Plakat(3, 52.4709, 13.32744, "12161, Goßlerstraße 29", 11, false)
-    ***REMOVED***
+    }
 
     @Suppress("unused")
     open class TerminBuilder {
@@ -128,27 +128,27 @@ class TestdatenVorrat {
         open fun mitTeilnehmern(): TerminBuilder {
             termin.teilnehmer = terminMitTeilnehmerOhneDetails().teilnehmer
             return this
-        ***REMOVED***
+        }
 
         open fun mitDetails(): TerminBuilder {
             termin.details = terminMitTeilnehmerMitDetails().details
             return this
-        ***REMOVED***
+        }
 
         open fun heute(): TerminBuilder {
             termin.beginn = now().plusHours(1)
             termin.ende = now().plusHours(3)
             return this
-        ***REMOVED***
+        }
 
         open fun mitKoordinaten(latitude: Double?, longitude: Double?): TerminBuilder {
             termin.latitude = latitude
             termin.longitude = longitude
             return this
-        ***REMOVED***
+        }
 
         open fun build(): Termin {
             return termin
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+        }
+    }
+}

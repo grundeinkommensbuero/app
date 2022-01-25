@@ -31,7 +31,7 @@ class ActionExportRestResourceTest {
 
     @Test
     fun `generates list of today and coming 7 days`() {
-        (0L..7L).map { days -> LocalDate.now().plusDays(days) ***REMOVED***.containsAll(
+        (0L..7L).map { days -> LocalDate.now().plusDays(days) }.containsAll(
             listOf(
                 LocalDate.now(),
                 LocalDate.now().plusDays(1),
@@ -43,7 +43,7 @@ class ActionExportRestResourceTest {
                 LocalDate.now().plusDays(7)
             )
         )
-    ***REMOVED***
+    }
 
     @Test
     fun `getActionsAsGeoJson returns found actions in geoJson format`() {
@@ -62,7 +62,7 @@ class ActionExportRestResourceTest {
         assertEquals(entity::class, GeoJsonCollection::class)
         val collection = entity as GeoJsonCollection
         assertEquals(collection.features.size, 3)
-    ***REMOVED***
+    }
 
     @Test
     fun `getActionsAsGeoJson filters actions without coordinates`() {
@@ -79,7 +79,7 @@ class ActionExportRestResourceTest {
 
         val collection = entity as GeoJsonCollection
         assertEquals(2, collection.features.size)
-    ***REMOVED***
+    }
 
     @Test(expected = GeoJsonParseException::class)
     fun `GeoJson parses not without latitude`() {
@@ -87,7 +87,7 @@ class ActionExportRestResourceTest {
         action.latitude = null
 
         GeoJsonAction.convertFromAction(action)
-    ***REMOVED***
+    }
 
     @Test(expected = GeoJsonParseException::class)
     fun `GeoJson parses not without longitude`() {
@@ -95,7 +95,7 @@ class ActionExportRestResourceTest {
         action.longitude = null
 
         GeoJsonAction.convertFromAction(action)
-    ***REMOVED***
+    }
 
     @Test
     fun `GeoJson parses from Action`() {
@@ -110,7 +110,7 @@ class ActionExportRestResourceTest {
         assertEquals(geoJson.geometry.type, "Point")
         assertEquals(geoJson.geometry.coordinates[0], terminOhneTeilnehmerMitDetails().longitude)
         assertEquals(geoJson.geometry.coordinates[1], terminOhneTeilnehmerMitDetails().latitude)
-    ***REMOVED***
+    }
 
     @Test
     fun `generateJsonDescription concatenates description, from, to and venue`() {
@@ -121,7 +121,7 @@ class ActionExportRestResourceTest {
                     "am 22.10.2019 ab 12:00 Uhr bis 15:00 Uhr\n" +
                     "Treffpunkt: Weltzeituhr"
         )
-    ***REMOVED***
+    }
 
     @Test
     fun `generateJsonDescription uses placeholder if description is missing`() {
@@ -134,7 +134,7 @@ class ActionExportRestResourceTest {
                     "am 22.10.2019 ab 12:00 Uhr bis 15:00 Uhr\n" +
                     "Treffpunkt: Weltzeituhr"
         )
-    ***REMOVED***
+    }
 
     @Test
     fun `generateJsonDescription ignores date and times if date is missing`() {
@@ -146,7 +146,7 @@ class ActionExportRestResourceTest {
                     "\n" +
                     "Treffpunkt: Weltzeituhr"
         )
-    ***REMOVED***
+    }
 
     @Test
     fun `generateJsonDescription ignores end if end is missing`() {
@@ -159,5 +159,5 @@ class ActionExportRestResourceTest {
                     "am 22.10.2019 ab 12:00 Uhr\n" +
                     "Treffpunkt: Weltzeituhr"
         )
-    ***REMOVED***
-***REMOVED***
+    }
+}

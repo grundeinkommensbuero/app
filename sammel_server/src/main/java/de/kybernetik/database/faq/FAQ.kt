@@ -26,4 +26,4 @@ class FAQ @Suppress("unused") constructor() {
     @CollectionTable(name = "FAQ_Tags", joinColumns = [JoinColumn(name = "faq")])
     @Column(name = "tag")
     lateinit var tags: List<String>
-***REMOVED***
+}

@@ -11,7 +11,7 @@ void main() {
 
     expect(find.byKey(Key('content')), findsOneWidget);
     expect(find.text('Content'), findsOneWidget);
-  ***REMOVED***);
+  });
 
   testWidgets('ExpandableConstrainedBox accepts long child',
       (WidgetTester tester) async {
@@ -25,7 +25,7 @@ void main() {
     await tester.pumpWidget(MaterialApp(home: widget));
 
     expect(find.byKey(Key('content')), findsOneWidget);
-  ***REMOVED***);
+  });
 
   testWidgets('ExpandableConstrainedBox clips too long child',
       (WidgetTester tester) async {
@@ -45,7 +45,7 @@ void main() {
             .constraints
             .maxHeight,
         40.0);
-  ***REMOVED***);
+  });
 
   testWidgets('ExpandableConstrainedBox expands on tap',
       (WidgetTester tester) async {
@@ -69,7 +69,7 @@ void main() {
             .constraints
             .maxHeight,
         double.infinity);
-  ***REMOVED***);
+  });
 
   testWidgets('ExpandableConstrainedBox changes icon on tap',
       (WidgetTester tester) async {
@@ -94,7 +94,7 @@ void main() {
         (tester.widget(find.byKey(Key('ExpandableConstraintBox icon'))) as Icon)
             .icon,
         Icons.keyboard_arrow_up);
-  ***REMOVED***);
+  });
 
   testWidgets('ExpandableConstrainedBox applies condition',
       (WidgetTester tester) async {
@@ -125,5 +125,5 @@ void main() {
     expect(find.byKey(Key('ExpandableConstraintBox constrained box')),
         findsNothing);
     expect(find.byKey(Key('ExpandableConstraintBox icon')), findsNothing);
-  ***REMOVED***);
-***REMOVED***
+  });
+}

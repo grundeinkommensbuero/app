@@ -8,13 +8,13 @@ class ExpandableConstrainedBox extends StatefulWidget {
   ExpandableConstrainedBox(
       {required this.child,
       this.maxHeight = 40.0,
-      this.expandableCondition = true***REMOVED***);
+      this.expandableCondition = true});
 
   @override
   State<StatefulWidget> createState() {
     return _ExpandableConstraintBox();
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 class _ExpandableConstraintBox extends State<ExpandableConstrainedBox>
     with TickerProviderStateMixin {
@@ -60,5 +60,5 @@ class _ExpandableConstraintBox extends State<ExpandableConstrainedBox>
             constraints: BoxConstraints(
                 maxHeight: expanded ? double.infinity : widget.maxHeight),
             child: widget.child);
-  ***REMOVED***
-***REMOVED***
+  }
+}

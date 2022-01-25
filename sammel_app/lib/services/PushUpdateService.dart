@@ -10,9 +10,9 @@ class PushUpdateService extends BackendService {
     try {
       return get('service/push/pull').then((response) =>
               (response.body as List).cast<Map<String, dynamic>>());
-    ***REMOVED*** catch (e, s) {
+    } catch (e, s) {
       ErrorService.handleError(e, s,
           context: "Fehler beim Nachladen von Nachrichten");
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***
+    }
+  }
+}

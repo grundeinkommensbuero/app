@@ -22,16 +22,16 @@ abstract class AbstractPushNotificationManager {
 
   onTap(RemoteMessage message);
 
-  updateMessages() {***REMOVED***
-***REMOVED***
+  updateMessages() {}
+}
 
 abstract class PushNotificationListener {
-  void receiveMessage(Map<String, dynamic> data) {***REMOVED***
+  void receiveMessage(Map<String, dynamic> data) {}
 
-  void handleNotificationTap(Map<String, dynamic> data) {***REMOVED***
+  void handleNotificationTap(Map<String, dynamic> data) {}
 
-  void updateMessages(List<Map<String, dynamic>> data) {***REMOVED***
-***REMOVED***
+  void updateMessages(List<Map<String, dynamic>> data) {}
+}
 
 class PushNotificationManager implements AbstractPushNotificationManager {
   late PushReceiveService listener;
@@ -49,7 +49,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
 
     pushToken = listener.then((l) => l.token);
     listener.then((listener) => updateMessages());
-  ***REMOVED***
+  }
 
   Future<PushReceiveService> createPushListener(
       FirebaseReceiveService firebaseService, Backend backend) async {
@@ -64,16 +64,16 @@ class PushNotificationManager implements AbstractPushNotificationManager {
                 'Darum kann die App nur Benachrichtigungen empfangen während sie geöffnet ist.');
 
         storageService.setPullMode();
-      ***REMOVED***
-    ***REMOVED*** else {
+      }
+    } else {
       listener = firebaseService;
       storageService.unsetPullMode();
-    ***REMOVED***
+    }
 
     listener.subscribe(onMessage: onReceived, onResume: onTap, onLaunch: onTap);
 
     return listener;
-  ***REMOVED***
+  }
 
   Map<String, PushNotificationListener> callbackMap = Map();
 
@@ -81,23 +81,23 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     final data;
     try {
       data = await decrypt(message.data);
-    ***REMOVED*** catch (e) {
+    } catch (e) {
       ErrorService.pushError("Unlesbare Push-Nachricht",
           'Bei der Entschlüsselung einer Push-Nachrich ist ein Fehler aufgetreten');
       return;
-    ***REMOVED***
+    }
 
     try {
       if (data.containsKey('type'))
         callbackMap[data['type']]?.receiveMessage(data);
-    ***REMOVED*** catch (e, s) {
+    } catch (e, s) {
       ErrorService.handleError(e, s);
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   onTap(RemoteMessage message) async {
     print(
-        'onTap: Push-Nachricht empfangen: $message \nund Callback-Map für: ${callbackMap.keys***REMOVED***');
+        'onTap: Push-Nachricht empfangen: $message \nund Callback-Map für: ${callbackMap.keys}');
     final data = await decrypt(message.data);
 
     try {
@@ -105,29 +105,29 @@ class PushNotificationManager implements AbstractPushNotificationManager {
         String type = data['type'];
         if (callbackMap.containsKey(type)) {
           callbackMap[type]?.handleNotificationTap(data);
-        ***REMOVED***
-      ***REMOVED***
-    ***REMOVED*** catch (e, s) {
+        }
+      }
+    } catch (e, s) {
       ErrorService.handleError(e, s);
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   @override
   void registerMessageCallback(String id, PushNotificationListener callback) {
     this.callbackMap[id] = callback;
-  ***REMOVED***
+  }
 
   @override
   void subscribeToKiezActionTopics(List<String> kieze, String interval) {
     var topics = kieze.map((kiez) => '$kiez-$interval').toList();
     listener.subscribeToTopics(topics);
-  ***REMOVED***
+  }
 
   @override
   void unsubscribeFromKiezActionTopics(List<String> kieze, String interval) {
     var topics = kieze.map((kiez) => '$kiez-$interval').toList();
     listener.unsubscribeFromTopics(topics);
-  ***REMOVED***
+  }
 
   @override
   Future<void> updateMessages() async {
@@ -137,7 +137,7 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     for (var message in messages) {
       final decryptedMessage = await decrypt(message['data']);
       decrypted.add(decryptedMessage);
-    ***REMOVED***
+    }
     final messageMap = sortMessagesByType(decrypted);
 
     if (listener is PullService)
@@ -145,12 +145,12 @@ class PushNotificationManager implements AbstractPushNotificationManager {
     try {
       messageMap.forEach((type, messages) {
         callbackMap[type]?.updateMessages(messages);
-      ***REMOVED***);
-    ***REMOVED*** catch (e, s) {
+      });
+    } catch (e, s) {
       ErrorService.handleError(e, s);
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***
+    }
+  }
+}
 
 Map<String, List<Map<String, dynamic>>> sortMessagesByType(
         List<Map<String, dynamic>> messages) =>
@@ -160,7 +160,7 @@ Map<String, List<Map<String, dynamic>>> sortMessagesByType(
       if (typeMap[data['type']] == null) typeMap[data['type']] = [];
       typeMap[data['type']]?.add(data);
       return typeMap;
-    ***REMOVED***);
+    });
 
 class DemoPushNotificationManager implements AbstractPushNotificationManager {
   DemoPushSendService pushService;
@@ -172,15 +172,15 @@ class DemoPushNotificationManager implements AbstractPushNotificationManager {
     pushService.stream
         .where((data) => data.type == type)
         .listen((data) => callback.receiveMessage(data.toJson()));
-  ***REMOVED***
+  }
 
   // Ignore
   @override
-  void subscribeToKiezActionTopics(List<String> kieze, String interval) {***REMOVED***
+  void subscribeToKiezActionTopics(List<String> kieze, String interval) {}
 
   // Ignore
   @override
-  void unsubscribeFromKiezActionTopics(List<String> kieze, String interval) {***REMOVED***
+  void unsubscribeFromKiezActionTopics(List<String> kieze, String interval) {}
 
   @override
   Future<String> get pushToken => Future.value('Demo-Modus');
@@ -191,5 +191,5 @@ class DemoPushNotificationManager implements AbstractPushNotificationManager {
 
   // Ignore - no Push-Messages in Demo-Mode
   @override
-  updateMessages() {***REMOVED***
-***REMOVED***
+  updateMessages() {}
+}

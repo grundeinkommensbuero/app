@@ -14,7 +14,7 @@ main() {
             '"number":"36",'
             '"latitude":52.4935584,'
             '"longitude":13.3877282'
-            '***REMOVED***');
+            '}');
     ListLocation listLocation = ListLocation.fromJson(json);
 
     expect(listLocation.id, curry36().id);
@@ -23,5 +23,5 @@ main() {
     expect(listLocation.number, curry36().number);
     expect(listLocation.latitude, curry36().latitude);
     expect(listLocation.longitude, curry36().longitude);
-  ***REMOVED***);
-***REMOVED***
+  });
+}

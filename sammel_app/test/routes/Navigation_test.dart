@@ -101,11 +101,11 @@ void main() {
         Provider<AbstractVisitedHousesService>.value(
             value: _visitedHousesService),
       ], child: MaterialApp(home: navigation)));
-    ***REMOVED***);
+    });
 
     testUI('starts and shows correct Titel', (WidgetTester tester) async {
       expect(find.text('Aktionen'), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('shows all items', (WidgetTester tester) async {
       await tester.tap(find.byIcon(Icons.menu));
@@ -115,18 +115,18 @@ void main() {
       expect(
           find.byKey(Key('action creator navigation button')), findsOneWidget);
       expect(find.byKey(Key('faq navigation button')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('starts with ActionPage ', (WidgetTester tester) async {
       NavigationState state = tester.state(find.byWidget(navigation));
       expect(state.navigation, 0);
       expect(find.byKey(actionPageKey), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('creates ActionPage and ActionCreator', (WidgetTester tester) async {
       expect(find.byKey(actionPageKey), findsOneWidget);
       expect(find.byKey(actionCreatorKey), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('switches to Action Creator with tap on Create Action Button',
         (WidgetTester tester) async {
@@ -141,7 +141,7 @@ void main() {
       expect(state.navigation, 1);
       expect(find.byKey(actionCreatorKey), findsOneWidget);
       expect(find.text('Zum Sammeln einladen'), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('switches to FAQ page with tap on FAQ Button',
         (WidgetTester tester) async {
@@ -156,7 +156,7 @@ void main() {
       expect(state.navigation, 2);
       expect(find.byKey(Key('faq page')), findsOneWidget);
       expect(find.text('Tipps und Argumente'), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('returns to same ActionPage page with tap on Actions-Button',
         (WidgetTester tester) async {
@@ -170,7 +170,7 @@ void main() {
 
       expect(state.navigation, 0);
       expect(find.byKey(actionPageKey), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('stores navigation history', (WidgetTester tester) async {
       await openActionCreator(tester);
@@ -178,7 +178,7 @@ void main() {
 
       NavigationState state = tester.state(find.byWidget(navigation));
       expect(state.history, [0, 1]);
-    ***REMOVED***);
+    });
 
     testUI('returns to last page and pops history with back button',
         (WidgetTester tester) async {
@@ -203,7 +203,7 @@ void main() {
       // Test auf Schließen der App scheint nicht möglich
       expect(state.navigation, 0);
       expect(state.history, isEmpty);
-    ***REMOVED***);
+    });
 
     testUI('returns action page after action creation',
         (WidgetTester tester) async {
@@ -219,7 +219,7 @@ void main() {
 
       NavigationState navigation = tester.state(find.byKey(Key('navigation')));
       expect(navigation.navigation, 0);
-    ***REMOVED***);
+    });
 
     testUI('navigateToActionCreator changes page to ActionCreator',
         (tester) async {
@@ -239,8 +239,8 @@ void main() {
       expect(state.history, containsAll([0]));
       expect(find.byKey(actionCreatorKey), findsOneWidget);
       expect(find.text('Zum Sammeln einladen'), findsOneWidget);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('menuEntry', () {
     final title = 'Title';
@@ -254,31 +254,31 @@ void main() {
         subtitle: subtitle,
       );
       await tester.pumpWidget(MaterialApp(home: Scaffold(body: menuEntry)));
-    ***REMOVED***);
+    });
 
     testUI('shows title and subtitle', (WidgetTester _) async {
       expect(find.byKey(Key('menu entry')), findsOneWidget);
       expect(find.text(title), findsOneWidget);
       expect(find.text(subtitle), findsOneWidget);
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+    });
+  });
+}
 
 Future openActionCreator(WidgetTester tester) async {
   await tester.tap(find.byIcon(Icons.menu));
   await tester.pumpAndSettle();
   await tester.tap(find.byKey(Key('action creator navigation button')));
   await tester.pumpAndSettle();
-***REMOVED***
+}
 
 Future openActionPage(WidgetTester tester) async {
   await tester.tap(find.byIcon(Icons.menu));
   await tester.pumpAndSettle();
   await tester.tap(find.byKey(Key('action page navigation button')));
   await tester.pumpAndSettle();
-***REMOVED***
+}
 
 Future maybePop(NavigationState state, WidgetTester tester) async {
   Navigator.of(state.context).maybePop();
   await tester.pumpAndSettle();
-***REMOVED***
+}

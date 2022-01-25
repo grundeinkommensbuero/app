@@ -33,17 +33,17 @@ open class VorbehalteRestRessource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     open fun legeNeueVorbehalteAn(vorbehalte: VorbehalteDto): Response {
-        LOG.info("Lege neue Vorbehalte an durch ${context.userPrincipal.name***REMOVED***")
-        LOG.debug("Vorbehalte: ${vorbehalte.id***REMOVED***, ${vorbehalte.vorbehalte***REMOVED***, ${vorbehalte.datum***REMOVED***, ${vorbehalte.ort***REMOVED***")
+        LOG.info("Lege neue Vorbehalte an durch ${context.userPrincipal.name}")
+        LOG.debug("Vorbehalte: ${vorbehalte.id}, ${vorbehalte.vorbehalte}, ${vorbehalte.datum}, ${vorbehalte.ort}")
         try {
             dao.erzeugeNeueVorbehalte(vorbehalte.convertToVorbehalte(context.userPrincipal.name.toLong()))
-        ***REMOVED*** catch (e: FehlenderWertException) {
+        } catch (e: FehlenderWertException) {
             LOG.error(e.message)
             return Response.status(322).entity(RestFehlermeldung(e.message)).build()
-        ***REMOVED***
+        }
         return Response.ok().build()
-    ***REMOVED***
-***REMOVED***
+    }
+}
 
 data class VorbehalteDto(
     var id: Long? = null,
@@ -54,7 +54,7 @@ data class VorbehalteDto(
     fun convertToVorbehalte(benutzer: Long): Vorbehalte {
         if (this.datum == null) throw FehlenderWertException("Datum")
         return Vorbehalte(id ?: 0, vorbehalte ?: "", benutzer, datum!!, ort ?: "Unbekannt")
-    ***REMOVED***
+    }
 
     companion object {
         fun convertFromVorbehalte(vorbehalte: Vorbehalte): VorbehalteDto {
@@ -64,6 +64,6 @@ data class VorbehalteDto(
                 vorbehalte.datum,
                 vorbehalte.ort
             )
-        ***REMOVED***
-    ***REMOVED***
-***REMOVED***
+        }
+    }
+}

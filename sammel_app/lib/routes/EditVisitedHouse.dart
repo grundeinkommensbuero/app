@@ -23,20 +23,20 @@ VisitedHouse? addNewVisitedHouseEvent(
     var abstractVisitedHousesService =
         Provider.of<AbstractVisitedHousesService>(context, listen: false);
     return abstractVisitedHousesService.editVisitedHouse(visitedHouse);
-  ***REMOVED*** else
+  } else
     return null;
-***REMOVED***
+}
 
 Future<VisitedHouse?> showEditVisitedHouseDialog(
     {required BuildContext context,
     required VisitedHouseView visitedHouseView,
-    required double currentZoomFactor***REMOVED***) async {
+    required double currentZoomFactor}) async {
   VisitedHouse? visitedHouse = await showDialog(
     context: context,
     builder: (context) => EditVisitedHouseDialog(visitedHouseView, currentZoomFactor),
   );
   return addNewVisitedHouseEvent(context, visitedHouse);
-***REMOVED***
+}
 
 class EditVisitedHouseDialog extends StatefulWidget {
   late final LatLng? center;
@@ -49,8 +49,8 @@ class EditVisitedHouseDialog extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return EditVisitedHouseDialogState(visitedHouseView);
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 class EditVisitedHouseDialogState extends State<EditVisitedHouseDialog> {
   LocationMarker? marker;
@@ -66,7 +66,7 @@ class EditVisitedHouseDialogState extends State<EditVisitedHouseDialog> {
         0.5 * (visitedHouseView.bbox.maxLatitude + visitedHouseView.bbox.minLatitude),
         0.5 *
             (visitedHouseView.bbox.maxLongitude + visitedHouseView.bbox.minLongitude));
-  ***REMOVED***
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +80,7 @@ class EditVisitedHouseDialogState extends State<EditVisitedHouseDialog> {
           child: Text('Abbrechen').tr(),
           onPressed: () {
             Navigator.pop(context, null);
-          ***REMOVED***,
+          },
         ),
         TextButton(
           key: Key('venue dialog finish button'),
@@ -90,11 +90,11 @@ class EditVisitedHouseDialogState extends State<EditVisitedHouseDialog> {
                     .latestUser ==
                 null) throw ServerException('Couldnt fetch user from server');
             Navigator.pop(context, visitedHouseView.selectedHouse);
-          ***REMOVED***,
+          },
         ),
       ],
     );
-  ***REMOVED***
+  }
 
   List<Widget> createWidgets() {
     var widgets = [
@@ -130,9 +130,9 @@ class EditVisitedHouseDialogState extends State<EditVisitedHouseDialog> {
         visitedHouseView.selectedHouse!.visitations.length > 0) {
       widgets.addAll(visitedHouseView.selectedHouse!.visitations
           .map((event) => buildVisitationEventItem(event)));
-    ***REMOVED***
+    }
     return widgets;
-  ***REMOVED***
+  }
 
   Widget buildFlutterMap() {
     var map = FlutterMap(
@@ -151,7 +151,7 @@ class EditVisitedHouseDialogState extends State<EditVisitedHouseDialog> {
             plugins: [AttributionPlugin()]),
         layers: [
           TileLayerOptions(
-              urlTemplate: "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
+              urlTemplate: "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
               subdomains: ['a', 'b', 'c']),
           PolygonLayerOptions(
               polygons: visitedHouseView.buildDrawablePolygonsFromView(),
@@ -160,7 +160,7 @@ class EditVisitedHouseDialogState extends State<EditVisitedHouseDialog> {
           AttributionOptions(),
         ]);
     return map;
-  ***REMOVED***
+  }
 
   houseSelected(LatLng point) async {
     SelectableVisitedHouse? house = visitedHouseView.getHouseByPoint(point);
@@ -170,30 +170,30 @@ class EditVisitedHouseDialogState extends State<EditVisitedHouseDialog> {
           visitedHouseView.selectedHouse?.osmId != house.osmId) {
         visitedHouseView.selectedHouse = SelectableVisitedHouse.clone(house);
         visitedHouseView.selectedHouse?.selected = true;
-      ***REMOVED***
+      }
       //venueController.text = geodata.description;
       // marker = LocationMarker(point);
-    ***REMOVED***);
-  ***REMOVED***
+    });
+  }
 
   Widget buildVisitationEventItem(Visitation item) {
     Locale? locale;
     try {
       locale = context.locale;
-    ***REMOVED*** catch (_) {
+    } catch (_) {
       print('Konnte Locale nicht ermitteln');
-    ***REMOVED***
+    }
 
     final tile = ListTile(
       title: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text('${item.adresse***REMOVED***',
+        Text('${item.adresse}',
             style: TextStyle(color: CampaignTheme.secondary)),
         Text(
-            '${ChronoHelfer.formatDateOfDateTimeMitWochentagOhneJahr(item.datum, locale)***REMOVED***',
+            '${ChronoHelfer.formatDateOfDateTimeMitWochentagOhneJahr(item.datum, locale)}',
             textScaleFactor: 0.8),
         isEmpty(item.hausteil)
             ? SizedBox()
-            : Text('${item.hausteil***REMOVED***', textScaleFactor: 0.8),
+            : Text('${item.hausteil}', textScaleFactor: 0.8),
       ]),
     );
 
@@ -209,13 +209,13 @@ class EditVisitedHouseDialogState extends State<EditVisitedHouseDialog> {
               // Remove the item from the data source.
               setState(() {
                 visitedHouseView.selectedHouse!.visitations.remove(item);
-              ***REMOVED***);
-            ***REMOVED***)
+              });
+            })
       ]);
-    ***REMOVED*** else
+    } else
       return tile;
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 class LocationMarker extends Marker {
   LocationMarker(LatLng point)
@@ -230,4 +230,4 @@ class LocationMarker extends Marker {
                       BoxShadow(blurRadius: 4.0, offset: Offset(-2.0, 2.0))
                     ]),
                 child: Icon(Icons.supervised_user_circle, size: 30.0)));
-***REMOVED***
+}

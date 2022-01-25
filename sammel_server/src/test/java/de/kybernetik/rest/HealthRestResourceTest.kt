@@ -34,7 +34,7 @@ class HealthRestResourceTest {
     fun setUp() {
         setProperty("mode", "LOCAL")
         whenever(faqDao.getFAQTimestamp()).thenReturn(faqTimestamp)
-    ***REMOVED***
+    }
 
     @Test
     fun healthSendetLebenszeichen() {
@@ -46,7 +46,7 @@ class HealthRestResourceTest {
         assertTrue(health.minClient.isNotEmpty())
         assertEquals("LOCAL", health.modus)
         assertEquals(faqTimestamp, health.faqTimestamp)
-    ***REMOVED***
+    }
 
     @Test
     fun healthAcceptsNullTimestamp() {
@@ -59,5 +59,5 @@ class HealthRestResourceTest {
         assertTrue(health.minClient.isNotEmpty())
         assertEquals("LOCAL", health.modus)
         assertNull(health.faqTimestamp)
-    ***REMOVED***
-***REMOVED***
+    }
+}

@@ -15,11 +15,11 @@ import 'ChatWindow.dart';
 class ChatListWidget extends StatefulWidget {
   final ChatChannel channel;
 
-  ChatListWidget(this.channel, {Key? key***REMOVED***) : super(key: key);
+  ChatListWidget(this.channel, {Key? key}) : super(key: key);
 
   @override
   ChatListState createState() => ChatListState(this.channel);
-***REMOVED***
+}
 
 class ChatListState extends State<ChatListWidget>
     implements ChannelChangeListener {
@@ -29,8 +29,8 @@ class ChatListState extends State<ChatListWidget>
 
   ChatListState(this.channel) {
     this.channel.registerChannelChangeListener(this);
-    // widget.scroll_controller.addListener(() {widget.position = widget.scroll_controller.hasClients ? widget.scroll_controller.position.extentBefore : 0; ***REMOVED***);
-  ***REMOVED***
+    // widget.scroll_controller.addListener(() {widget.position = widget.scroll_controller.hasClients ? widget.scroll_controller.position.extentBefore : 0; });
+  }
 
   Widget build(context) {
     if (user == null) {
@@ -38,7 +38,7 @@ class ChatListState extends State<ChatListWidget>
       Provider.of<AbstractUserService>(context)
           .user
           .listen((user) => setState(() => this.user = user));
-    ***REMOVED***
+    }
 
     var itemList = buildListMessage();
     var listView = Container(
@@ -54,21 +54,21 @@ class ChatListState extends State<ChatListWidget>
             () => widget.scroll_controller
             .jumpTo(widget.scroll_controller.position.maxScrollExtent));*/
     return listView;
-  ***REMOVED***
+  }
 
   @override
   void channelChanged(ChatChannel channel) {
     forceScrolling = true;
     setState(() {
       this.channel = channel;
-    ***REMOVED***);
+    });
     //we need this hack to enable scrolling to the end of the list on message received
     /*
     Timer(
         Duration(milliseconds: 500),
         () => widget.scroll_controller
             .jumpTo(widget.scroll_controller.position.maxScrollExtent));*/
-  ***REMOVED***
+  }
 
   List<Widget> buildListMessage() {
     List<Message> messageList = widget.channel.channelMessages;
@@ -78,9 +78,9 @@ class ChatListState extends State<ChatListWidget>
         messageListWidgets.add(createChatMessageWidget(message));
       if (message is ParticipationMessage)
         messageListWidgets.add(createParticipationMessageWidget(message));
-    ***REMOVED***
+    }
     return messageListWidgets;
-  ***REMOVED***
+  }
 
   Widget createChatMessageWidget(ChatMessage message) {
     final own = message.userId == user?.id;
@@ -139,7 +139,7 @@ class ChatListState extends State<ChatListWidget>
                                     ]
                                   : []))
                         ])))));
-  ***REMOVED***
+  }
 
   Widget createParticipationMessageWidget(ParticipationMessage message) {
     var title = message.joins == true
@@ -161,9 +161,9 @@ class ChatListState extends State<ChatListWidget>
                   style: TextStyle(
                       color: Colors.grey, fontStyle: FontStyle.italic))
             ]));
-  ***REMOVED***
+  }
 
   dispose() {
     super.dispose();
-  ***REMOVED***
-***REMOVED***
+  }
+}

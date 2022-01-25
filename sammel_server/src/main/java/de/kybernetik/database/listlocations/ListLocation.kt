@@ -13,7 +13,7 @@ class ListLocation() {
         this.nr = nr
         this.laengengrad = laengengrad
         this.breitengrad = breitengrad
-    ***REMOVED***
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,5 +33,5 @@ class ListLocation() {
 
     @Column
     var breitengrad: Double? = null
-***REMOVED***
+}
 

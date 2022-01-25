@@ -51,16 +51,16 @@ class Termin {
         'longitude': longitude,
         'participants': participants?.map((user) => user.toJson()).toList(),
         'details': details == null ? null : details?.toJson(),
-      ***REMOVED***
+      };
 
   bool isEvaluated(List<int>? evaluatedActionIds) {
     if (this.typ != 'Sammeln') return true;
     if (evaluatedActionIds == null) return false;
     if (evaluatedActionIds.contains(this.id)) return true;
     return false;
-  ***REMOVED***
+  }
 
-  String getAsset({bool centered = false***REMOVED***) {
+  String getAsset({bool centered = false}) {
     // Vali: Centered images will be the same as default ones for now
     switch (typ) {
       case 'Sammeln':
@@ -89,13 +89,13 @@ class Termin {
         return 'assets/images/Kiezfest.png';
       case 'Plakate aufhängen':
         return 'assets/images/PlakateAufhaengen.png';
-    ***REMOVED***
+    }
     return 'assets/images/xbge_logo_small.png'; // Platzhalter
-  ***REMOVED***
+  }
 
   static final int Function(Termin a, Termin b) compareByStart =
       (termin1, termin2) => termin1.beginn.compareTo(termin2.beginn);
-***REMOVED***
+}
 
 class ActionWithToken {
   final Termin? action;
@@ -106,9 +106,9 @@ class ActionWithToken {
   Map<String, dynamic> toJson() => {
         'action': action,
         'token': token,
-      ***REMOVED***
+      };
 
   ActionWithToken.fromJson(Map<String, dynamic> json)
       : action = json['action'],
         token = json['token'];
-***REMOVED***
+}

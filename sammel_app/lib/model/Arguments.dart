@@ -12,5 +12,5 @@ class Arguments {
     'vorbehalte': arguments,
     'datum': DateFormat('yyyy-MM-dd').format(date),
     'ort': plz,
-  ***REMOVED***
-***REMOVED***
+  };
+}

@@ -29,18 +29,18 @@ void main() {
     trainUserService(userService);
     reset(stammdatenService);
     trainStammdatenService(stammdatenService);
-  ***REMOVED***);
+  });
 
   group('DemoTermineService', () {
     late DemoTermineService service;
     setUp(() {
       service = DemoTermineService(
           stammdatenService, userService, GlobalKey<TermineSeiteState>());
-    ***REMOVED***);
+    });
 
     test('uses DemoBackend', () {
       expect(service.backend is DemoBackend, true);
-    ***REMOVED***);
+    });
 
     test('creates new Termin', () async {
       expect(
@@ -65,7 +65,7 @@ void main() {
       expect(response.id, 5);
       expect(
           (await service.loadActions(TermineFilter.leererFilter())).length, 5);
-    ***REMOVED***);
+    });
 
     test('deletes action', () async {
       var actionsBefore =
@@ -78,7 +78,7 @@ void main() {
       var actionsAfter =
           await service.loadActions(TermineFilter.leererFilter());
       expect(actionsAfter.map((action) => action.id), containsAll([1, 3, 4]));
-    ***REMOVED***);
+    });
 
     test('stores new action', () async {
       var termine = await service.termine;
@@ -98,7 +98,7 @@ void main() {
       expect(termine[0].typ, 'Infoveranstaltung');
       expect(termine[0].ort.name, 'Plänterwald');
       expect(termine[0].details!.kontakt, 'Test123');
-    ***REMOVED***);
+    });
 
     test('joinAction adds user to action', () async {
       var termine = await service.termine;
@@ -108,7 +108,7 @@ void main() {
 
       termine = await service.termine;
       expect(termine[0].participants!.map((e) => e.id), containsAll([11, 12]));
-    ***REMOVED***);
+    });
 
     test('joinAction ignores if user already partakes', () async {
       var termine = await service.termine;
@@ -118,7 +118,7 @@ void main() {
 
       termine = await service.termine;
       expect(termine[0].participants!.map((e) => e.id), containsAll([11, 12]));
-    ***REMOVED***);
+    });
 
     test('leaveAction removes user from action', () async {
       var termine = await service.termine;
@@ -128,7 +128,7 @@ void main() {
 
       termine = await service.termine;
       expect(termine[0].participants!.map((e) => e.id), containsAll([12]));
-    ***REMOVED***);
+    });
 
     test('leaveAction ignores if user doesnt partake', () async {
       var termine = await service.termine;
@@ -138,8 +138,8 @@ void main() {
 
       termine = await service.termine;
       expect(termine[0].participants!.map((e) => e.id), containsAll([12]));
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('TermineService', () {
     late MockBackend backend;
@@ -151,7 +151,7 @@ void main() {
       service = TermineService(stammdatenService, userService, backend,
           pushManager, localNotificationService, GlobalKey());
       service.userService = userService;
-    ***REMOVED***);
+    });
 
     test('loadActions calls right path and serializes Filter correctly',
         () async {
@@ -171,9 +171,9 @@ void main() {
               '"orte":["Frankfurter Allee Nord"],'
               '"nurEigene":false,'
               '"immerEigene":false'
-              '***REMOVED***',
+              '}',
           any));
-    ***REMOVED***);
+    });
 
     test('loadActions deserializes actions correctly', () async {
       when(backend.post('service/termine', any, any)).thenAnswer((_) =>
@@ -217,7 +217,7 @@ void main() {
           'Bringe Westen und Klämmbretter mit');
       expect(actions[1].details!.treffpunkt, 'Weltzeituhr');
       expect(actions[1].details!.kontakt, 'Ruft an unter 012345678');
-    ***REMOVED***);
+    });
 
     test(
         'createTermin calls right path and serializes action and token correctly',
@@ -243,18 +243,18 @@ void main() {
               '"typ":"Sammeln",'
               '"latitude":52.52116,'
               '"longitude":13.41331,'
-              '"participants":[{"id":11,"name":"Karl Marx","color":4294198070***REMOVED***],'
+              '"participants":[{"id":11,"name":"Karl Marx","color":4294198070}],'
               '"details":'
               '{'
               '"id":null,'
               '"treffpunkt":"Weltzeituhr",'
               '"beschreibung":"Bringe Westen und Klämmbretter mit",'
-              '"kontakt":"Ruft an unter 012345678"***REMOVED***'
-              '***REMOVED***,'
+              '"kontakt":"Ruft an unter 012345678"}'
+              '},'
               '"token":"Token"'
-              '***REMOVED***',
+              '}',
           any));
-    ***REMOVED***);
+    });
 
     test('createTermin deserializes action correctly', () async {
       when(backend.post('service/termine/neu', any, any)).thenAnswer((_) =>
@@ -283,7 +283,7 @@ void main() {
           action.details!.beschreibung, 'Bringe Westen und Klämmbretter mit');
       expect(action.details!.treffpunkt, 'Weltzeituhr');
       expect(action.details!.kontakt, 'Ruft an unter 012345678');
-    ***REMOVED***);
+    });
 
     test('getActionWithDetails calls right path', () async {
       when(backend.get('service/termine/termin?id=0', any)).thenAnswer((_) =>
@@ -295,7 +295,7 @@ void main() {
       await service.getActionWithDetails(0);
 
       verify(backend.get('service/termine/termin?id=0', any));
-    ***REMOVED***);
+    });
 
     test('getActionWithDetails deserializes action correctly', () async {
       when(backend.get('service/termine/termin?id=0', any)).thenAnswer((_) =>
@@ -323,7 +323,7 @@ void main() {
           action.details!.beschreibung, 'Bringe Westen und Klämmbretter mit');
       expect(action.details!.treffpunkt, 'Weltzeituhr');
       expect(action.details!.kontakt, 'Ruft an unter 012345678');
-    ***REMOVED***);
+    });
 
     test(
         'saveAction calls right path and serialises action and token correctly',
@@ -347,18 +347,18 @@ void main() {
               '"typ":"Sammeln",'
               '"latitude":52.52116,'
               '"longitude":13.41331,'
-              '"participants":[{"id":11,"name":"Karl Marx","color":4294198070***REMOVED***],'
+              '"participants":[{"id":11,"name":"Karl Marx","color":4294198070}],'
               '"details":'
               '{'
               '"id":null,'
               '"treffpunkt":"Weltzeituhr",'
               '"beschreibung":"Bringe Westen und Klämmbretter mit",'
-              '"kontakt":"Ruft an unter 012345678"***REMOVED***'
-              '***REMOVED***,'
+              '"kontakt":"Ruft an unter 012345678"}'
+              '},'
               '"token":"Token"'
-              '***REMOVED***',
+              '}',
           any));
-    ***REMOVED***);
+    });
 
     test(
         'deleteAction calls right path and serialises action and token correctly',
@@ -382,18 +382,18 @@ void main() {
               '"typ":"Sammeln",'
               '"latitude":52.52116,'
               '"longitude":13.41331,'
-              '"participants":[{"id":11,"name":"Karl Marx","color":4294198070***REMOVED***],'
+              '"participants":[{"id":11,"name":"Karl Marx","color":4294198070}],'
               '"details":'
               '{'
               '"id":null,'
               '"treffpunkt":"Weltzeituhr",'
               '"beschreibung":"Bringe Westen und Klämmbretter mit",'
-              '"kontakt":"Ruft an unter 012345678"***REMOVED***'
-              '***REMOVED***,'
+              '"kontakt":"Ruft an unter 012345678"}'
+              '},'
               '"token":"Token"'
-              '***REMOVED***',
+              '}',
           any));
-    ***REMOVED***);
+    });
 
     test('joinAction calls correct path with parameters', () async {
       when(backend.post(any, any, any, any)).thenAnswer((_) =>
@@ -408,7 +408,7 @@ void main() {
           .single;
       expect(parameters.length, 1);
       expect(parameters['id'], '0');
-    ***REMOVED***);
+    });
 
     test('leaveAction calls correct path with parameters', () async {
       when(backend.post(any, any, any, any)).thenAnswer((_) =>
@@ -423,9 +423,9 @@ void main() {
               .single;
       expect(parameters.length, 1);
       expect(parameters['id'], '0');
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+    });
+  });
+}
 
 TermineFilter einFilter() {
   var datum = DateTime.parse('2020-08-20');
@@ -440,4 +440,4 @@ TermineFilter einFilter() {
       false,
       false);
   return einFilter;
-***REMOVED***
+}

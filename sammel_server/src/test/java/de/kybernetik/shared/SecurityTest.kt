@@ -19,7 +19,7 @@ class SecurityTest {
         val hashUndSalt2 = security.hashSecret("secret2")
 
         assertFalse(hashUndSalt1.hash.equals(hashUndSalt2.hash))
-    ***REMOVED***
+    }
 
     @Test
     fun `hashSecret erzeugt durch Salt unterschiedliche Hashes fuer gleiche Secrets`() {
@@ -27,14 +27,14 @@ class SecurityTest {
         val hashUndSalt2 = security.hashSecret("secret")
 
         assertFalse(hashUndSalt1.hash.equals(hashUndSalt2.hash))
-    ***REMOVED***
+    }
 
     @Test
     fun `verifiziereSecretMitHash erkennt korrekten Hash wieder`() {
         val hashUndSalt = security.hashSecret("secret")
 
         assertTrue(security.verifiziereSecretMitHash("secret", hashUndSalt))
-    ***REMOVED***
+    }
 
     @Test
     fun `verifiziereSecretMitHash unterscheidet falschen Hash`() {
@@ -42,7 +42,7 @@ class SecurityTest {
         val falschesHashUndSalt = HashMitSalt(hashUndSalt.hash.substring(hashUndSalt.hash.length - 1) + "A", hashUndSalt.salt)
 
         assertFalse(security.verifiziereSecretMitHash("secret", falschesHashUndSalt))
-    ***REMOVED***
+    }
 
     @Test
     fun `verifiziereSecretMitHash unterscheidet bei abweichendem Salt`() {
@@ -52,7 +52,7 @@ class SecurityTest {
         val falschesHashUndSalt = HashMitSalt(hashUndSalt.hash, Hex.encodeHexString(falschesSalt))
 
         assertFalse(security.verifiziereSecretMitHash("secret", falschesHashUndSalt))
-    ***REMOVED***
+    }
 
     @Ignore("Zum Erzeugen von Drittsystem-Secrets")
     @Test
@@ -62,9 +62,9 @@ class SecurityTest {
         val hashMitSalt = security.hashSecret(secret)
 
         println("secret: $secret")
-        println("hash: ${hashMitSalt.hash***REMOVED***")
-        println("salt: ${hashMitSalt.salt***REMOVED***")
-    ***REMOVED***
+        println("hash: ${hashMitSalt.hash}")
+        println("salt: ${hashMitSalt.salt}")
+    }
 
     @Ignore("Zum Erzeugen von BASE64-codierter Basic-Auth")
     @Test
@@ -72,5 +72,5 @@ class SecurityTest {
         val base64 = Base64.getEncoder().encodeToString("1:mySecret".toByteArray())
 
         println(base64)
-    ***REMOVED***
-***REMOVED***
+    }
+}

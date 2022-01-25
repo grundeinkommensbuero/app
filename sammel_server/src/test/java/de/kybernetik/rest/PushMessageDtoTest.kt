@@ -25,5 +25,5 @@ class PushMessageDtoTest {
         assertEquals(dto.data!!["key2"], "value2")
         assertEquals(dto.notification!!.title, "Titel")
         assertEquals(dto.notification!!.body, "Inhalt")
-    ***REMOVED***
-***REMOVED***
+    }
+}

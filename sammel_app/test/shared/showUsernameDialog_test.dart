@@ -34,10 +34,10 @@ void main() {
                       child: const Text('X'),
                       onPressed: () async => result = await showUsernameDialog(
                           context: context, hideHint: hideHint)));
-            ***REMOVED***,
+            },
           ),
         ))));
-  ***REMOVED***);
+  });
 
   testUI('opens Username Dialog and shows Title, Hint and Input Field',
       (tester) async {
@@ -49,7 +49,7 @@ void main() {
             'Um diese Aktion auszuführen musst du dir einen Benutzer*in-Name geben'),
         findsOneWidget);
     expect(find.byKey(Key('user name input')), findsOneWidget);
-  ***REMOVED***);
+  });
 
   testUI('hides Hint with flag true', (tester) async {
     hideHint = true;
@@ -61,7 +61,7 @@ void main() {
             'Um diese Aktion auszuführen musst du dir einen Benutzer*in-Name geben'),
         findsNothing);
     hideHint = false;
-  ***REMOVED***);
+  });
 
   testUI('Fertig calls userSerivice and returns true', (tester) async {
     await openDialog(tester);
@@ -74,7 +74,7 @@ void main() {
 
     verify(_userService.updateUsername('Mein neuer Name')).called(1);
     expect(result, isNotNull);
-  ***REMOVED***);
+  });
 
   testUI('Fertig returns false on UserService error', (tester) async {
     when(_userService.updateUsername(any)).thenThrow(Error());
@@ -87,7 +87,7 @@ void main() {
     await tester.pump();
 
     expect(result, isNull);
-  ***REMOVED***);
+  });
 
   testUI('Abbrechen returns does not call UserService and returns false',
       (tester) async {
@@ -101,7 +101,7 @@ void main() {
 
     verifyNever(_userService.updateUsername(any));
     expect(result, isNull);
-  ***REMOVED***);
+  });
 
   testUI('Fertig button validates against empty/blank', (tester) async {
     await openDialog(tester);
@@ -132,10 +132,10 @@ void main() {
     await tester.tap(fertigButtonFinder);
     await tester.pump();
     expect(find.byType(UsernameDialog), findsNothing);
-  ***REMOVED***);
-***REMOVED***
+  });
+}
 
 Future openDialog(WidgetTester tester) async {
   await tester.tap(find.text('X'));
   await tester.pump();
-***REMOVED***
+}

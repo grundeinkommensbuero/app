@@ -34,7 +34,7 @@ class FAQRestResourceTest {
                 FAQBuilder().withGenericValues(3).build()
             )
         )
-    ***REMOVED***
+    }
 
     @Test
     fun `getAllFAQs gibt Ergebnisse der Dao unveraendert als Dto weiter`() {
@@ -65,5 +65,5 @@ class FAQRestResourceTest {
         assertEquals(faqDtos[2].tags!![0], "tag 1")
         assertEquals(faqDtos[2].tags!![1], "tag 2")
         assertEquals(faqDtos[2].tags!![2], "tag 3")
-    ***REMOVED***
-***REMOVED***
+    }
+}

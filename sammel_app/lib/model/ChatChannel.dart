@@ -21,7 +21,7 @@ class ChatChannel {
 
     channelMessages.sort((a, b) => compareTimestamp(a.timestamp, b.timestamp));
     ccl?.channelChanged(this);
-  ***REMOVED***
+  }
 
   _pushChatMessage(Message message) {
     Message? ownMessage =
@@ -30,27 +30,27 @@ class ChatChannel {
       channelMessages.add(message);
     else
       ownMessage.obtainedFromServer = true;
-  ***REMOVED***
+  }
 
   pushParticipationMessage(ParticipationMessage message) {
     if (channelMessages.any((m) => message.isMessageEqual(m))) return;
     channelMessages.add(message);
-  ***REMOVED***
+  }
 
   void registerChannelChangeListener(ChannelChangeListener c) {
     if (ccl == null) {
       ccl = c;
-    ***REMOVED*** else if (c != ccl) {
+    } else if (c != ccl) {
       ccl = c;
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   void disposeListener() => ccl = null;
 
   Map<String, dynamic> toJson() => {
         'id': this.id,
         'messages': this.channelMessages,
-      ***REMOVED***
+      };
 
   ChatChannel.fromJSON(Map<dynamic, dynamic> json) {
     this.id = json['id'];
@@ -61,15 +61,15 @@ class ChatChannel {
       if (type == PushDataTypes.simpleChatMessage)
         return ChatMessage.fromJson(jsonMsg);
       throw UnkownMessageTypeError('Unbekannter Nachrichtentyp abgespeichert');
-    ***REMOVED***).toList();
+    }).toList();
     this
         .channelMessages
         .sort((a, b) => compareTimestamp(a.timestamp, b.timestamp));
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 class UnkownMessageTypeError implements Exception {
   String message;
 
   UnkownMessageTypeError([this.message = ""]);
-***REMOVED***
+}

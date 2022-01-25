@@ -13,22 +13,22 @@ void main() {
         '"treffpunkt":"Weltzeituhr",'
         '"beschreibung":"Bringe Westen und Klämmbretter mit",'
         '"kontakt":"Ruft an unter 012345678"'
-        '***REMOVED***');
-  ***REMOVED***);
+        '}');
+  });
   test('deserialisert TerminDetailt mit Treffpunkt, Beschreibung und Kontakt', () {
     var json = '{'
         '"treffpunkt":"Weltzeituhr",'
         '"beschreibung":"Bringe Westen und Klämmbretter mit",'
         '"kontakt":"Ruft an unter 012345678"'
-        '***REMOVED***';
+        '}';
     var terminDetails = TerminDetails.fromJSON(jsonDecode(json));
     expect(terminDetails.treffpunkt, 'Weltzeituhr');
     expect(terminDetails.beschreibung, 'Bringe Westen und Klämmbretter mit');
     expect(terminDetails.kontakt, 'Ruft an unter 012345678');
-  ***REMOVED***);
-***REMOVED***
+  });
+}
 
 class TerminDetailsTestDaten {
   static TerminDetails terminDetailsTestDaten() => TerminDetails('Weltzeituhr',
       'Bringe Westen und Klämmbretter mit', 'Ruft an unter 012345678');
-***REMOVED***
+}

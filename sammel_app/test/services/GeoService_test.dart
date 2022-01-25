@@ -11,8 +11,8 @@ main() {
           'house_number': '15',
           'postcode': '12345',
           'city': 'Berlin'
-        ***REMOVED***
-      ***REMOVED***);
+        }
+      });
 
       expect(g.name, 'my name');
       expect(g.street, 'my street');
@@ -22,7 +22,7 @@ main() {
 
       expect(g.description, 'my name, my street 15');
       expect(g.fullAdress, 'my street 15, 12345 Berlin');
-    ***REMOVED***);
+    });
 
     test('parses address without name', () {
       GeoData g = GeoData.fromJson({
@@ -31,8 +31,8 @@ main() {
           'house_number': '15',
           'postcode': '12345',
           'city': 'Berlin'
-        ***REMOVED***
-      ***REMOVED***);
+        }
+      });
 
       expect(g.street, 'my street');
       expect(g.number, '15');
@@ -41,15 +41,15 @@ main() {
 
       expect(g.description, 'my street 15');
       expect(g.fullAdress, 'my street 15, 12345 Berlin');
-    ***REMOVED***);
+    });
 
     test('parses address without street', () {
       GeoData g = GeoData.fromJson({
         'name': 'my name',
-        'address': {'house_number': '15'***REMOVED***
-      ***REMOVED***);
+        'address': {'house_number': '15'}
+      });
 
       expect(g.description, 'my name, 15');
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+    });
+  });
+}

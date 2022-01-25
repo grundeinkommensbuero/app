@@ -12,7 +12,7 @@ class PushMessageTest {
 
         assertNull(pushMessage.benachrichtigung)
         assertNull(pushMessage.daten)
-    ***REMOVED***
+    }
 
     @Test
     fun `serialisiert und deserialisiert korrekt`() {
@@ -26,5 +26,5 @@ class PushMessageTest {
         assertEquals(pushMessage.getDaten()!!["key2"], "value2")
         assertEquals(pushMessage.getBenachrichtigung()!!.title, "Titel")
         assertEquals(pushMessage.getBenachrichtigung()!!.body, "Inhalt")
-    ***REMOVED***
-***REMOVED***
+    }
+}

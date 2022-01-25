@@ -26,45 +26,45 @@ open class NeueAktionenNotification {
     open fun dailyNeueAktionenNotification() {
         LOG.debug("Starte Job für tägliche Push-Nachrichten über neue Aktionen")
         try {
-            LOG.debug("Neue Aktionen der letzte 24 Stunden: ${neueAktionen24h.map { it.id ***REMOVED******REMOVED***")
-            for (kiez in neueAktionen24h.map { it.ort ***REMOVED***.distinct()) {
-                val aktionenInKiez = neueAktionen24h.filter { it.ort == kiez ***REMOVED***
-                pushService.pusheNeueAktionenNotification(aktionenInKiez, "${aktionenInKiez[0].ort***REMOVED***-täglich")
-            ***REMOVED***
+            LOG.debug("Neue Aktionen der letzte 24 Stunden: ${neueAktionen24h.map { it.id }}")
+            for (kiez in neueAktionen24h.map { it.ort }.distinct()) {
+                val aktionenInKiez = neueAktionen24h.filter { it.ort == kiez }
+                pushService.pusheNeueAktionenNotification(aktionenInKiez, "${aktionenInKiez[0].ort}-täglich")
+            }
             neueAktionen24h.clear()
 
             LOG.debug("Job für tägliche Push-Nachrichten über neue Aktionen abgeschlossen")
-        ***REMOVED*** catch (e: InterruptedException) {
+        } catch (e: InterruptedException) {
             LOG.error("Fehler im täglichen Job für neue Aktionen", e)
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
     open fun merkeNeueAktion(aktion: TerminDto) {
-        LOG.debug("Merke neue Aktion ${aktion.id***REMOVED*** vor")
+        LOG.debug("Merke neue Aktion ${aktion.id} vor")
         neueAktionen24h.add(aktion)
-    ***REMOVED***
+    }
 
     @Schedule(dayOfWeek = "Wed", hour = "18")
     @Suppress("unused")
     open fun weeklyNeueAktionenNotification() {
         LOG.info("Starte Job für wöchentliche Push-Nachrichten über neue Aktionen")
         try {
-            val filter = TermineFilter(tage = (0L..14L).map { LocalDate.now().plus(it, ChronoUnit.DAYS) ***REMOVED***)
+            val filter = TermineFilter(tage = (0L..14L).map { LocalDate.now().plus(it, ChronoUnit.DAYS) })
             val aktionen = termineDao.getTermine(filter, null)
 
-            LOG.debug("Aktionen der nächsten 2 Wochen: ${aktionen.map { it.id ***REMOVED******REMOVED***")
-            for (kiez in aktionen.map { it.ort ***REMOVED***.distinct()) {
-                val aktionenInKiez = aktionen.filter { it.ort == kiez ***REMOVED***
+            LOG.debug("Aktionen der nächsten 2 Wochen: ${aktionen.map { it.id }}")
+            for (kiez in aktionen.map { it.ort }.distinct()) {
+                val aktionenInKiez = aktionen.filter { it.ort == kiez }
                 pushService.pusheNeueAktionenNotification(
                     aktionenInKiez.map(::convertFromTerminWithoutDetails),
-                    "${aktionenInKiez[0].ort***REMOVED***-wöchentlich"
+                    "${aktionenInKiez[0].ort}-wöchentlich"
                 )
-            ***REMOVED***
+            }
 
             LOG.debug("Job für wöchentliche Push-Nachrichten über neue Aktionen abgeschlossen")
-        ***REMOVED*** catch (e: InterruptedException) {
+        } catch (e: InterruptedException) {
             LOG.error("Fehler im wöchentlichen Job für neue Aktionen", e)
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
-***REMOVED***
+}

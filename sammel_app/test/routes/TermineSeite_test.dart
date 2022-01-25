@@ -116,8 +116,8 @@ void main() {
           return TermineSeite(
             switchToActionCreator: switchToActionCreator,
           );
-        ***REMOVED***)));
-  ***REMOVED***);
+        })));
+  });
 
   group('presentation', () {
     testWidgets('TermineSeite sorts actions by From Date',
@@ -158,7 +158,7 @@ void main() {
               of: find.byType(TerminCard).last,
               matching: find.text(TerminCard.erzeugeOrtText(ffAlleeNord()))),
           findsOneWidget);
-    ***REMOVED***);
+    });
 
     testWidgets(
         'shows edit and delete button in Detail Dialog only at own actions',
@@ -220,8 +220,8 @@ void main() {
 
       expect(find.byKey(Key('action details delete menu item')), findsNothing);
       expect(find.byKey(Key('action details edit menu item')), findsNothing);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('Filter', () {
     testWidgets('is displayed', (WidgetTester tester) async {
@@ -236,7 +236,7 @@ void main() {
       // await StammdatenService.kieze;
 
       expect(find.text('Aktualisieren'), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testWidgets('opens on tap', (WidgetTester tester) async {
       when(_termineService.loadActions(any)).thenAnswer((_) async => [
@@ -252,8 +252,8 @@ void main() {
       await tester.pump();
 
       expect(find.text('Anwenden'), findsOneWidget);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('ActionDetailsDialog', () {
     testWidgets('opens with tap on TermineCard', (WidgetTester tester) async {
@@ -276,7 +276,7 @@ void main() {
       expect(find.byKey(Key('termin details dialog')), findsOneWidget);
       expect(find.byKey(Key('action details page')), findsOneWidget);
       expect(find.byKey(Key('action details close button')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testWidgets('loads Termin with details with tap on TermineCard',
         (WidgetTester tester) async {
@@ -297,7 +297,7 @@ void main() {
       await tester.pump();
 
       verify(_termineService.getActionWithDetails(0));
-    ***REMOVED***);
+    });
 
     testWidgets('closes TerminDetails dialog with tap on Schliessen button',
         (WidgetTester tester) async {
@@ -321,7 +321,7 @@ void main() {
       await tester.pump();
 
       expect(find.byKey(Key('termin details dialog')), findsNothing);
-    ***REMOVED***);
+    });
 
     testWidgets('closes TerminDetails dialog on tap at map',
         (WidgetTester tester) async {
@@ -343,7 +343,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byKey(Key('termin details dialog')), findsNothing);
-    ***REMOVED***);
+    });
 
     testWidgets('switches to map view and centers at action on tap at map',
         (WidgetTester tester) async {
@@ -374,7 +374,7 @@ void main() {
           tester.state(find.byKey(Key('action page')));
       expect(actionPage.mapController.zoom, 15);
       expect(actionPage.mapController.center, actionPosition);
-    ***REMOVED***);
+    });
 
     testWidgets(
         'triggers server call and highlights action with tap on join button',
@@ -409,7 +409,7 @@ void main() {
       expect(state.termine[0].participants![0].name, equals('Karl Marx'));
       expect(find.byKey(Key('join action button')), findsNothing);
       expect(find.byKey(Key('open chat window')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testWidgets(
         'triggers server call and highlihgts action with tap on leave button',
@@ -446,8 +446,8 @@ void main() {
       verify(_termineService.leaveAction(action.id!)).called(1);
       expect(state.termine[0].participants, isEmpty);
       expect(find.byKey(Key('join action button')), findsOneWidget);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('ActionCreator', () {
     testWidgets('new actions are added and sorted into action list',
@@ -515,7 +515,7 @@ void main() {
               of: find.byKey(Key('action card')).at(1),
               matching: find.text('Infoveranstaltung')),
           findsWidgets);
-    ***REMOVED***);
+    });
 
     testWidgets('uses created action from server with id',
         (WidgetTester tester) async {
@@ -577,7 +577,7 @@ void main() {
           matching: find.byKey(Key('action card'))));
 
       expect(newCard.termin.id, 1337);
-    ***REMOVED***);
+    });
 
     testWidgets('new actions are saved to server', (WidgetTester tester) async {
       reset(_termineService);
@@ -640,7 +640,7 @@ void main() {
       await tester.pumpAndSettle();
 
       verify(_termineService.createAction(any, any)).called(1);
-    ***REMOVED***);
+    });
 
     testWidgets('shows alert popup on RestFehler from create request',
         (WidgetTester tester) async {
@@ -699,8 +699,8 @@ void main() {
           find.text(
               'Aktion konnte nicht erzeugt werden. Fehlerbeschreibung. \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an app@dwenteignen.de'),
           findsOneWidget);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('ActionEditor', () {
     setUpUI((WidgetTester tester) async {
@@ -718,7 +718,7 @@ void main() {
             ..beginn = DateTime.now(),
           myAction
         ];
-      ***REMOVED***);
+      });
       when(_termineService.getActionWithDetails(any)).thenAnswer(
           (_) async => TerminTestDaten.einTerminMitTeilisUndDetails());
       when(_storageService.loadAllStoredActionIds())
@@ -728,7 +728,7 @@ void main() {
 
       // Warten bis asynchron Termine geladen wurden
       await tester.pumpAndSettle();
-    ***REMOVED***);
+    });
 
     testUI('closes after action edit', (WidgetTester tester) async {
       when(_storageService.loadActionToken(any))
@@ -748,7 +748,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byKey(Key('action editor')), findsNothing);
-    ***REMOVED***);
+    });
 
     testUI('re-sorts edited actions into action list',
         (WidgetTester tester) async {
@@ -765,7 +765,7 @@ void main() {
 
       expect(termineSeite.termine.map((action) => action.id),
           containsAllInOrder([1, 3, 2]));
-    ***REMOVED***);
+    });
 
     testUI('shows alert popup on AuthFehler from save request',
         (WidgetTester tester) async {
@@ -781,7 +781,7 @@ void main() {
       expect(
           find.byKey(Key('edit authentication failed dialog')), findsNothing);
       expect(termineSeite.termine[0].typ, 'Sammeln');
-    ***REMOVED***);
+    });
 
     testUI('shows alert popup on RestFehler from save request',
         (WidgetTester tester) async {
@@ -796,8 +796,8 @@ void main() {
 
       expect(find.byKey(Key('edit request failed dialog')), findsNothing);
       expect(termineSeite.termine[0].typ, 'Sammeln');
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('now-line', () {
     testWidgets('lies between past and future actions',
@@ -834,7 +834,7 @@ void main() {
             'Jetzt',
             'Sammeln',
           ]));
-    ***REMOVED***);
+    });
 
     testWidgets('hides if no past actions present',
         (WidgetTester tester) async {
@@ -857,7 +857,7 @@ void main() {
       expect(find.byKey(Key('action card')), findsNWidgets(3));
 
       expect(find.byKey(Key('action list now line')), findsNothing);
-    ***REMOVED***);
+    });
 
     testWidgets('is at end if no future actions present',
         (WidgetTester tester) async {
@@ -893,7 +893,7 @@ void main() {
             'Sammeln',
             'Jetzt',
           ]));
-    ***REMOVED***);
+    });
 
     testWidgets('hides if no actions are present', (WidgetTester tester) async {
       when(_termineService.loadActions(any)).thenAnswer((_) async => []);
@@ -904,7 +904,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byKey(Key('action list now line')), findsNothing);
-    ***REMOVED***);
+    });
 
     testWidgets(
         'lies behind actions that started in the past but end in the future',
@@ -941,8 +941,8 @@ void main() {
             'Jetzt',
             'Sammeln',
           ]));
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('delete button', () {
     testWidgets('opens confirmation dialog', (WidgetTester tester) async {
@@ -969,7 +969,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byKey(Key('deletion confirmation dialog')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testWidgets('closes confirmation dialog on tap at No button',
         (WidgetTester tester) async {
@@ -998,7 +998,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.byKey(Key('deletion confirmation dialog')), findsNothing);
-    ***REMOVED***);
+    });
 
     testWidgets('does not trigger deletion on tap at No button',
         (WidgetTester tester) async {
@@ -1036,7 +1036,7 @@ void main() {
       expect(find.byKey(Key('action details page')), findsOneWidget);
       verifyNever(_termineService.deleteAction(any, any));
       expect(find.byKey(Key('action card')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     group('on confirmed', () {
       var myAction;
@@ -1067,7 +1067,7 @@ void main() {
         clearInteractions(_storageService);
         when(_storageService.loadAllStoredActionIds())
             .thenAnswer((_) async => [2]);
-      ***REMOVED***);
+      });
 
       testWidgets('deletes action in backend', (WidgetTester tester) async {
         when(_storageService.loadActionToken(any))
@@ -1092,7 +1092,7 @@ void main() {
         await tester.pump();
 
         verify(_termineService.deleteAction(myAction, any)).called(1);
-      ***REMOVED***);
+      });
 
       testWidgets('deletes action in action list', (WidgetTester tester) async {
         await tester.pumpWidget(termineSeiteWidget);
@@ -1116,7 +1116,7 @@ void main() {
 
         expect(find.byKey(Key('action card')), findsNWidgets(2));
         expect(find.text('Infoveranstaltung'), findsNothing);
-      ***REMOVED***);
+      });
 
       testWidgets('deletes action id storage', (WidgetTester tester) async {
         await tester.pumpWidget(termineSeiteWidget);
@@ -1139,7 +1139,7 @@ void main() {
         await tester.pump();
 
         verify(_storageService.deleteActionToken(2)).called(1);
-      ***REMOVED***);
+      });
 
       testWidgets('closes confirmation dialog and action details',
           (WidgetTester tester) async {
@@ -1164,7 +1164,7 @@ void main() {
 
         expect(find.byKey(Key('deletion confirmation dialog')), findsNothing);
         expect(find.byKey(Key('action details page')), findsNothing);
-      ***REMOVED***);
+      });
 
       testWidgets('shows alert popup on RestFehler',
           (WidgetTester tester) async {
@@ -1193,7 +1193,7 @@ void main() {
             find.text(
                 'Aktion konnte nicht gelöscht werden. message \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an app@dwenteignen.de'),
             findsOneWidget);
-      ***REMOVED***);
+      });
 
       testWidgets('shows alert popup on AuthFehler',
           (WidgetTester tester) async {
@@ -1222,9 +1222,9 @@ void main() {
             find.text(
                 'Aktion konnte nicht gelöscht werden. message \n\nWenn du Hilfe brauchst, schreib uns doch einfach per Mail an app@dwenteignen.de'),
             findsOneWidget);
-      ***REMOVED***);
-    ***REMOVED***);
-  ***REMOVED***);
+      });
+    });
+  });
 
   group('action token', () {
     late TermineSeiteState actionPageState;
@@ -1232,7 +1232,7 @@ void main() {
       actionPageState = TermineSeiteState();
       actionPageState.storageService = _storageService;
       actionPageState.termineService = _termineService;
-    ***REMOVED***);
+    });
 
     test('is uniquely generated at action creation and sent to server', () {
       when(_termineService.createAction(any, any)).thenAnswer(
@@ -1247,7 +1247,7 @@ void main() {
       expect(uuids[0], isNotEmpty);
       expect(uuids[1], isNotEmpty);
       expect(uuids[0], isNot(uuids[1]));
-    ***REMOVED***);
+    });
 
     testWidgets('is passed to server when action is edited',
         (WidgetTester tester) async {
@@ -1270,7 +1270,7 @@ void main() {
 
       verify(_termineService.saveAction(action1, 'storedToken1')).called(1);
       verify(_termineService.saveAction(action2, 'storedToken2')).called(1);
-    ***REMOVED***);
+    });
 
     testWidgets('is passed to server when action is deleted',
         (WidgetTester tester) async {
@@ -1292,8 +1292,8 @@ void main() {
 
       verify(_termineService.deleteAction(action1, 'storedToken1')).called(1);
       verify(_termineService.deleteAction(action2, 'storedToken2')).called(1);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('updateAction', () {
     var actionPageState = TermineSeiteState();
@@ -1304,18 +1304,18 @@ void main() {
         TerminTestDaten.einTermin()..id = 3,
       ];
       actionPageState.myActions = [2, 3];
-    ***REMOVED***);
+    });
 
     test('removes action w/ remove flag', () {
       actionPageState.updateAction(TerminTestDaten.einTermin()..id = 2, true);
       expect(actionPageState.termine.map((action) => action.id),
           containsAll([1, 3]));
-    ***REMOVED***);
+    });
 
     test('removes action from myAction list w/ remove flag', () {
       actionPageState.updateAction(TerminTestDaten.einTermin()..id = 2, true);
       expect(actionPageState.myActions, containsAll([3]));
-    ***REMOVED***);
+    });
 
     test('only updates action w/o remove flag', () {
       var newAction = TerminTestDaten.einTermin()
@@ -1333,7 +1333,7 @@ void main() {
               .ort
               .name,
           tempVorstadt().name);
-    ***REMOVED***);
+    });
 
     test('sorts new list by date', () {
       var newAction = TerminTestDaten.einTermin()
@@ -1342,15 +1342,15 @@ void main() {
       actionPageState.updateAction(newAction, false);
       expect(actionPageState.termine.map((action) => action.id),
           containsAll([3, 1, 2]));
-    ***REMOVED***);
+    });
 
     test('does nothing with unknown actions', () {
       actionPageState.updateAction(TerminTestDaten.einTermin()..id = 4, true);
       expect(actionPageState.termine.map((action) => action.id),
           containsAll([1, 2, 3]));
       expect(actionPageState.myActions, containsAll([2, 3]));
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('createAndAddAction', () {
     late TermineSeiteState state;
@@ -1363,7 +1363,7 @@ void main() {
         TerminTestDaten.einTermin()..id = 2,
         TerminTestDaten.einTermin()..id = 3,
       ];
-    ***REMOVED***);
+    });
 
     testUI('adds new action to list', (tester) async {
       var initialAction = TerminTestDaten.einTermin();
@@ -1376,7 +1376,7 @@ void main() {
 
       expect(
           state.termine.map((action) => action.id), containsAll([1, 2, 3, 4]));
-    ***REMOVED***);
+    });
 
     testUI('sorts list', (tester) async {
       var initialAction = TerminTestDaten.einTermin()
@@ -1392,7 +1392,7 @@ void main() {
 
       expect(
           state.termine.map((action) => action.id), containsAll([4, 1, 2, 3]));
-    ***REMOVED***);
+    });
 
     testUI('marks action as own', (tester) async {
       var initialAction = TerminTestDaten.einTermin();
@@ -1404,8 +1404,8 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(state.myActions, containsAll([4]));
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('navgation button', () {
     testWidgets('for list view is active on start',
@@ -1417,7 +1417,7 @@ void main() {
 
       TermineSeiteState state = tester.state(find.byKey(Key('action page')));
       expect(state.navigation, 0);
-    ***REMOVED***);
+    });
 
     testWidgets('for map view switches to map view',
         (WidgetTester tester) async {
@@ -1431,8 +1431,8 @@ void main() {
 
       TermineSeiteState state = tester.state(find.byKey(Key('action page')));
       expect(state.navigation, 1);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('unilink processing', () {
     testUI('shows action on start', (tester) async {
@@ -1442,10 +1442,10 @@ void main() {
       await state.showAction(Uri(
           scheme: 'https',
           host: 'dwenteignen.de',
-          queryParameters: {"aktion": "4"***REMOVED***));
+          queryParameters: {"aktion": "4"}));
 
       verify(_termineService.loadAndShowAction(4)).called(1);
-    ***REMOVED***);
+    });
 
     testUI('ignores path without action parameter', (tester) async {
       await tester.pumpWidget(termineSeiteWidget);
@@ -1454,7 +1454,7 @@ void main() {
       await state.showAction(Uri(scheme: 'https', host: 'dwenteignen.de'));
 
       verifyNever(_termineService.loadAndShowAction(any));
-    ***REMOVED***);
+    });
 
     testUI('ignores path with invalid action parameter', (tester) async {
       await tester.pumpWidget(termineSeiteWidget);
@@ -1463,10 +1463,10 @@ void main() {
       await state.showAction(Uri(
           scheme: 'https',
           host: 'dwenteignen.de',
-          queryParameters: {"aktion": "vier"***REMOVED***));
+          queryParameters: {"aktion": "vier"}));
 
       verifyNever(_termineService.loadAndShowAction(any));
-    ***REMOVED***);
+    });
 
     testUI('shows action while running', (tester) async {
       var controller = StreamController<Uri?>();
@@ -1477,14 +1477,14 @@ void main() {
       controller.add(Uri(
           scheme: 'https',
           host: 'dwenteignen.de',
-          queryParameters: {"aktion": "4"***REMOVED***));
+          queryParameters: {"aktion": "4"}));
 
       await tester.pumpAndSettle();
 
       verify(_termineService.loadAndShowAction(4)).called(1);
       controller.close();
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('placard delete dialog', () {
     setUpUI((tester) async {
@@ -1500,14 +1500,14 @@ void main() {
       map.mapController
           .move(LatLng(placard1().latitude, placard1().longitude), 15);
       await tester.pumpAndSettle();
-    ***REMOVED***);
+    });
 
     testUI('opens placard dialog on tap at placard', (tester) async {
       await tester.tap(find.byKey(Key('placard marker')));
       await tester.pump();
 
       expect(find.byKey(Key('placard dialog')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('closes placard dialog on abort and does not delete placard',
         (tester) async {
@@ -1521,7 +1521,7 @@ void main() {
 
       verifyNever(_placardsService.deletePlacard(any));
       expect(find.byKey(Key('placard marker')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('closes placard dialog on confirm and deletes placard',
         (tester) async {
@@ -1538,8 +1538,8 @@ void main() {
 
       verify(_placardsService.deletePlacard(1)).called(1);
       expect(find.byKey(Key('placard marker')), findsNothing);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('mapAction dialog', () {
     setUpUI((tester) async {
@@ -1555,15 +1555,15 @@ void main() {
       //
       // await tester.longPress(find.byKey(Key('action map map')));
       // await tester.pump();
-    ***REMOVED***);
+    });
 
     testUI('opens mapAction dialog on long press at map', (tester) async {
       // expect(find.byKey(Key('map action dialog')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('opens mapAction dialog on long press at map 2', (tester) async {
       // expect(find.byKey(Key('map action dialog')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     // testUI('closes mapAction dialog on abort and does nothing', (tester) async {
     //   await tester.tap(find.byKey(Key('map action dialog abort button')));
@@ -1571,7 +1571,7 @@ void main() {
     //
     //   verifyNever(_placardsService.createPlacard(any));
     //   expect(switchParameter, isNull);
-    // ***REMOVED***);
+    // });
 
     // testUI('closes mapAction dialog and switches to Action Creator',
     //     (tester) async {
@@ -1581,7 +1581,7 @@ void main() {
     //   verifyNever(_placardsService.createPlacard(any));
     //   expect(switchParameter?.latitude.floor(), 52);
     //   expect(switchParameter?.longitude.floor(), 13);
-    // ***REMOVED***);
+    // });
 
     // testUI('closes mapAction dialog and creates placard with geo data',
     //     (tester) async {
@@ -1602,7 +1602,7 @@ void main() {
     //   expect(placard.adresse, 'Elm Street 12, 12345 Berlin');
     //   expect(placard.benutzer, 11);
     //   expect(find.byKey(Key('placard marker')), findsOneWidget);
-    // ***REMOVED***);
+    // });
     //
     // testUI('creates no placard with missing user', (tester) async {
     //   when(_placardsService.createPlacard(any))
@@ -1619,9 +1619,9 @@ void main() {
     //   verifyNever(_geoService.getDescriptionToPoint(any));
     //   verifyNever(_placardsService.createPlacard(any));
     //   expect(find.byKey(Key('placard marker')), findsNothing);
-    // ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+    // });
+  });
+}
 
 _pumpNavigation(WidgetTester tester) async {
   await tester.pumpWidget(MultiProvider(
@@ -1647,4 +1647,4 @@ _pumpNavigation(WidgetTester tester) async {
             Navigation(GlobalKey(debugLabel: 'action page'), actionCreatorKey),
       )));
   await tester.pumpAndSettle();
-***REMOVED***
+}

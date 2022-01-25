@@ -3,25 +3,25 @@
     "project_number": "34078750980",
     "project_id": "expedition-grundeinkommen-app",
     "storage_bucket": "expedition-grundeinkommen-app.appspot.com"
-  ***REMOVED***,
+  },
   "client": [
     {
       "client_info": {
         "mobilesdk_app_id": "1:34078750980:android:2e53da301bd70504d1b851",
         "android_client_info": {
           "package_name": "de.expeditiongrundeinkommen.app"
-        ***REMOVED***
-      ***REMOVED***,
+        }
+      },
       "oauth_client": [
         {
           "client_id": "34078750980-cl765vaiud8l97laee6l4gapmu5e3voa.apps.googleusercontent.com",
           "client_type": 3
-        ***REMOVED***
+        }
       ],
       "api_key": [
         {
           "current_key": "AIzaSyDwgbiT8iKrRoL45ljPOO6IYaClQqSJhhA"
-        ***REMOVED***
+        }
       ],
       "services": {
         "appinvite_service": {
@@ -29,18 +29,18 @@
             {
               "client_id": "34078750980-cl765vaiud8l97laee6l4gapmu5e3voa.apps.googleusercontent.com",
               "client_type": 3
-            ***REMOVED***,
+            },
             {
               "client_id": "34078750980-3897fobie83afqudvbs6tgffpb6etrmm.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "io.flutter.flutter.app"
-              ***REMOVED***
-            ***REMOVED***
+              }
+            }
           ]
-        ***REMOVED***
-      ***REMOVED***
-    ***REMOVED***
+        }
+      }
+    }
   ],
   "configuration_version": "1"
-***REMOVED***
+}

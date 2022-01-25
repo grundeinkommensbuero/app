@@ -20,7 +20,7 @@ void main() {
 
       expect(datumText.substring(datumText.lastIndexOf(',') + 2),
           '3 Stunden.other');
-    ***REMOVED***);
+    });
 
     test('und rundet ab', () {
       var datumText = TerminCard.erzeugeDatumText(
@@ -30,7 +30,7 @@ void main() {
 
       expect(
           datumText.substring(datumText.lastIndexOf(',') + 2), '2 Stunden.two');
-    ***REMOVED***);
+    });
 
     test('und singularisiert bei einer Stunde', () {
       var datumText = TerminCard.erzeugeDatumText(
@@ -38,7 +38,7 @@ void main() {
 
       expect(
           datumText.substring(datumText.lastIndexOf(',') + 2), '1 Stunden.one');
-    ***REMOVED***);
+    });
 
     test('und markiert Teiträume kleiner als 1 Stunde', () {
       var datumText = TerminCard.erzeugeDatumText(DateTime(2019, 10, 30, 20),
@@ -46,15 +46,15 @@ void main() {
 
       expect(datumText.substring(datumText.lastIndexOf(',') + 2),
           '< 1 Stunden.one');
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
   group('ermittlePrefix', () {
     test('ermittelt Heute richtig', () {
       var heute = DateTime(now().year, now().month, now().day, 20);
       var datumText = TerminCard.ermittlePrefix(heute, Locale('de'));
 
       expect(datumText.substring(0, datumText.indexOf(',')), 'Heute');
-    ***REMOVED***);
+    });
 
     test('ermittelt Morgen richtig', () {
       var morgen = DateTime(now().year, now().month, now().day, 20)
@@ -62,7 +62,7 @@ void main() {
       var datumText = TerminCard.ermittlePrefix(morgen, Locale('de'));
 
       expect(datumText.substring(0, datumText.indexOf(',')), 'Morgen');
-    ***REMOVED***);
+    });
 
     test('gibt Wochentag an für übermorgen bis in 7 Tagen', () {
       var spaeter = DateTime(now().year, now().month, now().day, 20)
@@ -77,15 +77,15 @@ void main() {
 
       expect(datumText.substring(0, datumText.indexOf(',')),
           DateFormat.EEEE('de').format(spaeter));
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
   group('erzeugeOrtText', () {
     test('konkateniert Bezirk und Ort', () {
       var text = TerminCard.erzeugeOrtText(ffAlleeNord());
 
       expect(text, 'Friedrichshain Ost, Frankfurter Allee Nord');
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+    });
+  });
+}
 
 DateTime now() => DateTime.now();

@@ -10,7 +10,7 @@ class Benutzer() {
         this.id = id
         this.name = name
         this.color = color
-    ***REMOVED***
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,5 +21,5 @@ class Benutzer() {
 
     @Column
     var color: Long? = null
-***REMOVED***
+}
 

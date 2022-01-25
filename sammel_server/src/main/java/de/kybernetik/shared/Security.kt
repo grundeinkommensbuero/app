@@ -30,15 +30,15 @@ open class Security {
         val hash = hasheSecretMitSalt(secret, salt)
 
         return HashMitSalt(encodeHexString(hash), encodeHexString(salt))
-    ***REMOVED***
+    }
 
     private fun hasheSecretMitSalt(secret: String, salt: ByteArray): ByteArray {
         val startTime = now()
         val encryptableSpec = EncryptablePasswordSpec(secret.toCharArray(), SaltedPasswordAlgorithmSpec(salt))
         val password = BCRYPTFACTORY.generatePassword(encryptableSpec) as BCryptPassword
-        LOG.trace("Secret in ${startTime.until(now(), MILLIS)***REMOVED*** Millisekunden gehasht mit Salt ${encodeHexString(salt)***REMOVED***")
+        LOG.trace("Secret in ${startTime.until(now(), MILLIS)} Millisekunden gehasht mit Salt ${encodeHexString(salt)}")
         return password.hash
-    ***REMOVED***
+    }
 
     @Throws(DecoderException::class)
     open fun verifiziereSecretMitHash(secret: String, hashMitSalt: HashMitSalt): Boolean {
@@ -46,10 +46,10 @@ open class Security {
         val originalerHash = decodeHex(hashMitSalt.hash)
 
         return Arrays.equals(originalerHash, hashAusSecret)
-    ***REMOVED***
+    }
 
     data class HashMitSalt(
             val hash: String,
             val salt: String
     )
-***REMOVED***
+}

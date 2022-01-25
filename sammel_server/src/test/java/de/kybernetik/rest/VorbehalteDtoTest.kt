@@ -16,7 +16,7 @@ class VorbehalteDtoTest {
             null,
             "10243"
         ).convertToVorbehalte(11L)
-    ***REMOVED***
+    }
 
     @Test
     fun `convertToVorbehalte konvertiert vollstaendiges Dto`() {
@@ -34,7 +34,7 @@ class VorbehalteDtoTest {
         assertEquals(8, vorbehalte.datum?.month?.value)
         assertEquals(8, vorbehalte.datum?.dayOfMonth)
         assertEquals("10243", vorbehalte.ort)
-    ***REMOVED***
+    }
 
     @Test
     fun `convertToVorbehalte nutzt Default-Werte fuer Id und Vorbehalte`() {
@@ -48,7 +48,7 @@ class VorbehalteDtoTest {
         assertEquals(0, vorbehalte.id)
         assertEquals("", vorbehalte.vorbehalte)
         assertEquals("Unbekannt", vorbehalte.ort)
-    ***REMOVED***
+    }
 
     @Test
     fun `convertFromVorbehalte konvertiert zu Dto`() {
@@ -66,5 +66,5 @@ class VorbehalteDtoTest {
         assertEquals(8, vorbehalte.datum?.month?.value)
         assertEquals(8, vorbehalte.datum?.dayOfMonth)
         assertEquals("10243", vorbehalte.ort)
-    ***REMOVED***
-***REMOVED***
+    }
+}

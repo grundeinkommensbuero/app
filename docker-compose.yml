@@ -48,4 +48,4 @@ services:
       - ./server-work-dir:/opt/shared
 
 volumes:
-  my-db: { ***REMOVED***
+  my-db: { }

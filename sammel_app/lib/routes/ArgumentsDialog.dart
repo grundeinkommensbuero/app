@@ -9,7 +9,7 @@ import 'package:sammel_app/shared/CampaignTheme.dart';
 import 'package:sammel_app/shared/ChronoHelfer.dart';
 
 Future<Arguments?> showArgumentsDialog(
-        {required BuildContext context, required LatLng coordinates***REMOVED***) =>
+        {required BuildContext context, required LatLng coordinates}) =>
     showDialog(
       context: context,
       builder: (context) => ArgumentsDialog(coordinates),
@@ -23,8 +23,8 @@ class ArgumentsDialog extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return ArgumentsDialogState(coordinates);
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 class ArgumentsDialogState extends State<ArgumentsDialog> {
   final LatLng coordinates;
@@ -46,7 +46,7 @@ class ArgumentsDialogState extends State<ArgumentsDialog> {
       content: SingleChildScrollView(
           child: ListBody(children: [
         Text(
-          '${plz != null ? plz : 'Berlin'***REMOVED***, ${ChronoHelfer.formatDateOfDateTime(date)***REMOVED***',
+          '${plz != null ? plz : 'Berlin'}, ${ChronoHelfer.formatDateOfDateTime(date)}',
           textScaleFactor: 0.9,
           style: TextStyle(color: CampaignTheme.secondary),
         ),
@@ -82,5 +82,5 @@ class ArgumentsDialogState extends State<ArgumentsDialog> {
         ),
       ],
     );
-  ***REMOVED***
-***REMOVED***
+  }
+}

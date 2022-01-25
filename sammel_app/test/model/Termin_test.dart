@@ -30,8 +30,8 @@ void main() {
           '"latitude":52.52116,'
           '"longitude":13.41331,'
           '"participants":null,'
-          '"details":null***REMOVED***');
-    ***REMOVED***);
+          '"details":null}');
+    });
     test('serialisiert Termin mit Teilnehmer und ohne Details', () {
       expect(
           jsonEncode(Termin(
@@ -53,8 +53,8 @@ void main() {
           '"latitude":52.52116,'
           '"longitude":13.41331,'
           '"participants":[],'
-          '"details":null***REMOVED***');
-    ***REMOVED***);
+          '"details":null}');
+    });
 
     test('serialisiert Termin mit Teilnehmern und Details', () {
       expect(
@@ -76,23 +76,23 @@ void main() {
           '"typ":"Sammeln",'
           '"latitude":52.52116,'
           '"longitude":13.41331,'
-          '"participants":[{"id":11,"name":"Karl Marx","color":4294198070***REMOVED***],'
+          '"participants":[{"id":11,"name":"Karl Marx","color":4294198070}],'
           '"details":{'
           '"id":null,'
           '"treffpunkt":"Weltzeituhr",'
           '"beschreibung":"Bringe Westen und Klämmbretter mit",'
-          '"kontakt":"Ruft an unter 012345678"***REMOVED***'
-          '***REMOVED***');
-    ***REMOVED***);
+          '"kontakt":"Ruft an unter 012345678"}'
+          '}');
+    });
 
     test('serializes filled ActionWithToken', () {
       expect(
           jsonEncode(ActionWithToken(TerminTestDaten.einTermin(), 'Token')),
           '{'
-          '"action":${jsonEncode(TerminTestDaten.einTermin())***REMOVED***,'
+          '"action":${jsonEncode(TerminTestDaten.einTermin())},'
           '"token":"Token"'
-          '***REMOVED***');
-    ***REMOVED***);
+          '}');
+    });
 
     test('serializes empty ActionWithToken', () {
       expect(
@@ -100,9 +100,9 @@ void main() {
           '{'
           '"action":null,'
           '"token":null'
-          '***REMOVED***');
-    ***REMOVED***);
-  ***REMOVED***);
+          '}');
+    });
+  });
   group('deserialisiere', () {
     test('deserialisiert Termin ohne Teilnehmer und Details', () {
       var termin = Termin.fromJson(
@@ -113,7 +113,7 @@ void main() {
               '"ort":"Frankfurter Allee Nord",'
               '"typ":"Sammeln",'
               '"latitude":52.52116,'
-              '"longitude":13.41331***REMOVED***'),
+              '"longitude":13.41331}'),
           [ffAlleeNord()].toSet());
       expect(termin.id, 1);
       expect(termin.beginn, equals(DateTime(2020, 1, 2, 15, 0, 0)));
@@ -124,24 +124,24 @@ void main() {
       expect(termin.ort.toString(), ffAlleeNord().toString());
       expect(termin.participants, isNull);
       expect(termin.details, isNull);
-    ***REMOVED***);
+    });
 
     test('deserialisiert Termin mit Teilnehmer und Details', () {
       var termin = Termin.fromJson(
           jsonDecode('{'
               '"beginn":"2020-02-05T09:00:00",'
-              '"participants":[{"id":11,"name":"Karl Marx", "color":4294198070***REMOVED***],'
+              '"participants":[{"id":11,"name":"Karl Marx", "color":4294198070}],'
               '"details":{'
               '"id":1,'
               '"beschreibung":"wir stellen uns an die Ubhf-Eingänge. ihr erkennt mich an der DWE-Weste",'
               '"kontakt":"kalle@revo.de",'
-              '"treffpunkt":"Weltzeituhr"***REMOVED***,'
+              '"treffpunkt":"Weltzeituhr"},'
               '"ende":"2020-02-05T12:00:00",'
               '"id":1,'
               '"ort":"Frankfurter Allee Nord",'
               '"latitude":52.48612,'
               '"longitude":13.47192,'
-              '"typ":"Sammeln"***REMOVED***'),
+              '"typ":"Sammeln"}'),
           [ffAlleeNord()].toSet());
       expect(termin.details?.treffpunkt, "Weltzeituhr");
       expect(termin.details?.beschreibung,
@@ -150,8 +150,8 @@ void main() {
       expect(termin.participants?.single.id, 11);
       expect(termin.participants?.single.name, 'Karl Marx');
       expect(termin.participants?.single.color?.value, Colors.red.value);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   test('compareByStart orders actions by Start value', () {
     var now = DateTime.now();
@@ -202,13 +202,13 @@ void main() {
 
     // first lesser then second by start, but not by end
     expect(Termin.compareByStart(action4, action1), -1);
-  ***REMOVED***);
+  });
 
   group('isEvaluated', () {
     test('returns true if action is in list and of type Sammeln', () {
       final sammeln = TerminTestDaten.einTermin()..typ = 'Sammeln';
       expect(sammeln.isEvaluated([0]), true);
-    ***REMOVED***);
+    });
 
     test('returns false if list is Empty', () {
       final sammeln1 = TerminTestDaten.einTermin()..typ = 'Sammeln';
@@ -216,7 +216,7 @@ void main() {
 
       final sammeln2 = TerminTestDaten.einTermin()..typ = 'Sammeln';
       expect(sammeln2.isEvaluated([]), false);
-    ***REMOVED***);
+    });
 
     test('returns true for any Action that is not Sammeln', () {
       final infova = TerminTestDaten.einTermin()..typ = 'Infoveranstaltung';
@@ -227,13 +227,13 @@ void main() {
 
       final plakatieren = TerminTestDaten.einTermin()..typ = 'Plakatieren';
       expect(plakatieren.isEvaluated([plakatieren.id!]), true);
-    ***REMOVED***);
+    });
 
     test('returns false if action is not in list', () {
       final sammeln = TerminTestDaten.einTermin()..typ = 'Sammeln';
       expect(sammeln.isEvaluated([1, 2, 3]), false);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('getAsset', () {
     var infoveranstaltung = TerminTestDaten.einTermin();
@@ -243,21 +243,21 @@ void main() {
       infoveranstaltung.typ = 'Unbekannt';
       expect(infoveranstaltung.getAsset(centered: false),
           'assets/images/logo_transparent.png');
-    ***REMOVED***);
+    });
 
     test('returns non-centered icon path', () {
       infoveranstaltung.typ = 'Sammeln';
       expect(infoveranstaltung.getAsset(centered: false),
           'assets/images/Sammeln.png');
-    ***REMOVED***);
+    });
 
     test('returns centered icon path', () {
       infoveranstaltung.typ = 'Sammeln';
       expect(infoveranstaltung.getAsset(centered: true),
           'assets/images/Sammeln_centered.png');
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+    });
+  });
+}
 
 class TerminTestDaten {
   static Termin einTermin() => Termin(
@@ -295,4 +295,4 @@ class TerminTestDaten {
       13.41331,
       [],
       TerminDetailsTestDaten.terminDetailsTestDaten());
-***REMOVED***
+}

@@ -17,5 +17,5 @@ class TerminDetails {
         'treffpunkt': treffpunkt,
         'beschreibung': beschreibung,
         'kontakt': kontakt
-      ***REMOVED***
-***REMOVED***
+      };
+}

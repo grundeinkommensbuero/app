@@ -84,7 +84,7 @@ class TermineRestResourceTest {
         val aktion3 = terminMitTeilnehmerOhneDetails()
         aktion3.id = 3L
         whenever(dao.getTermine(any(), anyOrNull())).thenReturn(listOf(aktion1, aktion2, aktion3))
-    ***REMOVED***
+    }
 
     @Test
     fun `TerminDto konvertiert zu Termin mit Teilnehmern`() {
@@ -109,7 +109,7 @@ class TermineRestResourceTest {
         assertEquals(termin.teilnehmer[0].id, 11L)
         assertEquals(termin.teilnehmer[0].name, "Karl Marx")
         assertEquals(termin.teilnehmer[0].color, 4294198070)
-    ***REMOVED***
+    }
 
     @Test
     fun `getTermin liefert Termin mit Details`() {
@@ -122,7 +122,7 @@ class TermineRestResourceTest {
         assertEquals(response.status, 200)
         val termin = response.entity as TerminDto
         assertEquals(termin.id, terminOhneTeilnehmerMitDetails().id)
-    ***REMOVED***
+    }
 
     @Test
     fun `getTermin liefert 422 bei fehlender Id`() {
@@ -131,7 +131,7 @@ class TermineRestResourceTest {
         assertEquals(response.status, 422)
         val entity = response.entity as String
         assertEquals(entity, "Keine Aktions-ID angegeben")
-    ***REMOVED***
+    }
 
     @Test
     fun `getTermin liefert 433 bei unbekannter Id`() {
@@ -142,7 +142,7 @@ class TermineRestResourceTest {
         assertEquals(response.status, 433)
         val entity = response.entity as String
         assertEquals(entity, "Unbekannte Aktion abgefragt")
-    ***REMOVED***
+    }
 
     @Test
     fun `getTermine liefert TerminDtos aus mit Filter`() {
@@ -165,7 +165,7 @@ class TermineRestResourceTest {
         val termin2 = termine[1] as TerminDto
         assertEquals(termin1.id, terminOhneTeilnehmerOhneDetails().id)
         assertEquals(termin2.id, terminOhneTeilnehmerMitDetails().id)
-    ***REMOVED***
+    }
 
     @Test
     fun `getTermine nimmt fuer keinen Filter leeren Filter`() {
@@ -184,7 +184,7 @@ class TermineRestResourceTest {
         assertEquals(captor.value.von, null)
         assertEquals(captor.value.bis, null)
         assertEquals(captor.value.orte, emptyList())
-    ***REMOVED***
+    }
 
     @Test
     fun `erstelleNeuenTermin legt Termin in Db ab`() {
@@ -199,7 +199,7 @@ class TermineRestResourceTest {
         verify(dao, times(1)).erstelleNeuenTermin(argCaptor.capture())
         val terminInDb = argCaptor.firstValue
         assertEquals(terminInDb.id, termin.id)
-    ***REMOVED***
+    }
 
     @Test
     fun `erstelleNeuenTermin speichert Token in Db`() {
@@ -211,7 +211,7 @@ class TermineRestResourceTest {
 
         assertEquals(response.status, 200)
         verify(dao, times(1)).storeToken(1L, "secretToken")
-    ***REMOVED***
+    }
 
     @Test
     fun `erstelleNeuenTermin speichert nicht leeres Token`() {
@@ -229,7 +229,7 @@ class TermineRestResourceTest {
         assertEquals(response.status, 200)
 
         verify(dao, never()).storeToken(any(), any())
-    ***REMOVED***
+    }
 
     @Test
     fun `aktualisiereTermin reicht Fehler weiter bei Exception`() {
@@ -243,7 +243,7 @@ class TermineRestResourceTest {
 
         assertEquals(response.status, 422)
         assertNull(response.entity)
-    ***REMOVED***
+    }
 
     @Test
     fun `aktualisiereTermin aktualisiert Termin in Db`() {
@@ -260,7 +260,7 @@ class TermineRestResourceTest {
         assertEquals(termin.id, terminDto.id)
 
         assertEquals(response.status, 200)
-    ***REMOVED***
+    }
 
     @Test
     fun `aktualisiereTermin aktualisiert nicht Teilnehmer`() {
@@ -278,13 +278,13 @@ class TermineRestResourceTest {
         assertNotEquals(termin.teilnehmer.size, terminNeu.participants!!.size)
 
         assertEquals(response.status, 200)
-    ***REMOVED***
+    }
 
     @Test
     fun `aktualisiereTermin informiert Teilnehmer`() {
         val terminAlt = terminMitTeilnehmerMitDetails()
         val termin = terminDto()
-        termin.participants = listOf(rosa(), karl()).map { BenutzerDto.convertFromBenutzer(it) ***REMOVED***
+        termin.participants = listOf(rosa(), karl()).map { BenutzerDto.convertFromBenutzer(it) }
         whenever(dao.getTermin(any())).thenReturn(terminAlt)
         whenever(dao.loadToken(any())).thenReturn(Token(1L, "token"))
 
@@ -296,8 +296,8 @@ class TermineRestResourceTest {
             .sendePushNachrichtAnEmpfaenger(nachricht.capture(), empfaenger.capture())
         assertEquals(nachricht.firstValue.notification!!.title, "Eine Aktion an der du teilnimmst hat sich geändert")
         assertEquals(nachricht.firstValue.notification!!.body, "Sammeln am 22.10. in Frankfurter Allee Nord (null)")
-        assertTrue(empfaenger.firstValue.map { it.id ***REMOVED***.containsAll(listOf(12L)))
-    ***REMOVED***
+        assertTrue(empfaenger.firstValue.map { it.id }.containsAll(listOf(12L)))
+    }
 
     @Test
     fun `aktualisiereTermin prueft Token`() {
@@ -311,7 +311,7 @@ class TermineRestResourceTest {
         verify(dao, times(1)).loadToken(1L)
 
         assertEquals(response.status, 200)
-    ***REMOVED***
+    }
 
     @Test
     fun `aktualisiereTermin liefert 403  bei falschem Token`() {
@@ -323,7 +323,7 @@ class TermineRestResourceTest {
         verify(dao, times(1)).loadToken(1L)
 
         assertEquals(response.status, 403)
-    ***REMOVED***
+    }
 
     @Test
     fun `loescheAktion loescht Aktion und Token in Db`() {
@@ -344,7 +344,7 @@ class TermineRestResourceTest {
         verify(dao, times(1)).deleteToken(tokenCaptor.capture())
         assertEquals(tokenCaptor.firstValue.actionId, 1L)
         assertEquals(tokenCaptor.firstValue.token, "token")
-    ***REMOVED***
+    }
 
     @Test
     fun `loescheAktion liefert 404 wenn Aktion nicht gefunden wird`() {
@@ -356,7 +356,7 @@ class TermineRestResourceTest {
         val response: Response = resource.loescheAktion(ActionWithTokenDto(terminDto, "token"))
 
         assertEquals(response.status, 404)
-    ***REMOVED***
+    }
 
     @Test
     fun `loescheAktion prueft Token`() {
@@ -369,7 +369,7 @@ class TermineRestResourceTest {
         verify(dao, times(1)).loadToken(1L)
 
         assertEquals(response.status, 200)
-    ***REMOVED***
+    }
 
     @Test
     fun `loescheAktion liefert 403 bei falschem Token`() {
@@ -383,7 +383,7 @@ class TermineRestResourceTest {
         verify(dao, never()).deleteToken(any())
 
         assertEquals(response.status, 403)
-    ***REMOVED***
+    }
 
     @Test
     fun `loescheAktion informiert Teilnehmer`() {
@@ -402,8 +402,8 @@ class TermineRestResourceTest {
             data.firstValue.notification!!.body,
             "Sammeln am 22.10. in Frankfurter Allee Nord (null) wurde von der Ersteller*in gelöscht"
         )
-        assertTrue(empfaenger.firstValue.map { it.id ***REMOVED***.containsAll(listOf(12L)))
-    ***REMOVED***
+        assertTrue(empfaenger.firstValue.map { it.id }.containsAll(listOf(12L)))
+    }
 
     @Test
     fun `loescheAktion loescht Aktion auch ohne Token wenn Aktion keinen Token in Db hat`() {
@@ -417,7 +417,7 @@ class TermineRestResourceTest {
         verify(dao, never()).deleteToken(any())
 
         assertEquals(response.status, 200)
-    ***REMOVED***
+    }
 
     @Test
     fun `meldeTeilnahmeAn liefert 422 bei fehlender AktionsId`() {
@@ -426,7 +426,7 @@ class TermineRestResourceTest {
         assertEquals(response.status, 422)
         assertTrue(response.entity is RestFehlermeldung)
         assertEquals((response.entity as RestFehlermeldung).meldung, "Die angegebene Aktion ist ungültig")
-    ***REMOVED***
+    }
 
     @Test
     fun `meldeTeilnahme an liefert 422 bei unbekannter AktionsId`() {
@@ -435,7 +435,7 @@ class TermineRestResourceTest {
         assertEquals(response.status, 422)
         assertTrue(response.entity is RestFehlermeldung)
         assertEquals((response.entity as RestFehlermeldung).meldung, "Die angegebene Aktion ist ungültig")
-    ***REMOVED***
+    }
 
     @Test
     fun `meldeTeilnahmeAn ergaenzt TerminTeilnehmer um Benutzer`() {
@@ -449,7 +449,7 @@ class TermineRestResourceTest {
         assertEquals(captor.firstValue.teilnehmer.size, 3)
         assertEquals(captor.firstValue.teilnehmer[2].id, bini().id)
         assertEquals(response.status, 202)
-    ***REMOVED***
+    }
 
     @Test
     fun `meldeTeilnahmeAn informiert genau Ersteller und restliche Teilnehmer`() {
@@ -466,7 +466,7 @@ class TermineRestResourceTest {
         )
         assertEquals(empfaengerCaptor.secondValue[0].name, rosa().name)
         assertEquals(empfaengerCaptor.secondValue.size, 1)
-    ***REMOVED***
+    }
 
     @Test
     fun `meldeTeilnahmeAn ignoriert bestehende Teilnahme`() {
@@ -480,7 +480,7 @@ class TermineRestResourceTest {
 
         verify(dao, never()).aktualisiereTermin(any())
         assertEquals(response.status, 202)
-    ***REMOVED***
+    }
 
     @Test
     fun `informiereUeberTeilnahme informiert Ersteller`() {
@@ -499,7 +499,7 @@ class TermineRestResourceTest {
         )
         assertTrue(empfaengerCaptor.firstValue.containsAll(listOf(karl)))
         assertEquals("Verstärkung für deine Aktion", nachricht.firstValue.notification!!.title)
-    ***REMOVED***
+    }
 
     @Test
     fun `informiereUeberTeilnahme informiert restliche Teilnehmer`() {
@@ -517,7 +517,7 @@ class TermineRestResourceTest {
         )
         assertTrue(empfaengerCaptor.secondValue.containsAll(listOf(rosa)))
         assertEquals("Verstärkung für eure Aktion", nachricht.secondValue.notification!!.title)
-    ***REMOVED***
+    }
 
     @Test
     fun `informiereUeberTeilnahme sendet Aktion, Benutzername und Typ`() {
@@ -542,7 +542,7 @@ class TermineRestResourceTest {
         assertEquals(data2["action"], 2L)
         assertEquals(data2["username"], "Bini Adamczak")
         assertEquals(data2["joins"], true)
-    ***REMOVED***
+    }
 
     @Test
     fun `sageTeilnahmeAb liefert 422 bei fehlender Aktions-Id`() {
@@ -551,7 +551,7 @@ class TermineRestResourceTest {
         assertEquals(response.status, 422)
         assertTrue(response.entity is RestFehlermeldung)
         assertEquals((response.entity as RestFehlermeldung).meldung, "Die angegebene Aktion ist ungültig")
-    ***REMOVED***
+    }
 
     @Test
     fun `sageTeilnahmeAb liefert 422 bei unbekannter AktionsId`() {
@@ -560,7 +560,7 @@ class TermineRestResourceTest {
         assertEquals(response.status, 422)
         assertTrue(response.entity is RestFehlermeldung)
         assertEquals((response.entity as RestFehlermeldung).meldung, "Die angegebene Aktion ist ungültig")
-    ***REMOVED***
+    }
 
     @Test
     fun `sageTeilnahmeAb entfernt Benutzer als TerminTeilnehmer`() {
@@ -576,7 +576,7 @@ class TermineRestResourceTest {
         verify(dao, times(1)).aktualisiereTermin(captor.capture())
         assertEquals(captor.firstValue.teilnehmer.size, 1)
         assertEquals(response.status, 202)
-    ***REMOVED***
+    }
 
     @Test
     fun `sageTeilnahmeAb ignoriert fehlenden Benutzer in Liste`() {
@@ -587,7 +587,7 @@ class TermineRestResourceTest {
 
         verify(dao, never()).aktualisiereTermin(any())
         assertEquals(response.status, 202)
-    ***REMOVED***
+    }
 
     @Test
     fun `informiereUeberAbsage informiert Ersteller`() {
@@ -606,7 +606,7 @@ class TermineRestResourceTest {
         )
         assertTrue(empfaengerCaptor.firstValue.containsAll(listOf(karl)))
         assertEquals("Absage bei deiner Aktion", nachrichtCaptor.firstValue.notification!!.title)
-    ***REMOVED***
+    }
 
     @Test
     fun `informiereUeberAbsage informiert restliche Teilnehmer`() {
@@ -625,7 +625,7 @@ class TermineRestResourceTest {
         )
         assertTrue(empfaengerCaptor.secondValue.containsAll(listOf(rosa)))
         assertEquals("Absage bei eurer Aktion", nachrichtCaptor.secondValue.notification!!.title)
-    ***REMOVED***
+    }
 
     @Test
     fun `informiereUeberAbsage sendet Inhalt`() {
@@ -650,14 +650,14 @@ class TermineRestResourceTest {
         assertEquals(data2["action"], 2L)
         assertEquals(data2["username"], "Bini Adamczak")
         assertEquals(data2["joins"], false)
-    ***REMOVED***
+    }
 
     @Test
     fun test() {
         println(ZonedDateTime.now().format(ISO_OFFSET_DATE_TIME))
         println(ZonedDateTime.now().format(ISO_ZONED_DATE_TIME))
         println(ZonedDateTime.now().format(ISO_INSTANT))
-    ***REMOVED***
+    }
 
     @Test
     fun `fragt alle Aktionen und alle Evaluationen aus Datenbank ab`() {
@@ -672,7 +672,7 @@ class TermineRestResourceTest {
         assertEquals(captor.firstValue.typen, emptyList())
 
         verify(dao, times(1)).ladeAlleEvaluationen()
-    ***REMOVED***
+    }
 
     @Test
     fun `liefert alle Aktionen und Evaluationen aus`() {
@@ -685,7 +685,7 @@ class TermineRestResourceTest {
         assertEquals(3L, (ergebnis.entity as EvaluationenUndAktionenDto).aktionen[2].id)
         assertEquals(1L, (ergebnis.entity as EvaluationenUndAktionenDto).evaluationen[0].id)
         assertEquals(2L, (ergebnis.entity as EvaluationenUndAktionenDto).evaluationen[1].id)
-    ***REMOVED***
+    }
 
     @Test
     fun `liefert Aktionen ohne Teilnehmer aus`() {
@@ -696,7 +696,7 @@ class TermineRestResourceTest {
         assertNull((ergebnis.entity as EvaluationenUndAktionenDto).aktionen[0].participants)
         assertNull((ergebnis.entity as EvaluationenUndAktionenDto).aktionen[1].participants)
         assertNull((ergebnis.entity as EvaluationenUndAktionenDto).aktionen[2].participants)
-    ***REMOVED***
+    }
 
     @Test
     fun `convertFromEvaluation konvertiert Evaluation zu Dto`() {
@@ -712,5 +712,5 @@ class TermineRestResourceTest {
         assertEquals("ganz okay", dto.kommentar)
         assertEquals("Sonnenschein", dto.situation)
         assertEquals(false, dto.ausgefallen)
-    ***REMOVED***
-***REMOVED***
+    }
+}

@@ -27,7 +27,7 @@ class Navigation extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => NavigationState();
-***REMOVED***
+}
 
 class NavigationState extends State<Navigation>
     with SingleTickerProviderStateMixin {
@@ -60,7 +60,7 @@ class NavigationState extends State<Navigation>
     // Error-Service kann am Ende des ersten Builds Dialoge zeigen
     SchedulerBinding.instance!
         .addPostFrameCallback((_) => ErrorService.setContext(context));
-  ***REMOVED***
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +126,7 @@ class NavigationState extends State<Navigation>
                 )
               : null),
     );
-  ***REMOVED***
+  }
 
   SizedBox buildDrawer() {
     return SizedBox(
@@ -172,10 +172,10 @@ class NavigationState extends State<Navigation>
                         index: 4),
                   ],
                 ))));
-  ***REMOVED***
+  }
 
   Widget menuEntry(
-      {Key? key, String title = '', String subtitle = '', int index = 0***REMOVED***) {
+      {Key? key, String title = '', String subtitle = '', int index = 0}) {
     var selected = navigation == index;
     return Container(
         key: key,
@@ -198,10 +198,10 @@ class NavigationState extends State<Navigation>
               if (navigation != index) {
                 history.add(navigation);
                 switchPage(index);
-              ***REMOVED***
+              }
               Navigator.pop(context);
-            ***REMOVED***));
-  ***REMOVED***
+            }));
+  }
 
   void switchPage(int index) async {
     setState(() => swipeUp = index > navigation);
@@ -211,25 +211,25 @@ class NavigationState extends State<Navigation>
         Provider.of<ChatMessageService>(context, listen: false)
             .getTopicChannel("global")
             .then((value) => maybeDispose(value));
-      ***REMOVED***
+      }
       navigation = index;
       swipeUp = !swipeUp;
-    ***REMOVED***);
+    });
     await _animationController.reverse();
 
     primaryFocus?.unfocus(); // sonst nimmt man die Tastatur mit
-  ***REMOVED***
+  }
 
   newActionCreated(List<Termin> actions) {
     addActionsToActionPage(actions);
     navigateToActionPage();
-  ***REMOVED***
+  }
 
   void addActionsToActionPage(List<Termin> actions) {
     actions.forEach((action) =>
         (widget.actionPage.currentState as TermineSeiteState)
             .createAndAddAction(action));
-  ***REMOVED***
+  }
 
   Future<bool> navigateBack() async {
     var closeApp = false;
@@ -238,27 +238,27 @@ class NavigationState extends State<Navigation>
     else {
       switchPage(history.last);
       history.removeLast();
-    ***REMOVED***
+    }
     return closeApp;
-  ***REMOVED***
+  }
 
   void navigateToActionPage() {
     switchPage(0);
     history.removeLast();
-  ***REMOVED***
+  }
 
   void navigateToActionCreator(LatLng position) {
     switchPage(1);
     (widget.actionEditorPage.currentState as ActionEditorState)
         .setPosition(position);
     history.add(navigation);
-  ***REMOVED***
+  }
 
   maybeDispose(ChatChannel value) {
     var cls = value.ccl as State<StatefulWidget>?;
     if (cls == null) return;
     if (ModalRoute.of(cls.context)?.settings.name == "/") {
       value.disposeListener();
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***
+    }
+  }
+}

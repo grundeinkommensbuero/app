@@ -15,9 +15,9 @@ open class VorbehalteDao {
     private lateinit var entityManager: EntityManager
 
     open fun erzeugeNeueVorbehalte(vorbehalte: Vorbehalte): Vorbehalte {
-        LOG.debug("Speichere Vorbehalte ${vorbehalte.id***REMOVED***")
+        LOG.debug("Speichere Vorbehalte ${vorbehalte.id}")
         entityManager.persist(vorbehalte)
         entityManager.flush()
         return vorbehalte
-    ***REMOVED***
-***REMOVED***
+    }
+}

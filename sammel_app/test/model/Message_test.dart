@@ -4,17 +4,17 @@ import 'package:sammel_app/model/Message.dart';
 void main() {
   group('determineType', () {
     test('determineType returns type in json data', () {
-      Map<String, dynamic> data = {'type': 'MyType', 'anyOther': 'Data'***REMOVED***
+      Map<String, dynamic> data = {'type': 'MyType', 'anyOther': 'Data'};
 
       expect('MyType', Message.determineType(data));
-    ***REMOVED***);
+    });
 
     test('returns null for missing type in json data', () {
-      Map<String, dynamic> data = {'anyOther': 'Data'***REMOVED***
+      Map<String, dynamic> data = {'anyOther': 'Data'};
 
       expect(Message.determineType(data), isNull);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('ParticipationMessage', () {
     group('toJson', () {
@@ -28,7 +28,7 @@ void main() {
         expect(json['timestamp'], '2020-12-12 23:58:00.000');
         expect(json['username'], 'Karl Marx');
         expect(json['joins'], isTrue);
-      ***REMOVED***);
+      });
 
       test('serializes null username', () {
         var message =
@@ -39,8 +39,8 @@ void main() {
         expect(json['timestamp'], '2020-12-12 23:58:00.000');
         expect(json['username'], null);
         expect(json['joins'], isTrue);
-      ***REMOVED***);
-    ***REMOVED***);
+      });
+    });
 
     group('fromJson', () {
       test('deserializes correctly', () {
@@ -50,7 +50,7 @@ void main() {
           'timestamp': '2020-12-12 23:58:00.000',
           'username': 'Karl Marx',
           'joins': true
-        ***REMOVED***
+        };
 
         var message = ParticipationMessage.fromJson(json);
         expect(message.type, 'ParticipationMessage');
@@ -58,7 +58,7 @@ void main() {
         expect(message.timestamp.toString(), '2020-12-12 23:58:00.000');
         expect(message.username, 'Karl Marx');
         expect(message.joins, isTrue);
-      ***REMOVED***);
+      });
 
       test('deserializes null-values', () {
         var json = {
@@ -66,12 +66,12 @@ void main() {
           'obtained_from_server': true,
           'timestamp': '2020-12-12 23:58:00.000',
           'joins': true
-        ***REMOVED***
+        };
 
         var message = ParticipationMessage.fromJson(json);
         expect(message.type, 'ParticipationMessage');
         expect(message.username, isNull);
-      ***REMOVED***);
+      });
 
       test('fromJson expects joins', () async {
         var json = {
@@ -79,11 +79,11 @@ void main() {
           'obtained_from_server': false,
           'timestamp': '2020-12-12 23:58:00.000',
           'username': 'Karl Marx',
-        ***REMOVED***
+        };
         expect(() => ParticipationMessage.fromJson(json),
             throwsA((e) => e is TypeError));
-      ***REMOVED***);
-    ***REMOVED***);
+      });
+    });
     group('isMessageEqual', () {
       test('idntifies equal values', () {
         var user1 = ParticipationMessage(
@@ -92,7 +92,7 @@ void main() {
             DateTime(2020, 1, 11, 04, 18), 'Karl Marx', true);
 
         expect(user1.isMessageEqual(user2), isTrue);
-      ***REMOVED***);
+      });
 
       test('ignores different obtained_from_server values', () {
         var user1 = ParticipationMessage(
@@ -101,7 +101,7 @@ void main() {
             DateTime(2020, 1, 11, 04, 18), 'Karl Marx', true);
 
         expect(user1.isMessageEqual(user2), isTrue);
-      ***REMOVED***);
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+      });
+    });
+  });
+}

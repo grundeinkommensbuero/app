@@ -24,7 +24,7 @@ import 'package:sammel_app/shared/showUsernameDialog.dart';
 
 import 'LocationDialog.dart';
 
-enum ValidationState { not_validated, error, ok, pressed, unpressed ***REMOVED***
+enum ValidationState { not_validated, error, ok, pressed, unpressed }
 
 class ActionData {
   TimeOfDay? von;
@@ -48,7 +48,7 @@ class ActionData {
       this.kontakt,
       this.coordinates]) {
     this.tage = tage ?? [];
-  ***REMOVED***
+  }
 
   Map<String, ValidationState> validated = {
     'von': ValidationState.not_validated,
@@ -61,20 +61,20 @@ class ActionData {
     'kontakt': ValidationState.not_validated,
     'beschreibung': ValidationState.not_validated,
     'finish_pressed': ValidationState.unpressed,
-  ***REMOVED***
-***REMOVED***
+  };
+}
 
 // ignore: must_be_immutable
 class ActionEditor extends StatefulWidget {
   final Termin? initAction;
   late Function onFinish;
 
-  ActionEditor({this.initAction, required this.onFinish, Key? key***REMOVED***)
+  ActionEditor({this.initAction, required this.onFinish, Key? key})
       : super(key: key);
 
   @override
   ActionEditorState createState() => ActionEditorState(this.initAction);
-***REMOVED***
+}
 
 class ActionEditorState extends State<ActionEditor>
     with AfterLayoutMixin<ActionEditor> {
@@ -83,7 +83,7 @@ class ActionEditorState extends State<ActionEditor>
   ActionEditorState(Termin? initAction) : super() {
     if (initAction != null) assignInitialAction(initAction);
     validateAllInput();
-  ***REMOVED***
+  }
 
   void assignInitialAction(Termin initAction) {
     action.ort = initAction.ort;
@@ -95,7 +95,7 @@ class ActionEditorState extends State<ActionEditor>
     action.beschreibung = initAction.details?.beschreibung;
     action.kontakt = initAction.details?.kontakt;
     action.coordinates = LatLng(initAction.latitude, initAction.longitude);
-  ***REMOVED***
+  }
 
   get isNewAction => widget.initAction == null;
 
@@ -107,8 +107,8 @@ class ActionEditorState extends State<ActionEditor>
           .then((stored) {
         setState(() => action.kontakt = stored);
         validateContact();
-      ***REMOVED***);
-  ***REMOVED***
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -221,14 +221,14 @@ class ActionEditorState extends State<ActionEditor>
                 onPressed: () {
                   resetAction();
                   Navigator.maybePop(context);
-                ***REMOVED***),
+                }),
             ElevatedButton(
                 key: Key('action editor finish button'),
                 child: Text('Fertig').tr(),
                 onPressed: () => finishPressed())
           ]),
         ));
-  ***REMOVED***
+  }
 
   static Widget motivationText() =>
       Column(key: Key('motivation text'), children: [
@@ -243,7 +243,7 @@ class ActionEditorState extends State<ActionEditor>
         ).tr()
       ]);
 
-  void locationSelection({LatLng? initPosition***REMOVED***) async {
+  void locationSelection({LatLng? initPosition}) async {
     Location? ergebnis = await showLocationDialog(
         context: context,
         initDescription: action.treffpunkt,
@@ -252,7 +252,7 @@ class ActionEditorState extends State<ActionEditor>
         center: determineMapCenter(action));
 
     setNewLocation(ergebnis);
-  ***REMOVED***
+  }
 
   void setNewLocation(Location? ergebnis) {
     setState(() {
@@ -260,8 +260,8 @@ class ActionEditorState extends State<ActionEditor>
       action.coordinates = ergebnis?.coordinates;
       action.ort = ergebnis?.kiez;
       validateAllInput();
-    ***REMOVED***);
-  ***REMOVED***
+    });
+  }
 
   static LatLng? determineMapCenter(ActionData action) {
     // at old coordinates
@@ -271,7 +271,7 @@ class ActionEditorState extends State<ActionEditor>
     else
       return LatLng(
           action.coordinates!.latitude, action.coordinates!.longitude);
-  ***REMOVED***
+  }
 
   void contactSelection() async {
     var ergebnis = await showTextInputDialog(
@@ -284,8 +284,8 @@ class ActionEditorState extends State<ActionEditor>
     setState(() {
       this.action.kontakt = ergebnis;
       validateAllInput();
-    ***REMOVED***);
-  ***REMOVED***
+    });
+  }
 
   Future<String?> showTextInputDialog(
       String? initialValue, String title, String? description, Key key) {
@@ -302,7 +302,7 @@ class ActionEditorState extends State<ActionEditor>
       ),
       onChanged: (newValue) {
         currentValue = newValue;
-      ***REMOVED***,
+      },
     );
 
     return showDialog(
@@ -323,7 +323,7 @@ class ActionEditorState extends State<ActionEditor>
             child: Text("Abbrechen").tr(),
             onPressed: () {
               Navigator.pop(context, initialValue);
-            ***REMOVED***,
+            },
           ),
           TextButton(
             key: Key('action editor text input accept button'),
@@ -333,7 +333,7 @@ class ActionEditorState extends State<ActionEditor>
         ],
       ),
     );
-  ***REMOVED***
+  }
 
   typeSelection() async {
     String? ausgewTyp = action.typ;
@@ -354,20 +354,20 @@ class ActionEditorState extends State<ActionEditor>
                           onChanged: (String? newValue) {
                             setDialogState(() {
                               ausgewTyp = newValue ?? 'Sammeln';
-                            ***REMOVED***);
-                          ***REMOVED***,
+                            });
+                          },
                         )))
                     ..add(ElevatedButton(
                         child: Text('Fertig').tr(),
                         onPressed: () => Navigator.pop(context))));
-            ***REMOVED***));
+            }));
 
     if (ausgewTyp != null)
       setState(() {
         this.action.typ = ausgewTyp!;
         validateAllInput();
-      ***REMOVED***);
-  ***REMOVED***
+      });
+  }
 
   daysSelection() async {
     var selectedDates = await showMultipleDatePicker(
@@ -382,8 +382,8 @@ class ActionEditorState extends State<ActionEditor>
         this.action.tage = selectedDates
           ..sort((dt1, dt2) => dt1.compareTo(dt2));
       validateAllInput();
-    ***REMOVED***);
-  ***REMOVED***
+    });
+  }
 
   timeSelection() async {
     TimeRange timeRange =
@@ -392,8 +392,8 @@ class ActionEditorState extends State<ActionEditor>
       this.action.von = timeRange.from;
       this.action.bis = timeRange.to;
       validateAllInput();
-    ***REMOVED***);
-  ***REMOVED***
+    });
+  }
 
   void descriptionSelection() async {
     var ergebnis = await showTextInputDialog(
@@ -406,8 +406,8 @@ class ActionEditorState extends State<ActionEditor>
     setState(() {
       this.action.beschreibung = ergebnis;
       validateAllInput();
-    ***REMOVED***);
-  ***REMOVED***
+    });
+  }
 
   Widget daysButtonCaption() {
     Text text;
@@ -416,7 +416,7 @@ class ActionEditorState extends State<ActionEditor>
       text = Text("Wähle einen Tag",
               style: TextStyle(color: CampaignTheme.secondary))
           .tr();
-    ***REMOVED*** else {
+    } else {
       text = Text('am '.tr() +
           this
               .action
@@ -424,9 +424,9 @@ class ActionEditorState extends State<ActionEditor>
               .map((tag) => DateFormat('dd.MM.').format(tag))
               .join(', ') +
           ',');
-    ***REMOVED***
+    }
     return buildTextRow(text, this.action.validated['tage']!);
-  ***REMOVED***
+  }
 
   Widget locationButtonCaption(ActionData termin) {
     Text text;
@@ -436,16 +436,16 @@ class ActionEditorState extends State<ActionEditor>
         'Gib einen Treffpunkt an',
         style: TextStyle(color: CampaignTheme.secondary),
       ).tr();
-    ***REMOVED*** else {
+    } else {
       text =
-          Text('{kiez***REMOVED*** in {bezirk***REMOVED***\n Treffpunkt: {treffpunkt***REMOVED***').tr(namedArgs: {
+          Text('{kiez} in {bezirk}\n Treffpunkt: {treffpunkt}').tr(namedArgs: {
         'kiez': termin.ort!.name,
         'bezirk': termin.ort!.ortsteil,
         'treffpunkt': termin.treffpunkt!,
-      ***REMOVED***);
-    ***REMOVED***
+      });
+    }
     return buildTextRow(text, this.action.validated['venue']!);
-  ***REMOVED***
+  }
 
   Widget contactButtonCaption(ActionData termin) {
     Text text;
@@ -453,39 +453,39 @@ class ActionEditorState extends State<ActionEditor>
     if (this.action.validated['kontakt'] == ValidationState.ok) {
       text = Text(termin.kontakt!);
       val = ValidationState.ok;
-    ***REMOVED*** else {
+    } else {
       text = Text('Ein paar Worte über dich',
               style: TextStyle(color: CampaignTheme.secondary))
           .tr();
       val = ValidationState.error;
-    ***REMOVED***
+    }
     return buildTextRow(text, val);
-  ***REMOVED***
+  }
 
   Widget descriptionButtonCaption(ActionData termin) {
     Text text;
     if (this.action.validated['beschreibung'] == ValidationState.ok) {
-      text = Text('Beschreibung: {beschreibung***REMOVED***')
-          .tr(namedArgs: {'beschreibung': termin.beschreibung!***REMOVED***);
-    ***REMOVED*** else {
+      text = Text('Beschreibung: {beschreibung}')
+          .tr(namedArgs: {'beschreibung': termin.beschreibung!});
+    } else {
       text = Text('Beschreibe die Aktion kurz',
               style: TextStyle(color: CampaignTheme.secondary))
           .tr();
-    ***REMOVED***
+    }
     return buildTextRow(text, this.action.validated['beschreibung']!);
-  ***REMOVED***
+  }
 
   Widget typeButtonCaption() {
     Text text;
     if (this.action.validated['typ'] == ValidationState.ok) {
       text = Text(this.action.typ).tr();
-    ***REMOVED*** else {
+    } else {
       text = Text('Wähle die Art der Aktion',
               style: TextStyle(color: CampaignTheme.secondary))
           .tr();
-    ***REMOVED***
+    }
     return buildTextRow(text, this.action.validated['typ']!);
-  ***REMOVED***
+  }
 
   Row timeButtonCaption(ActionData termin) {
     String beschriftung = '';
@@ -500,14 +500,14 @@ class ActionEditorState extends State<ActionEditor>
       text = Text('Wähle eine Uhrzeit',
               style: TextStyle(color: CampaignTheme.secondary))
           .tr();
-    ***REMOVED*** else {
+    } else {
       val = ValidationState.ok;
       text = Text(beschriftung);
-    ***REMOVED***
+    }
     //beschriftung += ',';
 
     return buildTextRow(text, val);
-  ***REMOVED***
+  }
 
   void validateAllInput() {
     // Skip validation for datetime, if type is "Listen ausgelegt"
@@ -515,11 +515,11 @@ class ActionEditorState extends State<ActionEditor>
       this.action.validated['von'] = ValidationState.ok;
       this.action.validated['bis'] = ValidationState.ok;
       this.action.validated['tage'] = ValidationState.ok;
-    ***REMOVED*** else {
+    } else {
       validateAgainstNull(action.von, 'von');
       validateAgainstNull(action.bis, 'bis');
       validateDays();
-    ***REMOVED***
+    }
 
     validateAgainstNull(action.ort, 'ort');
     validateTyp();
@@ -533,54 +533,54 @@ class ActionEditorState extends State<ActionEditor>
           value == ValidationState.not_validated) {
         action.validated['all'] = ValidationState.error;
         break;
-      ***REMOVED***
-    ***REMOVED***
-  ***REMOVED***
+      }
+    }
+  }
 
   void validateAgainstNull(field, name) {
     if (field != null) {
       this.action.validated[name] = ValidationState.ok;
-    ***REMOVED*** else {
+    } else {
       this.action.validated[name] = ValidationState.error;
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   void validateContact() {
     if (this.action.kontakt == null) {
       this.action.validated['kontakt'] = ValidationState.error;
-    ***REMOVED*** else {
+    } else {
       this.action.validated['kontakt'] = this.action.kontakt == ''
           ? ValidationState.error
           : ValidationState.ok;
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   void validateDescription() {
     if (this.action.beschreibung == null) {
       this.action.validated['beschreibung'] = ValidationState.error;
-    ***REMOVED*** else {
+    } else {
       this.action.validated['beschreibung'] = this.action.beschreibung == ''
           ? ValidationState.error
           : ValidationState.ok;
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   void validateVenue() {
     if ((action.treffpunkt?.isEmpty ?? true) ||
         action.coordinates?.latitude == null ||
         action.coordinates?.longitude == null) {
       this.action.validated['venue'] = ValidationState.error;
-    ***REMOVED*** else
+    } else
       this.action.validated['venue'] = ValidationState.ok;
-  ***REMOVED***
+  }
 
   void validateDays() {
     validateAgainstNull(this.action.tage, 'tage');
 
     if (this.action.tage.isEmpty) {
       this.action.validated['tage'] = ValidationState.error;
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   void validateTyp() {
     validateAgainstNull(this.action.typ, 'typ');
@@ -588,8 +588,8 @@ class ActionEditorState extends State<ActionEditor>
     if (this.action.validated['typ'] == ValidationState.ok) {
       this.action.validated['typ'] =
           this.action.typ == '' ? ValidationState.error : ValidationState.ok;
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   Future<bool> showMultipleActionsQuestion(int anzahl) async =>
       await showDialog(
@@ -599,7 +599,7 @@ class ActionEditorState extends State<ActionEditor>
                 title: Text('Mehrere Aktionen erstellen?'.tr()),
                 content: SelectableText(
                     'Du hast $anzahl Tage ausgewählt. Soll für jeden eine Aktion erstellt werden?'
-                        .tr(namedArgs: {'anzahl': anzahl.toString()***REMOVED***)),
+                        .tr(namedArgs: {'anzahl': anzahl.toString()})),
                 actions: <Widget>[
                   ElevatedButton(
                     child: Text('Zurück').tr(),
@@ -634,7 +634,7 @@ class ActionEditorState extends State<ActionEditor>
             [],
             TerminDetails(
                 action.treffpunkt!, action.beschreibung!, action.kontakt!)));
-      ***REMOVED*** else {
+      } else {
         for (final tag in this.action.tage) {
           DateTime begin = new DateTime(tag.year, tag.month, tag.day,
               this.action.von!.hour, this.action.von!.minute);
@@ -643,7 +643,7 @@ class ActionEditorState extends State<ActionEditor>
           if (ChronoHelfer.isTimeOfDayBefore(
               this.action.bis!, this.action.von!)) {
             end = end.add(Duration(days: 1));
-          ***REMOVED***
+          }
 
           termine.add(Termin(
               widget.initAction?.id,
@@ -656,19 +656,19 @@ class ActionEditorState extends State<ActionEditor>
               [me],
               TerminDetails(
                   action.treffpunkt!, action.beschreibung!, action.kontakt!)));
-        ***REMOVED***
-      ***REMOVED***
+        }
+      }
       return termine;
-    ***REMOVED*** else {
+    } else {
       return null;
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   finishPressed() async {
     setState(() {
       action.validated['finish_pressed'] = ValidationState.pressed;
       validateAllInput();
-    ***REMOVED***);
+    });
     if (action.validated['all'] == ValidationState.ok) {
       var name = (await Provider.of<AbstractUserService>(context, listen: false)
               .user
@@ -677,11 +677,11 @@ class ActionEditorState extends State<ActionEditor>
       if (isBlank(name)) {
         var name = await showUsernameDialog(context: context);
         if (name == null) return;
-      ***REMOVED***
+      }
       if (action.tage.length > 1) {
         final resume = await showMultipleActionsQuestion(action.tage.length);
         if (!resume) return;
-      ***REMOVED***
+      }
       List<Termin>? termine = await generateActions();
       if (termine != null) {
         widget.onFinish(termine);
@@ -691,15 +691,15 @@ class ActionEditorState extends State<ActionEditor>
           Navigator.maybePop(context);
         Provider.of<StorageService>(context, listen: false)
             .saveContact(action.kontakt!);
-      ***REMOVED***
-    ***REMOVED***
-  ***REMOVED***
+      }
+    }
+  }
 
   void resetAction() {
     final contact = action.kontakt;
     setState(() => action = ActionData()..kontakt = contact);
     validateContact();
-  ***REMOVED***
+  }
 
   setPosition(LatLng position) async =>
       setNewLocation(await getDescriptionAndKiezToPoint(position));
@@ -710,32 +710,32 @@ class ActionEditorState extends State<ActionEditor>
         .catchError((e, s) {
       ErrorService.handleError(e, s);
       return GeoData('', '', '');
-    ***REMOVED***);
+    });
 
     Kiez? kiez = await Provider.of<StammdatenService>(context, listen: false)
         .getKiezAtLocation(point);
 
     return Location(geodata.description, point, kiez);
-  ***REMOVED***
+  }
 
   Row buildTextRow(Text text, ValidationState valState) {
     List<Widget> w = [Flexible(child: text)];
     if (action.validated['finish_pressed'] == ValidationState.pressed) {
       if (valState == ValidationState.ok) {
         w.add(Icon(Icons.done, color: Colors.black));
-      ***REMOVED*** else {
+      } else {
         w.add(Icon(Icons.error_outline));
-      ***REMOVED***
-    ***REMOVED***
+      }
+    }
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: w);
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 class InputButton extends StatelessWidget {
   final Function() onTap;
   final Widget child;
 
-  InputButton({required this.onTap, required this.child, key***REMOVED***)
+  InputButton({required this.onTap, required this.child, key})
       : super(key: key);
 
   @override
@@ -749,5 +749,5 @@ class InputButton extends StatelessWidget {
               Expanded(child: child),
             ])),
         onTap: onTap);
-  ***REMOVED***
-***REMOVED***
+  }
+}

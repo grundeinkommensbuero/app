@@ -38,7 +38,7 @@ class PlakateDaoTest {
 
         verify(entityManager, times(1)).persist(plakat)
         verify(entityManager, times(1)).flush()
-    ***REMOVED***
+    }
 
     @Test
     fun ladePlakatLiefertNullBeiIllegalArgumentException() {
@@ -48,7 +48,7 @@ class PlakateDaoTest {
 
         verify(entityManager, times(1)).find(Plakat::class.java, -3L)
         assertNull(plakat)
-    ***REMOVED***
+    }
 
     @Test
     fun ladePlakatLiefertGefundenesPlakat() {
@@ -59,7 +59,7 @@ class PlakateDaoTest {
 
         verify(entityManager, times(1)).find(Plakat::class.java, 1L)
         assertEquals(plakat, ergebnis)
-    ***REMOVED***
+    }
 
     @Test
     fun loeschePlakatLoeschtPlakat() {
@@ -67,7 +67,7 @@ class PlakateDaoTest {
         plakateDao.loeschePlakat(plakat)
 
         verify(entityManager, times(1)).remove(plakat)
-    ***REMOVED***
+    }
 
     @Test
     fun ladeAllePlakateErzeugtQuery() {
@@ -78,5 +78,5 @@ class PlakateDaoTest {
         val ergebnis = plakateDao.ladeAllePlakate()
 
         assertEquals(plakate, ergebnis)
-    ***REMOVED***
-***REMOVED***
+    }
+}

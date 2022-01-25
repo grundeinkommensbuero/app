@@ -31,7 +31,7 @@ class StorageService {
 
   StorageService() {
     _prefs = SharedPreferences.getInstance();
-  ***REMOVED***
+  }
 
   Future<bool> saveActionToken(int id, String token) => prefs
       .then((prefs) => prefs.setString('$_ACTION:$id', token))
@@ -42,10 +42,10 @@ class StorageService {
       .whenComplete(() => unmarkActionIdAsStored(id));
 
   Future<String?> loadActionToken(int id) =>
-      prefs.then((prefs) => prefs.getString('$_ACTION:${id.toString()***REMOVED***'));
+      prefs.then((prefs) => prefs.getString('$_ACTION:${id.toString()}'));
 
   Future<bool> saveChatChannel(ChatChannel channel) => prefs.then((prefs) =>
-      prefs.setString('$_CHANNEL:${channel.id***REMOVED***', jsonEncode(channel.toJson())));
+      prefs.setString('$_CHANNEL:${channel.id}', jsonEncode(channel.toJson())));
 
   FutureOr<ChatChannel?> loadChatChannel(String id) async {
     try {
@@ -53,11 +53,11 @@ class StorageService {
         var json = prefs.getString('$_CHANNEL:$id');
         if (json == null) return null;
         return ChatChannel.fromJSON(jsonDecode(json));
-      ***REMOVED***);
-    ***REMOVED*** catch (e) {
+      });
+    } catch (e) {
       ErrorService.handleError(e, StackTrace.current);
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   markActionIdAsStored(int id) => prefs.then((prefs) => _getActionList().then(
       (list) => prefs.setStringList(_ACTIONLIST, list..add(id.toString()))));
@@ -74,24 +74,24 @@ class StorageService {
         if (stringList == null) return [];
         List<int> intList = stringList.map((id) => int.parse(id)).toList();
         return intList;
-      ***REMOVED***);
+      });
 
   Future<List<int>> loadAllStoredEvaluations() => prefs.then((prefs) async {
         List<String>? stringList = prefs.getStringList(_EVALUATIONLIST);
         if (stringList == null) return [];
         List<int> intList = stringList.map((id) => int.parse(id)).toList();
         return intList;
-      ***REMOVED***);
+      });
 
   Future<List<String>> _getActionList() => _prefs.then((prefs) async {
         var list = prefs.getStringList(_ACTIONLIST);
         return list != null ? list : [];
-      ***REMOVED***);
+      });
 
   Future<List<String>> _getEvaluationList() => _prefs.then((prefs) async {
         var list = prefs.getStringList(_EVALUATIONLIST);
         return list != null ? list : [];
-      ***REMOVED***);
+      });
 
   // Filter Properties
 
@@ -102,7 +102,7 @@ class StorageService {
         var filter = prefs.getString(_FILTER);
         if (filter == null) return TermineFilter.leererFilter();
         return TermineFilter.fromJSON(jsonDecode(filter));
-      ***REMOVED***);
+      });
 
   // User
 
@@ -113,7 +113,7 @@ class StorageService {
         var user = prefs.getString(_USER);
         if (user == null) return null;
         return User.fromJSON(jsonDecode(user));
-      ***REMOVED***);
+      });
 
   // Gibt kein null zurück, sondern wartet bis ein Secret hinterlegt wurde
   Future<String> loadSecret() async {
@@ -121,17 +121,17 @@ class StorageService {
     await Future.doWhile(() async {
       await Future.delayed(Duration(milliseconds: 500));
       return prefs.getString(_SECRET) == null;
-    ***REMOVED***);
+    });
     var secret = prefs.getString(_SECRET)!;
     return secret;
-  ***REMOVED***
+  }
 
   Future<void> saveSecret(String secret) =>
       prefs.then((prefs) => prefs.setString(_SECRET, secret));
 
   clearAllPreferences() => _prefs.then((prefs) async {
         prefs.clear();
-      ***REMOVED***);
+      });
 
   Future<void> saveCostumPushToken(String token) =>
       prefs.then((prefs) => prefs.setString(_PUSHTOKEN, token));
@@ -151,7 +151,7 @@ class StorageService {
   Future<List<String>> loadMyKiez() => _prefs.then((prefs) async {
         var list = prefs.getStringList(_MYKIEZ);
         return list != null ? list : [];
-      ***REMOVED***);
+      });
 
   Future<bool> saveNotificationInterval(String interval) =>
       prefs.then((prefs) => prefs.setString(_NOTIF_INTERVAL, interval));
@@ -173,7 +173,7 @@ class StorageService {
         return storedFAQ
             ?.map((faq) => FAQItem.fromJson(jsonDecode(faq)))
             .toList();
-      ***REMOVED***);
+      });
 
   Future<bool> saveFAQTimestamp(DateTime timestamp) => prefs
       .then((prefs) => prefs.setString(_FAQ_Timestamp, timestamp.toString()));
@@ -182,8 +182,8 @@ class StorageService {
         var timestamp = prefs.getString(_FAQ_Timestamp);
         if (timestamp == null) return null;
         return DateTime.parse(timestamp);
-      ***REMOVED***);
+      });
 
   // for Debugging only
   loadCostumPushToken() => prefs.then((prefs) => prefs.getString(_PUSHTOKEN));
-***REMOVED***
+}

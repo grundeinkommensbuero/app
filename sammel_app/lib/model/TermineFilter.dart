@@ -40,7 +40,7 @@ class TermineFilter {
         'orte': orte,
         'nurEigene': nurEigene,
         'immerEigene': immerEigene
-      ***REMOVED***
+      };
 
   get isEmpty =>
       tage.isEmpty &&
@@ -50,4 +50,4 @@ class TermineFilter {
       typen.isEmpty &&
       nurEigene != true &&
       immerEigene != false;
-***REMOVED***
+}

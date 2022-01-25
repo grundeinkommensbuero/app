@@ -52,7 +52,7 @@ class BenutzerDaoTest {
         val ergebnis = dao.getBenutzer(11L)
 
         assertSame(ergebnis, karl)
-    ***REMOVED***
+    }
 
     @Test
     fun `benutzernameExistiert gibt true zurueck, wenn mindestens ein Benutzer mit dem Namen existiert`() {
@@ -66,7 +66,7 @@ class BenutzerDaoTest {
         val ergebnis = dao.benutzernameExistiert("name")
 
         assertTrue(ergebnis)
-    ***REMOVED***
+    }
 
     @Test
     fun `benutzernameExistiert gibt false zurueck, wenn kein Benutzer mit dem Namen existiert`() {
@@ -80,7 +80,7 @@ class BenutzerDaoTest {
         val ergebnis = dao.benutzernameExistiert("name")
 
         assertFalse(ergebnis)
-    ***REMOVED***
+    }
 
     @Test
     fun `getFirebaseKeys gibt leere Liste fuer keine Benutzer zurueck`() {
@@ -95,7 +95,7 @@ class BenutzerDaoTest {
 
         verify(typedStringQuery, never()).setParameter(anyString(), any())
         assertTrue(ergebnis.isEmpty())
-    ***REMOVED***
+    }
 
     @Test
     fun `getFirebaseKeys reicht Liste von Keys weiter`() {
@@ -112,9 +112,9 @@ class BenutzerDaoTest {
         val captor = argumentCaptor<List<Long>>()
         verify(typedStringQuery, times(1)).setParameter(anyString(), captor.capture())
         val argument = captor.firstValue
-        assertTrue(argument.containsAll(benutzer.map { it.id ***REMOVED***))
+        assertTrue(argument.containsAll(benutzer.map { it.id }))
         assertTrue(ergebnis.containsAll(listOf("key1", "key2")))
-    ***REMOVED***
+    }
 
     @Test
     fun `getFirebaseKeys akzeptiert leeres Suchergebnis`() {
@@ -130,7 +130,7 @@ class BenutzerDaoTest {
 
         verify(typedStringQuery, times(1)).setParameter(anyString(), anyList<Long>())
         assertTrue(ergebnis.isEmpty())
-    ***REMOVED***
+    }
 
     @Test
     fun `getBenutzerOhneFirebase gibt leere Liste fuer keine Benutzer zurueck`() {
@@ -147,7 +147,7 @@ class BenutzerDaoTest {
 
         verify(typedStringQuery, never()).setParameter(anyString(), any())
         assertTrue(ergebnis.isEmpty())
-    ***REMOVED***
+    }
 
     @Test
     fun `getBenutzerOhneFirebase reicht Liste von Benutzern weiter`() {
@@ -166,9 +166,9 @@ class BenutzerDaoTest {
         val captor = argumentCaptor<List<Long>>()
         verify(typedBenutzerQuery, times(1)).setParameter(anyString(), captor.capture())
         val argument = captor.firstValue
-        assertTrue(argument.containsAll(benutzer.map { it.id ***REMOVED***))
+        assertTrue(argument.containsAll(benutzer.map { it.id }))
         assertTrue(ergebnis.containsAll(listOf(karl, rosa)))
-    ***REMOVED***
+    }
 
     @Test
     fun `getBenutzerOhneFirebase akzeptiert leeres Suchergebnis`() {
@@ -184,7 +184,7 @@ class BenutzerDaoTest {
 
         verify(typedStringQuery, times(1)).setParameter(anyString(), anyList<Long>())
         assertTrue(ergebnis.isEmpty())
-    ***REMOVED***
+    }
 
     @Test
     fun `legeNeueCredentialsAn reicht Credentials an Datenbank weiter`() {
@@ -193,7 +193,7 @@ class BenutzerDaoTest {
         dao.legeNeueCredentialsAn(credentials)
 
         verify(entityManager, times(1)).persist(credentials)
-    ***REMOVED***
+    }
 
     @Test
     fun `aktualisiereBenutzerName aktualisiert Benutzer-Entity und gibt sie zurueck`() {
@@ -204,7 +204,7 @@ class BenutzerDaoTest {
         dao.aktualisiereBenutzername(1L, "neuer Name")
 
         assertEquals("neuer Name", karl.name)
-    ***REMOVED***
+    }
 
     @Test
     fun `gibNutzerNamedRolle vergibt Rolle 'named' an Benutzer`() {
@@ -218,5 +218,5 @@ class BenutzerDaoTest {
         verify(typedStringQuery, times(1)).setParameter("id", 11L)
         verify(typedStringQuery, times(1)).setParameter("rolle", "named")
         verify(typedStringQuery, times(1)).executeUpdate()
-    ***REMOVED***
-***REMOVED***
+    }
+}

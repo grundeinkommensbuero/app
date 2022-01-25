@@ -18,6 +18,6 @@ class Token {
         constructor(actionId: Long, token: String) {
                 this.actionId = actionId;
                 this.token = token;
-        ***REMOVED***
+        }
 
-***REMOVED***
+}

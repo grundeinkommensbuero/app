@@ -21,44 +21,44 @@ void main() {
       var channel = ChatChannel.fromJSON({
         'id': '1',
         'messages': [participationMessage.toJson()]
-      ***REMOVED***);
+      });
 
       expect(channel.channelMessages.length, 1);
       expect(channel.channelMessages[0] is ParticipationMessage, true);
-    ***REMOVED***);
+    });
 
     test('deserializes ChatMessages', () {
       var channel = ChatChannel.fromJSON({
         'id': '1',
         'messages': [chatMessage.toJson()]
-      ***REMOVED***);
+      });
 
       expect(channel.channelMessages.length, 1);
       expect(channel.channelMessages[0] is ChatMessage, true);
-    ***REMOVED***);
+    });
 
     test('deserializes throws Error on unknown message type', () {
       expect(
           () => ChatChannel.fromJSON({
                 'id': '1',
                 'messages': [
-                  {'id': '1', 'type': 'faulty'***REMOVED***
+                  {'id': '1', 'type': 'faulty'}
                 ]
-              ***REMOVED***),
+              }),
           throwsA((e) => e is UnkownMessageTypeError));
-    ***REMOVED***);
+    });
 
     test('deserializes deserializes mixed type messages', () {
       var channel = ChatChannel.fromJSON({
         'id': '1',
         'messages': [chatMessage.toJson(), participationMessage.toJson()]
-      ***REMOVED***);
+      });
 
       expect(channel.channelMessages.length, 2);
       expect(channel.channelMessages[0] is ChatMessage, true);
       expect(channel.channelMessages[1] is ParticipationMessage, true);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('push messages', () {
     ChatChannel channel = ChatChannel('my channel');
@@ -76,16 +76,16 @@ void main() {
       channel.pushMessages([laterMessage]);
       expect(channel.channelMessages, [laterMessage]);
       expect(laterMessage.obtainedFromServer, false);
-    ***REMOVED***);
+    });
 
     test('pushes second message and sorts it properly', () {
       channel.pushMessages([earlierMessage]);
       expect(channel.channelMessages, [earlierMessage, laterMessage]);
-    ***REMOVED***);
+    });
 
     test('does not push message again', () {
       channel.pushMessages([laterMessage]);
       expect(channel.channelMessages, [earlierMessage, laterMessage]);
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+    });
+  });
+}

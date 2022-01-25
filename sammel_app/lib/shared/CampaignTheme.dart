@@ -57,24 +57,24 @@ class CampaignTheme {
     if (participant) return secondary;
 
     return primary;
-  ***REMOVED***
+  }
 
   static Color actionColorText(bool owner, bool participant) {
     if (owner || participant) return primary;
 
     return Colors.black54;
-  ***REMOVED***
+  }
 
   static Color actionColorHeading(bool owner, bool participant) {
     if (owner || participant) return CampaignTheme.primary;
 
     return secondary;
-  ***REMOVED***
+  }
 
   static Color placardColor(bool owner) {
     if (owner) return altSecondaryLight;
     return Colors.transparent;
-  ***REMOVED***
+  }
 
   static final BoxDecoration background = BoxDecoration(
       image: DecorationImage(
@@ -87,4 +87,4 @@ class CampaignTheme {
 
   static String actionUrl(int? id) =>
       'www.expedition-grundeinkommen.de/die-sammel-app?aktion=$id';
-***REMOVED***
+}

@@ -32,23 +32,23 @@ open class Firebase {
                         .setDatabaseUrl("https://sammel-app.firebaseio.com")
                         .build()
                 )
-                LOG.debug("Firebase wurde initialisiert für ${FirebaseApp.DEFAULT_APP_NAME***REMOVED***")
-            ***REMOVED*** catch (e: IOException) {
-                LOG.warn("Firebase konnte nicht initialisiert werden: ${e.message***REMOVED***. Möglicherweise liegen die API-Keys nicht vor")
-            ***REMOVED***
-    ***REMOVED***
+                LOG.debug("Firebase wurde initialisiert für ${FirebaseApp.DEFAULT_APP_NAME}")
+            } catch (e: IOException) {
+                LOG.warn("Firebase konnte nicht initialisiert werden: ${e.message}. Möglicherweise liegen die API-Keys nicht vor")
+            }
+    }
 
     open fun send(message: Message): String {
         if (FirebaseApp.getApps().isNotEmpty())
             return FirebaseMessaging.getInstance().send(message)
         LOG.warn("Nachricht konnte nicht an Firebase versendet werden, weil Firebase nicht initialisiert wurde")
         return ""
-    ***REMOVED***
+    }
 
     open fun sendMulticast(message: MulticastMessage?): BatchResponse? {
         if (FirebaseApp.getApps().isNotEmpty())
             return FirebaseMessaging.getInstance().sendMulticast(message)
         LOG.warn("Nachricht konnte nicht an Firebase versendet werden, weil Firebase nicht initialisiert wurde")
         return null
-    ***REMOVED***
-***REMOVED***
+    }
+}

@@ -17,14 +17,14 @@ abstract class PushReceiveService {
       {Function(RemoteMessage)? onMessage,
       Function(RemoteMessage)? onResume,
       Function(RemoteMessage)? onLaunch,
-      Function(RemoteMessage)? onBackgroundMessage***REMOVED***);
+      Function(RemoteMessage)? onBackgroundMessage});
 
   void subscribeToTopics(List<String> topics);
 
   void unsubscribeFromTopics(List<String> topic);
 
   abstract Future<String?> token;
-***REMOVED***
+}
 
 class FirebaseReceiveService implements PushReceiveService {
   static FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
@@ -42,9 +42,9 @@ class FirebaseReceiveService implements PushReceiveService {
     else if (pullMode) {
       // DEBUG
       _tokenStreamController.add(null);
-    ***REMOVED*** else
+    } else
       initializeFirebase();
-  ***REMOVED***
+  }
 
   initializeFirebase() async {
     await Firebase.initializeApp();
@@ -57,15 +57,15 @@ class FirebaseReceiveService implements PushReceiveService {
     firebaseMessaging.requestPermission();
 
     if (await token != null) {
-      var topicEnc = Uri.encodeComponent('${topicPrefix***REMOVED***global');
+      var topicEnc = Uri.encodeComponent('${topicPrefix}global');
       firebaseMessaging.subscribeToTopic(topicEnc);
-    ***REMOVED***
+    }
 
-    print('Firebase initialisiert mit Token: ${await token***REMOVED***');
-  ***REMOVED***
+    print('Firebase initialisiert mit Token: ${await token}');
+  }
 
   @override
-  void subscribe({onMessage, onResume, onLaunch, onBackgroundMessage***REMOVED***) {
+  void subscribe({onMessage, onResume, onLaunch, onBackgroundMessage}) {
     if (Platform.isIOS) onBackgroundMessage = null;
     if (onMessage != null)
       FirebaseMessaging.onMessage.listen((message) => onMessage(message));
@@ -77,39 +77,39 @@ class FirebaseReceiveService implements PushReceiveService {
     if (onBackgroundMessage != null)
       FirebaseMessaging.onBackgroundMessage(
           (message) => onBackgroundMessage!(message));
-  ***REMOVED***
+  }
 
   @override
   void subscribeToTopics(List<String> topics) {
     for (String topic in topics) {
       var topicEnc = Uri.encodeComponent('$topicPrefix$topic');
       firebaseMessaging.subscribeToTopic(topicEnc);
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   @override
   void unsubscribeFromTopics(List<String> topics) {
     for (String topic in topics) {
       var topicEnc = Uri.encodeComponent('$topicPrefix$topic');
       firebaseMessaging.unsubscribeFromTopic(topicEnc);
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***
+    }
+  }
+}
 
 class PullService extends BackendService implements PushReceiveService {
   late Timer timer;
-  Function(RemoteMessage) onMessage = (_) => Future.value({***REMOVED***);
+  Function(RemoteMessage) onMessage = (_) => Future.value({});
 
   PullService(AbstractUserService userService, Backend backend)
       : super(userService, backend) {
     timer = Timer.periodic(Duration(seconds: 10), (_) => pull());
-  ***REMOVED***
+  }
 
   @override
-  void subscribe({onMessage, onResume, onLaunch, onBackgroundMessage***REMOVED***) {
+  void subscribe({onMessage, onResume, onLaunch, onBackgroundMessage}) {
     // ignore onResume, onLaunch and onBackgroundMessage, since they are not happening in Pull Mode
     if (onMessage != null) this.onMessage = onMessage;
-  ***REMOVED***
+  }
 
   Future<void> pull() async {
     try {
@@ -121,36 +121,36 @@ class PullService extends BackendService implements PushReceiveService {
                   body: json['notification']?['body']),
               data: json['data']));
       messages.forEach((message) => onMessage(message));
-    ***REMOVED*** catch (e, s) {
+    } catch (e, s) {
       ErrorService.handleError(e, s,
           context:
               'Beim Abrufen von Nachrichten ist ein Fehler aufgetreten. Das regelmäßige Abrufen von Nachrichten wird deshalb deaktiviert');
       timer.cancel();
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   @override
   void subscribeToTopics(List<String> topics) {
     try {
       post('service/push/pull/subscribe', jsonEncode(topics));
-    ***REMOVED*** catch (e, s) {
+    } catch (e, s) {
       ErrorService.handleError(e, s,
-          context: 'Fehler beim Anmelden der Benachrichtigungen zu {topics***REMOVED***'
-              .tr(namedArgs: {'topics': topics.toString()***REMOVED***));
-    ***REMOVED***
-  ***REMOVED***
+          context: 'Fehler beim Anmelden der Benachrichtigungen zu {topics}'
+              .tr(namedArgs: {'topics': topics.toString()}));
+    }
+  }
 
   @override
   void unsubscribeFromTopics(List<String> topics) {
     try {
       post('service/push/pull/subscribe', jsonEncode(topics));
-    ***REMOVED*** catch (e, s) {
+    } catch (e, s) {
       ErrorService.handleError(e, s,
-          context: 'Fehler beim Abmelden der Benachrichtigungen zu {topics***REMOVED***'
-              .tr(namedArgs: {'topics': topics.toString()***REMOVED***));
-    ***REMOVED***
-  ***REMOVED***
+          context: 'Fehler beim Abmelden der Benachrichtigungen zu {topics}'
+              .tr(namedArgs: {'topics': topics.toString()}));
+    }
+  }
 
   @override
   Future<String?> token = Future.value('Pull-Modus');
-***REMOVED***
+}

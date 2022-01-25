@@ -25,6 +25,6 @@ main() {
       verify(plugin.show(message.channel.hashCode, 'Nachricht von Tester',
           'hello', any,
           payload: jsonEncode(message.toJson())));
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+    });
+  });
+}

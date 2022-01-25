@@ -19,11 +19,11 @@ import 'package:sammel_app/shared/showTimeRangePicker.dart';
 class FilterWidget extends StatefulWidget {
   final Future Function(TermineFilter) onApply;
 
-  FilterWidget(this.onApply, {Key? key***REMOVED***) : super(key: key);
+  FilterWidget(this.onApply, {Key? key}) : super(key: key);
 
   @override
   FilterWidgetState createState() => FilterWidgetState();
-***REMOVED***
+}
 
 class FilterWidgetState extends State<FilterWidget>
     with TickerProviderStateMixin {
@@ -38,7 +38,7 @@ class FilterWidgetState extends State<FilterWidget>
   var loading = true;
 
   StorageService? storageService;
-  Set<Kiez> allLocations = {***REMOVED***
+  Set<Kiez> allLocations = {};
 
   @override
   Widget build(BuildContext context) {
@@ -117,11 +117,11 @@ class FilterWidgetState extends State<FilterWidget>
                     expanded = false;
                     onApply();
                     storageService?.saveFilter(filter);
-                  ***REMOVED*** else {
+                  } else {
                     setState(() => buttonText = 'Anwenden'.tr());
                     expanded = true;
-                  ***REMOVED***
-                ***REMOVED***,
+                  }
+                },
               )),
         ],
       ),
@@ -135,7 +135,7 @@ class FilterWidgetState extends State<FilterWidget>
                   .tr())
           : SizedBox()
     ]);
-  ***REMOVED***
+  }
 
   // Kann nicht im Konstruktor ausgeführt werden, weil der Provider den context braucht, der ins build reingereicht wird
   void initialize(BuildContext context) {
@@ -143,35 +143,35 @@ class FilterWidgetState extends State<FilterWidget>
     storageService!.loadFilter().then((filter) {
       setState(() {
         this.filter = filter != null ? filter : TermineFilter.leererFilter();
-      ***REMOVED***);
+      });
       onApply();
-    ***REMOVED***);
+    });
     Provider.of<StammdatenService>(context)
         .kieze
         .then((locations) => setState(() => allLocations = locations));
     _initialized = true;
-  ***REMOVED***
+  }
 
   Text tageButtonBeschriftung() {
     if (filter.tage.isEmpty) {
       return Text('alle Tage,').tr();
-    ***REMOVED*** else {
-      return Text('am {tage***REMOVED***,').tr(namedArgs: {
+    } else {
+      return Text('am {tage},').tr(namedArgs: {
         'tage': filter.tage
             .map((tag) => DateFormat("dd.MM.").format(tag))
             .join(", ")
-      ***REMOVED***);
-    ***REMOVED***
-  ***REMOVED***
+      });
+    }
+  }
 
   String artButtonBeschriftung() {
     return filter.typen.isNotEmpty
         ? (filter.typen.join(', ') +
-            ((filter.nurEigene == true) ? ', (${'eigene'.tr()***REMOVED***)' : ','))
+            ((filter.nurEigene == true) ? ', (${'eigene'.tr()})' : ','))
         : (filter.nurEigene == true)
             ? 'Eigene Aktionen'.tr() + ','
             : 'Alle Aktions-Arten,'.tr();
-  ***REMOVED***
+  }
 
   static String uhrzeitButtonBeschriftung(TermineFilter filter) {
     String beschriftung = '';
@@ -182,22 +182,22 @@ class FilterWidgetState extends State<FilterWidget>
     if (beschriftung.isEmpty) beschriftung = 'jederzeit'.tr();
     beschriftung += ',';
     return beschriftung;
-  ***REMOVED***
+  }
 
   String ortButtonBeschriftung(TermineFilter filter) {
     const maxLength = 500;
     return (filter.orte.isEmpty)
         ? 'überall'.tr()
         : filter.orte.map((ort) => ort).toList().join(", ").length < maxLength
-            ? 'in ${filter.orte.map((ort) => ort).toList().join(", ")***REMOVED***'
-            : 'in ${filter.orte.length***REMOVED*** Kiezen';
-  ***REMOVED***
+            ? 'in ${filter.orte.map((ort) => ort).toList().join(", ")}'
+            : 'in ${filter.orte.length} Kiezen';
+  }
 
   Future<void> onApply() async {
     setState(() => loading = true);
     await widget.onApply(filter);
     setState(() => loading = false);
-  ***REMOVED***
+  }
 
   typeSelection() async {
     List<String> ausgewTypen = []..addAll(filter.typen);
@@ -225,8 +225,8 @@ class FilterWidgetState extends State<FilterWidget>
                       onChanged: (neuerWert) {
                         setDialogState(() {
                           nurEigene = neuerWert;
-                        ***REMOVED***);
-                      ***REMOVED***),
+                        });
+                      }),
                       SwitchListTile(
                           activeColor: CampaignTheme.secondary,
                           inactiveThumbColor: CampaignTheme.primary,
@@ -235,8 +235,8 @@ class FilterWidgetState extends State<FilterWidget>
                           onChanged: (neuerWert) {
                             setDialogState(() {
                               immerEigene = neuerWert;
-                            ***REMOVED***);
-                          ***REMOVED***),
+                            });
+                          }),
                       Divider(
                           indent: 16, endIndent: 16, thickness: 1, height: 8),
                   Flexible(child: ListView.builder( itemCount: moeglicheTypen.length, shrinkWrap: true,
@@ -250,11 +250,11 @@ class FilterWidgetState extends State<FilterWidget>
                                 setDialogState(() {
                                   if (neuerWert == true) {
                                     ausgewTypen.add(moeglicheTypen[index]);
-                                  ***REMOVED*** else {
+                                  } else {
                                     ausgewTypen.remove(moeglicheTypen[index]);
-                                  ***REMOVED***
-                                ***REMOVED***);
-                              ***REMOVED***,
+                                  }
+                                });
+                              },
                             ))),
                         Divider(
                             indent: 16, endIndent: 16, thickness: 1, height: 8),
@@ -262,19 +262,19 @@ class FilterWidgetState extends State<FilterWidget>
                           child: Text('Fertig').tr(),
                           onPressed: () => Navigator.pop(context))
                       )])));
-            ***REMOVED***));
+            }));
 
     setState(() {
       filter.typen = ausgewTypen;
       filter.nurEigene = nurEigene;
       filter.immerEigene = immerEigene;
-    ***REMOVED***);
-  ***REMOVED***
+    });
+  }
 
   resetType() => setState(() {
         filter.typen = [];
         filter.nurEigene = false;
-      ***REMOVED***);
+      });
 
   daysSelection() async {
     var selectedDates = await showMultipleDatePicker(filter.tage, context,
@@ -282,8 +282,8 @@ class FilterWidgetState extends State<FilterWidget>
     setState(() {
       if (selectedDates != null)
         filter.tage = selectedDates..sort((dt1, dt2) => dt1.compareTo(dt2));
-    ***REMOVED***);
-  ***REMOVED***
+    });
+  }
 
   resetDays() => setState(() => filter.tage = []);
 
@@ -293,13 +293,13 @@ class FilterWidgetState extends State<FilterWidget>
     setState(() {
       filter.von = timeRange.from;
       filter.bis = timeRange.to;
-    ***REMOVED***);
-  ***REMOVED***
+    });
+  }
 
   resetTime() => setState(() {
         filter.von = null;
         filter.bis = null;
-      ***REMOVED***);
+      });
 
   locationSelection() async {
     var selectedLocations = await KiezPicker(allLocations
@@ -309,10 +309,10 @@ class FilterWidgetState extends State<FilterWidget>
 
     if (selectedLocations == null) return;
     setState(() => filter.orte = selectedLocations.map((k) => k.name).toList());
-  ***REMOVED***
+  }
 
   resetLocations() => setState(() => filter.orte = []);
-***REMOVED***
+}
 
 class FilterElement extends StatelessWidget {
   final _zeroPadding = MaterialTapTargetSize.shrinkWrap;
@@ -323,7 +323,7 @@ class FilterElement extends StatelessWidget {
   static emptyFunction() => null;
 
   FilterElement(
-      {key, required this.child, this.selectionFunction, this.resetFunction***REMOVED***)
+      {key, required this.child, this.selectionFunction, this.resetFunction})
       : super(key: key);
 
   @override
@@ -375,5 +375,5 @@ class FilterElement extends StatelessWidget {
                     )
                   ])),
             )));
-  ***REMOVED***
-***REMOVED***
+  }
+}

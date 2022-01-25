@@ -67,5 +67,5 @@ class ListLocationDaoTest {
         assertEquals(ergebnis[2].nr, zukunft().nr)
         assertEquals(ergebnis[2].laengengrad, zukunft().laengengrad)
         assertEquals(ergebnis[2].breitengrad, zukunft().breitengrad)
-    ***REMOVED***
-***REMOVED***
+    }
+}

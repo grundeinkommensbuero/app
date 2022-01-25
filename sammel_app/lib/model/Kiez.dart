@@ -16,7 +16,7 @@ class Ortsteil {
             : (json['geometry']['coordinates'][0] as List)
                 .map((e) => LatLng(e[1], e[0]))
                 .toList();
-***REMOVED***
+}
 
 class Region {
   String name;
@@ -33,7 +33,7 @@ class Region {
             : (json['geometry']['coordinates'][0] as List)
                 .map((e) => LatLng(e[1], e[0]))
                 .toList();
-***REMOVED***
+}
 
 class Kiez {
   String name;
@@ -62,4 +62,4 @@ class Kiez {
       this.region == that.region &&
       this.ortsteil == that.ortsteil &&
       DeepCollectionEquality().equals(this.polygon, that.polygon); //TODO Testen
-***REMOVED***
+}

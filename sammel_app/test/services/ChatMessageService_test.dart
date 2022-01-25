@@ -16,14 +16,14 @@ void main() {
     when(storageService.saveChatChannel(any))
         .thenAnswer((_) => Future.value(true));
     service = ChatMessageService(storageService, manager, null);
-  ***REMOVED***);
+  });
 
   group('getChannel', () {
     test('getChatChannel generates ActionChannel id', () {
       service.getActionChannel(5);
 
       verify(storageService.loadChatChannel('action:5')).called(1);
-    ***REMOVED***);
+    });
 
     test('getChannel returns channel from storage if found', () async {
       var chatChannel = ChatChannel('action:5');
@@ -32,7 +32,7 @@ void main() {
       var result = await service.getChannel('action:5');
 
       expect(result, chatChannel);
-    ***REMOVED***);
+    });
 
     test('getChannel stores channel in internal list and returns that later',
         () async {
@@ -46,7 +46,7 @@ void main() {
       var result = await service.getChannel('action:5');
 
       expect(result, chatChannel);
-    ***REMOVED***);
+    });
 
     test('getChannel creates and returns new Channel if none found', () async {
       var result = await service.getChannel('action:5');
@@ -54,6 +54,6 @@ void main() {
       expect(verify(storageService.saveChatChannel(captureAny)).captured.single,
           result);
       expect(result.id, 'action:5');
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+    });
+  });
+}

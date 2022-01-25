@@ -13,5 +13,5 @@ class MariaDbEntityManagerProducer {
     @Produces
     fun entityManager(): EntityManager {
         return entityManager
-    ***REMOVED***
-***REMOVED***
+    }
+}

@@ -19,27 +19,27 @@ open class PlakateDao {
         LOG.debug("Speichere neues Plakat in Datenbank")
         entityManager.persist(plakat)
         entityManager.flush()
-        LOG.debug("ID von neu erstelltem Plakat: ${plakat.id***REMOVED***")
+        LOG.debug("ID von neu erstelltem Plakat: ${plakat.id}")
         return plakat
-    ***REMOVED***
+    }
 
     open fun ladePlakat(id: Long): Plakat? {
         LOG.trace("Lade einzelnes Plakat $id")
         try {
             return entityManager.find(Plakat::class.java, id)
-        ***REMOVED*** catch (e: IllegalArgumentException) {
+        } catch (e: IllegalArgumentException) {
             LOG.error(e.message, e)
             return null
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
     open fun loeschePlakat(plakat: Plakat) {
-        LOG.debug("Lösche Plakat ${plakat.id***REMOVED***, in ${plakat.adresse***REMOVED***")
+        LOG.debug("Lösche Plakat ${plakat.id}, in ${plakat.adresse}")
         entityManager.remove(plakat)
-    ***REMOVED***
+    }
 
     open fun ladeAllePlakate(): List<Plakat> {
         LOG.trace("Lade alle Plakate")
         return entityManager.createQuery("from Plakat", Plakat::class.java).resultList
-    ***REMOVED***
-***REMOVED***
+    }
+}

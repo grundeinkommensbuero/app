@@ -9,7 +9,7 @@ import 'package:sammel_app/model/Evaluation.dart';
 import 'package:sammel_app/model/Termin.dart';
 import 'package:sammel_app/shared/CampaignTheme.dart';
 
-enum ValidationState { not_validated, error, ok, pressed, unpressed ***REMOVED***
+enum ValidationState { not_validated, error, ok, pressed, unpressed }
 
 const ratingOptions = {
   'sehr cool': 5,
@@ -17,7 +17,7 @@ const ratingOptions = {
   'ganz okay': 3,
   'mäßig': 2,
   'doof': 1
-***REMOVED***
+};
 
 class EvaluationData {
   int? teilnehmer;
@@ -38,22 +38,22 @@ class EvaluationData {
     'kommentar': ValidationState.ok,
     'situation': ValidationState.ok,
     'finish_pressed': ValidationState.unpressed,
-  ***REMOVED***
-***REMOVED***
+  };
+}
 
 // ignore: must_be_immutable
 class EvaluationForm extends StatefulWidget {
   Function(Evaluation) onFinish;
   final Termin action;
 
-  static emptyFunction(_) {***REMOVED***
+  static emptyFunction(_) {}
 
-  EvaluationForm(this.action, {this.onFinish = emptyFunction, Key? key***REMOVED***)
+  EvaluationForm(this.action, {this.onFinish = emptyFunction, Key? key})
       : super(key: key);
 
   @override
   EvaluationFormState createState() => EvaluationFormState(this.action);
-***REMOVED***
+}
 
 class EvaluationFormState extends State<EvaluationForm> {
   EvaluationData evaluation = EvaluationData();
@@ -62,7 +62,7 @@ class EvaluationFormState extends State<EvaluationForm> {
     evaluation.teilnehmer = action.participants?.length;
     evaluation.stunden =
         action.ende.difference(action.beginn).inHours.toDouble();
-  ***REMOVED***
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -200,14 +200,14 @@ class EvaluationFormState extends State<EvaluationForm> {
                 onPressed: () {
                   setState(() => evaluation = EvaluationData());
                   Navigator.maybePop(context);
-                ***REMOVED***),
+                }),
             ElevatedButton(
                 key: Key('evaluation editor finish button'),
                 child: Text('Fertig').tr(),
                 onPressed: () => finishPressed())
           ]),
         ));
-  ***REMOVED***
+  }
 
   static Widget motivationText() {
     return Column(key: Key('motivation text'), children: [
@@ -220,7 +220,7 @@ class EvaluationFormState extends State<EvaluationForm> {
         textScaleFactor: 1.0,
       ).tr()
     ]);
-  ***REMOVED***
+  }
 
   Future<String?> showTextInputDialog(
       String? initialValue, String title, String? description, Key key) {
@@ -245,21 +245,21 @@ class EvaluationFormState extends State<EvaluationForm> {
         SizedBox(height: 10),
         inputField
       ]));
-    ***REMOVED*** else {
+    } else {
       inputWidget = inputField;
-    ***REMOVED***
+    }
 
     Widget cancelButton = TextButton(
       child: Text("Abbrechen").tr(),
       onPressed: () {
         Navigator.pop(context, initialValue);
-      ***REMOVED***,
+      },
     );
     Widget continueButton = TextButton(
       child: Text("Fertig").tr(),
       onPressed: () {
         Navigator.pop(context, currentValue);
-      ***REMOVED***,
+      },
     );
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
@@ -277,9 +277,9 @@ class EvaluationFormState extends State<EvaluationForm> {
       context: context,
       builder: (BuildContext context) {
         return alert;
-      ***REMOVED***,
+      },
     );
-  ***REMOVED***
+  }
 
   Future<String?> showRadioInputDialog(
       String? init, String title, String? description, Key key) {
@@ -324,9 +324,9 @@ class EvaluationFormState extends State<EvaluationForm> {
                     ),
                   ],
                 );
-              ***REMOVED***,
+              },
             ));
-  ***REMOVED***
+  }
 
   void teilnehmerSelection() async {
     var ergebnis = await showIntegerInputDialog(
@@ -339,20 +339,20 @@ class EvaluationFormState extends State<EvaluationForm> {
     setState(() {
       this.evaluation.teilnehmer = ergebnis ?? this.evaluation.teilnehmer;
       validateAllInput();
-    ***REMOVED***);
-  ***REMOVED***
+    });
+  }
 
   Widget teilnehmerButtonCaption(EvaluationData evaluation) {
     Text text;
     if (this.evaluation.validated['teilnehmer'] == ValidationState.ok) {
-      text = Text('{***REMOVED*** Teilnehmer').plural(evaluation.teilnehmer ?? 0);
-    ***REMOVED*** else {
+      text = Text('{} Teilnehmer').plural(evaluation.teilnehmer ?? 0);
+    } else {
       text = Text('Wie viele Leute haben teilgenommen?',
               style: TextStyle(color: CampaignTheme.secondary))
           .tr();
-    ***REMOVED***
+    }
     return buildTextRow(text, this.evaluation.validated['teilnehmer']!);
-  ***REMOVED***
+  }
 
   void unterschriftenSelection() async {
     var ergebnis = await showIntegerInputDialog(
@@ -365,20 +365,20 @@ class EvaluationFormState extends State<EvaluationForm> {
       this.evaluation.unterschriften =
           ergebnis ?? this.evaluation.unterschriften;
       validateAllInput();
-    ***REMOVED***);
-  ***REMOVED***
+    });
+  }
 
   Widget unterschriftenButtonCaption(EvaluationData evaluation) {
     Text text;
     if (this.evaluation.validated['unterschriften'] == ValidationState.ok) {
-      text = Text('{***REMOVED*** Unterschriften').plural(evaluation.unterschriften!);
-    ***REMOVED*** else {
+      text = Text('{} Unterschriften').plural(evaluation.unterschriften!);
+    } else {
       text = Text('Wie viel hast Du gesammelt?',
               style: TextStyle(color: CampaignTheme.secondary))
           .tr();
-    ***REMOVED***
+    }
     return buildTextRow(text, this.evaluation.validated['unterschriften']!);
-  ***REMOVED***
+  }
 
   void bewertungSelection() async {
     var ergebnis = await showRadioInputDialog(
@@ -389,20 +389,20 @@ class EvaluationFormState extends State<EvaluationForm> {
     setState(() {
       this.evaluation.bewertung = ergebnis;
       validateAllInput();
-    ***REMOVED***);
-  ***REMOVED***
+    });
+  }
 
   Widget bewertungButtonCaption(EvaluationData evaluation) {
     Text text;
     if (this.evaluation.validated['bewertung'] == ValidationState.ok) {
       text = Text(evaluation.bewertung!).tr();
-    ***REMOVED*** else {
+    } else {
       text = Text('Wie fandest Du die Aktion?',
               style: TextStyle(color: CampaignTheme.secondary))
           .tr();
-    ***REMOVED***
+    }
     return buildTextRow(text, this.evaluation.validated['bewertung']!);
-  ***REMOVED***
+  }
 
   void stundenSelection() async {
     var ergebnis = await showIntegerInputDialog(
@@ -415,20 +415,20 @@ class EvaluationFormState extends State<EvaluationForm> {
     setState(() {
       this.evaluation.stunden = ergebnis?.toDouble() ?? this.evaluation.stunden;
       validateAllInput();
-    ***REMOVED***);
-  ***REMOVED***
+    });
+  }
 
   Widget stundenButtonCaption(EvaluationData evaluation) {
     Text text;
     if (this.evaluation.validated['stunden'] == ValidationState.ok) {
-      text = Text('{***REMOVED*** Stunden').plural(evaluation.stunden ?? 0);
-    ***REMOVED*** else {
+      text = Text('{} Stunden').plural(evaluation.stunden ?? 0);
+    } else {
       text = Text('Wie viele Stunden habt ihr gesammelt?',
               style: TextStyle(color: CampaignTheme.secondary))
           .tr();
-    ***REMOVED***
+    }
     return buildTextRow(text, this.evaluation.validated['stunden']!);
-  ***REMOVED***
+  }
 
   void kommentarSelection() async {
     var ergebnis = await showTextInputDialog(
@@ -439,20 +439,20 @@ class EvaluationFormState extends State<EvaluationForm> {
     setState(() {
       this.evaluation.kommentar = ergebnis ?? this.evaluation.kommentar;
       validateAllInput();
-    ***REMOVED***);
-  ***REMOVED***
+    });
+  }
 
   Widget kommentarButtonCaption(EvaluationData evaluation) {
     Text text;
     if (!isBlank(this.evaluation.kommentar)) {
       text = Text(evaluation.kommentar!);
-    ***REMOVED*** else {
+    } else {
       text = Text('Optional: Muss man noch etwas zu den Angaben wissen?',
               style: TextStyle(color: CampaignTheme.secondary))
           .tr();
-    ***REMOVED***
+    }
     return buildTextRow(text, this.evaluation.validated['kommentar']!);
-  ***REMOVED***
+  }
 
   void situationSelection() async {
     var ergebnis = await showTextInputDialog(
@@ -463,20 +463,20 @@ class EvaluationFormState extends State<EvaluationForm> {
     setState(() {
       this.evaluation.situation = ergebnis ?? this.evaluation.situation;
       validateAllInput();
-    ***REMOVED***);
-  ***REMOVED***
+    });
+  }
 
   Widget situationButtonCaption(EvaluationData evaluation) {
     Text text;
     if (isBlank(this.evaluation.situation)) {
       text = Text(evaluation.situation!);
-    ***REMOVED*** else {
+    } else {
       text = Text('Optional: Wie war die Situation?',
               style: TextStyle(color: CampaignTheme.secondary))
           .tr();
-    ***REMOVED***
+    }
     return buildTextRow(text, this.evaluation.validated['situation']!);
-  ***REMOVED***
+  }
 
   void validateAllInput() {
     validateInt(evaluation.unterschriften, 'unterschriften');
@@ -489,32 +489,32 @@ class EvaluationFormState extends State<EvaluationForm> {
           value == ValidationState.not_validated) {
         evaluation.validated['all'] = ValidationState.error;
         break;
-      ***REMOVED***
-    ***REMOVED***
-  ***REMOVED***
+      }
+    }
+  }
 
   void validateDouble(double? field, name) {
     this.evaluation.validated[name] = (field != null && field > 0)
         ? ValidationState.ok
         : ValidationState.error;
-  ***REMOVED***
+  }
 
   void validateString(String? field, name) {
     this.evaluation.validated[name] = field != null && field.isNotEmpty
         ? ValidationState.ok
         : ValidationState.error;
-  ***REMOVED***
+  }
 
   void validateInt(int? field, name) {
     this.evaluation.validated[name] =
         field != null ? ValidationState.ok : ValidationState.error;
-  ***REMOVED***
+  }
 
   finishPressed() async {
     setState(() {
       evaluation.validated['finish_pressed'] = ValidationState.pressed;
       validateAllInput();
-    ***REMOVED***);
+    });
     if (evaluation.validated['all'] == ValidationState.ok) {
       validateAllInput();
       if (evaluation.validated['all'] == ValidationState.ok) {
@@ -529,9 +529,9 @@ class EvaluationFormState extends State<EvaluationForm> {
                 .situation)); // maybe the Evaluation/EvaluationData two-tap is superfluous here
         setState(
             () => evaluation = EvaluationData()); // reset Form for next use
-      ***REMOVED***
-    ***REMOVED***
-  ***REMOVED***
+      }
+    }
+  }
 
   Row buildTextRow(Text text, ValidationState valState) {
     List<Widget> w = [Flexible(child: text)];
@@ -540,16 +540,16 @@ class EvaluationFormState extends State<EvaluationForm> {
         w.add(Icon(Icons.done, color: Colors.black));
       else
         w.add(Icon(Icons.error_outline));
-    ***REMOVED***
+    }
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: w);
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 class InputButton extends StatelessWidget {
   final Function() onTap;
   final Widget child;
 
-  InputButton({required this.onTap, required this.child, Key? key***REMOVED***)
+  InputButton({required this.onTap, required this.child, Key? key})
       : super(key: key);
 
   @override
@@ -563,8 +563,8 @@ class InputButton extends StatelessWidget {
               Expanded(child: child),
             ])),
         onTap: onTap);
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 Future<int?> showIntegerInputDialog(BuildContext context, int? init,
     String title, String? description, Key key) {
@@ -580,7 +580,7 @@ Future<int?> showIntegerInputDialog(BuildContext context, int? init,
                 return;
               else
                 controller.text = (number - 1).toString();
-            ***REMOVED***)),
+            })),
     Flexible(
         child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 100.0, minWidth: 50.0),
@@ -605,14 +605,14 @@ Future<int?> showIntegerInputDialog(BuildContext context, int? init,
                 controller.text = '1';
               else
                 controller.text = (number + 1).toString();
-            ***REMOVED***)),
+            })),
   ]);
 
   if (description != null) {
     content = SingleChildScrollView(
         child: ListBody(
             children: [Text(description).tr(), SizedBox(height: 10), content]));
-  ***REMOVED***
+  }
 
   // show the dialog
   return showDialog(
@@ -626,14 +626,14 @@ Future<int?> showIntegerInputDialog(BuildContext context, int? init,
                 child: Text("Abbrechen").tr(),
                 onPressed: () {
                   Navigator.pop(context, init);
-                ***REMOVED***,
+                },
               ),
               TextButton(
                 child: Text("Fertig").tr(),
                 onPressed: () {
                   Navigator.pop(context, int.tryParse(controller.text));
-                ***REMOVED***,
+                },
               ),
             ],
           ));
-***REMOVED***
+}

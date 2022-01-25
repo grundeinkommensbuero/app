@@ -22,7 +22,7 @@ Future iWasCalled(TermineFilter result) async {
   numberOfTimesCalled++;
   iWasCalledResult = result;
   return Future.value();
-***REMOVED***
+}
 
 final _stammdatenService = MockStammdatenService();
 final _storageService = MockStorageService();
@@ -39,11 +39,11 @@ void main() {
       when(_storageService.saveFilter(any))
           .thenAnswer((_) => Future.value(true));
       await pumpFilterWidget(tester);
-    ***REMOVED***);
+    });
 
     testUI('Filter starts successfully', (WidgetTester tester) async {
       expect(find.byKey(Key('filter')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('Filter opens with click', (WidgetTester tester) async {
       await tester.tap(find.byIcon(Icons.filter_alt_sharp));
@@ -54,7 +54,7 @@ void main() {
       expect(find.byKey(Key('days button')), findsOneWidget);
       expect(find.byKey(Key('time button')), findsOneWidget);
       expect(find.byKey(Key('locations button')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('Filter closes with click', (WidgetTester tester) async {
       await tester.tap(find.byIcon(Icons.filter_alt_sharp));
@@ -69,7 +69,7 @@ void main() {
       expect(find.byKey(Key('days button')), findsNothing);
       expect(find.byKey(Key('time button')), findsNothing);
       expect(find.byKey(Key('locations button')), findsNothing);
-    ***REMOVED***);
+    });
 
     testUI('Filter changes caption with click', (WidgetTester tester) async {
       await tester.pump(Duration(seconds: 1));
@@ -87,7 +87,7 @@ void main() {
 
       expect(find.text('Anwenden'), findsNothing);
       expect(find.text('Aktualisieren'), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('Filter opens Type selection with click at type button',
         (WidgetTester tester) async {
@@ -98,7 +98,7 @@ void main() {
       await tester.pump();
 
       expect(find.byKey(Key('type selection dialog')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('Type Selection shows all types', (WidgetTester tester) async {
       await tester.tap(find.byIcon(Icons.filter_alt_sharp));
@@ -110,7 +110,7 @@ void main() {
       // currently hardcoded
       expect(find.text('Sammeln'), findsOneWidget);
       expect(find.text('Infoveranstaltung'), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('Type Selection selects initially types from filter',
         (WidgetTester tester) async {
@@ -132,7 +132,7 @@ void main() {
 
       expect(sammelTermin.value, isTrue);
       expect(andere.every((ct) => ct.value == false), true);
-    ***REMOVED***);
+    });
 
     testUI('Type Selection selects initially nothing if filter is empty',
         (WidgetTester tester) async {
@@ -146,7 +146,7 @@ void main() {
           tester.widgetList<CheckboxListTile>(find.byType(CheckboxListTile));
 
       expect(checkboxTiles.every((ct) => ct.value == false), true);
-    ***REMOVED***);
+    });
 
     testUI('Type Selection saves selected types to filter',
         (WidgetTester tester) async {
@@ -168,7 +168,7 @@ void main() {
       await tester.pump();
 
       expect(filterState.filter.typen, containsAll(['Sammeln']));
-    ***REMOVED***);
+    });
 
     testUI('Filter opens Days selection with click at days button',
         (WidgetTester tester) async {
@@ -179,7 +179,7 @@ void main() {
       await tester.pump();
 
       expect(find.byKey(Key('days selection dialog')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     // FIXME
     /*testUI('Filter opens Locations selection with click at locations button',
@@ -193,7 +193,7 @@ void main() {
       await tester.pump(Duration(seconds: 1));
 
       expect(find.byKey(Key('kiez picker')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('Filter passes locations to Locations selection',
         (WidgetTester tester) async {
@@ -205,7 +205,7 @@ void main() {
 
       expect(find.text('district1'), findsOneWidget);
       expect(find.text('district2'), findsOneWidget);
-    ***REMOVED***);*/
+    });*/
 
     testUI('Filter opens From Time selection with click at Zeit button',
         (WidgetTester tester) async {
@@ -217,7 +217,7 @@ void main() {
 
       expect(find.text('Startzeit'), findsOneWidget);
       expect(find.byKey(Key('from time picker')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('Filter opens To Time selection when From Time selection is closed',
         (WidgetTester tester) async {
@@ -232,7 +232,7 @@ void main() {
 
       expect(find.text('Endzeit'), findsOneWidget);
       expect(find.byKey(Key('to time picker')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('Filter intially shows time from filter in from time selection',
         (WidgetTester tester) async {
@@ -255,7 +255,7 @@ void main() {
 
       expect(find.text('20'), findsOneWidget);
       expect(find.text('21'), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('Filter intially shows default time if filter is empty',
         (WidgetTester tester) async {
@@ -273,7 +273,7 @@ void main() {
 
       expect(find.text('12'), findsOneWidget);
       expect(find.text('00'), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('Filter saves selected time to filter', (WidgetTester tester) async {
       FilterWidgetState filterState = tester.state(find.byKey(Key('filter')));
@@ -296,7 +296,7 @@ void main() {
 
       expect(ChronoHelfer.timeToStringHHmm(filterState.filter.von), '12:00');
       expect(ChronoHelfer.timeToStringHHmm(filterState.filter.von), '12:00');
-    ***REMOVED***);
+    });
 
     testUI('Filter is applied on Anwenden button', (WidgetTester tester) async {
       FilterWidgetState filterState = tester.state(find.byKey(Key('filter')));
@@ -326,11 +326,11 @@ void main() {
       expect(iWasCalledResult?.tage.map((t) => DateFormat.yMd().format(t)),
           containsAll(['12/16/2019']));
       expect(iWasCalledResult?.orte, containsAll(['kiez']));
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('storage function', () {
-    setUpUI((WidgetTester tester) async {***REMOVED***);
+    setUpUI((WidgetTester tester) async {});
 
     testUI('initializes filter with default values if no storage is found',
         (WidgetTester tester) async {
@@ -346,7 +346,7 @@ void main() {
       expect(filterState.filter.von, null);
       expect(filterState.filter.bis, null);
       expect(filterState.filter.orte, []);
-    ***REMOVED***);
+    });
 
     testUI('loads initially filter from storage if found',
         (WidgetTester tester) async {
@@ -372,8 +372,8 @@ void main() {
       expect(filter.bis, TimeOfDay(hour: 15, minute: 0));
       expect(filter.orte,
           containsAll(['Frankfurter Allee Nord', 'Tempelhofer Vorstadt']));
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   trainTranslation(MockTranslations());
   trainStammdatenService(_stammdatenService);
@@ -383,11 +383,11 @@ void main() {
     setUpUI((WidgetTester tester) async {
       when(_storageService.loadFilter()).thenAnswer((_) async => null);
       await pumpFilterWidget(tester);
-    ***REMOVED***);
+    });
 
     testUI('Filter starts successfully', (WidgetTester tester) async {
       expect(find.byKey(Key('filter')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('Filter opens with click', (WidgetTester tester) async {
       await tester.tap(find.byIcon(Icons.filter_alt_sharp));
@@ -398,7 +398,7 @@ void main() {
       expect(find.byKey(Key('days button')), findsOneWidget);
       expect(find.byKey(Key('time button')), findsOneWidget);
       expect(find.byKey(Key('locations button')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('Filter closes with click', (WidgetTester tester) async {
       await tester.tap(find.byIcon(Icons.filter_alt_sharp));
@@ -413,7 +413,7 @@ void main() {
       expect(find.byKey(Key('days button')), findsNothing);
       expect(find.byKey(Key('time button')), findsNothing);
       expect(find.byKey(Key('locations button')), findsNothing);
-    ***REMOVED***);
+    });
 
     testUI('Filter changes caption with click', (WidgetTester tester) async {
       await tester.pump(Duration(seconds: 1));
@@ -431,7 +431,7 @@ void main() {
 
       expect(find.text('Anwenden'), findsNothing);
       expect(find.text('Aktualisieren'), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('Filter opens Type selection with click at type button',
         (WidgetTester tester) async {
@@ -442,7 +442,7 @@ void main() {
       await tester.pump();
 
       expect(find.byKey(Key('type selection dialog')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('Type Selection shows all types', (WidgetTester tester) async {
       await tester.tap(find.byIcon(Icons.filter_alt_sharp));
@@ -454,7 +454,7 @@ void main() {
       // currently hardcoded
       expect(find.text('Sammeln'), findsOneWidget);
       expect(find.text('Infoveranstaltung'), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('Type Selection selects initially types from filter',
         (WidgetTester tester) async {
@@ -476,7 +476,7 @@ void main() {
 
       expect(sammelTermin.value, isTrue);
       expect(andere.every((ct) => ct.value == false), true);
-    ***REMOVED***);
+    });
 
     testUI('Type Selection selects initially nothing if filter is empty',
         (WidgetTester tester) async {
@@ -490,7 +490,7 @@ void main() {
           tester.widgetList<CheckboxListTile>(find.byType(CheckboxListTile));
 
       expect(checkboxTiles.every((ct) => ct.value == false), true);
-    ***REMOVED***);
+    });
 
     testUI('Type Selection saves selected types to filter',
         (WidgetTester tester) async {
@@ -512,7 +512,7 @@ void main() {
       await tester.pump();
 
       expect(filterState.filter.typen, containsAll(['Sammeln']));
-    ***REMOVED***);
+    });
 
     testUI('Filter opens Days selection with click at days button',
         (WidgetTester tester) async {
@@ -523,7 +523,7 @@ void main() {
       await tester.pump();
 
       expect(find.byKey(Key('days selection dialog')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     // FIXME
     /*testUI('Filter opens Locations selection with click at locations button',
@@ -537,7 +537,7 @@ void main() {
       await tester.pump(Duration(seconds: 1));
 
       expect(find.byKey(Key('kiez picker')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('Filter passes locations to Locations selection',
         (WidgetTester tester) async {
@@ -549,7 +549,7 @@ void main() {
 
       expect(find.text('district1'), findsOneWidget);
       expect(find.text('district2'), findsOneWidget);
-    ***REMOVED***);*/
+    });*/
 
     testUI('Filter opens From Time selection with click at Zeit button',
         (WidgetTester tester) async {
@@ -561,7 +561,7 @@ void main() {
 
       expect(find.text('Startzeit'), findsOneWidget);
       expect(find.byKey(Key('from time picker')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('Filter opens To Time selection when From Time selection is closed',
         (WidgetTester tester) async {
@@ -576,7 +576,7 @@ void main() {
 
       expect(find.text('Endzeit'), findsOneWidget);
       expect(find.byKey(Key('to time picker')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('Filter intially shows time from filter in from time selection',
         (WidgetTester tester) async {
@@ -599,7 +599,7 @@ void main() {
 
       expect(find.text('20'), findsOneWidget);
       expect(find.text('21'), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('Filter intially shows default time if filter is empty',
         (WidgetTester tester) async {
@@ -617,7 +617,7 @@ void main() {
 
       expect(find.text('12'), findsOneWidget);
       expect(find.text('00'), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('Filter saves selected time to filter', (WidgetTester tester) async {
       FilterWidgetState filterState = tester.state(find.byKey(Key('filter')));
@@ -640,7 +640,7 @@ void main() {
 
       expect(ChronoHelfer.timeToStringHHmm(filterState.filter.von), '12:00');
       expect(ChronoHelfer.timeToStringHHmm(filterState.filter.von), '12:00');
-    ***REMOVED***);
+    });
 
     testUI('Filter is applied on Anwenden button', (WidgetTester tester) async {
       FilterWidgetState filterState = tester.state(find.byKey(Key('filter')));
@@ -670,11 +670,11 @@ void main() {
       expect(iWasCalledResult?.tage.map((t) => DateFormat.yMd().format(t)),
           containsAll(['12/16/2019']));
       expect(iWasCalledResult?.orte, containsAll(['kiez']));
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('storage function', () {
-    setUpUI((WidgetTester tester) async {***REMOVED***);
+    setUpUI((WidgetTester tester) async {});
 
     testUI('initializes filter with default values if no storage is found',
         (WidgetTester tester) async {
@@ -689,7 +689,7 @@ void main() {
       expect(filterState.filter.von, null);
       expect(filterState.filter.bis, null);
       expect(filterState.filter.orte, []);
-    ***REMOVED***);
+    });
 
     testUI('loads initially filter from storage if found',
         (WidgetTester tester) async {
@@ -715,9 +715,9 @@ void main() {
       expect(filter.bis, TimeOfDay(hour: 15, minute: 0));
       expect(filter.orte,
           containsAll(['Frankfurter Allee Nord', 'Tempelhofer Vorstadt']));
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+    });
+  });
+}
 
 Future pumpFilterWidget(WidgetTester tester) async {
   FilterWidget filterWidget = FilterWidget(iWasCalled, key: Key('filter'));
@@ -725,4 +725,4 @@ Future pumpFilterWidget(WidgetTester tester) async {
     Provider<StammdatenService>.value(value: _stammdatenService),
     Provider<StorageService>.value(value: _storageService)
   ], child: MaterialApp(home: filterWidget)));
-***REMOVED***
+}

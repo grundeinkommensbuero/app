@@ -50,7 +50,7 @@ class BenutzerRestResourceTest {
         whenever(security.hashSecret(any())).thenReturn(Security.HashMitSalt("hash", "salt"))
         whenever(security.verifiziereSecretMitHash(anyString(), any())).thenReturn(true)
         whenever(context.userPrincipal).thenReturn(BasicUserPrincipal("1"))
-    ***REMOVED***
+    }
 
     @Test
     fun `legeNeuenBenutzerAn erwartet secret`() {
@@ -59,7 +59,7 @@ class BenutzerRestResourceTest {
         assertEquals(response.status, 412)
         assertEquals(response.entity is RestFehlermeldung, true)
         assertEquals((response.entity as RestFehlermeldung).meldung, "Secret darf nicht leer sein")
-    ***REMOVED***
+    }
 
     @Test
     fun `legeNeuenBenutzerAn markiert Credentials ohne Firebase-Key`() {
@@ -72,7 +72,7 @@ class BenutzerRestResourceTest {
         verify(dao, times(1)).legeNeueCredentialsAn(captor.capture())
         assertEquals(captor.firstValue.firebaseKey, BenutzerRestResource.NO_FIREBASE)
         assertEquals(captor.firstValue.isFirebase, false)
-    ***REMOVED***
+    }
 
     @Ignore("ausgebautes Feature")
     @Test
@@ -84,14 +84,14 @@ class BenutzerRestResourceTest {
         assertEquals(response.status, 412)
         assertEquals(response.entity is RestFehlermeldung, true)
         assertEquals((response.entity as RestFehlermeldung).meldung, "Benutzername ist bereits vergeben")
-    ***REMOVED***
+    }
 
     @Test
     fun `legeNeuenBenutzerAn prueft Nahmensaehnlichkeit nicht bei fehlendem Namen`() {
         resource.legeNeuenBenutzerAn(Login("11111111", "AAAAAAAA", BenutzerDto(null, null)))
 
         verify(dao, never()).benutzernameExistiert(anyString())
-    ***REMOVED***
+    }
 
     @Test
     fun `legeNeuenBenutzerAn erzeugt neuen Benutzer in Datenbank`() {
@@ -101,7 +101,7 @@ class BenutzerRestResourceTest {
         resource.legeNeuenBenutzerAn(Login("11111111", "AAAAAAAA", BenutzerDto(null, "Karl Marx", 4294198070)))
 
         verify(dao, times(1)).legeNeuenBenutzerAn(any())
-    ***REMOVED***
+    }
 
     @Ignore("auskommentiertes Feature")
     @Test
@@ -114,7 +114,7 @@ class BenutzerRestResourceTest {
         val captor = argumentCaptor<Benutzer>()
         verify(dao, times(1)).legeNeuenBenutzerAn(captor.capture())
         assertEquals("Karl Marx", captor.firstValue.name)
-    ***REMOVED***
+    }
 
     @Test
     fun `legeNeuenBenutzerAn erzeugt Credentials fuer Benutzer mit Firebase-Key`() {
@@ -130,7 +130,7 @@ class BenutzerRestResourceTest {
         assertNotNull(captor.firstValue.salt)
         assertNotNull(captor.firstValue.secret)
         assertTrue(captor.firstValue.isFirebase)
-    ***REMOVED***
+    }
 
     @Test
     fun `legeNeuenBenutzerAn hasht Secret und speichert gehashtes Secret mit Salt in Datenbank`() {
@@ -145,7 +145,7 @@ class BenutzerRestResourceTest {
 
         assertEquals(captor.firstValue.secret, "hash")
         assertEquals(captor.firstValue.salt, "salt")
-    ***REMOVED***
+    }
 
     @Test
     fun `legeNeuenBenutzerAn gibt Benutzer Rollen`() {
@@ -158,7 +158,7 @@ class BenutzerRestResourceTest {
         verify(dao, times(1)).legeNeueCredentialsAn(captor.capture())
         assertTrue(captor.firstValue.roles.contains("app"))
         assertTrue(captor.firstValue.roles.contains("user"))
-    ***REMOVED***
+    }
 
     @Test
     fun `authentifiziereBenutzer erwartet Id`() {
@@ -167,7 +167,7 @@ class BenutzerRestResourceTest {
         assertEquals(response.status, 412)
         assertEquals(response.entity is RestFehlermeldung, true)
         assertEquals((response.entity as RestFehlermeldung).meldung, "Benutzer-ID darf nicht leer sein")
-    ***REMOVED***
+    }
 
     @Test
     fun `authentifiziereBenutzer erwartet gueltige Id`() {
@@ -177,7 +177,7 @@ class BenutzerRestResourceTest {
         assertEquals(response.status, 412)
         assertEquals(response.entity is RestFehlermeldung, true)
         assertEquals((response.entity as RestFehlermeldung).meldung, "Benutzer-ID ist ungültig")
-    ***REMOVED***
+    }
 
     @Test
     fun `authentifiziereBenutzer erwartet secret`() {
@@ -186,7 +186,7 @@ class BenutzerRestResourceTest {
         assertEquals(response.status, 412)
         assertEquals(response.entity is RestFehlermeldung, true)
         assertEquals((response.entity as RestFehlermeldung).meldung, "Secret darf nicht leer sein")
-    ***REMOVED***
+    }
 
     @Test
     fun `authentifiziereBenutzer lehnt falsches Secret ab`() {
@@ -198,7 +198,7 @@ class BenutzerRestResourceTest {
         verify(security, times(1)).verifiziereSecretMitHash(anyString(), any())
         assertEquals(response.status, 200)
         assertEquals(response.entity, false)
-    ***REMOVED***
+    }
 
     @Test
     fun `authentifiziereBenutzer weist unbekannte Benutzer zurueck`() {
@@ -207,7 +207,7 @@ class BenutzerRestResourceTest {
 
         assertEquals(response.status, 200)
         assertEquals(response.entity, false)
-    ***REMOVED***
+    }
 
     @Test
     fun `authentifiziereBenutzer akzeptiert korrektes Secret`() {
@@ -218,7 +218,7 @@ class BenutzerRestResourceTest {
 
         verify(security, times(1)).verifiziereSecretMitHash(anyString(), any())
         assertEquals(response.status, 200)
-    ***REMOVED***
+    }
 
     @Test
     fun `authentifiziereBenutzer tauscht Firebas-Key aus, wenn er nicht uebereinstimmt`() {
@@ -230,7 +230,7 @@ class BenutzerRestResourceTest {
         resource.authentifiziereBenutzer(Login("richtig", "neuer Firebase-Key", BenutzerDto(11L, "Karl Marx", 4294198070)))
 
         assertEquals(credentials.firebaseKey, "neuer Firebase-Key")
-    ***REMOVED***
+    }
 
     @Test
     fun `authentifiziereBenutzer ergaenzt Firebas-Key wenn keiner hinterlegt ist`() {
@@ -242,7 +242,7 @@ class BenutzerRestResourceTest {
         resource.authentifiziereBenutzer(Login("richtig", "neuer Firebase-Key", BenutzerDto(11L, "Karl Marx", 4294198070)))
 
         assertEquals(credentials.firebaseKey, "neuer Firebase-Key")
-    ***REMOVED***
+    }
 
     @Test
     fun `authentifiziereBenutzer ersetzt echten Firebas-Key nicht, wenn neuer Key null ist`() {
@@ -254,7 +254,7 @@ class BenutzerRestResourceTest {
         resource.authentifiziereBenutzer(Login("richtig", null, BenutzerDto(11L, "Karl Marx", 4294198070)))
 
         assertEquals(credentials.firebaseKey, "alter Firebase-Key")
-    ***REMOVED***
+    }
 
     @Test
     fun `aktualisiereBenutzername weist leeren Namen zurueck`() {
@@ -267,7 +267,7 @@ class BenutzerRestResourceTest {
 
         response = resource.aktualisiereBenutzername("   ")
         assertEquals(response.status, 412)
-    ***REMOVED***
+    }
 
     @Test
     fun `aktualisiereBenutzername reicht Benutzer zum speichern in DB weiter`() {
@@ -280,7 +280,7 @@ class BenutzerRestResourceTest {
         verify(dao, times(1)).aktualisiereBenutzername(1L, name)
         assertEquals(name, (response.entity as BenutzerDto).name)
         assertEquals(1L, (response.entity as BenutzerDto).id)
-    ***REMOVED***
+    }
 
     @Test
     fun `aktualisiereBenutzername vergibt Rolle wenn alles klappt`() {
@@ -291,18 +291,18 @@ class BenutzerRestResourceTest {
         resource.aktualisiereBenutzername(name)
 
         verify(dao, times(1)).gibNutzerNamedRolle(karl)
-    ***REMOVED***
+    }
 
     @Test
     fun `aktualisiereBenutzername vergibt Rolle _nicht_ bei Fehler`() {
         val name = "ein neuer Name"
         val karl = Benutzer(1, "ein neuer Name", color = 12345678)
-        whenever(dao.aktualisiereBenutzername(1L, name)).then { throw SQLException() ***REMOVED***
+        whenever(dao.aktualisiereBenutzername(1L, name)).then { throw SQLException() }
 
         try {
             resource.aktualisiereBenutzername(name)
-        ***REMOVED*** catch(e: SQLException) {***REMOVED***
+        } catch(e: SQLException) {}
 
         verify(dao, never()).gibNutzerNamedRolle(karl)
-    ***REMOVED***
-***REMOVED***
+    }
+}

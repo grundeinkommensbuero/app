@@ -10,11 +10,11 @@ class ChatInputWidget extends StatefulWidget {
   final Function(TextEditingController) onSendMessage;
   final TextEditingController textEditingController = TextEditingController();
 
-  ChatInputWidget(this.onSendMessage, {Key? key***REMOVED***) : super(key: key);
+  ChatInputWidget(this.onSendMessage, {Key? key}) : super(key: key);
 
   @override
   ChatInputState createState() => ChatInputState();
-***REMOVED***
+}
 
 class ChatInputState extends State<ChatInputWidget> {
   Widget build(context) {
@@ -56,7 +56,7 @@ class ChatInputState extends State<ChatInputWidget> {
                   icon: Icon(Icons.send),
                   onPressed: () {
                     return widget.onSendMessage(widget.textEditingController);
-                  ***REMOVED***,
+                  },
                   color: CampaignTheme.secondary,
                 ),
               ),
@@ -77,5 +77,5 @@ class ChatInputState extends State<ChatInputWidget> {
                   boxShadow: [BoxShadow(blurRadius: 5, color: Colors.grey)]))
           : SizedBox()
     ]);
-  ***REMOVED***
-***REMOVED***
+  }
+}

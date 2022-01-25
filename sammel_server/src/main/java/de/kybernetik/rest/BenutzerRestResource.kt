@@ -47,7 +47,7 @@ open class BenutzerRestResource {
                     .status(412)
                     .entity(RestFehlermeldung("Secret darf nicht leer sein"))
                     .build()
-        ***REMOVED***
+        }
 
          // Zum Vermeiden optisch ähnlicher Namen
 //        login.user.name = login.user.name?.trim()
@@ -57,7 +57,7 @@ open class BenutzerRestResource {
 //                    .status(412)
 //                    .entity(RestFehlermeldung("Benutzername ist bereits vergeben"))
 //                    .build()
-//        ***REMOVED***
+//        }
 
         try {
             val benutzerAusDb = dao.legeNeuenBenutzerAn(benutzer.convertToBenutzer())
@@ -68,7 +68,7 @@ open class BenutzerRestResource {
             if (login.firebaseKey.isNullOrEmpty()) {
                 login.firebaseKey = NO_FIREBASE
                 isFirebase = false
-            ***REMOVED***
+            }
 
             dao.legeNeueCredentialsAn(Credentials(
                     benutzerAusDb.id,
@@ -80,16 +80,16 @@ open class BenutzerRestResource {
 
             subscriptinDao.subscribe(benutzerAusDb.id, listOf("global"))
 
-            LOG.info("Neuen Benutzer ${benutzerAusDb.id***REMOVED*** angelegt")
+            LOG.info("Neuen Benutzer ${benutzerAusDb.id} angelegt")
             return Response.ok().entity(benutzerAusDb).build()
-        ***REMOVED*** catch (e: Exception) {
+        } catch (e: Exception) {
             LOG.error("Fehler beim Anlegen eines Benutzers: $benutzer", e)
             return Response
                     .status(500)
                     .entity(RestFehlermeldung("Ein technisches Problem ist aufgetreten"))
                     .build()
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
     @POST
     @Path("aktualisiereName")
@@ -105,7 +105,7 @@ open class BenutzerRestResource {
                     .status(412)
                     .entity(RestFehlermeldung("Benutzername darf nicht leer sein"))
                     .build()
-        ***REMOVED***
+        }
 
         val aktualisierterBenutzer = dao.aktualisiereBenutzername(id.toLong(), trimmedName)
         dao.gibNutzerNamedRolle(aktualisierterBenutzer)
@@ -113,76 +113,76 @@ open class BenutzerRestResource {
                 .status(200)
                 .entity(BenutzerDto.convertFromBenutzer(aktualisierterBenutzer))
                 .build()
-    ***REMOVED***
+    }
 
     @POST
     @Path("authentifiziere")
     @RolesAllowed("app")
     @Produces(APPLICATION_JSON)
     open fun authentifiziereBenutzer(login: Login): Response {
-        LOG.info("authentifiziere Benutzer ${login.user.id***REMOVED***")
-        LOG.trace("Firebase-Key: ${login.firebaseKey***REMOVED***")
+        LOG.info("authentifiziere Benutzer ${login.user.id}")
+        LOG.trace("Firebase-Key: ${login.firebaseKey}")
         val benutzer = login.user
         if (benutzer.id == null) {
             return Response
                     .status(412)
                     .entity(RestFehlermeldung("Benutzer-ID darf nicht leer sein"))
                     .build()
-        ***REMOVED***
+        }
         if (login.secret.isNullOrEmpty()) {
             return Response
                     .status(412)
                     .entity(RestFehlermeldung("Secret darf nicht leer sein"))
                     .build()
-        ***REMOVED***
+        }
         val credentials: Credentials?
         try {
             credentials = dao.getCredentials(benutzer.id!!)
-        ***REMOVED*** catch (e: java.lang.IllegalArgumentException) {
+        } catch (e: java.lang.IllegalArgumentException) {
             return Response
                     .status(412)
                     .entity(RestFehlermeldung("Benutzer-ID ist ungültig"))
                     .build()
-        ***REMOVED***
+        }
         if (credentials == null) {
-            LOG.info("Login mit unbekanntem Benutzer ${login.user.id***REMOVED***")
+            LOG.info("Login mit unbekanntem Benutzer ${login.user.id}")
             return Response
                     .ok()
                     .entity(false)
                     .build()
-        ***REMOVED***
+        }
         LOG.trace(credentials.roles)
         val verifiziert: Boolean?
         try {
             verifiziert = security.verifiziereSecretMitHash(login.secret!!, Security.HashMitSalt(credentials.secret, credentials.salt))
-        ***REMOVED*** catch (e: Exception) {
-            val meldung = "Technischer Fehler beim Verifizieren: ${e.localizedMessage***REMOVED***"
+        } catch (e: Exception) {
+            val meldung = "Technischer Fehler beim Verifizieren: ${e.localizedMessage}"
             LOG.info(meldung)
             return Response.status(500).entity(RestFehlermeldung(meldung)).build()
-        ***REMOVED***
+        }
 
         if(login.firebaseKey != null && !credentials.firebaseKey.equals(login.firebaseKey)) {
-            LOG.warn("Erneuere veralteten Firbase-Key von Benutzer ${login.user.id***REMOVED***: ${credentials.firebaseKey***REMOVED***")
+            LOG.warn("Erneuere veralteten Firbase-Key von Benutzer ${login.user.id}: ${credentials.firebaseKey}")
             credentials.firebaseKey = login.firebaseKey!!
-        ***REMOVED***
+        }
 
         if(login.firebaseKey == null && !credentials.firebaseKey.equals("none"))
-            LOG.debug("Firbase-Key null für Benutzer ${login.user***REMOVED*** obwohl Key hinterlegt ist")
+            LOG.debug("Firbase-Key null für Benutzer ${login.user} obwohl Key hinterlegt ist")
 
         if (!verifiziert) {
-            LOG.warn("Falscher Login mit Benutzer ${login.user.id***REMOVED***")
+            LOG.warn("Falscher Login mit Benutzer ${login.user.id}")
             return Response
                     .ok()
                     .entity(false)
                     .build()
-        ***REMOVED***
+        }
         return Response
                 .ok()
                 .entity(true)
                 .build()
-    ***REMOVED***
+    }
 
     companion object {
         const val NO_FIREBASE = "none"
-    ***REMOVED***
-***REMOVED***
+    }
+}

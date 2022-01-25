@@ -21,7 +21,7 @@ import 'package:share/share.dart';
 
 import 'ChatWindow.dart';
 
-enum TerminDetailsCommand { EDIT, DELETE, EVALUATE, CLOSE, FOCUS ***REMOVED***
+enum TerminDetailsCommand { EDIT, DELETE, EVALUATE, CLOSE, FOCUS }
 
 Future<TerminDetailsCommand?> showActionDetailsPage(
     BuildContext context,
@@ -37,7 +37,7 @@ Future<TerminDetailsCommand?> showActionDetailsPage(
               key: Key('termin details dialog'),
               child: ActionDetailsPage(action, isMyAction, iAmParticipant,
                   joinAction, leaveAction))));
-***REMOVED***
+}
 
 // ignore: must_be_immutable
 class ActionDetailsPage extends StatefulWidget {
@@ -59,12 +59,12 @@ class ActionDetailsPage extends StatefulWidget {
               key: Key('action details map marker'),
               size: 30,
             ));
-  ***REMOVED***
+  }
 
   @override
   State<StatefulWidget> createState() =>
       ActionDetailsPageState(this.isMyAction, this.iAmParticipant);
-***REMOVED***
+}
 
 class ActionDetailsPageState extends State<ActionDetailsPage> {
   bool iAmParticipant;
@@ -91,7 +91,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           .user
           .listen((user) => setState(() => me = user));
       initialized = true;
-    ***REMOVED***
+    }
 
     final color = CampaignTheme.primary;
 
@@ -101,9 +101,9 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
     Locale? locale;
     try {
       locale = context.locale;
-    ***REMOVED*** catch (_) {
+    } catch (_) {
       print('Konnte Locale nicht ermitteln');
-    ***REMOVED***
+    }
 
     return Scaffold(
         backgroundColor: color,
@@ -184,7 +184,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                       ExpandableConstrainedBox(
                         child: SelectableText(
                           widget.action.details!.beschreibung,
-                          // onTap: () => {***REMOVED***,
+                          // onTap: () => {},
                           // TODO: SelectableText stiehlt ExpandableContraintBox den onTap
                           style: TextStyle(fontWeight: FontWeight.normal),
                         ),
@@ -239,13 +239,13 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                       ).tr(),
                       ExpandableConstrainedBox(
                         child: SelectableText(
-                            tr('{kiez***REMOVED*** in {bezirk***REMOVED***\n Treffpunkt: {treffpunkt***REMOVED***',
+                            tr('{kiez} in {bezirk}\n Treffpunkt: {treffpunkt}',
                                 namedArgs: {
                                   'kiez': widget.action.ort.name,
                                   'bezirk': widget.action.ort.ortsteil,
                                   'treffpunkt':
                                       widget.action.details!.treffpunkt,
-                                ***REMOVED***),
+                                }),
                             style: TextStyle(fontWeight: FontWeight.normal)),
                         maxHeight: 80,
                         expandableCondition:
@@ -272,11 +272,11 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                       onTap: (_) {
                         return Navigator.pop(
                             context, TerminDetailsCommand.FOCUS);
-                      ***REMOVED***),
+                      }),
                   layers: [
                     TileLayerOptions(
                         urlTemplate:
-                            "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
+                            "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
                         subdomains: ['a', 'b', 'c']),
                     MarkerLayerOptions(markers: [widget.marker]),
                   ],
@@ -289,7 +289,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
             child: Text('Schließen').tr(),
             onPressed: () => Navigator.pop(context, TerminDetailsCommand.CLOSE),
           )));
-  ***REMOVED***
+  }
 
   PopupMenuButton? menuButton(
       Termin action, bool isMyAction, bool iAmParticipant) {
@@ -380,7 +380,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
                 .tr()
           ]),
           value: 'Löschen'));
-    ***REMOVED***
+    }
 
     if (items.isEmpty) return null;
 
@@ -397,8 +397,8 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           if (command == 'Feedback') evaluateAction();
           if (command == 'Bearbeiten') editAction();
           if (command == 'Löschen') deleteAction();
-        ***REMOVED***);
-  ***REMOVED***
+        });
+  }
 
   openChatWindow() async {
     ChatChannel messageChannel =
@@ -408,7 +408,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
         MaterialPageRoute(
             builder: (context) =>
                 ChatWindow(messageChannel, widget.action, true)));
-  ***REMOVED***
+  }
 
   List<Widget> determineActionButton() {
     if (isPastAction(widget.action) &&
@@ -446,7 +446,7 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
 
     // default
     return [];
-  ***REMOVED***
+  }
 
   void joinAction() {
     widget.joinAction(widget.action);
@@ -454,8 +454,8 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
     setState(() {
       (widget.action.participants ?? []).add(me!);
       iAmParticipant = true;
-    ***REMOVED***);
-  ***REMOVED***
+    });
+  }
 
   void leaveAction() {
     widget.leaveAction(widget.action);
@@ -463,35 +463,35 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
       widget.action.participants?.remove(
           widget.action.participants?.firstWhere((u) => u.id == me?.id));
       iAmParticipant = false;
-    ***REMOVED***);
-  ***REMOVED***
+    });
+  }
 
   void calendarAction() {
     final Event event = Event(
-        title: '{typ***REMOVED*** in {ortsteil***REMOVED***'.tr(namedArgs: {
+        title: '{typ} in {ortsteil}'.tr(namedArgs: {
           'typ': widget.action.typ.tr(),
           'ortsteil': widget.action.ort.ortsteil
-        ***REMOVED***),
+        }),
         description:
-            '${widget.action.details!.beschreibung***REMOVED***\n${CampaignTheme.actionUrl(widget.action.id)***REMOVED***',
+            '${widget.action.details!.beschreibung}\n${CampaignTheme.actionUrl(widget.action.id)}',
         location: widget.action.details!.treffpunkt,
         startDate: widget.action.beginn,
         endDate: widget.action.ende);
     Add2Calendar.addEvent2Cal(event);
-  ***REMOVED***
+  }
 
   void shareAction() {
-    Share.share('{typ***REMOVED*** in {ortsteil***REMOVED***, {treffpunkt***REMOVED*** am {zeitpunkt***REMOVED***\n{url***REMOVED***'
+    Share.share('{typ} in {ortsteil}, {treffpunkt} am {zeitpunkt}\n{url}'
         .tr(namedArgs: {
       'typ': widget.action.typ.tr(),
       'ortsteil': widget.action.ort.ortsteil,
       'treffpunkt': widget.action.details!.treffpunkt,
       'zeitpunkt': ''
-          '${DateFormat.MMMd(Localizations.localeOf(context).languageCode).format(widget.action.beginn)***REMOVED***,'
-          '${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(widget.action.beginn)***REMOVED***',
+          '${DateFormat.MMMd(Localizations.localeOf(context).languageCode).format(widget.action.beginn)},'
+          '${DateFormat.Hm(Localizations.localeOf(context).languageCode).format(widget.action.beginn)}',
       'url': CampaignTheme.actionUrl(widget.action.id),
-    ***REMOVED***));
-  ***REMOVED***
+    }));
+  }
 
   void evaluateAction() =>
       Navigator.pop(context, TerminDetailsCommand.EVALUATE);
@@ -503,5 +503,5 @@ class ActionDetailsPageState extends State<ActionDetailsPage> {
           builder: (context) => confirmDeleteDialog(context)).then((confirmed) {
         if (confirmed == true)
           Navigator.pop(context, TerminDetailsCommand.DELETE);
-      ***REMOVED***);
-***REMOVED***
+      });
+}

@@ -11,7 +11,7 @@ abstract class AbstractArgumentsService extends BackendService {
       : super(userService, backend);
 
   Future<void> createArguments(Arguments arguments);
-***REMOVED***
+}
 
 class ArgumentsService extends AbstractArgumentsService {
   ArgumentsService(AbstractUserService userService, Backend backend)
@@ -21,17 +21,17 @@ class ArgumentsService extends AbstractArgumentsService {
   Future<void> createArguments(Arguments arguments) async {
     try {
       await post('service/vorbehalte', jsonEncode(arguments));
-    ***REMOVED*** catch (e, s) {
+    } catch (e, s) {
       ErrorService.handleError(e, s,
           context: 'Eintragen von Vorbehalten ist fehlgeschlagen.');
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***
+    }
+  }
+}
 
 class DemoArgumentsService extends AbstractArgumentsService {
   DemoArgumentsService(AbstractUserService userService)
       : super(userService, DemoBackend());
 
   @override
-  Future<void> createArguments(Arguments arguments) async {***REMOVED***
-***REMOVED***
+  Future<void> createArguments(Arguments arguments) async {}
+}

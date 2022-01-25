@@ -19,7 +19,7 @@ abstract class AbstractPlacardsService extends BackendService {
   deletePlacard(int id);
 
   takeDownPlacard(int id);
-***REMOVED***
+}
 
 class PlacardsService extends AbstractPlacardsService {
   PlacardsService(AbstractUserService userService, Backend backend)
@@ -30,21 +30,21 @@ class PlacardsService extends AbstractPlacardsService {
     try {
       var response = await post('service/plakate/neu', jsonEncode(placard));
       return Placard.fromJson(response.body);
-    ***REMOVED*** catch (e, s) {
+    } catch (e, s) {
       ErrorService.handleError(e, s,
           context: 'Eintragen von Plakat ist fehlgeschlagen.');
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   @override
   deletePlacard(int id) async {
     try {
       return await delete('service/plakate/$id');
-    ***REMOVED*** catch (e, s) {
+    } catch (e, s) {
       ErrorService.handleError(e, s,
           context: 'Löschen von Plakat ist fehlgeschlagen.');
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   @override
   Future<List<Placard>> loadPlacards() async {
@@ -55,24 +55,24 @@ class PlacardsService extends AbstractPlacardsService {
       placards = (response.body as List)
           .map((jsonListLocation) => Placard.fromJson(jsonListLocation))
           .toList();
-    ***REMOVED*** catch (e, s) {
+    } catch (e, s) {
       ErrorService.handleError(e, s,
           context: 'Plakate konnten nicht geladen werden.');
       return [];
-    ***REMOVED***
+    }
     return placards;
-  ***REMOVED***
+  }
 
   @override
   takeDownPlacard(int id) async {
     try {
-      return await post('service/plakate/abgehangen/$id', jsonEncode({***REMOVED***));
-    ***REMOVED*** catch (e, s) {
+      return await post('service/plakate/abgehangen/$id', jsonEncode({}));
+    } catch (e, s) {
       ErrorService.handleError(e, s,
           context: 'Abhängen von Plakat ist fehlgeschlagen.');
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***
+    }
+  }
+}
 
 class DemoPlacardsService extends AbstractPlacardsService {
   DemoPlacardsService(AbstractUserService userService)
@@ -91,10 +91,10 @@ class DemoPlacardsService extends AbstractPlacardsService {
           .map((p) => p.id)
           .fold(0, (int? v, int? e) => max(v!, e == null ? 0 : e));
       placard.id = maxId + 1;
-    ***REMOVED***
+    }
     placards.add(placard);
     return Future.value(placard);
-  ***REMOVED***
+  }
 
   @override
   deletePlacard(int id) {
@@ -102,7 +102,7 @@ class DemoPlacardsService extends AbstractPlacardsService {
 
     var placard = placards.firstWhere((pl) => pl.id == id);
     placards.remove(placard);
-  ***REMOVED***
+  }
 
   @override
   Future<List<Placard>> loadPlacards() => Future.value(placards);
@@ -113,5 +113,5 @@ class DemoPlacardsService extends AbstractPlacardsService {
     placard.abgehangen = true;
 
     return placard;
-  ***REMOVED***
-***REMOVED***
+  }
+}

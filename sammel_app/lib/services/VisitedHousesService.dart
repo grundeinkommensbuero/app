@@ -14,7 +14,7 @@ import 'VisitedHouseView.dart';
 abstract class AbstractVisitedHousesService extends BackendService {
   late GeoService geoService;
 
-  Map<int, VisitedHouse> localHousesMap = {***REMOVED***
+  Map<int, VisitedHouse> localHousesMap = {};
 
   Future<List<VisitedHouse>> loadVisitedHouses();
 
@@ -24,7 +24,7 @@ abstract class AbstractVisitedHousesService extends BackendService {
       GeoService geoService, Backend backend)
       : super(userService, backend) {
     this.geoService = geoService;
-  ***REMOVED***
+  }
 
   Future<VisitedHouse?> getVisitedHouseOfPoint(LatLng point,
       bool checkOnServer) async {
@@ -47,22 +47,22 @@ abstract class AbstractVisitedHousesService extends BackendService {
         LatLng(point.latitude + lat5m, point.longitude + lng5m),
         LatLng(point.latitude - lat5m, point.longitude + lng5m)
       ];
-    ***REMOVED***
+    }
     if (osmId == null) {
       //in this case we create the osm id by the center
       osmId = point.hashCode;
-    ***REMOVED***
+    }
     return getVistitedHouseFromJson(osmId, point, shape);
-  ***REMOVED***
+  }
 
   VisitedHouse? getVistitedHouseFromJson(int osmId, LatLng point,
       List<LatLng> shape) {
     if (localHousesMap.containsKey(osmId)) {
       return localHousesMap[osmId];
-    ***REMOVED*** else {
+    } else {
       return VisitedHouse(osmId, point.latitude, point.longitude, shape, []);
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   VisitedHouseView getVisitedHousesInArea(BoundingBox bbox) {
     List<SelectableVisitedHouse> housesInRoi = localHousesMap.values
@@ -71,7 +71,7 @@ abstract class AbstractVisitedHousesService extends BackendService {
         .toList();
 
     return VisitedHouseView(bbox, housesInRoi);
-  ***REMOVED***
+  }
 
   VisitedHouse? getVisitedHouseForPointLocal(LatLng point) =>
       // ignore: unnecessary_cast
@@ -84,33 +84,33 @@ abstract class AbstractVisitedHousesService extends BackendService {
     Set<int> deleteVisitations = Set();
 
     print('localHousesMap: ${localHousesMap.values.map((value) => '${value
-        .osmId***REMOVED*** ${value.visitations.map((e) => e.id)***REMOVED***')***REMOVED***');
+        .osmId} ${value.visitations.map((e) => e.id)}')}');
     VisitedHouse? localHouse = localHousesMap[house.osmId];
 
     if (localHouse != null) {
       var currentEventIds = localHouse.visitations.map((e) => e.id!).toSet();
-      print('currentIds: ${currentEventIds***REMOVED***');
+      print('currentIds: ${currentEventIds}');
       var newVisitationIds = newVisitationList.map((e) => e.id).toSet();
-      print('newIds: ${newVisitationIds***REMOVED***');
+      print('newIds: ${newVisitationIds}');
       deleteVisitations = currentEventIds.difference(newVisitationIds);
       newVisitationList = newVisitationList
           .where((element) => !currentEventIds.contains(element.id))
           .toList();
-    ***REMOVED***
-    print('deleteVisitations: ${deleteVisitations***REMOVED***');
+    }
+    print('deleteVisitations: ${deleteVisitations}');
     for (var deleteVisitation in deleteVisitations) {
-      print('Lösche Event ${deleteVisitation***REMOVED***');
+      print('Lösche Event ${deleteVisitation}');
       deleteVisitedHouse(deleteVisitation);
-    ***REMOVED***
+    }
 
     for (var addEvent in newVisitationList) {
       VisitedHouse houseWithEventOnly = VisitedHouse(house.osmId,
           house.latitude, house.longitude, house.shape, [addEvent]);
       var h = createVisitedHouse(houseWithEventOnly);
       h.then((value) => addEvent.id = value?.visitations.last.id);
-    ***REMOVED***
-    print('Events von Haus ${house.osmId***REMOVED***: ${house.visitations.map((e) => e
-        .id)***REMOVED***');
+    }
+    print('Events von Haus ${house.osmId}: ${house.visitations.map((e) => e
+        .id)}');
     if (house.visitations.isNotEmpty) {
       house.visitations.sort((a, b) =>
       a.datum
@@ -123,20 +123,20 @@ abstract class AbstractVisitedHousesService extends BackendService {
           ? -1
           : 0);
       localHousesMap[house.osmId] = house;
-    ***REMOVED*** else {
-      print('Lösche Haus ${house.osmId***REMOVED***');
+    } else {
+      print('Lösche Haus ${house.osmId}');
       localHousesMap.remove(house.osmId);
-    ***REMOVED***
+    }
 
     return house;
-  ***REMOVED***
+  }
 
   List<VisitedHouse> getAllHouses() {
     return localHousesMap.values.toList();
-  ***REMOVED***
+  }
 
   Future deleteVisitedHouse(int id);
-***REMOVED***
+}
 
 class VisitedHousesService extends AbstractVisitedHousesService {
   late GeoService geoService;
@@ -151,32 +151,32 @@ class VisitedHousesService extends AbstractVisitedHousesService {
       var response =
       await post('service/besuchteHaeuser/neu', jsonEncode(house));
       return VisitedHouse.fromJson(response.body);
-    ***REMOVED*** catch (e, s) {
+    } catch (e, s) {
       ErrorService.handleError(e, s,
           context: 'Eintragen von Besuchtem Haus ist fehlgeschlagen.');
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   @override
   deleteVisitedHouse(int id) async {
     try {
       await delete('service/besuchteHaeuser/$id');
-    ***REMOVED*** catch (e, s) {
+    } catch (e, s) {
       ErrorService.handleError(e, s,
           context: 'Löschen von Besuchtem Haus ist fehlgeschlagen.');
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
 
   @override
   Future<List<VisitedHouse>> loadVisitedHouses() async {
     HttpClientResponseBody response;
     try {
       response = await get('service/besuchteHaeuser');
-    ***REMOVED*** catch (e, s) {
+    } catch (e, s) {
       ErrorService.handleError(e, s,
           context: 'Besuchte Häuser konnten nicht geladen werden.');
       return [];
-    ***REMOVED***
+    }
 
     final houses = (response.body as List)
         .map((jsonHouse) => VisitedHouse.fromJson(jsonHouse))
@@ -189,65 +189,65 @@ class VisitedHousesService extends AbstractVisitedHousesService {
             .indexWhere((element) => element.id == house.visitations.first.id);
         if (idx == -1) {
           localHouse.visitations.add(house.visitations.first);
-        ***REMOVED*** else {
+        } else {
           localHouse.visitations[idx] = house.visitations.first;
-        ***REMOVED***
-      ***REMOVED*** else {
+        }
+      } else {
         localHousesMap[house.osmId] = house;
-      ***REMOVED***
-    ***REMOVED***
+      }
+    }
 
     return this.getAllHouses();
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 var s1 = [
-  {'lat': 52.5204094, 'lon': 13.3687217***REMOVED***,
-  {'lat': 52.5204086, 'lon': 13.3680145***REMOVED***,
-  {'lat': 52.5204089, 'lon': 13.3678788***REMOVED***,
-  {'lat': 52.5204099, 'lon': 13.3677085***REMOVED***,
-  {'lat': 52.5204104, 'lon': 13.3676495***REMOVED***,
-  {'lat': 52.5206084, 'lon': 13.3679925***REMOVED***,
-  {'lat': 52.5206114, 'lon': 13.3679974***REMOVED***,
-  {'lat': 52.5206187, 'lon': 13.3680081***REMOVED***,
-  {'lat': 52.5206179, 'lon': 13.3680836***REMOVED***,
-  {'lat': 52.5206187, 'lon': 13.3687223***REMOVED***,
-  {'lat': 52.5204767, 'lon': 13.3687249***REMOVED***,
-  {'lat': 52.5204758, 'lon': 13.3688658***REMOVED***,
-  {'lat': 52.5206182, 'lon': 13.3688652***REMOVED***,
-  {'lat': 52.5206176, 'lon': 13.3693935***REMOVED***,
-  {'lat': 52.5204761, 'lon': 13.3693966***REMOVED***,
-  {'lat': 52.5204768, 'lon': 13.3695387***REMOVED***,
-  {'lat': 52.5206174, 'lon': 13.3695316***REMOVED***,
-  {'lat': 52.5206179, 'lon': 13.3706762***REMOVED***,
-  {'lat': 52.52047, 'lon': 13.3706844***REMOVED***,
-  {'lat': 52.52047, 'lon': 13.370648***REMOVED***,
-  {'lat': 52.5204065, 'lon': 13.3706481***REMOVED***,
-  {'lat': 52.5204063, 'lon': 13.3695382***REMOVED***,
-  {'lat': 52.5202293, 'lon': 13.3695436***REMOVED***,
-  {'lat': 52.5200722, 'lon': 13.3695426***REMOVED***,
-  {'lat': 52.5199124, 'lon': 13.3695358***REMOVED***,
-  {'lat': 52.5199138, 'lon': 13.3706514***REMOVED***,
-  {'lat': 52.5198519, 'lon': 13.3706515***REMOVED***,
-  {'lat': 52.5198519, 'lon': 13.3706825***REMOVED***,
-  {'lat': 52.5197022, 'lon': 13.3706828***REMOVED***,
-  {'lat': 52.5197014, 'lon': 13.369536***REMOVED***,
-  {'lat': 52.5198416, 'lon': 13.3695358***REMOVED***,
-  {'lat': 52.5198412, 'lon': 13.3693948***REMOVED***,
-  {'lat': 52.519701, 'lon': 13.3693986***REMOVED***,
-  {'lat': 52.5197007, 'lon': 13.3688791***REMOVED***,
-  {'lat': 52.5198481, 'lon': 13.3688788***REMOVED***,
-  {'lat': 52.5198479, 'lon': 13.3687133***REMOVED***,
-  {'lat': 52.519705, 'lon': 13.3687135***REMOVED***,
-  {'lat': 52.5197032, 'lon': 13.3660429***REMOVED***,
-  {'lat': 52.5197021, 'lon': 13.3656432***REMOVED***,
-  {'lat': 52.5198057, 'lon': 13.366007***REMOVED***,
-  {'lat': 52.5199159, 'lon': 13.3663634***REMOVED***,
-  {'lat': 52.5199159, 'lon': 13.3665685***REMOVED***,
-  {'lat': 52.5199161, 'lon': 13.3671573***REMOVED***,
-  {'lat': 52.519914, 'lon': 13.3687215***REMOVED***,
-  {'lat': 52.5201746, 'lon': 13.3687225***REMOVED***,
-  {'lat': 52.5204094, 'lon': 13.3687217***REMOVED***
+  {'lat': 52.5204094, 'lon': 13.3687217},
+  {'lat': 52.5204086, 'lon': 13.3680145},
+  {'lat': 52.5204089, 'lon': 13.3678788},
+  {'lat': 52.5204099, 'lon': 13.3677085},
+  {'lat': 52.5204104, 'lon': 13.3676495},
+  {'lat': 52.5206084, 'lon': 13.3679925},
+  {'lat': 52.5206114, 'lon': 13.3679974},
+  {'lat': 52.5206187, 'lon': 13.3680081},
+  {'lat': 52.5206179, 'lon': 13.3680836},
+  {'lat': 52.5206187, 'lon': 13.3687223},
+  {'lat': 52.5204767, 'lon': 13.3687249},
+  {'lat': 52.5204758, 'lon': 13.3688658},
+  {'lat': 52.5206182, 'lon': 13.3688652},
+  {'lat': 52.5206176, 'lon': 13.3693935},
+  {'lat': 52.5204761, 'lon': 13.3693966},
+  {'lat': 52.5204768, 'lon': 13.3695387},
+  {'lat': 52.5206174, 'lon': 13.3695316},
+  {'lat': 52.5206179, 'lon': 13.3706762},
+  {'lat': 52.52047, 'lon': 13.3706844},
+  {'lat': 52.52047, 'lon': 13.370648},
+  {'lat': 52.5204065, 'lon': 13.3706481},
+  {'lat': 52.5204063, 'lon': 13.3695382},
+  {'lat': 52.5202293, 'lon': 13.3695436},
+  {'lat': 52.5200722, 'lon': 13.3695426},
+  {'lat': 52.5199124, 'lon': 13.3695358},
+  {'lat': 52.5199138, 'lon': 13.3706514},
+  {'lat': 52.5198519, 'lon': 13.3706515},
+  {'lat': 52.5198519, 'lon': 13.3706825},
+  {'lat': 52.5197022, 'lon': 13.3706828},
+  {'lat': 52.5197014, 'lon': 13.369536},
+  {'lat': 52.5198416, 'lon': 13.3695358},
+  {'lat': 52.5198412, 'lon': 13.3693948},
+  {'lat': 52.519701, 'lon': 13.3693986},
+  {'lat': 52.5197007, 'lon': 13.3688791},
+  {'lat': 52.5198481, 'lon': 13.3688788},
+  {'lat': 52.5198479, 'lon': 13.3687133},
+  {'lat': 52.519705, 'lon': 13.3687135},
+  {'lat': 52.5197032, 'lon': 13.3660429},
+  {'lat': 52.5197021, 'lon': 13.3656432},
+  {'lat': 52.5198057, 'lon': 13.366007},
+  {'lat': 52.5199159, 'lon': 13.3663634},
+  {'lat': 52.5199159, 'lon': 13.3665685},
+  {'lat': 52.5199161, 'lon': 13.3671573},
+  {'lat': 52.519914, 'lon': 13.3687215},
+  {'lat': 52.5201746, 'lon': 13.3687225},
+  {'lat': 52.5204094, 'lon': 13.3687217}
 ];
 
 class DemoVisitedHousesService extends AbstractVisitedHousesService {
@@ -276,27 +276,27 @@ class DemoVisitedHousesService extends AbstractVisitedHousesService {
   DemoVisitedHousesService(AbstractUserService userService,
       GeoService geoService)
       : super(userService, geoService, DemoBackend()) {
-    localHousesMap = {for (var house in visitedHousesOnStart) house.osmId: house***REMOVED***
-  ***REMOVED***
+    localHousesMap = {for (var house in visitedHousesOnStart) house.osmId: house};
+  }
 
   @override
   Future<VisitedHouse> createVisitedHouse(VisitedHouse house) {
     print('### Häuser vorher: ${visitedHousesOnStart.map((e) =>
-        e.visitations.map((e) => e.id))***REMOVED***');
+        e.visitations.map((e) => e.id))}');
     house.visitations.last.id = maxId += 1;
     house.osmId = maxId;
     var newHouse = VisitedHouse.clone(house);
     visitedHousesOnStart.add(newHouse);
     print('### Häuser nachher: ${visitedHousesOnStart.map((e) =>
-        e.visitations.map((e) => e.id))***REMOVED***');
+        e.visitations.map((e) => e.id))}');
     return Future.value(newHouse);
-  ***REMOVED***
+  }
 
   @override
   Future<List<VisitedHouse>> loadVisitedHouses() => Future.value(visitedHousesOnStart);
 
   @override
   deleteVisitedHouse(int id) async {
-    // Löschen im Server unnötig***REMOVED***
-  ***REMOVED***
-***REMOVED***
+    // Löschen im Server unnötig}
+  }
+}

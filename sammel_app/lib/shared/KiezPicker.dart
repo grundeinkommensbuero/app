@@ -20,9 +20,9 @@ class KiezPicker {
   double KIEZE_THRESHOLD = 12; // ignore: non_constant_identifier_names
   double REGIONEN_THRESHOLD = 11; // ignore: non_constant_identifier_names
 
-  static Set<Kiez> kieze = {***REMOVED***
-  static Set<Region> regionen = {***REMOVED***
-  static Set<Ortsteil> ortsteile = {***REMOVED***
+  static Set<Kiez> kieze = {};
+  static Set<Region> regionen = {};
+  static Set<Ortsteil> ortsteile = {};
 
   StammdatenService? stammdatenService;
 
@@ -42,7 +42,7 @@ class KiezPicker {
               var layers = [
                 TileLayerOptions(
                     urlTemplate:
-                        "https://{s***REMOVED***.tile.openstreetmap.de/{z***REMOVED***/{x***REMOVED***/{y***REMOVED***.png",
+                        "https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png",
                     subdomains: ['a', 'b', 'c']),
                 PolygonLayerOptions(
                     polygons: visiblePolygons, polygonCulling: true),
@@ -88,8 +88,8 @@ class KiezPicker {
                                   Navigator.pop(context, selectedKieze))
                         ])),
                   ]);
-            ***REMOVED***));
-  ***REMOVED***
+            }));
+  }
 
   getVisiblePolygons() {
     if (mapController.zoom > KIEZE_THRESHOLD)
@@ -101,7 +101,7 @@ class KiezPicker {
 
     selectedKieze.forEach((selected) =>
         this.visiblePolygons.add(generateKiezeAreas(kieze)[selected]!));
-  ***REMOVED***
+  }
 
   markKiez(LatLng position) {
     final zoom = mapController.zoom;
@@ -126,15 +126,15 @@ class KiezPicker {
       selectedKieze.addAll(tappedKieze);
 
     getVisiblePolygons();
-  ***REMOVED***
+  }
 
   bool isIn(LatLng position, List<LatLng> polygon) {
     return poly.Polygon(polygon
             .map((latlng) => poly.Point<num>(latlng.latitude, latlng.longitude))
             .toList())
         .contains(position.latitude, position.longitude);
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 Set<Polygon> generateKiezeOutlines(Set<Kiez> kieze) {
   return kieze
@@ -145,7 +145,7 @@ Set<Polygon> generateKiezeOutlines(Set<Kiez> kieze) {
               CampaignTheme.secondary.green, CampaignTheme.secondary.blue),
           points: kiez.polygon))
       .toSet();
-***REMOVED***
+}
 
 Set<Polygon> generateOrtsteileOutlines(Set<Ortsteil> bezirke) {
   return bezirke
@@ -156,7 +156,7 @@ Set<Polygon> generateOrtsteileOutlines(Set<Ortsteil> bezirke) {
               CampaignTheme.secondary.green, CampaignTheme.secondary.blue),
           points: bezirk.polygon))
       .toSet();
-***REMOVED***
+}
 
 Set<Polygon> generateRegionenOutlines(Set<Region> ortsteile) {
   return ortsteile
@@ -167,7 +167,7 @@ Set<Polygon> generateRegionenOutlines(Set<Region> ortsteile) {
               CampaignTheme.secondary.green, CampaignTheme.secondary.blue),
           points: ortsteil.polygon))
       .toSet();
-***REMOVED***
+}
 
 Map<Kiez, Polygon> generateKiezeAreas(Set<Kiez> kieze) {
   return kieze.toList().asMap().map((_, kiez) => MapEntry(
@@ -176,4 +176,4 @@ Map<Kiez, Polygon> generateKiezeAreas(Set<Kiez> kieze) {
           color: Color.fromARGB(150, CampaignTheme.primary.red, CampaignTheme.primary.green,
               CampaignTheme.primary.blue),
           points: kiez.polygon)));
-***REMOVED***
+}

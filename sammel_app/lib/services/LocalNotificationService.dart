@@ -85,7 +85,7 @@ Future<FlutterLocalNotificationsPlugin> initializeLocalNotifications(
   notifications?.createNotificationChannel(topicChatChannel);
 
   return plugin;
-***REMOVED***
+}
 
 class LocalNotificationService {
   FlutterLocalNotificationsPlugin? plugin;
@@ -95,8 +95,8 @@ class LocalNotificationService {
 
   LocalNotificationService(this.pushManager) {
     onTap = (String? message) async => await pushManager.onTap(RemoteMessage(
-        data: {'payload': jsonDecode(message ?? ''), 'encrypted': 'Plain'***REMOVED***));
-  ***REMOVED***
+        data: {'payload': jsonDecode(message ?? ''), 'encrypted': 'Plain'}));
+  }
 
   Future sendChatNotification(ActionChatMessagePushData chatMessage) async {
     AndroidNotificationDetails androidPlatformChannelSpecifics =
@@ -113,11 +113,11 @@ class LocalNotificationService {
     if (plugin == null) plugin = await initializeLocalNotifications(onTap);
     plugin!.show(
         chatMessage.channel.hashCode,
-        'Nachricht von ${chatMessage.message.senderName***REMOVED***',
+        'Nachricht von ${chatMessage.message.senderName}',
         chatMessage.message.text,
         platformChannelSpecifics,
         payload: jsonEncode(chatMessage.toJson()));
-  ***REMOVED***
+  }
 
   Future<void> sendParticipationNotification(ParticipationPushData data) async {
     if (data.message == null) return;
@@ -141,11 +141,11 @@ class LocalNotificationService {
             ? 'Verstärkung für deine Aktion'
             : 'Absage bei deiner Aktion',
         data.message!.joins
-            ? '${data.message!.username***REMOVED*** ist deiner Aktion beigetreten'
-            : '${data.message!.username***REMOVED*** hat deine Aktion verlassen',
+            ? '${data.message!.username} ist deiner Aktion beigetreten'
+            : '${data.message!.username} hat deine Aktion verlassen',
         platformChannelSpecifics,
         payload: jsonEncode(data.toJson()));
-  ***REMOVED***
+  }
 
   Future<void> sendNewActionsNotification(
       ActionListPushData partMessage) async {
@@ -161,19 +161,19 @@ class LocalNotificationService {
 
     String body;
     if (partMessage.actions.length == 1)
-      body = '${partMessage.actions[0].typ***REMOVED*** '
-          'am ${ChronoHelfer.formatDateOfDateTime(partMessage.actions[0].beginn)***REMOVED*** '
-          'um ${ChronoHelfer.dateTimeToStringHHmm(partMessage.actions[0].beginn)***REMOVED*** '
-          ', ${partMessage.actions[0].ort.ortsteil***REMOVED***';
+      body = '${partMessage.actions[0].typ} '
+          'am ${ChronoHelfer.formatDateOfDateTime(partMessage.actions[0].beginn)} '
+          'um ${ChronoHelfer.dateTimeToStringHHmm(partMessage.actions[0].beginn)} '
+          ', ${partMessage.actions[0].ort.ortsteil}';
     else
       body =
-          '${partMessage.actions.length***REMOVED*** neue Aktionen in ${partMessage.actions[0].ort.name***REMOVED***';
+          '${partMessage.actions.length} neue Aktionen in ${partMessage.actions[0].ort.name}';
 
     if (plugin == null) plugin = await initializeLocalNotifications(onTap);
-    plugin!.show('newactions:${partMessage.actions[0].ort.name***REMOVED***'.hashCode,
+    plugin!.show('newactions:${partMessage.actions[0].ort.name}'.hashCode,
         'Neue Aktionen in deinem Kiez', body, platformChannelSpecifics,
         payload: jsonEncode(partMessage.toJson()));
-  ***REMOVED***
+  }
 
   Future<void> sendActionDeletedNotification(
       ActionListPushData partMessage) async {
@@ -190,15 +190,15 @@ class LocalNotificationService {
 
     if (plugin == null) plugin = await initializeLocalNotifications(onTap);
     plugin!.show(
-        'action:change:${partMessage.actions[0].id***REMOVED***'.hashCode,
+        'action:change:${partMessage.actions[0].id}'.hashCode,
         'Eine Aktion an der du teilnimmst wurde abgesagt',
-        '${partMessage.actions[0].typ***REMOVED*** '
-            'am ${ChronoHelfer.formatDateOfDateTime(partMessage.actions[0].beginn)***REMOVED*** '
-            'in ${partMessage.actions[0].ort.name***REMOVED*** (${partMessage.actions[0].details!.treffpunkt***REMOVED***) '
+        '${partMessage.actions[0].typ} '
+            'am ${ChronoHelfer.formatDateOfDateTime(partMessage.actions[0].beginn)} '
+            'in ${partMessage.actions[0].ort.name} (${partMessage.actions[0].details!.treffpunkt}) '
             ' wurde von der Ersteller*in gelöscht',
         platformChannelSpecifics,
         payload: jsonEncode(partMessage.toJson()));
-  ***REMOVED***
+  }
 
   Future<void> sendActionChangedNotification(
       ActionListPushData partMessage) async {
@@ -215,14 +215,14 @@ class LocalNotificationService {
 
     if (plugin == null) plugin = await initializeLocalNotifications(onTap);
     plugin!.show(
-        'action:change:${partMessage.actions[0].id***REMOVED***'.hashCode,
+        'action:change:${partMessage.actions[0].id}'.hashCode,
         'Eine Aktion an der du teilnimmst hat sich geändert',
-        '${partMessage.actions[0].typ***REMOVED*** '
-            'am ${ChronoHelfer.formatDateOfDateTime(partMessage.actions[0].beginn)***REMOVED*** '
-            'in ${partMessage.actions[0].ort.name***REMOVED*** (${partMessage.actions[0].details!.treffpunkt***REMOVED***)',
+        '${partMessage.actions[0].typ} '
+            'am ${ChronoHelfer.formatDateOfDateTime(partMessage.actions[0].beginn)} '
+            'in ${partMessage.actions[0].ort.name} (${partMessage.actions[0].details!.treffpunkt})',
         platformChannelSpecifics,
         payload: jsonEncode(partMessage.toJson()));
-  ***REMOVED***
+  }
 
   Future<void> sendOtherNotification(Map<String, dynamic> data) async {
     AndroidNotificationDetails androidPlatformChannelSpecifics =
@@ -238,7 +238,7 @@ class LocalNotificationService {
     plugin!.show(0, data['notification']['title'], data['notification']['body'],
         platformChannelSpecifics,
         payload: jsonEncode(data['data']));
-  ***REMOVED***
+  }
 
   void sendTopicChatNotification(
       TopicChatMessagePushData topicChatMessagePushData) async {
@@ -255,9 +255,9 @@ class LocalNotificationService {
     if (plugin == null) plugin = await initializeLocalNotifications(onTap);
     plugin!.show(
         topicChatMessagePushData.channel.hashCode,
-        'Nachricht von ${topicChatMessagePushData.message!.senderName***REMOVED***',
+        'Nachricht von ${topicChatMessagePushData.message!.senderName}',
         topicChatMessagePushData.message!.text,
         platformChannelSpecifics,
         payload: jsonEncode(topicChatMessagePushData.toJson()));
-  ***REMOVED***
-***REMOVED***
+  }
+}

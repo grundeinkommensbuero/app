@@ -20,7 +20,7 @@ class Placard {
     if (json['benutzer'] == null) missingValues.add("benutzer");
     if (json['abgehangen'] == null) missingValues.add("abgehangen");
     if (missingValues.isNotEmpty)
-      throw DeserialisationException('Fehlende Werte: ${missingValues.join(', ')***REMOVED***');
+      throw DeserialisationException('Fehlende Werte: ${missingValues.join(', ')}');
 
     id = json['id'];
     latitude = json['latitude'];
@@ -28,7 +28,7 @@ class Placard {
     adresse = json['adresse'];
     benutzer = json['benutzer'];
     abgehangen = json['abgehangen'];
-  ***REMOVED***
+  }
 
   Map<dynamic, dynamic> toJson() => {
         'id': id,
@@ -37,5 +37,5 @@ class Placard {
         'adresse': adresse,
         'benutzer': benutzer,
         'abgehangen': abgehangen,
-      ***REMOVED***
-***REMOVED***
+      };
+}

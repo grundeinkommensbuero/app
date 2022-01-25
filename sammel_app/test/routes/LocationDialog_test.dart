@@ -29,7 +29,7 @@ void main() {
     StammdatenService.fileReader = TestFileReader();
     _stammdatenService = StammdatenService();
     await _stammdatenService.kieze;
-  ***REMOVED***);
+  });
 
   testWidgets('opens dialog', (WidgetTester tester) async {
     await tester.pumpWidget(MultiProvider(
@@ -46,7 +46,7 @@ void main() {
     await tester.pump();
 
     expect(find.byType(LocationDialog), findsOneWidget);
-  ***REMOVED***);
+  });
 
   group('presentation', () {
     testWidgets('shows map', (WidgetTester tester) async {
@@ -59,7 +59,7 @@ void main() {
       await tester.pump();
 
       expect(find.byKey(Key('venue map')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testWidgets('shows description input field', (WidgetTester tester) async {
       var initCoordinates;
@@ -71,8 +71,8 @@ void main() {
       await tester.pump();
 
       expect(find.byKey(Key('venue description input')), findsOneWidget);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('initially shows', () {
     testWidgets('no marker, if no initial coordinates given',
@@ -86,7 +86,7 @@ void main() {
       await tester.pump();
 
       expect(find.byType(LocationMarker), findsNothing);
-    ***REMOVED***);
+    });
 
     testWidgets('marker, if initial coordinates given',
         (WidgetTester tester) async {
@@ -102,7 +102,7 @@ void main() {
           tester.state(find.byType(LocationDialog)) as LocationDialogState;
       expect(state.marker?.point, initCoordinates);
       expect(find.byKey(Key('location marker')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testWidgets('description', (WidgetTester tester) async {
       var initCoordinates = LatLng(52.51579, 13.45399);
@@ -114,8 +114,8 @@ void main() {
       await tester.pump();
 
       expect(find.text('description'), findsOneWidget);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('centers map', () {
     testWidgets('at given coordinates', (tester) async {
@@ -127,7 +127,7 @@ void main() {
       FlutterMap map = tester.widget(find.byKey(Key('venue map')));
       expect(map.options.center, LatLng(52.49653, 13.43762));
       expect(map.options.zoom, 11.0);
-    ***REMOVED***);
+    });
 
     testWidgets('at Berlin with no coordinates given', (tester) async {
       await tester.pumpWidget(
@@ -138,8 +138,8 @@ void main() {
       FlutterMap map = tester.widget(find.byKey(Key('venue map')));
       expect(map.options.center, LatLng(52.5170365, 13.3888599));
       expect(map.options.zoom, 10.0);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('reads input', () {
     testWidgets('with tap on map and creates marker',
@@ -158,8 +158,8 @@ void main() {
 
         await tester.pump();
         expect(find.byKey(Key('location marker')), findsOneWidget);
-      ***REMOVED***);
-    ***REMOVED***);
+      });
+    });
 
     testWidgets('with tap on map and moves marker',
         (WidgetTester tester) async {
@@ -183,9 +183,9 @@ void main() {
 
         expect(find.byKey(Key('location marker')), findsOneWidget);
         expect(state.marker?.point != initCoordinates, true);
-      ***REMOVED***);
-    ***REMOVED***);
-  ***REMOVED***);
+      });
+    });
+  });
 
   group('returns', () {
     testWidgets('coordinates', (WidgetTester tester) async {
@@ -206,8 +206,8 @@ void main() {
         LocationDialogTester venueTester =
             tester.widget(find.byType(LocationDialogTester));
         expect(venueTester.result?.coordinates, state.marker?.point);
-      ***REMOVED***);
-    ***REMOVED***);
+      });
+    });
 
     testWidgets('new coordinates', (WidgetTester tester) async {
       await _pumpLocationDialogTester(
@@ -228,7 +228,7 @@ void main() {
       LocationDialogTester venueTester =
           tester.widget(find.byType(LocationDialogTester));
       expect(venueTester.result!.coordinates, state.marker!.point);
-    ***REMOVED***);
+    });
 
     testWidgets('description', (WidgetTester tester) async {
       await _pumpLocationDialogTester(
@@ -246,7 +246,7 @@ void main() {
       LocationDialogTester venueTester =
           tester.widget(find.byType(LocationDialogTester));
       expect(venueTester.result!.description, 'description');
-    ***REMOVED***);
+    });
 
     testWidgets('new description', (WidgetTester tester) async {
       await pumpLocationDialogTester(tester, 'description', null, null);
@@ -263,7 +263,7 @@ void main() {
       LocationDialogTester venueTester =
           tester.widget(find.byType(LocationDialogTester));
       expect(venueTester.result!.description, 'new description');
-    ***REMOVED***);
+    });
 
     testWidgets('old values, with no input', (WidgetTester tester) async {
       await pumpLocationDialogTester(
@@ -279,15 +279,15 @@ void main() {
           tester.widget(find.byType(LocationDialogTester));
       expect(venueTester.result!.description, 'description');
       expect(venueTester.result!.coordinates, LatLng(52.51579, 13.45399));
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+    });
+  });
+}
 
 Future pumpLocationDialogTester(
     WidgetTester tester, description, initCoordinates, center) async {
   await tester.pumpWidget(MaterialApp(
       home: LocationDialogTester(description, initCoordinates, center)));
-***REMOVED***
+}
 
 _pumpLocationDialogTester(
     WidgetTester tester, LocationDialogTester locationDialogTester) async {
@@ -295,7 +295,7 @@ _pumpLocationDialogTester(
     Provider<StammdatenService>.value(value: _stammdatenService),
     Provider<GeoService>.value(value: _geoService)
   ], child: MaterialApp(home: locationDialogTester)));
-***REMOVED***
+}
 
 // nur eine Testklasse
 // ignore: must_be_immutable
@@ -319,5 +319,5 @@ class LocationDialogTester extends StatelessWidget {
                 initCoordinates: initCoordinates,
                 center: center)
             .then((result) => this.result = result));
-  ***REMOVED***
-***REMOVED***
+  }
+}

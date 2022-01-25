@@ -19,5 +19,5 @@ void main() {
 
     expect(find.text(termin.typ), findsOneWidget);
     expect(find.text(TerminCard.erzeugeOrtText(termin.ort)), findsOneWidget);
-  ***REMOVED***);
-***REMOVED***
+  });
+}

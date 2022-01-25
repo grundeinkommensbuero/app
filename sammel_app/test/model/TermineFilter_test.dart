@@ -8,8 +8,8 @@ void main() {
   group('serialisere', () {
     test('serialisiert leeren TermineFilter', () {
       expect(jsonEncode(TermineFilter.leererFilter()),
-          '{"typen":[],"tage":[],"von":null,"bis":null,"orte":[],"nurEigene":false,"immerEigene":true***REMOVED***');
-    ***REMOVED***);
+          '{"typen":[],"tage":[],"von":null,"bis":null,"orte":[],"nurEigene":false,"immerEigene":true}');
+    });
 
     test('serialisiert gefuellten TermineFilter', () {
       expect(
@@ -29,9 +29,9 @@ void main() {
           '"orte":["Frankfurter Allee Süd"],'
           '"nurEigene":true,'
           '"immerEigene":false'
-          '***REMOVED***');
-    ***REMOVED***);
-  ***REMOVED***);
+          '}');
+    });
+  });
   group("deserialisiere", () {
     test("deserialisert leeren TermineFilter", () {
       var termineFilter = TermineFilter.fromJSON(jsonDecode('{'
@@ -40,13 +40,13 @@ void main() {
           '"von":null,'
           '"bis":null,'
           '"orte":[]'
-          '***REMOVED***'));
+          '}'));
       expect(termineFilter.typen.length, 0);
       expect(termineFilter.tage.length, 0);
       expect(termineFilter.von, null);
       expect(termineFilter.bis, null);
       expect(termineFilter.orte.length, 0);
-    ***REMOVED***);
+    });
     test("deserialisert gefuellten TermineFilter", () {
       var termineFilter = TermineFilter.fromJSON(jsonDecode('{'
           '"typen":["Sammeln","Infoveranstaltung"],'
@@ -54,7 +54,7 @@ void main() {
           '"von":"23:59:00",'
           '"bis":"01:02:00",'
           '"orte":["Frankfurter Allee Nord"]'
-          '***REMOVED***'));
+          '}'));
       expect(termineFilter.typen.length, 2);
       expect(termineFilter.typen[0], "Sammeln");
       expect(termineFilter.typen[1], "Infoveranstaltung");
@@ -81,47 +81,47 @@ void main() {
       expect([termineFilter.bis?.hour, termineFilter.bis?.minute], [1, 2]);
       expect(termineFilter.orte.length, 1);
       expect(termineFilter.orte[0], 'Frankfurter Allee Nord');
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('isEmpty', () {
     test('returns true on empty filter', () {
       expect(TermineFilter([], [], null, null, [], false, true).isEmpty, true);
       expect(TermineFilter([], [], null, null, [], null, null).isEmpty,
           true);
-    ***REMOVED***);
+    });
 
     test('returns false if types set', () {
       expect(
           TermineFilter(['Sammeln'], [], null, null, [], false, false).isEmpty,
           false);
-    ***REMOVED***);
+    });
 
     test('returns false if days set', () {
       expect(
           TermineFilter([], [DateTime.now()], null, null, [], false, false)
               .isEmpty,
           false);
-    ***REMOVED***);
+    });
 
     test('returns false if types set', () {
       expect(
           TermineFilter([], [], TimeOfDay.now(), null, [], false, false)
               .isEmpty,
           false);
-    ***REMOVED***);
+    });
 
     test('returns false if types set', () {
       expect(
           TermineFilter([], [], null, TimeOfDay.now(), [], false, false)
               .isEmpty,
           false);
-    ***REMOVED***);
+    });
 
     test('returns false if types set', () {
       expect(TermineFilter([], [], null, null, ['Kiez'], false, false).isEmpty,
           false);
-    ***REMOVED***);
+    });
 
     test('seralizes properly with default values', () {
       var termineFilter = TermineFilter.fromJSON(jsonDecode('{'
@@ -130,9 +130,9 @@ void main() {
           '"von":null,'
           '"bis":null,'
           '"orte":[]'
-          '***REMOVED***'));
+          '}'));
       expect(jsonEncode(termineFilter),
-          '{"typen":[],"tage":[],"von":null,"bis":null,"orte":[],"nurEigene":false,"immerEigene":true***REMOVED***');
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+          '{"typen":[],"tage":[],"von":null,"bis":null,"orte":[],"nurEigene":false,"immerEigene":true}');
+    });
+  });
+}

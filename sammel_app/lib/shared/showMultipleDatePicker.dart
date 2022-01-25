@@ -9,7 +9,7 @@ import 'package:sammel_app/shared/CampaignTheme.dart';
 
 Future<List<DateTime>?> showMultipleDatePicker(
     List<DateTime> initDates, BuildContext context,
-    {key: Key, multiMode = true, maxTage = 0***REMOVED***) async {
+    {key: Key, multiMode = true, maxTage = 0}) async {
   DateTime displayedMonth =
       initDates.isNotEmpty ? initDates.first : DateTime.now();
   List<DateTime> dates = []..addAll(initDates);
@@ -81,7 +81,7 @@ Future<List<DateTime>?> showMultipleDatePicker(
                         onTap: (DateTime date) {
                           // bei Multi-Select manipuliert Calendarro die Liste selbst
                           if (!multiMode) dates = [date];
-                        ***REMOVED***,
+                        },
                       )),
                   ButtonBar(alignment: MainAxisAlignment.center, children: [
                     ElevatedButton(
@@ -98,29 +98,29 @@ Future<List<DateTime>?> showMultipleDatePicker(
                             dates.length > maxTage) {
                           showTooManyDatesDialog(context, maxTage);
                           return;
-                        ***REMOVED***
+                        }
                         Navigator.pop(context, dates);
-                      ***REMOVED***,
+                      },
                     )
                   ])
                 ]);
-          ***REMOVED***));
+          }));
   return selectedDatesFromDialog;
-***REMOVED***
+}
 
 class DweDayTileBuilder extends DayTileBuilder {
   @override
   Widget build(BuildContext context, DateTime date, DateTimeCallback? onTap) {
     return DweCalendarroDayItem(
         date: date, calendarroState: Calendarro.of(context)!, onTap: onTap);
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 // Warning inherited from CalendarroItem
 // ignore: must_be_immutable
 class DweCalendarroDayItem extends CalendarroDayItem {
   DweCalendarroDayItem(
-      {required DateTime date, required CalendarroState calendarroState, onTap***REMOVED***)
+      {required DateTime date, required CalendarroState calendarroState, onTap})
       : super(date: date, calendarroState: calendarroState, onTap: onTap);
 
   @override
@@ -146,7 +146,7 @@ class DweCalendarroDayItem extends CalendarroDayItem {
           shape: BoxShape.rectangle,
           borderRadius:
               BorderRadius.horizontal(left: leftborder, right: rightborder));
-    ***REMOVED*** else if (isToday) {
+    } else if (isToday) {
       boxDecoration = BoxDecoration(
           border: Border.all(
             color: CampaignTheme.secondary,
@@ -154,7 +154,7 @@ class DweCalendarroDayItem extends CalendarroDayItem {
           ),
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.all(Radius.circular(10.0)));
-    ***REMOVED***
+    }
 
     return Expanded(
         child: GestureDetector(
@@ -163,15 +163,15 @@ class DweCalendarroDayItem extends CalendarroDayItem {
           decoration: boxDecoration,
           child: Center(
               child: Text(
-            "${date.day***REMOVED***",
+            "${date.day}",
             textAlign: TextAlign.center,
             style: TextStyle(color: textColor, fontWeight: fontWeight),
           ))),
       onTap: handleTap,
       behavior: HitTestBehavior.translucent,
     ));
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 class GerCalendarroWeekdayLabelsView extends CalendarroWeekdayLabelsView {
   @override
@@ -187,8 +187,8 @@ class GerCalendarroWeekdayLabelsView extends CalendarroWeekdayLabelsView {
         Expanded(child: Text('So', textAlign: TextAlign.center).tr()),
       ],
     );
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 showTooManyDatesDialog(context, maxTage) {
   showDialog(
@@ -196,8 +196,8 @@ showTooManyDatesDialog(context, maxTage) {
       builder: (context) => AlertDialog(
             title: Text('Zu viele Tage'.tr()),
             content: SelectableText(
-                'Bitte wähle {maxTage***REMOVED*** Tage oder weniger aus.'
-                    .tr(namedArgs: {'maxTage': maxTage.toString()***REMOVED***)),
+                'Bitte wähle {maxTage} Tage oder weniger aus.'
+                    .tr(namedArgs: {'maxTage': maxTage.toString()})),
             actions: <Widget>[
               TextButton(
                 child: Text('Na gut').tr(),
@@ -205,4 +205,4 @@ showTooManyDatesDialog(context, maxTage) {
               )
             ],
           ));
-***REMOVED***
+}

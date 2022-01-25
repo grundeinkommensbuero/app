@@ -22,11 +22,11 @@ open class TermineDao {
     private lateinit var entityManager: EntityManager
 
     open fun getTermine(filter: TermineFilter, benutzerId: Long?): List<Termin> {
-        LOG.info("benutzer id ${benutzerId***REMOVED***")
+        LOG.info("benutzer id ${benutzerId}")
         val ergebnisse = erzeugeGetTermineQuery(filter, benutzerId).resultList
-        LOG.debug("Gefundene Aktionen: ${ergebnisse.map { it.id ***REMOVED******REMOVED***")
+        LOG.debug("Gefundene Aktionen: ${ergebnisse.map { it.id }}")
         return ergebnisse
-    ***REMOVED***
+    }
 
     private val aktuellKlausel: String = "DATE(termine.ende) >= (:heute)"
     private val typenKlausel = "termine.typ in (:typen)"
@@ -69,33 +69,33 @@ open class TermineDao {
         if (sql.contains(immerEigeneKlausel) || filterKlausel.contains(nurEigeneKlausel))
             query.setParameter("benutzer", Benutzer(benutzerId!!, null, 0L))
         if (filterKlausel.contains(typenKlausel)) query.setParameter("typen", filter.typen)
-        if (filterKlausel.contains(tageKlausel)) query.setParameter("tage", filter.tage!!.map { it.toDate() ***REMOVED***)
+        if (filterKlausel.contains(tageKlausel)) query.setParameter("tage", filter.tage!!.map { it.toDate() })
         if (filterKlausel.contains(vonKlausel)) query.setParameter("von", filter.von!!.atDate(now()))
         if (filterKlausel.contains(bisKlausel)) query.setParameter("bis", filter.bis!!.atDate(now()))
         if (filterKlausel.contains(orteKlausel)) query.setParameter("orte", filter.orte)
         return query
-    ***REMOVED***
+    }
 
     open fun getTermin(id: Long): Termin? {
         return entityManager.find(Termin::class.java, id)
-    ***REMOVED***
+    }
 
     open fun aktualisiereTermin(termin: Termin): Termin {
-        LOG.debug("Aktualisiere Aktion ${termin.id***REMOVED***")
+        LOG.debug("Aktualisiere Aktion ${termin.id}")
         if (termin.id != termin.details?.termin_id) {
             throw DatenkonsistenzException("Termin und TerminDetails stimmen nicht überein")
-        ***REMOVED***
+        }
         termin.details!!.termin = termin
         entityManager.merge(termin)
         entityManager.flush()
         return termin
-    ***REMOVED***
+    }
 
     open fun speichereEvaluation(evaluation: Evaluation): Evaluation {
         entityManager.persist(evaluation)
         entityManager.flush()
         return evaluation
-    ***REMOVED***
+    }
 
     open fun ladeAlleEvaluationen(): List<Evaluation> {
         LOG.debug("Lade alle Evaluationen aus Datenbank")
@@ -104,47 +104,47 @@ open class TermineDao {
             .resultList
         LOG.trace("Evaluationen gefunden: $evaluationen")
         return evaluationen
-    ***REMOVED***
+    }
 
     open fun erstelleNeuenTermin(termin: Termin): Termin {
         termin.details!!.termin = termin
-        LOG.debug("Speichere Aktion ${termin.id***REMOVED***")
+        LOG.debug("Speichere Aktion ${termin.id}")
         entityManager.persist(termin)
         entityManager.flush()
         return termin
 
-    ***REMOVED***
+    }
 
     @Throws(DatabaseException::class)
     open fun loescheAktion(action: Termin) {
         val actionFromDb: Termin
         try {
             actionFromDb = entityManager.find(Termin::class.java, action.id)
-        ***REMOVED*** catch (ignore: IllegalArgumentException) {
+        } catch (ignore: IllegalArgumentException) {
             throw DatabaseException("Die Aktion wurde nicht gefunden und kann daher nicht gelöscht werden")
-        ***REMOVED***
+        }
         try {
             entityManager.remove(actionFromDb)
             entityManager.flush()
-        ***REMOVED*** catch (ignore: Exception) {
+        } catch (ignore: Exception) {
             throw DatabaseException("Die Aktion wurde gefunden, kann aber aus technischen Gründen nicht gelöscht werden")
-        ***REMOVED***
-    ***REMOVED***
+        }
+    }
 
     open fun storeToken(actionId: Long, token: String) {
         entityManager.persist(Token(actionId, token))
-    ***REMOVED***
+    }
 
     open fun loadToken(actionId: Long): Token? {
         return entityManager.find(Token::class.java, actionId)
-    ***REMOVED***
+    }
 
     open fun deleteToken(token: Token) {
         // aus irgendeinem Grund funktioniert ein einfaches Remove hier nicht, sondern es muss geprüft werden
         // ob das Token vom EntityManager verwaltet wird und um ergänzt werden, bevor es gelöscht werden kann
         // Muss das bei anderen Lösch-Funktionen auch passieren?
         entityManager.remove(if (entityManager.contains(token)) token else entityManager.merge(token))
-    ***REMOVED***
-***REMOVED***
+    }
+}
 
 class DatenkonsistenzException(message: String?) : Exception(message)

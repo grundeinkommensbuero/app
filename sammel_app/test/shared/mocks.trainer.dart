@@ -21,14 +21,14 @@ MockStammdatenService trainStammdatenService(MockStammdatenService mock) {
   when(mock.ortsteile).thenAnswer((_) =>
       Future.value([friedrichshain(), kreuzberg(), koepenick()].toSet()));
   return mock;
-***REMOVED***
+}
 
 MockUserService trainUserService(MockUserService mock) {
   when(mock.user).thenAnswer((_) => Stream.value(karl()));
   when(mock.userHeaders)
-      .thenAnswer((_) async => {'Authorization': 'userCreds'***REMOVED***);
+      .thenAnswer((_) async => {'Authorization': 'userCreds'});
   return mock;
-***REMOVED***
+}
 
 MockStorageService trainStorageService(MockStorageService mock) {
   when(mock.loadAllStoredEvaluations())
@@ -36,13 +36,13 @@ MockStorageService trainStorageService(MockStorageService mock) {
   when(mock.loadContact())
       .thenAnswer((_) => Future.value('Ruft an unter 123456'));
   return mock;
-***REMOVED***
+}
 
 MockChatMessageService trainChatMessageService(MockChatMessageService mock) {
   when(mock.getTopicChannel('global'))
       .thenAnswer((_) => Future.value(ChatChannel('topic:global')));
   return mock;
-***REMOVED***
+}
 
 MockBackend trainBackend(MockBackend mock) {
   final nullReponse =
@@ -53,10 +53,10 @@ MockBackend trainBackend(MockBackend mock) {
   when(mock.post('service/benutzer/authentifiziere', any, any)).thenAnswer((_) {
     return Future<HttpClientResponseBody>.value(
         trainHttpResponse(MockHttpClientResponseBody(), 200, true));
-  ***REMOVED***);
+  });
   when(mock.getServerHealth()).thenAnswer((_) => Future.value(ServerHealth()));
   return mock;
-***REMOVED***
+}
 
 HttpClientResponseBody trainHttpResponse(
     HttpClientResponseBody bodyMock, int status, dynamic content) {
@@ -65,14 +65,14 @@ HttpClientResponseBody trainHttpResponse(
   when(bodyMock.response).thenAnswer((_) => clientMock);
   when(bodyMock.body).thenReturn(content);
   return bodyMock;
-***REMOVED***
+}
 
 trainTranslation(MockTranslations mock, [Function(Translations)? training]) {
   when(mock.get(any)).thenAnswer((inv) => inv.positionalArguments[0]);
   if (training != null) training(mock);
   return Localization.load(Locale('en'), translations: mock);
-***REMOVED***
+}
 
 trainFAQService(MockFAQService mock) {
   when(mock.getSortedFAQ(any)).thenAnswer((_) => Stream.value(testItems));
-***REMOVED***
+}

@@ -45,7 +45,7 @@ class TerminCard extends StatelessWidget {
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     Expanded(
                         child: Text(
-                      '${termin.typ***REMOVED***',
+                      '${termin.typ}',
                       softWrap: false,
                       overflow: TextOverflow.fade,
                       textAlign: TextAlign.center,
@@ -81,23 +81,23 @@ class TerminCard extends StatelessWidget {
                 ])),
           ]),
     );
-  ***REMOVED***
+  }
 
   static String erzeugeOrtText(Kiez ort) {
-    return '${ort.region***REMOVED***, ${ort.name***REMOVED***';
-  ***REMOVED***
+    return '${ort.region}, ${ort.name}';
+  }
 
   static String erzeugeDatumText(
       DateTime beginn, DateTime ende, Locale locale) {
-    return '{prefix***REMOVED***{date***REMOVED*** um {zeit***REMOVED*** Uhr, '.tr(namedArgs: {
+    return '{prefix}{date} um {zeit} Uhr, '.tr(namedArgs: {
           'prefix': ermittlePrefix(beginn, locale),
           'date': DateFormat.MMMd(locale.languageCode).format(beginn),
           'zeit': DateFormat.Hm(locale.languageCode).format(beginn),
-        ***REMOVED***) +
+        }) +
         (ende.difference(beginn).inHours < 1
-            ? '< ' + '{***REMOVED*** Stunden'.plural(1)
-            : '{***REMOVED*** Stunden'.plural(ende.difference(beginn).inHours));
-  ***REMOVED***
+            ? '< ' + '{} Stunden'.plural(1)
+            : '{} Stunden'.plural(ende.difference(beginn).inHours));
+  }
 
   static String ermittlePrefix(DateTime beginn, Locale locale) {
     DateTime heuteNacht = DateTime(DateTime.now().year, DateTime.now().month,
@@ -106,14 +106,14 @@ class TerminCard extends StatelessWidget {
     if (beginn.isAfter(heuteNacht.subtract(Duration(days: 1)))) {
       if (beginn.isBefore(heuteNacht)) {
         prefix = 'Heute, '.tr();
-      ***REMOVED*** else if (beginn.isBefore(heuteNacht.add(Duration(days: 1)))) {
+      } else if (beginn.isBefore(heuteNacht.add(Duration(days: 1)))) {
         prefix = 'Morgen, '.tr();
-      ***REMOVED*** else {
+      } else {
         if (beginn.isBefore(heuteNacht.add(Duration(days: 7)))) {
-          prefix = '${DateFormat.EEEE(locale.languageCode).format(beginn)***REMOVED***, ';
-        ***REMOVED***
-      ***REMOVED***
-    ***REMOVED***
+          prefix = '${DateFormat.EEEE(locale.languageCode).format(beginn)}, ';
+        }
+      }
+    }
     return prefix;
-  ***REMOVED***
-***REMOVED***
+  }
+}

@@ -11,7 +11,7 @@ class FAQItem {
   FAQItem.short(id, title, content, order, tags)
       : this(id, title, content, null, order, tags);
 
-  String get full => '$teaser${rest ?? ''***REMOVED***';
+  String get full => '$teaser${rest ?? ''}';
 
   FAQItem.fromJson(json) :
       id = json['id'],
@@ -28,5 +28,5 @@ class FAQItem {
     "rest": rest,
     "order": order,
     "tags": tags
-  ***REMOVED***
-***REMOVED***
+  };
+}

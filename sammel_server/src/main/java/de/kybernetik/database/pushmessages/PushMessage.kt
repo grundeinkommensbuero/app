@@ -15,7 +15,7 @@ class PushMessage {
         this.empfaenger = empfaenger
         if (daten != null) this.daten = SerializationUtils.serialize(HashMap(daten))
         if (benachrichtigung != null) this.benachrichtigung = SerializationUtils.serialize(benachrichtigung)
-    ***REMOVED***
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,10 +36,10 @@ class PushMessage {
     fun getDaten(): HashMap<String, String>? {
         if (daten == null) return null
         else return SerializationUtils.deserialize<HashMap<String, String>>(daten)
-    ***REMOVED***
+    }
 
     fun getBenachrichtigung(): PushNotificationDto? {
         if (benachrichtigung == null) return null
         else return SerializationUtils.deserialize(benachrichtigung)
-    ***REMOVED***
-***REMOVED***
+    }
+}

@@ -10,7 +10,7 @@ import 'ErrorService.dart';
 
 abstract class AbstractFAQService {
   Stream<List<FAQItem>?> getSortedFAQ(String? search);
-***REMOVED***
+}
 
 mixin FAQSorter {
   List<FAQItem>? sortItems(String? search, List<FAQItem>? items) {
@@ -22,7 +22,7 @@ mixin FAQSorter {
           List<FAQItem>.of(items); // Kopie zum sortieren
       orderedItems.sort((item1, item2) => item1.id < item2.id ? -1 : 1);
       return orderedItems;
-    ***REMOVED***
+    }
 
     var searchWords = search
         .split(RegExp(r"\s+"))
@@ -41,10 +41,10 @@ mixin FAQSorter {
             // Schlagwörter haben schweres Gewicht
             weight[item] = weight[item]! + 100;
             break; // nicht mehrere Treffer pro Stichwort
-          ***REMOVED***
-        ***REMOVED***
-      ***REMOVED***);
-    ***REMOVED***);
+          }
+        }
+      });
+    });
 
     // Suche im Titel
     searchWords.forEach((word) {
@@ -52,8 +52,8 @@ mixin FAQSorter {
         if (item.title.toLowerCase().contains(word))
           // Titel-Treffer haben mittleres Gewicht
           weight[item] = weight[item]! + 10;
-      ***REMOVED***);
-    ***REMOVED***);
+      });
+    });
 
     // Suche im Text
     searchWords.forEach((word) {
@@ -61,16 +61,16 @@ mixin FAQSorter {
         if (item.full.toLowerCase().contains(word))
           // niedriges Gewicht für Text-Treffer
           weight[item] = weight[item]! + 1;
-      ***REMOVED***);
-    ***REMOVED***);
+      });
+    });
 
     List<FAQItem> orderedItems = List<FAQItem>.of(items); // Kopie zum sortieren
     orderedItems.sort((item1, item2) =>
         Comparable.compare(weight[item1]!, weight[item2]!) * -1);
 
     return orderedItems;
-  ***REMOVED***
-***REMOVED***
+  }
+}
 
 class FAQService extends BackendService
     with FAQSorter
@@ -91,7 +91,7 @@ class FAQService extends BackendService
         .then((value) => value ?? List<FAQItem>.empty())
         .then((faq) => controller.add(faq));
     updateFAQfromServer();
-  ***REMOVED***
+  }
 
   @override
   Stream<List<FAQItem>?> getSortedFAQ(String? search) {
@@ -100,7 +100,7 @@ class FAQService extends BackendService
     if (latest != null) sortedController.add(latest);
     sortedController.addStream(stream).whenComplete(() => controller.close());
     return sortedController.stream.map((items) => sortItems(search, items));
-  ***REMOVED***
+  }
 
   updateFAQfromServer() async {
     var serverTimestamp = (await backend.getServerHealth()).faqTimestamp;
@@ -119,11 +119,11 @@ class FAQService extends BackendService
       storageService.saveFAQTimestamp(DateTime.now());
       controller.add(faqFromServer);
       controller.close();
-    ***REMOVED*** catch (e) {
+    } catch (e) {
       ErrorService.handleError(e, StackTrace.current);
-    ***REMOVED***
-  ***REMOVED***
-***REMOVED***
+    }
+  }
+}
 
 class DemoFAQService with FAQSorter implements AbstractFAQService {
   @override
@@ -181,4 +181,4 @@ Nach kurzer Bedenkzeit der Person kann eine weitere erläuternder Satz nachgesch
         4.0,
         ['Bugs', 'Kontakt', 'Webseite', 'Email', 'E-Mail']),
   ];
-***REMOVED***
+}

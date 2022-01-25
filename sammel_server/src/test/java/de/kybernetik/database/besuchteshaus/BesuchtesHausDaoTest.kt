@@ -38,7 +38,7 @@ class BesuchtesHausDaoTest {
 
         verify(entityManager, times(1)).persist(besuchtesHaus)
         verify(entityManager, times(1)).flush()
-    ***REMOVED***
+    }
 
     @Test
     fun ladeBesuchtesHausLiefertNullBeiIllegalArgumentException() {
@@ -48,7 +48,7 @@ class BesuchtesHausDaoTest {
 
         verify(entityManager, times(1)).find(BesuchtesHaus::class.java, -3L)
         assertNull(besuchtesHaus)
-    ***REMOVED***
+    }
 
     @Test
     fun ladeBesuchtesHausLiefertGefundenesBesuchtesHaus() {
@@ -59,7 +59,7 @@ class BesuchtesHausDaoTest {
 
         verify(entityManager, times(1)).find(BesuchtesHaus::class.java, 1L)
         assertEquals(besuchtesHaus, ergebnis)
-    ***REMOVED***
+    }
 
     @Test
     fun loescheBesuchtesHausLoeschtBesuchtesHaus() {
@@ -67,7 +67,7 @@ class BesuchtesHausDaoTest {
         besuchtesHausDao.loescheBesuchtesHaus(besuchtesHaus)
 
         verify(entityManager, times(1)).remove(besuchtesHaus)
-    ***REMOVED***
+    }
 
     @Test
     fun ladeAlleBesuchtenHaeuserErzeugtQuery() {
@@ -78,5 +78,5 @@ class BesuchtesHausDaoTest {
         val ergebnis = besuchtesHausDao.ladeAlleBesuchtenHaeuser()
 
         assertEquals(besuchteHaeuser, ergebnis)
-    ***REMOVED***
-***REMOVED***
+    }
+}

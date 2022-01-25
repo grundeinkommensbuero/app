@@ -19,16 +19,16 @@ main() {
     await tester.pumpWidget(MaterialApp(
         home: Provider<AbstractFAQService>.value(value: service, child: faq)));
     await tester.pumpAndSettle();
-  ***REMOVED***);
+  });
 
   group('visualisation', () {
     testUI('starts', (WidgetTester _) async {
       expect(find.byKey(Key('faq page')), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('shows all items', (WidgetTester tester) async {
       expect(find.byKey(Key('item tile')), findsNWidgets(testItems.length));
-    ***REMOVED***);
+    });
 
     testUI('initially shows all items closed', (WidgetTester tester) async {
       var itemTiles = tester.widgetList<FAQTile>(find.byKey(Key('item tile')));
@@ -37,8 +37,8 @@ main() {
       testItems
           .forEach((item) => expect(find.text(item.teaser), findsOneWidget));
       testItems.forEach((item) => expect(find.text(item.rest!), findsNothing));
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('open/close', () {
     testUI('opens on tap at tile', (WidgetTester tester) async {
@@ -46,7 +46,7 @@ main() {
       await tester.pump();
 
       expect(find.text(testItems[0].full), findsOneWidget);
-    ***REMOVED***);
+    });
 
     testUI('closes on second tap at tile', (WidgetTester tester) async {
       await tester.tap(find.text(testItems[1].title));
@@ -60,8 +60,8 @@ main() {
 
       expect(find.text(testItems[1].teaser), findsOneWidget);
       expect(find.text(testItems[1].full), findsNothing);
-    ***REMOVED***);
-  ***REMOVED***);
+    });
+  });
 
   group('search', () {
     testUI('clear button deletes text field content',
@@ -76,7 +76,7 @@ main() {
       await tester.pump();
 
       expect(faqState.searchInputController.text, '');
-    ***REMOVED***);
+    });
 
     testUI('input sorts items', (WidgetTester tester) async {
       var itemTiles = find.byKey(Key('item tile'));
@@ -99,7 +99,7 @@ main() {
           titlesInOrder,
           containsAllInOrder(
               ['Lasius Niger', 'Messor Barbarus', 'Camponotus Ligniperdus']));
-    ***REMOVED***);
+    });
 
     testUI('clear button resets item order', (WidgetTester tester) async {
       var itemTiles = find.byKey(Key('item tile'));
@@ -128,6 +128,6 @@ main() {
             'Lasius Niger',
             'Messor Barbarus',
           ]));
-    ***REMOVED***);
-  ***REMOVED***);
-***REMOVED***
+    });
+  });
+}

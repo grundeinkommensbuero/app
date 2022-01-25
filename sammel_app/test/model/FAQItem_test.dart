@@ -9,14 +9,14 @@ main() {
         ' in Mitteleuropa', 1.0, []);
 
     expect(faq.full, 'Die dickste Ameise in Mitteleuropa');
-  ***REMOVED***);
+  });
 
   test('full only returns teaser when rest null', () {
     final faq = FAQItem(
         1, 'Camponotus Ligniperda', 'Die dickste Ameise', null, 1.0, []);
 
     expect(faq.full, 'Die dickste Ameise');
-  ***REMOVED***);
+  });
 
   test('deserializes correctly', () {
     var faqItem = FAQItem.fromJson(jsonDecode('{'
@@ -26,7 +26,7 @@ main() {
         '"rest": " in Mitteleuropa",'
         '"order": 1.0,'
         '"tags": ["Holz", "Ameise", "rot", "schwarz"]'
-        '***REMOVED***'));
+        '}'));
 
     expect(faqItem.id, 1);
     expect(faqItem.title, "Camponotus Ligniperdus");
@@ -34,7 +34,7 @@ main() {
     expect(faqItem.rest, " in Mitteleuropa");
     expect(faqItem.order, 1.0);
     expect(faqItem.tags, ["Holz", "Ameise", "rot", "schwarz"]);
-  ***REMOVED***);
+  });
 
   test('deserializes correctly with null', () {
     var faqItem = FAQItem.fromJson(jsonDecode('{'
@@ -43,7 +43,7 @@ main() {
         '"teaser": "Die dickste Ameise",'
         '"order": 1.0,'
         '"tags": ["Holz", "Ameise", "rot", "schwarz"]'
-        '***REMOVED***'));
+        '}'));
 
     expect(faqItem.id, 1);
     expect(faqItem.title, "Camponotus Ligniperdus");
@@ -51,7 +51,7 @@ main() {
     expect(faqItem.rest, null);
     expect(faqItem.order, 1.0);
     expect(faqItem.tags, ["Holz", "Ameise", "rot", "schwarz"]);
-  ***REMOVED***);
+  });
 
   test('serializes correctly', () {
     final json = FAQItem(1, "Camponotus Ligniperdus", "Die dickste Ameise",
@@ -66,8 +66,8 @@ main() {
         '"rest":" in Mitteleuropa",'
         '"order":1.0,'
         '"tags":["Holz","Ameise","rot","schwarz"]'
-        '***REMOVED***');
-  ***REMOVED***);
+        '}');
+  });
 
   test('serializes correctly with null', () {
     final json = FAQItem(1, "Camponotus Ligniperdus", "Die dickste Ameise",
@@ -82,6 +82,6 @@ main() {
         '"rest":null,'
         '"order":1.0,'
         '"tags":["Holz","Ameise","rot","schwarz"]'
-        '***REMOVED***');
-  ***REMOVED***);
-***REMOVED***
+        '}');
+  });
+}
