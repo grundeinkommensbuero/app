@@ -77,30 +77,38 @@ class ChatWindowState extends State<ChatWindow> {
 
   buildHeader(Termin termin) {
     return AppBar(
+        iconTheme: IconThemeData(color: Colors.black),
         title: Column(children: [
           RichText(
-              text: TextSpan(children: [
-                TextSpan(
-                    text: termin.typ,
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                TextSpan(
-                    text: ' in ',
-                    style: TextStyle(
-                        fontSize: 13.0, fontWeight: FontWeight.normal)),
-                TextSpan(
-                    text: termin.ort.name,
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-              ], style: TextStyle(color: CampaignTheme.secondary, fontSize: 13.0)),
+              text: TextSpan(
+                  children: [
+                    TextSpan(
+                        text: termin.typ,
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    TextSpan(
+                        text: ' in ',
+                        style: TextStyle(
+                            fontSize: 13.0, fontWeight: FontWeight.normal)),
+                    TextSpan(
+                        text: termin.ort.name,
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                  ],
+                  style: TextStyle(
+                      color: CampaignTheme.secondary, fontSize: 13.0)),
               softWrap: false,
               overflow: TextOverflow.fade),
           Text(
               'am ${ChronoHelfer.formatDateOfDateTime(termin.beginn)}, um ${ChronoHelfer.dateTimeToStringHHmm(termin.beginn)} Uhr',
-              style: TextStyle(fontSize: 13.0, fontWeight: FontWeight.normal),
+              style: TextStyle(
+                  color: CampaignTheme.secondary,
+                  fontSize: 13.0,
+                  fontWeight: FontWeight.normal),
               overflow: TextOverflow.fade)
         ]),
         actions: <Widget>[
           termin.participants != null
               ? IconButton(
+                  color: Colors.black,
                   icon: const Icon(Icons.people),
                   tooltip: 'Show Chat Member',
                   onPressed: () {
